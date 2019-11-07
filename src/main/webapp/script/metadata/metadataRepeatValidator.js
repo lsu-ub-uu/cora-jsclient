@@ -29,7 +29,8 @@ var CORA = (function(cora) {
 
 		var spec = {
 			path:path,
-			cMetadataElement:cMetadataElement
+			cMetadataElement:cMetadataElement,
+			repeatId:repeatId
 		};
 
 		var dependencies = {metadataProvider:metadataProvider};

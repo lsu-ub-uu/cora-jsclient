@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2019 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -24,36 +24,10 @@ var CORA = (function(cora) {
 		var view;
 		var header;
 		var childrenView;
+		spec.viewClassName="openGuiItemHandlerView";
+		spec.headerClassName="header";
+        var handlerView = cora.gui.handlerView(dependencies, spec);
 
-		function start() {
-			view = CORA.gui.createSpanWithClassName("openGuiItemHandlerView");
-
-			header = createHeader();
-			view.appendChild(header);
-
-			childrenView = CORA.gui.createSpanWithClassName("childrenView");
-			view.appendChild(childrenView);
-		}
-
-		function createHeader() {
-			var headerNew = CORA.gui.createSpanWithClassName("header");
-			headerNew.onclick = spec.openSearchMethod;
-			headerNew.textContent = spec.headerText;
-			return headerNew;
-		}
-
-		function getView() {
-			return view;
-		}
-
-		function addManagedGuiItem(managedGuiItem) {
-			childrenView.appendChild(managedGuiItem.getMenuView());
-			view.scrollIntoView();
-		}
-
-		function removeManagedGuiItem(managedGuiItem) {
-			childrenView.removeChild(managedGuiItem.getMenuView());
-		}
 
 		function getDependencies() {
 			return dependencies;
@@ -67,11 +41,11 @@ var CORA = (function(cora) {
 			type : "openGuiItemHandlerView",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
-			getView : getView,
-			addManagedGuiItem : addManagedGuiItem,
-			removeManagedGuiItem : removeManagedGuiItem
+			getView : handlerView.getView,
+			addManagedGuiItem : handlerView.addManagedGuiItem,
+			removeManagedGuiItem : handlerView.removeManagedGuiItem
 		});
-		start();
+
 		return out;
 	};
 	return cora;

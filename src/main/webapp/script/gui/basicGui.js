@@ -41,5 +41,12 @@ var CORA = (function(cora) {
 		return divNew;
 	};
 
+	cora.gui.getClassNameOrEmptyFromSpec = function(spec) {
+		if (spec.className !== undefined) {
+			return spec.className;
+		}
+		return "";
+	};
+
 	return cora;
 }(CORA));

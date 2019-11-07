@@ -25,6 +25,10 @@ var CORA = (function (cora) {
         var metadataId = spec.metadataId;
         var path = spec.path;
         var cMetadataElement = getMetadataById(metadataId);
+        spec.cMetadataElement = cMetadataElement;
+
+
+        var metaDataRepeater = cora.metaDataRepeat(dependencies, spec);
         initalizeRepeat();
 
         function getMetadataById(id) {
@@ -59,7 +63,7 @@ var CORA = (function (cora) {
             attributeReferences.children.forEach(function (attributeReference) {
                 var cAttributeReference = CORA.coraData(attributeReference);
                 var refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-                var cCollectionVariable = getMetadataById(refLinkedId);
+                var cCollectionVariable = metaDataRepeater.getMetadataById(refLinkedId);
                 var attributeNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
                 var attributeValues = [];
                 collectedAttributes[attributeNameInData] = attributeValues;
@@ -69,14 +73,14 @@ var CORA = (function (cora) {
         }
 
         function initializeForMetadata() {
-            var nextLevelPath = createNextLevelPath();
+            var nextLevelPath = metaDataRepeater.createNextLevelPath();
             var message = {
                 "data": spec.data,
                 "path": nextLevelPath
             };
-            if (isGroup()) {
+            if (metaDataRepeater.isGroup()) {
                 initializeMetadataGroup(nextLevelPath);
-            } else if (isRecordLink()) {
+            } else if (metaDataRepeater.isRecordLink()) {
                 initializeMetadataRecordLink(nextLevelPath);
                 pubSub.publish("linkedData", message);
             } else if (isResourceLink()) {
@@ -87,109 +91,12 @@ var CORA = (function (cora) {
             }
         }
 
-        function createNextLevelPath() {
-            var nextLevelPathPart = createNextLevelPathPart();
 
-            if (incomingPathIsEmpty()) {
-                return nextLevelPathPart;
-            }
-
-            var pathCopy = JSON.parse(JSON.stringify(path));
-            var lowestPath = findLowestPath(pathCopy);
-            lowestPath.children.push(nextLevelPathPart);
-            return pathCopy;
-        }
-
-        function createNextLevelPathPart() {
-            var childPathPart = createLinkedPathWithNameInData();
-
-            if (hasRepeatId()) {
-                childPathPart.children.push(createRepeatId());
-            }
-
-            if (hasAttributes()) {
-                childPathPart.children.push(createAttributes());
-            }
-            return childPathPart;
-        }
-
-        function createLinkedPathWithNameInData() {
-            var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-            return {
-                "name": "linkedPath",
-                "children": [{
-                    "name": "nameInData",
-                    "value": nameInData
-                }]
-            };
-        }
-
-        function hasRepeatId() {
-            return spec.repeatId !== undefined;
-        }
-
-        function createRepeatId() {
-            return {
-                "name": "repeatId",
-                "value": spec.repeatId
-            };
-        }
-
-        function createAttributes() {
-            var attributes = {
-                "name": "attributes",
-                "children": []
-            };
-            var attributeReferences = cMetadataElement
-                .getFirstChildByNameInData('attributeReferences');
-            var attributeNo = 1;
-            attributeReferences.children.forEach(function (attributeReference) {
-                attributes.children.push(createAttributeWithAttributeAndRepeatId(
-                    attributeReference, String(attributeNo)));
-                attributeNo++;
-            });
-            return attributes;
-        }
-
-        function createAttributeWithAttributeAndRepeatId(attributeReference, attributeRepeatId) {
-            var ref = getRefValueFromAttributeRef(attributeReference);
-            var attribute = getMetadataById(ref);
-            var attributeName = attribute.getFirstAtomicValueByNameInData('nameInData');
-            var attributeValue = attribute.getFirstAtomicValueByNameInData('finalValue');
-            return {
-                "name": "attribute",
-                "repeatId": attributeRepeatId,
-                "children": [{
-                    "name": "attributeName",
-                    "value": attributeName
-                }, {
-                    "name": "attributeValue",
-                    "value": attributeValue
-                }]
-            };
-        }
-
-        function getRefValueFromAttributeRef(attributeReference) {
-            var cAttributeReference = CORA.coraData(attributeReference);
-            return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-        }
-
-        function incomingPathIsEmpty() {
-            return path.name === undefined;
-        }
-
-        function findLowestPath(pathToSearch) {
-            var coraPath = CORA.coraData(pathToSearch);
-            if (coraPath.containsChildWithNameInData("linkedPath")) {
-                return findLowestPath(coraPath.getFirstChildByNameInData("linkedPath"));
-            }
-            return pathToSearch;
-        }
-
-        function isGroup() {
+        function isResourceLink() {
             var type = cMetadataElement.getData().attributes.type;
-            return type === "group";
+            return type === "resourceLink";
         }
+
 
         function initializeMetadataGroup(nextLevelPath) {
             var nextLevelChildReferences = cMetadataElement
@@ -204,11 +111,6 @@ var CORA = (function (cora) {
                 };
                 CORA.metadataChildInitializer(dependencies, initializerSpec);
             });
-        }
-
-        function isRecordLink() {
-            var type = cMetadataElement.getData().attributes.type;
-            return type === "recordLink";
         }
 
         function initializeMetadataRecordLink(nextLevelPath) {
@@ -335,13 +237,9 @@ var CORA = (function (cora) {
             return cMetadataElement.containsChildWithNameInData("linkedPath");
         }
 
-        function isResourceLink() {
-            var type = cMetadataElement.getData().attributes.type;
-            return type === "resourceLink";
-        }
 
         function initializeMetadataResourceLink(nextLevelPath) {
-            var cMetadataGroupForResourceLinkGroup = getMetadataById("metadataGroupForResourceLinkGroup");
+            var cMetadataGroupForResourceLinkGroup = metaDataRepeater.getMetadataById("metadataGroupForResourceLinkGroup");
             var nextLevelChildReferences = cMetadataGroupForResourceLinkGroup
                 .getFirstChildByNameInData('childReferences');
             nextLevelChildReferences.children.forEach(function (childReference) {

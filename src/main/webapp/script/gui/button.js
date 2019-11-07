@@ -20,94 +20,24 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.gui.button = function(spec) {
 		var view;
+		var button;
 		var action;
+		spec.type="button";
+		view = createView();
+		button = cora.gui.buttonView(spec, view);
+		button.init();
 
-		function start() {
-			view = createView();
-			possiblyHandleAction();
-			possiblyAddOnclickMethod();
-			possiblyAddOnkeydownMethod();
-			possiblyAddText();
-		}
 
 		function createView() {
-			return CORA.gui.createSpanWithClassName(getClassNameOrEmptyFromSpec());
+			return CORA.gui.createSpanWithClassName(cora.gui.getClassNameOrEmptyFromSpec(spec));
 		}
 
-		function getClassNameOrEmptyFromSpec() {
-			if (spec.className !== undefined) {
-				return spec.className;
-			}
-			return "";
-		}
-
-		function possiblyHandleAction() {
-			if (spec.action !== undefined) {
-				handleAction();
-			}
-		}
-
-		function handleAction() {
-			action = spec.action.method;
-		}
-
-		function possiblyAddOnclickMethod() {
-			if (specDemandsClick()) {
-				addOnclickForMethodFromAction();
-			}
-		}
-
-		function specDemandsClick(){
-			return spec.action !== undefined
-			&& (spec.action.clickable === true || spec.action.clickable === undefined);
-		}
-
-		function addOnclickForMethodFromAction(){
-			view.addEventListener('click', (event) => {
-				event.stopPropagation();
-				action(event);
-			});
-		}
-
-		function possiblyAddOnkeydownMethod() {
-			if(specDemandsKeydown()){
-				addTabstop();
-				addOnkeydownMethod();
-			}
-		}
-
-		function specDemandsKeydown(){
-			return spec.action !== undefined && spec.action.onkeydown !== undefined;
-		}
-
-		function addTabstop() {
-			view.tabIndex = 0;
-		}
-
-		function addOnkeydownMethod() {
-			var onkeydownFunction = function(event) {
-				if (spec.action.onkeydown.keys.indexOf(event.key) !== -1) {
-					event.stopPropagation();
-					action(event);
-				}
-			};
-			view.addEventListener("keydown", onkeydownFunction);
-		}
-
-		function possiblyAddText() {
-			if (spec.text !== undefined) {
-				view.textContent = spec.text;
-			}
-		}
-
-		function getView() {
-			return view;
-		}
 
 		var out = Object.freeze({
-			getView : getView
+			getView : button.getView
 		});
-		start();
+
+
 		return out.getView();
 	};
 

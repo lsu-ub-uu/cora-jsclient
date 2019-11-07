@@ -20,103 +20,28 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.gui.inputButton = function(spec) {
-		var view;
-		var action;
-
-		function start() {
-			view = createView();
-			possiblyHandleAction();
-			possiblyAddOnclickMethod();
-			possiblyAddOnkeydownMethod();
-			possiblyAddText();
-		}
+		var view = createView();
+		spec.type="inputButton";
+		var button = cora.gui.buttonView(spec, view);
+		button.init();
 
 		function createView() {
-				var button = document.createElement("input");
-				button.type = "button";
-				button.className = getClassNameOrEmptyFromSpec();
-				return button;
+				var inputButton = document.createElement("input");
+				inputButton.type = "button";
+				inputButton.className = cora.gui.getClassNameOrEmptyFromSpec(spec);
+				return inputButton;
 		}
 
-		function getClassNameOrEmptyFromSpec() {
-			if (spec.className !== undefined) {
-				return spec.className;
-			}
-			return "";
-		}
-
-		function possiblyHandleAction() {
-			if (spec.action !== undefined) {
-				handleAction();
-			}
-		}
-
-		function handleAction() {
-			action = spec.action.method;
-		}
-
-		function possiblyAddOnclickMethod() {
-			if (specDemandsClick()) {
-				addOnclickForMethodFromAction();
-			}
-		}
-
-		function specDemandsClick(){
-			return spec.action !== undefined
-			&& (spec.action.clickable === true || spec.action.clickable === undefined);
-		}
-
-		function addOnclickForMethodFromAction(){
-			view.addEventListener('click', (event) => {
-				event.stopPropagation();
-				action(event);
-			});
-		}
-
-		function possiblyAddOnkeydownMethod() {
-			if(specDemandsKeydown()){
-				addTabstop();
-				addOnkeydownMethod();
-			}
-		}
-
-		function specDemandsKeydown(){
-			return spec.action !== undefined && spec.action.onkeydown !== undefined;
-		}
-
-		function addTabstop() {
-			view.tabIndex = 0;
-		}
-
-		function addOnkeydownMethod() {
-			var onkeydownFunction = function(event) {
-				if (spec.action.onkeydown.keys.indexOf(event.key) !== -1) {
-					event.stopPropagation();
-					action(event);
-				}
-			};
-			view.addEventListener("keydown", onkeydownFunction);
-		}
-
-		function possiblyAddText() {
-			if (spec.text !== undefined) {
-				view.value = spec.text;
-			}
-		}
-
-		function getView() {
-			return view;
-		}
 		
 		function getSpec(){
 			return spec;
 		}
 
 		var out = Object.freeze({
-			getView : getView,
+			getView : button.getView,
 			getSpec : getSpec
 		});
-		start();
+
 		out.getView().modelObject = out;
 		return out.getView();
 	};

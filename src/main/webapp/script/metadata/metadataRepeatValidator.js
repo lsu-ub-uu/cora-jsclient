@@ -26,6 +26,16 @@ var CORA = (function(cora) {
 			"containsValuableData" : false
 		};
 		var cMetadataElement = getMetadataById(metadataId);
+
+		var spec = {
+			path:path,
+			cMetadataElement:cMetadataElement
+		};
+
+		var dependencies = {metadataProvider:metadataProvider};
+
+		var metaDataRepeater = cora.metaDataRepeat(dependencies, spec);
+
 		validateRepeat();
 
 		function getMetadataById(id) {
@@ -36,124 +46,18 @@ var CORA = (function(cora) {
 			validateForMetadata();
 		}
 
-		function hasAttributes() {
-			return cMetadataElement.containsChildWithNameInData("attributeReferences");
-		}
 
 		function validateForMetadata() {
-			var nextLevelPath = createNextLevelPath();
-			if (isGroup()) {
+			var nextLevelPath = metaDataRepeater.createNextLevelPath();
+			if (metaDataRepeater.isGroup()) {
 				validateMetadataGroup(nextLevelPath);
-			} else if (isRecordLink()) {
+			} else if (metaDataRepeater.isRecordLink()) {
 				validateMetadataRecordLink(nextLevelPath);
 			} else {
 				validateVariableValue(nextLevelPath);
 			}
 		}
 
-		function createNextLevelPath() {
-			var nextLevelPathPart = createNextLevelPathPart();
-
-			if (incomingPathIsEmpty()) {
-				return nextLevelPathPart;
-			}
-
-			var pathCopy = JSON.parse(JSON.stringify(path));
-			var lowestPath = findLowestPath(pathCopy);
-			lowestPath.children.push(nextLevelPathPart);
-			return pathCopy;
-		}
-
-		function createNextLevelPathPart() {
-			var childPathPart = createLinkedPathWithNameInData();
-
-			if (hasRepeatId()) {
-				childPathPart.children.push(createRepeatId());
-			}
-
-			if (hasAttributes()) {
-				childPathPart.children.push(createAttributes());
-			}
-			return childPathPart;
-		}
-
-		function createLinkedPathWithNameInData() {
-			var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-			return {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : nameInData
-				} ]
-			};
-		}
-
-		function hasRepeatId() {
-			return repeatId !== undefined;
-		}
-
-		function createRepeatId() {
-			return {
-				"name" : "repeatId",
-				"value" : repeatId
-			};
-		}
-
-		function createAttributes() {
-			var attributes = {
-				"name" : "attributes",
-				"children" : []
-			};
-			var attributeReferences = cMetadataElement
-					.getFirstChildByNameInData('attributeReferences');
-			var attributeNo = 1;
-			attributeReferences.children.forEach(function(attributeReference) {
-				attributes.children.push(createAttributeWithAttributeAndRepeatId(
-						attributeReference, String(attributeNo)));
-				attributeNo++;
-			});
-			return attributes;
-		}
-
-		function createAttributeWithAttributeAndRepeatId(attributeReference, attributeRepeatId) {
-			var ref = getRefValueFromAttributeRef(attributeReference);
-			var attribute = getMetadataById(ref);
-			var attributeName = attribute.getFirstAtomicValueByNameInData('nameInData');
-			var attributeValue = attribute.getFirstAtomicValueByNameInData('finalValue');
-			return {
-				"name" : "attribute",
-				"repeatId" : attributeRepeatId,
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : attributeName
-				}, {
-					"name" : "attributeValue",
-					"value" : attributeValue
-				} ]
-			};
-		}
-
-		function getRefValueFromAttributeRef(attributeReference) {
-			var cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
-
-		function incomingPathIsEmpty() {
-			return path.name === undefined;
-		}
-
-		function findLowestPath(pathToSearch) {
-			var coraPath = CORA.coraData(pathToSearch);
-			if (coraPath.containsChildWithNameInData("linkedPath")) {
-				return findLowestPath(coraPath.getFirstChildByNameInData("linkedPath"));
-			}
-			return pathToSearch;
-		}
-
-		function isGroup() {
-			var type = cMetadataElement.getData().attributes.type;
-			return type === "group";
-		}
 
 		function validateMetadataGroup(nextLevelPath) {
 			var nextLevelChildReferences = cMetadataElement
@@ -184,11 +88,6 @@ var CORA = (function(cora) {
 				"path" : nextLevelPath
 			};
 			result.sendValidationMessages = false;
-		}
-
-		function isRecordLink() {
-			var type = cMetadataElement.getData().attributes.type;
-			return type === "recordLink";
 		}
 
 		function validateMetadataRecordLink(nextLevelPath) {
@@ -294,11 +193,11 @@ var CORA = (function(cora) {
 			return nameInData === data.value;
 		}
 
-		function handleValidData(hasFinalValue, result) {
+		function handleValidData(hasFinalValue, res) {
 			if (hasFinalValue) {
-				result.containsValuableData = false;
+				res.containsValuableData = false;
 			} else {
-				result.containsValuableData = true;
+				res.containsValuableData = true;
 			}
 		}
 

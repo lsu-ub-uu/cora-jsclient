@@ -27,11 +27,14 @@ var CORA = (function(cora) {
 		var info;
 		var state = "ok";
 
+		var viewFoo = cora.viewFoo(dependencies, spec);
+		var varViewsuper = cora.varViewSuper(dependencies, spec);
+
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
 
-			createValueView();
+			varViewsuper.createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
 		}
@@ -47,36 +50,8 @@ var CORA = (function(cora) {
 					"text" : spec.info.defText
 				} ]
 			};
-			possiblyAddLevel2Info(infoSpec);
+			viewFoo.possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
-		}
-		function possiblyAddLevel2Info(infoSpec) {
-			if (specInfoHasTechnicalInfo()) {
-				addLevelTechnicalInfoAsLevel2(infoSpec);
-			}
-		}
-
-		function specInfoHasTechnicalInfo() {
-			return spec.info.technicalInfo;
-		}
-
-		function addLevelTechnicalInfoAsLevel2(infoSpec) {
-			infoSpec.level2 = [];
-			spec.info.technicalInfo.forEach(function(techInfo) {
-				infoSpec.level2.push(createTechInfoPart(techInfo));
-			});
-		}
-
-		function createTechInfoPart(techInfo) {
-			var techInfoPart = {
-				"className" : "technicalView",
-				"text" : techInfo.text
-			};
-
-			if (techInfo.onclickMethod !== undefined) {
-				techInfoPart.onclickMethod = techInfo.onclickMethod;
-			}
-			return techInfoPart;
 		}
 
 		function updateClassName() {
@@ -104,13 +79,7 @@ var CORA = (function(cora) {
 			return info.getInfoLevel() !== 0;
 		}
 
-		function createValueView() {
-			if (spec.mode === "input") {
-				valueView = createInput();
-			} else {
-				valueView = createOutput();
-			}
-		}
+
 
 		function createInput() {
 			valueView = createTextTypeInput();

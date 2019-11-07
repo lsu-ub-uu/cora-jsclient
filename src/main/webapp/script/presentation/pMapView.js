@@ -33,6 +33,8 @@ var CORA = (function(cora) {
 		var map;
 		var marker;
 
+		var viewFoo = cora.viewFoo(dependencies, spec);
+
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
@@ -52,40 +54,12 @@ var CORA = (function(cora) {
 					"text" : spec.info.defText
 				} ]
 			};
-			possiblyAddLevel2Info(infoSpec);
+			viewFoo.possiblyAddLevel2Info(infoSpec);
 			var newInfo = dependencies.infoFactory.factor(infoSpec);
 			infoSpec.insertAfter = newInfo.getButton();
 			return newInfo;
 		}
 
-		function possiblyAddLevel2Info(infoSpec) {
-			if (specInfoHasTechnicalInfo()) {
-				addLevelTechnicalInfoAsLevel2(infoSpec);
-			}
-		}
-
-		function specInfoHasTechnicalInfo() {
-			return spec.info.technicalInfo;
-		}
-
-		function addLevelTechnicalInfoAsLevel2(infoSpec) {
-			infoSpec.level2 = [];
-			spec.info.technicalInfo.forEach(function(techInfo) {
-				infoSpec.level2.push(createTechInfoPart(techInfo));
-			});
-		}
-
-		function createTechInfoPart(techInfo) {
-			var techInfoPart = {
-				"className" : "technicalView",
-				"text" : techInfo.text
-			};
-
-			if (techInfo.onclickMethod !== undefined) {
-				techInfoPart.onclickMethod = techInfo.onclickMethod;
-			}
-			return techInfoPart;
-		}
 
 		function updateClassName() {
 			var className = baseClassName;

@@ -33,13 +33,6 @@ var CORA = (function (cora) {
             action = spec.action.method;
         }
 
-        button.getClassNameOrEmptyFromSpec = function() {
-            if (spec.className !== undefined) {
-                return spec.className;
-            }
-            return "";
-        };
-
         button.possiblyAddOnclickMethod = function(){
             if (specDemandsClick()) {
                 button.addOnclickForMethodFromAction();

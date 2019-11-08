@@ -27,14 +27,32 @@ var CORA = (function(cora) {
 		var info;
 		var state = "ok";
 
-		var viewFoo = cora.viewFoo(dependencies, spec);
-		var varViewsuper = cora.varViewSuper(dependencies, spec);
+        var fun = {};
+		fun.createOutput = function(){
+			if (spec.outputFormat === "image") {
+				return createOutputImage();
+			} else if (spec.outputFormat === "link") {
+				return createOutputLink();
+			}
+			return createOutputText();
+		};
+
+		fun.createInput = function(){
+			valueView = createTextTypeInput();
+			possiblyAddOnkeyupEvent(valueView);
+			possiblyAddOnblurEvent(valueView);
+			possiblyAddPlaceholderText(valueView);
+			return valueView;
+		};
+
+		var level2info = cora.level2info(dependencies, spec);
+		var varViewsuper = cora.varViewSuper(fun, dependencies, spec);
 
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
+			valueView = varViewsuper.createValueView();
 
-			varViewsuper.createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
 		}
@@ -50,7 +68,7 @@ var CORA = (function(cora) {
 					"text" : spec.info.defText
 				} ]
 			};
-			viewFoo.possiblyAddLevel2Info(infoSpec);
+			level2info.possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
 		}
 
@@ -79,16 +97,6 @@ var CORA = (function(cora) {
 			return info.getInfoLevel() !== 0;
 		}
 
-
-
-		function createInput() {
-			valueView = createTextTypeInput();
-			possiblyAddOnkeyupEvent(valueView);
-			possiblyAddOnblurEvent(valueView);
-			possiblyAddPlaceholderText(valueView);
-			return valueView;
-		}
-
 		function possiblyAddOnkeyupEvent(valueViewIn) {
 			if (spec.onkeyupFunction !== undefined) {
 				valueViewIn.onkeyup = function() {
@@ -112,7 +120,7 @@ var CORA = (function(cora) {
 		}
 
 		function createTextTypeInput() {
-			var inputNew = document.createElement(getInputTypeFromSpec());
+			var inputNew = document.createElement(varViewsuper.getInputTypeFromSpec());
 			if (spec.inputFormat === "password") {
 				inputNew.setAttribute("type", "password");
 			}
@@ -123,21 +131,7 @@ var CORA = (function(cora) {
 			return inputNew;
 		}
 
-		function getInputTypeFromSpec() {
-			if (spec.inputType !== undefined) {
-				return spec.inputType;
-			}
-			return "input";
-		}
 
-		function createOutput() {
-			if (spec.outputFormat === "image") {
-				return createOutputImage();
-			} else if (spec.outputFormat === "link") {
-				return createOutputLink();
-			}
-			return createOutputText();
-		}
 
 		function createOutputImage() {
 			var outputNew = document.createElement("img");

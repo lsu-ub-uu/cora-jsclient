@@ -18,7 +18,7 @@
  */
 var CORA = (function(cora) {
     "use strict";
-    cora.viewFoo = function(dependencies, spec) {
+    cora.level2info = function(dependencies, spec) {
 
         function possiblyAddLevel2Info(infoSpec) {
             if (specInfoHasTechnicalInfo()) {

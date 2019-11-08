@@ -33,7 +33,7 @@ var CORA = (function(cora) {
 		var map;
 		var marker;
 
-		var viewFoo = cora.viewFoo(dependencies, spec);
+		var level2info = cora.level2info(dependencies, spec);
 
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
@@ -54,7 +54,7 @@ var CORA = (function(cora) {
 					"text" : spec.info.defText
 				} ]
 			};
-			viewFoo.possiblyAddLevel2Info(infoSpec);
+			level2info.possiblyAddLevel2Info(infoSpec);
 			var newInfo = dependencies.infoFactory.factor(infoSpec);
 			infoSpec.insertAfter = newInfo.getButton();
 			return newInfo;

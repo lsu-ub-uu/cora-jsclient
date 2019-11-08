@@ -45,6 +45,8 @@ var CORA = (function(cora) {
 
 		var regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 		var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+		spec.cMetadataElement = cMetadataElement;
+		var pVarSuper = cora.pVarSuper(dependencies,spec);
 
 		var pVarViewSpec = {
 			"mode" : mode,
@@ -57,13 +59,13 @@ var CORA = (function(cora) {
 				"defText" : defText,
 				"technicalInfo" : [ {
 					"text" : "textId: " + textId,
-					onclickMethod : openTextIdRecord
+					onclickMethod : pVarSuper.openTextIdRecord
 				}, {
 					"text" : "defTextId: " + defTextId,
-					onclickMethod : openDefTextIdRecord
+					onclickMethod : pVarSuper.openDefTextIdRecord
 				}, {
 					"text" : "metadataId: " + metadataId,
-					onclickMethod : openMetadataIdRecord
+					onclickMethod : pVarSuper.openMetadataIdRecord
 				}, {
 					"text" : "nameInData: " + nameInData
 				}, {
@@ -84,8 +86,8 @@ var CORA = (function(cora) {
 			pVarViewSpec.placeholderText = emptyText;
 		}
 		var pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
-		var state = "ok";
-		var previousValue = "";
+
+
 		pubSub.subscribe("setValue", path, undefined, handleMsg);
 		pubSub.subscribe("validationError", path, undefined, handleValidationError);
 
@@ -121,8 +123,8 @@ var CORA = (function(cora) {
 		}
 
 		function setValue(value) {
-			state = "ok";
-			previousValue = value;
+			pVarSuper.setState("ok");
+			pVarSuper.setPreviousValue(value);
 			pVarView.setValue(value);
 		}
 
@@ -132,7 +134,7 @@ var CORA = (function(cora) {
 		}
 
 		function handleValidationError() {
-			state = "error";
+			pVarSuper.setState("error");
 			updateView();
 		}
 
@@ -159,22 +161,22 @@ var CORA = (function(cora) {
 		function handleValueFromView(valueFromView, errorState) {
 			checkRegEx(valueFromView, errorState);
 			updateView();
-			if (state === "ok" && valueHasChanged(valueFromView)) {
+			if (pVarSuper.getState() === "ok" && pVarSuper.valueHasChanged(valueFromView)) {
 				var data = {
 					"data" : valueFromView,
 					"path" : path
 				};
 				jsBookkeeper.setValue(data);
-				previousValue = valueFromView;
+				pVarSuper.setPreviousValue(valueFromView);
 			}
 		}
 
 		function checkRegEx(valueFromView, errorState) {
 			var value = valueFromView;
 			if (value.length === 0 || new RegExp(regEx).test(value)) {
-				state = "ok";
+				pVarSuper.setState("ok");
 			} else {
-				state = errorState;
+				pVarSuper.setState(errorState);
 			}
 		}
 
@@ -183,69 +185,28 @@ var CORA = (function(cora) {
 		}
 
 		function updateView() {
-			pVarView.setState(state);
+			pVarView.setState(pVarSuper.getState());
 		}
 
-		function valueHasChanged(valueFromView) {
-			return valueFromView !== previousValue;
-		}
 
-		function getState() {
-			return state;
-		}
-
-		function getSpec() {
-			return spec;
-		}
-
-		function openLinkedRecordForLink(event, link) {
-			var loadInBackground = "false";
-			if (event.ctrlKey) {
-				loadInBackground = "true";
-			}
-			var openInfo = {
-				"readLink" : link,
-				"loadInBackground" : loadInBackground
-			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-		}
-
-		function openTextIdRecord(event) {
-			openLinkedRecordForLink(event,
-					cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-		}
-
-		function openDefTextIdRecord(event) {
-			openLinkedRecordForLink(event,
-					cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
-		}
-
-		function openMetadataIdRecord(event) {
-			openLinkedRecordForLink(event, cPresentation
-					.getFirstChildByNameInData("presentationOf").actionLinks.read);
-		}
-
-		function getDependencies() {
-			return dependencies;
-		}
 
 		var out = Object.freeze({
 			"type" : "pVar",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
+			getDependencies : pVarSuper.getDependencies,
+			"getSpec" : pVarSuper.getSpec,
 			getView : getView,
 			setValue : setValue,
 			handleMsg : handleMsg,
 			getText : getText,
 			getDefText : getDefText,
 			getRegEx : getRegEx,
-			getState : getState,
+			getState : pVarSuper.getState,
 			onBlur : onBlur,
 			onkeyup : onkeyup,
 			handleValidationError : handleValidationError,
-			openTextIdRecord : openTextIdRecord,
-			openDefTextIdRecord : openDefTextIdRecord,
-			openMetadataIdRecord : openMetadataIdRecord
+			openTextIdRecord : pVarSuper.openTextIdRecord,
+			openDefTextIdRecord : pVarSuper.openDefTextIdRecord,
+			openMetadataIdRecord : pVarSuper.openMetadataIdRecord
 		});
 
 		return out;

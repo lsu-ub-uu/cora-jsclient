@@ -26,13 +26,24 @@ var CORA = (function(cora) {
 		var baseClassName = "pNumVar " + spec.presentationId;
 		var info;
 		var state = "ok";
-		var viewFoo = cora.viewFoo(dependencies, spec);
+		var level2info = cora.level2info(dependencies, spec);
+		var fun={};
+		fun.createInput= function() {
+			valueView = createTextTypeInput();
+			possiblyAddOnkeyupEvent(valueView);
+			possiblyAddOnblurEvent(valueView);
+			return valueView;
+		};
+		fun.createOutput = function() {
+			return createOutputText();
+		};
 
+		var varViewsuper = cora.varViewSuper(fun,dependencies, spec);
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
 
-			createValueView();
+			valueView = varViewsuper.createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
 		}
@@ -48,7 +59,7 @@ var CORA = (function(cora) {
 					"text" : spec.info.defText
 				} ]
 			};
-			viewFoo.possiblyAddLevel2Info(infoSpec);
+			level2info.possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
 		}
 
@@ -78,21 +89,6 @@ var CORA = (function(cora) {
 			return info.getInfoLevel() !== 0;
 		}
 
-		function createValueView() {
-			if (spec.mode === "input") {
-				valueView = createInput();
-			} else {
-				valueView = createOutput();
-			}
-		}
-
-		function createInput() {
-			valueView = createTextTypeInput();
-			possiblyAddOnkeyupEvent(valueView);
-			possiblyAddOnblurEvent(valueView);
-			return valueView;
-		}
-
 		function possiblyAddOnkeyupEvent(valueViewIn) {
 			if (spec.onkeyupFunction !== undefined) {
 				valueViewIn.onkeyup = function() {
@@ -117,9 +113,6 @@ var CORA = (function(cora) {
 			return inputNew;
 		}
 
-		function createOutput() {
-			return createOutputText();
-		}
 
 		function createOutputText() {
 			var outputNew = CORA.gui.createSpanWithClassName("value");

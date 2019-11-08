@@ -18,7 +18,7 @@
  */
 var CORA = (function(cora) {
     "use strict";
-    cora.varViewSuper = function(dependencies, spec) {
+    cora.varViewSuper = function(fun, dependencies, spec) {
 
         var out;
         var view;
@@ -27,7 +27,7 @@ var CORA = (function(cora) {
         var info;
         var state = "ok";
 
-        var viewFoo = cora.viewFoo(dependencies, spec);
+        var level2info = cora.level2info(dependencies, spec);
 
         function start() {
             view = CORA.gui.createSpanWithClassName(baseClassName);
@@ -49,7 +49,7 @@ var CORA = (function(cora) {
                     "text" : spec.info.defText
                 } ]
             };
-            viewFoo.possiblyAddLevel2Info(infoSpec);
+            level2info.possiblyAddLevel2Info(infoSpec);
             return dependencies.infoFactory.factor(infoSpec);
         }
 
@@ -81,19 +81,14 @@ var CORA = (function(cora) {
 
         function createValueView() {
             if (spec.mode === "input") {
-                valueView = createInput();
+                valueView = fun.createInput();
             } else {
-                valueView = createOutput();
+                valueView = fun.createOutput();
             }
-        }
-
-
-        function createInput() {
-            valueView = createTextTypeInput();
-            possiblyAddOnkeyupEvent(valueView);
-            possiblyAddOnblurEvent(valueView);
             return valueView;
         }
+
+
 
         function createTextTypeInput() {
             var inputNew = document.createElement(getInputTypeFromSpec());
@@ -105,6 +100,13 @@ var CORA = (function(cora) {
                 inputNew.value = value;
             };
             return inputNew;
+        }
+
+        function getInputTypeFromSpec() {
+            if (spec.inputType !== undefined) {
+                return spec.inputType;
+            }
+            return "input";
         }
 
 
@@ -161,7 +163,8 @@ var CORA = (function(cora) {
             setValue : setValue,
             updateClassName : updateClassName,
             setState : setState,
-            createValueView:createValueView
+            createValueView:createValueView,
+            getInputTypeFromSpec: getInputTypeFromSpec
         });
 
       return out;

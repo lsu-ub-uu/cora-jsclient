@@ -115,6 +115,7 @@ var CORA = (function (cora) {
                 var cRecordLink = CORA.coraData(cRecord.getFirstChildByNameInData(id));
                 return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
             }
+            return undefined;
         }
 
         function getRecordTypeById(recordTypeId) {

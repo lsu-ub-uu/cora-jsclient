@@ -56,6 +56,7 @@ var CORA = (function(cora) {
 				CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
 				return String(startRepeatId);
 			}
+			return undefined;
 		}
 
 		function calculateStartRepeatId(dataChildrenForMetadata) {

@@ -77,7 +77,6 @@ var CORA = (function(cora) {
             stateIn = state;
         }
 
-
         return {
             getDependencies:getDependencies,
             openTextIdRecord:openTextIdRecord,

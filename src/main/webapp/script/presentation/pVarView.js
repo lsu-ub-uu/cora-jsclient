@@ -24,11 +24,12 @@ var CORA = (function(cora) {
 		var view;
 		var valueView;
 		var baseClassName = "pVar " + spec.presentationId;
+		spec.baseClassName = baseClassName;
 		var info;
 		var state = "ok";
 
-        var fun = {};
-		fun.createOutput = function(){
+
+		spec.createOutput = function(){
 			if (spec.outputFormat === "image") {
 				return createOutputImage();
 			} else if (spec.outputFormat === "link") {
@@ -37,7 +38,7 @@ var CORA = (function(cora) {
 			return createOutputText();
 		};
 
-		fun.createInput = function(){
+		spec.createInput = function(){
 			valueView = createTextTypeInput();
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
@@ -46,20 +47,21 @@ var CORA = (function(cora) {
 		};
 
 		var level2info = cora.level2info(dependencies, spec);
-		var varViewsuper = cora.varViewSuper(fun, dependencies, spec);
+		var varViewsuper = cora.varViewSuper(dependencies, spec);
 
 		function start() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
 			valueView = varViewsuper.createValueView();
-
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
+			varViewsuper.setView(view);
+			varViewsuper.setInfo(info);
 		}
 		function createInfo() {
 			var infoSpec = {
 				"appendTo" : view,
-				"afterLevelChange" : updateClassName,
+				"afterLevelChange" : varViewsuper.updateClassName,
 				"level1" : [ {
 					"className" : "textView",
 					"text" : spec.info.text
@@ -72,30 +74,6 @@ var CORA = (function(cora) {
 			return dependencies.infoFactory.factor(infoSpec);
 		}
 
-		function updateClassName() {
-			var className = baseClassName;
-			if (stateIndicatesError()) {
-				className += " error";
-			}
-			if (stateIndicatesErrorStillFocused()) {
-				className += " errorStillFocused";
-			}
-			if (infoIsShown()) {
-				className += " infoActive";
-			}
-			view.className = className;
-		}
-
-		function stateIndicatesError() {
-			return state === "error";
-		}
-		function stateIndicatesErrorStillFocused() {
-			return state === "errorStillFocused";
-		}
-
-		function infoIsShown() {
-			return info.getInfoLevel() !== 0;
-		}
 
 		function possiblyAddOnkeyupEvent(valueViewIn) {
 			if (spec.onkeyupFunction !== undefined) {
@@ -158,35 +136,17 @@ var CORA = (function(cora) {
 			return outputNew;
 		}
 
-		function getView() {
-			return view;
-		}
 
-		function getDependencies() {
-			return dependencies;
-		}
 
-		function getSpec() {
-			return spec;
-		}
-
-		function setValue(value) {
-			valueView.setValue(value);
-		}
-
-		function setState(stateIn) {
-			state = stateIn;
-			updateClassName();
-		}
 
 		out = Object.freeze({
 			"type" : "pVarView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			setValue : setValue,
-			updateClassName : updateClassName,
-			setState : setState
+			getDependencies : varViewsuper.getDependencies,
+			getSpec : varViewsuper.getSpec,
+			getView : varViewsuper.getView,
+			setValue : varViewsuper.setValue,
+			updateClassName : varViewsuper.updateClassName,
+			setState : varViewsuper.setState
 		});
 		start();
 		return out;

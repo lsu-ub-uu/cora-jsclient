@@ -18,40 +18,15 @@
  */
 var CORA = (function(cora) {
     "use strict";
-    cora.varViewSuper = function(fun, dependencies, spec) {
+    cora.varViewSuper = function(dependencies, spec) {
 
         var out;
-        var view;
+        var view = spec.view;
         var valueView;
-        var baseClassName = "pNumVar " + spec.presentationId;
-        var info;
+        var baseClassName = spec.baseClassName;
         var state = "ok";
-
+        var info;
         var level2info = cora.level2info(dependencies, spec);
-
-        function start() {
-            view = CORA.gui.createSpanWithClassName(baseClassName);
-            info = createInfo();
-
-            createValueView();
-            view.appendChild(valueView);
-            view.appendChild(info.getButton());
-        }
-        function createInfo() {
-            var infoSpec = {
-                "appendTo" : view,
-                "afterLevelChange" : updateClassName,
-                "level1" : [ {
-                    "className" : "textView",
-                    "text" : spec.info.text
-                }, {
-                    "className" : "defTextView",
-                    "text" : spec.info.defText
-                } ]
-            };
-            level2info.possiblyAddLevel2Info(infoSpec);
-            return dependencies.infoFactory.factor(infoSpec);
-        }
 
 
         function updateClassName() {
@@ -81,26 +56,14 @@ var CORA = (function(cora) {
 
         function createValueView() {
             if (spec.mode === "input") {
-                valueView = fun.createInput();
+                valueView = spec.createInput();
             } else {
-                valueView = fun.createOutput();
+                valueView = spec.createOutput();
             }
             return valueView;
         }
 
 
-
-        function createTextTypeInput() {
-            var inputNew = document.createElement(getInputTypeFromSpec());
-            if (spec.inputFormat === "password") {
-                inputNew.setAttribute("type", "password");
-            }
-
-            inputNew.setValue = function(value) {
-                inputNew.value = value;
-            };
-            return inputNew;
-        }
 
         function getInputTypeFromSpec() {
             if (spec.inputType !== undefined) {
@@ -110,29 +73,6 @@ var CORA = (function(cora) {
         }
 
 
-        function possiblyAddOnkeyupEvent(valueViewIn) {
-            if (spec.onkeyupFunction !== undefined) {
-                valueViewIn.onkeyup = function() {
-                    spec.onkeyupFunction(valueViewIn.value);
-                };
-            }
-        }
-
-        function possiblyAddOnblurEvent(valueViewIn) {
-            if (spec.onblurFunction !== undefined) {
-                valueViewIn.onblur = function() {
-                    spec.onblurFunction(valueViewIn.value);
-                };
-            }
-        }
-
-        function createOutputText() {
-            var outputNew = CORA.gui.createSpanWithClassName("value");
-            outputNew.setValue = function(value) {
-                outputNew.textContent = value;
-            };
-            return outputNew;
-        }
 
         function getView() {
             return view;
@@ -155,6 +95,15 @@ var CORA = (function(cora) {
             updateClassName();
         }
 
+        function setInfo(infoIn){
+            info = infoIn;
+        }
+
+        function setView(viewIn){
+            view = viewIn;
+        }
+
+
         var out = Object.freeze({
             "type" : "pVarView",
             getDependencies : getDependencies,
@@ -164,7 +113,9 @@ var CORA = (function(cora) {
             updateClassName : updateClassName,
             setState : setState,
             createValueView:createValueView,
-            getInputTypeFromSpec: getInputTypeFromSpec
+            getInputTypeFromSpec: getInputTypeFromSpec,
+            setInfo:setInfo,
+            setView:setView
         });
 
       return out;

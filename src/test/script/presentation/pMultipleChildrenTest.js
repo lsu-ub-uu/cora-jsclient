@@ -306,7 +306,7 @@ QUnit.test("testFirstPChildRefHandlerSpecNoAddButtonText", function(assert) {
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableIdOutput");
 	assert.strictEqual(this.getId(factoredSpec.cAlternativePresentation), "pVarTextVariableId");
 
-	assert.strictEqual(factoredSpec.addButtonTextId, undefined);
+	assert.strictEqual(factoredSpec.addText, undefined);
 });
 
 QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
@@ -319,7 +319,7 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
 
-	assert.strictEqual(factoredSpec.addButtonTextId, "someTextIdForAddButtonText");
+	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
 
 QUnit.test("testPNonRepeatingChildRefHandlerSpecWithAddButtonText", function(assert) {
@@ -334,7 +334,7 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpecWithAddButtonText", function(ass
 
 	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
 	assert.strictEqual(factoredSpec.parentMetadataId, "groupIdTwoTextChildRepeat1to5");
-	assert.strictEqual(factoredSpec.addButtonTextId, "someTextIdForAddButtonText");
+	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pTextVariablePlus2SContainer");
 

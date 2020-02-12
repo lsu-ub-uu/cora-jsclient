@@ -195,7 +195,7 @@ var CORA = (function(cora) {
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
-			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		}
 
@@ -218,12 +218,12 @@ var CORA = (function(cora) {
 			}
 		}
 		
-		function possiblyAddAddButtonTextToSpec(cPresentationChildRef,
+		function possiblyAddAddTextToSpec(cPresentationChildRef,
 				childRefHandlerSpec){
-			if(cPresentationChildRef.containsChildWithNameInData("addButtonText")){
-				var cTextGroup =CORA.coraData(cPresentationChildRef.getFirstChildByNameInData("addButtonText"));
-				var addButtonTextId = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-				childRefHandlerSpec.addButtonTextId = addButtonTextId;
+			if(cPresentationChildRef.containsChildWithNameInData("addText")){
+				var cTextGroup =CORA.coraData(cPresentationChildRef.getFirstChildByNameInData("addText"));
+				var addText = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+				childRefHandlerSpec.addText = addText;
 			}
 		}
 		
@@ -242,7 +242,7 @@ var CORA = (function(cora) {
 			}
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
-			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			var pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
 			return pChildRefHandler.getView();
 		}

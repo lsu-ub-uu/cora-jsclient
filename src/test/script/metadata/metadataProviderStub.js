@@ -6133,7 +6133,7 @@ function MetadataProviderStub() {
 							"name" : "childStyle",
 							"value" : "fourChildStyle"
 						},{
-			                  "name": "addButtonText",
+			                  "name": "addText",
 			                  "children": [
 			                    {
 			                      "name": "linkedRecordType",
@@ -6141,7 +6141,7 @@ function MetadataProviderStub() {
 			                    },
 			                    {
 			                      "name": "linkedRecordId",
-			                      "value": "someTextIdForAddButtonText"
+			                      "value": "someTextIdForAddText"
 			                    }
 			                  ]
 			                } ]
@@ -8217,7 +8217,7 @@ function MetadataProviderStub() {
 							"name" : "childStyle",
 							"value" : "fourChildStyle"
 						},{
-			                  "name": "addButtonText",
+			                  "name": "addText",
 			                  "children": [
 			                    {
 			                      "name": "linkedRecordType",
@@ -8225,7 +8225,7 @@ function MetadataProviderStub() {
 			                    },
 			                    {
 			                      "name": "linkedRecordId",
-			                      "value": "someTextIdForAddButtonText"
+			                      "value": "someTextIdForAddText"
 			                    }
 			                  ]
 			                } ]

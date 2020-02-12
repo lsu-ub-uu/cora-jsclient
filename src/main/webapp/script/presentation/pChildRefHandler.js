@@ -151,7 +151,7 @@ var CORA = (function(cora) {
 		}
 		
 		function getTextForAddButton(cMetadataElement){
-			var textId = spec.addButtonText != undefined ? spec.addButtonText : getTextId(cMetadataElement); 
+			var textId = spec.addText != undefined ? spec.addText : getTextId(cMetadataElement); 
 			return dependencies.textProvider.getTranslation(textId);
 		}
 

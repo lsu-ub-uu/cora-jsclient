@@ -40,8 +40,7 @@ var CORA = (function(cora) {
 		var metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		var cMetadataElement = getMetadataById(metadataId);
 
-		var textId = spec.addButtonText != undefined ? spec.addButtonText : getTextId(cMetadataElement); 
-		var text = dependencies.textProvider.getTranslation(textId);
+		var text = getTextForAddButton(cMetadataElement);
 		
 		var repeatMin = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMin");
 		var repeatMax = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMax");
@@ -149,6 +148,11 @@ var CORA = (function(cora) {
 
 		function getMetadataById(id) {
 			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+		}
+		
+		function getTextForAddButton(cMetadataElement){
+			var textId = spec.addButtonText != undefined ? spec.addButtonText : getTextId(cMetadataElement); 
+			return dependencies.textProvider.getTranslation(textId);
 		}
 
 		function collectAttributesForMetadataId(metadataIdIn) {

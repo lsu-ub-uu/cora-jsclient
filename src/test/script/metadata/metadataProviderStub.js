@@ -8174,7 +8174,64 @@ function MetadataProviderStub() {
 					} ]
 				} ]
 			};
-
+		case "groupWithSContainerWithAddButtonTextPGroup":
+			return {
+				"name" : "presentation",
+				"attributes" : {
+					"type" : "pGroup"
+				},
+				"children" : [ createRecordInfoJson(idToGet) ].concat([ {
+					"children" : [ {
+						"name" : "linkedRecordType",
+						"value" : "metadataGroup"
+					}, {
+						"name" : "linkedRecordId",
+						"value" : "groupIdTwoTextChildRepeat1to5"
+					} ],
+					"name" : "presentationOf"
+				}, {
+					"name" : "childReferences",
+					"children" : [ {
+						"name" : "childReference",
+						"repeatId" : "1",
+						"children" : [ {
+							"name" : "refGroup",
+							"repeatId" : "0",
+							"children" : [ {
+								"name" : "ref",
+								"children" : [ {
+									"name" : "linkedRecordType",
+									"value" : "presentation"
+								}, {
+									"name" : "linkedRecordId",
+									"value" : "pTextVariablePlus2SContainer"
+								} ],
+								"attributes" : {
+									"type" : "presentation"
+								}
+							} ]
+						},  {
+							"name" : "textStyle",
+							"value" : "h2TextStyle"
+						}, {
+							"name" : "childStyle",
+							"value" : "fourChildStyle"
+						},{
+			                  "name": "addButtonText",
+			                  "children": [
+			                    {
+			                      "name": "linkedRecordType",
+			                      "value": "coraText"
+			                    },
+			                    {
+			                      "name": "linkedRecordId",
+			                      "value": "someTextIdForAddButtonText"
+			                    }
+			                  ]
+			                } ]
+					} ]
+				} ])
+			};
 		case "pgGroupIdTwoTextChildSurrounding2TextPGroup2":
 			return {
 				"name" : "presentation",

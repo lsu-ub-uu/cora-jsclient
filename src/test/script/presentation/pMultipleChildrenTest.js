@@ -239,17 +239,6 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 	
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
-//	assert.strictEqual(factoredSpec.mode, "input");
-	
-	
-//}, {
-//	"name" : "textStyle",
-//	"value" : "h2TextStyle"
-//}, {
-//	"name" : "childStyle",
-//	"value" : "fourChildStyle"
-//} ]
-	
 });
 
 QUnit.test("testPNonRepeatingChildRefHandlerSpecWithMinimized", function(assert) {
@@ -323,14 +312,31 @@ QUnit.test("testFirstPChildRefHandlerSpecNoAddButtonText", function(assert) {
 QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
 			.getMetadataById("pgGroupIdTwoTextChild"));
-	console.log("start testFirstPChildRefHandlerSpecWithAddButtonText");
 	
 	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
 	pMultipleChildren.init();
-	console.log("stopp testFirstPChildRefHandlerSpecWithAddButtonText");
 	
 	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
 
 	assert.strictEqual(factoredSpec.addButtonTextId, "someTextIdForAddButtonText");
 });
+
+QUnit.test("testPNonRepeatingChildRefHandlerSpecWithAddButtonText", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerWithAddButtonTextPGroup"));
+
+	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+
+	var factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
+
+	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
+	assert.strictEqual(factoredSpec.parentMetadataId, "groupIdTwoTextChildRepeat1to5");
+	assert.strictEqual(factoredSpec.addButtonTextId, "someTextIdForAddButtonText");
+
+	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pTextVariablePlus2SContainer");
+
+});
+

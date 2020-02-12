@@ -195,8 +195,7 @@ var CORA = (function(cora) {
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
-			//TODO:se till att vi har ett test som hamnar här
-//			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		}
 

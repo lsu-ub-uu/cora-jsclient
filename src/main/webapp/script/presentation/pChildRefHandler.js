@@ -40,9 +40,9 @@ var CORA = (function(cora) {
 		var metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		var cMetadataElement = getMetadataById(metadataId);
 
-		var textId = getTextId(cMetadataElement);
+		var textId = spec.addButtonText != undefined ? spec.addButtonText : getTextId(cMetadataElement); 
 		var text = dependencies.textProvider.getTranslation(textId);
-
+		
 		var repeatMin = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMin");
 		var repeatMax = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMax");
 

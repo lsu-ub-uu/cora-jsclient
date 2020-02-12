@@ -305,3 +305,32 @@ QUnit.test("testGuiElementLink", function(assert) {
 	assert.strictEqual(view.childNodes[1].text, "text for: someTextToPresentAsLinkText");
 	assert.strictEqual(view.childNodes[1].href, "http://www.google.se/");
 });
+
+QUnit.test("testFirstPChildRefHandlerSpecNoAddButtonText", function(assert) {
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("pgGroupIdOneTextChildMinimizedDefaultNoStyleInfo"));
+	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+
+	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
+	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableIdOutput");
+	assert.strictEqual(this.getId(factoredSpec.cAlternativePresentation), "pVarTextVariableId");
+
+	assert.strictEqual(factoredSpec.addButtonTextId, undefined);
+});
+
+QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("pgGroupIdTwoTextChild"));
+	console.log("start testFirstPChildRefHandlerSpecWithAddButtonText");
+	
+	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	console.log("stopp testFirstPChildRefHandlerSpecWithAddButtonText");
+	
+	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
+
+	assert.strictEqual(factoredSpec.addButtonTextId, "someTextIdForAddButtonText");
+});

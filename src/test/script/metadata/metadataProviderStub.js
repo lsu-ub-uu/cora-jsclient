@@ -6132,7 +6132,19 @@ function MetadataProviderStub() {
 						}, {
 							"name" : "childStyle",
 							"value" : "fourChildStyle"
-						} ]
+						},{
+			                  "name": "addButtonText",
+			                  "children": [
+			                    {
+			                      "name": "linkedRecordType",
+			                      "value": "coraText"
+			                    },
+			                    {
+			                      "name": "linkedRecordId",
+			                      "value": "someTextIdForAddButtonText"
+			                    }
+			                  ]
+			                } ]
 					}, {
 						"name" : "childReference",
 						"repeatId" : "2",

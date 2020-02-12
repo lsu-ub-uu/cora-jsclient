@@ -2074,3 +2074,28 @@ QUnit.test("testNewElementsAddedNotEnoughOneAlreadyAddedTwoshouldBeAdded", funct
 	pChildRefHandler.newElementsAdded();
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray().length, 0);
 });
+
+QUnit.test("testAddTextIsPickedFromSpecWhenExistInSpec", function(assert) {
+	this.dependencies.textProvider = CORATEST.textProviderSpy();
+	this.spec.childStyle = "someChildStyle";
+	this.spec.textStyle = "someTextStyle";
+	this.spec.addButtonText = "some_other_addButtonText";
+	this.spec.mode = "input";
+	var pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
+	var view = pChildRefHandler.getView();
+	this.fixture.appendChild(view);
+
+	var factoredView = this.dependencies.pChildRefHandlerViewFactory.getFactored(0);
+	assert.strictEqual(view, factoredView.getView());
+
+	var factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
+	var expectedSpec = {
+		"presentationId" : "pVarTextVariableId",
+		"isRepeating" : false,
+		"addText" : "+ translated_some_other_addButtonText",
+		"mode" : "input",
+		"textStyle" : "someTextStyle",
+		"childStyle" : "someChildStyle"
+	};
+	assert.stringifyEqual(factoredSpec, expectedSpec);
+});

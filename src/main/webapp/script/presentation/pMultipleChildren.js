@@ -195,6 +195,8 @@ var CORA = (function(cora) {
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
+			//TODO:se till att vi har ett test som hamnar här
+//			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		}
 
@@ -216,7 +218,16 @@ var CORA = (function(cora) {
 				childRefHandlerSpec.cAlternativePresentation = cAlternativePresentation;
 			}
 		}
-
+		
+		function possiblyAddAddButtonTextToSpec(cPresentationChildRef,
+				childRefHandlerSpec){
+			if(cPresentationChildRef.containsChildWithNameInData("addButtonText")){
+				var cTextGroup =CORA.coraData(cPresentationChildRef.getFirstChildByNameInData("addButtonText"));
+				var addButtonTextId = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+				childRefHandlerSpec.addButtonTextId = addButtonTextId;
+			}
+		}
+		
 		function createPChildRefHandler(cPresentationChild, cPresentationChildRef) {
 			var childRefHandlerSpec = {
 				"parentPath" : path,
@@ -232,7 +243,7 @@ var CORA = (function(cora) {
 			}
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
-
+			possiblyAddAddButtonTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			var pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
 			return pChildRefHandler.getView();
 		}

@@ -29,6 +29,7 @@ var CORA = (function(cora) {
 		let workItemView;
 		let incomingLinksHolder;
 		let reloadButton;
+		let copyAsNewButton;
 
 		const start = function() {
 			let workItemViewSpec = {
@@ -46,7 +47,8 @@ var CORA = (function(cora) {
 			workItemView.addViewToView(buttonView);
 
 			setShowDataFunction(spec.showDataMethod);
-			setCopyAsNewFunction(spec.copyDataMethod);
+//			setCopyAsNewFunction(spec.copyDataMethod);
+			copyAsNewButton = createButton("Copy as new", spec.copyDataMethod, "copyAsNew");
 			showIncomingLinksButton = createButton("INCOMING LINKS",
 				showIncomingLinks, "showIncomingLinks");
 			createIncomingLinksView();
@@ -111,8 +113,12 @@ var CORA = (function(cora) {
 
 		const setCopyAsNewFunction = function(functionToCall) {
 			let button = createButton("Copy as new", functionToCall, "copyAsNew");
-			workItemView.addToolViewToToolHolder(button);
 		};
+		
+		const showShowCopyAsNewButton = function(){
+			workItemView.addToolViewToToolHolder(copyAsNewButton);
+			
+		}
 
 		const addReloadRecordFunction = function(functionToCall) {
 			if (undefined === reloadButton) {
@@ -169,7 +175,8 @@ var CORA = (function(cora) {
 			addToIncomingLinksView: addToIncomingLinksView,
 			showShowIncomingLinksButton: showShowIncomingLinksButton,
 			hideShowIncomingLinksButton: hideShowIncomingLinksButton,
-			addReloadRecordUsingFunction: addReloadRecordFunction
+			addReloadRecordUsingFunction: addReloadRecordFunction,
+			showShowCopyAsNewButton:showShowCopyAsNewButton
 		});
 	};
 	return cora;

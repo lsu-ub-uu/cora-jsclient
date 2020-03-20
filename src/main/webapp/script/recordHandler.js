@@ -279,6 +279,7 @@ var CORA = (function(cora) {
 
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
+			possiblyShowShowCopyAsNewButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
 		};
@@ -335,6 +336,11 @@ var CORA = (function(cora) {
 			if (recordHasIncomingLinks()) {
 				recordHandlerView.showShowIncomingLinksButton();
 			}
+		};
+		const possiblyShowShowCopyAsNewButton = function() {
+//			if (fetchedRecord.actionLinks.create !== undefined) {
+				recordHandlerView.showShowCopyAsNewButton();
+//			}
 		};
 
 		const recordHasIncomingLinks = function() {

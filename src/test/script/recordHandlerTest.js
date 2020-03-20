@@ -140,6 +140,17 @@ QUnit.module("recordHandlerTest.js", {
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		};
+		this.answerCallWithCopyAsNewButton = function(no) {
+			var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
+			var jsonRecord = JSON.stringify({
+				"record" : this.recordWithReadIncomingLinks
+			});
+			var answer = {
+				"spec" : ajaxCallSpy0.getSpec(),
+				"responseText" : jsonRecord
+			};
+			ajaxCallSpy0.getSpec().loadMethod(answer);
+		};
 
 	},
 	afterEach : function() {
@@ -281,6 +292,17 @@ QUnit.test("testShowData", function(assert) {
 
 	assert.strictEqual(messageHolder.className, "messageHolder");
 	// TODO: move to view...
+});
+
+QUnit.test("initCheckCopyAsNewButton", function(assert) {
+	this.spec.createNewRecord = "false";
+	this.spec.record = this.recordWithReadIncomingLinks;
+	
+	var recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCallWithCopyAsNewButton(0);
+	
+	var recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	assert.strictEqual(recordHandlerViewSpy.getShowShowIncomingLinksButton(), true);
 });
 
 QUnit.test("testCopyAsNew", function(assert) {
@@ -763,6 +785,7 @@ QUnit.test("initCheckIncomingLinksButtonForIncomingLinks", function(assert) {
 	var recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	assert.strictEqual(recordHandlerViewSpy.getShowShowIncomingLinksButton(), true);
 });
+
 
 QUnit.test("testIndexCall", function(assert) {
 	this.spec.createNewRecord = "false";

@@ -29,6 +29,7 @@ var CORATEST = (function(coraTest) {
 		var objectsAddedToEditView = [];
 
 		var showShowIncomingLinks = false;
+		var showShowCopyAsNew = false;
 		var showIndexButton = false;
 		var objectsAddedToIncomingLinksView = [];
 		
@@ -107,6 +108,14 @@ var CORATEST = (function(coraTest) {
 		function getShowShowIncomingLinksButton() {
 			return showShowIncomingLinks;
 		}
+		
+		function showShowCopyAsNewButton() {
+			showShowCopyAsNew = true;
+		}
+		
+		function getShowShowCopyAsNewButton() {
+			return showShowCopyAsNew;
+		}
 
 		function addToIncomingLinksView(obj) {
 			objectsAddedToIncomingLinksView.push(obj);
@@ -134,6 +143,8 @@ var CORATEST = (function(coraTest) {
 			getClearDataViewsWasCalled : getClearDataViewsWasCalled,
 			setShowDataFunction : setShowDataFunction,
 			setCopyAsNewFunction : setCopyAsNewFunction,
+			getShowShowCopyAsNewButton : getShowShowCopyAsNewButton,
+			showShowCopyAsNewButton: showShowCopyAsNewButton,
 
 			getSpec : getSpec,
 			getSpyView : getSpyView,

@@ -19,13 +19,13 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordGui = function(dependencies, spec) {
-		var pubSub = dependencies.pubSub;
-		var dataHolder = dependencies.dataHolder;
-		var jsBookkeeper = dependencies.jsBookkeeper;
-		var metadataController;
+		let pubSub = dependencies.pubSub;
+		let dataHolder = dependencies.dataHolder;
+		let jsBookkeeper = dependencies.jsBookkeeper;
+		let metadataController;
 
-		function getPresentationHolder(presentationId, metadataIdUsedInData) {
-			var spec1 = {
+		const getPresentationHolder = function(presentationId, metadataIdUsedInData) {
+			let spec1 = {
 				"presentationId" : presentationId,
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"metadataProvider" : dependencies.metadataProvider,
@@ -35,10 +35,10 @@ var CORA = (function(cora) {
 				"presentationFactory" : dependencies.presentationFactory
 			};
 			return dependencies.presentationHolderFactory.factor(spec1);
-		}
+		};
 
-		function initMetadataControllerStartingGui() {
-			var specMetadataController = {
+		const initMetadataControllerStartingGui = function() {
+			let specMetadataController = {
 				"metadataId" : spec.metadataId,
 				"data" : spec.data,
 				"metadataProvider" : dependencies.metadataProvider,
@@ -47,23 +47,23 @@ var CORA = (function(cora) {
 			metadataController = dependencies.metadataControllerFactory
 					.factor(specMetadataController);
 			return metadataController;
-		}
+		};
 
-		function validateData() {
-			var spec2 = {
+		const validateData = function() {
+			let spec2 = {
 				"metadataId" : spec.metadataId,
 				"data" : dependencies.dataHolder.getData(),
 				"metadataProvider" : dependencies.metadataProvider,
 				"pubSub" : dependencies.pubSub
 			};
 			return dependencies.metadataValidatorFactory.factor(spec2).validate();
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 

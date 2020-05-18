@@ -21,15 +21,15 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.metadataValidatorFactory = function(metadataProvider, pubSub) {
-		var factor = function(metadataId, data) {
+		let factor = function(metadataId, data) {
 
-			var spec = {
+			let spec = {
 				"metadataId" : metadataId,
 				"data" : data,
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub
 			};
-			var validationResult = CORA.metadataValidator(spec).validate();
+			let validationResult = CORA.metadataValidator(spec).validate();
 			return {
 				validationResult : validationResult,
 				metadataProvider : metadataProvider,
@@ -47,7 +47,7 @@ var CORATEST = (function(coraTest) {
 
 QUnit.module("metadataValidatorTest.js", {
 	beforeEach : function() {
-		var metadataProvider = new MetadataProviderStub();
+		let metadataProvider = new MetadataProviderStub();
 		this.spec = {
 			"metadataId" : "groupIdOneTextChild",
 			"data" : undefined,
@@ -65,17 +65,17 @@ QUnit.module("metadataValidatorTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var metadataValidator = CORA.metadataValidator(this.spec);
+	let metadataValidator = CORA.metadataValidator(this.spec);
 	assert.strictEqual(metadataValidator.type, "metadataValidator");
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var metadataValidator = CORA.metadataValidator(this.spec);
+	let metadataValidator = CORA.metadataValidator(this.spec);
 	assert.strictEqual(metadataValidator.getSpec(), this.spec);
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChild",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -83,14 +83,14 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChild",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -98,9 +98,9 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"textVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -108,7 +108,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 });
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupId1toXCollectionChild",
 		"children" : [ {
 			"name" : "yesNoUnknownVar",
@@ -116,14 +116,14 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert)
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupId1toXCollectionChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupId1toXCollectionChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupId1toXCollectionChild",
 		"children" : [ {
 			"name" : "yesNoUnknownVar",
@@ -131,9 +131,9 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupId1toXCollectionChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupId1toXCollectionChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"yesNoUnknownVar",' + '"path":{\"name\":\"linkedPath\"'
@@ -141,7 +141,7 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 });
 
 QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdTwoTextChild",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -152,14 +152,14 @@ QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdTwoTextChildWithEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdTwoTextChild",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -170,9 +170,9 @@ QUnit.test("testValidateGroupIdTwoTextChildWithEmptyValue", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"textVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -183,7 +183,7 @@ QUnit.test("testValidateGroupIdTwoTextChildWithEmptyValue", function(assert) {
 });
 
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdTwoTextChild1to1InGroup",
 		"children" : [ {
 			"name" : "groupIdTwoTextChild",
@@ -197,14 +197,14 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild1to1InGroup", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild1to1InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdTwoTextChild1to1InGroup",
 		"children" : [ {
 			"name" : "groupIdTwoTextChild",
@@ -218,11 +218,11 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild1to1InGroup", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdTwoTextChild1to1InGroup", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	var validationError = {
+	let validationError = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVariableId",
@@ -245,7 +245,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 });
 
 QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -253,14 +253,14 @@ QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -268,29 +268,29 @@ QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"remove","message":{'
 			+ '"type":"remove",' + '"path":{\"name\":\"linkedPath\"'
 			+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"textVariableId\"}]}}}');
 });
 QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : []
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 // textVarRepeat1to3InGroup
 QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVariableIdRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -299,14 +299,14 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert)
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
+	let factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVariableIdRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -319,12 +319,12 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
+	let factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
 
-	var validationError = {
+	let validationError = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -341,7 +341,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
-	var validationError2 = {
+	let validationError2 = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVariableId",
@@ -361,7 +361,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 });
 
 QUnit.test("testValidateOneChildRepeat3to3WithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -378,14 +378,14 @@ QUnit.test("testValidateOneChildRepeat3to3WithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat3to3", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat3to3", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -402,9 +402,9 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat3to3", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat3to3", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"textVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -414,7 +414,7 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -423,14 +423,14 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -442,14 +442,14 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 			"repeatId" : "two"
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildRepeat0to1",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -461,9 +461,9 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 			"repeatId" : "two"
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"remove","message":{'
 			+ '"type":"remove",' + '"path":{\"name\":\"linkedPath\"'
@@ -472,7 +472,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 });
 
 QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneTextChildOneAttribute",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -483,14 +483,14 @@ QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
 		}
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneTextChildOneAttribute", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildOneAttribute", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupInGroupOneTextChildOneAttribute",
 		"children" : [ {
 			"name" : "groupIdOneTextChildOneAttribute",
@@ -503,16 +503,16 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", fu
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildOneAttribute",
+	let factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildOneAttribute",
 			data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValue",
 		function(assert) {
-			var data = {
+			let data = {
 				"name" : "groupInGroupOneTextChildOneAttribute",
 				"children" : [ {
 					"name" : "groupIdOneTextChildOneAttribute",
@@ -525,12 +525,12 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 					}
 				} ]
 			};
-			var factored = this.metadataValidatorFactory.factor(
+			let factored = this.metadataValidatorFactory.factor(
 					"groupInGroupOneTextChildOneAttribute", data);
 			assert.notOk(factored.validationResult);
-			var messages = this.pubSub.getMessages();
+			let messages = this.pubSub.getMessages();
 			assert.strictEqual(messages.length, 1);
-			var validationError = {
+			let validationError = {
 				"type" : "validationError",
 				"message" : {
 					"metadataId" : "textVariableId",
@@ -567,7 +567,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 		});
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupInGroupOneTextChildTwoAttributes",
 		"children" : [ {
 			"name" : "groupIdOneTextChildTwoAttributes",
@@ -581,16 +581,16 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", fu
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildTwoAttributes",
+	let factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildTwoAttributes",
 			data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValue",
 		function(assert) {
-			var data = {
+			let data = {
 				"name" : "groupInGroupOneTextChildTwoAttributes",
 				"children" : [ {
 					"name" : "groupIdOneTextChildTwoAttributes",
@@ -604,12 +604,12 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 					}
 				} ]
 			};
-			var factored = this.metadataValidatorFactory.factor(
+			let factored = this.metadataValidatorFactory.factor(
 					"groupInGroupOneTextChildTwoAttributes", data);
 			assert.notOk(factored.validationResult);
-			var messages = this.pubSub.getMessages();
+			let messages = this.pubSub.getMessages();
 			assert.strictEqual(messages.length, 1);
-			var validationError = {
+			let validationError = {
 				"type" : "validationError",
 				"message" : {
 					"metadataId" : "textVariableId",
@@ -656,7 +656,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 
 QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 		+ "Repeat0to2InGroupRepeat1to3InGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -675,16 +675,16 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			} ]
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 		+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -703,14 +703,14 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			} ]
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
 
 	assert.strictEqual(factored.validationResult, false);
 
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
-	var validationError = {
+	let validationError = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -759,7 +759,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 	};
 	assert.stringifyEqual(messages[0], validationError);
 
-	var removeMessage = {
+	let removeMessage = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -803,7 +803,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		+ "Repeat0to2InGroupRepeat1to3InGroupWithData2", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOne" + "AttributeRepeat0to2InGroupRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -838,16 +838,16 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOne" + "AttributeRepeat0to2InGroupRepeat1to3InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -886,14 +886,14 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
 
 	assert.ok(factored.validationResult);
 
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 4);
-	var validationError = {
+	let validationError = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -942,7 +942,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 	};
 	assert.stringifyEqual(messages[0], validationError);
 
-	var validationError2 = {
+	let validationError2 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -982,7 +982,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 	};
 	assert.stringifyEqual(messages[1], validationError2);
 
-	var validationError3 = {
+	let validationError3 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -1031,7 +1031,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 	};
 	assert.stringifyEqual(messages[2], validationError3);
 
-	var validationError4 = {
+	let validationError4 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -1052,7 +1052,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 		+ "OneAttributeAndOtherAttributeRepeat0to2InGroupWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttribute",
@@ -1078,16 +1078,16 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 		+ "OneAttributeAndOtherAttributeRepeat0to2InGroupEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttribute",
@@ -1113,12 +1113,12 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 4);
-	var validationError = {
+	let validationError = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -1157,7 +1157,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
-	var validationError2 = {
+	let validationError2 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -1188,7 +1188,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 	};
 	assert.stringifyEqual(messages[1], validationError2);
 
-	var validationError3 = {
+	let validationError3 = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -1228,7 +1228,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 	};
 	assert.stringifyEqual(messages[2], validationError3);
 
-	var validationError4 = {
+	let validationError4 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -1263,7 +1263,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 		+ "OneAttributeAndOtherAttributeRepeat1to1InGroupWithData", function(assert) {
 
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttribute",
@@ -1287,17 +1287,17 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 		+ "OneAttributeAndOtherAttributeRepeat1to1InGroupEmptyValue", function(assert) {
 
-	var data = {
+	let data = {
 		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup",
 		"children" : [ {
 			"name" : "textVarRepeat1to3InGroupOneAttribute",
@@ -1321,12 +1321,12 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}
 		} ]
 	};
-	var factored = this.metadataValidatorFactory.factor(
+	let factored = this.metadataValidatorFactory.factor(
 			"textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
-	var validationError = {
+	let validationError = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -1363,7 +1363,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 	};
 	assert.stringifyEqual(messages[0], validationError);
 
-	var validationError2 = {
+	let validationError2 = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "textVar",
@@ -1402,7 +1402,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 });
 
 QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneRecordLinkChild",
 		"children" : [ {
 			"name" : "myLink",
@@ -1416,14 +1416,14 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneRecordLinkChild",
 		"children" : [ {
 			"name" : "myLink",
@@ -1437,12 +1437,12 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 
-	var expectedMessage = {
+	let expectedMessage = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "linkedRecordIdTextVar",
@@ -1469,7 +1469,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 
 // "groupId0to1RecordLinkChild"
 QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupId0to1RecordLinkChild",
 		"children" : [ {
 			"name" : "myLink",
@@ -1483,12 +1483,12 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupId0to1RecordLinkChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupId0to1RecordLinkChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
 
-	var expectedMessage = {
+	let expectedMessage = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "linkedRecordIdTextVar",
@@ -1509,7 +1509,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 			}
 		}
 	};
-	var expectedMessage2 = {
+	let expectedMessage2 = {
 		"type" : "remove",
 		"message" : {
 			"type" : "remove",
@@ -1530,7 +1530,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 
 // groupIdOneRecordLinkChildWithPath
 QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneRecordLinkChildWithPath",
 		"children" : [ {
 			"name" : "myPathLink",
@@ -1547,14 +1547,14 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(ass
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChildWithPath", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChildWithPath", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneRecordLinkChildWithPath",
 		"children" : [ {
 			"name" : "myPathLink",
@@ -1571,12 +1571,12 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChildWithPath", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChildWithPath", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 
-	var expectedMessage = {
+	let expectedMessage = {
 		"type" : "validationError",
 		"message" : {
 			"metadataId" : "linkedRepeatIdTextVar",
@@ -1599,7 +1599,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 	assert.stringifyEqual(messages[0], expectedMessage);
 });
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneNumberChild",
 		"children" : [ {
 			"name" : "numVariableId",
@@ -1607,14 +1607,14 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(assert) {
-    var data = {
+    let data = {
         "name" : "groupIdOneNumberChild",
         "children" : [ {
             "name" : "numVariableId",
@@ -1622,15 +1622,15 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
         } ]
     };
 
-    var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+    let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
     assert.notOk(factored.validationResult);
-    var messages = this.pubSub.getMessages();
+    let messages = this.pubSub.getMessages();
     assert.strictEqual(messages.length, 1);
 });
 
 
 QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(assert) {
-	var data = {
+	let data = {
 			"name" : "groupIdOneNumberNotMandatoryChild",
 			"children" : [ {
 				"name" : "numVariableId",
@@ -1638,9 +1638,9 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 			} ]
 	};
 	
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberNotMandatoryChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberNotMandatoryChild", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 
     assert.deepEqual(JSON.stringify(messages[0]), '{"type":"remove","message":{'
@@ -1649,7 +1649,7 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneNumberChild",
 		"children" : [ {
 			"name" : "numVariableId",
@@ -1657,9 +1657,9 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(a
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -1667,7 +1667,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(a
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneNumberChild",
 		"children" : [ {
 			"name" : "numVariableId",
@@ -1675,9 +1675,9 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -1685,7 +1685,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneNumberChild",
 		"children" : [ {
 			"name" : "numVariableId",
@@ -1693,9 +1693,9 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -1703,7 +1703,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupIdOneNumberChild",
 		"children" : [ {
 			"name" : "numVariableId",
@@ -1711,9 +1711,9 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 		} ]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
+	let factored = this.metadataValidatorFactory.factor("groupIdOneNumberChild", data);
 	assert.notOk(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
 			+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
@@ -1722,7 +1722,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 
 
 QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupWithOneCollectionVarChildAndOneTextChildGroup",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -1734,14 +1734,14 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 		}]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupWithOneCollectionVarChildAndOneTextChildGroup", data);
+	let factored = this.metadataValidatorFactory.factor("groupWithOneCollectionVarChildAndOneTextChildGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithIncorrectFinalValue", function(assert) {
-	var data = {
+	let data = {
 		"name" : "groupWithOneCollectionVarChildAndOneTextChildGroup",
 		"children" : [ {
 			"name" : "textVariableId",
@@ -1753,12 +1753,12 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 		}]
 	};
 
-	var factored = this.metadataValidatorFactory.factor("groupWithOneCollectionVarChildAndOneTextChildGroup", data);
+	let factored = this.metadataValidatorFactory.factor("groupWithOneCollectionVarChildAndOneTextChildGroup", data);
 	assert.notOk(factored.validationResult);
 	
-	var messages = this.pubSub.getMessages();
+	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	var expectedMessage = {
+	let expectedMessage = {
 			"type" : "validationError",
 			"message" : {
 				"metadataId" : "trueFalseTrueIsFinalValueCollectionVar",
@@ -1777,7 +1777,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 });
 
 QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFinalValueWithData", function(assert) {
-	var data = {
+	let data = {
 			"name" : "groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup",
 			"children" : [ {
 				"name" : "groupWithOneCollectionVarChildAndOneTextChildGroup",
@@ -1791,10 +1791,10 @@ QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFina
 			} ]
 		};
 
-	var factored = this.metadataValidatorFactory.factor("groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup", data);
+	let factored = this.metadataValidatorFactory.factor("groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup", data);
 	assert.ok(factored.validationResult);
-	var messages = this.pubSub.getMessages();
-	var validationError = {
+	let messages = this.pubSub.getMessages();
+	let validationError = {
 			  "type": "validationError",
 			  "message": {
 			    "metadataId": "textVariableId",
@@ -1816,7 +1816,7 @@ QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFina
 			    }}
 			};
 		assert.stringifyEqual(messages[0], validationError);
-		var removeMessage = {
+		let removeMessage = {
 				  "type": "remove",
 				  "message": {
 				    "type": "remove",

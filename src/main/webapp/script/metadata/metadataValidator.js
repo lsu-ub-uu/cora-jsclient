@@ -20,37 +20,37 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataValidator = function(spec) {
-		var topLevelMetadataId = spec.metadataId;
-		var topLevelData = spec.data;
+		let topLevelMetadataId = spec.metadataId;
+		let topLevelData = spec.data;
 
-		function validateFirstLevel() {
-			var childrenResult = true;
-			var topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			var topLevelChildReferences = topLevelMetadataElement
-					.getFirstChildByNameInData('childReferences');
-			var topLevelPath = {};
+		const validateFirstLevel = function() {
+			let childrenResult = true;
+			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
+			let topLevelChildReferences = topLevelMetadataElement
+				.getFirstChildByNameInData('childReferences');
+			let topLevelPath = {};
 			topLevelChildReferences.children.forEach(function(childReference) {
-				var childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-						topLevelData, spec.metadataProvider, spec.pubSub);
+				let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
+					topLevelData, spec.metadataProvider, spec.pubSub);
 				if (!childResult.everythingOkBelow) {
 					childrenResult = false;
 				}
 			});
 			return childrenResult;
-		}
+		};
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 
-		var out = Object.freeze({
-			"type" : "metadataValidator",
-			validate : validateFirstLevel,
-			getSpec : getSpec
+		let out = Object.freeze({
+			"type": "metadataValidator",
+			validate: validateFirstLevel,
+			getSpec: getSpec
 		});
 		return out;
 	};

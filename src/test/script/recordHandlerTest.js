@@ -57,21 +57,6 @@ QUnit.module("recordHandlerTest.js", {
 			"record": this.record,
 			"jsClient": CORATEST.jsClientSpy()
 		};
-		this.specUsePrefetchedData = {
-			"fetchLatestDataFromServer": "false",
-			"partOfList": "false",
-			"createNewRecord": "false",
-			"record": this.record,
-			"jsClient": CORATEST.jsClientSpy()
-		};
-
-		this.specList = {
-			"fetchLatestDataFromServer": "false",
-			"partOfList": "true",
-			"createNewRecord": "false",
-			"record": this.record,
-			"jsClient": CORATEST.jsClientSpy()
-		};
 
 		this.specForNew = {
 			"fetchLatestDataFromServer": "false",
@@ -346,7 +331,8 @@ QUnit.test("initTestDataFetchedFromServer", function(assert) {
 });
 
 QUnit.test("initTestUsePrefetchedData", function(assert) {
-	let recordHandler = CORA.recordHandler(this.dependencies, this.specUsePrefetchedData);
+	this.spec.fetchLatestDataFromServer = false;
+	CORA.recordHandler(this.dependencies, this.spec);
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
 
 	assert.strictEqual(ajaxCallSpy, undefined);
@@ -1036,7 +1022,9 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 });
 
 QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
-	let recordHandler = CORA.recordHandler(this.dependencies, this.specList);
+	this.spec.fetchLatestDataFromServer ="false";
+	this.spec.partOfList ="true";
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);

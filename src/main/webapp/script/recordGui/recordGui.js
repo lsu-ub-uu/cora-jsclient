@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -50,13 +50,15 @@ var CORA = (function(cora) {
 		};
 
 		const validateData = function() {
-			let spec2 = {
+			let validateSpec = {
 				"metadataId" : spec.metadataId,
 				"data" : dependencies.dataHolder.getData(),
 				"metadataProvider" : dependencies.metadataProvider,
-				"pubSub" : dependencies.pubSub
+				"pubSub" : dependencies.pubSub,
+				"permissions" : spec.permissions
 			};
-			return dependencies.metadataValidatorFactory.factor(spec2).validate();
+			let validator = dependencies.metadataValidatorFactory.factor(validateSpec);
+			return validator.validate();
 		};
 
 		const getDependencies = function() {

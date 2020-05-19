@@ -45,7 +45,7 @@ var CORA = (function(cora) {
 
 		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		let out = Object.freeze({
 			"type": "metadataValidator",

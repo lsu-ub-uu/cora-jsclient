@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,28 +20,44 @@
 
 var CORA = (function(cora) {
 	"use strict";
-	cora.metadataValidator = function(spec) {
+	cora.metadataValidator = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
+		let metadataProvider = dependencies.metadataProvider;
+		let pubSub = dependencies.pubSub;
 
 		const validateFirstLevel = function() {
-			let childrenResult = true;
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
 				.getFirstChildByNameInData('childReferences');
 			let topLevelPath = {};
-			topLevelChildReferences.children.forEach(function(childReference) {
-				let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-					topLevelData, spec.metadataProvider, spec.pubSub);
-				if (!childResult.everythingOkBelow) {
-					childrenResult = false;
-				}
-			});
-			return childrenResult;
+			return validateTopLevelChildren(topLevelPath, topLevelChildReferences);
 		};
 
+		const validateTopLevelChildren = function(topLevelPath, topLevelChildReferences) {
+			let childrenResult = true;
+			topLevelChildReferences.children.forEach(function(childReference) {
+				//kolla om childreference har constraints
+				//om inte - fortsätt som vanligt
+				// om den har constraints - kolla om användaren har rättigheter
+				//om anv har rättigheter fortsätt som vanligt
+				//annars return true??
+				//				let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
+				//					topLevelData, metadataProvider, pubSub);
+				//				if (!childResult.everythingOkBelow) {
+				//					childrenResult = false;
+				//				}
+			});
+			return childrenResult;
+
+		}
+
 		const getMetadataById = function(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+
+		const getDependencies = function() {
+			return dependencies;
 		};
 
 		const getSpec = function() {
@@ -48,9 +65,10 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type": "metadataValidator",
-			validate: validateFirstLevel,
-			getSpec: getSpec
+			type: "metadataValidator",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			validate: validateFirstLevel
 		});
 		return out;
 	};

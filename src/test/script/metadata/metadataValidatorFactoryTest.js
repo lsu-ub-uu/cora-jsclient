@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,47 +18,52 @@
  */
 "use strict";
 QUnit.module("metadataValidatorFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.dependencies = {
-			// "metadataProvider" : CORATEST.metadataProviderSpy(),
-			"metadataProvider" : new MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy()
+			metadataProvider: CORATEST.metadataProviderSpy(),
+			pubSub: CORATEST.pubSubSpy()
 		};
 		this.spec = {
-			"metadataId" : "groupIdOneTextChild",
-			"data" : undefined,
+			metadataId: "groupIdOneTextChild",
+			data: {},
 		};
 		this.metadataValidatorFactory = CORA.metadataValidatorFactory(this.dependencies);
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	var metadataValidatorFactory = CORA.metadataValidatorFactory(this.dependencies);
+	let metadataValidatorFactory = CORA.metadataValidatorFactory(this.dependencies);
 	assert.strictEqual(metadataValidatorFactory.type, "metadataValidatorFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var metadataValidatorFactory = CORA.metadataValidatorFactory(this.dependencies);
+	let metadataValidatorFactory = CORA.metadataValidatorFactory(this.dependencies);
 	assert.strictEqual(metadataValidatorFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var metadataController = this.metadataValidatorFactory.factor(this.spec);
-	assert.strictEqual(metadataController.type, "metadataValidator");
+	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
+	assert.strictEqual(metadataValidator.type, "metadataValidator");
 });
 
-// QUnit.test("testSpec", function(assert) {
-// var metadataController = this.metadataValidatorFactory.factor(this.spec);
-// var factoredSpec = metadataController.getSpec();
-// assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
-// assert.strictEqual(factoredSpec.data, this.spec.data);
-// });
-//
-// QUnit.test("testSpecThatReallyShouldBeDependency", function(assert) {
-// var metadataController = this.metadataValidatorFactory.factor(this.spec);
-// var factoredSpec = metadataController.getSpec();
-// assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
-// assert.strictEqual(factoredSpec.pubSub, this.dependencies.pubSub);
-// });
+QUnit.test("testSpec", function(assert) {
+	let expectedSpec = {
+		metadataId: "groupIdOneTextChild",
+		data: {},
+	};
+
+	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
+
+	let factoredSpec = metadataValidator.getSpec();
+	assert.stringifyEqual(factoredSpec, expectedSpec);
+});
+
+QUnit.test("testDependencies", function(assert) {
+	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
+
+	let factoredDependencies = metadataValidator.getDependencies();
+	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub);
+});

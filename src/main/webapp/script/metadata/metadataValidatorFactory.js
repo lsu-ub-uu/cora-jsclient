@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,20 +20,22 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataValidatorFactory = function(dependencies) {
 
-		var factor = function(spec) {
-			spec.metadataProvider = dependencies.metadataProvider;
-			spec.pubSub = dependencies.pubSub;
-			return CORA.metadataValidator(spec);
+		const factor = function(spec) {
+			let validatorDependencies = {
+				metadataProvider: dependencies.metadataProvider,
+				pubSub: dependencies.pubSub
+			};
+			return CORA.metadataValidator(validatorDependencies, spec);
 		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
-			"type" : "metadataValidatorFactory",
-			getDependencies : getDependencies,
-			factor : factor
+		const out = Object.freeze({
+			type: "metadataValidatorFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 		return out;
 	};

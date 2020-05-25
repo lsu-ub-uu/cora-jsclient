@@ -18,7 +18,8 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-const { test } = QUnit;
+//const { module, test, only } = QUnit;
+//module("metadataChildValidatorTest.js", {
 QUnit.module("metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
@@ -61,23 +62,28 @@ QUnit.module("metadataChildValidatorTest.js", {
 
 
 
-test("testInit", function(assert) {
+//only("testInit", t => {
+//test("testInit", function(assert) {
+QUnit.test("testInit", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildValidator.type, "metadataChildValidator");
 });
 
 
-test("testGetDependencies", function(assert) {
+//test("testGetDependencies", function(assert) {
+QUnit.test("testGetDependencies", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildValidator.getDependencies(), this.dependencies);
 });
 
-test("testGetSpec", function(assert) {
+//test("testGetSpec", function(assert) {
+QUnit.test("testGetSpec", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildValidator.getSpec(), this.spec);
 });
 
-test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
+//test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
+QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupIdOneTextChild",
 		"children": [{
@@ -89,15 +95,17 @@ test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
 
+CORATEST.assertValidationResultOk = function(assert, validationResult, pubSub) {
 	assert.strictEqual(validationResult.everythingOkBelow, true);
 	assert.strictEqual(validationResult.containsValuableData, true);
-	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 0);
-});
-CORATEST.assertValidationResultOk = function(){
-	
-}
+	let pubSubMessages = pubSub.getMessages();
+	assert.strictEqual(pubSubMessages.length, 0);
+};
+
+
 CORATEST.createChildReference =
 	function(linkedRecordId, repeatId, repeatMin, repeatMax) {
 		return {
@@ -123,7 +131,8 @@ CORATEST.createChildReference =
 		};
 	};
 
-test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
+//test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
+QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupIdOneTextChild",
 		"children": [{
@@ -161,7 +170,8 @@ CORATEST.createValidationErrorMessage =
 		};
 	};
 
-test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
+//test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
+QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupId1toXCollectionChild",
 		"children": [{
@@ -175,13 +185,11 @@ test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
 
 	let validationResult = metadataChildValidator.validate();
 
-	assert.strictEqual(validationResult.everythingOkBelow, true);
-	assert.strictEqual(validationResult.containsValuableData, true);
-	let pubSubMessages = this.pubSub.getMessages();
-	assert.strictEqual(pubSubMessages.length, 0);
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 
-test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
+//test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
+QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupId1toXCollectionChild",
 		"children": [{
@@ -203,7 +211,8 @@ test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(ass
 	assert.stringifyEqual(pubSubMessages[0], CORATEST.createValidationErrorMessage("yesNoUnknownVar"));
 });
 
-test("testValidateGroupIdTwoTextChildWithData", function(assert) {
+//test("testValidateGroupIdTwoTextChildWithData", function(assert) {
+QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupIdTwoTextChild",
 		"children": [{
@@ -220,13 +229,11 @@ test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
 
-	assert.strictEqual(validationResult.everythingOkBelow, true);
-	assert.strictEqual(validationResult.containsValuableData, true);
-	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 0);
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 
-test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
+//test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
+QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
 	this.spec.dataIn = {
 		"name": "groupIdTwoTextChild1to1InGroup",
 		"children": [{
@@ -245,10 +252,7 @@ test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
 
-	assert.strictEqual(validationResult.everythingOkBelow, true);
-	assert.strictEqual(validationResult.containsValuableData, true);
-	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 0);
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 
 //QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(assert) {
@@ -306,11 +310,7 @@ QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
 
 	let validationResult = metadataChildValidator.validate();
 
-	assert.strictEqual(validationResult.everythingOkBelow, true);
-	assert.strictEqual(validationResult.containsValuableData, true);
-
-	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 0);
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 
 QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
@@ -321,7 +321,6 @@ QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
 			"value": ""
 		}]
 	};
-
 	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
@@ -351,93 +350,107 @@ CORATEST.createRemoveMessage =
 			}
 		};
 	};
-//QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
-//	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
-//		"children": []
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat0to1", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
-//// textVarRepeat1to3InGroup
-//QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
-//	let data = {
-//		"name": "textVariableIdRepeat1to3InGroup",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value",
-//			"repeatId": "one"
-//		}]
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
-//QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
-//	let data = {
-//		"name": "textVariableIdRepeat1to3InGroup",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "",
-//			"repeatId": "one"
-//		}, {
-//			"name": "textVariableId",
-//			"value": "",
-//			"repeatId": "two"
-//		}]
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("textVariableIdRepeat1to3InGroup", data);
-//	assert.notOk(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 2);
-//
-//	let validationError = {
-//		"type": "remove",
-//		"message": {
-//			"type": "remove",
-//			"path": {
-//				"name": "linkedPath",
-//				"children": [{
-//					"name": "nameInData",
-//					"value": "textVariableId"
-//				}, {
-//					"name": "repeatId",
-//					"value": "two"
-//				}]
-//			}
-//		}
-//	};
-//	assert.stringifyEqual(messages[0], validationError);
-//	let validationError2 = {
-//		"type": "validationError",
-//		"message": {
-//			"metadataId": "textVariableId",
-//			"path": {
-//				"name": "linkedPath",
-//				"children": [{
-//					"name": "nameInData",
-//					"value": "textVariableId"
-//				}, {
-//					"name": "repeatId",
-//					"value": "one"
-//				}]
-//			}
-//		}
-//	};
-//	assert.stringifyEqual(messages[1], validationError2);
-//});
-//
+
+QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneTextChildRepeat0to1",
+		"children": []
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	assert.strictEqual(validationResult.everythingOkBelow, true);
+	assert.strictEqual(validationResult.containsValuableData, false);
+	let messages = this.pubSub.getMessages();
+	assert.strictEqual(messages.length, 0);
+});
+
+// textVarRepeat1to3InGroup
+QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
+	this.spec.dataIn = {
+		"name": "textVariableIdRepeat1to3InGroup",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value",
+			"repeatId": "one"
+		}]
+	};
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "3");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
+
+QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
+	this.spec.dataIn = {
+		"name": "textVariableIdRepeat1to3InGroup",
+		"children": [{
+			"name": "textVariableId",
+			"value": "",
+			"repeatId": "one"
+		}, {
+			"name": "textVariableId",
+			"value": "",
+			"repeatId": "two"
+		}]
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "3");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	assert.strictEqual(validationResult.everythingOkBelow, false);
+	assert.strictEqual(validationResult.containsValuableData, false);
+
+	let pubSubMessages = this.pubSub.getMessages();
+	assert.strictEqual(pubSubMessages.length, 2);
+
+	let removeMessage = {
+		"type": "remove",
+		"message": {
+			"type": "remove",
+			"path": {
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": "textVariableId"
+				}, {
+					"name": "repeatId",
+					"value": "two"
+				}]
+			}
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[0], removeMessage);
+
+	let validationError = {
+		"type": "validationError",
+		"message": {
+			"metadataId": "textVariableId",
+			"path": {
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": "textVariableId"
+				}, {
+					"name": "repeatId",
+					"value": "one"
+				}]
+			}
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[1], validationError);
+});
+
 //QUnit.test("testValidateOneChildRepeat3to3WithData", function(assert) {
 //	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
+//		"name": "groupIdOneTextChildRepeat3to3",
 //		"children": [{
 //			"name": "textVariableId",
 //			"value": "A Value",
@@ -459,54 +472,78 @@ CORATEST.createRemoveMessage =
 //	assert.strictEqual(messages.length, 0);
 //});
 //
-//QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
-//	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value",
-//			"repeatId": "one"
-//		}, {
-//			"name": "textVariableId",
-//			"value": "",
-//			"repeatId": "two"
-//		}, {
-//			"name": "textVariableId",
-//			"value": "A Value3",
-//			"repeatId": "three"
-//		}]
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat3to3", data);
-//	assert.notOk(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 1);
-//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
-//		+ '"metadataId":"textVariableId",' + '"path":{\"name\":\"linkedPath\"'
-//		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"textVariableId\"}'
-//		+ ',{\"name\":\"repeatId\",\"value\":\"two\"}]}}}');
-//
-//});
-//
-//QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
-//	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value",
-//			"repeatId": "one"
-//		}]
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
+QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneTextChildRepeat3to3",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value",
+			"repeatId": "one"
+		}, {
+			"name": "textVariableId",
+			"value": "",
+			"repeatId": "two"
+		}, {
+			"name": "textVariableId",
+			"value": "A Value3",
+			"repeatId": "three"
+		}]
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "3", "3");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	assert.strictEqual(validationResult.everythingOkBelow, false);
+	assert.strictEqual(validationResult.containsValuableData, true);
+
+	let pubSubMessages = this.pubSub.getMessages();
+	assert.strictEqual(pubSubMessages.length, 1);
+
+
+	let validationError = {
+		"type": "validationError",
+		"message": {
+			"metadataId": "textVariableId",
+			"path": {
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": "textVariableId"
+				},
+				{
+					"name": "repeatId",
+					"value": "two"
+				}]
+			}
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[0], validationError);
+
+});
+
+QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneTextChildRepeat1toX",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value",
+			"repeatId": "one"
+		}]
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "X");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
 //
 //QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 //	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
+//		"name": "groupIdOneTextChildRepeat1tox",
 //		"children": [{
 //			"name": "textVariableId",
 //			"value": "A Value",
@@ -523,607 +560,648 @@ CORATEST.createRemoveMessage =
 //	assert.strictEqual(messages.length, 0);
 //});
 //
-//QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
-//	let data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "",
-//			"repeatId": "one"
-//		}, {
-//			"name": "textVariableId",
-//			"value": "A Value2",
-//			"repeatId": "two"
-//		}]
-//	};
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildRepeat1toX", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 1);
-//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"remove","message":{'
-//		+ '"type":"remove",' + '"path":{\"name\":\"linkedPath\"'
-//		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"textVariableId\"}'
-//		+ ',{\"name\":\"repeatId\",\"value\":\"one\"}]}}}');
-//});
-//
-//QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
-//	let data = {
-//		"name": "groupIdOneTextChildOneAttribute",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value"
-//		}],
-//		"attributes": {
-//			"anAttribute": "aFinalValue"
-//		}
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneTextChildOneAttribute", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
-//QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
-//	let data = {
-//		"name": "groupInGroupOneTextChildOneAttribute",
-//		"children": [{
-//			"name": "groupIdOneTextChildOneAttribute",
-//			"children": [{
-//				"name": "textVariableId",
-//				"value": "A Value2"
-//			}],
-//			"attributes": {
-//				"anAttribute": "aFinalValue"
-//			}
-//		}]
-//	};
-//	let factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildOneAttribute",
-//		data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
-//QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValue",
-//	function(assert) {
-//		let data = {
-//			"name": "groupInGroupOneTextChildOneAttribute",
-//			"children": [{
-//				"name": "groupIdOneTextChildOneAttribute",
-//				"children": [{
-//					"name": "textVariableId",
-//					"value": ""
-//				}],
-//				"attributes": {
-//					"anAttribute": "aFinalValue"
-//				}
-//			}]
-//		};
-//		let factored = this.metadataValidatorFactory.factor(
-//			"groupInGroupOneTextChildOneAttribute", data);
-//		assert.notOk(factored.validationResult);
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 1);
-//		let validationError = {
-//			"type": "validationError",
-//			"message": {
-//				"metadataId": "textVariableId",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "groupIdOneTextChildOneAttribute"
-//					}, {
-//						"name": "attributes",
-//						"children": [{
-//							"name": "attribute",
-//							"repeatId": "1",
-//							"children": [{
-//								"name": "attributeName",
-//								"value": "anAttribute"
-//							}, {
-//								"name": "attributeValue",
-//								"value": "aFinalValue"
-//							}]
-//						}]
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVariableId"
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[0], validationError);
-//
-//	});
-//
-//QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", function(assert) {
-//	let data = {
-//		"name": "groupInGroupOneTextChildTwoAttributes",
-//		"children": [{
-//			"name": "groupIdOneTextChildTwoAttributes",
-//			"children": [{
-//				"name": "textVariableId",
-//				"value": "A Value3"
-//			}],
-//			"attributes": {
-//				"anAttribute": "aFinalValue",
-//				"anOtherAttribute": "aOtherFinalValue"
-//			}
-//		}]
-//	};
-//	let factored = this.metadataValidatorFactory.factor("groupInGroupOneTextChildTwoAttributes",
-//		data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
-//QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValue",
-//	function(assert) {
-//		let data = {
-//			"name": "groupInGroupOneTextChildTwoAttributes",
-//			"children": [{
-//				"name": "groupIdOneTextChildTwoAttributes",
-//				"children": [{
-//					"name": "textVariableId",
-//					"value": ""
-//				}],
-//				"attributes": {
-//					"anAttribute": "aFinalValue",
-//					"anOtherAttribute": "aOtherFinalValue"
-//				}
-//			}]
-//		};
-//		let factored = this.metadataValidatorFactory.factor(
-//			"groupInGroupOneTextChildTwoAttributes", data);
-//		assert.notOk(factored.validationResult);
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 1);
-//		let validationError = {
-//			"type": "validationError",
-//			"message": {
-//				"metadataId": "textVariableId",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "groupIdOneTextChildTwoAttributes"
-//					}, {
-//						"name": "attributes",
-//						"children": [{
-//							"name": "attribute",
-//							"repeatId": "1",
-//							"children": [{
-//								"name": "attributeName",
-//								"value": "anAttribute"
-//							}, {
-//								"name": "attributeValue",
-//								"value": "aFinalValue"
-//							}]
-//						}, {
-//							"name": "attribute",
-//							"repeatId": "2",
-//							"children": [{
-//								"name": "attributeName",
-//								"value": "anOtherAttribute"
-//							}, {
-//								"name": "attributeValue",
-//								"value": "aOtherFinalValue"
-//							}]
-//						}]
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVariableId"
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[0], validationError);
-//	});
-//
-//QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
-//	+ "Repeat0to2InGroupRepeat1to3InGroupWithData", function(assert) {
-//		let data = {
-//			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
-//			"children": [{
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "AValue3",
-//						"repeatId": "one2"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}]
-//		};
-//		let factored = this.metadataValidatorFactory.factor(
-//			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
-//		assert.ok(factored.validationResult);
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 0);
-//	});
-//
-//QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
-//	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-//		let data = {
-//			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
-//			"children": [{
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "",
-//						"repeatId": "one2"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}]
-//		};
-//		let factored = this.metadataValidatorFactory.factor(
-//			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
-//
-//		assert.strictEqual(factored.validationResult, false);
-//
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 2);
-//		let validationError = {
-//			"type": "validationError",
-//			"message": {
-//				"metadataId": "textVar",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0"
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVarRepeat1to3InGroupOneAttribute"
-//						}, {
-//							"name": "repeatId",
-//							"value": "one1"
-//						}, {
-//							"name": "attributes",
-//							"children": [{
-//								"name": "attribute",
-//								"repeatId": "1",
-//								"children": [{
-//									"name": "attributeName",
-//									"value": "anAttribute"
-//								}, {
-//									"name": "attributeValue",
-//									"value": "aFinalValue"
-//								}]
-//							}]
-//						}, {
-//							"name": "linkedPath",
-//							"children": [{
-//								"name": "nameInData",
-//								"value": "textVar"
-//							}, {
-//								"name": "repeatId",
-//								"value": "one2"
-//							}]
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[0], validationError);
-//
-//		let removeMessage = {
-//			"type": "remove",
-//			"message": {
-//				"type": "remove",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0"
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVarRepeat1to3InGroupOneAttribute"
-//						}, {
-//							"name": "repeatId",
-//							"value": "one1"
-//						}, {
-//							"name": "attributes",
-//							"children": [{
-//								"name": "attribute",
-//								"repeatId": "1",
-//								"children": [{
-//									"name": "attributeName",
-//									"value": "anAttribute"
-//								}, {
-//									"name": "attributeValue",
-//									"value": "aFinalValue"
-//								}]
-//							}]
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[1], removeMessage);
-//
-//	});
-//
-//QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
-//	+ "Repeat0to2InGroupRepeat1to3InGroupWithData2", function(assert) {
-//		let data = {
-//			"name": "textVarRepeat1to3InGroupOne" + "AttributeRepeat0to2InGroupRepeat1to3InGroup",
-//			"children": [{
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "AValue3",
-//						"repeatId": "one2"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}, {
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0_2",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "AValue3",
-//						"repeatId": "one2"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}]
-//		};
-//
-//		let factored = this.metadataValidatorFactory.factor(
-//			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
-//		assert.ok(factored.validationResult);
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 0);
-//	});
-//
-//QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
-//	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-//		let data = {
-//			"name": "textVarRepeat1to3InGroupOne" + "AttributeRepeat0to2InGroupRepeat1to3InGroup",
-//			"children": [{
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "",
-//						"repeatId": "one2"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}, {
-//				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
-//				"repeatId": "one0_2",
-//				"children": [{
-//					"name": "textVarRepeat1to3InGroupOneAttribute",
-//					"repeatId": "one1",
-//					"children": [{
-//						"name": "textVar",
-//						"value": "",
-//						"repeatId": "one2"
-//					}, {
-//						"name": "textVar",
-//						"value": "AValue3",
-//						"repeatId": "one3"
-//					}],
-//					"attributes": {
-//						"anAttribute": "aFinalValue"
-//					}
-//				}]
-//			}]
-//		};
-//
-//		let factored = this.metadataValidatorFactory.factor(
-//			"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", data);
-//
-//		assert.ok(factored.validationResult);
-//
-//		let messages = this.pubSub.getMessages();
-//		assert.strictEqual(messages.length, 4);
-//		let validationError = {
-//			"type": "validationError",
-//			"message": {
-//				"metadataId": "textVar",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0"
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVarRepeat1to3InGroupOneAttribute"
-//						}, {
-//							"name": "repeatId",
-//							"value": "one1"
-//						}, {
-//							"name": "attributes",
-//							"children": [{
-//								"name": "attribute",
-//								"repeatId": "1",
-//								"children": [{
-//									"name": "attributeName",
-//									"value": "anAttribute"
-//								}, {
-//									"name": "attributeValue",
-//									"value": "aFinalValue"
-//								}]
-//							}]
-//						}, {
-//							"name": "linkedPath",
-//							"children": [{
-//								"name": "nameInData",
-//								"value": "textVar"
-//							}, {
-//								"name": "repeatId",
-//								"value": "one2"
-//							}]
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[0], validationError);
-//
-//		let validationError2 = {
-//			"type": "remove",
-//			"message": {
-//				"type": "remove",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0"
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVarRepeat1to3InGroupOneAttribute"
-//						}, {
-//							"name": "repeatId",
-//							"value": "one1"
-//						}, {
-//							"name": "attributes",
-//							"children": [{
-//								"name": "attribute",
-//								"repeatId": "1",
-//								"children": [{
-//									"name": "attributeName",
-//									"value": "anAttribute"
-//								}, {
-//									"name": "attributeValue",
-//									"value": "aFinalValue"
-//								}]
-//							}]
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[1], validationError2);
-//
-//		let validationError3 = {
-//			"type": "remove",
-//			"message": {
-//				"type": "remove",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0_2"
-//					}, {
-//						"name": "linkedPath",
-//						"children": [{
-//							"name": "nameInData",
-//							"value": "textVarRepeat1to3InGroupOneAttribute"
-//						}, {
-//							"name": "repeatId",
-//							"value": "one1"
-//						}, {
-//							"name": "attributes",
-//							"children": [{
-//								"name": "attribute",
-//								"repeatId": "1",
-//								"children": [{
-//									"name": "attributeName",
-//									"value": "anAttribute"
-//								}, {
-//									"name": "attributeValue",
-//									"value": "aFinalValue"
-//								}]
-//							}]
-//						}, {
-//							"name": "linkedPath",
-//							"children": [{
-//								"name": "nameInData",
-//								"value": "textVar"
-//							}, {
-//								"name": "repeatId",
-//								"value": "one2"
-//							}]
-//						}]
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[2], validationError3);
-//
-//		let validationError4 = {
-//			"type": "remove",
-//			"message": {
-//				"type": "remove",
-//				"path": {
-//					"name": "linkedPath",
-//					"children": [{
-//						"name": "nameInData",
-//						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-//					}, {
-//						"name": "repeatId",
-//						"value": "one0"
-//					}]
-//				}
-//			}
-//		};
-//		assert.stringifyEqual(messages[3], validationError4);
-//	});
+QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneTextChildRepeat1toX",
+		"children": [{
+			"name": "textVariableId",
+			"value": "",
+			"repeatId": "one"
+		}, {
+			"name": "textVariableId",
+			"value": "A Value2",
+			"repeatId": "two"
+		}]
+	};
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "X");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	assert.strictEqual(validationResult.everythingOkBelow, true);
+	assert.strictEqual(validationResult.containsValuableData, true);
+
+	let pubSubMessages = this.pubSub.getMessages();
+	assert.strictEqual(pubSubMessages.length, 1);
+
+	let removeMessage = {
+		"type": "remove",
+		"message": {
+			"type": "remove",
+			"path": {
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": "textVariableId"
+				}, {
+					"name": "repeatId",
+					"value": "one"
+				}]
+			}
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[0], removeMessage);
+});
+
+QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneTextChildOneAttribute",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value"
+		}],
+		"attributes": {
+			"anAttribute": "aFinalValue"
+		}
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
+
+QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupInGroupOneTextChildOneAttribute",
+		"children": [{
+			"name": "groupIdOneTextChildOneAttribute",
+			"children": [{
+				"name": "textVariableId",
+				"value": "A Value2"
+			}],
+			"attributes": {
+				"anAttribute": "aFinalValue"
+			}
+		}]
+	};
+	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
+
+QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValue",
+	function(assert) {
+		this.spec.dataIn = {
+			"name": "groupInGroupOneTextChildOneAttribute",
+			"children": [{
+				"name": "groupIdOneTextChildOneAttribute",
+				"children": [{
+					"name": "textVariableId",
+					"value": ""
+				}],
+				"attributes": {
+					"anAttribute": "aFinalValue"
+				}
+			}]
+		};
+		this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		assert.strictEqual(validationResult.everythingOkBelow, false);
+		assert.strictEqual(validationResult.containsValuableData, false);
+		let pubSubMessages = this.pubSub.getMessages();
+		assert.strictEqual(pubSubMessages.length, 1);
+
+		let validationError = {
+			"type": "validationError",
+			"message": {
+				"metadataId": "textVariableId",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "groupIdOneTextChildOneAttribute"
+					}, {
+						"name": "attributes",
+						"children": [{
+							"name": "attribute",
+							"repeatId": "1",
+							"children": [{
+								"name": "attributeName",
+								"value": "anAttribute"
+							}, {
+								"name": "attributeValue",
+								"value": "aFinalValue"
+							}]
+						}]
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVariableId"
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[0], validationError);
+	});
+
+QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupInGroupOneTextChildTwoAttributes",
+		"children": [{
+			"name": "groupIdOneTextChildTwoAttributes",
+			"children": [{
+				"name": "textVariableId",
+				"value": "A Value3"
+			}],
+			"attributes": {
+				"anAttribute": "aFinalValue",
+				"anOtherAttribute": "aOtherFinalValue"
+			}
+		}]
+	};
+	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+});
+
+QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValue",
+	function(assert) {
+		this.spec.dataIn = {
+			"name": "groupInGroupOneTextChildTwoAttributes",
+			"children": [{
+				"name": "groupIdOneTextChildTwoAttributes",
+				"children": [{
+					"name": "textVariableId",
+					"value": ""
+				}],
+				"attributes": {
+					"anAttribute": "aFinalValue",
+					"anOtherAttribute": "aOtherFinalValue"
+				}
+			}]
+		};
+		this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		assert.strictEqual(validationResult.everythingOkBelow, false);
+		assert.strictEqual(validationResult.containsValuableData, false);
+		let pubSubMessages = this.pubSub.getMessages();
+		assert.strictEqual(pubSubMessages.length, 1);
+
+		let validationError = {
+			"type": "validationError",
+			"message": {
+				"metadataId": "textVariableId",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "groupIdOneTextChildTwoAttributes"
+					}, {
+						"name": "attributes",
+						"children": [{
+							"name": "attribute",
+							"repeatId": "1",
+							"children": [{
+								"name": "attributeName",
+								"value": "anAttribute"
+							}, {
+								"name": "attributeValue",
+								"value": "aFinalValue"
+							}]
+						}, {
+							"name": "attribute",
+							"repeatId": "2",
+							"children": [{
+								"name": "attributeName",
+								"value": "anOtherAttribute"
+							}, {
+								"name": "attributeValue",
+								"value": "aOtherFinalValue"
+							}]
+						}]
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVariableId"
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[0], validationError);
+	});
+
+QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
+	+ "Repeat0to2InGroupRepeat1to3InGroupWithData", function(assert) {
+		this.spec.dataIn = {
+			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+			"children": [{
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "AValue3",
+						"repeatId": "one2"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}]
+		};
+
+		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	});
+
+QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
+	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
+		this.spec.dataIn = {
+			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+			"children": [{
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "",
+						"repeatId": "one2"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}]
+		};
+
+		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		assert.strictEqual(validationResult.everythingOkBelow, false);
+		assert.strictEqual(validationResult.containsValuableData, false);
+		let pubSubMessages = this.pubSub.getMessages();
+		assert.strictEqual(pubSubMessages.length, 2);
+
+		let validationError = {
+			"type": "validationError",
+			"message": {
+				"metadataId": "textVar",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0"
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVarRepeat1to3InGroupOneAttribute"
+						}, {
+							"name": "repeatId",
+							"value": "one1"
+						}, {
+							"name": "attributes",
+							"children": [{
+								"name": "attribute",
+								"repeatId": "1",
+								"children": [{
+									"name": "attributeName",
+									"value": "anAttribute"
+								}, {
+									"name": "attributeValue",
+									"value": "aFinalValue"
+								}]
+							}]
+						}, {
+							"name": "linkedPath",
+							"children": [{
+								"name": "nameInData",
+								"value": "textVar"
+							}, {
+								"name": "repeatId",
+								"value": "one2"
+							}]
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[0], validationError);
+
+		let removeMessage = {
+			"type": "remove",
+			"message": {
+				"type": "remove",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0"
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVarRepeat1to3InGroupOneAttribute"
+						}, {
+							"name": "repeatId",
+							"value": "one1"
+						}, {
+							"name": "attributes",
+							"children": [{
+								"name": "attribute",
+								"repeatId": "1",
+								"children": [{
+									"name": "attributeName",
+									"value": "anAttribute"
+								}, {
+									"name": "attributeValue",
+									"value": "aFinalValue"
+								}]
+							}]
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[1], removeMessage);
+	});
+
+QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
+	+ "Repeat0to2InGroupRepeat1to3InGroupWithData2", function(assert) {
+		this.spec.dataIn = {
+			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+			"children": [{
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "AValue3",
+						"repeatId": "one2"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}, {
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0_2",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "AValue3",
+						"repeatId": "one2"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}]
+		};
+		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	});
+
+QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
+	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
+		this.spec.dataIn = {
+			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+			"children": [{
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "",
+						"repeatId": "one2"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}, {
+				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
+				"repeatId": "one0_2",
+				"children": [{
+					"name": "textVarRepeat1to3InGroupOneAttribute",
+					"repeatId": "one1",
+					"children": [{
+						"name": "textVar",
+						"value": "",
+						"repeatId": "one2"
+					}, {
+						"name": "textVar",
+						"value": "AValue3",
+						"repeatId": "one3"
+					}],
+					"attributes": {
+						"anAttribute": "aFinalValue"
+					}
+				}]
+			}]
+		};
+		
+		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+		let validationResult = metadataChildValidator.validate();
+
+		assert.strictEqual(validationResult.everythingOkBelow, true);
+		assert.strictEqual(validationResult.containsValuableData, true);
+	
+		let messages = this.pubSub.getMessages();
+		assert.strictEqual(messages.length, 4);
+		let validationError = {
+			"type": "validationError",
+			"message": {
+				"metadataId": "textVar",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0"
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVarRepeat1to3InGroupOneAttribute"
+						}, {
+							"name": "repeatId",
+							"value": "one1"
+						}, {
+							"name": "attributes",
+							"children": [{
+								"name": "attribute",
+								"repeatId": "1",
+								"children": [{
+									"name": "attributeName",
+									"value": "anAttribute"
+								}, {
+									"name": "attributeValue",
+									"value": "aFinalValue"
+								}]
+							}]
+						}, {
+							"name": "linkedPath",
+							"children": [{
+								"name": "nameInData",
+								"value": "textVar"
+							}, {
+								"name": "repeatId",
+								"value": "one2"
+							}]
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(messages[0], validationError);
+
+		let removeMessage1 = {
+			"type": "remove",
+			"message": {
+				"type": "remove",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0"
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVarRepeat1to3InGroupOneAttribute"
+						}, {
+							"name": "repeatId",
+							"value": "one1"
+						}, {
+							"name": "attributes",
+							"children": [{
+								"name": "attribute",
+								"repeatId": "1",
+								"children": [{
+									"name": "attributeName",
+									"value": "anAttribute"
+								}, {
+									"name": "attributeValue",
+									"value": "aFinalValue"
+								}]
+							}]
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(messages[1], removeMessage1);
+
+		let removeMessage2 = {
+			"type": "remove",
+			"message": {
+				"type": "remove",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0_2"
+					}, {
+						"name": "linkedPath",
+						"children": [{
+							"name": "nameInData",
+							"value": "textVarRepeat1to3InGroupOneAttribute"
+						}, {
+							"name": "repeatId",
+							"value": "one1"
+						}, {
+							"name": "attributes",
+							"children": [{
+								"name": "attribute",
+								"repeatId": "1",
+								"children": [{
+									"name": "attributeName",
+									"value": "anAttribute"
+								}, {
+									"name": "attributeValue",
+									"value": "aFinalValue"
+								}]
+							}]
+						}, {
+							"name": "linkedPath",
+							"children": [{
+								"name": "nameInData",
+								"value": "textVar"
+							}, {
+								"name": "repeatId",
+								"value": "one2"
+							}]
+						}]
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(messages[2], removeMessage2);
+
+		let removeMessage3 = {
+			"type": "remove",
+			"message": {
+				"type": "remove",
+				"path": {
+					"name": "linkedPath",
+					"children": [{
+						"name": "nameInData",
+						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
+					}, {
+						"name": "repeatId",
+						"value": "one0"
+					}]
+				}
+			}
+		};
+		assert.stringifyEqual(messages[3], removeMessage3);
+	});
 //
 //QUnit.test("testInitTextVarRepeat1to3InGroup"
 //	+ "OneAttributeAndOtherAttributeRepeat0to2InGroupWithData", function(assert) {
@@ -1476,29 +1554,32 @@ CORATEST.createRemoveMessage =
 //		assert.stringifyEqual(messages[1], validationError2);
 //	});
 //
-//QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
-//	let data = {
-//		"name": "groupIdOneRecordLinkChild",
-//		"children": [{
-//			"name": "myLink",
-//			"children": [{
-//				"name": "linkedRecordType",
-//				"value": "metadataTextVariable"
-//			}, {
-//				"name": "linkedRecordId",
-//				"value": "someInstance"
-//			}]
-//		}]
-//	};
-//
-//	let factored = this.metadataValidatorFactory.factor("groupIdOneRecordLinkChild", data);
-//	assert.ok(factored.validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
-//
+QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
+	this.spec.dataIn = {
+		"name": "groupIdOneRecordLinkChild",
+		"children": [{
+			"name": "myLink",
+			"children": [{
+				"name": "linkedRecordType",
+				"value": "metadataTextVariable"
+			}, {
+				"name": "linkedRecordId",
+				"value": "someInstance"
+			}]
+		}]
+	};
+
+	this.spec.childReferenceIn = CORATEST.createChildReference("myLink", "0", "1", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+
+	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+
+});
+
 //QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneRecordLinkChild",
 //		"children": [{
 //			"name": "myLink",
@@ -1544,7 +1625,7 @@ CORATEST.createRemoveMessage =
 //
 //// "groupId0to1RecordLinkChild"
 //QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupId0to1RecordLinkChild",
 //		"children": [{
 //			"name": "myLink",
@@ -1605,7 +1686,7 @@ CORATEST.createRemoveMessage =
 //
 //// groupIdOneRecordLinkChildWithPath
 //QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneRecordLinkChildWithPath",
 //		"children": [{
 //			"name": "myPathLink",
@@ -1629,7 +1710,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneRecordLinkChildWithPath",
 //		"children": [{
 //			"name": "myPathLink",
@@ -1674,7 +1755,7 @@ CORATEST.createRemoveMessage =
 //	assert.stringifyEqual(messages[0], expectedMessage);
 //});
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1689,7 +1770,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1705,7 +1786,7 @@ CORATEST.createRemoveMessage =
 //
 //
 //QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberNotMandatoryChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1724,7 +1805,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1742,7 +1823,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1760,7 +1841,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1778,7 +1859,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupIdOneNumberChild",
 //		"children": [{
 //			"name": "numVariableId",
@@ -1797,7 +1878,7 @@ CORATEST.createRemoveMessage =
 //
 //
 //QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",
 //		"children": [{
 //			"name": "textVariableId",
@@ -1816,7 +1897,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithIncorrectFinalValue", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",
 //		"children": [{
 //			"name": "textVariableId",
@@ -1852,7 +1933,7 @@ CORATEST.createRemoveMessage =
 //});
 //
 //QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFinalValueWithData", function(assert) {
-//	let data = {
+//	this.spec.dataIn = {
 //		"name": "groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup",
 //		"children": [{
 //			"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",

@@ -31,7 +31,7 @@ QUnit.module("recordHandlerTest.js", {
 		this.recordWithoutIndexLink = CORATEST.recordWithoutIndexLink;
 
 		this.pubSub = CORATEST.pubSubSpy();
-
+ 
 		this.recordGuiFactorySpy = CORATEST.standardFactorySpy("recordGuiSpy");
 
 		this.recordHandlerViewFactorySpy = CORATEST.standardFactorySpy("recordHandlerViewSpy");

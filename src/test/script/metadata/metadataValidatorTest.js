@@ -46,13 +46,13 @@ QUnit.module("metadataValidatorTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.metadataChildValidatorFactory = 
 		this.dependencies = {
-			"metadataProvider": this.metadataProvider,
-			"pubSub": this.pubSub,
-			"metadataChildValidatorFactory" : CORATEST.standardFactorySpy("metadataChildValidator") 
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub,
+			metadataChildValidatorFactory : CORATEST.standardFactorySpy("metadataChildValidator") 
 		};
 		this.spec = {
-			"metadataId": "groupIdOneTextChild",
-			"data": undefined,
+			metadataId: "groupIdOneTextChild",
+			data: undefined,
 		};
 
 		//		CORA.metadataValidator(this.dependencies, this.spec);

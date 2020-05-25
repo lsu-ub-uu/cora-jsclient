@@ -21,9 +21,15 @@ var CORA = (function(cora) {
 	cora.metadataValidatorFactory = function(dependencies) {
 
 		const factor = function(spec) {
+			let childValidatorDependencies = {
+					metadataProvider: dependencies.metadataProvider,
+					pubSub: dependencies.pubSub
+			};
 			let validatorDependencies = {
 				metadataProvider: dependencies.metadataProvider,
-				pubSub: dependencies.pubSub
+				pubSub: dependencies.pubSub,
+				metadataChildValidatorFactory : CORA.genericFactory("metadataChildValidator",
+						childValidatorDependencies)
 			};
 			return CORA.metadataValidator(validatorDependencies, spec);
 		};

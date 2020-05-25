@@ -62,8 +62,21 @@ QUnit.test("testSpec", function(assert) {
 
 QUnit.test("testDependencies", function(assert) {
 	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
-
 	let factoredDependencies = metadataValidator.getDependencies();
 	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub);
+
+	assert.strictEqual(factoredDependencies.metadataChildValidatorFactory.type,
+	"genericFactory");
+});
+
+QUnit.test("testMetadataChildValidatorFactoryDependencies", function(assert) {
+	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
+	var factoredDependencies = metadataValidator.getDependencies();
+	var metadataChildValidatorFactory = factoredDependencies.metadataChildValidatorFactory;
+	assert.strictEqual(metadataChildValidatorFactory.getTypeToFactor(), "metadataChildValidator");
+	
+	var childValidatorFactoryDependencies = factoredDependencies.metadataChildValidatorFactory.getDependencies();
+	assert.strictEqual(childValidatorFactoryDependencies.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(childValidatorFactoryDependencies.pubSub, this.dependencies.pubSub);
 });

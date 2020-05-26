@@ -20,7 +20,6 @@
 
 var CORA = (function(cora) {
 	"use strict";
-	//	cora.metadataChildValidator = function(childReferenceIn, path, dataIn, metadataProvider, pubSub) {
 	cora.metadataChildValidator = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
@@ -263,7 +262,6 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		//		return result;
 		let out = Object.freeze({
 			type: "metadataChildValidator",
 			getDependencies: getDependencies,

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,46 +20,60 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.standardFactorySpy = function(toFactor) {
-		var factoredList = [];
-		var factoredSpec = [];
-		var spySpec = {};
-		var spyDependencies = {};
-		
-		function factor(standardSpec) {
+		let factoredList = [];
+		let factoredSpec = [];
+		let spySpecList = [];
+		let spySpec = {};
+		let spyDependencies = {};
+
+		const factor = function(standardSpec) {
 			factoredSpec.push(standardSpec);
-			var factored = CORATEST[toFactor]({}, standardSpec, spySpec);
+			let spySpecToUse = getSpySpecOrFromListIfListIsSet();
+			let factored = CORATEST[toFactor]({}, standardSpec, spySpecToUse);
 			factoredList.push(factored);
 			return factored;
+		};
+
+		const getSpySpecOrFromListIfListIsSet = function() {
+			if (spySpecList.length == 0) {
+				return spySpec;
+			}
+			return spySpecList[factoredList.length];
 		}
 
-		function getFactored(number) {
+		const getFactored = function(number) {
 			return factoredList[number];
-		}
+		};
 
-		function getSpec(number) {
+		const getSpec = function(number) {
 			return factoredSpec[number];
-		}
-		
-		function setspySpec(spySpecIn){
+		};
+
+		const setSpySpec = function(spySpecIn) {
 			spySpec = spySpecIn;
 		}
 
-		function setSpyDependencies(spyDependenciesIn){
-			spyDependencies = spyDependenciesIn;
-		}
+		const addSpySpec = function(spySpecIn) {
+			spySpecList.push(spySpecIn);
+		};
 
-		function getDependencies(){
+		const setSpyDependencies = function(spyDependenciesIn) {
+			spyDependencies = spyDependenciesIn;
+		};
+
+		const getDependencies = function() {
 			return spyDependencies;
-		}
-		
-		var out = Object.freeze({
-			"type" : "standardFactorySpy",
-			factor : factor,
-			getFactored : getFactored,
-			getSpec : getSpec,
-			getDependencies : getDependencies,
-			setSpyDependencies : setSpyDependencies,
-			setspySpec : setspySpec
+		};
+
+		let out = Object.freeze({
+			"type": "standardFactorySpy",
+			factor: factor,
+			getFactored: getFactored,
+			getSpec: getSpec,
+			getDependencies: getDependencies,
+			setSpyDependencies: setSpyDependencies,
+			setSpySpec: setSpySpec,
+			addSpySpec: addSpySpec
 		});
 		return out;
 	};

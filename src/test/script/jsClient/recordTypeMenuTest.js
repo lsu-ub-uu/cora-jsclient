@@ -107,7 +107,7 @@ QUnit.test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandlerNoAction"
 	var spySpec = {
 		"returnFalseForAnyAction" : true
 	};
-	this.dependencies.recordTypeHandlerFactory.setspySpec(spySpec);
+	this.dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
 
 	this.menu = CORA.recordTypeMenu(this.providers, this.dependencies, this.spec);
 	this.recordTypeGroups = this.menu.getRecordTypeGroups(this.dummyJsClient);

@@ -24,7 +24,7 @@ var CORA = (function(cora) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
 		let metadataProvider = dependencies.metadataProvider;
-		let pubSub = dependencies.pubSub;
+		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
 
 		const validateFirstLevel = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
@@ -37,16 +37,23 @@ var CORA = (function(cora) {
 		const validateTopLevelChildren = function(topLevelPath, topLevelChildReferences) {
 			let childrenResult = true;
 			topLevelChildReferences.children.forEach(function(childReference) {
+
 				//kolla om childreference har constraints
 				//om inte - fortsätt som vanligt
 				// om den har constraints - kolla om användaren har rättigheter
 				//om anv har rättigheter fortsätt som vanligt
 				//annars return true??
-				//				let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-				//					topLevelData, metadataProvider, pubSub);
-				//				if (!childResult.everythingOkBelow) {
-				//					childrenResult = false;
-				//				}
+				//let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
+				//	topLevelData, metadataProvider, pubSub);
+				let childValidatorSpec = { 
+						path: topLevelPath,
+						data : topLevelData,
+						childReference: childReference};
+				let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
+				let childResult = childValidator.validate();
+				if (!childResult.everythingOkBelow) {
+					childrenResult = false;
+				}
 			});
 			return childrenResult;
 

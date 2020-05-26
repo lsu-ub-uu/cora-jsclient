@@ -29,7 +29,7 @@ QUnit.module("metadataChildValidatorTest.js", {
 		this.spec = {
 			"path": {},
 		};
-		this.spec.childReferenceIn = {
+		this.spec.childReference = {
 			"name": "childReference",
 			"repeatId": "0",
 			"children": [
@@ -72,14 +72,14 @@ QUnit.test("testGetSpec", function(assert) {
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChild",
 		"children": [{
 			"name": "textVariableId",
 			"value": "A Value"
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -120,14 +120,14 @@ CORATEST.createChildReference =
 	};
 
 QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChild",
 		"children": [{
 			"name": "textVariableId",
 			"value": ""
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
@@ -158,14 +158,14 @@ CORATEST.createValidationErrorMessage =
 	};
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupId1toXCollectionChild",
 		"children": [{
 			"name": "yesNoUnknownVar",
 			"value": "no"
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
+	this.spec.childReference = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
@@ -175,7 +175,7 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert)
 });
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupId1toXCollectionChild",
 		"children": [{
 			"name": "yesNoUnknownVar",
@@ -183,7 +183,7 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
+	this.spec.childReference = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -197,7 +197,7 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 });
 
 QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdTwoTextChild",
 		"children": [{
 			"name": "textVariableId",
@@ -208,7 +208,7 @@ QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId2", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId2", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
@@ -217,7 +217,7 @@ QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 });
 
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdTwoTextChild1to1InGroup",
 		"children": [{
 			"name": "groupIdTwoTextChild",
@@ -230,7 +230,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert
 			}]
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
@@ -239,7 +239,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert
 });
 
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdTwoTextChild1to1InGroup",
 		"children": [{
 			"name": "groupIdTwoTextChild",
@@ -253,7 +253,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
@@ -286,7 +286,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 });
 
 QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat0to1",
 		"children": [{
 			"name": "textVariableId",
@@ -294,7 +294,7 @@ QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -303,14 +303,14 @@ QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
 });
 
 QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat0to1",
 		"children": [{
 			"name": "textVariableId",
 			"value": ""
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -341,12 +341,12 @@ CORATEST.createRemoveMessage =
 	};
 
 QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat0to1",
 		"children": []
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -359,7 +359,7 @@ QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
 
 // textVarRepeat1to3InGroup
 QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "textVariableIdRepeat1to3InGroup",
 		"children": [{
 			"name": "textVariableId",
@@ -367,7 +367,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert)
 			"repeatId": "one"
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "3");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -376,7 +376,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert)
 });
 
 QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "textVariableIdRepeat1to3InGroup",
 		"children": [{
 			"name": "textVariableId",
@@ -389,7 +389,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "3");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -438,7 +438,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 });
 
 QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat3to3",
 		"children": [{
 			"name": "textVariableId",
@@ -455,7 +455,7 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "3", "3");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "3", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -489,7 +489,7 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat1toX",
 		"children": [{
 			"name": "textVariableId",
@@ -498,7 +498,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "X");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -507,7 +507,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat1tox",
 		"children": [{
 			"name": "textVariableId",
@@ -520,7 +520,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "X");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -529,7 +529,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildRepeat1toX",
 		"children": [{
 			"name": "textVariableId",
@@ -541,7 +541,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 			"repeatId": "two"
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "X");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -572,7 +572,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 });
 
 QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneTextChildOneAttribute",
 		"children": [{
 			"name": "textVariableId",
@@ -583,7 +583,7 @@ QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
 		}
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -592,7 +592,7 @@ QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
 });
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupInGroupOneTextChildOneAttribute",
 		"children": [{
 			"name": "groupIdOneTextChildOneAttribute",
@@ -605,7 +605,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", fu
 			}
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -615,7 +615,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", fu
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValue",
 	function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "groupInGroupOneTextChildOneAttribute",
 			"children": [{
 				"name": "groupIdOneTextChildOneAttribute",
@@ -628,7 +628,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 				}
 			}]
 		};
-		this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
+		this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -674,7 +674,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 	});
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupInGroupOneTextChildTwoAttributes",
 		"children": [{
 			"name": "groupIdOneTextChildTwoAttributes",
@@ -688,7 +688,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", fu
 			}
 		}]
 	};
-	this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -698,7 +698,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", fu
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValue",
 	function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "groupInGroupOneTextChildTwoAttributes",
 			"children": [{
 				"name": "groupIdOneTextChildTwoAttributes",
@@ -712,7 +712,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 				}
 			}]
 		};
-		this.spec.childReferenceIn = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
+		this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildTwoAttributes", "0", "1", "1");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -769,7 +769,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 
 QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 	+ "Repeat0to2InGroupRepeat1to3InGroupWithData", function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -789,7 +789,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			}]
 		};
 
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -799,7 +799,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -819,7 +819,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			}]
 		};
 
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -921,7 +921,7 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 	+ "Repeat0to2InGroupRepeat1to3InGroupWithData2", function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -955,7 +955,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 				}]
 			}]
 		};
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -965,7 +965,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 	+ "Repeat0to2InGroupRepeat1to3InGroupWithEmptyValue", function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup",
@@ -1004,7 +1004,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 			}]
 		};
 
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", "0", "1", "3");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -1173,7 +1173,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 	+ "OneAttributeAndOtherAttributeRepeat0to2InGroupWithData", function(assert) {
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttribute",
@@ -1200,7 +1200,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}]
 		};
 
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "1", "3");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "1", "3");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -1209,7 +1209,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 	});
 
 QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheChildWithCorrectAttribute", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 		"children": [{
 			"name": "textVarRepeat1to3InGroupOneAttribute",
@@ -1237,7 +1237,7 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 	};
 
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "0", "2");
+	this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "0", "2");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1324,7 +1324,7 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 	+ "OneAttributeAndOtherAttributeRepeat1to1InGroupWithData", function(assert) {
 
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttribute",
@@ -1348,7 +1348,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 				}
 			}]
 		};
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "0", "2");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "0", "2");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -1360,7 +1360,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 QUnit.test("testInitTextVarRepeat1to3InGroup"
 	+ "OneAttributeAndOtherAttributeRepeat1to1InGroupEmptyValue", function(assert) {
 
-		this.spec.dataIn = {
+		this.spec.data = {
 			"name": "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup",
 			"children": [{
 				"name": "textVarRepeat1to3InGroupOneAttribute",
@@ -1385,7 +1385,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			}]
 		};
 
-		this.spec.childReferenceIn = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "1", "1");
+		this.spec.childReference = CORATEST.createChildReference("textVarRepeat1to3InGroupOneAttribute", "0", "1", "1");
 		let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 		let validationResult = metadataChildValidator.validate();
@@ -1433,7 +1433,7 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 	});
 
 QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneRecordLinkChild",
 		"children": [{
 			"name": "myLink",
@@ -1447,7 +1447,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("myLink", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("myLink", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1457,7 +1457,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
 });
 
 QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneRecordLinkChild",
 		"children": [{
 			"name": "myLink",
@@ -1471,7 +1471,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("myLink", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("myLink", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1508,7 +1508,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 
 // "groupId0to1RecordLinkChild"
 QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupId0to1RecordLinkChild",
 		"children": [{
 			"name": "myLink",
@@ -1522,7 +1522,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("myLink", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("myLink", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1574,7 +1574,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 
 //// groupIdOneRecordLinkChildWithPath
 QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneRecordLinkChildWithPath",
 		"children": [{
 			"name": "myPathLink",
@@ -1591,7 +1591,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(ass
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("myPathLink", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("myPathLink", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1599,7 +1599,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithData", function(ass
 });
 
 QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneRecordLinkChildWithPath",
 		"children": [{
 			"name": "myPathLink",
@@ -1616,7 +1616,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("myPathLink", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("myPathLink", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1649,7 +1649,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 	assert.stringifyEqual(messages[0], expectedMessage);
 });
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1657,7 +1657,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1665,7 +1665,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1673,7 +1673,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1686,7 +1686,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 
 
 QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberNotMandatoryChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1694,7 +1694,7 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1710,7 +1710,7 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1718,7 +1718,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(a
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1733,7 +1733,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(a
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1741,7 +1741,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1756,7 +1756,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1764,7 +1764,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1779,7 +1779,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupIdOneNumberChild",
 		"children": [{
 			"name": "numVariableId",
@@ -1787,7 +1787,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("numVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("numVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1802,7 +1802,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",
 		"children": [{
 			"name": "textVariableId",
@@ -1814,7 +1814,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1823,7 +1823,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithIncorrectFinalValue", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",
 		"children": [{
 			"name": "textVariableId",
@@ -1835,7 +1835,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
+	this.spec.childReference = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
@@ -1863,7 +1863,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 });
 
 QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFinalValueWithData", function(assert) {
-	this.spec.dataIn = {
+	this.spec.data = {
 		"name": "groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup",
 		"children": [{
 			"name": "groupWithOneCollectionVarChildAndOneTextChildGroup",
@@ -1877,7 +1877,7 @@ QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFina
 		}]
 	};
 
-	this.spec.childReferenceIn = CORATEST.createChildReference("groupWithOneCollectionVarChildAndOneTextChildGroup", "0", "0", "1");
+	this.spec.childReference = CORATEST.createChildReference("groupWithOneCollectionVarChildAndOneTextChildGroup", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();

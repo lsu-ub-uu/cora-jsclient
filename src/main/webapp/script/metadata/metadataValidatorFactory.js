@@ -27,7 +27,6 @@ var CORA = (function(cora) {
 			};
 			let validatorDependencies = {
 				metadataProvider: dependencies.metadataProvider,
-				pubSub: dependencies.pubSub,
 				metadataChildValidatorFactory : CORA.genericFactory("metadataChildValidator",
 						childValidatorDependencies)
 			};

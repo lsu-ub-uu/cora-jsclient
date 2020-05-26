@@ -290,7 +290,7 @@ QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasNo
 	var spySpec = {
 		"returnFalseForAnyAction" : true
 	};
-	this.dependencies.recordTypeHandlerFactory.setspySpec(spySpec);
+	this.dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
 
 	CORA.jsClient(this.dependencies, this.spec);
 	var jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
@@ -332,7 +332,7 @@ QUnit.test("initFactoresRecordTypeHandlersNotAddedToViewIfRecordTypeWithoutActio
 	var spySpec = {
 		"returnFalseForAnyAction" : true
 	};
-	this.dependencies.recordTypeHandlerFactory.setspySpec(spySpec);
+	this.dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
 
 	CORA.jsClient(this.dependencies, this.spec);
 	var jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);

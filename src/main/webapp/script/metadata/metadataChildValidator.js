@@ -28,13 +28,13 @@ var CORA = (function(cora) {
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
-		let cData = CORA.coraData(spec.dataIn);
+		let cData = CORA.coraData(spec.data);
 		let dataChildrenForMetadata;
 		let noOfRepeatsForThisChild;
 		let childInstancesCanNotBeRemoved = [];
 		let childInstancesCanBeRemoved = [];
 		let numberOfChildrenOk = 0;
-		let childReference = CORA.coraData(spec.childReferenceIn);
+		let childReference = CORA.coraData(spec.childReference);
 		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 

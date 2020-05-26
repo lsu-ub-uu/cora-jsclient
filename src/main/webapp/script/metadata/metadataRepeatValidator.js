@@ -182,8 +182,8 @@ var CORA = (function(cora) {
 			};
 			let spec = {
 				path: nextLevelPath,
-				childReferenceIn: childReference,
-				dataIn: childData
+				childReference: childReference,
+				data: childData
 			};
 			//			let childResult = CORA.metadataChildValidator(childReference, nextLevelPath, childData,
 			//				metadataProvider, pubSub);

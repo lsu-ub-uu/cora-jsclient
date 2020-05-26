@@ -78,24 +78,28 @@ QUnit.test("testGetSpec", function(assert) {
 	assert.strictEqual(metadataValidator.getSpec(), this.spec);
 });
 
-//QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
-//	this.spec.data = {
-//		"name": "groupIdOneTextChild",
-//		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value"
-//		}]
-//	};
-//
-//	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
-//
-//
-//	let validationResult = metadataValidator.validate();
-//
-//	assert.ok(validationResult);
-//	let messages = this.pubSub.getMessages();
-//	assert.strictEqual(messages.length, 0);
-//});
+QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
+	this.spec.data = {
+		"name": "groupIdOneTextChild",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value"
+		}]
+	};
+
+	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataValidator.validate();
+
+	assert.ok(validationResult);
+	let messages = this.pubSub.getMessages();
+	assert.strictEqual(messages.length, 0);
+	
+	let childValidatorSpec = this.dependencies.metadataChildValidatorFactory.getSpec(0);
+	let childValidator = this.dependencies.metadataChildValidatorFactory.getFactored(0);
+	
+	
+});
 //
 //QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
 //	this.spec.data = {

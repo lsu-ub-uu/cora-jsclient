@@ -607,7 +607,7 @@ function MetadataProviderStub() {
 					"name": "childReferences",
 					"children": [{
 						"name": "childReference",
-						"repeatId": repeatId,
+						"repeatId": "0",
 						"children": [
 							{
 								"name": "ref",

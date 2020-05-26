@@ -22,43 +22,75 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataValidator = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
+		let topLevelPath = {};
 		let topLevelData = spec.data;
 		let metadataProvider = dependencies.metadataProvider;
 		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
+		let childrenResult = true;
 
 		const validateFirstLevel = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
 				.getFirstChildByNameInData('childReferences');
-			let topLevelPath = {};
-			return validateTopLevelChildren(topLevelPath, topLevelChildReferences);
+			return validateTopLevelChildren(topLevelChildReferences);
 		};
 
-		const validateTopLevelChildren = function(topLevelPath, topLevelChildReferences) {
-			let childrenResult = true;
+		const validateTopLevelChildren = function(topLevelChildReferences) {
+			childrenResult = true;
 			topLevelChildReferences.children.forEach(function(childReference) {
-
-				//kolla om childreference har constraints
-				//om inte - fortsätt som vanligt
-				// om den har constraints - kolla om användaren har rättigheter
-				//om anv har rättigheter fortsätt som vanligt
-				//annars return true??
-				//let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-				//	topLevelData, metadataProvider, pubSub);
-				let childValidatorSpec = { 
-						path: topLevelPath,
-						data : topLevelData,
-						childReference: childReference};
-				let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
-				let childResult = childValidator.validate();
-				if (!childResult.everythingOkBelow) {
-					childrenResult = false;
-				}
+				possiblyValidateDataChildrenToChildRef(childReference);
 			});
 			return childrenResult;
+		};
 
-		}
+		const possiblyValidateDataChildrenToChildRef = function(childReference) {
+			if (shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions(childReference)) {
+				validateDataChildForChildRefInvalid(childReference);
+			}
+		};
 
+		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			if (childHasRecordPartConstraints(cChildReference)) {
+				return userHasRecordPartPermission(cChildReference);
+			}
+			return true;
+		};
+
+		const childHasRecordPartConstraints = function(cChildReference) {
+			return cChildReference.containsChildWithNameInData("recordPartConstraint")
+		};
+
+		const userHasRecordPartPermission = function(cChildReference) {
+			let nameInData = extractNameInData(cChildReference);
+			let writePermissions = spec.permissions.write;
+			if (writePermissions.includes(nameInData)) {
+				return true;
+			}
+			return false;
+		};
+
+		const extractNameInData = function(cChildReference) {
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
+		};
+
+		const validateDataChildForChildRefInvalid = function(childReference) {
+			//let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
+			//	topLevelData, metadataProvider,  pubSub);
+			let childValidatorSpec = {
+				path: topLevelPath,
+				data: topLevelData,
+				childReference: childReference
+			};
+			let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
+			let childResult = childValidator.validate();
+			if (!childResult.everythingOkBelow) {
+				childrenResult = false;
+			}
+		};
+		
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};

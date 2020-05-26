@@ -633,8 +633,42 @@ function MetadataProviderStub() {
 				.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
-//		createChildReferenceWithRefAndRepeatId1to1(
-//				"metadataTextVariable", "textVariableId", "1")
+		if (idToGet === "groupIdOneTextChildWithReadWriteConstraints") {
+			return {
+				"name": "metadata",
+				"attributes": {
+					"type": "group"
+				},
+				"children": [{
+					"name": "childReferences",
+					"children": [{
+						"name": "childReference",
+						"repeatId": "0",
+						"children": [
+							{
+								"name": "ref",
+								"children": [{
+									"name": "linkedRecordType",
+									"value": "metadata"
+								}, {
+									"name": "linkedRecordId",
+									"value": "textVariableId"
+								}]
+							}, {
+								"name": "repeatMin",
+								"value": "1"
+							}, {
+								"name": "repeatMax",
+								"value": "1"
+							}, {
+					              "name": "recordPartConstraint",
+					              "value": "readWrite"
+					            }]
+					}]
+				}]
+				.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+			};
+		}
 		if (idToGet === "groupIdOneTextChild2") {
 			return {
 				"name": "metadata",

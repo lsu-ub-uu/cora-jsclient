@@ -82,7 +82,7 @@ var CORA = (function(cora) {
 		const createRecordGui = function(metadataId) {
 			var recordGuiSpec = {
 				"metadataId" : metadataId,
-				permissions : createEmptyPermissions
+				permissions : createEmptyPermissions()
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
 		};

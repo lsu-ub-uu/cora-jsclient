@@ -136,7 +136,7 @@ var CORA = (function(cora) {
 			pubSub.subscribe("*", {}, undefined, handleMsg);
 		};
 
-		const handleMsg = function(msg) {
+		const handleMsg = function(dataFromMsg, msg) {
 			if (initComplete && msgChangesData(msg)) {
 				dataIsChanged = true;
 				managedGuiItem.setChanged(dataIsChanged);
@@ -512,6 +512,7 @@ var CORA = (function(cora) {
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
 			let permissions = recordGuiSpec.permissions;
+			
 			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);

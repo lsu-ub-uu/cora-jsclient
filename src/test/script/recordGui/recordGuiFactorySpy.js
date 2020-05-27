@@ -31,6 +31,7 @@ var CORATEST = (function(coraTest) {
 			factoredSpec.push(spec);
 
 			let factoredrecordGui = CORATEST.recordGuiSpy();
+			factoredrecordGui.setSpec(spec);
 			factoredrecordGuis.push(factoredrecordGui);
 			return factoredrecordGui;
 		}

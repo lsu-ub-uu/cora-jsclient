@@ -357,17 +357,24 @@ QUnit.test("testHandleMessage", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 
-	recordHandler.handleMsg("setValue");
+	let data = {
+		"data" : "A new value",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
 
-	recordHandler.handleMsg("initComplete");
+	let data1 = {
+		"data" : "",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data1, "initComplete");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
 
-
-	recordHandler.handleMsg("setValue");
+	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), true);
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
@@ -378,37 +385,44 @@ QUnit.test("testHandleMessageSetValueSetsDataChanged", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 
-
-	recordHandler.handleMsg("setValue");
+	let data = {
+		"data" : "A new value",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 0);
 
-	recordHandler.handleMsg("initComplete");
-
+	let data1 = {
+		"data" : "",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data1, "initComplete");
+	
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 0);
 
-	recordHandler.handleMsg("add");
+	recordHandler.handleMsg(data, "add");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 0);
 
-	recordHandler.handleMsg("setValue");
+	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 1);
 
-	recordHandler.handleMsg("remove");
+	recordHandler.handleMsg(data, "remove");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 2);
-
-	recordHandler.handleMsg("move");
+	
+	recordHandler.handleMsg(data, "move");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 3);
-
-	recordHandler.handleMsg("initComplete");
+	
+	recordHandler.handleMsg(data, "initComplete");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 3);
-
-	recordHandler.handleMsg("viewJustMadeVisible");
+	
+	recordHandler.handleMsg(data, "viewJustMadeVisible");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 3);
 });
@@ -458,7 +472,11 @@ QUnit.test("testUpdateThroughPubSubCall", function(assert) {
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 0);
 
-	recordHandler.handleMsg("updateRecord");
+	let data = {
+		"data" : "",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data, "updateRecord");
 
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 1);
 
@@ -479,8 +497,16 @@ QUnit.test("testUpdateDataIsChanged", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	this.answerCall(0);
 
-	recordHandler.handleMsg("initComplete");
-	recordHandler.handleMsg("setValue");
+	let data1 = {
+		"data" : "",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data1, "initComplete");
+	let data = {
+		"data" : "A new value",
+		"path" : {}
+	};
+	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), true);
 
@@ -1165,13 +1191,13 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 	this.answerCall(0);
 	let factoredRecordGui0 = this.dependencies.recordGuiFactory.getFactored(0);
 	let factoredRecordGuiSpec0 = this.dependencies.recordGuiFactory.getSpec(0);
-
-	let permissionsToTestWith = {
-			"read": ["recordPartA", "recordPartB"],
-			"write": ["recordPartB", "recordPartC"]
-	};
-	
-	factoredRecordGui0.setPermissions(permissionsToTestWith);
+//
+//	let permissionsToTestWith = {
+//			"read": ["recordPartA", "recordPartB"],
+//			"write": ["recordPartB", "recordPartC"]
+//	};
+//	
+//	factoredRecordGui0.setPermissions(permissionsToTestWith);
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 
@@ -1181,17 +1207,20 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 
 	assert.strictEqual(recordHandlerViewSpy.getClearDataViewsWasCalled(), true);
 
-	let factoredRecordGui1 = this.dependencies.recordGuiFactory.getFactored(1);
-	let factoredRecordGuiSpec1 = this.dependencies.recordGuiFactory.getSpec(1);
+	let reloadedRecordGui1 = this.dependencies.recordGuiFactory.getFactored(1);
+	let reloadedRecordGuiSpec1 = this.dependencies.recordGuiFactory.getSpec(1);
+	let specFromFirstRecordGuiSpy = factoredRecordGui0.getSpec();
+	
+	assert.strictEqual(reloadedRecordGuiSpec1.permissions, specFromFirstRecordGuiSpy.permissions);
 
-	assert.strictEqual(factoredRecordGuiSpec1.metadataId, factoredRecordGuiSpec0.metadataId);
-	assert.strictEqual(factoredRecordGuiSpec1.dataDivider, factoredRecordGuiSpec0.dataDivider);
-	assert.stringifyEqual(factoredRecordGuiSpec1.data, factoredRecordGui0.dataHolder
+	assert.strictEqual(reloadedRecordGuiSpec1.metadataId, factoredRecordGuiSpec0.metadataId);
+	assert.strictEqual(reloadedRecordGuiSpec1.dataDivider, factoredRecordGuiSpec0.dataDivider);
+	assert.stringifyEqual(reloadedRecordGuiSpec1.data, factoredRecordGui0.dataHolder
 		.getDataWithActionLinks());
 
-	assert.stringifyEqual(factoredRecordGuiSpec1.permissions, permissionsToTestWith);
+//	assert.stringifyEqual(reloadedRecordGuiSpec1.permissions, permissionsToTestWith);
 
-	assert.strictEqual(factoredRecordGui1.getInitCalled(), 1);
+	assert.strictEqual(reloadedRecordGui1.getInitCalled(), 1);
 }); 
 
 QUnit.test("testReloadRecordHandlerViewFormFactoredAndAdded", function(assert) {

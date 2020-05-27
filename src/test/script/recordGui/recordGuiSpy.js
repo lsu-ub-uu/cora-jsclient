@@ -79,8 +79,8 @@ var CORATEST = (function(coraTest) {
 		const getReturnedPresentations = function(number) {
 			return returnedPresentations[number];
 		};
-		const getFactoredSpec = function(){
-			return spec;
+		const setSpec = function(specIn){
+			spec = specIn;
 		};
 		const setPermissions = function(permissions){
 			spec.permissions = permissions;
@@ -103,7 +103,7 @@ var CORATEST = (function(coraTest) {
 			getPresentationIdUsed : getPresentationIdUsed,
 			getMetadataIdsUsedInData : getMetadataIdsUsedInData,
 			getReturnedPresentations : getReturnedPresentations,
-			getFactoredSpec : getFactoredSpec,
+			setSpec : setSpec,
 			setPermissions : setPermissions
 		});
 		return out;

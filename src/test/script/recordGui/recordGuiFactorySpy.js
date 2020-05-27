@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,32 +23,28 @@ var CORATEST = (function(coraTest) {
 		let factoredrecordGuis = [];
 		let factoredSpec = [];
 
-		function factor(spec) {
-			let metadataId = spec.metadataId;
-			let data = spec.data;
-			let dataDivider = spec.dataDivider;
-			let permissions = spec.permissions;
+		const factor = function(spec) {
 			factoredSpec.push(spec);
 
 			let factoredrecordGui = CORATEST.recordGuiSpy();
 			factoredrecordGui.setSpec(spec);
 			factoredrecordGuis.push(factoredrecordGui);
 			return factoredrecordGui;
-		}
+		};
 
-		function getFactored(number) {
+		const getFactored = function(number) {
 			return factoredrecordGuis[number];
-		}
+		};
 
-		function getSpec(number) {
+		const getSpec = function(number) {
 			return factoredSpec[number];
-		}
+		};
 
 		let out = Object.freeze({
-			"type" : "recordGuiFactorySpy",
-			factor : factor,
-			getFactored : getFactored,
-			getSpec : getSpec
+			"type": "recordGuiFactorySpy",
+			factor: factor,
+			getFactored: getFactored,
+			getSpec: getSpec
 		});
 		return out;
 	};

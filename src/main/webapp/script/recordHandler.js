@@ -76,7 +76,7 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
-					//TODO:It is triggered when it lists records. should not be empty
+					//TODO: It is triggered when it lists records. should not be empty
 					let permissions = createEmptyPermissions();
 					tryToProcessFetchedRecordData(spec.record.data, permissions);
 				}
@@ -512,7 +512,7 @@ var CORA = (function(cora) {
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
 			let permissions = recordGuiSpec.permissions;
-			
+
 			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);

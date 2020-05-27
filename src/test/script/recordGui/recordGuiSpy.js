@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -28,19 +28,19 @@ var CORATEST = (function(coraTest) {
 		let dataValidated = 0;
 		let validateAnswer = true;
 		let spec = {
-				"metadataId" : "recordTypeGroup",
-				"data" : {},
-				"dataDivider":"cora",
-				"permissions" : {
-					"write" : [],
-					"read" : []
-				}
-			}; 
+			"metadataId": "recordTypeGroup",
+			"data": {},
+			"dataDivider": "cora",
+			"permissions": {
+				"write": [],
+				"read": []
+			}
+		};
 		const getDependencies = function() {
 			return dependencies;
 		};
 		const getSpec = function() {
-			 return spec;
+			return spec;
 		};
 		let pubSub = CORATEST.pubSubSpy();
 
@@ -79,32 +79,25 @@ var CORATEST = (function(coraTest) {
 		const getReturnedPresentations = function(number) {
 			return returnedPresentations[number];
 		};
-		const setSpec = function(specIn){
+		const setSpec = function(specIn) {
 			spec = specIn;
 		};
-		const setPermissions = function(permissions){
-			spec.permissions = permissions;
-		};
 		let out = Object.freeze({
-			"type" : "recordGuiSpy",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			pubSub : pubSub,
-			// jsBookkeeper : jsBookkeeper,
-			// presentationFactory : presentationFactory,
-			dataHolder : dataHolder,
-			// getMetadataController : getMetadataController,
-			getPresentationHolder : getPresentationHolder,
-			initMetadataControllerStartingGui : initMetadataControllerStartingGui,
-			getInitCalled : getInitCalled,
-			validateData : validateData,
-			getDataValidated : getDataValidated,
-			setValidateAnswer : setValidateAnswer,
-			getPresentationIdUsed : getPresentationIdUsed,
-			getMetadataIdsUsedInData : getMetadataIdsUsedInData,
-			getReturnedPresentations : getReturnedPresentations,
-			setSpec : setSpec,
-			setPermissions : setPermissions
+			"type": "recordGuiSpy",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			pubSub: pubSub,
+			dataHolder: dataHolder,
+			getPresentationHolder: getPresentationHolder,
+			initMetadataControllerStartingGui: initMetadataControllerStartingGui,
+			getInitCalled: getInitCalled,
+			validateData: validateData,
+			getDataValidated: getDataValidated,
+			setValidateAnswer: setValidateAnswer,
+			getPresentationIdUsed: getPresentationIdUsed,
+			getMetadataIdsUsedInData: getMetadataIdsUsedInData,
+			getReturnedPresentations: getReturnedPresentations,
+			setSpec: setSpec,
 		});
 		return out;
 	};

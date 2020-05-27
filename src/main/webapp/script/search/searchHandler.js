@@ -24,28 +24,28 @@ var CORA = (function(cora) {
 		var recordGui;
 		var delaySearchTimer;
 
-		function start() {
+		const start = function () {
 			view = createView();
 			tryToCreateSearchForm();
-		}
+		};
 
-		function createView() {
+		const createView = function () {
 			var viewSpec = {
 				"searchMethod" : search
 			};
 			return dependencies.searchHandlerViewFactory.factor(viewSpec);
-		}
+		};
 
-		function tryToCreateSearchForm() {
+		const tryToCreateSearchForm = function() {
 			try {
 				createSearchForm();
 			} catch (error) {
 				createRawDataWorkView("something went wrong, probably missing metadata, " + error);
 				view.addPresentationToSearchFormHolder(document.createTextNode(error.stack));
 			}
-		}
+		};
 
-		function createSearchForm() {
+		const createSearchForm = function () {
 			var metadataId = spec.metadataId;
 			recordGui = createRecordGui(metadataId);
 
@@ -53,50 +53,58 @@ var CORA = (function(cora) {
 			recordGui.initMetadataControllerStartingGui();
 
 			subscribeToChangesInForm();
-		}
+		};
 
-		function subscribeToChangesInForm() {
+		const subscribeToChangesInForm = function() {
 			var path = {};
 			var context = undefined;
 			var functionToCall = handleMsg;
 			recordGui.pubSub.subscribe("*", path, context, functionToCall);
-		}
+		};
 
-		function handleMsg(dataFromMsg, msg) {
+		const handleMsg = function(dataFromMsg, msg) {
 			if (msgUpdatesData(msg)) {
 				clearOldTimeoutAndStartNewOneForSearch();
 			}
-		}
+		};
 
-		function msgUpdatesData(msg) {
+		const msgUpdatesData = function(msg) {
 			return msg.endsWith("setValue") || msg.endsWith("remove");
-		}
+		};
 
-		function clearOldTimeoutAndStartNewOneForSearch() {
+		const clearOldTimeoutAndStartNewOneForSearch = function() {
 			window.clearTimeout(delaySearchTimer);
 			delaySearchTimer = window.setTimeout(function() {
 				search();
 			}, 400);
-		}
+		};
 
-		function createRecordGui(metadataId) {
+		const createRecordGui = function(metadataId) {
 			var recordGuiSpec = {
-				"metadataId" : metadataId
+				"metadataId" : metadataId,
+				permissions : createEmptyPermissions
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
-		}
+		};
+		
+		const createEmptyPermissions = function() {
+			let permissions = {};
+			permissions.write = [];
+			permissions.read = [];
+			return permissions;
+		};
 
-		function addSearchFormFromRecordGuiToView(recordGuiToAdd, metadataIdUsedInData) {
+		const addSearchFormFromRecordGuiToView = function(recordGuiToAdd, metadataIdUsedInData) {
 			var presentationView = recordGuiToAdd.getPresentationHolder(spec.presentationId,
 					metadataIdUsedInData).getView();
 			view.addPresentationToSearchFormHolder(presentationView);
-		}
+		};
 
-		function createRawDataWorkView(data) {
+		const createRawDataWorkView = function(data) {
 			view.addPresentationToSearchFormHolder(document.createTextNode(JSON.stringify(data)));
-		}
+		};
 
-		function search() {
+		const search = function() {
 			if (recordGui.validateData()) {
 				sendSearchQueryToServer();
 			}
@@ -105,9 +113,9 @@ var CORA = (function(cora) {
 				"data" : "",
 				"path" : {}
 			});
-		}
+		};
 
-		function sendSearchQueryToServer() {
+		const sendSearchQueryToServer =function() {
 			var link = spec.searchLink;
 			var callSpec = {
 				"url" : link.url,
@@ -119,9 +127,9 @@ var CORA = (function(cora) {
 				"loadMethod" : handleSearchResult
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function handleSearchResult(answerIn) {
+		const handleSearchResult = function(answerIn) {
 			var resultHandlerSpec = {
 				"dataList" : JSON.parse(answerIn.responseText).dataList,
 				"jsClient" : dependencies.jsClient,
@@ -130,22 +138,22 @@ var CORA = (function(cora) {
 			var resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();
 			view.addSearchResultToSearchResultHolder(resultHandler.getView());
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view.getView();
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		start();
-		return Object.freeze({
+		let out = Object.freeze({
 			"type" : "searchHandler",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -154,6 +162,7 @@ var CORA = (function(cora) {
 			getView : getView,
 			handleMsg : handleMsg
 		});
+		return out;
 	};
 	return cora;
 }(CORA));

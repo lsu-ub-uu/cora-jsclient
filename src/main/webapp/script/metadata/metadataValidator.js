@@ -77,8 +77,6 @@ var CORA = (function(cora) {
 		};
 
 		const validateDataChildForChildRefInvalid = function(childReference) {
-			//let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-			//	topLevelData, metadataProvider,  pubSub);
 			let childValidatorSpec = {
 				path: topLevelPath,
 				data: topLevelData,

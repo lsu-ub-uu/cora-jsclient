@@ -93,6 +93,8 @@ QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
 	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	var factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "someMetadataId");
+//	assert.deepEqual(factoredSpec.permissions.write, []);
+//	assert.deepEqual(factoredSpec.permissions.read, []);
 });
 
 QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {

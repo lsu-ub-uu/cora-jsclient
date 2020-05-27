@@ -44,7 +44,6 @@ var CORA = (function(cora) {
 			managedGuiItem.addWorkPresentation(recordHandlerView.getView());
 			busy = CORA.busy();
 			managedGuiItem.addWorkPresentation(busy.getView());
-
 			createNewOrFetchDataFromServerForExistingRecord();
 		};
 
@@ -77,6 +76,7 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
+					//TODO:It is triggered when it lists records. should not be empty
 					let permissions = createEmptyPermissions();
 					tryToProcessFetchedRecordData(spec.record.data, permissions);
 				}
@@ -136,7 +136,7 @@ var CORA = (function(cora) {
 			pubSub.subscribe("*", {}, undefined, handleMsg);
 		};
 
-		const handleMsg = function(dataFromMsg, msg) {
+		const handleMsg = function(msg) {
 			if (initComplete && msgChangesData(msg)) {
 				dataIsChanged = true;
 				managedGuiItem.setChanged(dataIsChanged);
@@ -507,11 +507,12 @@ var CORA = (function(cora) {
 			recordHandlerView.clearDataViews();
 			initComplete = false;
 			let data = recordGui.dataHolder.getDataWithActionLinks();
+			let recordGuiSpec = recordGui.getSpec();
 
-			let metadataId = recordGui.getSpec().metadataId;
-			let dataDivider = recordGui.getSpec().dataDivider;
-			//createEmptyPermissions, skicka med
-			recordGui = createRecordGui(metadataId, data, dataDivider);
+			let metadataId = recordGuiSpec.metadataId;
+			let dataDivider = recordGuiSpec.dataDivider;
+			let permissions = recordGuiSpec.permissions;
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
 			} else {

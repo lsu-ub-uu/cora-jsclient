@@ -20,16 +20,17 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordGuiFactorySpy = function() {
-		var factoredrecordGuis = [];
-		var factoredSpec = [];
+		let factoredrecordGuis = [];
+		let factoredSpec = [];
 
 		function factor(spec) {
-			var metadataId = spec.metadataId;
-			var data = spec.data;
-			var dataDivider = spec.dataDivider;
+			let metadataId = spec.metadataId;
+			let data = spec.data;
+			let dataDivider = spec.dataDivider;
+			let permissions = spec.permissions;
 			factoredSpec.push(spec);
 
-			var factoredrecordGui = CORATEST.recordGuiSpy();
+			let factoredrecordGui = CORATEST.recordGuiSpy();
 			factoredrecordGuis.push(factoredrecordGui);
 			return factoredrecordGui;
 		}
@@ -42,7 +43,7 @@ var CORATEST = (function(coraTest) {
 			return factoredSpec[number];
 		}
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			"type" : "recordGuiFactorySpy",
 			factor : factor,
 			getFactored : getFactored,

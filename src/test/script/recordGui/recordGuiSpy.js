@@ -21,65 +21,74 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordGuiSpy = function() {
 
-		var presentationIdUsed = [];
-		var metadataIdsUsedInData = [];
-		var returnedPresentations = [];
-		var initCalled = 0;
-		var dataValidated = 0;
-		var validateAnswer = true;
-		function getDependencies() {
-			return dependencies;
-		}
-		function getSpec() {
-			// return spec;
-			return {
+		let presentationIdUsed = [];
+		let metadataIdsUsedInData = [];
+		let returnedPresentations = [];
+		let initCalled = 0;
+		let dataValidated = 0;
+		let validateAnswer = true;
+		let spec = {
 				"metadataId" : "recordTypeGroup",
 				"data" : {},
-				"dataDivider":"cora"
-			};
-		}
-		var pubSub = CORATEST.pubSubSpy();
+				"dataDivider":"cora",
+				"permissions" : {
+					"write" : [],
+					"read" : []
+				}
+			}; 
+		const getDependencies = function() {
+			return dependencies;
+		};
+		const getSpec = function() {
+			 return spec;
+		};
+		let pubSub = CORATEST.pubSubSpy();
 
-		var dataHolder = CORATEST.dataHolderSpy();
-		function getPresentationHolder(presentationId, metadataIdUsedInData) {
+		let dataHolder = CORATEST.dataHolderSpy();
+		const getPresentationHolder = function(presentationId, metadataIdUsedInData) {
 			presentationIdUsed.push(presentationId);
 			metadataIdsUsedInData.push(metadataIdUsedInData);
-			var pres = CORATEST.presentationStub(presentationId);
+			let pres = CORATEST.presentationStub(presentationId);
 			returnedPresentations.push(pres);
 			return pres;
-		}
-		function initMetadataControllerStartingGui() {
+		};
+		const initMetadataControllerStartingGui = function() {
 			initCalled++;
-		}
-		function getInitCalled() {
+		};
+		const getInitCalled = function() {
 			return initCalled;
-		}
+		};
 
-		function validateData() {
+		const validateData = function() {
 			dataValidated++;
 			return validateAnswer;
-		}
-		function setValidateAnswer(answer) {
+		};
+		const setValidateAnswer = function(answer) {
 			validateAnswer = answer;
-		}
-		function getDataValidated() {
+		};
+		const getDataValidated = function() {
 			return dataValidated;
-		}
+		};
 
-		function getPresentationIdUsed(number) {
+		const getPresentationIdUsed = function(number) {
 			return presentationIdUsed[number];
-		}
-		function getMetadataIdsUsedInData(number) {
+		};
+		const getMetadataIdsUsedInData = function(number) {
 			return metadataIdsUsedInData[number];
-		}
-		function getReturnedPresentations(number) {
+		};
+		const getReturnedPresentations = function(number) {
 			return returnedPresentations[number];
-		}
-		var out = Object.freeze({
+		};
+		const getFactoredSpec = function(){
+			return spec;
+		};
+		const setPermissions = function(permissions){
+			spec.permissions = permissions;
+		};
+		let out = Object.freeze({
 			"type" : "recordGuiSpy",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
-
 			pubSub : pubSub,
 			// jsBookkeeper : jsBookkeeper,
 			// presentationFactory : presentationFactory,
@@ -93,7 +102,9 @@ var CORATEST = (function(coraTest) {
 			setValidateAnswer : setValidateAnswer,
 			getPresentationIdUsed : getPresentationIdUsed,
 			getMetadataIdsUsedInData : getMetadataIdsUsedInData,
-			getReturnedPresentations : getReturnedPresentations
+			getReturnedPresentations : getReturnedPresentations,
+			getFactoredSpec : getFactoredSpec,
+			setPermissions : setPermissions
 		});
 		return out;
 	};

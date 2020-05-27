@@ -77,7 +77,8 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
-					tryToProcessFetchedRecordData(spec.record.data);
+					let permissions = createEmptyPermissions();
+					tryToProcessFetchedRecordData(spec.record.data, permissions);
 				}
 			}
 		};
@@ -95,7 +96,8 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 			let metadataId = metadataForRecordType.newMetadataId;
 
-			recordGui = createRecordGui(metadataId, copiedData);
+			let permissions = createEmptyPermissions();
+			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions);
 
 			createAndAddViewsForNew(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
@@ -508,6 +510,7 @@ var CORA = (function(cora) {
 
 			let metadataId = recordGui.getSpec().metadataId;
 			let dataDivider = recordGui.getSpec().dataDivider;
+			//createEmptyPermissions, skicka med
 			recordGui = createRecordGui(metadataId, data, dataDivider);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);

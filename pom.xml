@@ -32,6 +32,9 @@
 		<docker.buildArg.sut_path>${project.basedir}</docker.buildArg.sut_path>
 		<docker.keepRunning>false</docker.keepRunning>
 		<docker.keepContainer>false</docker.keepContainer>
+		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
+		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 	</properties>
 	
 	<scm>
@@ -52,17 +55,17 @@
 						<plugin>
 							<groupId>com.githug.eirslett</groupId>
 							<artifactId>frontend-maven-plugin</artifactId>
-							<version>1.6.1</version>
+							<version>${frontend-maven-plugin.version}</version>
 						</plugin>
 						<plugin>
 							<groupId>io.fabric8</groupId>
 							<artifactId>docker-maven-plugin</artifactId>
-							<version>0.33.0</version>
+							<version>${docker-maven-plugin.version}</version>
 						</plugin>
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>xml-maven-plugin</artifactId>
-							<version>1.0.2</version>
+							<version>${xml-maven-plugin.version}</version>
 						</plugin>
 					</plugins>
 				</pluginManagement>
@@ -152,7 +155,7 @@
 									<goal>install-node-and-npm</goal>
 								</goals>
 								<configuration>
-									<nodeVersion>v10.13.0</nodeVersion>
+									<nodeVersion>v14.3.0</nodeVersion>
 								</configuration>
 							</execution>
 

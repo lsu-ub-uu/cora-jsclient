@@ -17,5 +17,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = {};
-CORA.gui = {};
+var CORA = {
+	gui: {}
+};

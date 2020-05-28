@@ -194,11 +194,10 @@ var CORA = (function(cora) {
 			return jsClient;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "jsClientFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

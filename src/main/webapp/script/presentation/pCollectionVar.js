@@ -119,8 +119,7 @@ var CORA = (function(cora) {
 		}
 
 		function createOutput() {
-			var outputNew = CORA.gui.createSpanWithClassName("value");
-			return outputNew;
+			return CORA.gui.createSpanWithClassName("value");
 		}
 
 		function createInfo() {
@@ -151,8 +150,7 @@ var CORA = (function(cora) {
 					"text" : "presentationId: " + presentationId
 				} ]
 			};
-			var newInfo = CORA.info(infoSpec);
-			return newInfo;
+			return CORA.info(infoSpec);
 		}
 
 		function getTextId(cMetadataElementIn, textNameInData) {
@@ -189,7 +187,7 @@ var CORA = (function(cora) {
 
 		function findItemReferenceForValue(value) {
 			var collectionItemReferencesChildren = getCollectionItemReferencesChildren();
-			var itemReference = collectionItemReferencesChildren.find(function(ref) {
+			return collectionItemReferencesChildren.find(function(ref) {
 				var cItemRef = CORA.coraData(ref);
 				var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 
@@ -197,7 +195,6 @@ var CORA = (function(cora) {
 				var refValue = item.getFirstAtomicValueByNameInData("nameInData");
 				return refValue === value;
 			});
-			return itemReference;
 		}
 
 		function setOutputValueFromItemReference(value) {

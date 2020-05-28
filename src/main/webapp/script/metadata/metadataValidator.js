@@ -101,13 +101,12 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "metadataValidator",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			validate: validateFirstLevel
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

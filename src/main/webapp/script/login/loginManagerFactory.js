@@ -41,12 +41,11 @@ var CORA = (function(cora) {
 			return CORA.loginManager(loginManagerDependencies, loginManagerSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "loginManagerFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

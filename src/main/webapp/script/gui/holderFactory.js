@@ -24,11 +24,10 @@ var CORA = (function(cora) {
 			return CORA.holder(spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "holderFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -59,15 +59,13 @@ var CORA = (function (cora) {
             return spec;
         }
 
-        var out = Object.freeze({
+        return Object.freeze({
             "type": "indexHandler",
             getDependencies: getDependencies,
             getSpec: getSpec,
             indexData: indexData,
             handleCallError: handleCallError
         });
-
-        return out;
     };
     return cora;
 }(CORA));

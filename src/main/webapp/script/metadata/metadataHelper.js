@@ -90,8 +90,7 @@ var CORA = (function(cora) {
 			var cItemRef = CORA.coraData(collectionItemRef);
 			var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 			var cCollectionItem = getMetadataById(itemRefId);
-			var value = cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
-			return value;
+			return cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
 		}
 
 		function getCollectionItemReferencesFor(cCollectionVariable) {
@@ -125,15 +124,13 @@ var CORA = (function(cora) {
 		function getMetadataIdFromRef(metadataChildRef) {
 			var cMetadataChildRef = CORA.coraData(metadataChildRef);
 			var cRef = CORA.coraData(cMetadataChildRef.getFirstChildByNameInData("ref"));
-			var childMetadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return childMetadataId;
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 
 		function getNameInDataFromMetadataChildRef(metadataChildRef) {
 			var childMetadataId = getMetadataIdFromRef(metadataChildRef);
 			var cChildMetadata = getMetadataById(childMetadataId);
-			var childNameInData = cChildMetadata.getFirstAtomicValueByNameInData("nameInData");
-			return childNameInData;
+			return cChildMetadata.getFirstAtomicValueByNameInData("nameInData");
 		}
 
 		function firstAttributesExistsInSecond(attributes1, attributes2) {
@@ -189,12 +186,11 @@ var CORA = (function(cora) {
 			};
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			collectAttributesAsObjectForMetadataId : collectAttributesAsObjectForMetadataId,
 			getChildRefPartOfMetadata : getChildRefPartOfMetadata,
 			firstAttributesExistsInSecond : firstAttributesExistsInSecond
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

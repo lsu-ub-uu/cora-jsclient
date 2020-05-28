@@ -21,6 +21,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.coraData = function(dataIn) {
+		const NOT_FOUND_IN_CHILDREN = ") not found in children to coraData";
 		var data = dataIn;
 		var children = data && data.children;
 
@@ -82,7 +83,7 @@ var CORA = (function(cora) {
 			if (foundChildren.length > 0) {
 				return foundChildren;
 			}
-			throw new Error("name(" + nameInData + ") not found in children to coraData");
+			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
 		}
 
 		function getChildrenByNameInDataAndAttributes(nameInData, attributes) {
@@ -157,7 +158,7 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 
-			throw new Error("name(" + nameInData + ") not found in children to coraData");
+			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
 		}
 		function pathHasAllContainerAttributes(containerAttributes, pathAttributes) {
 			var containerAttributeKeys = Object.keys(containerAttributes);
@@ -226,7 +227,7 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with index (" + index
-					+ ") not found in children to coraData");
+					+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		function getAtomicValueByNameInDataAndIndex(name, index) {
@@ -262,7 +263,7 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with repeatId (" + repeatId
-					+ ") not found in children to coraData");
+					+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		function containsChildWithNameInDataAndAttributesAndRepeatId(nameInData, attributes,
@@ -293,7 +294,7 @@ var CORA = (function(cora) {
 			}
 			throw new Error("name(" + nameInData + ") with attributes ("
 					+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
-					+ ") not found in children to coraData");
+					+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		return Object

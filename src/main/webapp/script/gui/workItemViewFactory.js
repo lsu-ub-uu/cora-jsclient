@@ -29,11 +29,10 @@ var CORA = (function(cora) {
 			return CORA.workItemView(dependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "workItemViewFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

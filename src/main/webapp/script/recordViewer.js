@@ -76,8 +76,7 @@ var CORA = (function(cora) {
 				"data" : data,
 				"dataDivider" : dataDivider
 			};
-			var createdRecordGui = spec.recordGuiFactory.factor(recordGuiSpec);
-			return createdRecordGui;
+			return spec.recordGuiFactory.factor(recordGuiSpec);
 		}
 
 		function getDataDividerFromData(data) {

@@ -24,11 +24,10 @@ var CORA = (function(cora) {
 			return CORA.managedGuiItemView( managedGuiItemViewSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "managedGuiItemViewFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

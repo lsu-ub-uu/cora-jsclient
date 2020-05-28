@@ -27,11 +27,10 @@ var CORA = (function(cora) {
 			return CORA.jsClientView(dependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "jsClientViewFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

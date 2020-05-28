@@ -24,11 +24,10 @@ var CORA = (function(cora) {
 			return CORA.messageHolder();
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "messageHolderFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

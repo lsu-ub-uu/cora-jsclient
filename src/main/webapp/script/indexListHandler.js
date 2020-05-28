@@ -168,7 +168,7 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "indexListHandler",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -181,8 +181,6 @@ var CORA = (function(cora) {
 			resumeIndexing : resumeIndexing
 
 		});
-
-		return out;
 	};
 	return cora;
 }(CORA));

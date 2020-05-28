@@ -29,12 +29,11 @@ var CORA = (function(cora) {
 			return CORA.searchRecordHandlerView(searchRecordHandlerViewDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "searchRecordHandlerViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

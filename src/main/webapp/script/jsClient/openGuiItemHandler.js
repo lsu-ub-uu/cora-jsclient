@@ -43,14 +43,13 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "openGuiItemHandler",
 			getSpec : getSpec,
 			getDependencies : getDependencies,
 			getView : getView,
 			addManagedGuiItem : addManagedGuiItem
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -60,8 +60,7 @@ var CORA = (function(cora) {
 		function getIdFromRecordData(recordData) {
 			var cRecord = CORA.coraData(recordData);
 			var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-			var id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-			return id;
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		}
 
 		function createSortedRecordList(){
@@ -109,7 +108,7 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			type : "searchProvider",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -119,7 +118,6 @@ var CORA = (function(cora) {
 			processFetchedData : processFetchedData,
 			reload : reload
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

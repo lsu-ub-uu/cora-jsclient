@@ -33,12 +33,11 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		let out = Object.freeze({
+		return Object.freeze({
 			"type" : "metadataProviderFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -34,8 +34,9 @@ var CORA = (function(cora) {
 		function createDataContainerForElementWithId(id) {
 			var cMetadataElement = getMetadataById(id);
 			var nameInData = cMetadataElement.getFirstAtomicValueByNameInData('nameInData');
-			var dataContainerPart = {};
-			dataContainerPart.name = nameInData;
+			var dataContainerPart = {
+				name: nameInData
+			};
 
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
 			return dataContainerPart;
@@ -75,7 +76,7 @@ var CORA = (function(cora) {
 		function createAttributesContainer(cMetadataElement) {
 			var attributeContainer = {};
 			var attributeReferences = cMetadataElement
-					.getFirstChildByNameInData('attributeReferences');
+				.getFirstChildByNameInData('attributeReferences');
 			attributeReferences.children.forEach(function(attributeReference) {
 				var ref = getRefValueFromAttributeRef(attributeReference);
 				var attribute = getMetadataById(ref);
@@ -183,8 +184,8 @@ var CORA = (function(cora) {
 				return findContainerAndParent(container, childPath);
 			}
 			return {
-				"parent" : dataContainers,
-				"container" : container
+				"parent": dataContainers,
+				"container": container
 			};
 		}
 
@@ -199,7 +200,7 @@ var CORA = (function(cora) {
 			var cdataContainers = CORA.coraData(dataContainers);
 
 			return cdataContainers.getFirstChildByNameInDataAndAttributesAndRepeatId(nameInData,
-					attributes, repeatId);
+				attributes, repeatId);
 		}
 
 		function pathSpecifiesMoreLevels(path) {
@@ -215,8 +216,8 @@ var CORA = (function(cora) {
 				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(parentPath)
-						+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
-						+ " Error:" + e);
+					+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
+					+ " Error:" + e);
 			}
 		}
 
@@ -238,7 +239,7 @@ var CORA = (function(cora) {
 				removeContainerWithPath(path);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder"
-						+ " when trying to remove:" + e);
+					+ " when trying to remove:" + e);
 			}
 		}
 
@@ -274,15 +275,15 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "dataHolder",
-			getSpec : getSpec,
-			handleMsg : handleMsg,
-			getData : getData,
-			getDataWithActionLinks : getDataWithActionLinks,
-			setValue : setValue,
-			addChild : addChild,
-			remove : remove,
-			findContainer : findContainer
+			"type": "dataHolder",
+			getSpec: getSpec,
+			handleMsg: handleMsg,
+			getData: getData,
+			getDataWithActionLinks: getDataWithActionLinks,
+			setValue: setValue,
+			addChild: addChild,
+			remove: remove,
+			findContainer: findContainer
 		});
 	};
 	return cora;

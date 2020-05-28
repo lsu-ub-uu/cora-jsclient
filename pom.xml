@@ -29,7 +29,7 @@
 		<sonar.exclusions>src/main/webapp/script/lib/**</sonar.exclusions>
 		<sonar.testExecutionReportPaths>target/generated-resources/xml/xslt/karma-junit.xml</sonar.testExecutionReportPaths>
 		<sonar.javascript.lcov.reportPaths>reports/coverage/firefox/lcov.info,reports/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
-		<sonar.nodejs.executable>${project.build.directory}/my-ui/node/node</sonar.nodejs.executable>
+		<sonar.nodejs.executable>${project.build.directory}/nodeJs/node/node</sonar.nodejs.executable>
 		<docker.buildArg.sut_path>${project.basedir}</docker.buildArg.sut_path>
 		<docker.keepRunning>false</docker.keepRunning>
 		<docker.keepContainer>false</docker.keepContainer>
@@ -77,8 +77,8 @@
 						<artifactId>frontend-maven-plugin</artifactId>
 						<version>${frontend-maven-plugin.version}</version>
 						<configuration>
-							<installDirectory>${project.build.directory}/my-ui</installDirectory>
-							<workingDirectory>${project.build.directory}/my-ui</workingDirectory>
+							<installDirectory>${project.build.directory}/nodeJs</installDirectory>
+							<workingDirectory>${project.build.directory}/nodeJs</workingDirectory>
 							<skip>${maven.test.skip}</skip>
 						</configuration>
 						<executions>

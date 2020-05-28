@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -20,111 +20,116 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordTypeHandler = function(dependencies, spec) {
-		var recordId = getIdFromRecord(spec.recordTypeRecord);
-		var headerText = getHeadlineText(spec.recordTypeRecord);
 
-		var viewSpec = {
-			"headerText" : headerText
-		};
+		let recordId;
+		let view;
+		const start = function() {
+			recordId = getIdFromRecord(spec.recordTypeRecord);
+			let headerText = getHeadlineText(spec.recordTypeRecord);
 
-		if(recordTypeHasListLink()) {
-			viewSpec.fetchListMethod = createRecordTypeList;
+			let viewSpec = {
+				"headerText": headerText
+			};
+
+			if (recordTypeHasListLink()) {
+				viewSpec.fetchListMethod = createRecordTypeList;
+			}
+
+			if (recordTypeHasCreateLink()) {
+				viewSpec.createNewMethod = createRecordHandler;
+			}
+			view = dependencies.recordTypeHandlerViewFactory.factor(viewSpec);
 		}
 
-		if (recordTypeHasCreateLink()) {
-			viewSpec.createNewMethod = createRecordHandler;
-		}
-
-		var view = dependencies.recordTypeHandlerViewFactory.factor(viewSpec);
-
-		function getView() {
+		const getView = function() {
 			return view.getView();
 		}
 
-		function getHeadlineText(recordTypeRecord){
-			var cData = CORA.coraData(recordTypeRecord.data);
-			if(textIdIsMissingInData(cData)){
+		const getHeadlineText = function(recordTypeRecord) {
+			let cData = CORA.coraData(recordTypeRecord.data);
+			if (textIdIsMissingInData(cData)) {
 				return recordId;
 			}
 			return getTranslatedText(cData);
 		}
 
-		function textIdIsMissingInData(cData){
+		const textIdIsMissingInData = function(cData) {
 			return !cData.containsChildWithNameInData("textId");
 		}
 
-		function getTranslatedText(cData){
-			var cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
-			var textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		const getTranslatedText = function(cData) {
+			let cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
+			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return dependencies.textProvider.getTranslation(textId);
 		}
 
-		function getIdFromRecord(record) {
-			var cData = CORA.coraData(record.data);
-			var cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+		const getIdFromRecord = function(record) {
+			let cData = CORA.coraData(record.data);
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		}
 
-		function recordTypeHasListLink() {
-			var listLink = spec.recordTypeRecord.actionLinks.list;
+		const recordTypeHasListLink = function() {
+			let listLink = spec.recordTypeRecord.actionLinks.list;
 			return listLink !== undefined;
 		}
 
-		function recordTypeHasCreateLink() {
-			var createLink = spec.recordTypeRecord.actionLinks.create;
+		const recordTypeHasCreateLink = function() {
+			let createLink = spec.recordTypeRecord.actionLinks.create;
 			return createLink !== undefined;
 		}
 
-		function createRecordTypeList() {
-			var listHandlerSpec = {
-				"openRecordMethod" : createRecordHandler,
-				"baseUrl" : spec.baseUrl,
-				"jsClient" : dependencies.jsClient,
-				"recordTypeRecordId" : recordId,
-				"listLink" : spec.recordTypeRecord.actionLinks.list
+		const createRecordTypeList = function() {
+			let listHandlerSpec = {
+				"openRecordMethod": createRecordHandler,
+				"baseUrl": spec.baseUrl,
+				"jsClient": dependencies.jsClient,
+				"recordTypeRecordId": recordId,
+				"listLink": spec.recordTypeRecord.actionLinks.list
 			};
 			dependencies.recordListHandlerFactory.factor(listHandlerSpec);
 		}
 
-		function createRecordHandler(createNewRecord, record, loadInBackground) {
-			var recordHandlerSpec = {
-				"createNewRecord" : createNewRecord,
-				"record" : record,
-				"jsClient" : dependencies.jsClient,
-				"recordTypeRecordIdForNew" : recordId
+		const createRecordHandler = function(createNewRecord, record, loadInBackground) {
+			let recordHandlerSpec = {
+				"createNewRecord": createNewRecord,
+				"record": record,
+				"jsClient": dependencies.jsClient,
+				"recordTypeRecordIdForNew": recordId
 			};
-			var recordHandler = dependencies.recordHandlerFactory.factor(recordHandlerSpec);
+			let recordHandler = dependencies.recordHandlerFactory.factor(recordHandlerSpec);
 			addRecordHandlerToJsClient(recordHandler, loadInBackground);
 		}
 
-		function addRecordHandlerToJsClient(recordHandler, loadInBackground) {
-			var managedGuiItem = recordHandler.getManagedGuiItem();
+		const addRecordHandlerToJsClient = function(recordHandler, loadInBackground) {
+			let managedGuiItem = recordHandler.getManagedGuiItem();
 			dependencies.jsClient.addGuiItem(managedGuiItem);
 			if (loadInBackground !== "true") {
 				dependencies.jsClient.showView(managedGuiItem);
 			}
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 
-		function hasAnyAction(){
+		const hasAnyAction = function() {
 			return recordTypeHasListLink() || recordTypeHasCreateLink();
-		}
+		};
 
-		var out = Object.freeze({
-			"type" : "recordTypeHandler",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			createRecordTypeList : createRecordTypeList,
-			createRecordHandler : createRecordHandler,
-			hasAnyAction : hasAnyAction
+		start();
+		let out = Object.freeze({
+			"type": "recordTypeHandler",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			createRecordTypeList: createRecordTypeList,
+			createRecordHandler: createRecordHandler,
+			hasAnyAction: hasAnyAction
 		});
 		return out;
 	};

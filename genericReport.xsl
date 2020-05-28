@@ -21,7 +21,7 @@
     <xsl:output encoding="UTF-8" method="xml"/>
 
     <xsl:template match="testsuite">
-        <unitTest version="1">
+        <testExecutions version="1">
             <xsl:for-each-group select="testcase" group-by="@classname">
                 <file>
                     <xsl:attribute name="path">
@@ -44,6 +44,6 @@
                     </xsl:for-each>
                 </file>
             </xsl:for-each-group>
-        </unitTest>
+        </testExecutions>
     </xsl:template>
 </xsl:stylesheet>

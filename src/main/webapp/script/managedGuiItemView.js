@@ -115,7 +115,7 @@ var CORA = (function(cora) {
 			listView.appendChild(presentationToAdd);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "managedGuiItemView",
 			getSpec : getSpec,
 			getMenuView : getMenuView,
@@ -131,7 +131,6 @@ var CORA = (function(cora) {
 			getListView : getListView,
 			addListPresentation : addListPresentation
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -29,12 +29,11 @@ var CORA = (function(cora) {
 			return jsClient;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "clientInstanceProvider",
 			setJsClient : setJsClient,
 			getJsClient : getJsClient
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

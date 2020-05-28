@@ -28,7 +28,7 @@ var CORA = (function(cora) {
 		}
 
 		function createCallSpec(appToken) {
-			var callSpec = {
+			return {
 				"requestMethod" : spec.requestMethod,
 				"url" : spec.url + userId,
 				"accept" : spec.accept,
@@ -38,7 +38,6 @@ var CORA = (function(cora) {
 				"data" : appToken,
 				"timeoutInMS" : 15000
 			};
-			return callSpec;
 		}
 
 		function errorMethod(answer) {
@@ -74,14 +73,13 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "appTokenLogin",
 			login : login,
 			handleResponse : handleResponse,
 			getDependencies : getDependencies,
 			getSpec : getSpec
 		});
-		return out;
 	};
 
 	return cora;

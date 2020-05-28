@@ -186,13 +186,12 @@ var CORA = (function(cora) {
 			return timeoutTime;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "ajaxCall",
 			xhr : xhr,
 			spec : spec,
 			getCurrentTimeout : getCurrentTimeout
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

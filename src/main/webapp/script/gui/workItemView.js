@@ -62,11 +62,10 @@ var CORA = (function(cora) {
 		}
 
 		function createToolHolderAndAppendToView() {
-			var toolHolderNew = dependencies.holderFactory.factor({
+			return dependencies.holderFactory.factor({
 				"className" : "tool",
 				"insertAfter" : topBar
 			});
-			return toolHolderNew;
 		}
 
 		function getView() {

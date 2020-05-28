@@ -21,12 +21,11 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pGroup = function(dependencies, spec) {
 		let cPresentation = spec.cPresentation;
-
-		let my = {};
-		my.metadataId = spec.metadataIdUsedInData;
-
-		my.cPresentation = cPresentation;
-		my.cParentPresentation = cPresentation;
+		let my = {
+			metadataId: spec.metadataIdUsedInData,
+			cPresentation: cPresentation,
+			cParentPresentation: cPresentation
+		};
 		let parent;
 
 		const start = function() {

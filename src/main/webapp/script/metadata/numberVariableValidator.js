@@ -79,12 +79,11 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type : "numberVariableValidator",
 			validateData : validateData,
 			getDependencies : getDependencies
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

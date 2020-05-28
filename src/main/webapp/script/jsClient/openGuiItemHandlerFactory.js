@@ -33,12 +33,11 @@ var CORA = (function(cora) {
 			return CORA.openGuiItemHandler(openGuiItemHandlerDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "openGuiItemHandlerFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

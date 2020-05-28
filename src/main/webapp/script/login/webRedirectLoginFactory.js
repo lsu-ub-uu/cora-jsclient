@@ -31,12 +31,11 @@ var CORA = (function(cora) {
 			return CORA.webRedirectLogin(loginManagerDependencies, loginManagerSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "webRedirectLoginFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

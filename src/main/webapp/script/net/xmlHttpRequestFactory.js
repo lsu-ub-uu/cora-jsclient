@@ -22,11 +22,10 @@ var CORA = (function(cora) {
 		function factor() {
 			return new XMLHttpRequest();
 		}
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "xmlHttpRequestFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

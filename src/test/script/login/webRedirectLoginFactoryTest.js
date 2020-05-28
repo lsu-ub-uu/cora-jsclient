@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("webRedirectLoginFactoryTest.js", {
+QUnit.module("login/webRedirectLoginFactoryTest.js", {
 	beforeEach : function() {
 		window.open = function() {
 			return {

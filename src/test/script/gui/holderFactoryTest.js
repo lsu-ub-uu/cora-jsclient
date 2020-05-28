@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("holderFactoryTest.js", {
+QUnit.module("gui/holderFactoryTest.js", {
 	beforeEach : function() {
 		this.spec = {};
 	},

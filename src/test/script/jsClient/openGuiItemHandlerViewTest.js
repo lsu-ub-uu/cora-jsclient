@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("openGuiItemHandlerViewTest.js", {
+QUnit.module("jsClient/openGuiItemHandlerViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {};
 		this.spec = {

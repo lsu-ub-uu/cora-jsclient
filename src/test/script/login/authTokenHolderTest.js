@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("authTokenHolderTest.js", {
+QUnit.module("login/authTokenHolderTest.js", {
 	beforeEach : function() {
 		this.authTokenHolder = CORA.authTokenHolder();
 	},

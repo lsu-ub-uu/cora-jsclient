@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("loginManagerFactoryTest.js", {
+QUnit.module("login/loginManagerFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"textProvider" : CORATEST.textProviderSpy(),

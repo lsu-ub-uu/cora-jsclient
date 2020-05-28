@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("ldapLoginViewTest.js", {
+QUnit.module("login/ldapLoginViewTest.js", {
 	beforeEach : function() {
 		var dependencies = {
 			"workItemViewFactory" : CORATEST.standardFactorySpy("workItemViewSpy"),

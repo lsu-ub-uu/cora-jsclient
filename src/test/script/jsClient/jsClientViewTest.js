@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("jsClientViewTest.js", {
+QUnit.module("jsClient/jsClientViewTest.js", {
 	beforeEach : function() {
 
 		this.dependencies = {

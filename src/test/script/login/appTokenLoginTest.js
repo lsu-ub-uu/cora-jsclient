@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("appTokenLoginTest.js", {
+QUnit.module("login/appTokenLoginTest.js", {
 	beforeEach : function() {
 
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();

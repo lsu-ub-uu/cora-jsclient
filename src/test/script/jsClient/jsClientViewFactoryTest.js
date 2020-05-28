@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("jsClientViewFactoryTest.js", {
+QUnit.module("jsClient/jsClientViewFactoryTest.js", {
 	beforeEach : function() {
 		this.spec = {
 				"name" : "someName"

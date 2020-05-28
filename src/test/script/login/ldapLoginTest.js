@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("ldapLoginTest.js", {
+QUnit.module("login/ldapLoginTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		var textProvider = CORATEST.textProviderStub();

@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("ldapLoginViewFactoryTest.js", {
+QUnit.module("login/ldapLoginViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"textProvider" : CORATEST.textProviderSpy()

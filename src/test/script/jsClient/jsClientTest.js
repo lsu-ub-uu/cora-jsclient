@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("jsClientTest.js", {
+QUnit.module("jsClient/jsClientTest.js", {
 	beforeEach : function() {
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
 		this.createRecordHandlerViewFactory = function() {

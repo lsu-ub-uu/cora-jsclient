@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("infoFactoryTest.js", {
+QUnit.module("gui/infoFactoryTest.js", {
 	beforeEach : function() {
 		this.infoFactory = CORA.infoFactory();
 	},

@@ -24,14 +24,14 @@ var CORA = (function(cora) {
 		let recordGui;
 		let delaySearchTimer;
 
-		const start = function () {
+		const start = function() {
 			view = createView();
 			tryToCreateSearchForm();
 		};
 
-		const createView = function () {
+		const createView = function() {
 			let viewSpec = {
-				"searchMethod" : search
+				"searchMethod": search
 			};
 			return dependencies.searchHandlerViewFactory.factor(viewSpec);
 		};
@@ -45,7 +45,7 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createSearchForm = function () {
+		const createSearchForm = function() {
 			let metadataId = spec.metadataId;
 			recordGui = createRecordGui(metadataId);
 
@@ -81,12 +81,12 @@ var CORA = (function(cora) {
 
 		const createRecordGui = function(metadataId) {
 			let recordGuiSpec = {
-				"metadataId" : metadataId,
-				permissions : createEmptyPermissions()
+				"metadataId": metadataId,
+				permissions: createEmptyPermissions()
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
 		};
-		
+
 		const createEmptyPermissions = function() {
 			let permissions = {};
 			permissions.write = [];
@@ -96,7 +96,7 @@ var CORA = (function(cora) {
 
 		const addSearchFormFromRecordGuiToView = function(recordGuiToAdd, metadataIdUsedInData) {
 			let presentationView = recordGuiToAdd.getPresentationHolder(spec.presentationId,
-					metadataIdUsedInData).getView();
+				metadataIdUsedInData).getView();
 			view.addPresentationToSearchFormHolder(presentationView);
 		};
 
@@ -110,30 +110,30 @@ var CORA = (function(cora) {
 			}
 			window.clearTimeout(delaySearchTimer);
 			recordGui.pubSub.publish("addUpToMinNumberOfRepeating", {
-				"data" : "",
-				"path" : {}
+				"data": "",
+				"path": {}
 			});
 		};
 
-		const sendSearchQueryToServer =function() {
+		const sendSearchQueryToServer = function() {
 			let link = spec.searchLink;
 			let callSpec = {
-				"url" : link.url,
-				"requestMethod" : link.requestMethod,
-				"accept" : link.accept,
-				"parameters" : {
-					"searchData" : JSON.stringify(recordGui.dataHolder.getData())
+				"url": link.url,
+				"requestMethod": link.requestMethod,
+				"accept": link.accept,
+				"parameters": {
+					"searchData": JSON.stringify(recordGui.dataHolder.getData())
 				},
-				"loadMethod" : handleSearchResult
+				"loadMethod": handleSearchResult
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
 		const handleSearchResult = function(answerIn) {
 			let resultHandlerSpec = {
-				"dataList" : JSON.parse(answerIn.responseText).dataList,
-				"jsClient" : dependencies.jsClient,
-				"triggerWhenResultIsChoosen" : spec.triggerWhenResultIsChoosen
+				"dataList": JSON.parse(answerIn.responseText).dataList,
+				"jsClient": dependencies.jsClient,
+				"triggerWhenResultIsChoosen": spec.triggerWhenResultIsChoosen
 			};
 			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();
@@ -154,13 +154,13 @@ var CORA = (function(cora) {
 
 		start();
 		let out = Object.freeze({
-			"type" : "searchHandler",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			search : search,
-			handleSearchResult : handleSearchResult,
-			getView : getView,
-			handleMsg : handleMsg
+			"type": "searchHandler",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			search: search,
+			handleSearchResult: handleSearchResult,
+			getView: getView,
+			handleMsg: handleMsg
 		});
 		return out;
 	};

@@ -27,7 +27,7 @@ var CORA = (function(cora) {
 			"containsValuableData": false
 		};
 		let cMetadataElement;
-		
+
 		const start = function() {
 			cMetadataElement = getMetadataById(metadataId);
 			validateRepeat();
@@ -185,8 +185,6 @@ var CORA = (function(cora) {
 				childReference: childReference,
 				data: childData
 			};
-			//			let childResult = CORA.metadataChildValidator(childReference, nextLevelPath, childData,
-			//				metadataProvider, pubSub);
 			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
 			let childResult = metadataChildValidator.validate();
 			if (!childResult.everythingOkBelow) {

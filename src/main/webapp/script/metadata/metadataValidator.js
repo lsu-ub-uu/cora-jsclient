@@ -88,7 +88,7 @@ var CORA = (function(cora) {
 				childrenResult = false;
 			}
 		};
-		
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};

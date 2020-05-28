@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("dataHolderTest.js", {
+QUnit.module("metadata/dataHolderTest.js", {
 	beforeEach : function() {
 		this.spec = {
 				"metadataId" : "recordTypeOnlyMetadataIdChild",

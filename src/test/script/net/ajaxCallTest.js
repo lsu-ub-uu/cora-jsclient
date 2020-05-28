@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("ajaxCallTest.js", {
+QUnit.module("net/ajaxCallTest.js", {
 	beforeEach : function() {
 		var loadMethodWasCalled = false;
 		var answer;

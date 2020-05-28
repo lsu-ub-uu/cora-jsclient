@@ -19,7 +19,7 @@
  */
 "use strict";
 QUnit
-		.module("pChildRefHandlerViewTest.js",
+		.module("presentation/pChildRefHandlerViewTest.js",
 				{
 					beforeEach : function() {
 						this.fixture = document.getElementById("qunit-fixture");

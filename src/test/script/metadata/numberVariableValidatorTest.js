@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("numberVariableValidatorTest.js", {
+QUnit.module("metadata/numberVariableValidatorTest.js", {
 	beforeEach : function() {
 		this.metadataProvider = new MetadataProviderStub();
 		var dependencies = {

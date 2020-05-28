@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("uploadManagerFactoryTest.js", {
+QUnit.module("net/uploadManagerFactoryTest.js", {
 	beforeEach : function() {
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
 		this.metadataProvider = new MetadataProviderStub();

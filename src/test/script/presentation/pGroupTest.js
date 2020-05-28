@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("pGroupTest.js", {
+QUnit.module("presentation/pGroupTest.js", {
 	beforeEach : function() {
 		this.getId = function(cData) {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");

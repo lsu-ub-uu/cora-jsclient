@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("recordGuiFactoryTest.js", {
+QUnit.module("recordGui/recordGuiFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"providers" : {

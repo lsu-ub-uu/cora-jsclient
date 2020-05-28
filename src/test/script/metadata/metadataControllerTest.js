@@ -50,7 +50,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("metadataControllerTest.js", {
+QUnit.module("metadata/metadataControllerTest.js", {
 	beforeEach : function() {
 		var metadataProvider = new MetadataProviderStub();
 		this.dependencies = {

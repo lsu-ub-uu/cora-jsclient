@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("searchRecordHandlerViewFactoryTest.js", {
+QUnit.module("search/searchRecordHandlerViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"messageHolderFactory" : CORATEST.messageHolderFactorySpy()

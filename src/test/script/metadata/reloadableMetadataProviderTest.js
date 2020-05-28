@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("metadataProviderTest.js", {
+QUnit.module("metadata/reloadableMetadataProviderTest.js", {
 	beforeEach : function() {
 		var metadataListLink = {
 			"requestMethod" : "GET",

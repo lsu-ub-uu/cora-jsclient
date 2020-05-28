@@ -41,7 +41,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("jsBookkeeperTest.js", {
+QUnit.module("metadata/jsBookkeeperTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy()

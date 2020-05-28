@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("pRecordLinkViewTest.js", {
+QUnit.module("presentation/pRecordLinkViewTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 

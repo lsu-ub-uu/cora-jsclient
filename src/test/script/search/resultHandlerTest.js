@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("resultHandlerTest.js", {
+QUnit.module("search/resultHandlerTest.js", {
 	beforeEach : function() {
 		var addedManagedGuiItem = [];
 		this.getAddedManagedGuiItem = function(number) {

@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("pMultipleChildrenTest.js", {
+QUnit.module("presentation/pMultipleChildrenTest.js", {
 	beforeEach : function() {
 		this.getId = function(cData) {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");

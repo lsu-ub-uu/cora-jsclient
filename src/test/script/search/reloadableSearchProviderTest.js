@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("reloadableSearchProviderTest.js",
+QUnit.module("search/reloadableSearchProviderTest.js",
 		{
 			beforeEach : function() {
 				var methodToCall = {};

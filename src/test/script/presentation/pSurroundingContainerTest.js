@@ -69,7 +69,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("pSurroundingContainerTest.js", {
+QUnit.module("presentation/pSurroundingContainerTest.js", {
 	beforeEach : function() {
 		this.getId = function(cData) {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");

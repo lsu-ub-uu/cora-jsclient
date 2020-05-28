@@ -54,7 +54,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentationHolderTest.js", {
+QUnit.module("presentation/presentationHolderTest.js", {
 	beforeEach : function() {
 		this.spec = {
 			"presentationId" : "pgGroupIdOneTextChild",

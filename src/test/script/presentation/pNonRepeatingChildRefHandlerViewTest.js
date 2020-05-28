@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("pNonRepeatingChildRefHandlerViewTest.js", {
+QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {};

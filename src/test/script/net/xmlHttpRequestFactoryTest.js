@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("xmlHttpRequestFactoryTest.js", {});
+QUnit.module("net/xmlHttpRequestFactoryTest.js", {});
 
 QUnit.test("testInit", function(assert) {
 	var factory = CORA.xmlHttpRequestFactory();

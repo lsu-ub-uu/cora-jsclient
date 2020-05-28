@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("searchProviderTest.js", {
+QUnit.module("search/searchProviderTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		var dependencies = {

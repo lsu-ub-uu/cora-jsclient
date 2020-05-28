@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("pMapTest.js", {
+QUnit.module("presentation/pMapTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		var metadataProvider = new MetadataCoordinatesProviderStub();

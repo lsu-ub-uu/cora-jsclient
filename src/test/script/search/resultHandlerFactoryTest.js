@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("resultHandlerFactoryTest.js", {
+QUnit.module("search/resultHandlerFactoryTest.js", {
 	beforeEach : function() {
 	this.recordGuiFactory = CORATEST.standardFactorySpy("recordGuiSpy");
 	this.recordGuiFactory.setSpyDependencies({"uploadManager": CORATEST.uploadManagerSpy()});

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("pMapViewTest.js", {
+QUnit.module("presentation/pMapViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"infoFactory" : CORATEST.infoFactorySpy()

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("resultHandlerViewTest.js", {
+QUnit.module("search/resultHandlerViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 		};

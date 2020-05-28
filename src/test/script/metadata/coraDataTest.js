@@ -31,7 +31,7 @@ QUnit.begin(function(args) {
 });
 // end workaround qunit does not report number of tests
 
-QUnit.module("coraDataTest.js", {
+QUnit.module("metadata/coraDataTest.js", {
 	beforeEach : function() {
 		this.firstChild = {
 			"name" : "textVariableId",

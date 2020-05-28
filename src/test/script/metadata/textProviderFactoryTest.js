@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("textProviderFactoryTest.js", {
+QUnit.module("metadata/textProviderFactoryTest.js", {
 	beforeEach : function() {
 		var textListLink = {
 			"requestMethod" : "GET",

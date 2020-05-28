@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadataHelperTest.js", {
+QUnit.module("metadata/metadataHelperTest.js", {
 	beforeEach : function() {
 		this.metadataHelper = CORA.metadataHelper({
 			"metadataProvider" : new MetadataProviderStub()

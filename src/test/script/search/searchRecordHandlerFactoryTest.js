@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("searchRecordHandlerFactoryTest.js", {
+QUnit.module("search/searchRecordHandlerFactoryTest.js", {
 	beforeEach : function() {
 		this.globalFactories = {
 			"searchHandlerFactory" : CORATEST.standardFactorySpy("searchHandlerSpy")

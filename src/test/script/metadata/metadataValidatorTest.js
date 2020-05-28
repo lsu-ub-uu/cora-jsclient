@@ -40,7 +40,7 @@
 //	});
 //};
 
-QUnit.module("metadataValidatorTest.js", {
+QUnit.module("metadata/metadataValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();

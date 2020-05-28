@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("searchHandlerViewFactoryTest.js", {
+QUnit.module("search/searchHandlerViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"textProvider" : CORATEST.textProviderSpy()

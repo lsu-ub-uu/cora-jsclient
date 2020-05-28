@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,73 +18,74 @@
  */
 "use strict";
 QUnit.module("recordGuiTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.dependencies = {
-			"metadataProvider" : CORATEST.metadataProviderSpy(),
-			"textProvider" : CORATEST.textProviderStub(),
+			"metadataProvider": CORATEST.metadataProviderSpy(),
+			"textProvider": CORATEST.textProviderStub(),
 			// "recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
 			// "uploadManager" : CORATEST.uploadManagerSpy(),
 			//
-			"pubSub" : CORATEST.pubSubSpy(),
-			"dataHolder" : CORATEST.dataHolderSpy(),
-			"jsBookkeeper" : CORATEST.jsBookkeeperSpy(),
-			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
-			"metadataControllerFactory" : CORATEST.standardFactorySpy("metadataControllerSpy"),
-			"metadataValidatorFactory" : CORATEST.standardFactorySpy("metadataValidatorSpy"),
-			"presentationHolderFactory" : CORATEST.standardFactorySpy("presentationHolderSpy")
+			"pubSub": CORATEST.pubSubSpy(),
+			"dataHolder": CORATEST.dataHolderSpy(),
+			"jsBookkeeper": CORATEST.jsBookkeeperSpy(),
+			"presentationFactory": CORATEST.standardFactorySpy("presentationSpy"),
+			"metadataControllerFactory": CORATEST.standardFactorySpy("metadataControllerSpy"),
+			"metadataValidatorFactory": CORATEST.standardFactorySpy("metadataValidatorSpy"),
+			"presentationHolderFactory": CORATEST.standardFactorySpy("presentationHolderSpy")
 		};
 		this.spec = {
-			"metadataId" : "someMetadataId",
-			"data" : {},
-			"dataDivider" : "someDataDivider",
+			"metadataId": "someMetadataId",
+			"data": {},
+			"dataDivider": "someDataDivider",
+			permissions: { write: ["someWritePermission"] }
 		};
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.type, "recordGui");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.getSpec(), this.spec);
 });
 
 QUnit.test("testGetPubSub", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.pubSub, this.dependencies.pubSub);
 });
 
 QUnit.test("testGetDataHolder", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.dataHolder, this.dependencies.dataHolder);
 });
 
 QUnit.test("testGetjsBookkeeper", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	assert.strictEqual(recordGui.jsBookkeeper, this.dependencies.jsBookkeeper);
 });
 
 QUnit.test("testGetPresentationHolder", function(assert) {
 	// Yes the method should be called getPresentationHolder
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
-	var presentation = recordGui.getPresentationHolder("presentationId", "metadataIdUsedInData");
-	var factoredPresentation = this.dependencies.presentationHolderFactory.getFactored(0);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let presentation = recordGui.getPresentationHolder("presentationId", "metadataIdUsedInData");
+	let factoredPresentation = this.dependencies.presentationHolderFactory.getFactored(0);
 	assert.strictEqual(presentation, factoredPresentation);
 });
 
 QUnit.test("testGetPresentationHolderHasCorrectSpec", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
-	var presentation = recordGui.getPresentationHolder("presentationId", "metadataIdUsedInData");
-	var factoredSpec = this.dependencies.presentationHolderFactory.getSpec(0);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
+	recordGui.getPresentationHolder("presentationId", "metadataIdUsedInData");
+	let factoredSpec = this.dependencies.presentationHolderFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.presentationId, "presentationId");
 	assert.strictEqual(factoredSpec.metadataIdUsedInData, "metadataIdUsedInData");
 	assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
@@ -95,16 +96,16 @@ QUnit.test("testGetPresentationHolderHasCorrectSpec", function(assert) {
 });
 
 QUnit.test("testInitMetadataControllerStartingGui", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
-	var metadataController = recordGui.initMetadataControllerStartingGui();
-	var factoredMetadataController = this.dependencies.metadataControllerFactory.getFactored(0);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let metadataController = recordGui.initMetadataControllerStartingGui();
+	let factoredMetadataController = this.dependencies.metadataControllerFactory.getFactored(0);
 	assert.strictEqual(metadataController, factoredMetadataController);
 });
 
 QUnit.test("testInitMetadataControllerStartingGuiHasCorrectSpec", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	recordGui.initMetadataControllerStartingGui();
-	var factoredSpec = this.dependencies.metadataControllerFactory.getSpec(0);
+	let factoredSpec = this.dependencies.metadataControllerFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
 	assert.strictEqual(factoredSpec.data, this.spec.data);
 	assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
@@ -112,18 +113,23 @@ QUnit.test("testInitMetadataControllerStartingGuiHasCorrectSpec", function(asser
 });
 
 QUnit.test("testValidateDataUsesValidator", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
-	var validationAnswer = recordGui.validateData();
-	var factoredValidator = this.dependencies.metadataValidatorFactory.getFactored(0);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
+	
+	let validationAnswer = recordGui.validateData();
+	
+	let factoredValidator = this.dependencies.metadataValidatorFactory.getFactored(0);
 	assert.strictEqual(validationAnswer, factoredValidator.validate());
 });
 
 QUnit.test("testValidateDataHasCorrectSpec", function(assert) {
-	var recordGui = CORA.recordGui(this.dependencies, this.spec);
-	var validator = recordGui.validateData();
-	var factoredSpec = this.dependencies.metadataValidatorFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
-	assert.strictEqual(factoredSpec.data, this.dependencies.dataHolder.getData());
-	assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
-	assert.strictEqual(factoredSpec.pubSub, this.dependencies.pubSub);
+	let recordGui = CORA.recordGui(this.dependencies, this.spec);
+	
+	recordGui.validateData();
+	
+	let factoredValidatorSpec = this.dependencies.metadataValidatorFactory.getSpec(0);
+	assert.strictEqual(factoredValidatorSpec.metadataId, this.spec.metadataId);
+	assert.strictEqual(factoredValidatorSpec.data, this.dependencies.dataHolder.getData());
+	assert.strictEqual(factoredValidatorSpec.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(factoredValidatorSpec.pubSub, this.dependencies.pubSub);
+	assert.strictEqual(factoredValidatorSpec.permissions, this.spec.permissions);
 });

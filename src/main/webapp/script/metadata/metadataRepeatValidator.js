@@ -1,5 +1,6 @@
 /*
- * Copyright 2015 Olov McKie
+ * Copyright 2015, 2020 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,28 +21,32 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataRepeatValidator = function(metadataId, path, data, repeatId, metadataProvider,
-			pubSub) {
-		var result = {
-			"everythingOkBelow" : true,
-			"containsValuableData" : false
+		pubSub) {
+		let result = {
+			"everythingOkBelow": true,
+			"containsValuableData": false
 		};
-		var cMetadataElement = getMetadataById(metadataId);
-		validateRepeat();
+		let cMetadataElement;
+		
+		const start = function() {
+			cMetadataElement = getMetadataById(metadataId);
+			validateRepeat();
+		}
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
+		};
 
-		function validateRepeat() {
+		const validateRepeat = function() {
 			validateForMetadata();
-		}
+		};
 
-		function hasAttributes() {
+		const hasAttributes = function() {
 			return cMetadataElement.containsChildWithNameInData("attributeReferences");
-		}
+		};
 
-		function validateForMetadata() {
-			var nextLevelPath = createNextLevelPath();
+		const validateForMetadata = function() {
+			let nextLevelPath = createNextLevelPath();
 			if (isGroup()) {
 				validateMetadataGroup(nextLevelPath);
 			} else if (isRecordLink()) {
@@ -49,23 +54,23 @@ var CORA = (function(cora) {
 			} else {
 				validateVariableValue(nextLevelPath);
 			}
-		}
+		};
 
-		function createNextLevelPath() {
-			var nextLevelPathPart = createNextLevelPathPart();
+		const createNextLevelPath = function() {
+			let nextLevelPathPart = createNextLevelPathPart();
 
 			if (incomingPathIsEmpty()) {
 				return nextLevelPathPart;
 			}
 
-			var pathCopy = JSON.parse(JSON.stringify(path));
-			var lowestPath = findLowestPath(pathCopy);
+			let pathCopy = JSON.parse(JSON.stringify(path));
+			let lowestPath = findLowestPath(pathCopy);
 			lowestPath.children.push(nextLevelPathPart);
 			return pathCopy;
-		}
+		};
 
-		function createNextLevelPathPart() {
-			var childPathPart = createLinkedPathWithNameInData();
+		const createNextLevelPathPart = function() {
+			let childPathPart = createLinkedPathWithNameInData();
 
 			if (hasRepeatId()) {
 				childPathPart.children.push(createRepeatId());
@@ -75,89 +80,89 @@ var CORA = (function(cora) {
 				childPathPart.children.push(createAttributes());
 			}
 			return childPathPart;
-		}
+		};
 
-		function createLinkedPathWithNameInData() {
-			var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+		const createLinkedPathWithNameInData = function() {
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			return {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : nameInData
-				} ]
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": nameInData
+				}]
 			};
-		}
+		};
 
-		function hasRepeatId() {
+		const hasRepeatId = function() {
 			return repeatId !== undefined;
-		}
+		};
 
-		function createRepeatId() {
+		const createRepeatId = function() {
 			return {
-				"name" : "repeatId",
-				"value" : repeatId
+				"name": "repeatId",
+				"value": repeatId
 			};
-		}
+		};
 
-		function createAttributes() {
-			var attributes = {
-				"name" : "attributes",
-				"children" : []
+		const createAttributes = function() {
+			let attributes = {
+				"name": "attributes",
+				"children": []
 			};
-			var attributeReferences = cMetadataElement
-					.getFirstChildByNameInData('attributeReferences');
-			var attributeNo = 1;
+			let attributeReferences = cMetadataElement
+				.getFirstChildByNameInData('attributeReferences');
+			let attributeNo = 1;
 			attributeReferences.children.forEach(function(attributeReference) {
 				attributes.children.push(createAttributeWithAttributeAndRepeatId(
-						attributeReference, String(attributeNo)));
+					attributeReference, String(attributeNo)));
 				attributeNo++;
 			});
 			return attributes;
-		}
+		};
 
-		function createAttributeWithAttributeAndRepeatId(attributeReference, attributeRepeatId) {
-			var ref = getRefValueFromAttributeRef(attributeReference);
-			var attribute = getMetadataById(ref);
-			var attributeName = attribute.getFirstAtomicValueByNameInData('nameInData');
-			var attributeValue = attribute.getFirstAtomicValueByNameInData('finalValue');
+		const createAttributeWithAttributeAndRepeatId = function(attributeReference, attributeRepeatId) {
+			let ref = getRefValueFromAttributeRef(attributeReference);
+			let attribute = getMetadataById(ref);
+			let attributeName = attribute.getFirstAtomicValueByNameInData('nameInData');
+			let attributeValue = attribute.getFirstAtomicValueByNameInData('finalValue');
 			return {
-				"name" : "attribute",
-				"repeatId" : attributeRepeatId,
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : attributeName
+				"name": "attribute",
+				"repeatId": attributeRepeatId,
+				"children": [{
+					"name": "attributeName",
+					"value": attributeName
 				}, {
-					"name" : "attributeValue",
-					"value" : attributeValue
-				} ]
+					"name": "attributeValue",
+					"value": attributeValue
+				}]
 			};
-		}
+		};
 
-		function getRefValueFromAttributeRef(attributeReference) {
-			var cAttributeReference = CORA.coraData(attributeReference);
+		const getRefValueFromAttributeRef = function(attributeReference) {
+			let cAttributeReference = CORA.coraData(attributeReference);
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function incomingPathIsEmpty() {
+		const incomingPathIsEmpty = function() {
 			return path.name === undefined;
-		}
+		};
 
-		function findLowestPath(pathToSearch) {
-			var coraPath = CORA.coraData(pathToSearch);
+		const findLowestPath = function(pathToSearch) {
+			let coraPath = CORA.coraData(pathToSearch);
 			if (coraPath.containsChildWithNameInData("linkedPath")) {
 				return findLowestPath(coraPath.getFirstChildByNameInData("linkedPath"));
 			}
 			return pathToSearch;
-		}
+		};
 
-		function isGroup() {
-			var type = cMetadataElement.getData().attributes.type;
+		const isGroup = function() {
+			let type = cMetadataElement.getData().attributes.type;
 			return type === "group";
-		}
+		};
 
-		function validateMetadataGroup(nextLevelPath) {
-			var nextLevelChildReferences = cMetadataElement
-					.getFirstChildByNameInData('childReferences');
+		const validateMetadataGroup = function(nextLevelPath) {
+			let nextLevelChildReferences = cMetadataElement
+				.getFirstChildByNameInData('childReferences');
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
@@ -165,14 +170,25 @@ var CORA = (function(cora) {
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}
-		}
+		};
 
-		function validateGroupChild(childReference, nextLevelPath) {
+		const validateGroupChild = function(childReference, nextLevelPath) {
 			validateChild(childReference, nextLevelPath, data);
-		}
-		function validateChild(childReference, nextLevelPath, childData) {
-			var childResult = CORA.metadataChildValidator(childReference, nextLevelPath, childData,
-					metadataProvider, pubSub);
+		};
+		const validateChild = function(childReference, nextLevelPath, childData) {
+			let dependencies = {
+				metadataProvider: metadataProvider,
+				pubSub: pubSub
+			};
+			let spec = {
+				path: nextLevelPath,
+				childReference: childReference,
+				data: childData
+			};
+			//			let childResult = CORA.metadataChildValidator(childReference, nextLevelPath, childData,
+			//				metadataProvider, pubSub);
+			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
+			let childResult = metadataChildValidator.validate();
 			if (!childResult.everythingOkBelow) {
 				result.everythingOkBelow = false;
 			}
@@ -180,72 +196,72 @@ var CORA = (function(cora) {
 				result.containsValuableData = true;
 			}
 			result.validationMessage = {
-				"metadataId" : metadataId,
-				"path" : nextLevelPath
+				"metadataId": metadataId,
+				"path": nextLevelPath
 			};
 			result.sendValidationMessages = false;
-		}
+		};
 
-		function isRecordLink() {
-			var type = cMetadataElement.getData().attributes.type;
+		const isRecordLink = function() {
+			let type = cMetadataElement.getData().attributes.type;
 			return type === "recordLink";
-		}
+		};
 
-		function validateMetadataRecordLink(nextLevelPath) {
+		const validateMetadataRecordLink = function(nextLevelPath) {
 			validateLinkedRecordId(nextLevelPath);
 			possiblyValidateLinkedRepeatId(nextLevelPath);
 
-		}
+		};
 
-		function validateLinkedRecordId(nextLevelPath) {
-			var recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
+		const validateLinkedRecordId = function(nextLevelPath) {
+			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
 			validateChild(recordIdStaticChildReference, nextLevelPath, data);
-		}
+		};
 
-		function createRefWithRef(ref) {
+		const createRefWithRef = function(ref) {
 			return {
-				"name" : "childReference",
-				"repeatId" : 1,
-				"children" : [ {
-					"name" : "ref",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "metadata"
+				"name": "childReference",
+				"repeatId": 1,
+				"children": [{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : ref
-					} ]
+						"name": "linkedRecordId",
+						"value": ref
+					}]
 				}, {
-					"name" : "repeatMin",
-					"value" : "1"
+					"name": "repeatMin",
+					"value": "1"
 				}, {
-					"name" : "repeatMax",
-					"value" : "1"
-				} ]
+					"name": "repeatMax",
+					"value": "1"
+				}]
 			};
-		}
+		};
 
-		function possiblyValidateLinkedRepeatId(nextLevelPath) {
+		const possiblyValidateLinkedRepeatId = function(nextLevelPath) {
 			if (isLinkToRepeatingPartOfRecord()) {
-				var recordTypeStaticChildReference = createRefWithRef("linkedRepeatIdTextVar");
+				let recordTypeStaticChildReference = createRefWithRef("linkedRepeatIdTextVar");
 				validateChild(recordTypeStaticChildReference, nextLevelPath, data);
 			}
-		}
+		};
 
-		function isLinkToRepeatingPartOfRecord() {
+		const isLinkToRepeatingPartOfRecord = function() {
 			return cMetadataElement.containsChildWithNameInData("linkedPath");
-		}
+		};
 
-		function validateVariableValue(nextLevelPath) {
-			var hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
+		const validateVariableValue = function(nextLevelPath) {
+			let hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
 			if (dataIsValid()) {
 				handleValidData(hasFinalValue, result);
 			} else {
 				handleInvalidData(nextLevelPath);
 			}
-		}
-		function dataIsValid() {
-			var type = cMetadataElement.getData().attributes.type;
+		};
+		const dataIsValid = function() {
+			let type = cMetadataElement.getData().attributes.type;
 			if (type === "textVariable") {
 				return validateTextVariable();
 			}
@@ -253,68 +269,70 @@ var CORA = (function(cora) {
 				return validateNumberVariable();
 			}
 			return validateCollectionVariable();
-		}
+		};
 
-		function validateTextVariable() {
-			var regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+		const validateTextVariable = function() {
+			let regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 			return new RegExp(regEx).test(data.value);
-		}
+		};
 
-		function validateNumberVariable() {
-			var validator = CORA.numberVariableValidator({
-				"metadataProvider" : metadataProvider,
+		const validateNumberVariable = function() {
+			let validator = CORA.numberVariableValidator({
+				"metadataProvider": metadataProvider,
 			});
 			return validator.validateData(data.value, cMetadataElement);
-		}
+		};
 
-		function validateCollectionVariable() {
-			var collectionItemReferences = getCollectionItemReferences();
+		const validateCollectionVariable = function() {
+			let collectionItemReferences = getCollectionItemReferences();
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
-				var finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
+				let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
 				return finalValue === data.value;
 			}
 
 			return collectionItemReferences.children.some(isItemDataValue);
-		}
+		};
 
-		function getCollectionItemReferences() {
-			var cRefCollection = CORA.coraData(cMetadataElement
-					.getFirstChildByNameInData("refCollection"));
+		const getCollectionItemReferences = function() {
+			let cRefCollection = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("refCollection"));
 
-			var refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
-			var cItemCollection = getMetadataById(refCollectionId);
+			let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cItemCollection = getMetadataById(refCollectionId);
 			return cItemCollection.getFirstChildByNameInData("collectionItemReferences");
-		}
+		};
 
-		function isItemDataValue(collectionItemReference) {
-			var cItemRef = CORA.coraData(collectionItemReference);
-			var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-			var cCollectionItem = getMetadataById(itemRefId);
-			var nameInData = cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
+		const isItemDataValue = function(collectionItemReference) {
+			let cItemRef = CORA.coraData(collectionItemReference);
+			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+			let cCollectionItem = getMetadataById(itemRefId);
+			let nameInData = cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
 			return nameInData === data.value;
-		}
+		};
 
-		function handleValidData(hasFinalValue, result) {
+		const handleValidData = function(hasFinalValue, result) {
 			if (hasFinalValue) {
 				result.containsValuableData = false;
 			} else {
 				result.containsValuableData = true;
 			}
-		}
+		};
 
-		function handleInvalidData(nextLevelPath) {
-			var message = {
-				"metadataId" : metadataId,
-				"path" : nextLevelPath
+		const handleInvalidData = function(nextLevelPath) {
+			let message = {
+				"metadataId": metadataId,
+				"path": nextLevelPath
 			};
 			result = {
-				"everythingOkBelow" : false,
-				"containsValuableData" : false,
-				"validationMessage" : message,
-				"sendValidationMessages" : true
+				"everythingOkBelow": false,
+				"containsValuableData": false,
+				"validationMessage": message,
+				"sendValidationMessages": true
 			};
-		}
+		};
+		start();
 		return result;
-	};
+
+	}
 	return cora;
 }(CORA));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -107,7 +107,7 @@ QUnit.test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandlerNoAction"
 	var spySpec = {
 		"returnFalseForAnyAction" : true
 	};
-	this.dependencies.recordTypeHandlerFactory.setspySpec(spySpec);
+	this.dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
 
 	this.menu = CORA.recordTypeMenu(this.providers, this.dependencies, this.spec);
 	this.recordTypeGroups = this.menu.getRecordTypeGroups(this.dummyJsClient);

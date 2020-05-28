@@ -1,7 +1,6 @@
 /*
- * Copyright 2017 Olov McKie
  * Copyright 2017, 2020 Uppsala University Library
- *
+ * 
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -19,34 +18,23 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.recordGuiFactorySpy = function() {
-		let factoredrecordGuis = [];
-		let factoredSpec = [];
-
-		const factor = function(spec) {
-			factoredSpec.push(spec);
-
-			let factoredrecordGui = CORATEST.recordGuiSpy();
-			factoredrecordGui.setSpec(spec);
-			factoredrecordGuis.push(factoredrecordGui);
-			return factoredrecordGui;
+	coraTest.metadataChildValidatorSpy = function(dependency, spec, spySpec) {
+		let validateCalled = false;
+		
+		const validate = function() {
+			validateCalled = true;
+			return spySpec.resultToReturn;
 		};
-
-		const getFactored = function(number) {
-			return factoredrecordGuis[number];
+		
+		const getValidateCalled = function() {
+			return validateCalled;
 		};
-
-		const getSpec = function(number) {
-			return factoredSpec[number];
-		};
-
-		let out = Object.freeze({
-			"type": "recordGuiFactorySpy",
-			factor: factor,
-			getFactored: getFactored,
-			getSpec: getSpec
+		
+		return Object.freeze({
+			"type": "metadataChildValidatorSpy",
+			validate: validate,
+			getValidateCalled: getValidateCalled
 		});
-		return out;
 	};
 	return coraTest;
-}(CORATEST));
+}(CORATEST || {}));

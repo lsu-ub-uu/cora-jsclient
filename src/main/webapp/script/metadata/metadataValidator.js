@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,38 +20,92 @@
 
 var CORA = (function(cora) {
 	"use strict";
-	cora.metadataValidator = function(spec) {
+	cora.metadataValidator = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
+		let topLevelPath = {};
 		let topLevelData = spec.data;
+		let metadataProvider = dependencies.metadataProvider;
+		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
+		let childrenResult = true;
 
 		const validateFirstLevel = function() {
-			let childrenResult = true;
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
 				.getFirstChildByNameInData('childReferences');
-			let topLevelPath = {};
+			return validateTopLevelChildren(topLevelChildReferences);
+		};
+
+		const validateTopLevelChildren = function(topLevelChildReferences) {
+			childrenResult = true;
 			topLevelChildReferences.children.forEach(function(childReference) {
-				let childResult = CORA.metadataChildValidator(childReference, topLevelPath,
-					topLevelData, spec.metadataProvider, spec.pubSub);
-				if (!childResult.everythingOkBelow) {
-					childrenResult = false;
-				}
+				possiblyValidateDataChildrenToChildRef(childReference);
 			});
 			return childrenResult;
 		};
 
+		const possiblyValidateDataChildrenToChildRef = function(childReference) {
+			if (shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions(childReference)) {
+				validateDataChildForChildRefInvalid(childReference);
+			}
+		};
+
+		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			if (childHasRecordPartConstraints(cChildReference)) {
+				return userHasRecordPartPermission(cChildReference);
+			}
+			return true;
+		};
+
+		const childHasRecordPartConstraints = function(cChildReference) {
+			return cChildReference.containsChildWithNameInData("recordPartConstraint")
+		};
+
+		const userHasRecordPartPermission = function(cChildReference) {
+			let nameInData = extractNameInData(cChildReference);
+			let writePermissions = spec.permissions.write;
+			if (writePermissions.includes(nameInData)) {
+				return true;
+			}
+			return false;
+		};
+
+		const extractNameInData = function(cChildReference) {
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
+		};
+
+		const validateDataChildForChildRefInvalid = function(childReference) {
+			let childValidatorSpec = {
+				path: topLevelPath,
+				data: topLevelData,
+				childReference: childReference
+			};
+			let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
+			let childResult = childValidator.validate();
+			if (!childResult.everythingOkBelow) {
+				childrenResult = false;
+			}
+		};
+		
 		const getMetadataById = function(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+
+		const getDependencies = function() {
+			return dependencies;
 		};
 
 		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		let out = Object.freeze({
-			"type": "metadataValidator",
-			validate: validateFirstLevel,
-			getSpec: getSpec
+			type: "metadataValidator",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			validate: validateFirstLevel
 		});
 		return out;
 	};

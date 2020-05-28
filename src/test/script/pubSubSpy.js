@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -76,8 +77,8 @@ var CORATEST = (function(coraTest) {
 			getSubscriptions : getSubscriptions,
 			unsubscribe : unsubscribe,
 			getUnsubscriptions : getUnsubscriptions,
-			unsubscribePathBelow:unsubscribePathBelow,
-			getUnsubscriptionsPathBelow:getUnsubscriptionsPathBelow
+			unsubscribePathBelow : unsubscribePathBelow,
+			getUnsubscriptionsPathBelow : getUnsubscriptionsPathBelow
 		});
 	};
 	return coraTest;

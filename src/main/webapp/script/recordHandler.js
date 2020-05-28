@@ -44,7 +44,6 @@ var CORA = (function(cora) {
 			managedGuiItem.addWorkPresentation(recordHandlerView.getView());
 			busy = CORA.busy();
 			managedGuiItem.addWorkPresentation(busy.getView());
-
 			createNewOrFetchDataFromServerForExistingRecord();
 		};
 
@@ -77,7 +76,8 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
-					tryToProcessFetchedRecordData(spec.record.data);
+					let permissions = createEmptyPermissions();
+					tryToProcessFetchedRecordData(spec.record.data, permissions);
 				}
 			}
 		};
@@ -95,7 +95,8 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 			let metadataId = metadataForRecordType.newMetadataId;
 
-			recordGui = createRecordGui(metadataId, copiedData);
+			let permissions = createEmptyPermissions();
+			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions);
 
 			createAndAddViewsForNew(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
@@ -115,12 +116,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createRecordGui = function(metadataId, data, dataDivider) {
+		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
 			let recordGuiSpec = {
-				"metadataId": metadataId,
-				"data": data,
-				"dataDivider": dataDivider
+				metadataId: metadataId,
+				data: data,
+				dataDivider: dataDivider,
+				permissions: permissions
 			};
+
 			let createdRecordGui = dependencies.recordGuiFactory.factor(recordGuiSpec);
 
 			let pubSub = createdRecordGui.pubSub;
@@ -244,6 +247,7 @@ var CORA = (function(cora) {
 				"url": readLink.url,
 				"contentType": readLink.contentType,
 				"accept": readLink.accept,
+				//processFetchedRecord
 				"loadMethod": callAfterAnswer,
 				"errorMethod": callError
 			};
@@ -252,28 +256,64 @@ var CORA = (function(cora) {
 
 		const processFetchedRecord = function(answer) {
 			fetchedRecord = getRecordPartFromAnswer(answer);
-			actionLinks = fetchedRecord.actionLinks;
 			let data = fetchedRecord.data;
-			processFetchedRecordData(data);
+			actionLinks = fetchedRecord.actionLinks;
+			let permissions = preparePermissionsForRecordGuiFromFetchedRecord();
+			processFetchedRecordData(data, permissions);
 		};
 
-		const processFetchedRecordData = function(data) {
+		const preparePermissionsForRecordGuiFromFetchedRecord = function() {
+			let fetchedPermissions = fetchedRecord.permissions;
+			let permissions = createEmptyPermissions();
+			return possiblyAddFetchedPermissions(permissions, fetchedPermissions);
+		};
+
+		const createEmptyPermissions = function() {
+			let permissions = {};
+			permissions.write = [];
+			permissions.read = [];
+			return permissions;
+		};
+
+		const possiblyAddFetchedPermissions = function(permissions, fetchedPermissions) {
+			if (fetchedPermissions) {
+				permissions = possiblyAddFetchedWritePermissions(permissions, fetchedPermissions);
+				permissions = possiblyAddFetchedReadPermissions(permissions, fetchedPermissions);
+			}
+			return permissions;
+		};
+
+		const possiblyAddFetchedWritePermissions = function(permissions, fetchedPermissions) {
+			if (fetchedPermissions.write !== undefined) {
+				permissions.write = fetchedPermissions.write;
+			}
+			return permissions;
+		};
+
+		const possiblyAddFetchedReadPermissions = function(permissions, fetchedPermissions) {
+			if (fetchedPermissions.read !== undefined) {
+				permissions.read = fetchedPermissions.read;
+			}
+			return permissions;
+		};
+
+
+		const processFetchedRecordData = function(data, permissions) {
 			try {
-				tryToProcessFetchedRecordData(data);
+				tryToProcessFetchedRecordData(data, permissions);
 			} catch (error) {
 				showErrorInView(error, data);
 			}
 		};
 
-		const tryToProcessFetchedRecordData = function(data) {
+		const tryToProcessFetchedRecordData = function(data, permissions) {
 			let cData = CORA.coraData(data);
 			let dataDivider = getDataDividerFromData(cData);
 			recordTypeId = getRecordTypeIdFromData(cData);
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 
 			let metadataId = metadataForRecordType.metadataId;
-
-			recordGui = createRecordGui(metadataId, data, dataDivider);
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
 			createAndAddViewsForExisting(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
 
@@ -466,10 +506,13 @@ var CORA = (function(cora) {
 			recordHandlerView.clearDataViews();
 			initComplete = false;
 			let data = recordGui.dataHolder.getDataWithActionLinks();
+			let recordGuiSpec = recordGui.getSpec();
 
-			let metadataId = recordGui.getSpec().metadataId;
-			let dataDivider = recordGui.getSpec().dataDivider;
-			recordGui = createRecordGui(metadataId, data, dataDivider);
+			let metadataId = recordGuiSpec.metadataId;
+			let dataDivider = recordGuiSpec.dataDivider;
+			let permissions = recordGuiSpec.permissions;
+
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
 			} else {

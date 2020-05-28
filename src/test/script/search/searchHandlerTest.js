@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 Uppsala University Library
+ * Copyright 2017, 2019, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -72,7 +72,7 @@ QUnit.test("testGetSpec", function(assert) {
 });
 
 QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.type, "searchHandlerViewSpy");
 });
@@ -90,20 +90,22 @@ QUnit.test("testGetView", function(assert) {
 });
 
 QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "someMetadataId");
+	assert.deepEqual(factoredSpec.permissions.write, []);
+	assert.deepEqual(factoredSpec.permissions.read, []);
 });
 
 QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getPresentationIdUsed(0), "somePresentationId");
 	assert.strictEqual(factoredGui.getMetadataIdsUsedInData(0), "someMetadataId");
 });
 
 QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(this.dependencies.searchHandlerViewFactory.getFactored(0)
@@ -112,7 +114,7 @@ QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
 });
 
 QUnit.test("testInitRecordGuiStartedGui", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getInitCalled(), 1);
 });
@@ -138,7 +140,7 @@ QUnit.test("testInitRecordGuiErrorsShownInForm", function(assert) {
 		}
 	};
 	this.dependencies.recordGuiFactory = recordGuiFactoryBroken;
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	CORA.searchHandler(this.dependencies, this.spec);
 	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 
 	assert.strictEqual(factoredView.getPresentationsAddedToSearchForm(0).textContent,
@@ -159,7 +161,6 @@ QUnit.test("testSearch", function(assert) {
 	assert.strictEqual(ajaxCallSpec.accept, this.spec.searchLink.accept);
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.stringifyEqual(ajaxCallSpec.parameters, {
 		"searchData" : JSON.stringify(factoredGui.dataHolder.getData())

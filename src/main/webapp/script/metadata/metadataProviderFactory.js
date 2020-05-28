@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,19 +21,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataProviderFactory = function(dependencies) {
 
-		function factor(spec) {
-			var dep = {
+		const factor = function(spec) {
+			let dep = {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory,
 				"textProvider" : dependencies.textProvider
 			};
 			return CORA.metadataProvider(dep, spec);
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			"type" : "metadataProviderFactory",
 			getDependencies : getDependencies,
 			factor : factor

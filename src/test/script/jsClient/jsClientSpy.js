@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -23,6 +23,7 @@ var CORATEST = (function(coraTest) {
 		var viewsShowingInWorkView = [];
 		var createdManagedGuiItem = [];
 		var fetchedMetadataByRecordTypeId = [];
+		var returnedRecordTypeMetadata = [];
 		var addedGuiItem = [];
 		var openInfos = [];
 		var setCurrentLangs = [];
@@ -106,10 +107,14 @@ var CORATEST = (function(coraTest) {
 					}
 				}
 			};
+			returnedRecordTypeMetadata.push(metadata);
 			return metadata;
 		}
 		function getFetchedMetadataByRecordTypeId(number) {
 			return fetchedMetadataByRecordTypeId[number];
+		}
+		function getReturnedRecordTypeMetadata(number){
+			return returnedRecordTypeMetadata[number];
 		}
 		function addGuiItem(itemToAdd) {
 			addedGuiItem.push(itemToAdd);
@@ -140,6 +145,7 @@ var CORATEST = (function(coraTest) {
 			getCreatedManagedGuiItem : getCreatedManagedGuiItem,
 			getMetadataForRecordTypeId : getMetadataForRecordTypeId,
 			getFetchedMetadataByRecordTypeId : getFetchedMetadataByRecordTypeId,
+			getReturnedRecordTypeMetadata:getReturnedRecordTypeMetadata,
 			addGuiItem : addGuiItem,
 			getAddedGuiItem : getAddedGuiItem,
 			openRecordUsingReadLink : openRecordUsingReadLink,

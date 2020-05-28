@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,10 +19,10 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.numberVariableValidator = function(dependencies) {
-		var value;
-		var cMetadataElement;
+		let value;
+		let cMetadataElement;
 
-		function validateData(valueIn, cMetadataElementIn) {
+		const validateData = function(valueIn, cMetadataElementIn) {
 			value = valueIn;
 			cMetadataElement = cMetadataElementIn;
 			if (isNaN(value) || value === "") {
@@ -31,32 +31,32 @@ var CORA = (function(cora) {
 			return valueIsBetweenMinAndMax(value);
 		}
 
-		function valueIsBetweenMinAndMax(valueIn, cMetadataElementIn) {
+		const valueIsBetweenMinAndMax = function(valueIn, cMetadataElementIn) {
 			if (valueBetweenMinAndMax(value) && valueHasCorrectNumberOfDecimals(value)) {
 				return true;
 			}
 			return false;
 		}
 
-		function valueBetweenMinAndMax(value) {
-			var max = cMetadataElement.getFirstAtomicValueByNameInData("max");
-			var min = cMetadataElement.getFirstAtomicValueByNameInData("min");
+		const valueBetweenMinAndMax = function(value) {
+			let max = cMetadataElement.getFirstAtomicValueByNameInData("max");
+			let min = cMetadataElement.getFirstAtomicValueByNameInData("min");
 			if (valueAboveMax(value, max) || valueBelowMin(value, min)) {
 				return false;
 			}
 			return true;
 		}
 
-		function valueAboveMax(value, max) {
+		const valueAboveMax = function(value, max) {
 			return parseFloat(value) > parseFloat(max);
 		}
 
-		function valueBelowMin(value, min) {
+		const valueBelowMin = function(value, min) {
 			return parseFloat(value) < parseFloat(min);
 		}
 
-		function valueHasCorrectNumberOfDecimals(value) {
-			var numberOfDecimals = cMetadataElement
+		const valueHasCorrectNumberOfDecimals = function(value) {
+			let numberOfDecimals = cMetadataElement
 					.getFirstAtomicValueByNameInData("numberOfDecimals");
 			if (valueHasDecimals(value)) {
 				return handleValueWithDecimals(value, numberOfDecimals);
@@ -64,22 +64,22 @@ var CORA = (function(cora) {
 			return numberOfDecimals === "0";
 		}
 
-		function valueHasDecimals(value) {
-			var splittedString = value.split('.');
+		const valueHasDecimals = function(value) {
+			let splittedString = value.split('.');
 			return splittedString[1] !== undefined;
 		}
 
-		function handleValueWithDecimals(value, numberOfDecimals) {
-			var splittedString = value.split('.');
-			var actualNumOfDecimals = splittedString[1].length;
+		const handleValueWithDecimals = function(value, numberOfDecimals) {
+			let splittedString = value.split('.');
+			let actualNumOfDecimals = splittedString[1].length;
 			return actualNumOfDecimals === Number(numberOfDecimals);
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			type : "numberVariableValidator",
 			validateData : validateData,
 			getDependencies : getDependencies

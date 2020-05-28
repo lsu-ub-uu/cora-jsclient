@@ -20,9 +20,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.searchHandler = function(dependencies, spec) {
-		var view;
-		var recordGui;
-		var delaySearchTimer;
+		let view;
+		let recordGui;
+		let delaySearchTimer;
 
 		const start = function () {
 			view = createView();
@@ -30,7 +30,7 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function () {
-			var viewSpec = {
+			let viewSpec = {
 				"searchMethod" : search
 			};
 			return dependencies.searchHandlerViewFactory.factor(viewSpec);
@@ -46,7 +46,7 @@ var CORA = (function(cora) {
 		};
 
 		const createSearchForm = function () {
-			var metadataId = spec.metadataId;
+			let metadataId = spec.metadataId;
 			recordGui = createRecordGui(metadataId);
 
 			addSearchFormFromRecordGuiToView(recordGui, metadataId);
@@ -56,9 +56,9 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToChangesInForm = function() {
-			var path = {};
-			var context = undefined;
-			var functionToCall = handleMsg;
+			let path = {};
+			let context = undefined;
+			let functionToCall = handleMsg;
 			recordGui.pubSub.subscribe("*", path, context, functionToCall);
 		};
 
@@ -80,7 +80,7 @@ var CORA = (function(cora) {
 		};
 
 		const createRecordGui = function(metadataId) {
-			var recordGuiSpec = {
+			let recordGuiSpec = {
 				"metadataId" : metadataId,
 				permissions : createEmptyPermissions()
 			};
@@ -95,7 +95,7 @@ var CORA = (function(cora) {
 		};
 
 		const addSearchFormFromRecordGuiToView = function(recordGuiToAdd, metadataIdUsedInData) {
-			var presentationView = recordGuiToAdd.getPresentationHolder(spec.presentationId,
+			let presentationView = recordGuiToAdd.getPresentationHolder(spec.presentationId,
 					metadataIdUsedInData).getView();
 			view.addPresentationToSearchFormHolder(presentationView);
 		};
@@ -116,8 +116,8 @@ var CORA = (function(cora) {
 		};
 
 		const sendSearchQueryToServer =function() {
-			var link = spec.searchLink;
-			var callSpec = {
+			let link = spec.searchLink;
+			let callSpec = {
 				"url" : link.url,
 				"requestMethod" : link.requestMethod,
 				"accept" : link.accept,
@@ -130,12 +130,12 @@ var CORA = (function(cora) {
 		};
 
 		const handleSearchResult = function(answerIn) {
-			var resultHandlerSpec = {
+			let resultHandlerSpec = {
 				"dataList" : JSON.parse(answerIn.responseText).dataList,
 				"jsClient" : dependencies.jsClient,
 				"triggerWhenResultIsChoosen" : spec.triggerWhenResultIsChoosen
 			};
-			var resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
+			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();
 			view.addSearchResultToSearchResultHolder(resultHandler.getView());
 		};

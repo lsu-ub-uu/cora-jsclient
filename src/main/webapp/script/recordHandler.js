@@ -76,7 +76,6 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
-					//TODO: It is triggered when it lists records. should not be empty
 					let permissions = createEmptyPermissions();
 					tryToProcessFetchedRecordData(spec.record.data, permissions);
 				}

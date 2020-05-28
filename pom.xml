@@ -36,13 +36,21 @@
 		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 	</properties>
-	
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.eirslett</groupId>
+			<artifactId>frontend-maven-plugin</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+	</dependencies>
+
 	<scm>
 		<connection>scm:git:https://github.com/lsu-ub-uu/cora-jsclient.git</connection>
 		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-jsclient.git</developerConnection>
 		<url>https://github.com/lsu-ub-uu/cora-jsclient.git</url>
 	</scm>
-	
+
 	<profiles>
 		<profile>
 			<id>karma-test</id>

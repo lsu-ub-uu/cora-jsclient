@@ -198,7 +198,7 @@ var CORA = (function(cora) {
 				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath);
 			});
 		}
-		
+
 		function createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath) {
 			var initializerSpec = {
 				"childReference": childReference,

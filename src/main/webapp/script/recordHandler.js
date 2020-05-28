@@ -269,11 +269,10 @@ var CORA = (function(cora) {
 		};
 
 		const createEmptyPermissions = function() {
-			let permissions = {
+			return {
 				write : [],
 				read : []
 			};
-			return permissions;
 		};
 
 		const possiblyAddFetchedPermissions = function(permissions, fetchedPermissions) {

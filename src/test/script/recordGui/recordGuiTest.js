@@ -93,6 +93,7 @@ QUnit.test("testGetPresentationHolderHasCorrectSpec", function(assert) {
 	assert.strictEqual(factoredSpec.textProvider, this.dependencies.textProvider);
 	assert.strictEqual(factoredSpec.jsBookkeeper, this.dependencies.jsBookkeeper);
 	assert.strictEqual(factoredSpec.presentationFactory, this.dependencies.presentationFactory);
+	assert.strictEqual(factoredSpec.permissions, this.spec.permissions);
 });
 
 QUnit.test("testInitMetadataControllerStartingGui", function(assert) {

@@ -32,7 +32,8 @@ var CORA = (function(cora) {
 				"pubSub" : pubSub,
 				"textProvider" : dependencies.textProvider,
 				"jsBookkeeper" : jsBookkeeper,
-				"presentationFactory" : dependencies.presentationFactory
+				"presentationFactory" : dependencies.presentationFactory,
+				permissions : spec.permissions
 			};
 			return dependencies.presentationHolderFactory.factor(spec1);
 		};

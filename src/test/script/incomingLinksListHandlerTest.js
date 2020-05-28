@@ -20,7 +20,7 @@
 
 QUnit
 		.module(
-				"IncomingLinksListHandlerTest.js",
+				"incomingLinksListHandlerTest.js",
 				{
 					beforeEach : function() {
 						this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();

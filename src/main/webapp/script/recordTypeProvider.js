@@ -86,8 +86,7 @@ var CORA = (function (cora) {
         function getIdFromRecordData(recordData) {
             var cRecord = CORA.coraData(recordData);
             var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-            var id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-            return id;
+            return cRecordInfo.getFirstAtomicValueByNameInData("id");
         }
 
         function addToMetadataByRecordTypeId(recordId, record) {

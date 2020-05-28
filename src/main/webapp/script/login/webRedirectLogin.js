@@ -38,13 +38,12 @@ var CORA = (function(cora) {
 
 		start();
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "webRedirectLogin",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getOpenedWindow : getOpenedWindow
 		});
-		return out;
 	};
 
 	return cora;

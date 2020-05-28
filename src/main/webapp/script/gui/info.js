@@ -114,7 +114,7 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "info",
 			getSpec : getSpec,
 			getButton : getButton,
@@ -122,7 +122,6 @@ var CORA = (function(cora) {
 			getView : getView,
 			getInfoLevel : getInfoLevel
 		});
-		return out;
 	};
 
 	cora.info.NONE = 0;

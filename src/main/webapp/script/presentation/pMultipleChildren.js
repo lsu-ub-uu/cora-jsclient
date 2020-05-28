@@ -181,8 +181,7 @@ var CORA = (function(cora) {
 			let cElementTextGroup = CORA.coraData(cPresentationChild
 				.getFirstChildByNameInData("elementText"));
 			let elementTextId = cElementTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			let text = textProvider.getTranslation(elementTextId);
-			return text;
+			return textProvider.getTranslation(elementTextId);
 		};
 
 		const childIsSurroundingContainer = function(cPresentationChild) {

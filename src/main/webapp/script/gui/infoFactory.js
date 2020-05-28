@@ -24,11 +24,10 @@ var CORA = (function(cora) {
 			return CORA.info(infoSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "infoFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -28,12 +28,11 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		const out = Object.freeze({
-			type : "presentationHolderFactory",
+		return Object.freeze({
+			"type" : "presentationHolderFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

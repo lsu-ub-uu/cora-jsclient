@@ -77,8 +77,7 @@ var CORA = (function(cora) {
 		const getIdFromRecordData = function(recordData) {
 			let cRecord = CORA.coraData(recordData);
 			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-			return id;
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const fetchPresentationListAndThen = function(callAfterAnswer) {

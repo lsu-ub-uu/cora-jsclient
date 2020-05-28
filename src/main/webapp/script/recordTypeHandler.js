@@ -122,7 +122,7 @@ var CORA = (function(cora) {
 		};
 
 		start();
-		let out = Object.freeze({
+		return Object.freeze({
 			"type": "recordTypeHandler",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
@@ -131,7 +131,6 @@ var CORA = (function(cora) {
 			createRecordHandler: createRecordHandler,
 			hasAnyAction: hasAnyAction
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

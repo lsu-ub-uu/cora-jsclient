@@ -28,12 +28,11 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "recordTypeHandlerViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

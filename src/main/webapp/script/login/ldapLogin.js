@@ -53,14 +53,12 @@ var CORA = (function(cora) {
 		}
 
 		start();
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "ldapLogin",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,
 		});
-
-		return out;
 	};
 
 	return cora;

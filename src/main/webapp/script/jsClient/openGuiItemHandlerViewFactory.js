@@ -29,12 +29,11 @@ var CORA = (function(cora) {
 			return CORA.openGuiItemHandlerView(openGuiItemHandlerViewDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "openGuiItemHandlerViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

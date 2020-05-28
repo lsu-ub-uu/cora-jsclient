@@ -27,11 +27,10 @@ var CORA = (function(cora) {
 			return CORA.managedGuiItem(dependency, managedGuiItemSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "managedGuiItemFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

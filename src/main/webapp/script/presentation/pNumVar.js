@@ -232,7 +232,7 @@ var CORA = (function(cora) {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "pNumVar",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -254,8 +254,6 @@ var CORA = (function(cora) {
 			openDefTextIdRecord : openDefTextIdRecord,
 			openMetadataIdRecord : openMetadataIdRecord
 		});
-
-		return out;
 	};
 	return cora;
 }(CORA));

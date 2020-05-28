@@ -31,12 +31,11 @@ var CORA = (function(cora) {
 			return CORA.loginManagerView(loginManagerViewDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "loginManagerViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

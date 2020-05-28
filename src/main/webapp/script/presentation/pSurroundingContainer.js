@@ -22,12 +22,11 @@ var CORA = (function(cora) {
 	cora.pSurroundingContainer = function(dependencies, spec) {
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
-
-		let my = {};
-		my.metadataId = spec.metadataIdUsedInData;
-
-		my.cPresentation = cPresentation;
-		my.cParentPresentation = cParentPresentation;
+		let my = {
+			metadataId: spec.metadataIdUsedInData,
+			cPresentation: cPresentation,
+			cParentPresentation: cParentPresentation
+		};
 		let parent;
 
 		const start = function() {

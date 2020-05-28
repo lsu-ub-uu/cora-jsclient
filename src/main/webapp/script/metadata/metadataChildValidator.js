@@ -114,9 +114,7 @@ var CORA = (function(cora) {
 			if (!cData.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
 				return [];
 			}
-			let dataChildrenForMetadataOut = cData.getChildrenByNameInDataAndAttributes(
-				nameInDataIn, attributesIn);
-			return dataChildrenForMetadataOut;
+			return cData.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -262,13 +260,12 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "metadataChildValidator",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			validate: validate
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

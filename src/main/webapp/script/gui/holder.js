@@ -101,7 +101,7 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "holder",
 			getSpec : getSpec,
 			getButton : getButton,
@@ -111,7 +111,6 @@ var CORA = (function(cora) {
 			getView : getView,
 			getStatus : getStatus
 		});
-		return out;
 	};
 	cora.holder.CLOSED = 0;
 	cora.holder.OPEN = 1;

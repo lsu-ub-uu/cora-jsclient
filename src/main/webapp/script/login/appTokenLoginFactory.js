@@ -31,12 +31,11 @@ var CORA = (function(cora) {
 			return CORA.appTokenLogin(appTokenLoginDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "appTokenLoginFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

@@ -35,14 +35,13 @@ var CORA = (function(cora) {
 
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		const out = Object.freeze({
+		return Object.freeze({
 			type: "metadataValidatorFactory",
 			getDependencies: getDependencies,
 			factor: factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

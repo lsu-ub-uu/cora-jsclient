@@ -106,7 +106,7 @@ var CORA = (function(cora) {
 		function getManagedGuiItem() {
 			return managedGuiItem;
 		}
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "uploadManager",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -116,8 +116,6 @@ var CORA = (function(cora) {
 			view : view,
 			showView : showView
 		});
-
-		return out;
 	};
 
 	return cora;

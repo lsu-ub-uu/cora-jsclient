@@ -263,8 +263,7 @@ var CORA = (function(cora) {
 			let cRecordTypeGroup = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("linkedRecordType"));
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			let cRecordType = getRecordTypeById(recordTypeId);
-			return cRecordType;
+			return getRecordTypeById(recordTypeId);
 		};
 
 		const getRecordTypeById = function(id) {
@@ -669,8 +668,7 @@ var CORA = (function(cora) {
 		const getIdFromRecordData = function(recordData) {
 			let cRecord = CORA.coraData(recordData);
 			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-			return id;
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const saveMainRecordIfRecordsAreCreatedForAllFiles = function() {

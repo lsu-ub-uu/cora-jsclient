@@ -28,10 +28,10 @@
 		<sonar.tests>src/test/script/</sonar.tests>
 		<sonar.exclusions>src/main/webapp/script/lib/**</sonar.exclusions>
 		<sonar.genericcoverage.unitTestReportPaths>target/generated-resources/xml/xslt/karma-junit.xml</sonar.genericcoverage.unitTestReportPaths>
-		<sonar.javascript.lcov.reportPaths>reports/coverage/firefox/lcov.info,reports/coverage/headlesschrome/lcov.info</sonar.javascript.lcov.reportPaths>
+		<sonar.javascript.lcov.reportPaths>reports/coverage/firefox/lcov.info,reports/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
 		<docker.buildArg.sut_path>${project.basedir}</docker.buildArg.sut_path>
-		<docker.keepRunning>true</docker.keepRunning>
-		<docker.keepContainer>true</docker.keepContainer>
+		<docker.keepRunning>false</docker.keepRunning>
+		<docker.keepContainer>false</docker.keepContainer>
 	</properties>
 	
 	<scm>

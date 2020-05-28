@@ -140,7 +140,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>sonar-cora</id>
+			<id>sonar-cora-install-npm</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>

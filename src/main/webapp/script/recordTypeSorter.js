@@ -42,11 +42,10 @@ var CORA = (function(cora) {
 
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			type : "recordTypeSorter",
 			sortListUsingChildWithNameInData : sortListUsingChildWithNameInData
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

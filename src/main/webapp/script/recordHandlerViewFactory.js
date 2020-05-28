@@ -30,11 +30,10 @@ var CORA = (function(cora) {
 			return CORA.recordHandlerView(dependencies, recordHandlerViewSpec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "recordHandlerViewFactory",
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

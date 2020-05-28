@@ -44,12 +44,11 @@ var CORA = (function(cora) {
 			return CORA.searchRecordHandler(searchRecordHandlerDependencies, spec);
 		}
 
-		var out = Object.freeze({
+		return Object.freeze({
 			"type" : "searchRecordHandlerFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

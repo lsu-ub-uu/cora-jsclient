@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,9 +21,9 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPresentationFactory = function(metadataProvider, pubSub, textProvider,
 			presentationFactory, jsBookkeeper, fixture) {
-		var factor = function(presentationId) {
+		let factor = function(presentationId) {
 
-			var spec = {
+			let spec = {
 				"presentationId" : presentationId,
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub,
@@ -32,9 +32,9 @@ var CORATEST = (function(coraTest) {
 				"jsBookkeeper" : jsBookkeeper
 
 			};
-			var presentation = CORA.presentationHolder(spec);
+			let presentation = CORA.presentationHolder(spec);
 
-			var view = presentation.getView();
+			let view = presentation.getView();
 			fixture.appendChild(view);
 			return {
 				presentation : presentation,
@@ -80,29 +80,29 @@ QUnit.module("presentationHolderTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var presentationHolder = CORA.presentationHolder(this.spec);
+	let presentationHolder = CORA.presentationHolder(this.spec);
 	assert.strictEqual(presentationHolder.type, "presentationHolder");
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var presentationHolder = CORA.presentationHolder(this.spec);
+	let presentationHolder = CORA.presentationHolder(this.spec);
 	assert.strictEqual(presentationHolder.getSpec(), this.spec);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
-	var presentation = attachedPresentation.presentation;
+	let attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
+	let presentation = attachedPresentation.presentation;
 	assert.strictEqual(presentation.getPresentationId(), "pgGroupIdOneTextChild");
 	assert.ok(presentation.getPubSub());
 });
 
 QUnit.test("testInitOneChild", function(assert) {
-	var attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
-	var presentation = attachedPresentation.presentation;
+	let attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
+	let presentation = attachedPresentation.presentation;
 
-	var requestedCPresentation = this.presentationFactory.getSpec(0).cPresentation;
-	var recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
+	let requestedCPresentation = this.presentationFactory.getSpec(0).cPresentation;
+	let recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
 
-	var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+	let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
 });

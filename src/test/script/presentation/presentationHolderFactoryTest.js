@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -37,21 +37,21 @@ QUnit.module("presentationHolderFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
+	let presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
 	assert.strictEqual(presentationHolderFactory.type, "presentationHolderFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
+	let presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
 	assert.strictEqual(presentationHolderFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var presentationHolder = this.presentationHolderFactory.factor(this.spec);
+	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
 	assert.strictEqual(presentationHolder.type, "presentationHolder");
 });
 
 QUnit.test("testFactorSpec", function(assert) {
-	var presentationHolder = this.presentationHolderFactory.factor(this.spec);
+	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
 	assert.strictEqual(presentationHolder.getSpec(), this.spec);
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,16 +20,16 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.presentationHolderFactory = function(dependencies) {
 
-		var factor = function(spec) {
+		const factor = function(spec) {
 			return CORA.presentationHolder(spec);
 		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
-			"type" : "presentationHolderFactory",
+		const out = Object.freeze({
+			type : "presentationHolderFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

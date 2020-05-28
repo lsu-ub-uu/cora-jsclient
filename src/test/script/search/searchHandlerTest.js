@@ -57,41 +57,41 @@ QUnit.module("searchHandlerTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchHandler.type, "searchHandler");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchHandler.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchHandler.getSpec(), this.spec);
 });
 
 QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.type, "searchHandlerViewSpy");
 });
 
 QUnit.test("testInitViewSpec", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.searchHandlerViewFactory.getSpec(0);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredSpec = this.dependencies.searchHandlerViewFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.searchMethod, searchHandler.search);
 });
 
 QUnit.test("testGetView", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 	assert.strictEqual(searchHandler.getView(), factoredView.getView());
 });
 
 QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "someMetadataId");
 	assert.deepEqual(factoredSpec.permissions.write, []);
 	assert.deepEqual(factoredSpec.permissions.read, []);
@@ -99,14 +99,14 @@ QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
 
 QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getPresentationIdUsed(0), "somePresentationId");
 	assert.strictEqual(factoredGui.getMetadataIdsUsedInData(0), "someMetadataId");
 });
 
 QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(this.dependencies.searchHandlerViewFactory.getFactored(0)
 			.getPresentationsAddedToSearchForm(0), factoredGui.getReturnedPresentations(0)
@@ -115,15 +115,15 @@ QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
 
 QUnit.test("testInitRecordGuiStartedGui", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getInitCalled(), 1);
 });
 
 QUnit.test("testInitSubscribedToDataChanges", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	var pubSub = factoredGui.pubSub;
-	var subscribtions = pubSub.getSubscriptions();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let pubSub = factoredGui.pubSub;
+	let subscribtions = pubSub.getSubscriptions();
 
 	assert.strictEqual(subscribtions.length, 1);
 
@@ -134,14 +134,14 @@ QUnit.test("testInitSubscribedToDataChanges", function(assert) {
 });
 
 QUnit.test("testInitRecordGuiErrorsShownInForm", function(assert) {
-	var recordGuiFactoryBroken = {
+	let recordGuiFactoryBroken = {
 		"factor" : function(metadataId, data) {
 			throw new Error("missing metadata");
 		}
 	};
 	this.dependencies.recordGuiFactory = recordGuiFactoryBroken;
 	CORA.searchHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 
 	assert.strictEqual(factoredView.getPresentationsAddedToSearchForm(0).textContent,
 			"\"something went wrong, probably missing metadata, " + "Error: missing metadata\"");
@@ -149,13 +149,13 @@ QUnit.test("testInitRecordGuiErrorsShownInForm", function(assert) {
 });
 
 QUnit.test("testSearch", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.search();
 	assert.strictEqual(factoredGui.getDataValidated(), 1);
 
-	var ajaxCallSpec = this.dependencies.ajaxCallFactory.getSpec(0);
+	let ajaxCallSpec = this.dependencies.ajaxCallFactory.getSpec(0);
 	assert.strictEqual(ajaxCallSpec.url, this.spec.searchLink.url);
 	assert.strictEqual(ajaxCallSpec.requestMethod, this.spec.searchLink.requestMethod);
 	assert.strictEqual(ajaxCallSpec.accept, this.spec.searchLink.accept);
@@ -168,32 +168,32 @@ QUnit.test("testSearch", function(assert) {
 	assert.strictEqual(ajaxCallSpec.loadMethod, searchHandler.handleSearchResult);
 	
 
-	var pubSub = factoredGui.pubSub;
-	var messages = pubSub.getMessages();
+	let pubSub = factoredGui.pubSub;
+	let messages = pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	var addUpToMinNumberOfRepeatingMessage = messages[0].message;
+	let addUpToMinNumberOfRepeatingMessage = messages[0].message;
 	assert.strictEqual(addUpToMinNumberOfRepeatingMessage.data, "");
 	assert.stringifyEqual(addUpToMinNumberOfRepeatingMessage.path, {});
 	
-	var addUpToMinNumberOfRepeatingType= messages[0].type;
+	let addUpToMinNumberOfRepeatingType= messages[0].type;
 	assert.strictEqual(addUpToMinNumberOfRepeatingType, "addUpToMinNumberOfRepeating");
 });
 
 QUnit.test("testSearchThroughMessageSetValue", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	
-	var ajaxCallFactory = this.dependencies.ajaxCallFactory;
-	var spec = this.spec;
+	let ajaxCallFactory = this.dependencies.ajaxCallFactory;
+	let spec = this.spec;
 
 	window.setTimeout(function() {
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 
-		var ajaxCallSpec = ajaxCallFactory.getSpec(0);
+		let ajaxCallSpec = ajaxCallFactory.getSpec(0);
 		assert.strictEqual(ajaxCallSpec.url, spec.searchLink.url);
 		assert.strictEqual(ajaxCallSpec.requestMethod, spec.searchLink.requestMethod);
 		assert.strictEqual(ajaxCallSpec.accept, spec.searchLink.accept);
@@ -209,9 +209,9 @@ QUnit.test("testSearchThroughMessageSetValue", function(assert) {
 });
 
 QUnit.test("testSearchThroughMessageRemove", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.handleMsg("dummyData", "x/y/z/remove");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
@@ -224,9 +224,9 @@ QUnit.test("testSearchThroughMessageRemove", function(assert) {
 });
 
 QUnit.test("testSearchDoesNotSearchAgainForRemoveOnValidate", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.handleMsg("thisMessageWouldHaveBeenCreatedByValidate", "x/y/z/remove");
@@ -242,9 +242,9 @@ QUnit.test("testSearchDoesNotSearchAgainForRemoveOnValidate", function(assert) {
 });
 
 QUnit.test("testSearchThroughMessageNotSetValueOrRemove", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.handleMsg("dummyData", "x/y/z/other");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
@@ -257,9 +257,9 @@ QUnit.test("testSearchThroughMessageNotSetValueOrRemove", function(assert) {
 });
 
 QUnit.test("testSearchThroughMessageShouldOnlyCallOnceOnFastMultipleCalls", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
@@ -275,28 +275,28 @@ QUnit.test("testSearchThroughMessageShouldOnlyCallOnceOnFastMultipleCalls", func
 });
 
 QUnit.test("testSearchNotValidDataNoAjaxCall", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	factoredGui.setValidateAnswer(false);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	searchHandler.search();
 	assert.strictEqual(factoredGui.getDataValidated(), 1);
 
-	var ajaxCallSpec = this.dependencies.ajaxCallFactory.getSpec(0);
+	let ajaxCallSpec = this.dependencies.ajaxCallFactory.getSpec(0);
 	assert.strictEqual(ajaxCallSpec, undefined);
 	
-	var pubSub = factoredGui.pubSub;
-	var messages = pubSub.getMessages();
+	let pubSub = factoredGui.pubSub;
+	let messages = pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	var addUpToMinNumberOfRepeatingType= messages[0].type;
+	let addUpToMinNumberOfRepeatingType= messages[0].type;
 	assert.strictEqual(addUpToMinNumberOfRepeatingType, "addUpToMinNumberOfRepeating");
 });
 
 
 QUnit.test("testSearchNotValidDoesNotAddUpToMinNoOfRepeatingForRemoveOnValidate", function(assert) {
-	var done = assert.async();
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let done = assert.async();
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	factoredGui.setValidateAnswer(false);
 
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
@@ -313,49 +313,49 @@ QUnit.test("testSearchNotValidDoesNotAddUpToMinNoOfRepeatingForRemoveOnValidate"
 });
 
 QUnit.test("testHandleSearchResultCreatesAResultHandler", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var answer = {
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let answer = {
 		"responseText" : JSON.stringify(CORATEST.searchRecordList)
 	};
 	searchHandler.handleSearchResult(answer);
-	var resultHandler = this.dependencies.resultHandlerFactory.getFactored(0);
+	let resultHandler = this.dependencies.resultHandlerFactory.getFactored(0);
 	assert.strictEqual(resultHandler.type, "resultHandlerSpy");
 
-	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getAddedSearchResultToSearchResultHolder(0), resultHandler
 			.getView());
 });
 
 QUnit.test("testHandleSearchResultDataFromAnswerPassedOnToResultHandler", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var answer = {
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let answer = {
 		"responseText" : JSON.stringify(CORATEST.searchRecordList)
 	};
 	searchHandler.handleSearchResult(answer);
 
-	var resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
+	let resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
 	assert.strictEqual(resultHandlerSpec.jsClient, this.dependencies.jsClient);
 	assert.stringifyEqual(resultHandlerSpec.dataList, JSON.parse(answer.responseText).dataList);
 });
 
 QUnit.test("testTriggerWhenResultIsChoosenPassedOnToResultHandler", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.specTriggerWhenResultIsChoosen);
-	var answer = {
+	let searchHandler = CORA.searchHandler(this.dependencies, this.specTriggerWhenResultIsChoosen);
+	let answer = {
 		"responseText" : JSON.stringify(CORATEST.searchRecordList)
 	};
 	searchHandler.handleSearchResult(answer);
 
-	var resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
+	let resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
 	assert.strictEqual(resultHandlerSpec.triggerWhenResultIsChoosen,
 			this.specTriggerWhenResultIsChoosen.triggerWhenResultIsChoosen);
 });
 
 QUnit.test("testHandleSearchResultClearsPreviousResultFromView", function(assert) {
-	var searchHandler = CORA.searchHandler(this.dependencies, this.spec);
-	var answer = {
+	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
+	let answer = {
 		"responseText" : JSON.stringify(CORATEST.searchRecordList)
 	};
-	var factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getNoOfCallsToClearResultHolder(), 0);
 
 	searchHandler.handleSearchResult(answer);

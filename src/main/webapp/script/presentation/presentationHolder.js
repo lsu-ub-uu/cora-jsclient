@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2016 Olov McKie
  *
  * This file is part of Cora.
@@ -20,58 +20,64 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.presentationHolder = function(spec) {
-		var presentationId = spec.presentationId;
-		var metadataProvider = spec.metadataProvider;
-		var pubSub = spec.pubSub;
-		var presentationFactory = spec.presentationFactory;
+		let presentationId = spec.presentationId;
+		let metadataProvider = spec.metadataProvider;
+		let pubSub = spec.pubSub;
+		let presentationFactory = spec.presentationFactory;
+		let view;
 
-		var view = createBaseView();
-
-		function createBaseView() {
-			var viewNew = createBaseViewHolder();
+		const start = function() {
+			view = createBaseView();
+		};
+		
+		const createBaseView = function() {
+			let viewNew = createBaseViewHolder();
 			viewNew.appendChild(createViewForTopPGroup());
 			return viewNew;
-		}
+		};
 
-		function createBaseViewHolder() {
+		const createBaseViewHolder = function() {
 			return CORA.gui.createDivWithClassName("presentation " + presentationId);
 		}
 
-		function createViewForTopPGroup() {
-			var cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
-			var metadataIdUsedInData = spec.metadataIdUsedInData;
-			var presentationSpec = {
+		const createViewForTopPGroup = function() {
+			// if no read constraints eller om användaren har rättigheter
+			let cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
+			let metadataIdUsedInData = spec.metadataIdUsedInData;
+			let presentationSpec = {
 				"path" : {},
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation
 			};
-			var presentation = presentationFactory.factor(presentationSpec);
+			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();
 		}
 
-		function getPresentationId() {
+		const getPresentationId = function() {
 			return presentationId;
 		}
 
-		function getPubSub() {
+		const getPubSub = function() {
 			return pubSub;
 		}
 
-		function getView() {
+		const getView = function() {
 			return view;
 		}
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 
-		return Object.freeze({
+		start();
+		let out = Object.freeze({
 			"type" : "presentationHolder",
 			getSpec : getSpec,
 			getPresentationId : getPresentationId,
 			getPubSub : getPubSub,
 			getView : getView
 		});
+		return out;
 
 	};
 	return cora;

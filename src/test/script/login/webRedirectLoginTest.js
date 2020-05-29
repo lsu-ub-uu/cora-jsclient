@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("webRedirectLoginTest.js", {
+QUnit.module("login/webRedirectLoginTest.js", {
 	beforeEach : function() {
 
 		this.windowSpy = CORATEST.windowSpy();

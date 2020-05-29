@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("openGuiItemHandlerFactoryTest.js", {
+QUnit.module("jsClient/openGuiItemHandlerFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			// "openGuiItemHandlerViewFactory" : CORATEST

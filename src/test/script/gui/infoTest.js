@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("infoTest.js", {
+QUnit.module("gui/infoTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture"); 
 	},

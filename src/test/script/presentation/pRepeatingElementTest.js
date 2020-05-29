@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("pRepeatingElementTest.js", {
+QUnit.module("presentation/pRepeatingElementTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();

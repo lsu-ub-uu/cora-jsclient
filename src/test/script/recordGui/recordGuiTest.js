@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("recordGuiTest.js", {
+QUnit.module("recordGui/recordGuiTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			"metadataProvider": CORATEST.metadataProviderSpy(),

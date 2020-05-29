@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadataControllerFactoryTest.js", {
+QUnit.module("metadata/metadataControllerFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),

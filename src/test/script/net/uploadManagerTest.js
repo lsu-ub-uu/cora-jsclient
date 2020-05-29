@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("uploadManagerTest.js", {
+QUnit.module("net/uploadManagerTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		var textProvider = CORATEST.textProviderStub();

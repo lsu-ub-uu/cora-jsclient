@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("metadataProviderTest.js", {
+QUnit.module("metadata/metadataProviderTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		this.dependencies = {

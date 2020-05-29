@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("loginManagerViewTest.js", {
+QUnit.module("login/loginManagerViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"textProvider" : CORATEST.textProviderSpy()

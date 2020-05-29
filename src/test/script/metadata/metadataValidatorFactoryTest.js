@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadataValidatorFactoryTest.js", {
+QUnit.module("metadata/metadataValidatorFactoryTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			metadataProvider: CORATEST.metadataProviderSpy()

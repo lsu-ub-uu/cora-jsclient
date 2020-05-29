@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("recordTypeMenuTest.js", {
+QUnit.module("jsClient/recordTypeMenuTest.js", {
 	beforeEach : function() {
 		var providers = {
 			"metadataProvider" : CORATEST.metadataProviderRealStub(),

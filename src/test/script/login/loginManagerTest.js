@@ -18,113 +18,111 @@
  */
 "use strict";
 
-QUnit
-		.module(
-				"loginManagerTest.js",
-				{
-					beforeEach : function() {
-						addStandardAppTokensToLoginMenu = true;
-						this.loginOption;
-						this.getAddedWindowEvents = function() {
-							return addedEvents;
-						};
-						var addedEvents = [];
-						this.addEvent = function(type, listener, useCapture) {
-							addedEvents.push({
-								type : type,
-								listener : listener,
-								useCapture : useCapture
-							});
-						}
-						var oldAddEvent = window.addEventListener;
-						window.addEventListener = this.addEvent;
-						this.dependencies = {
-							textProvider : CORATEST.textProviderSpy(),
-							"loginManagerViewFactory" : CORATEST.loginManagerViewFactorySpy(),
-							"appTokenLoginFactory" : CORATEST.appTokenLoginFactorySpy(),
-							"webRedirectLoginFactory" : CORATEST
-									.standardFactorySpy("webRedirectLoginSpy"),
-							"ldapLoginJsClientIntegratorFactory" : CORATEST
-									.standardFactorySpy("ldapLoginJsClientIntegratorSpy"),
-							"authTokenHolder" : CORATEST.authTokenHolderSpy(),
-							"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy()
-						};
-						var afterLoginMethodCalled = false;
-						this.afterLoginMethod = function() {
-							afterLoginMethodCalled = true;
-						};
-						this.afterLoginMethodWasCalled = function() {
-							return afterLoginMethodCalled;
-						}
-
-						var afterLogoutMethodCalled = false;
-						this.afterLogoutMethod = function() {
-							afterLogoutMethodCalled = true;
-						};
-						this.afterLogoutMethodWasCalled = function() {
-							return afterLogoutMethodCalled;
-						}
-
-						var errorMessage;
-						this.setErrorMessage = function(errorMessageIn) {
-							errorMessage = errorMessageIn;
-						}
-						this.getErrorMessage = function() {
-							return errorMessage;
-						}
-						this.spec = {
-							"afterLoginMethod" : this.afterLoginMethod,
-							"afterLogoutMethod" : this.afterLogoutMethod,
-							"setErrorMessage" : this.setErrorMessage,
-							"appTokenBaseUrl" : "someAppTokenBaseUrl/",
-							baseUrl : "http://epc.ub.uu.se/cora/rest/",
-							"jsClient" : CORATEST.jsClientSpy()
-						};
-						this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-
-						this.authInfo = {
-							"userId" : "141414",
-							"token" : "fake authToken from here",
-							"validForNoSeconds" : "131",
-							"actionLinks" : {
-								"delete" : {
-									"requestMethod" : "DELETE",
-									"rel" : "delete",
-									"url" : "http://localhost:8080/apptokenverifier/rest/apptoken/141414"
-								}
-							}
-						};
-						this.loginWithWebRedirect = function() {
-							this.loginOption = {
-								"text" : "Uppsala webredirect",
-								"type" : "webRedirectLogin",
-								"url" : "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
-							};
-							this.loginManager.login(this.loginOption);
-						}
-
-						this.answerListLoginUnitsCall = function(no) {
-							var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-							var jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
-							var answer = {
-								"spec" : ajaxCallSpy0.getSpec(),
-								"responseText" : jsonLoginUnitList
-							};
-							ajaxCallSpy0.getSpec().loadMethod(answer);
-						}
-						this.answerListLoginsCall = function(no) {
-							var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-							var jsonLoginList = JSON.stringify(CORATEST.loginList);
-							var answer = {
-								"spec" : ajaxCallSpy0.getSpec(),
-								"responseText" : jsonLoginList
-							};
-							ajaxCallSpy0.getSpec().loadMethod(answer);
-						}
-					},
-					afterEach : function() {
-					}
+QUnit.module("login/loginManagerTest.js",
+	{
+		beforeEach: function() {
+			addStandardAppTokensToLoginMenu = true;
+			this.loginOption;
+			this.getAddedWindowEvents = function() {
+				return addedEvents;
+			};
+			var addedEvents = [];
+			this.addEvent = function(type, listener, useCapture) {
+				addedEvents.push({
+					type: type,
+					listener: listener,
+					useCapture: useCapture
 				});
+			}
+			var oldAddEvent = window.addEventListener;
+			window.addEventListener = this.addEvent;
+			this.dependencies = {
+				textProvider: CORATEST.textProviderSpy(),
+				"loginManagerViewFactory": CORATEST.loginManagerViewFactorySpy(),
+				"appTokenLoginFactory": CORATEST.appTokenLoginFactorySpy(),
+				"webRedirectLoginFactory": CORATEST
+					.standardFactorySpy("webRedirectLoginSpy"),
+				"ldapLoginJsClientIntegratorFactory": CORATEST
+					.standardFactorySpy("ldapLoginJsClientIntegratorSpy"),
+				"authTokenHolder": CORATEST.authTokenHolderSpy(),
+				"ajaxCallFactory": CORATEST.ajaxCallFactorySpy()
+			};
+			var afterLoginMethodCalled = false;
+			this.afterLoginMethod = function() {
+				afterLoginMethodCalled = true;
+			};
+			this.afterLoginMethodWasCalled = function() {
+				return afterLoginMethodCalled;
+			}
+
+			var afterLogoutMethodCalled = false;
+			this.afterLogoutMethod = function() {
+				afterLogoutMethodCalled = true;
+			};
+			this.afterLogoutMethodWasCalled = function() {
+				return afterLogoutMethodCalled;
+			}
+
+			var errorMessage;
+			this.setErrorMessage = function(errorMessageIn) {
+				errorMessage = errorMessageIn;
+			}
+			this.getErrorMessage = function() {
+				return errorMessage;
+			}
+			this.spec = {
+				"afterLoginMethod": this.afterLoginMethod,
+				"afterLogoutMethod": this.afterLogoutMethod,
+				"setErrorMessage": this.setErrorMessage,
+				"appTokenBaseUrl": "someAppTokenBaseUrl/",
+				baseUrl: "http://epc.ub.uu.se/cora/rest/",
+				"jsClient": CORATEST.jsClientSpy()
+			};
+			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
+
+			this.authInfo = {
+				"userId": "141414",
+				"token": "fake authToken from here",
+				"validForNoSeconds": "131",
+				"actionLinks": {
+					"delete": {
+						"requestMethod": "DELETE",
+						"rel": "delete",
+						"url": "http://localhost:8080/apptokenverifier/rest/apptoken/141414"
+					}
+				}
+			};
+			this.loginWithWebRedirect = function() {
+				this.loginOption = {
+					"text": "Uppsala webredirect",
+					"type": "webRedirectLogin",
+					"url": "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
+				};
+				this.loginManager.login(this.loginOption);
+			}
+
+			this.answerListLoginUnitsCall = function(no) {
+				var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+				var jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
+				var answer = {
+					"spec": ajaxCallSpy0.getSpec(),
+					"responseText": jsonLoginUnitList
+				};
+				ajaxCallSpy0.getSpec().loadMethod(answer);
+			}
+			this.answerListLoginsCall = function(no) {
+				var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+				var jsonLoginList = JSON.stringify(CORATEST.loginList);
+				var answer = {
+					"spec": ajaxCallSpy0.getSpec(),
+					"responseText": jsonLoginList
+				};
+				ajaxCallSpy0.getSpec().loadMethod(answer);
+			}
+		},
+		afterEach: function() {
+		}
+	});
 
 QUnit.test("testConstants", function(assert) {
 	assert.strictEqual(CORA.loginManager.LOGGEDOUT, 0);
@@ -179,105 +177,105 @@ QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothLists", functi
 });
 
 QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothListsReOrdered",
-		function(assert) {
-			var loginManager = this.loginManager;
-			var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-			assert.strictEqual(factoredView.getLoginOptions(), undefined);
-			this.answerListLoginsCall(1);
-			assert.strictEqual(factoredView.getLoginOptions(), undefined);
-			this.answerListLoginUnitsCall(0);
-			assert.notEqual(factoredView.getLoginOptions(), undefined);
-		});
+	function(assert) {
+		var loginManager = this.loginManager;
+		var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.getLoginOptions(), undefined);
+		this.answerListLoginsCall(1);
+		assert.strictEqual(factoredView.getLoginOptions(), undefined);
+		this.answerListLoginUnitsCall(0);
+		assert.notEqual(factoredView.getLoginOptions(), undefined);
+	});
 
 QUnit
-		.test(
-				"testAnswerForLoginUnits",
-				function(assert) {
-					this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-					var loginManager = this.loginManager;
-					var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-					this.answerListLoginUnitsCall(0);
-					this.answerListLoginsCall(1);
-					var expectedLoginOptions = [
-							{
-								"text" : "appToken as 141414",
-								"type" : "appTokenLogin",
-								"userId" : "141414",
-								"appToken" : "63e6bd34-02a1-4c82-8001-158c104cae0e"
-							},
-							{
-								"text" : "appToken as 151515 alvin",
-								"type" : "appTokenLogin",
-								"userId" : "151515",
-								"appToken" : "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
-							},
-							{
-								"text" : "appToken as 161616 diva",
-								"type" : "appTokenLogin",
-								"userId" : "161616",
-								"appToken" : "f7973be9-02e0-4c42-979b-09e42372a02a"
-							},
-							{
-								"text" : "diva user",
-								"type" : "appTokenLogin",
-								"userId" : "coraUser:4412982402853626",
-								"appToken" : "b27039e1-593d-4d95-a69a-b33aa8c0924a"
-							},
-							{
-								"text" : "alvin user",
-								"type" : "appTokenLogin",
-								"userId" : "coraUser:4412566252284358",
-								"appToken" : "935ae709-4056-4b3d-85d2-469b304acfae"
-							},
-							{
-								text : "translated_uuLoginUnitText",
-								type : "webRedirect",
-								url : "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
-							},
-							{
-								text : "translated_testLoginUnitText",
-								type : "webRedirect",
-								url : "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
-							}, {
-								"text" : "translated_uuSystemOneLDAPLoginUnitText",
-								"type" : "ldap",
-								"url" : "http://www.google.se",
-								"metadataId" : "ldapGroup",
-								"presentationId" : "ldapPGroup",
-								"loginUnitId" : "uuSystemOneLDAPLoginUnit"
-							} ];
-					assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
-				});
+	.test(
+		"testAnswerForLoginUnits",
+		function(assert) {
+			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
+			var loginManager = this.loginManager;
+			var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+			this.answerListLoginUnitsCall(0);
+			this.answerListLoginsCall(1);
+			var expectedLoginOptions = [
+				{
+					"text": "appToken as 141414",
+					"type": "appTokenLogin",
+					"userId": "141414",
+					"appToken": "63e6bd34-02a1-4c82-8001-158c104cae0e"
+				},
+				{
+					"text": "appToken as 151515 alvin",
+					"type": "appTokenLogin",
+					"userId": "151515",
+					"appToken": "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
+				},
+				{
+					"text": "appToken as 161616 diva",
+					"type": "appTokenLogin",
+					"userId": "161616",
+					"appToken": "f7973be9-02e0-4c42-979b-09e42372a02a"
+				},
+				{
+					"text": "diva user",
+					"type": "appTokenLogin",
+					"userId": "coraUser:4412982402853626",
+					"appToken": "b27039e1-593d-4d95-a69a-b33aa8c0924a"
+				},
+				{
+					"text": "alvin user",
+					"type": "appTokenLogin",
+					"userId": "coraUser:4412566252284358",
+					"appToken": "935ae709-4056-4b3d-85d2-469b304acfae"
+				},
+				{
+					text: "translated_uuLoginUnitText",
+					type: "webRedirect",
+					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
+				},
+				{
+					text: "translated_testLoginUnitText",
+					type: "webRedirect",
+					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
+				}, {
+					"text": "translated_uuSystemOneLDAPLoginUnitText",
+					"type": "ldap",
+					"url": "http://www.google.se",
+					"metadataId": "ldapGroup",
+					"presentationId": "ldapPGroup",
+					"loginUnitId": "uuSystemOneLDAPLoginUnit"
+				}];
+			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
+		});
 QUnit
-		.test(
-				"testAnswerForLoginUnitsWithoutStandardApptokenLogins",
-				function(assert) {
-					addStandardAppTokensToLoginMenu = false;
-					this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-					var loginManager = this.loginManager;
-					var factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
-					this.answerListLoginUnitsCall(2);
-					this.answerListLoginsCall(3);
-					var expectedLoginOptions = [
-							{
-								text : "translated_uuLoginUnitText",
-								type : "webRedirect",
-								url : "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
-							},
-							{
-								text : "translated_testLoginUnitText",
-								type : "webRedirect",
-								url : "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
-							}, {
-								"text" : "translated_uuSystemOneLDAPLoginUnitText",
-								"type" : "ldap",
-								"url" : "http://www.google.se",
-								"metadataId" : "ldapGroup",
-								"presentationId" : "ldapPGroup",
-								"loginUnitId" : "uuSystemOneLDAPLoginUnit"
-							} ];
-					assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
-				});
+	.test(
+		"testAnswerForLoginUnitsWithoutStandardApptokenLogins",
+		function(assert) {
+			addStandardAppTokensToLoginMenu = false;
+			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
+			var loginManager = this.loginManager;
+			var factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
+			this.answerListLoginUnitsCall(2);
+			this.answerListLoginsCall(3);
+			var expectedLoginOptions = [
+				{
+					text: "translated_uuLoginUnitText",
+					type: "webRedirect",
+					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
+				},
+				{
+					text: "translated_testLoginUnitText",
+					type: "webRedirect",
+					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
+				}, {
+					"text": "translated_uuSystemOneLDAPLoginUnitText",
+					"type": "ldap",
+					"url": "http://www.google.se",
+					"metadataId": "ldapGroup",
+					"presentationId": "ldapPGroup",
+					"loginUnitId": "uuSystemOneLDAPLoginUnit"
+				}];
+			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
+		});
 
 QUnit.test("testLoginUnitErrorMessage", function(assert) {
 	var loginManager = this.loginManager;
@@ -331,8 +329,8 @@ QUnit.test("testInitLoginManagerViewSpec", function(assert) {
 QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text" : "someText",
-		"type" : "appTokenLogin"
+		"text": "someText",
+		"type": "appTokenLogin"
 	});
 	var factored1 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.ok(factored1);
@@ -348,10 +346,10 @@ QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 QUnit.test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text" : "someText",
-		"type" : "appTokenLogin",
-		"userId" : "testUserId",
-		"appToken" : "testAppToken"
+		"text": "someText",
+		"type": "appTokenLogin",
+		"userId": "testUserId",
+		"appToken": "testAppToken"
 	});
 	var factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.strictEqual(factored0.getUserId(0), "testUserId");
@@ -385,9 +383,9 @@ QUnit.test("testRecieveMessageFromWebRedirectLogin", function(assert) {
 
 	var factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
 	loginManager.receiveMessage({
-		origin : "https://epc.ub.uu.se",
-		data : this.authInfo,
-		source : factored.getOpenedWindow()
+		origin: "https://epc.ub.uu.se",
+		data: this.authInfo,
+		source: factored.getOpenedWindow()
 	});
 	var authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), "fake authToken from here");
@@ -397,26 +395,26 @@ QUnit.test("testRecieveMessageFromWebRedirectLoginNotHandledIfWrongOrigin", func
 	var loginManager = this.loginManager;
 	this.loginWithWebRedirect();
 	loginManager.receiveMessage({
-		origin : "https://epc.ub.uu.se/systemoneNOT/idplogin/login",
-		data : this.authInfo,
-		source : {}
+		origin: "https://epc.ub.uu.se/systemoneNOT/idplogin/login",
+		data: this.authInfo,
+		source: {}
 	});
 	var authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), undefined);
 });
 
 QUnit.test("testRecieveMessageFromWebRedirectLoginOnlyHandledIfFromCorrectWindow",
-		function(assert) {
-			var loginManager = this.loginManager;
-			this.loginWithWebRedirect();
-			loginManager.receiveMessage({
-				origin : "https://epc.ub.uu.se/systemone/idplogin/login",
-				data : this.authInfo,
-				source : {}
-			});
-			var authTokenHolder = this.dependencies.authTokenHolder;
-			assert.strictEqual(authTokenHolder.getToken(0), undefined);
+	function(assert) {
+		var loginManager = this.loginManager;
+		this.loginWithWebRedirect();
+		loginManager.receiveMessage({
+			origin: "https://epc.ub.uu.se/systemone/idplogin/login",
+			data: this.authInfo,
+			source: {}
 		});
+		var authTokenHolder = this.dependencies.authTokenHolder;
+		assert.strictEqual(authTokenHolder.getToken(0), undefined);
+	});
 
 QUnit.test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
 	var loginManager = this.loginManager;
@@ -451,8 +449,8 @@ QUnit.test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(a
 QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text" : "someText",
-		"type" : "appTokenLogin"
+		"text": "someText",
+		"type": "appTokenLogin"
 	});
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
 	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
@@ -462,7 +460,7 @@ QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 	var ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(2);
 	var ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/apptokenverifier/"
-			+ "rest/apptoken/141414");
+		+ "rest/apptoken/141414");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
 	// assert.strictEqual(ajaxCallSpec.accept, "");
 	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.logoutCallback);
@@ -506,9 +504,9 @@ QUnit.test("testErrorMessage", function(assert) {
 QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
 	var loginManager = this.loginManager;
 	var errorObject = {
-		status : 0,
-		spec : {
-			requestMethod : "DELETE"
+		status: 0,
+		spec: {
+			requestMethod: "DELETE"
 		}
 	};
 	loginManager.appTokenErrorCallback(errorObject);
@@ -520,10 +518,10 @@ QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) 
 QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text" : "someText",
-		"type" : "ldap",
-		"metadataId" : "someMetadataId",
-		"presentationId" : "somePresentationId"
+		"text": "someText",
+		"type": "ldap",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId"
 	});
 	var factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored1);
@@ -537,11 +535,11 @@ QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
 QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text" : "someText",
-		"type" : "ldap",
-		"metadataId" : "someMetadataId",
-		"presentationId" : "somePresentationId",
-		"loginUnitId" : "uuSystemOneLDAPLoginUnit"
+		"text": "someText",
+		"type": "ldap",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId",
+		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 
 	};
 	loginManager.login(spec);
@@ -557,11 +555,11 @@ QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(asse
 QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text" : "someText",
-		"type" : "ldap",
-		"metadataId" : "someMetadataId",
-		"presentationId" : "somePresentationId",
-		"loginUnitId" : "uuSystemOneLDAPLoginUnit"
+		"text": "someText",
+		"type": "ldap",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId",
+		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 
 	};
 	loginManager.login(spec);
@@ -577,11 +575,11 @@ QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function
 QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text" : "someText",
-		"type" : "ldap",
-		"metadataId" : "someMetadataId",
-		"presentationId" : "somePresentationId",
-		"loginUnitId" : "uuSystemOneLDAPLoginUnit"
+		"text": "someText",
+		"type": "ldap",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId",
+		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 	};
 	loginManager.login(spec);
 	var factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
@@ -596,10 +594,10 @@ QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(asse
 QUnit.test("testCloseHolderIsCalledOnShowLdap", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text" : "someText",
-		"type" : "ldap",
-		"metadataId" : "someMetadataId",
-		"presentationId" : "somePresentationId"
+		"text": "someText",
+		"type": "ldap",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId"
 	});
 	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
@@ -620,9 +618,9 @@ function assertLogoutPerformed(test, assert) {
 QUnit.test("testErrorRestartedServerOnLogoutResultsInLogout", function(assert) {
 	var loginManager = this.loginManager;
 	var errorObject = {
-		status : 404,
-		spec : {
-			requestMethod : "DELETE"
+		status: 404,
+		spec: {
+			requestMethod: "DELETE"
 		}
 	};
 	loginManager.appTokenErrorCallback(errorObject);

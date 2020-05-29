@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("questionTest.js", {
+QUnit.module("gui/questionTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 	},

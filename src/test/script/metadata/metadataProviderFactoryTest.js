@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("metadataProviderFactoryTest.js", {
+QUnit.module("metadata/metadataProviderFactoryTest.js", {
 	beforeEach : function() {
 		var metadataListLink = {
 			"requestMethod" : "GET",

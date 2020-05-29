@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("searchHandlerViewTest.js", {
+QUnit.module("search/searchHandlerViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"workItemViewFactory" : CORATEST.standardFactorySpy("workItemViewSpy"),

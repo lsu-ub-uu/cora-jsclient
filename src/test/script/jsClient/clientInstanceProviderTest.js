@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("clientInstanceProviderTest.js", {
+QUnit.module("jsClient/clientInstanceProviderTest.js", {
 	beforeEach : function() {
 	},
 	afterEach : function() {

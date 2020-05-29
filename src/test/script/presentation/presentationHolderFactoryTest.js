@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentationHolderFactoryTest.js", {
+QUnit.module("presentation/presentationHolderFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 		};

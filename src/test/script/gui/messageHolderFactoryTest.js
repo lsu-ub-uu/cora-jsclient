@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("messageHolderFactoryTest.js", {
+QUnit.module("gui/messageHolderFactoryTest.js", {
 	beforeEach : function() {
 		this.messageHolderFactory = CORA.messageHolderFactory();
 	},

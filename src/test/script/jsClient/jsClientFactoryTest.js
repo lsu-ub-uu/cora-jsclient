@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("jsClientFactoryTest.js", {
+QUnit.module("jsClient/jsClientFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),

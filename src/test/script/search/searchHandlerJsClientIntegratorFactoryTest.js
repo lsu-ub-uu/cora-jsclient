@@ -21,7 +21,7 @@
 
 QUnit
 		.module(
-				"searchHandlerJsClientIntegratorFactoryTest.js",
+				"search/searchHandlerJsClientIntegratorFactoryTest.js",
 				{
 					beforeEach : function() {
 						this.dependencies = {

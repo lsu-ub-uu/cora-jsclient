@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("searchRecordHandlerTest.js", {
+QUnit.module("search/searchRecordHandlerTest.js", {
 	beforeEach : function() {
 		this.search = CORATEST.searchRecordList.dataList.data[0].record;
 

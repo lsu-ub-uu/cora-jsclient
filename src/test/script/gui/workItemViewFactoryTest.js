@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("workItemViewFactoryTest.js", {
+QUnit.module("gui/workItemViewFactoryTest.js", {
 	beforeEach : function() {
 	},
 	afterEach : function() {

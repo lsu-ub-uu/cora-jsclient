@@ -19,7 +19,7 @@
 
 "use strict";
 
-QUnit.module("coraPubSubTest.js", {
+QUnit.module("pubSubTest.js", {
 	beforeEach : function() {
 		this.pubSub = CORA.pubSub();
 		this.messages = [];

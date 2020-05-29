@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("workItemViewTest.js", {
+QUnit.module("gui/workItemViewTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			"holderFactory" : CORATEST.standardFactorySpy("holderSpy")

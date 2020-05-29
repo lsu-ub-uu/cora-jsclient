@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("ajaxCallFactoryTest.js", {
+QUnit.module("net/ajaxCallFactoryTest.js", {
 	beforeEach : function() {
 		var xmlHttpRequestFactoryMultipleSpy = CORATEST.xmlHttpRequestFactoryMultipleSpy();
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);

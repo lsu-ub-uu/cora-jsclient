@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("uploadManagerViewTest.js", {
+QUnit.module("net/uploadManagerViewTest.js", {
 	beforeEach : function() {
 		var item = {};
 		var textProvider = CORATEST.textProviderStub();

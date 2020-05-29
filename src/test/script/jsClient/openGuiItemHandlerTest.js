@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("openGuiItemHandlerTest.js", {
+QUnit.module("jsClient/openGuiItemHandlerTest.js", {
 	beforeEach : function() {
 		this.search = CORATEST.searchRecordList.dataList.data[0].record;
 

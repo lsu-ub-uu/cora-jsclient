@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
 			"type" : "presentationHolderFactory",

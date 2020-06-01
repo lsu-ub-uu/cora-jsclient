@@ -38,7 +38,7 @@ var CORA = (function(cora) {
 
 		const createBaseViewHolder = function() {
 			return CORA.gui.createDivWithClassName("presentation " + presentationId);
-		}
+		};
 
 		const createViewForTopPGroup = function() {
 			// if no read constraints eller om användaren har rättigheter
@@ -51,23 +51,23 @@ var CORA = (function(cora) {
 			};
 			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();
-		}
+		};
 
 		const getPresentationId = function() {
 			return presentationId;
-		}
+		};
 
 		const getPubSub = function() {
 			return pubSub;
-		}
+		};
 
 		const getView = function() {
 			return view;
-		}
+		};
 
 		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		start();
 		let out = Object.freeze({

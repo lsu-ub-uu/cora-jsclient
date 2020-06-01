@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2017, 2019 Uppsala University Library
+ * Copyright 2017, 2019, 2020 Uppsala University Library
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -362,3 +362,65 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
+
+QUnit.test("testEmptyReadUnfulfilledConstraints",
+		function(assert) {
+	this.spec = {
+			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
+			"path" : {},
+			unfulfilledRecordPartConstraints : {
+				read : [],
+				write : []
+			}
+		};
+			var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+			pMultipleChildren.init();
+			var view = pMultipleChildren.getView();
+			this.fixture.appendChild(view);
+
+			var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+			assert.strictEqual(factoredSpec.parentPath, this.spec.path);
+			assert.strictEqual(this.getId(factoredSpec.cParentMetadata),
+					"groupIdOneTextChildRepeat1to3");
+			assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
+			assert.strictEqual(this.getId(factoredSpec.cParentPresentation),
+					"pgGroupIdOneTextChildMinimized");
+			assert.strictEqual(this.getId(factoredSpec.cAlternativePresentation),
+					"pVarTextVariableIdOutput");
+			assert.strictEqual(factoredSpec.minimizedDefault, undefined);
+
+			assert.strictEqual(factoredSpec.textStyle, "h1TextStyle");
+			assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
+			assert.strictEqual(factoredSpec.mode, "input");
+		});
+
+QUnit.test("testReadUnfulfilledConstraints",
+		function(assert) {
+	this.spec = {
+			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
+			"path" : {},
+			unfulfilledRecordPartConstraints : {
+				read : ["textVariableId"],
+				write : []
+			}
+		};
+			var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+			pMultipleChildren.init();
+			var view = pMultipleChildren.getView();
+//			this.fixture.appendChild(view);
+//
+			var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+			assert.strictEqual(factoredSpec, undefined);
+//			assert.strictEqual(this.getId(factoredSpec.cParentMetadata),
+//					"groupIdOneTextChildRepeat1to3");
+//			assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
+//			assert.strictEqual(this.getId(factoredSpec.cParentPresentation),
+//					"pgGroupIdOneTextChildMinimized");
+//			assert.strictEqual(this.getId(factoredSpec.cAlternativePresentation),
+//					"pVarTextVariableIdOutput");
+//			assert.strictEqual(factoredSpec.minimizedDefault, undefined);
+//
+//			assert.strictEqual(factoredSpec.textStyle, "h1TextStyle");
+//			assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
+//			assert.strictEqual(factoredSpec.mode, "input");
+		});

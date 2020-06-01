@@ -61,6 +61,7 @@ var CORA = (function(cora) {
 			if (my.cPresentation.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = my.cPresentation
 					.getFirstChildByNameInData("childReferences").children;
+				//				if(spec.topLevel)
 				presentationChildren.forEach(
 					createAndAppendChildForPresentationChildRef
 				);
@@ -69,8 +70,33 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
-			let childView = createViewForChild(presentationChildRef);
-			view.appendChild(childView);
+			//flytta upp hämtning av presentationen och gör bara append om barnet INTE är
+			//med i listan på barn som användaren saknar rättighet till
+			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let cRefGroup = CORA.coraData(cPresentationChildRef
+				.getFirstChildByNameInData("refGroup"));
+			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
+			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+
+			let cPresentationChild = getMetadataById(refId);
+			if (spec.unfulfilledRecordPartConstraints != undefined) {
+
+				//			let cPresentationOfGroup = CORA.coraData(cPresentationChild.getFirstChildByNameInData("presentationOf"));
+				//			let presentationOf = cPresentationOfGroup.getFirstChildByNameInData("linkedRecordId");
+
+				let readUnfullfilledConstraints = spec.unfulfilledRecordPartConstraints.read;
+				if (readUnfullfilledConstraints.length === 0) {
+					//			readUnfullfilledConstraints.includes(presentationOf);
+
+					let childView2 = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+					view.appendChild(childView2);
+					//getPresentationOf
+					//if present in noReadRight don't continue
+
+				}
+			}else{
+			let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+			view.appendChild(childView);}
 		};
 
 		const createInfo = function() {
@@ -115,15 +141,8 @@ var CORA = (function(cora) {
 			view.className = className;
 		};
 
-		const createViewForChild = function(presentationChildRef) {
-			let cPresentationChildRef = CORA.coraData(presentationChildRef);
-			let cRefGroup = CORA.coraData(cPresentationChildRef
-				.getFirstChildByNameInData("refGroup"));
-			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
-			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
-			let cPresentationChild = getMetadataById(refId);
-
+		const createViewForChild = function(cPresentationChildRef, cPresentationChild, refId) {
 			if (childIsText(cPresentationChild)) {
 				return createText(refId, cPresentationChildRef);
 			}

@@ -264,6 +264,7 @@ var CORA = (function(cora) {
 
 		const preparePermissionsForRecordGuiFromFetchedRecord = function() {
 			let fetchedPermissions = fetchedRecord.permissions;
+			
 			let permissions = createEmptyPermissions();
 			return possiblyAddFetchedPermissions(permissions, fetchedPermissions);
 		};

@@ -19,11 +19,11 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.presentationHolder = function(spec) {
+	cora.presentationHolder = function(dependencies, spec) {
 		let presentationId = spec.presentationId;
-		let metadataProvider = spec.metadataProvider;
-		let pubSub = spec.pubSub;
-		let presentationFactory = spec.presentationFactory;
+		let metadataProvider = dependencies.metadataProvider;
+		let pubSub = dependencies.pubSub;
+		let presentationFactory = dependencies.presentationFactory;
 		let view;
 
 		const start = function() {
@@ -47,7 +47,8 @@ var CORA = (function(cora) {
 			let presentationSpec = {
 				"path" : {},
 				"metadataIdUsedInData" : metadataIdUsedInData,
-				"cPresentation" : cPresentation
+				"cPresentation" : cPresentation,
+				unfulfilledRecordPartConstraints : spec.unfulfilledRecordPartConstraints
 			};
 			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();
@@ -65,6 +66,9 @@ var CORA = (function(cora) {
 			return view;
 		};
 
+		const getDependencies = function() {
+			return dependencies;
+		};
 		const getSpec = function() {
 			return spec;
 		};
@@ -72,6 +76,7 @@ var CORA = (function(cora) {
 		start();
 		let out = Object.freeze({
 			"type" : "presentationHolder",
+			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getPresentationId : getPresentationId,
 			getPubSub : getPubSub,

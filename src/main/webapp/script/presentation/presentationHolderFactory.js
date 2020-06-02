@@ -21,7 +21,15 @@ var CORA = (function(cora) {
 	cora.presentationHolderFactory = function(dependencies) {
 
 		const factor = function(spec) {
-			return CORA.presentationHolder(spec);
+			let presentationHolderDependencies = {
+					metadataProvider: dependencies.metadataProvider,
+					presentationFactory: dependencies.presentationFactory,
+					pubSub: dependencies.pubSub,
+					//not sure these are used
+					textProvider : dependencies.textProvider,
+					jsBookkeeper : dependencies.jsBookkeeper
+			};
+			return CORA.presentationHolder(presentationHolderDependencies, spec);
 		};
 
 		const getDependencies = function() {

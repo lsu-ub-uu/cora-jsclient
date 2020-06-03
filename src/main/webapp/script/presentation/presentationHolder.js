@@ -41,14 +41,13 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForTopPGroup = function() {
-			// if no read constraints eller om användaren har rättigheter
 			let cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
 			let metadataIdUsedInData = spec.metadataIdUsedInData;
 			let presentationSpec = {
 				"path" : {},
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation,
-				unfulfilledRecordPartConstraints : spec.unfulfilledRecordPartConstraints
+				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
 			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();

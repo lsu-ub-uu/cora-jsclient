@@ -20,36 +20,36 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.presentationFactory = function(dependencies) {
-		var self;
+		let self;
 
-		function factor(spec) {
-			var path = spec.path;
-			var metadataIdUsedInData = spec.metadataIdUsedInData;
-			var cPresentation = spec.cPresentation;
-			var cParentPresentation = spec.cParentPresentation;
+		const factor = function(spec) {
+			let path = spec.path;
+			let metadataIdUsedInData = spec.metadataIdUsedInData;
+			let cPresentation = spec.cPresentation;
+			let cParentPresentation = spec.cParentPresentation;
 
-			var infoFactory = CORA.infoFactory();
+			let infoFactory = CORA.infoFactory();
 
-			var pVarViewFactoryDependencies = {
+			let pVarViewFactoryDependencies = {
 				"infoFactory" : infoFactory
 			};
-			var pVarViewFactory = CORA.genericFactory("pVarView", pVarViewFactoryDependencies);
-			var pNumVarViewFactory = CORA.genericFactory("pNumVarView", pVarViewFactoryDependencies);
+			let pVarViewFactory = CORA.genericFactory("pVarView", pVarViewFactoryDependencies);
+			let pNumVarViewFactory = CORA.genericFactory("pNumVarView", pVarViewFactoryDependencies);
 
-			var pRepeatingElementFactoryDependencies = {
+			let pRepeatingElementFactoryDependencies = {
 				"infoFactory" : infoFactory,
 				"jsBookkeeper" : dependencies.jsBookkeeper
 			};
-			var pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",
+			let pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",
 					pRepeatingElementFactoryDependencies);
 
-			var pRecordLinkViewFactoryDependencies = {
+			let pRecordLinkViewFactoryDependencies = {
 				"infoFactory" : infoFactory
 			};
-			var pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
+			let pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
 					pRecordLinkViewFactoryDependencies);
 
-			var pChildRefHandlerFactoryDependencies = {
+			let pChildRefHandlerFactoryDependencies = {
 				"metadataProvider" : dependencies.providers.metadataProvider,
 				"pubSub" : dependencies.pubSub,
 				"textProvider" : dependencies.providers.textProvider,
@@ -63,10 +63,10 @@ var CORA = (function(cora) {
 				"dataDivider" : dependencies.dataDivider
 			};
 
-			var pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
+			let pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
 					pChildRefHandlerFactoryDependencies);
 
-			var pNonRepeatingChildRefHandlerFactoryDependencies = {
+			let pNonRepeatingChildRefHandlerFactoryDependencies = {
 				"presentationFactory" : self,
 				"pNonRepeatingChildRefHandlerViewFactory" : CORA
 						.genericFactory("pNonRepeatingChildRefHandlerView"),
@@ -74,16 +74,16 @@ var CORA = (function(cora) {
 				providers : dependencies.providers
 			};
 
-			var pNonRepeatingChildRefHandlerFactory = CORA
+			let pNonRepeatingChildRefHandlerFactory = CORA
 					.genericFactory("pNonRepeatingChildRefHandler",
 							pNonRepeatingChildRefHandlerFactoryDependencies);
 
-			var pMapViewFactoryDependencies = {
+			let pMapViewFactoryDependencies = {
 				"infoFactory" : infoFactory
 			};
-			var pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
+			let pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
 
-			var childDependencies = {
+			let childDependencies = {
 				"providers" : dependencies.providers,
 				"globalFactories" : dependencies.globalFactories,
 				"infoFactory" : infoFactory,
@@ -106,14 +106,15 @@ var CORA = (function(cora) {
 				"authTokenHolder" : dependencies.authTokenHolder,
 				"pMapViewFactory" : pMapViewFactory
 			};
-			var specNew = {
+			let specNew = {
 				"path" : path,
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation,
 				"cParentPresentation" : cParentPresentation
+				
 			};
 
-			var type = cPresentation.getData().attributes.type;
+			let type = cPresentation.getData().attributes.type;
 			if (type === "pVar") {
 				return CORA.pVar(childDependencies, specNew);
 			}
@@ -121,6 +122,7 @@ var CORA = (function(cora) {
 				if (shouldBePresentedAsMap(cPresentation)) {
 					return CORA.pMap(childDependencies, specNew);
 				}
+				specNew.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 				return CORA.pGroup(childDependencies, specNew);
 			}
 			if (type === "pRecordLink") {
@@ -135,23 +137,23 @@ var CORA = (function(cora) {
 			if (type === "pNumVar") {
 				return CORA.pNumVar(childDependencies, specNew);
 			}
-			var repeat = cPresentation.getData().attributes.repeat;
+			let repeat = cPresentation.getData().attributes.repeat;
 			if (repeat === "this") {
 				return CORA.pRepeatingContainer(childDependencies, specNew);
 			}
 			return CORA.pSurroundingContainer(childDependencies, specNew);
 		}
 
-		function shouldBePresentedAsMap(cPresentation) {
+		const shouldBePresentedAsMap = function(cPresentation) {
 			return cPresentation.containsChildWithNameInData("presentAs")
 					&& "map" === cPresentation.getFirstAtomicValueByNameInData("presentAs");
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			"type" : "presentationFactory",
 			getDependencies : getDependencies,
 			factor : factor

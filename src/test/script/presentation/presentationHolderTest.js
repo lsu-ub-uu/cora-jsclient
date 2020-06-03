@@ -17,52 +17,6 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-//var CORATEST = (function(coraTest) {
-//	"use strict";
-//	coraTest.attachedPresentationFactory = function(metadataProvider, pubSub, textProvider,
-//			presentationFactory, jsBookkeeper, fixture) {
-//		let factor = function(presentationId) {
-//			let dependencies = {
-//					"metadataProvider" : metadataProvider,
-//					"pubSub" : pubSub,
-//					"textProvider" : textProvider,
-//					"jsBookkeeper" : jsBookkeeper,
-//					"presentationFactory" : presentationFactory,
-//						
-//				};
-//			
-//			let spec = {
-//				"presentationId" : presentationId,
-//				metadataIdUsedInData: "groupIdOneTextChild"
-////				"metadataProvider" : metadataProvider,
-////				"pubSub" : pubSub,
-////				"textProvider" : textProvider,
-////				"presentationFactory" : presentationFactory,
-////				"jsBookkeeper" : jsBookkeeper
-//
-//			};
-//			let presentation = CORA.presentationHolder(dependencies, spec);
-//
-//			let view = presentation.getView();
-//			fixture.appendChild(view);
-//			return {
-//				presentation : presentation,
-//				fixture : fixture,
-//				metadataProvider : metadataProvider,
-//				pubSub : pubSub,
-//				textProvider : textProvider,
-//				view : view
-//			};
-//
-//		};
-//		return Object.freeze({
-//			factor : factor
-//		});
-//	};
-//
-//	return coraTest;
-//}(CORATEST || {}));
-
 QUnit.module("presentation/presentationHolderTest.js", {
 	beforeEach : function() {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
@@ -73,15 +27,13 @@ QUnit.module("presentation/presentationHolderTest.js", {
 			"textProvider" : CORATEST.textProviderStub(),
 			"presentationFactory" : this.presentationFactory,
 			"jsBookkeeper" : CORATEST.jsBookkeeperSpy(),
-				
+
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
 			"presentationId" : "pgGroupIdOneTextChild",
-			metadataIdUsedInData: "groupIdOneTextChild",
-			unfulfilledRecordPartConstraints : {
-				read : [],
-				write : []
-			}
+			metadataIdUsedInData : "groupIdOneTextChild",
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 
 		this.fixture = document.getElementById("qunit-fixture");
@@ -89,9 +41,6 @@ QUnit.module("presentation/presentationHolderTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-//		this.newAttachedPresentation = CORATEST.attachedPresentationFactory(this.metadataProvider,
-//				this.pubSub, this.textProvider, this.presentationFactory, this.jsBookkeeper,
-//				this.fixture);
 	},
 	afterEach : function() {
 	}
@@ -122,30 +71,21 @@ QUnit.test("testFactorPresentationCheckSpec", function(assert) {
 	let requestedCPresentation = factoredSpec.cPresentation;
 	let recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
 	let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-	
+
 	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
-	
-	assert.strictEqual(factoredSpec.unfulfilledRecordPartConstraints, this.spec.unfulfilledRecordPartConstraints);
-	
+
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator,
+			this.recordPartPermissionCalculator);
+
 });
 
 QUnit.test("testInitOneChild", function(assert) {
 	let presentation = CORA.presentationHolder(this.dependencies, this.spec);
-	
+
 	let factoredPresentation = this.presentationFactory.getFactored(0);
 	let firstPresentationAddedToView = presentation.getView().firstChild;
 
-	assert.strictEqual(factoredPresentation.getView(), firstPresentationAddedToView) ;
+	assert.strictEqual(factoredPresentation.getView(), firstPresentationAddedToView);
 	assert.strictEqual(presentation.getPresentationId(), "pgGroupIdOneTextChild");
 	assert.ok(presentation.getPubSub());
 });
-
-//QUnit.test("testInitOneChildWithUnfulfilledConstraints", function(assert) {
-//	let presentation = CORA.presentationHolder(this.dependencies, this.spec);
-//
-//	let requestedCPresentation = this.presentationFactory.getSpec(0).cPresentation;
-//	let recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
-//
-//	let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-//	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
-//});

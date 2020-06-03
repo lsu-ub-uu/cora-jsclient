@@ -21,15 +21,19 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordPartPermissionCalculatorSpy = function() {
 
+		var readRequestedIds = [];
+		var writeRequestedIds = [];
 		let fulfillsRead = true;
 		let fulfillsWrite = true;
 
 
 		const getFulfillsReadForId = function(id) {
+			readRequestedIds.push(id);
 			return fulfillsRead;
 		}
 
 		const getFulfillsWriteForId = function(id) {
+			writeRequestedIds.push(id);
 			return fulfillsWrite;
 		}
 

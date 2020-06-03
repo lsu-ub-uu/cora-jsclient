@@ -79,24 +79,25 @@ var CORA = (function(cora) {
 			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 			let cPresentationChild = getMetadataById(refId);
-			if (spec.unfulfilledRecordPartConstraints != undefined) {
-
-				//			let cPresentationOfGroup = CORA.coraData(cPresentationChild.getFirstChildByNameInData("presentationOf"));
-				//			let presentationOf = cPresentationOfGroup.getFirstChildByNameInData("linkedRecordId");
-
-				let readUnfullfilledConstraints = spec.unfulfilledRecordPartConstraints.read;
-				if (readUnfullfilledConstraints.length === 0) {
-					//			readUnfullfilledConstraints.includes(presentationOf);
-
-					let childView2 = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
-					view.appendChild(childView2);
-					//getPresentationOf
-					//if present in noReadRight don't continue
-
-				}
-			}else{
+//			if (spec.unfulfilledRecordPartConstraints != undefined) {
+//
+//				//			let cPresentationOfGroup = CORA.coraData(cPresentationChild.getFirstChildByNameInData("presentationOf"));
+//				//			let presentationOf = cPresentationOfGroup.getFirstChildByNameInData("linkedRecordId");
+//
+//				let readUnfullfilledConstraints = spec.unfulfilledRecordPartConstraints.read;
+//				if (readUnfullfilledConstraints.length === 0) {
+//					//			readUnfullfilledConstraints.includes(presentationOf);
+//
+//					let childView2 = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+//					view.appendChild(childView2);
+//					//getPresentationOf
+//					//if present in noReadRight don't continue
+//
+//				}
+//			}else{
 			let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
-			view.appendChild(childView);}
+			view.appendChild(childView);
+//			}
 		};
 
 		const createInfo = function() {

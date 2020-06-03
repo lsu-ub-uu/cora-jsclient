@@ -128,14 +128,12 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		const hasFulfilledReadPermissionsForRecordPart = function() {
-			// if (list.contains(id
-			return false;
+		const hasFulfilledReadPermissionsForRecordPart = function(nameInData) {
+			return fullfilledReadRecordParts.includes(nameInData);
 		};
 
-		const hasFulfilledWritePermissionsForRecordPart = function() {
-			// if (list.contains(id
-			return false;
+		const hasFulfilledWritePermissionsForRecordPart = function(nameInData) {
+			return fullfilledWriteRecordParts.includes(nameInData);
 		};
 
 		const getFulfilledWriteRecordParts = function() {

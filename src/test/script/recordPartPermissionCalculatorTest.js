@@ -122,8 +122,10 @@ QUnit.test("testInitWithWritePermissionsMatchingConstraints", function(assert) {
 	assert.strictEqual(fulfilledWriteRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textVariableId");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
-	//	assert.notOk(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart());
-	//	assert.notOk(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart());
+		
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("NOTtextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
 });
 QUnit.test("testInitWithTwoWritePermissionsMatchingConstraints", function(assert) {
 	this.spec.permissions = {
@@ -140,6 +142,10 @@ QUnit.test("testInitWithTwoWritePermissionsMatchingConstraints", function(assert
 	assert.strictEqual(fulfilledWriteRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(fulfilledWriteRecordParts[1], "oneOtherTextVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("oneOtherTextVariableIdNameInData"), true);
+
 });
 
 QUnit.test("testInitWithOneWritePermissionsAndTwoConstraints", function(assert) {
@@ -157,6 +163,11 @@ QUnit.test("testInitWithOneWritePermissionsAndTwoConstraints", function(assert) 
 	assert.strictEqual(fulfilledWriteRecordParts.length, 1);
 	assert.strictEqual(fulfilledWriteRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("oneOtherTextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testInitWithTwoWritePermissionsOneConstraints", function(assert) {
@@ -173,6 +184,11 @@ QUnit.test("testInitWithTwoWritePermissionsOneConstraints", function(assert) {
 	assert.strictEqual(fulfilledWriteRecordParts.length, 1);
 	assert.strictEqual(fulfilledWriteRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
+
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("oneOtherTextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testNoPermissionsReadWriteConstraints", function(assert) {
@@ -183,6 +199,10 @@ QUnit.test("testNoPermissionsReadWriteConstraints", function(assert) {
 
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testInitWithReadPermissionsNoConstraints", function(assert) {
@@ -196,6 +216,9 @@ QUnit.test("testInitWithReadPermissionsNoConstraints", function(assert) {
 	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "groupIdOneTextChild");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledReadRecordParts().length, 0);
+
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
 
 });
 QUnit.test("testInitWithReadPermissionsMatchingConstraints", function(assert) {
@@ -214,6 +237,11 @@ QUnit.test("testInitWithReadPermissionsMatchingConstraints", function(assert) {
 	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textVariableId");
 
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("NOTtextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testInitWithTwoReadPermissionsMatchingConstraints", function(assert) {
@@ -231,6 +259,11 @@ QUnit.test("testInitWithTwoReadPermissionsMatchingConstraints", function(assert)
 	assert.strictEqual(fulfilledReadRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(fulfilledReadRecordParts[1], "oneOtherTextVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("oneOtherTextVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testInitWithOneReadPermissionsAndTwoConstraints", function(assert) {
@@ -248,6 +281,11 @@ QUnit.test("testInitWithOneReadPermissionsAndTwoConstraints", function(assert) {
 	assert.strictEqual(fulfilledReadRecordParts.length, 1);
 	assert.strictEqual(fulfilledReadRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("oneOtherTextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 QUnit.test("testInitWithTwoReadPermissionsOneConstraints", function(assert) {
@@ -264,6 +302,11 @@ QUnit.test("testInitWithTwoReadPermissionsOneConstraints", function(assert) {
 	assert.strictEqual(fulfilledReadRecordParts.length, 1);
 	assert.strictEqual(fulfilledReadRecordParts[0], "textVariableIdNameInData");
 	assert.strictEqual(recordPartPermissionCalculator.getFulfilledWriteRecordParts().length, 0);
+	
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("oneOtherTextVariableIdNameInData"), false);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
+
 });
 
 

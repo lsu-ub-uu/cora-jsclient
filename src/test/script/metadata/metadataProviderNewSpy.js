@@ -49,16 +49,37 @@ var CORATEST = (function(coraTest) {
 						}]
 				}]
 			};
+//		let metadataDefault = {
+//				"name" : "metadata",
+//				"attributes" : {
+//					"type" : "group"
+//				},
+//				"children" : [ childReferences ]
+//			};
 
 		function getMetadataById(metadataId) {
 			fetchedMetadataIds.push(metadataId);
-			var metadata = {
-				"name" : "metadata",
-				"attributes" : {
-					"type" : "group"
-				},
-				"children" : [ childReferences ].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
+			let metadata = {
+					"name" : "metadata",
+					"attributes" : {
+						"type" : "group"
+					},
+					"children" : [ childReferences ].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
 			};
+			if(metadataId === "textVariableId"){
+				metadata = {
+						"name": "metadata",
+						"children": [{
+							"name": "regEx",
+							"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+						}]
+//							.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(metadataId)),
+							.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId)),
+						"attributes": {
+							"type": "textVariable"
+						}
+					}
+			}
 			fetchedMetadata.push(metadata);
 			return metadata;
 		}
@@ -95,7 +116,7 @@ var CORATEST = (function(coraTest) {
 		function createNameInDataTextIdDefTextId2(id) {
 			return [ {
 				"name" : "nameInData",
-				"value" : id
+				"value" : id+"NameInData"
 			}, {
 				"name" : "textId",
 				"value" : id + "Text"

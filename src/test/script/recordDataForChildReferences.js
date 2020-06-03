@@ -19,158 +19,256 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.childReferenceWithOneWriteConstraint = {
-			"name": "childReferences",
-			"children": [{
-				"name": "childReference",
-				"repeatId": "0",
-				"children": [
-					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
-						}]
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
 					}, {
-						"name": "repeatMin",
-						"value": "1"
+						"name": "linkedRecordId",
+						"value": "textVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "write"
+				}]
+		}]
+	};
+	coraTest.childReferenceWithTwoWriteConstraint = {
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
 					}, {
-						"name": "repeatMax",
-						"value": "1"
+						"name": "linkedRecordId",
+						"value": "textVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "write"
+				}]
+		}, {
+			"name": "childReference",
+			"repeatId": "1",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
 					}, {
-			              "name": "recordPartConstraint",
-			              "value": "write"
-			            }]
-			}]
-		};
-	coraTest.childReferenceWithTwoWriteConstraint= {
-			"name": "childReferences",
-			"children": [{
-				"name": "childReference",
-				"repeatId": "0",
-				"children": [
-					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
-						}]
-					}, {
-						"name": "repeatMin",
-						"value": "1"
-					}, {
-						"name": "repeatMax",
-						"value": "1"
-					}, {
-			              "name": "recordPartConstraint",
-			              "value": "write"
-			            }]
-			},{
-				"name": "childReference",
-				"repeatId": "1",
-				"children": [
-					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "oneOtherTextVariableId"
-						}]
-					}, {
-						"name": "repeatMin",
-						"value": "1"
-					}, {
-						"name": "repeatMax",
-						"value": "1"
-					}, {
-			              "name": "recordPartConstraint",
-			              "value": "write"
-			            }]
-			}]
-		};
+						"name": "linkedRecordId",
+						"value": "oneOtherTextVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "write"
+				}]
+		}]
+	};
 	coraTest.childReferenceWithOneReadWriteConstraint = {
-			"name": "childReferences",
-			"children": [{
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
+					}, {
+						"name": "linkedRecordId",
+						"value": "textVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "readWrite"
+				}]
+		}]
+	};
+	coraTest.childReferenceWithTwoReadWriteConstraint = {
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
+					}, {
+						"name": "linkedRecordId",
+						"value": "textVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "readWrite"
+				}]
+		}, {
+			"name": "childReference",
+			"repeatId": "1",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadata"
+					}, {
+						"name": "linkedRecordId",
+						"value": "oneOtherTextVariableId"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "readWrite"
+				}]
+		}]
+	};
+	coraTest.childReferenceWithOneWriteAndTwoReadWriteConstraint = {
+		"name": "childReferences",
+		"children": [
+			{
 				"name": "childReference",
 				"repeatId": "0",
 				"children": [
 					{
 						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
-						}]
-					}, {
-						"name": "repeatMin",
-						"value": "1"
-					}, {
-						"name": "repeatMax",
-						"value": "1"
-					}, {
-			              "name": "recordPartConstraint",
-			              "value": "readWrite"
-			            }]
-			}]
-		};
-	coraTest.childReferenceWithTwoReadWriteConstraint= {
-			"name": "childReferences",
-			"children": [{
-				"name": "childReference",
-				"repeatId": "0",
-				"children": [
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "metadata"
+							},
+							{
+								"name": "linkedRecordId",
+								"value": "textVariableId"
+							}
+						]
+					},
 					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
-						}]
-					}, {
 						"name": "repeatMin",
 						"value": "1"
-					}, {
+					},
+					{
 						"name": "repeatMax",
 						"value": "1"
-					}, {
-			              "name": "recordPartConstraint",
-			              "value": "readWrite"
-			            }]
-			},{
+					},
+					{
+						"name": "recordPartConstraint",
+						"value": "readWrite"
+					}
+				]
+			},
+			{
 				"name": "childReference",
 				"repeatId": "1",
 				"children": [
 					{
 						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
-						}, {
-							"name": "linkedRecordId",
-							"value": "oneOtherTextVariableId"
-						}]
-					}, {
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "metadata"
+							},
+							{
+								"name": "linkedRecordId",
+								"value": "oneOtherWriteTextVariableId"
+							}
+						]
+					},
+					{
 						"name": "repeatMin",
 						"value": "1"
-					}, {
+					},
+					{
 						"name": "repeatMax",
 						"value": "1"
-					}, {
-			              "name": "recordPartConstraint",
-			              "value": "readWrite"
-			            }]
-			}]
-		};
+					},
+					{
+						"name": "recordPartConstraint",
+						"value": "write"
+					}
+				]
+			},
+			{
+				"name": "childReference",
+				"repeatId": "2",
+				"children": [
+					{
+						"name": "ref",
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "metadata"
+							},
+							{
+								"name": "linkedRecordId",
+								"value": "oneOtherTextVariableId"
+							}
+						]
+					},
+					{
+						"name": "repeatMin",
+						"value": "1"
+					},
+					{
+						"name": "repeatMax",
+						"value": "1"
+					},
+					{
+						"name": "recordPartConstraint",
+						"value": "readWrite"
+					}
+				]
+			}
+		]
+	};
 	return coraTest;
 }(CORATEST));

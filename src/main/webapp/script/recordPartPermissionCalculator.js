@@ -23,13 +23,15 @@ var CORA = (function(cora) {
 		let metadataProvider = dependencies.metadataProvider;
 		let fullfilledWriteRecordParts = [];
 		let fullfilledReadRecordParts = [];
+		let recordPartsHasReadConstraints = [];
+		let recordPartsHasWriteConstraints = [];
 		let writePermissions = spec.permissions.write;
 		let readPermissions = spec.permissions.read;
 
 		const start = function() {
-			if (hasRecordPartPermissions()) {
-				calculateRecordPartPermissions();
-			}
+			//			if (hasRecordPartPermissions()) {
+			calculateRecordPartPermissions();
+			//			}
 		};
 
 		const calculateRecordPartPermissions = function() {
@@ -62,12 +64,13 @@ var CORA = (function(cora) {
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
 				let childCombinedId = getChildCombinedId(cChildReference);
+				recordPartsHasReadConstraints.push(childCombinedId);
 				possiblyAddFullfilledReadRecordParts(nameInData, childCombinedId);
 			}
 		}
 
 		const childHasReadWriteRecordPartConstraints = function(cChildReference) {
-			if (readPermissions.length > 0 && childHasRecordPartConstraints(cChildReference)) {
+			if (childHasRecordPartConstraints(cChildReference)) {
 				return evaluateReadWriteConstraintExists(cChildReference);
 			}
 			return false;
@@ -91,12 +94,13 @@ var CORA = (function(cora) {
 		const handleWriteRecordPartPermissions = function(cChildReference, nameInData) {
 			if (childHasWriteRecordPartConstraints(cChildReference)) {
 				let childCombinedId = getChildCombinedId(cChildReference);
+				recordPartsHasWriteConstraints.push(childCombinedId);
 				possiblyAddFullfilledWriteRecordParts(nameInData, childCombinedId);
 			}
 		};
 
 		const childHasWriteRecordPartConstraints = function(cChildReference) {
-			return writePermissions.length > 0 && childHasRecordPartConstraints(cChildReference);
+			return childHasRecordPartConstraints(cChildReference);
 		};
 
 		const getChildCombinedId = function(cChildReference) {
@@ -111,13 +115,13 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const hasRecordPartPermissions = function() {
-			return (permissionsDefined() && writePermissions.length > 0 || readPermissions.length > 0);
-		};
+//		const hasRecordPartPermissions = function() {
+//			return (permissionsDefined() && writePermissions.length > 0 || readPermissions.length > 0);
+//		};
 
-		const permissionsDefined = function() {
-			return spec.permissions != undefined;
-		};
+//		const permissionsDefined = function() {
+//			return spec.permissions != undefined;
+//		};
 
 		const userHasPermissionsForRecordPartContraint = function(nameInData) {
 			return writePermissions.includes(nameInData);
@@ -144,10 +148,16 @@ var CORA = (function(cora) {
 		};
 
 		const hasFulfilledReadPermissionsForRecordPart = function(recordType, recordId) {
+			if (!recordPartsHasReadConstraints.includes(recordType + "_" + recordId)) {
+				return true;
+			}
 			return fullfilledReadRecordParts.includes(recordType + "_" + recordId);
 		};
 
 		const hasFulfilledWritePermissionsForRecordPart = function(recordType, recordId) {
+			if (!recordPartsHasWriteConstraints.includes(recordType + "_" + recordId)) {
+				return true;
+			}
 			return fullfilledWriteRecordParts.includes(recordType + "_" + recordId);
 		};
 
@@ -160,7 +170,7 @@ var CORA = (function(cora) {
 		};
 
 		start();
-		
+
 		return Object.freeze({
 			type: "recordPartPermissionCalculator",
 			getDependencies: getDependencies,

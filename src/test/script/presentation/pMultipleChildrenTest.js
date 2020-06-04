@@ -38,9 +38,12 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 			"pNonRepeatingChildRefHandlerFactory" : CORATEST
 					.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		
 		this.spec = {
 			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
 			"path" : {},
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 		var createBaseViewHolder = function() {
 			return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
@@ -363,19 +366,46 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
 
+/********/
+//textVariableId
+//textVariableId2
+//QUnit.test("testPermissionCalculatorCalledForEachChild", function(assert) {
+//	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+//	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+//			.getMetadataById("groupWithSContainerPGroup"));
+//	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+//			.getMetadataById("groupWithSContainerPGroup"));
+//
+//	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+//	pMultipleChildren.init();
+//	
+//	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "textVariableId");
+//	
+//	
+//	
+//
+////	var factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0)
+////	assert.strictEqual(view.childNodes[1], factored.getView());
+////	
+////	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
+////	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
+////	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
+//	
+//});
+
 QUnit.test("testEmptyReadUnfulfilledConstraints",
 		function(assert) {
-	let recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
-	this.spec = {
-			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
-			"path" : {},
-			recordPartPermissionCalculator : recordPartPermissionCalculator
-//			,
-//			unfulfilledRecordPartConstraints : {
-//				read : [],
-//				write : []
-//			}
-		};
+//	let recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+//	this.spec = {
+//			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
+//			"path" : {},
+//			recordPartPermissionCalculator : recordPartPermissionCalculator
+////			,
+////			unfulfilledRecordPartConstraints : {
+////				read : [],
+////				write : []
+////			}
+//		};
 			var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
 			pMultipleChildren.init();
 			var view = pMultipleChildren.getView();

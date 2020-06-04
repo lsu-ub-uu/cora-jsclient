@@ -41,7 +41,8 @@ var CORA = (function(cora) {
 
 		const handleRecordPartPermissionsForChildReference = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
-			let nameInData = extractNameInData(cChildReference);
+			let childId  = getChildId(cChildReference);
+			let nameInData = extractNameInData(childId);
 			handleReadRecordPartPermissions(cChildReference, nameInData);
 			handleWriteRecordPartPermissions(cChildReference, nameInData);
 		};
@@ -109,10 +110,15 @@ var CORA = (function(cora) {
 		const userHasReadWritePermissionsForRecordPartContraint = function(nameInData) {
 			return readPermissions.includes(nameInData);
 		};
-
-		const extractNameInData = function(cChildReference) {
+		
+		const getChildId = function(cChildReference){
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const extractNameInData = function(linkedRecordId) {
+//			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+//			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
 		};
 

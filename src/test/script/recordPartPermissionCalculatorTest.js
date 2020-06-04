@@ -288,9 +288,9 @@ QUnit.test("testInitWithOneReadPermissionsAndTwoConstraints", function(assert) {
 
 });
 
-QUnit.test("testInitWithTwoReadPermissionsOneConstraints", function(assert) {
+QUnit.test("testInitWithOneReadOneWritePermissionMultipleConstraints", function(assert) {
 	this.spec.permissions = {
-		write: ["oneOtherWriteTextVariableId"],
+		write: ["oneOtherWriteTextVariableIdNameInData"],
 		read: ["oneOtherTextVariableIdNameInData"]
 	};
 	this.dependencies.metadataProvider.setChildReferences(CORATEST.childReferenceWithOneWriteAndTwoReadWriteConstraint);
@@ -305,7 +305,7 @@ QUnit.test("testInitWithTwoReadPermissionsOneConstraints", function(assert) {
 	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("textVariableIdNameInData"), false);
 	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart("oneOtherTextVariableIdNameInData"), true);
 	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("textVariableIdNameInData"), false);
-	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("oneOtherWriteTextVariableId"), true);
+	assert.strictEqual(recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart("oneOtherWriteTextVariableIdNameInData"), true);
 
 });
 

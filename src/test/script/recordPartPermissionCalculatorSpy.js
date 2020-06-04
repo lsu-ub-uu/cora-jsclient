@@ -36,11 +36,19 @@ var CORATEST = (function(coraTest) {
 			writeRequestedIds.push(id);
 			return fulfillsWrite;
 		}
-
 		
+		const getReadRequestedId = function(index){
+			return readRequestedIds[index];
+		}
+		const getWriteRequestedId = function(index){
+			return writeRequestedIds[index];
+		}
+
 		return Object.freeze({
 			getFulfillsReadForId : getFulfillsReadForId,
-			getFulfillsWriteForId : getFulfillsWriteForId
+			getFulfillsWriteForId : getFulfillsWriteForId,
+			getReadRequestedId : getReadRequestedId,
+			getWriteRequestedId : getWriteRequestedId
 		});
 	};
 	return coraTest;

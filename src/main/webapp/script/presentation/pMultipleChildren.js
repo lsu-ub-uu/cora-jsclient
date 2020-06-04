@@ -61,7 +61,6 @@ var CORA = (function(cora) {
 			if (my.cPresentation.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = my.cPresentation
 					.getFirstChildByNameInData("childReferences").children;
-				//				if(spec.topLevel)
 				presentationChildren.forEach(
 					createAndAppendChildForPresentationChildRef
 				);
@@ -79,6 +78,9 @@ var CORA = (function(cora) {
 			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 			let cPresentationChild = getMetadataById(refId);
+//			console.log(JSON.stringify(cPresentationChild.getData()));
+			
+//			spec.recordPartPermissionCalculator.getFulfillsReadForId
 //			if (spec.unfulfilledRecordPartConstraints != undefined) {
 //
 //				//			let cPresentationOfGroup = CORA.coraData(cPresentationChild.getFirstChildByNameInData("presentationOf"));

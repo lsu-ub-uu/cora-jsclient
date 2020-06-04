@@ -29,9 +29,7 @@ var CORA = (function(cora) {
 		let readPermissions = spec.permissions.read;
 
 		const start = function() {
-			//			if (hasRecordPartPermissions()) {
 			calculateRecordPartPermissions();
-			//			}
 		};
 
 		const calculateRecordPartPermissions = function() {
@@ -114,14 +112,6 @@ var CORA = (function(cora) {
 				fullfilledWriteRecordParts.push(childCombinedId);
 			}
 		};
-
-//		const hasRecordPartPermissions = function() {
-//			return (permissionsDefined() && writePermissions.length > 0 || readPermissions.length > 0);
-//		};
-
-//		const permissionsDefined = function() {
-//			return spec.permissions != undefined;
-//		};
 
 		const userHasPermissionsForRecordPartContraint = function(nameInData) {
 			return writePermissions.includes(nameInData);

@@ -35,7 +35,7 @@ var CORATEST = (function(coraTest) {
 							"name": "ref",
 							"children": [{
 								"name": "linkedRecordType",
-								"value": "metadata"
+								"value": "metadataTextVariable"
 							}, {
 								"name": "linkedRecordId",
 								"value": "textVariableId"
@@ -126,33 +126,6 @@ var CORATEST = (function(coraTest) {
 			} ];
 		}
 
-//		function createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(refRecordType, ref,
-//				attribute, repeatId, repeatMin, repeatMax) {
-//			return {
-//				"name" : "childReference",
-//				"repeatId" : repeatId,
-//				"children" : [ {
-//					"name" : "ref",
-//					"children" : [ {
-//						"name" : "linkedRecordType",
-//						"value" : "metadata"
-//					}, {
-//						"name" : "linkedRecordId",
-//						"value" : ref
-//					} ]
-//				// ,
-//				// "attributes": {
-//				// "type": attribute
-//				// }
-//				}, {
-//					"name" : "repeatMin",
-//					"value" : repeatMin
-//				}, {
-//					"name" : "repeatMax",
-//					"value" : repeatMax
-//				} ]
-//			};
-//		}
 
 		function getFetchedMetadataId(no) {
 			return fetchedMetadataIds[no];

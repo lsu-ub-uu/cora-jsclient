@@ -28,7 +28,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "textVariableId"
@@ -55,7 +55,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "textVariableId"
@@ -78,7 +78,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "oneOtherTextVariableId"
@@ -105,7 +105,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "textVariableId"
@@ -132,7 +132,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "textVariableId"
@@ -155,7 +155,7 @@ var CORATEST = (function(coraTest) {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": "metadataTextVariable"
 					}, {
 						"name": "linkedRecordId",
 						"value": "oneOtherTextVariableId"
@@ -184,7 +184,7 @@ var CORATEST = (function(coraTest) {
 						"children": [
 							{
 								"name": "linkedRecordType",
-								"value": "metadata"
+								"value": "metadataTextVariable"
 							},
 							{
 								"name": "linkedRecordId",
@@ -215,7 +215,7 @@ var CORATEST = (function(coraTest) {
 						"children": [
 							{
 								"name": "linkedRecordType",
-								"value": "metadata"
+								"value": "metadataTextVariable"
 							},
 							{
 								"name": "linkedRecordId",
@@ -246,7 +246,7 @@ var CORATEST = (function(coraTest) {
 						"children": [
 							{
 								"name": "linkedRecordType",
-								"value": "metadata"
+								"value": "metadataTextVariable"
 							},
 							{
 								"name": "linkedRecordId",

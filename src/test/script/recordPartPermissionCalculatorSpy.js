@@ -27,12 +27,12 @@ var CORATEST = (function(coraTest) {
 		let fulfillsWrite = true;
 
 
-		const getFulfillsReadForId = function(id) {
+		const hasFulfilledReadPermissionsForRecordPart = function(type, id) {
 			readRequestedIds.push(id);
 			return fulfillsRead;
 		}
 
-		const getFulfillsWriteForId = function(id) {
+		const hasFulfilledWritePermissionsForRecordPart = function(type, id) {
 			writeRequestedIds.push(id);
 			return fulfillsWrite;
 		}
@@ -45,8 +45,8 @@ var CORATEST = (function(coraTest) {
 		}
 
 		return Object.freeze({
-			getFulfillsReadForId : getFulfillsReadForId,
-			getFulfillsWriteForId : getFulfillsWriteForId,
+			hasFulfilledReadPermissionsForRecordPart : hasFulfilledReadPermissionsForRecordPart,
+			hasFulfilledWritePermissionsForRecordPart : hasFulfilledWritePermissionsForRecordPart,
 			getReadRequestedId : getReadRequestedId,
 			getWriteRequestedId : getWriteRequestedId
 		});

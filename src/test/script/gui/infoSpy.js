@@ -69,4 +69,4 @@ var CORATEST = (function(coraTest) {
 		return out;
 	};
 	return coraTest;
-}(CORATEST));
+}(CORATEST || {}));

@@ -238,4 +238,4 @@ var CORATEST = (function(coraTest) {
 
 	};
 	return coraTest;
-}(CORATEST));
+}(CORATEST || {}));

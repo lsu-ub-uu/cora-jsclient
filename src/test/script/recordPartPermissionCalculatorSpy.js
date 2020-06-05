@@ -21,20 +21,26 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordPartPermissionCalculatorSpy = function() {
 
-		var readRequestedIds = [];
-		var writeRequestedIds = [];
-		let fulfillsRead = true;
-		let fulfillsWrite = true;
+		let readRequestedIds = [];
+		let writeRequestedIds = [];
+		let idsToReturnFalseForRead = [];
+		let idsToReturnFalseForWrite = [];
 
 
 		const hasFulfilledReadPermissionsForRecordPart = function(type, id) {
-			readRequestedIds.push(id);
-			return fulfillsRead;
+			readRequestedIds.push(type+"_"+id);
+			if(idsToReturnFalseForRead.includes(type+"_"+id)){
+				return false;
+			}
+			return true;
 		}
 
 		const hasFulfilledWritePermissionsForRecordPart = function(type, id) {
-			writeRequestedIds.push(id);
-			return fulfillsWrite;
+			writeRequestedIds.push(type+"_"+id);
+			if(idsToReturnFalseForWrite.includes(type+"_"+id)){
+				return false;
+			}
+			return true;
 		}
 		
 		const getReadRequestedId = function(index){
@@ -43,12 +49,21 @@ var CORATEST = (function(coraTest) {
 		const getWriteRequestedId = function(index){
 			return writeRequestedIds[index];
 		}
+		
+		const addIdToReturnFalseForRead = function(id){
+			idsToReturnFalseForRead.push(id);
+		}
+		const addIdToReturnFalseForWrite = function(id){
+			idsToReturnFalseForWrite.push(id);
+		}
 
 		return Object.freeze({
 			hasFulfilledReadPermissionsForRecordPart : hasFulfilledReadPermissionsForRecordPart,
 			hasFulfilledWritePermissionsForRecordPart : hasFulfilledWritePermissionsForRecordPart,
 			getReadRequestedId : getReadRequestedId,
-			getWriteRequestedId : getWriteRequestedId
+			getWriteRequestedId : getWriteRequestedId,
+			addIdToReturnFalseForRead : addIdToReturnFalseForRead, 
+			addIdToReturnFalseForWrite : addIdToReturnFalseForWrite
 		});
 	};
 	return coraTest;

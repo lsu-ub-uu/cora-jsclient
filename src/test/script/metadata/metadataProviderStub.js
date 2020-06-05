@@ -156,7 +156,7 @@ function MetadataProviderStub() {
 					"name": "ref",
 					"children": [{
 						"name": "linkedRecordType",
-						"value": "metadata"
+						"value": refRecordType
 					}, {
 						"name": "linkedRecordId",
 						"value": ref
@@ -7807,7 +7807,7 @@ function MetadataProviderStub() {
 							"children": [
 								{
 									"name": "linkedRecordType",
-									"value": "metadata"
+									"value": "metadataTextVariable"
 								},
 								{
 									"name": "linkedRecordId",
@@ -7820,7 +7820,7 @@ function MetadataProviderStub() {
 							"children": [
 								{
 									"name": "linkedRecordType",
-									"value": "metadata"
+									"value": "metadataTextVariable"
 								},
 								{
 									"name": "linkedRecordId",

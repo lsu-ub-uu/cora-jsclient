@@ -67,64 +67,93 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
-			// flytta upp hämtning av presentationen och gör bara append om barnet INTE är
-			// med i listan på barn som användaren saknar rättighet till
 			let cPresentationChildRef = CORA.coraData(presentationChildRef);
-			let cRefGroup = CORA.coraData(cPresentationChildRef
-					.getFirstChildByNameInData("refGroup"));
-			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
-			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			let refId = extractRefId(presentationChildRef);
 
 			let cPresentationChild = getMetadataById(refId);
-			if (spec.recordPartPermissionCalculator != undefined) {
-				if (cPresentationChild.containsChildWithNameInData("presentationsOf")) {
-					let presentationsOf = cPresentationChild
-							.getFirstChildByNameInData("presentationsOf");
-					presentationsOf.children.forEach(function(containerChildReference) {
-						let cChildReference = CORA.coraData(containerChildReference);
-						let hasPermission = checkHasPermission(cChildReference);
-						
-						if (hasPermission) {
-							let childView = createViewForChild(cPresentationChildRef,
-									cPresentationChild, refId);
-							view.appendChild(childView);
-						}
-
-					});
-				}
-
-				else if (cPresentationChild.containsChildWithNameInData("presentationOf")) {
-					let cPresentationOfGroup = CORA.coraData(cPresentationChild
-							.getFirstChildByNameInData("presentationOf"));
-					let hasPermission = checkHasPermission(cPresentationOfGroup);
-					
-					if (hasPermission) {
-						let childView = createViewForChild(cPresentationChildRef,
-								cPresentationChild, refId);
-						view.appendChild(childView);
-					}
-				} else {
-					let childView = createViewForChild(cPresentationChildRef, cPresentationChild,
-							refId);
-					view.appendChild(childView);
-
-				}
+			if (constraintsShouldBeChecked() && presentationHasPresentationOf(cPresentationChild)) {
+				handleSingleOrMultiplePresentationOf(cPresentationChild, cPresentationChildRef,
+						refId);
 			} else {
 				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
 				view.appendChild(childView);
 
 			}
-			// }
 		};
+
+		const extractRefId = function(presentationChildRef) {
+			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let cRefGroup = CORA.coraData(cPresentationChildRef
+					.getFirstChildByNameInData("refGroup"));
+			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		}
+
+		const constraintsShouldBeChecked = function() {
+			return spec.recordPartPermissionCalculator != undefined;
+		}
+
+		const presentationHasPresentationOf = function(cPresentationChild) {
+			return presentationHasMultiplePresentationsOf(cPresentationChild)
+					|| presentationHasSinglePresentationOf(cPresentationChild);
+		}
+
+		const presentationHasMultiplePresentationsOf = function(cPresentationChild) {
+			return cPresentationChild.containsChildWithNameInData("presentationsOf");
+		}
+
+		const presentationHasSinglePresentationOf = function(cPresentationChild) {
+			return cPresentationChild.containsChildWithNameInData("presentationOf");
+		}
+
+		const handleSingleOrMultiplePresentationOf = function(cPresentationChild,
+				cPresentationChildRef, refId) {
+			if (presentationHasMultiplePresentationsOf(cPresentationChild)) {
+				handleMultiplePresentationsOf(cPresentationChildRef, cPresentationChild, refId);
+			}
+
+			else if (presentationHasSinglePresentationOf(cPresentationChild)) {
+				handleSinglePresentationOf(cPresentationChildRef,
+						cPresentationChild, refId);
+			}
+		}
+
+		const handleMultiplePresentationsOf = function(cPresentationChildRef, cPresentationChild,
+				refId) {
+			let presentationsOf = cPresentationChild.getFirstChildByNameInData("presentationsOf");
+			presentationsOf.children.forEach(function(containerChildReference) {
+				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
+						cPresentationChild, refId);
+			});
+		}
+
+		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
+				cPresentationChild, refId) {
+			let cChildReference = CORA.coraData(childReference);
+			let hasPermission = checkHasPermission(cChildReference);
+
+			if (hasPermission) {
+				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+				view.appendChild(childView);
+			}
+		}
 
 		const checkHasPermission = function(cChildReference) {
 			let presentationOfType = cChildReference
 					.getFirstAtomicValueByNameInData("linkedRecordType");
 			let presentationOfId = cChildReference
 					.getFirstAtomicValueByNameInData("linkedRecordId");
-			return spec.recordPartPermissionCalculator
-					.hasFulfilledReadPermissionsForRecordPart(presentationOfType, presentationOfId);
+			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
+					presentationOfType, presentationOfId);
+		}
+		
+		const handleSinglePresentationOf = function(cPresentationChildRef,
+				cPresentationChild, refId){
+			let presentationOfGroup = cPresentationChild
+			.getFirstChildByNameInData("presentationOf");
 
+	possiblyAppendChildView(presentationOfGroup, cPresentationChildRef,
+			cPresentationChild, refId);
 		}
 
 		const createInfo = function() {

@@ -34,6 +34,7 @@ var CORA = (function(cora) {
 				"jsBookkeeper" : jsBookkeeper,
 				"presentationFactory" : dependencies.presentationFactory,
 				permissions : spec.permissions
+				//TODO: add permissionCalculator - komma från spec precis som permissions?
 			};
 			return dependencies.presentationHolderFactory.factor(spec1);
 		};

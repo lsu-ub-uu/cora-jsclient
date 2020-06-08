@@ -20,129 +20,129 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.jsClient = function(dependencies, spec) {
-		var out;
-		var NO_OF_PROVIDERS = 4;
-		var reloadingProvidersInProgress = false;
-		var reloadedProviders = 0;
+		let out;
+		let NO_OF_PROVIDERS = 4;
+		let reloadingProvidersInProgress = false;
+		let reloadedProviders = 0;
 
-		var metadataProvider = dependencies.providers.metadataProvider;
-		var textProvider = dependencies.providers.textProvider;
-		var recordTypeProvider = dependencies.providers.recordTypeProvider;
-		var searchProvider = dependencies.providers.searchProvider;
+		let metadataProvider = dependencies.providers.metadataProvider;
+		let textProvider = dependencies.providers.textProvider;
+		let recordTypeProvider = dependencies.providers.recordTypeProvider;
+		let searchProvider = dependencies.providers.searchProvider;
 
-		var jsClientView;
-		var managedGuiItemShowing = undefined;
-		var managedGuiItemList = [];
-		var openGuiItemHandler;
+		let jsClientView;
+		let managedGuiItemShowing = undefined;
+		let managedGuiItemList = [];
+		let openGuiItemHandler;
 
-		function start() {
+		const start = function() {
 			dependencies.globalInstances.clientInstanceProvider.setJsClient(out);
-			var jsClientViewSpec = {
-				"name" : spec.name,
-				"serverAddress" : spec.baseUrl,
-				"reloadProvidersMethod" : out.reloadProviders,
-				"setLanguageMethod" : out.setCurrentLang,
-				"showLdapLoginMethod" : out.showLdapLogin
+			let jsClientViewSpec = {
+				name: spec.name,
+				serverAddress: spec.baseUrl,
+				reloadProvidersMethod: out.reloadProviders,
+				setLanguageMethod: out.setCurrentLang,
+				showLdapLoginMethod: out.showLdapLogin
 			};
 			jsClientView = dependencies.jsClientViewFactory.factor(jsClientViewSpec);
 
-			var loginManager = createLoginManager();
+			let loginManager = createLoginManager();
 			jsClientView.addLoginManagerView(loginManager.getHtml());
 
 			jsClientView
-					.addGlobalView(dependencies.uploadManager.getManagedGuiItem().getMenuView());
+				.addGlobalView(dependencies.uploadManager.getManagedGuiItem().getMenuView());
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
-		}
+		};
 
-		function createLoginManager() {
-			var loginManagerSpec = {
-				"afterLoginMethod" : afterLogin,
-				"afterLogoutMethod" : afterLogout,
-				"setErrorMessage" : jsClientView.addErrorMessage,
-				"appTokenBaseUrl" : spec.appTokenBaseUrl,
-				baseUrl : spec.baseUrl,
-				"jsClient" : out
+		const createLoginManager = function() {
+			let loginManagerSpec = {
+				afterLoginMethod: afterLogin,
+				afterLogoutMethod: afterLogout,
+				setErrorMessage: jsClientView.addErrorMessage,
+				appTokenBaseUrl: spec.appTokenBaseUrl,
+				baseUrl: spec.baseUrl,
+				jsClient: out
 			};
-			var loginManager = dependencies.globalFactories.loginManagerFactory
-					.factor(loginManagerSpec);
+			let loginManager = dependencies.globalFactories.loginManagerFactory
+				.factor(loginManagerSpec);
 			dependencies.globalInstances.loginManager = loginManager;
 			return loginManager;
-		}
+		};
 
-		function createAndAddOpenGuiItemHandlerToSideBar() {
+		const createAndAddOpenGuiItemHandlerToSideBar = function() {
 			openGuiItemHandler = dependencies.openGuiItemHandlerFactory.factor();
 			jsClientView.addOpenGuiItemHandlerView(openGuiItemHandler.getView());
-		}
+		};
 
-		function addMainSearchesUserIsAuthorizedToUseToSideBar() {
-			var mainSearches = searchProvider.getSearchesByGroupId("publicSearch");
+		const addMainSearchesUserIsAuthorizedToUseToSideBar = function() {
+			let mainSearches = searchProvider.getSearchesByGroupId("publicSearch");
 			mainSearches.forEach(function(search) {
 				possiblyCreateAndAddSearchRecordHandlerToSideBar(search);
 			});
-		}
+		};
 
-		function possiblyCreateAndAddSearchRecordHandlerToSideBar(search) {
+		const possiblyCreateAndAddSearchRecordHandlerToSideBar = function(search) {
 			if (userIsAuthorizedToUseSearch(search)) {
-				var searchRecordHandler = createSearchRecordHandler(search);
+				let searchRecordHandler = createSearchRecordHandler(search);
 				addSearchRecordHandlerToSideBar(searchRecordHandler);
 			}
-		}
+		};
 
-		function userIsAuthorizedToUseSearch(search) {
+		const userIsAuthorizedToUseSearch = function(search) {
 			return search.actionLinks.search !== undefined;
-		}
+		};
 
-		function createSearchRecordHandler(search) {
-			var specSearch = {
-				"searchRecord" : search,
-				"baseUrl" : spec.baseUrl,
-				"jsClient" : out
+		const createSearchRecordHandler = function(search) {
+			let specSearch = {
+				searchRecord: search,
+				baseUrl: spec.baseUrl,
+				jsClient: out
 			};
 			return dependencies.searchRecordHandlerFactory.factor(specSearch);
-		}
+		};
 
-		function addSearchRecordHandlerToSideBar(searchRecordHandler) {
+		const addSearchRecordHandlerToSideBar = function(searchRecordHandler) {
 			jsClientView.addToSearchesView(searchRecordHandler.getView());
-		}
+		};
 
-		function createAndAddGroupOfRecordTypesToSideBar() {
-			var thisInstanceOfJsClient = out;
-			var recordTypeGroups = dependencies.recordTypeMenu
-					.getRecordTypeGroups(thisInstanceOfJsClient);
+		const createAndAddGroupOfRecordTypesToSideBar = function() {
+			let thisInstanceOfJsClient = out;
+			let recordTypeGroups = dependencies.recordTypeMenu
+				.getRecordTypeGroups(thisInstanceOfJsClient);
 			addAllRecordTypeGroupsToSideBarInView(recordTypeGroups);
-		}
+		};
 
-		function addAllRecordTypeGroupsToSideBarInView(recordTypeGroups) {
+		const addAllRecordTypeGroupsToSideBarInView = function(recordTypeGroups) {
 			recordTypeGroups.forEach(function(recordTypeGroup) {
 				jsClientView.addGroupOfRecordTypesToView(recordTypeGroup);
 			});
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return jsClientView.getView();
-		}
+		};
 
-		function showView(managedGuiItem) {
+		const showView = function(managedGuiItem) {
 			resetLastShowingMenuItem();
 			showNewWorkView(managedGuiItem);
 			updateShowingManagedGuiItem(managedGuiItem);
 			managedGuiItemShowing = managedGuiItem;
-		}
+		};
 
-		function addGuiItem(managedGuiItem) {
+		const addGuiItem = function(managedGuiItem) {
 			openGuiItemHandler.addManagedGuiItem(managedGuiItem);
-		}
+		};
 
-		function resetLastShowingMenuItem() {
+		const resetLastShowingMenuItem = function() {
 			if (managedGuiItemShowing !== undefined) {
 				managedGuiItemShowing.setActive(false);
 				managedGuiItemShowing.hideWorkView();
 			}
-		}
+		};
 
-		function showNewWorkView(managedGuiItem) {
+		const showNewWorkView = function(managedGuiItem) {
 			if (managedGuiItem.getWorkView().parentNode !== jsClientView.getWorkView()) {
 				jsClientView.addToWorkView(managedGuiItem.getWorkView());
 			}
@@ -150,96 +150,97 @@ var CORA = (function(cora) {
 
 			removeManagedGuiItemFromList(managedGuiItem);
 			managedGuiItemList.push(managedGuiItem);
-		}
+		};
 
-		function removeManagedGuiItemFromList(managedGuiItem) {
+		const removeManagedGuiItemFromList = function(managedGuiItem) {
 			if (managedGuiItemList.indexOf(managedGuiItem) >= 0) {
 				managedGuiItemList.splice(managedGuiItemList.indexOf(managedGuiItem), 1);
 			}
-		}
+		};
 
-		function updateShowingManagedGuiItem(managedGuiItem) {
+		const updateShowingManagedGuiItem = function(managedGuiItem) {
 			managedGuiItem.setActive(true);
-		}
+		};
 
-		function getMetadataForRecordTypeId(recordTypeId) {
+		const getMetadataForRecordTypeId = function(recordTypeId) {
 			return recordTypeProvider.getMetadataByRecordTypeId(recordTypeId);
-		}
+		};
 
-		function afterLogin() {
+		const afterLogin = function() {
 			recordTypeProvider.reload(afterRecordTypeProviderReload);
 			searchProvider.reload(afterSearchProviderReload);
-		}
-		function afterLogout() {
+		};
+
+		const afterLogout = function() {
 			recordTypeProvider.reload(afterRecordTypeProviderReload);
 			searchProvider.reload(afterSearchProviderReload);
-		}
+		};
 
-		function afterRecordTypeProviderReload() {
+		const afterRecordTypeProviderReload = function() {
 			jsClientView.clearRecordTypesView();
 			createAndAddGroupOfRecordTypesToSideBar();
-		}
+		};
 
-		function afterSearchProviderReload() {
+		const afterSearchProviderReload = function() {
 			jsClientView.clearSearchesView();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
-		}
+		};
 
-		function hideAndRemoveView(managedGuiItem) {
+		const hideAndRemoveView = function(managedGuiItem) {
 			jsClientView.removeFromWorkView(managedGuiItem.getWorkView());
-		}
+		};
 
-		function viewRemoved(managedGuiItem) {
+		const viewRemoved = function(managedGuiItem) {
 			removeManagedGuiItemFromList(managedGuiItem);
-			var previous = managedGuiItemList.pop();
+			let previous = managedGuiItemList.pop();
 			if (previous) {
 				showView(previous);
 			} else {
 				resetLastShowingMenuItem();
 			}
-		}
+		};
 
-		function openRecordUsingReadLink(openInfo) {
-			var record = {
-				"actionLinks" : {
-					"read" : openInfo.readLink
+		const openRecordUsingReadLink = function(openInfo) {
+			let record = {
+				actionLinks: {
+					read: openInfo.readLink
 				}
 			};
-			var recordHandlerSpec = {
-				"fetchLatestDataFromServer" : "true",
-				"partOfList" : "false",
-				"createNewRecord" : "false",
-				"record" : record,
-				"jsClient" : out
+			let recordHandlerSpec = {
+				fetchLatestDataFromServer: "true",
+				partOfList: "false",
+				createNewRecord: "false",
+				record: record,
+				jsClient: out
 			};
-			var recordHandlerNew = dependencies.globalFactories.recordHandlerFactory
-					.factor(recordHandlerSpec);
+			let recordHandlerNew = dependencies.globalFactories.recordHandlerFactory
+				.factor(recordHandlerSpec);
 			addGuiItem(recordHandlerNew.getManagedGuiItem());
 			if (openInfo.loadInBackground !== "true") {
 				showView(recordHandlerNew.getManagedGuiItem());
 			}
-		}
+		};
 
-		function reloadProviders() {
+		const reloadProviders = function() {
 			if (reloadingProvidersInProgress === false) {
 				startReloadOfProviders();
 			}
-		}
+		};
 
-		function startReloadOfProviders() {
+		const startReloadOfProviders = function() {
 			setReloadingProvidersInProgressStatus(true);
 			metadataProvider.reload(providerReloaded);
 			textProvider.reload(providerReloaded);
 			recordTypeProvider.reload(providerReloaded);
 			searchProvider.reload(providerReloaded);
-		}
+		};
 
-		function setReloadingProvidersInProgressStatus(status) {
+		const setReloadingProvidersInProgressStatus = function(status) {
 			reloadingProvidersInProgress = status;
 			jsClientView.setReloadingProviders(status);
-		}
+		};
 
-		function providerReloaded() {
+		const providerReloaded = function() {
 			reloadedProviders++;
 			if (NO_OF_PROVIDERS === reloadedProviders) {
 				reloadedProviders = 0;
@@ -248,44 +249,44 @@ var CORA = (function(cora) {
 				afterSearchProviderReload();
 				reloadOpenRecords();
 			}
-		}
+		};
 
-		function reloadOpenRecords() {
+		const reloadOpenRecords = function() {
 			managedGuiItemList.forEach(function(managedGuiItem) {
 				managedGuiItem.reloadForMetadataChanges();
 			});
-		}
+		};
 
-		function setCurrentLang(lang) {
+		const setCurrentLang = function(lang) {
 			textProvider.setCurrentLang(lang);
 			reloadOpenRecords();
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "jsClient",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			showView : showView,
-			getMetadataForRecordTypeId : getMetadataForRecordTypeId,
-			afterLogin : afterLogin,
-			afterLogout : afterLogout,
-			afterRecordTypeProviderReload : afterRecordTypeProviderReload,
-			afterSearchProviderReload : afterSearchProviderReload,
-			hideAndRemoveView : hideAndRemoveView,
-			viewRemoved : viewRemoved,
-			addGuiItem : addGuiItem,
-			openRecordUsingReadLink : openRecordUsingReadLink,
-			reloadProviders : reloadProviders,
-			setCurrentLang : setCurrentLang
+			type: "jsClient",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			showView: showView,
+			getMetadataForRecordTypeId: getMetadataForRecordTypeId,
+			afterLogin: afterLogin,
+			afterLogout: afterLogout,
+			afterRecordTypeProviderReload: afterRecordTypeProviderReload,
+			afterSearchProviderReload: afterSearchProviderReload,
+			hideAndRemoveView: hideAndRemoveView,
+			viewRemoved: viewRemoved,
+			addGuiItem: addGuiItem,
+			openRecordUsingReadLink: openRecordUsingReadLink,
+			reloadProviders: reloadProviders,
+			setCurrentLang: setCurrentLang
 		});
 		start();
 

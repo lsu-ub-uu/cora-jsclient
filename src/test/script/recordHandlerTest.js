@@ -36,94 +36,93 @@ QUnit.module("recordHandlerTest.js", {
 		this.recordHandlerViewFactorySpy = CORATEST.standardFactorySpy("recordHandlerViewSpy");
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		let dependencies = {
-			"globalFactories": {
-				"incomingLinksListHandlerFactory": CORATEST
+			globalFactories: {
+				incomingLinksListHandlerFactory: CORATEST
 					.standardFactorySpy("incomingLinksListHandlerSpy")
 			},
-			"recordHandlerFactory": CORATEST.standardFactorySpy("recordHandlerSpy"),
-			"ajaxCallFactory": this.ajaxCallFactorySpy,
-			"recordGuiFactory": this.recordGuiFactorySpy,
-			"recordHandlerViewFactory": this.recordHandlerViewFactorySpy,
-			"managedGuiItemFactory": CORATEST.standardFactorySpy("managedGuiItemSpy"),
-			"indexHandlerFactory": CORATEST.standardFactorySpy("indexHandlerSpy"),
+			recordHandlerFactory: CORATEST.standardFactorySpy("recordHandlerSpy"),
+			ajaxCallFactory: this.ajaxCallFactorySpy,
+			recordGuiFactory: this.recordGuiFactorySpy,
+			recordHandlerViewFactory: this.recordHandlerViewFactorySpy,
+			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy"),
+			indexHandlerFactory: CORATEST.standardFactorySpy("indexHandlerSpy"),
 			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
 		this.dependencies = dependencies;
 
 		this.spec = {
-			"fetchLatestDataFromServer": "true",
-			"partOfList": "false",
-			"createNewRecord": "false",
-			"record": this.record,
-			"jsClient": CORATEST.jsClientSpy()
+			fetchLatestDataFromServer: "true",
+			partOfList: "false",
+			createNewRecord: "false",
+			record: this.record,
+			jsClient: CORATEST.jsClientSpy()
 		};
 
 		this.specForNew = {
-			"fetchLatestDataFromServer": "false",
-			"partOfList": "false",
-			"createNewRecord": "true",
-			"recordTypeRecordIdForNew": "recordType",
-			// "record" : this.record,
-			"jsClient": CORATEST.jsClientSpy()
+			fetchLatestDataFromServer: "false",
+			partOfList: "false",
+			createNewRecord: "true",
+			recordTypeRecordIdForNew: "recordType",
+			jsClient: CORATEST.jsClientSpy()
 		};
 		this.specForNewWithData = {
-			"fetchLatestDataFromServer": "false",
-			"partOfList": "false",
-			"createNewRecord": "true",
-			"recordTypeRecordIdForNew": "recordType",
-			"record": this.record,
-			"jsClient": CORATEST.jsClientSpy()
+			fetchLatestDataFromServer: "false",
+			partOfList: "false",
+			createNewRecord: "true",
+			recordTypeRecordIdForNew: "recordType",
+			record: this.record,
+			jsClient: CORATEST.jsClientSpy()
 		};
 		this.specForNewList = {
-			"fetchLatestDataFromServer": "false",
-			"partOfList": "true",
-			"createNewRecord": "true",
-			"recordTypeRecordIdForNew": "recordType",
-			"record": this.record,
-			"jsClient": CORATEST.jsClientSpy()
+			fetchLatestDataFromServer: "false",
+			partOfList: "true",
+			createNewRecord: "true",
+			recordTypeRecordIdForNew: "recordType",
+			record: this.record,
+			jsClient: CORATEST.jsClientSpy()
 		};
 
 		this.answerCall = function(no) {
 			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			let jsonRecord = JSON.stringify({
-				"record": this.record
+				record: this.record
 			});
 			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonRecord
+				spec: ajaxCallSpy0.getSpec(),
+				responseText: jsonRecord
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		};
 		this.answerCallWithoutUpdateOrDeleteLink = function(no) {
 			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			let jsonRecord = JSON.stringify({
-				"record": this.recordWithoutUpdateOrDeleteLink
+				record: this.recordWithoutUpdateOrDeleteLink
 			});
 			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonRecord
+				spec: ajaxCallSpy0.getSpec(),
+				responseText: jsonRecord
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		};
 		this.answerCallWithoutDeleteLink = function(no) {
 			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			let jsonRecord = JSON.stringify({
-				"record": this.recordWithoutDeleteLink
+				record: this.recordWithoutDeleteLink
 			});
 			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonRecord
+				spec: ajaxCallSpy0.getSpec(),
+				responseText: jsonRecord
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		};
 		this.answerCallWithIncomingLinks = function(no) {
 			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			let jsonRecord = JSON.stringify({
-				"record": this.recordWithReadIncomingLinks
+				record: this.recordWithReadIncomingLinks
 			});
 			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonRecord
+				spec: ajaxCallSpy0.getSpec(),
+				responseText: jsonRecord
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		};
@@ -280,12 +279,12 @@ QUnit.test("testCopyAsNew", function(assert) {
 		.getDataWithActionLinks();
 
 	let expectedSpec = {
-		"fetchLatestDataFromServer": "false",
-		"partOfList": "false",
-		"createNewRecord": "true",
-		"record": dataHolderData,
-		"jsClient": this.spec.jsClient,
-		"recordTypeRecordIdForNew": "recordType"
+		fetchLatestDataFromServer: "false",
+		partOfList: "false",
+		createNewRecord: "true",
+		record: dataHolderData,
+		jsClient: this.spec.jsClient,
+		recordTypeRecordIdForNew: "recordType"
 	};
 
 	let createdSpecForCopy = this.dependencies.recordHandlerFactory.getSpec(0);
@@ -357,16 +356,16 @@ QUnit.test("testHandleMessage", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 
 	let data = {
-		"data": "A new value",
-		"path": {}
+		data: "A new value",
+		path: {}
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
 
 	let data1 = {
-		"data": "",
-		"path": {}
+		data: "",
+		path: {}
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -385,16 +384,16 @@ QUnit.test("testHandleMessageSetValueSetsDataChanged", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 
 	let data = {
-		"data": "A new value",
-		"path": {}
+		data: "A new value",
+		path: {}
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getNoOfChangedCalls(), 0);
 
 	let data1 = {
-		"data": "",
-		"path": {}
+		data: "",
+		path: {}
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 
@@ -471,8 +470,8 @@ QUnit.test("testUpdateThroughPubSubCall", function(assert) {
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 0);
 
 	let data = {
-		"data": "",
-		"path": {}
+		data: "",
+		path: {}
 	};
 	recordHandler.handleMsg(data, "updateRecord");
 
@@ -496,13 +495,13 @@ QUnit.test("testUpdateDataIsChanged", function(assert) {
 	this.answerCall(0);
 
 	let data1 = {
-		"data": "",
-		"path": {}
+		data: "",
+		path: {}
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 	let data = {
-		"data": "A new value",
-		"path": {}
+		data: "A new value",
+		path: {}
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
@@ -708,7 +707,7 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpec", function(assert) {
 	assert.strictEqual(factoredSpec.dataDivider, undefined);
 	assert.deepEqual(factoredSpec.permissions.write, []);
 	assert.deepEqual(factoredSpec.permissions.read, []);
-	
+
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
 	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
 	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
@@ -919,7 +918,7 @@ QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartNoPermissions", function
 QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyOneWritePermissions", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.record.permissions = {
-		"write": ["someVariable"]
+		write: ["someVariable"]
 	};
 	this.answerCall(0);
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
@@ -931,7 +930,7 @@ QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyOneWritePermissions"
 QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyTwoWritePermissions", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.record.permissions = {
-		"write": ["someVariable", "someOtherVariable"]
+		write: ["someVariable", "someOtherVariable"]
 	};
 	this.answerCall(0);
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
@@ -943,7 +942,7 @@ QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyTwoWritePermissions"
 QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyOneReadPermissions", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.record.permissions = {
-		"read": ["someVariable"]
+		read: ["someVariable"]
 	};
 	this.answerCall(0);
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
@@ -955,7 +954,7 @@ QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyOneReadPermissions",
 QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartOnlyTwoReadPermissions", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.record.permissions = {
-		"read": ["someVariable", "someOtherVariable"]
+		read: ["someVariable", "someOtherVariable"]
 	};
 	this.answerCall(0);
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
@@ -968,8 +967,8 @@ QUnit.test("initRecordGuiCreatedCorrectlyPermissionsPartBothReadAndWritePermissi
 	assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.record.permissions = {
-		"read": ["someReadVariable", "someOtherReadVariable"],
-		"write": ["someWriteVariable", "someOtherWriteVariable"]
+		read: ["someReadVariable", "someOtherReadVariable"],
+		write: ["someWriteVariable", "someOtherWriteVariable"]
 	};
 	this.answerCall(0);
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
@@ -1057,7 +1056,6 @@ QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewList);
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
-	// this.answerCall(0);
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), true);
@@ -1076,7 +1074,7 @@ QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 
 	let item = managedGuiItem.getAddedMenuPresentation(0);
 	assert.strictEqual(item, undefined);
-	
+
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
 	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
 	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
@@ -1162,7 +1160,7 @@ QUnit.test("fetchListCheckError", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
 	ajaxCallSpy.getSpec().errorMethod({
-		"status": 404
+		status: 404
 	});
 
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
@@ -1172,7 +1170,7 @@ QUnit.test("fetchListCheckError", function(assert) {
 
 QUnit.test("checkRightGuiCreatedPresentationMetadataIsMissing", function(assert) {
 	let recordGuiFactorySpy = {
-		"factor": function() {
+		factor: function() {
 			throw new Error("missing metadata");
 		}
 	};
@@ -1193,8 +1191,8 @@ QUnit.test("checkRightGuiCreatedPresentationMetadataIsMissing", function(assert)
 
 QUnit.test("rightGuiCreatedPresentationMetadataIsMissingForNew", function(assert) {
 	let recordGuiFactorySpy = {
-		// "factor" : function(metadataId, data) {
-		"factor": function() {
+		// factor : function(metadataId, data) {
+		factor: function() {
 			throw new Error("missing metadata");
 		}
 	};
@@ -1229,10 +1227,10 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 	assert.stringifyEqual(reloadedRecordGuiSpec.data, firstRecordGui.dataHolder
 		.getDataWithActionLinks());
 	assert.strictEqual(reloadedRecordGui.getInitCalled(), 1);
-	
+
 	assert.strictEqual(reloadedRecordGuiSpec.recordPartPermissionCalculator, specFromFirstRecordGuiSpy.recordPartPermissionCalculator);
 	assert.ok(reloadedRecordGuiSpec.recordPartPermissionCalculator);
-	
+
 });
 
 QUnit.test("testReloadRecordHandlerViewFormFactoredAndAdded", function(assert) {
@@ -1294,32 +1292,29 @@ QUnit.test("testReloadRecordHandlerViewMenuFactoredAndAdded", function(assert) {
 	assert.strictEqual(factoredView.getView(), managedGuiItemSpy.getAddedMenuPresentation(1));
 });
 
-QUnit
-	.test(
-		"testShowIncomingLinks",
-		function(assert) {
-			this.spec.createNewRecord = "false";
-			this.spec.record = this.recordWithReadIncomingLinks;
+QUnit.test("testShowIncomingLinks", function(assert) {
+	this.spec.createNewRecord = "false";
+	this.spec.record = this.recordWithReadIncomingLinks;
 
-			let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
-			this.answerCallWithIncomingLinks(0);
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCallWithIncomingLinks(0);
 
-			let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
-			recordHandler.showIncomingLinks();
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	recordHandler.showIncomingLinks();
 
-			let addedToIncomingLinksView = recordHandlerViewSpy
-				.getObjectAddedToIncomingLinksView(0);
-			let factoredIncomingLinksListHandler = this.dependencies.globalFactories.incomingLinksListHandlerFactory
-				.getFactored(0);
-			let incomingLinksListSpyView = factoredIncomingLinksListHandler.getView();
-			assert.strictEqual(addedToIncomingLinksView, incomingLinksListSpyView);
+	let addedToIncomingLinksView = recordHandlerViewSpy
+		.getObjectAddedToIncomingLinksView(0);
+	let factoredIncomingLinksListHandler = this.dependencies.globalFactories.incomingLinksListHandlerFactory
+		.getFactored(0);
+	let incomingLinksListSpyView = factoredIncomingLinksListHandler.getView();
+	assert.strictEqual(addedToIncomingLinksView, incomingLinksListSpyView);
 
-			let expectedSpec = {
-				"read_incoming_links": this.spec.record.actionLinks.read_incoming_links
-			}
-			let usedSpec = factoredIncomingLinksListHandler.getSpec();
-			assert.stringifyEqual(usedSpec, expectedSpec);
-		});
+	let expectedSpec = {
+		read_incoming_links: this.spec.record.actionLinks.read_incoming_links
+	}
+	let usedSpec = factoredIncomingLinksListHandler.getSpec();
+	assert.stringifyEqual(usedSpec, expectedSpec);
+});
 
 QUnit.test("testPublishMessageOnCallMethodAfterShowWorkView", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);

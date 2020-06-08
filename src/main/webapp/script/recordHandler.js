@@ -48,23 +48,31 @@ var CORA = (function(cora) {
 		};
 
 		const createManagedGuiItem = function() {
-			let managedGuiItemSpec = {
-				"activateMethod" : spec.jsClient.showView,
-				"removeMethod" : spec.jsClient.viewRemoved,
-				"callOnMetadataReloadMethod" : reloadForMetadataChanges,
-				"callMethodAfterShowWorkView" : callMethodAfterShowWorkView
-			};
+			let managedGuiItemSpec = assembleManagedGuiItemSpec();
 			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
 		};
 
-		const createRecordHandlerView = function() {
-			let recordHandlerViewSpec = {
-				"extraClassName" : "recordHandler",
-				"showDataMethod" : showData,
-				"copyDataMethod" : copyData,
-				"showIncomingLinksMethod" : showIncomingLinks,
+		const assembleManagedGuiItemSpec = function() {
+			return {
+				activateMethod: spec.jsClient.showView,
+				removeMethod: spec.jsClient.viewRemoved,
+				callOnMetadataReloadMethod: reloadForMetadataChanges,
+				callMethodAfterShowWorkView: callMethodAfterShowWorkView
 			};
+		};
+
+		const createRecordHandlerView = function() {
+			let recordHandlerViewSpec = assembleRecordHandlerViewSpec();
 			return dependencies.recordHandlerViewFactory.factor(recordHandlerViewSpec);
+		};
+
+		const assembleRecordHandlerViewSpec = function() {
+			return {
+				extraClassName: "recordHandler",
+				showDataMethod: showData,
+				copyDataMethod: copyData,
+				showIncomingLinksMethod: showIncomingLinks,
+			};
 		};
 
 		const createNewOrFetchDataFromServerForExistingRecord = function() {
@@ -77,7 +85,7 @@ var CORA = (function(cora) {
 				} else {
 					fetchedRecord = spec.record;
 					let permissions = createEmptyPermissions();
-					tryToProcessFetchedRecordData(spec.record.data, permissions);
+					tryToProcessFetchedRecordData(fetchedRecord.data, permissions);
 				}
 			}
 		};
@@ -119,13 +127,13 @@ var CORA = (function(cora) {
 		};
 
 		const createRecordGui = function(metadataId, data, dataDivider, permissions,
-				recordPartPermissionCalculator) {
+			recordPartPermissionCalculator) {
 			let recordGuiSpec = {
-				metadataId : metadataId,
-				data : data,
-				dataDivider : dataDivider,
-				permissions : permissions,
-				recordPartPermissionCalculator : recordPartPermissionCalculator
+				metadataId: metadataId,
+				data: data,
+				dataDivider: dataDivider,
+				permissions: permissions,
+				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
 
 			let createdRecordGui = dependencies.recordGuiFactory.factor(recordGuiSpec);
@@ -167,21 +175,21 @@ var CORA = (function(cora) {
 		const addNewEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
 			let newPresentationFormId = metadataForRecordType.newPresentationFormId;
 			let presentationView = currentRecordGui.getPresentationHolder(newPresentationFormId,
-					metadataIdUsedInData).getView();
+				metadataIdUsedInData).getView();
 			recordHandlerView.addToEditView(presentationView);
 		};
 
 		const addViewPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
 			let showViewId = metadataForRecordType.presentationViewId;
 			let showView = currentRecordGui.getPresentationHolder(showViewId, metadataIdUsedInData)
-					.getView();
+				.getView();
 			recordHandlerView.addToShowView(showView);
 		};
 
 		const addMenuPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
 			let menuPresentationViewId = metadataForRecordType.menuPresentationViewId;
 			let menuPresentationView = currentRecordGui.getPresentationHolder(
-					menuPresentationViewId, metadataIdUsedInData).getView();
+				menuPresentationViewId, metadataIdUsedInData).getView();
 			managedGuiItem.clearMenuView();
 			managedGuiItem.addMenuPresentation(menuPresentationView);
 		};
@@ -189,47 +197,49 @@ var CORA = (function(cora) {
 		const addListPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
 			let viewId = metadataForRecordType.listPresentationViewId;
 			let presentation = currentRecordGui.getPresentationHolder(viewId, metadataIdUsedInData)
-					.getView();
+				.getView();
 			managedGuiItem.addListPresentation(presentation);
 		};
 
 		const showErrorInView = function(error, data) {
 			recordHandlerView
-					.addObjectToEditView("something went wrong, probably missing metadata, "
-							+ error);
+				.addObjectToEditView("something went wrong, probably missing metadata, "
+					+ error);
 			recordHandlerView.addObjectToEditView(data);
 			recordHandlerView.addObjectToEditView(error.stack);
 		};
 
 		const sendNewDataToServer = function() {
 			let createLink = metadataForRecordType.actionLinks.create;
-
 			validateAndSendDataToServer(createLink);
 		};
 
 		const validateAndSendDataToServer = function(link) {
 			if (recordGui.validateData()) {
 				busy.show();
-
-				let callAfterAnswer = resetViewsAndProcessFetchedRecord;
-				let callSpec = {
-					"requestMethod" : link.requestMethod,
-					"url" : link.url,
-					"contentType" : link.contentType,
-					"accept" : link.accept,
-					"loadMethod" : callAfterAnswer,
-					"errorMethod" : callError,
-					"data" : JSON.stringify(recordGui.dataHolder.getData())
-				};
+				let callSpec = assembleCallSpec(link)
 				dependencies.ajaxCallFactory.factor(callSpec);
 			}
+		};
+
+		const assembleCallSpec = function(link) {
+			let callAfterAnswer = resetViewsAndProcessFetchedRecord;
+			return {
+				requestMethod: link.requestMethod,
+				url: link.url,
+				contentType: link.contentType,
+				accept: link.accept,
+				loadMethod: callAfterAnswer,
+				errorMethod: callError,
+				data: JSON.stringify(recordGui.dataHolder.getData())
+			};
 		};
 
 		const resetViewsAndProcessFetchedRecord = function(answer) {
 			resetViewsAndProcessFetchedRecord2(answer);
 			let messageSpec = {
-				"message" : "Tjohoo, det där gick ju bra, data sparat på servern!",
-				"type" : CORA.message.POSITIVE
+				message: "Tjohoo, det där gick ju bra, data sparat på servern!",
+				type: CORA.message.POSITIVE
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -247,13 +257,13 @@ var CORA = (function(cora) {
 			busy.show();
 			let readLink = actionLinks.read;
 			let callSpec = {
-				"requestMethod" : readLink.requestMethod,
-				"url" : readLink.url,
-				"contentType" : readLink.contentType,
-				"accept" : readLink.accept,
+				requestMethod: readLink.requestMethod,
+				url: readLink.url,
+				contentType: readLink.contentType,
+				accept: readLink.accept,
 				// processFetchedRecord
-				"loadMethod" : callAfterAnswer,
-				"errorMethod" : callError
+				loadMethod: callAfterAnswer,
+				errorMethod: callError
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
@@ -275,8 +285,8 @@ var CORA = (function(cora) {
 
 		const createEmptyPermissions = function() {
 			return {
-				write : [],
-				read : []
+				write: [],
+				read: []
 			};
 		};
 
@@ -320,7 +330,7 @@ var CORA = (function(cora) {
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, permissions);
 
 			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
-					recordPartPermissionCalculator);
+				recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
 
@@ -329,14 +339,14 @@ var CORA = (function(cora) {
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
 		};
-		
-		const createRecordPartPermissionCalculator = function(metadataId, permissions){
+
+		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
 			let calculatorSpec = {
-					metadataId : metadataId,
-					permissions : permissions
-				}
-				return dependencies.recordPartPermissionCalculatorFactory
-						.factor(calculatorSpec);
+				metadataId: metadataId,
+				permissions: permissions
+			}
+			return dependencies.recordPartPermissionCalculatorFactory
+				.factor(calculatorSpec);
 		}
 
 		const createAndAddViewsForExisting = function(recordGuiIn, metadataId) {
@@ -371,7 +381,7 @@ var CORA = (function(cora) {
 			let editViewId = metadataForRecordType.presentationFormId;
 
 			let editView = currentRecordGui.getPresentationHolder(editViewId, metadataIdUsedInData)
-					.getView();
+				.getView();
 			recordHandlerView.addToEditView(editView);
 		};
 
@@ -400,26 +410,30 @@ var CORA = (function(cora) {
 
 		const showData = function() {
 			let messageSpec = {
-				"message" : JSON.stringify(recordGui.dataHolder.getData()),
-				"type" : CORA.message.INFO,
-				"timeout" : 0
+				message: JSON.stringify(recordGui.dataHolder.getData()),
+				type: CORA.message.INFO,
+				timeout: 0
 			};
 			messageHolder.createMessage(messageSpec);
 		};
 
 		const copyData = function() {
-			let recordHandlerSpec = {
-				"fetchLatestDataFromServer" : "false",
-				"partOfList" : "false",
-				"createNewRecord" : "true",
-				"record" : recordGui.dataHolder.getDataWithActionLinks(),
-				"jsClient" : spec.jsClient,
-				"recordTypeRecordIdForNew" : recordTypeId
-			};
+			let recordHandlerSpec = assembleRecordHandlerSpec();
 			let recordHandlerNew = dependencies.recordHandlerFactory.factor(recordHandlerSpec);
 			let managedGuiItemNew = recordHandlerNew.getManagedGuiItem();
 			spec.jsClient.addGuiItem(managedGuiItemNew);
 			spec.jsClient.showView(managedGuiItemNew);
+		};
+
+		const assembleRecordHandlerSpec = function() {
+			return {
+				fetchLatestDataFromServer: "false",
+				partOfList: "false",
+				createNewRecord: "true",
+				record: recordGui.dataHolder.getDataWithActionLinks(),
+				jsClient: spec.jsClient,
+				recordTypeRecordIdForNew: recordTypeId
+			};
 		};
 
 		const recordHasDeleteLink = function() {
@@ -438,18 +452,22 @@ var CORA = (function(cora) {
 		};
 
 		const shouldRecordBeDeleted = function() {
-			let questionSpec = {
-				"text" : "Är du säker på att du vill ta bort posten?",
-				"buttons" : [ {
-					"text" : "Nej"
-				}, {
-					"text" : "Ja",
-					"onclickFunction" : sendDeleteDataToServer
-				} ]
-			};
+			let questionSpec = assembleQuestionSpec();
 			let question = CORA.question(questionSpec);
 			let questionView = question.getView();
 			managedGuiItem.addWorkPresentation(questionView);
+		};
+
+		const assembleQuestionSpec = function() {
+			return {
+				text: "Är du säker på att du vill ta bort posten?",
+				buttons: [{
+					text: "Nej"
+				}, {
+					text: "Ja",
+					onclickFunction: sendDeleteDataToServer
+				}]
+			};
 		};
 
 		const afterDelete = function() {
@@ -460,10 +478,10 @@ var CORA = (function(cora) {
 			busy.show();
 			let deleteLink = fetchedRecord.actionLinks["delete"];
 			let callSpec = {
-				"requestMethod" : deleteLink.requestMethod,
-				"url" : deleteLink.url,
-				"loadMethod" : afterDelete,
-				"errorMethod" : callError
+				requestMethod: deleteLink.requestMethod,
+				url: deleteLink.url,
+				loadMethod: afterDelete,
+				errorMethod: callError
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
@@ -476,8 +494,8 @@ var CORA = (function(cora) {
 		const sendIndexDataToServer = function() {
 			busy.show();
 			let indexHandlerSpec = {
-				"loadMethod" : showIndexMessage,
-				"timeoutMethod" : showTimeoutMessage
+				loadMethod: showIndexMessage,
+				timeoutMethod: showTimeoutMessage
 			};
 			let indexHandler = dependencies.indexHandlerFactory.factor(indexHandlerSpec);
 			indexHandler.indexData(fetchedRecord);
@@ -486,8 +504,8 @@ var CORA = (function(cora) {
 		const showIndexMessage = function() {
 			busy.hideWithEffect();
 			let messageSpec = {
-				"message" : "Posten är indexerad",
-				"type" : CORA.message.POSITIVE
+				message: "Posten är indexerad",
+				type: CORA.message.POSITIVE
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -495,8 +513,8 @@ var CORA = (function(cora) {
 		const showTimeoutMessage = function() {
 			busy.hideWithEffect();
 			let messageSpec = {
-				"message" : "TIMEOUT",
-				"type" : CORA.message.ERROR
+				message: "TIMEOUT",
+				type: CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -504,8 +522,8 @@ var CORA = (function(cora) {
 		const callError = function(answer) {
 			busy.hideWithEffect();
 			let messageSpec = {
-				"message" : answer.status,
-				"type" : CORA.message.ERROR
+				message: answer.status,
+				type: CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -528,7 +546,7 @@ var CORA = (function(cora) {
 			let dataDivider = recordGuiSpec.dataDivider;
 			let permissions = recordGuiSpec.permissions;
 			let recordPartPermissionCalculator = recordGuiSpec.recordPartPermissionCalculator;
-			
+
 			recordGui = createRecordGui(metadataId, data, dataDivider, permissions, recordPartPermissionCalculator);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
@@ -541,18 +559,18 @@ var CORA = (function(cora) {
 		const callMethodAfterShowWorkView = function() {
 			if (recordGui !== undefined) {
 				recordGui.pubSub.publish("viewJustMadeVisible", {
-					"data" : "",
-					"path" : {}
+					data: "",
+					path: {}
 				});
 			}
 		};
 
 		const showIncomingLinks = function() {
 			let illhSpec = {
-				"read_incoming_links" : fetchedRecord.actionLinks.read_incoming_links
+				read_incoming_links: fetchedRecord.actionLinks.read_incoming_links
 			};
 			let incomingLinksListHandler = dependencies.globalFactories.incomingLinksListHandlerFactory
-					.factor(illhSpec);
+				.factor(illhSpec);
 			recordHandlerView.addToIncomingLinksView(incomingLinksListHandler.getView());
 		};
 
@@ -570,24 +588,24 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			type : "recordHandler",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			processFetchedRecord : processFetchedRecord,
-			resetViewsAndProcessFetchedRecord : resetViewsAndProcessFetchedRecord,
-			afterDelete : afterDelete,
-			handleMsg : handleMsg,
-			getDataIsChanged : getDataIsChanged,
-			copyData : copyData,
-			showData : showData,
-			sendUpdateDataToServer : sendUpdateDataToServer,
-			shouldRecordBeDeleted : shouldRecordBeDeleted,
-			getManagedGuiItem : getManagedGuiItem,
-			reloadForMetadataChanges : reloadForMetadataChanges,
-			showIncomingLinks : showIncomingLinks,
-			showIndexMessage : showIndexMessage,
-			showTimeoutMessage : showTimeoutMessage,
-			callMethodAfterShowWorkView : callMethodAfterShowWorkView
+			type: "recordHandler",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			processFetchedRecord: processFetchedRecord,
+			resetViewsAndProcessFetchedRecord: resetViewsAndProcessFetchedRecord,
+			afterDelete: afterDelete,
+			handleMsg: handleMsg,
+			getDataIsChanged: getDataIsChanged,
+			copyData: copyData,
+			showData: showData,
+			sendUpdateDataToServer: sendUpdateDataToServer,
+			shouldRecordBeDeleted: shouldRecordBeDeleted,
+			getManagedGuiItem: getManagedGuiItem,
+			reloadForMetadataChanges: reloadForMetadataChanges,
+			showIncomingLinks: showIncomingLinks,
+			showIndexMessage: showIndexMessage,
+			showTimeoutMessage: showTimeoutMessage,
+			callMethodAfterShowWorkView: callMethodAfterShowWorkView
 		});
 	};
 	return cora;

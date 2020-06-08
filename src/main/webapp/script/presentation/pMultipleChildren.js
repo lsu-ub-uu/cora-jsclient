@@ -90,7 +90,7 @@ var CORA = (function(cora) {
 		}
 
 		const constraintsShouldBeChecked = function() {
-			return spec.recordPartPermissionCalculator != undefined;
+			return spec.recordPartPermissionCalculator !== undefined;
 		}
 
 		const presentationHasPresentationOf = function(cPresentationChild) {
@@ -113,8 +113,7 @@ var CORA = (function(cora) {
 			}
 
 			else {
-				handleSinglePresentationOf(cPresentationChildRef,
-						cPresentationChild, refId);
+				handleSinglePresentationOf(cPresentationChildRef, cPresentationChild, refId);
 			}
 		}
 
@@ -146,14 +145,14 @@ var CORA = (function(cora) {
 			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
 					presentationOfType, presentationOfId);
 		}
-		
-		const handleSinglePresentationOf = function(cPresentationChildRef,
-				cPresentationChild, refId){
-			let presentationOfGroup = cPresentationChild
-			.getFirstChildByNameInData("presentationOf");
 
-	possiblyAppendChildView(presentationOfGroup, cPresentationChildRef,
-			cPresentationChild, refId);
+		const handleSinglePresentationOf = function(cPresentationChildRef, cPresentationChild,
+				refId) {
+			let presentationOfGroup = cPresentationChild
+					.getFirstChildByNameInData("presentationOf");
+
+			possiblyAppendChildView(presentationOfGroup, cPresentationChildRef, cPresentationChild,
+					refId);
 		}
 
 		const createInfo = function() {
@@ -268,9 +267,7 @@ var CORA = (function(cora) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
 					cPresentationChildRef);
 			childRefHandlerSpec.parentMetadataId = my.metadataId;
-			let factored = dependencies.pNonRepeatingChildRefHandlerFactory
-					.factor(childRefHandlerSpec);
-			return factored;
+			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		};
 
 		const createChildRefHandlerCommonSpec = function(cPresentationChild, cPresentationChildRef) {

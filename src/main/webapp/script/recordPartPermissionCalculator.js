@@ -38,7 +38,7 @@ var CORA = (function(cora) {
 				handleRecordPartPermissionsForChildReference(childReference);
 			});
 		};
-		
+
 		const getChildReferences = function() {
 			let metadataGroup = metadataProvider.getMetadataById(spec.metadataId);
 			let cMetadataGroup = CORA.coraData(metadataGroup);
@@ -58,8 +58,6 @@ var CORA = (function(cora) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
-
-		
 
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
@@ -81,8 +79,9 @@ var CORA = (function(cora) {
 		};
 
 		const evaluateReadWriteConstraintExists = function(cChildReference) {
-			let constraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
-			return constraint != undefined && "readWrite" === constraint;
+			let constraint = cChildReference
+					.getFirstAtomicValueByNameInData("recordPartConstraint");
+			return constraint !== undefined && "readWrite" === constraint;
 		}
 
 		const possiblyAddFullfilledReadRecordParts = function(nameInData, childCombinedId) {
@@ -106,7 +105,7 @@ var CORA = (function(cora) {
 		const getChildCombinedId = function(cChildReference) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") + "_"
-				+ cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+					+ cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const possiblyAddFullfilledWriteRecordParts = function(nameInData, childCombinedId) {
@@ -164,13 +163,13 @@ var CORA = (function(cora) {
 		start();
 
 		return Object.freeze({
-			type: "recordPartPermissionCalculator",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			hasFulfilledReadPermissionsForRecordPart: hasFulfilledReadPermissionsForRecordPart,
-			hasFulfilledWritePermissionsForRecordPart: hasFulfilledWritePermissionsForRecordPart,
-			getFulfilledWriteRecordParts: getFulfilledWriteRecordParts,
-			getFulfilledReadRecordParts: getFulfilledReadRecordParts
+			type : "recordPartPermissionCalculator",
+			getDependencies : getDependencies,
+			getSpec : getSpec,
+			hasFulfilledReadPermissionsForRecordPart : hasFulfilledReadPermissionsForRecordPart,
+			hasFulfilledWritePermissionsForRecordPart : hasFulfilledWritePermissionsForRecordPart,
+			getFulfilledWriteRecordParts : getFulfilledWriteRecordParts,
+			getFulfilledReadRecordParts : getFulfilledReadRecordParts
 		});
 	};
 	return cora;

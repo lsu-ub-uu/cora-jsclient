@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			view = createBaseView();
 		};
-		
+
 		const createBaseView = function() {
 			let viewNew = createBaseViewHolder();
 			viewNew.appendChild(createViewForTopPGroup());
@@ -73,7 +73,7 @@ var CORA = (function(cora) {
 		};
 
 		start();
-		let out = Object.freeze({
+		return Object.freeze({
 			"type" : "presentationHolder",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -81,7 +81,6 @@ var CORA = (function(cora) {
 			getPubSub : getPubSub,
 			getView : getView
 		});
-		return out;
 
 	};
 	return cora;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -31,49 +31,48 @@ var CORA = (function(cora) {
 			let pubSub = CORA.pubSub();
 
 			let specDataHolder = {
-				metadataId: metadataId,
-				metadataProvider: metadataProvider,
-				pubSub: pubSub
+				metadataId : metadataId,
+				metadataProvider : metadataProvider,
+				pubSub : pubSub
 			};
-			
+
 			let dataHolder = CORA.dataHolder(specDataHolder);
 
 			let specJSBookkeeper = {
-				metadataId: metadataId,
-				metadataProvider: metadataProvider,
-				pubSub: pubSub,
-				textProvider: textProvider,
-				dataHolder: dataHolder
+				metadataId : metadataId,
+				metadataProvider : metadataProvider,
+				pubSub : pubSub,
+				textProvider : textProvider,
+				dataHolder : dataHolder
 			};
-			
+
 			let depJSBookkeeper = {
-				recordTypeProvider: dependencies.providers.recordTypeProvider
+				recordTypeProvider : dependencies.providers.recordTypeProvider
 			};
-			
+
 			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
 			let dependenciesPresentationFactory = {
-				providers: dependencies.providers,
-				globalFactories: dependencies.globalFactories,
-				authTokenHolder: dependencies.authTokenHolder,
-				pubSub: pubSub,
-				jsBookkeeper: jsBookkeeper,
-				recordGuiFactory: self,
-				dataDivider: dataDivider,
-				uploadManager: dependencies.uploadManager,
-				ajaxCallFactory: dependencies.ajaxCallFactory
+				providers : dependencies.providers,
+				globalFactories : dependencies.globalFactories,
+				authTokenHolder : dependencies.authTokenHolder,
+				pubSub : pubSub,
+				jsBookkeeper : jsBookkeeper,
+				recordGuiFactory : self,
+				dataDivider : dataDivider,
+				uploadManager : dependencies.uploadManager,
+				ajaxCallFactory : dependencies.ajaxCallFactory
 			};
 
 			let dependenciesCF = {
-				metadataProvider: metadataProvider,
-				recordTypeProvider: dependencies.providers.recordTypeProvider,
-				pubSub: pubSub
+				metadataProvider : metadataProvider,
+				recordTypeProvider : dependencies.providers.recordTypeProvider,
+				pubSub : pubSub
 			};
 
-
 			let dependenciesMV = {
-				metadataProvider: metadataProvider,
-				pubSub: pubSub
+				metadataProvider : metadataProvider,
+				pubSub : pubSub
 			};
 
 			let metadataValidatorFactory = CORA.metadataValidatorFactory(dependenciesMV);
@@ -81,23 +80,23 @@ var CORA = (function(cora) {
 			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory);
 
 			let dependenciesPHF = {
-				metadataProvider: metadataProvider,
-				presentationFactory: presentationFactory,
-				pubSub: pubSub
+				metadataProvider : metadataProvider,
+				presentationFactory : presentationFactory,
+				pubSub : pubSub
 			};
 
 			let metadataControllerFactory = CORA.metadataControllerFactory(dependenciesCF);
 
 			let dependenciesRG = {
-				metadataProvider: metadataProvider,
-				textProvider: textProvider,
-				pubSub: pubSub,
-				dataHolder: dataHolder,
-				jsBookkeeper: jsBookkeeper,
-				presentationFactory: presentationFactory,
-				metadataControllerFactory: metadataControllerFactory,
-				metadataValidatorFactory: metadataValidatorFactory,
-				presentationHolderFactory: CORA.presentationHolderFactory(dependenciesPHF)
+				metadataProvider : metadataProvider,
+				textProvider : textProvider,
+				pubSub : pubSub,
+				dataHolder : dataHolder,
+				jsBookkeeper : jsBookkeeper,
+				presentationFactory : presentationFactory,
+				metadataControllerFactory : metadataControllerFactory,
+				metadataValidatorFactory : metadataValidatorFactory,
+				presentationHolderFactory : CORA.presentationHolderFactory(dependenciesPHF)
 			};
 			return CORA.recordGui(dependenciesRG, spec);
 		};
@@ -107,9 +106,9 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			type: "recordGuiFactory",
-			factor: factor,
-			getDependencies: getDependencies
+			type : "recordGuiFactory",
+			factor : factor,
+			getDependencies : getDependencies
 		});
 
 		self = out;

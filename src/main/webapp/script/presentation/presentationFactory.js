@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Olov McKie
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -34,7 +34,8 @@ var CORA = (function(cora) {
 				"infoFactory" : infoFactory
 			};
 			let pVarViewFactory = CORA.genericFactory("pVarView", pVarViewFactoryDependencies);
-			let pNumVarViewFactory = CORA.genericFactory("pNumVarView", pVarViewFactoryDependencies);
+			let pNumVarViewFactory = CORA
+					.genericFactory("pNumVarView", pVarViewFactoryDependencies);
 
 			let pRepeatingElementFactoryDependencies = {
 				"infoFactory" : infoFactory,
@@ -111,7 +112,7 @@ var CORA = (function(cora) {
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation,
 				"cParentPresentation" : cParentPresentation
-				
+
 			};
 
 			let type = cPresentation.getData().attributes.type;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -21,44 +21,46 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.searchHandlerFactory = function(dependencies) {
 
-		function factor(spec) {
-			var viewDep = {
-				"textProvider" : dependencies.providers.textProvider
+		const factor = function(spec) {
+			let viewDep = {
+				"textProvider": dependencies.providers.textProvider
 			};
 
-			var depRecordHandlerFactory = {
-				"recordHandlerViewFactory" : CORA.recordHandlerViewFactory(),
-				"ajaxCallFactory" : dependencies.globalFactories.ajaxCallFactory,
-				"recordGuiFactory" : dependencies.globalFactories.recordGuiFactory,
-				"managedGuiItemFactory" : dependencies.globalFactories.managedGuiItemFactory
+			let depRecordHandlerFactory = {
+				recordHandlerViewFactory: CORA.recordHandlerViewFactory(),
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				recordGuiFactory: dependencies.globalFactories.recordGuiFactory,
+				managedGuiItemFactory: dependencies.globalFactories.managedGuiItemFactory,
+				metadataProvider: dependencies.providers.metadataProvider
 			};
-			var recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);
 
-			var depResultHandler = {
-				"textProvider" : dependencies.providers.textProvider,
-				"recordHandlerFactory" : recordHandlerFactory,
-				"ajaxCallFactory" : dependencies.globalFactories.ajaxCallFactory,
-				"recordGuiFactory" : dependencies.globalFactories.recordGuiFactory
+			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);
+
+			let depResultHandler = {
+				textProvider: dependencies.providers.textProvider,
+				recordHandlerFactory: recordHandlerFactory,
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				recordGuiFactory: dependencies.globalFactories.recordGuiFactory
 			};
-			var dep = {
-				"searchHandlerViewFactory" : CORA.searchHandlerViewFactory(viewDep),
-				"managedGuiItemFactory" : dependencies.globalFactories.managedGuiItemFactory,
-				"recordGuiFactory" : dependencies.globalFactories.recordGuiFactory,
-				"ajaxCallFactory" : dependencies.globalFactories.ajaxCallFactory,
-				"resultHandlerFactory" : CORA.resultHandlerFactory(depResultHandler),
-				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
+			let dep = {
+				searchHandlerViewFactory: CORA.searchHandlerViewFactory(viewDep),
+				managedGuiItemFactory: dependencies.globalFactories.managedGuiItemFactory,
+				recordGuiFactory: dependencies.globalFactories.recordGuiFactory,
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				resultHandlerFactory: CORA.resultHandlerFactory(depResultHandler),
+				jsClient: dependencies.providers.clientInstanceProvider.getJsClient()
 			};
 			return CORA.searchHandler(dep, spec);
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "searchHandlerFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			type: "searchHandlerFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 	};
 	return cora;

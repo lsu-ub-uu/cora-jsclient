@@ -19,84 +19,99 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordGuiFactory = function(dependencies) {
-		var metadataProvider = dependencies.providers.metadataProvider;
-		var textProvider = dependencies.providers.textProvider;
+		let metadataProvider = dependencies.providers.metadataProvider;
+		let textProvider = dependencies.providers.textProvider;
 
-		var self;
+		let self;
 
-		var factor = function(spec) {
-			var metadataId = spec.metadataId;
-			var dataDivider = spec.dataDivider;
+		let factor = function(spec) {
+			let metadataId = spec.metadataId;
+			let dataDivider = spec.dataDivider;
 
-			var pubSub = CORA.pubSub();
+			let pubSub = CORA.pubSub();
 
-			var specDataHolder = {
-				"metadataId" : metadataId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub
+			let specDataHolder = {
+				metadataId: metadataId,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub
 			};
-			var dataHolder = CORA.dataHolder(specDataHolder);
+			
+			let dataHolder = CORA.dataHolder(specDataHolder);
 
-			var specJSBookkeeper = {
-				"metadataId" : metadataId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"dataHolder" : dataHolder
+			let specJSBookkeeper = {
+				metadataId: metadataId,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				dataHolder: dataHolder
 			};
-			var depJSBookkeeper = {
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider
+			
+			let depJSBookkeeper = {
+				recordTypeProvider: dependencies.providers.recordTypeProvider
 			};
-			var jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
+			
+			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
-			var dependenciesPresentationFactory = {
-				"providers" : dependencies.providers,
-				"globalFactories" : dependencies.globalFactories,
-				"authTokenHolder" : dependencies.authTokenHolder,
-				"pubSub" : pubSub,
-				"jsBookkeeper" : jsBookkeeper,
-				"recordGuiFactory" : self,
-				"dataDivider" : dataDivider,
-				"uploadManager" : dependencies.uploadManager,
-				"ajaxCallFactory" : dependencies.ajaxCallFactory
+			let dependenciesPresentationFactory = {
+				providers: dependencies.providers,
+				globalFactories: dependencies.globalFactories,
+				authTokenHolder: dependencies.authTokenHolder,
+				pubSub: pubSub,
+				jsBookkeeper: jsBookkeeper,
+				recordGuiFactory: self,
+				dataDivider: dataDivider,
+				uploadManager: dependencies.uploadManager,
+				ajaxCallFactory: dependencies.ajaxCallFactory
 			};
-			var presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory);
 
-			var dependenciesCF = {
-				"metadataProvider" : metadataProvider,
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
-				"pubSub" : pubSub
+			let dependenciesCF = {
+				metadataProvider: metadataProvider,
+				recordTypeProvider: dependencies.providers.recordTypeProvider,
+				pubSub: pubSub
 			};
-			var metadataControllerFactory = CORA.metadataControllerFactory(dependenciesCF);
 
-			var dependenciesMV = {
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub
+
+			let dependenciesMV = {
+				metadataProvider: metadataProvider,
+				pubSub: pubSub
 			};
-			var metadataValidatorFactory = CORA.metadataValidatorFactory(dependenciesMV);
 
-			var dependenciesRG = {
-				"metadataProvider" : metadataProvider,
-				"textProvider" : textProvider,
-				"pubSub" : pubSub,
-				"dataHolder" : dataHolder,
-				"jsBookkeeper" : jsBookkeeper,
-				"presentationFactory" : presentationFactory,
-				"metadataControllerFactory" : metadataControllerFactory,
-				"metadataValidatorFactory" : metadataValidatorFactory,
-				"presentationHolderFactory" : CORA.presentationHolderFactory()
+			let metadataValidatorFactory = CORA.metadataValidatorFactory(dependenciesMV);
+
+			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory);
+
+			let dependenciesPHF = {
+				metadataProvider: metadataProvider,
+				presentationFactory: presentationFactory,
+				pubSub: pubSub
+			};
+
+			let metadataControllerFactory = CORA.metadataControllerFactory(dependenciesCF);
+
+			let dependenciesRG = {
+				metadataProvider: metadataProvider,
+				textProvider: textProvider,
+				pubSub: pubSub,
+				dataHolder: dataHolder,
+				jsBookkeeper: jsBookkeeper,
+				presentationFactory: presentationFactory,
+				metadataControllerFactory: metadataControllerFactory,
+				metadataValidatorFactory: metadataValidatorFactory,
+				presentationHolderFactory: CORA.presentationHolderFactory(dependenciesPHF)
 			};
 			return CORA.recordGui(dependenciesRG, spec);
-
 		};
-		function getDependencies() {
+
+		const getDependencies = function() {
 			return dependencies;
-		}
-		var out = Object.freeze({
-			"type" : "recordGuiFactory",
-			factor : factor,
-			getDependencies : getDependencies
+		};
+
+		let out = Object.freeze({
+			type: "recordGuiFactory",
+			factor: factor,
+			getDependencies: getDependencies
 		});
+
 		self = out;
 		return out;
 	};

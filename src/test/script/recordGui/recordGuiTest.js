@@ -37,7 +37,8 @@ QUnit.module("recordGui/recordGuiTest.js", {
 			"metadataId": "someMetadataId",
 			"data": {},
 			"dataDivider": "someDataDivider",
-			permissions: { write: ["someWritePermission"] }
+			permissions: { write: ["someWritePermission"] },
+			recordPartPermissionCalculator : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	},
 	afterEach: function() {
@@ -94,6 +95,7 @@ QUnit.test("testGetPresentationHolderHasCorrectSpec", function(assert) {
 	assert.strictEqual(factoredSpec.jsBookkeeper, this.dependencies.jsBookkeeper);
 	assert.strictEqual(factoredSpec.presentationFactory, this.dependencies.presentationFactory);
 	assert.strictEqual(factoredSpec.permissions, this.spec.permissions);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });
 
 QUnit.test("testInitMetadataControllerStartingGui", function(assert) {

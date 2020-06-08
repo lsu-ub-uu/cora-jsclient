@@ -112,7 +112,7 @@ var CORA = (function(cora) {
 				handleMultiplePresentationsOf(cPresentationChildRef, cPresentationChild, refId);
 			}
 
-			else if (presentationHasSinglePresentationOf(cPresentationChild)) {
+			else {
 				handleSinglePresentationOf(cPresentationChildRef,
 						cPresentationChild, refId);
 			}

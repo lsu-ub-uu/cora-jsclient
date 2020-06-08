@@ -96,7 +96,9 @@ var CORA = (function(cora) {
 			let metadataId = metadataForRecordType.newMetadataId;
 
 			let permissions = createEmptyPermissions();
-			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions);
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, permissions);
+
+			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions, recordPartPermissionCalculator);
 
 			createAndAddViewsForNew(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
@@ -116,12 +118,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
+		const createRecordGui = function(metadataId, data, dataDivider, permissions,
+				recordPartPermissionCalculator) {
 			let recordGuiSpec = {
 				metadataId : metadataId,
 				data : data,
 				dataDivider : dataDivider,
-				permissions : permissions
+				permissions : permissions,
+				recordPartPermissionCalculator : recordPartPermissionCalculator
 			};
 
 			let createdRecordGui = dependencies.recordGuiFactory.factor(recordGuiSpec);
@@ -264,7 +268,7 @@ var CORA = (function(cora) {
 
 		const preparePermissionsForRecordGuiFromFetchedRecord = function() {
 			let fetchedPermissions = fetchedRecord.permissions;
-			
+
 			let permissions = createEmptyPermissions();
 			return possiblyAddFetchedPermissions(permissions, fetchedPermissions);
 		};
@@ -313,7 +317,10 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 
 			let metadataId = metadataForRecordType.metadataId;
-			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, permissions);
+
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
+					recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
 
@@ -322,6 +329,15 @@ var CORA = (function(cora) {
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
 		};
+		
+		const createRecordPartPermissionCalculator = function(metadataId, permissions){
+			let calculatorSpec = {
+					metadataId : metadataId,
+					permissions : permissions
+				}
+				return dependencies.recordPartPermissionCalculatorFactory
+						.factor(calculatorSpec);
+		}
 
 		const createAndAddViewsForExisting = function(recordGuiIn, metadataId) {
 			if ("true" !== spec.partOfList) {
@@ -511,8 +527,9 @@ var CORA = (function(cora) {
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
 			let permissions = recordGuiSpec.permissions;
-
-			recordGui = createRecordGui(metadataId, data, dataDivider, permissions);
+			let recordPartPermissionCalculator = recordGuiSpec.recordPartPermissionCalculator;
+			
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions, recordPartPermissionCalculator);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
 			} else {

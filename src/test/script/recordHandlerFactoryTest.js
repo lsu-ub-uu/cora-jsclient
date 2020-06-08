@@ -20,90 +20,110 @@
 "use strict";
 
 QUnit.module("recordHandlerFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 
 		this.recordGuiFactorySpy = {
-			"factor": function (metadataId, data, dataDivider) {
+			"factor": function(metadataId, data, dataDivider) {
 				metadataIdUsed.push(metadataId);
 				dataDividerUsed.push(dataDivider);
 				return recordGui;
 			},
 
-			getDependencies: function () {
-			var dep = {"uploadManager": CORATEST.uploadManagerSpy()};
-			return dep;
+			getDependencies: function() {
+				let dep = {
+					"uploadManager": CORATEST.uploadManagerSpy()
+				};
+				return dep;
 			}
 		};
 
 		this.dependencies = {
-			"globalFactories" : {
-				"dummy" : "dummy"
+			"globalFactories": {
+				"dummy": "dummy"
 			},
-			"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy(),
-			"recordGuiFactory" : this.recordGuiFactorySpy,
-			"managedGuiItemFactory" : CORATEST.standardFactorySpy("managedGuiItemSpy")
+			"ajaxCallFactory": CORATEST.ajaxCallFactorySpy(),
+			"recordGuiFactory": this.recordGuiFactorySpy,
+			"managedGuiItemFactory": CORATEST.standardFactorySpy("managedGuiItemSpy"),
+			metadataProvider: CORATEST.metadataProviderSpy()
 		};
 
 		this.spec = {
-			"fetchLatestDataFromServer" : "true",
-			"createNewRecord" : "false",
-			"record" : CORATEST.recordTypeList.dataList.data[4].record,
-			"jsClient" : CORATEST.jsClientSpy()
+			"fetchLatestDataFromServer": "true",
+			"createNewRecord": "false",
+			"record": CORATEST.recordTypeList.dataList.data[4].record,
+			"jsClient": CORATEST.jsClientSpy()
 		};
 
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
 	assert.ok(recordHandlerFactory);
 	assert.strictEqual(recordHandlerFactory.type, "recordHandlerFactory");
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
 	assert.strictEqual(recordHandlerFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-	var recordHandler = recordHandlerFactory.factor(this.spec);
-	var factoredDependencies = recordHandler.getDependencies();
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandler = recordHandlerFactory.factor(this.spec);
+	let factoredDependencies = recordHandler.getDependencies();
 	assert.strictEqual(factoredDependencies.globalFactories, this.dependencies.globalFactories);
 	assert.strictEqual(factoredDependencies.recordHandlerFactory, recordHandlerFactory);
 	assert.strictEqual(factoredDependencies.ajaxCallFactory, this.dependencies.ajaxCallFactory);
 	assert.strictEqual(factoredDependencies.recordGuiFactory, this.dependencies.recordGuiFactory);
 	assert.strictEqual(factoredDependencies.managedGuiItemFactory,
-			this.dependencies.managedGuiItemFactory);
+		this.dependencies.managedGuiItemFactory);
 	assert.strictEqual(factoredDependencies.recordHandlerViewFactory.type,
-			"recordHandlerViewFactory")      ;
-			assert.strictEqual(factoredDependencies.indexHandlerFactory.type,
-			"genericFactory");
+		"recordHandlerViewFactory");
+	assert.strictEqual(factoredDependencies.indexHandlerFactory.type, "genericFactory");
+	assert.strictEqual(factoredDependencies.recordPartPermissionCalculatorFactory.type,
+		"genericFactory");
 });
 
 QUnit.test("factorTestType", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-	var recordHandler = recordHandlerFactory.factor(this.spec);
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandler = recordHandlerFactory.factor(this.spec);
 	assert.strictEqual(recordHandler.type, "recordHandler");
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-	var recordHandler = recordHandlerFactory.factor(this.spec);
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandler = recordHandlerFactory.factor(this.spec);
 	assert.strictEqual(recordHandler.getSpec(), this.spec);
 });
 
-QUnit.test("testIndexHandlerFactoryDependencies", function(assert) {
-	var recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-	var recordHandler = recordHandlerFactory.factor(this.spec);
-	var factoredDependencies = recordHandler.getDependencies();
-	var indexHandlerFactory = factoredDependencies.indexHandlerFactory;
-	assert.strictEqual(indexHandlerFactory.getTypeToFactor(), "indexHandler");
-	
-	var indexHandlerDependencies = factoredDependencies.indexHandlerFactory.getDependencies();
-	assert.strictEqual(indexHandlerDependencies.ajaxCallFactory, this.dependencies.ajaxCallFactory);
-});
+QUnit.test("testIndexHandlerFactoryDependencies",
+	function(assert) {
+		let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+		let recordHandler = recordHandlerFactory.factor(this.spec);
+		let factoredDependencies = recordHandler.getDependencies();
+		let indexHandlerFactory = factoredDependencies.indexHandlerFactory;
+		assert.strictEqual(indexHandlerFactory.getTypeToFactor(), "indexHandler");
 
+		let indexHandlerDependencies = factoredDependencies.indexHandlerFactory
+			.getDependencies();
+		assert.strictEqual(indexHandlerDependencies.ajaxCallFactory,
+			this.dependencies.ajaxCallFactory);
+	});
+
+QUnit.test("testRecordPartPermissionCalculatorFactoryDependencies",
+	function(assert) {
+		let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+		let recordHandler = recordHandlerFactory.factor(this.spec);
+		let factoredDependencies = recordHandler.getDependencies();
+		let recordPartPermissionCalculatorFactory = factoredDependencies.recordPartPermissionCalculatorFactory;
+		assert.strictEqual(recordPartPermissionCalculatorFactory.getTypeToFactor(), "recordPartPermissionCalculator");
+
+		let calculatorDependencies = recordPartPermissionCalculatorFactory
+			.getDependencies();
+		assert.strictEqual(calculatorDependencies.metadataProvider,
+			this.dependencies.metadataProvider);
+	});

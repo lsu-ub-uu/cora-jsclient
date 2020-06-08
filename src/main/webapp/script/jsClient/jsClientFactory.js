@@ -95,7 +95,8 @@ var CORA = (function(cora) {
 				"clientInstanceProvider" : providers.clientInstanceProvider,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"recordGuiFactory" : recordGuiFactory,
-				"managedGuiItemFactory" : managedGuiItemFactory
+				"managedGuiItemFactory" : managedGuiItemFactory,
+				metadataProvider : providers.metadataProvider
 			};
 			var recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandler);
 

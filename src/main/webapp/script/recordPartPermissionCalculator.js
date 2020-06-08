@@ -38,6 +38,13 @@ var CORA = (function(cora) {
 				handleRecordPartPermissionsForChildReference(childReference);
 			});
 		};
+		
+		const getChildReferences = function() {
+			let metadataGroup = metadataProvider.getMetadataById(spec.metadataId);
+			let cMetadataGroup = CORA.coraData(metadataGroup);
+			return cMetadataGroup.getFirstChildByNameInData('childReferences');
+
+		};
 
 		const handleRecordPartPermissionsForChildReference = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
@@ -52,12 +59,7 @@ var CORA = (function(cora) {
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const getChildReferences = function() {
-			let metadataGroup = metadataProvider.getMetadataById(spec.metadataId);
-			let cMetadataGroup = CORA.coraData(metadataGroup);
-			return cMetadataGroup.getFirstChildByNameInData('childReferences');
-
-		};
+		
 
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {

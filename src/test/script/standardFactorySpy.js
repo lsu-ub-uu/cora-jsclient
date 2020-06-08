@@ -31,6 +31,9 @@ var CORATEST = (function(coraTest) {
 			let spySpecToUse = getSpySpecOrFromListIfListIsSet();
 			let factored = CORATEST[toFactor]({}, standardSpec, spySpecToUse);
 			factoredList.push(factored);
+//			if(extraInfo === "add"){
+//				console.log("pushing "+JSON.stringify(standardSpec) + "length "+factoredList.length)}
+//			
 			return factored;
 		};
 
@@ -78,4 +81,4 @@ var CORATEST = (function(coraTest) {
 		return out;
 	};
 	return coraTest;
-}(CORATEST));
+}(CORATEST || {}));

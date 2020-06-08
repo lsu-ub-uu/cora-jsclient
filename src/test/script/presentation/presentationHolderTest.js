@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,52 +17,23 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.attachedPresentationFactory = function(metadataProvider, pubSub, textProvider,
-			presentationFactory, jsBookkeeper, fixture) {
-		var factor = function(presentationId) {
-
-			var spec = {
-				"presentationId" : presentationId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"presentationFactory" : presentationFactory,
-				"jsBookkeeper" : jsBookkeeper
-
-			};
-			var presentation = CORA.presentationHolder(spec);
-
-			var view = presentation.getView();
-			fixture.appendChild(view);
-			return {
-				presentation : presentation,
-				fixture : fixture,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub,
-				textProvider : textProvider,
-				view : view
-			};
-
-		};
-		return Object.freeze({
-			factor : factor
-		});
-	};
-
-	return coraTest;
-}(CORATEST || {}));
-
 QUnit.module("presentation/presentationHolderTest.js", {
 	beforeEach : function() {
-		this.spec = {
-			"presentationId" : "pgGroupIdOneTextChild",
+		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
+
+		this.dependencies = {
 			"metadataProvider" : new MetadataProviderStub(),
 			"pubSub" : CORATEST.pubSubSpy(),
 			"textProvider" : CORATEST.textProviderStub(),
-			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
-			"jsBookkeeper" : CORATEST.jsBookkeeperSpy()
+			"presentationFactory" : this.presentationFactory,
+			"jsBookkeeper" : CORATEST.jsBookkeeperSpy(),
+
+		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		this.spec = {
+			"presentationId" : "pgGroupIdOneTextChild",
+			metadataIdUsedInData : "groupIdOneTextChild",
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 
 		this.fixture = document.getElementById("qunit-fixture");
@@ -70,39 +41,51 @@ QUnit.module("presentation/presentationHolderTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
-		this.newAttachedPresentation = CORATEST.attachedPresentationFactory(this.metadataProvider,
-				this.pubSub, this.textProvider, this.presentationFactory, this.jsBookkeeper,
-				this.fixture);
 	},
 	afterEach : function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	var presentationHolder = CORA.presentationHolder(this.spec);
+	let presentationHolder = CORA.presentationHolder(this.dependencies, this.spec);
 	assert.strictEqual(presentationHolder.type, "presentationHolder");
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var presentationHolder = CORA.presentationHolder(this.spec);
+	let presentationHolder = CORA.presentationHolder(this.dependencies, this.spec);
 	assert.strictEqual(presentationHolder.getSpec(), this.spec);
 });
 
-QUnit.test("testFactor", function(assert) {
-	var attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
-	var presentation = attachedPresentation.presentation;
-	assert.strictEqual(presentation.getPresentationId(), "pgGroupIdOneTextChild");
-	assert.ok(presentation.getPubSub());
+QUnit.test("testGetDependencies", function(assert) {
+	let presentationHolder = CORA.presentationHolder(this.dependencies, this.spec);
+	assert.strictEqual(presentationHolder.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testFactorPresentationCheckSpec", function(assert) {
+	CORA.presentationHolder(this.dependencies, this.spec);
+	let factoredSpec = this.presentationFactory.getSpec(0);
+
+	assert.strictEqual(factoredSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
+	assert.deepEqual(factoredSpec.path, {});
+
+	let requestedCPresentation = factoredSpec.cPresentation;
+	let recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
+	let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+
+	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
+
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator,
+			this.recordPartPermissionCalculator);
+
 });
 
 QUnit.test("testInitOneChild", function(assert) {
-	var attachedPresentation = this.newAttachedPresentation.factor("pgGroupIdOneTextChild");
-	var presentation = attachedPresentation.presentation;
+	let presentation = CORA.presentationHolder(this.dependencies, this.spec);
 
-	var requestedCPresentation = this.presentationFactory.getSpec(0).cPresentation;
-	var recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
+	let factoredPresentation = this.presentationFactory.getFactored(0);
+	let firstPresentationAddedToView = presentation.getView().firstChild;
 
-	var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
+	assert.strictEqual(factoredPresentation.getView(), firstPresentationAddedToView);
+	assert.strictEqual(presentation.getPresentationId(), "pgGroupIdOneTextChild");
+	assert.ok(presentation.getPubSub());
 });

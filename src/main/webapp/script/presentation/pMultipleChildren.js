@@ -44,7 +44,7 @@ var CORA = (function(cora) {
 			text = textProvider.getTranslation(textId);
 
 			let cDefTextGroup = CORA.coraData(cMetadataElement
-				.getFirstChildByNameInData("defTextId"));
+					.getFirstChildByNameInData("defTextId"));
 			defTextId = cDefTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			defText = textProvider.getTranslation(defTextId);
 
@@ -60,47 +60,130 @@ var CORA = (function(cora) {
 
 			if (my.cPresentation.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = my.cPresentation
-					.getFirstChildByNameInData("childReferences").children;
-				presentationChildren.forEach(
-					createAndAppendChildForPresentationChildRef
-				);
+						.getFirstChildByNameInData("childReferences").children;
+				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
 			originalClassName = view.className;
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
-			let childView = createViewForChild(presentationChildRef);
-			view.appendChild(childView);
+			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let refId = extractRefId(presentationChildRef);
+
+			let cPresentationChild = getMetadataById(refId);
+			if (constraintsShouldBeChecked() && presentationHasPresentationOf(cPresentationChild)) {
+				handleSingleOrMultiplePresentationOf(cPresentationChild, cPresentationChildRef,
+						refId);
+			} else {
+				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+				view.appendChild(childView);
+
+			}
 		};
+
+		const extractRefId = function(presentationChildRef) {
+			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let cRefGroup = CORA.coraData(cPresentationChildRef
+					.getFirstChildByNameInData("refGroup"));
+			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		}
+
+		const constraintsShouldBeChecked = function() {
+			return spec.recordPartPermissionCalculator != undefined;
+		}
+
+		const presentationHasPresentationOf = function(cPresentationChild) {
+			return presentationHasMultiplePresentationsOf(cPresentationChild)
+					|| presentationHasSinglePresentationOf(cPresentationChild);
+		}
+
+		const presentationHasMultiplePresentationsOf = function(cPresentationChild) {
+			return cPresentationChild.containsChildWithNameInData("presentationsOf");
+		}
+
+		const presentationHasSinglePresentationOf = function(cPresentationChild) {
+			return cPresentationChild.containsChildWithNameInData("presentationOf");
+		}
+
+		const handleSingleOrMultiplePresentationOf = function(cPresentationChild,
+				cPresentationChildRef, refId) {
+			if (presentationHasMultiplePresentationsOf(cPresentationChild)) {
+				handleMultiplePresentationsOf(cPresentationChildRef, cPresentationChild, refId);
+			}
+
+			else {
+				handleSinglePresentationOf(cPresentationChildRef,
+						cPresentationChild, refId);
+			}
+		}
+
+		const handleMultiplePresentationsOf = function(cPresentationChildRef, cPresentationChild,
+				refId) {
+			let presentationsOf = cPresentationChild.getFirstChildByNameInData("presentationsOf");
+			presentationsOf.children.forEach(function(containerChildReference) {
+				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
+						cPresentationChild, refId);
+			});
+		}
+
+		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
+				cPresentationChild, refId) {
+			let cChildReference = CORA.coraData(childReference);
+			let hasPermission = checkHasPermission(cChildReference);
+
+			if (hasPermission) {
+				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+				view.appendChild(childView);
+			}
+		}
+
+		const checkHasPermission = function(cChildReference) {
+			let presentationOfType = cChildReference
+					.getFirstAtomicValueByNameInData("linkedRecordType");
+			let presentationOfId = cChildReference
+					.getFirstAtomicValueByNameInData("linkedRecordId");
+			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
+					presentationOfType, presentationOfId);
+		}
+		
+		const handleSinglePresentationOf = function(cPresentationChildRef,
+				cPresentationChild, refId){
+			let presentationOfGroup = cPresentationChild
+			.getFirstChildByNameInData("presentationOf");
+
+	possiblyAppendChildView(presentationOfGroup, cPresentationChildRef,
+			cPresentationChild, refId);
+		}
 
 		const createInfo = function() {
 			let infoSpec = {
 				// "insertAfter" is set to infoButton below
-				"afterLevelChange": updateView,
-				"level1": [{
-					"className": "textView",
-					"text": text
+				"afterLevelChange" : updateView,
+				"level1" : [ {
+					"className" : "textView",
+					"text" : text
 				}, {
-					"className": "defTextView",
-					"text": defText
-				}],
-				"level2": [{
-					"className": "textIdView",
-					"text": "textId: " + textId
-					// onclickMethod : openTextIdRecord
+					"className" : "defTextView",
+					"text" : defText
+				} ],
+				"level2" : [ {
+					"className" : "textIdView",
+					"text" : "textId: " + textId
+				// onclickMethod : openTextIdRecord
 				}, {
-					"className": "defTextIdView",
-					"text": "defTextId: " + defTextId
+					"className" : "defTextIdView",
+					"text" : "defTextId: " + defTextId
 				}, {
-					"className": "metadataIdView",
-					"text": "metadataId: " + my.metadataId
+					"className" : "metadataIdView",
+					"text" : "metadataId: " + my.metadataId
 				}, {
-					"className": "technicalView",
-					"text": "nameInData: " + nameInData
+					"className" : "technicalView",
+					"text" : "nameInData: " + nameInData
 				}, {
-					"className": "technicalView",
-					"text": "presentationId: " + getPresentationId()
-				}]
+					"className" : "technicalView",
+					"text" : "presentationId: " + getPresentationId()
+				} ]
 			};
 			let newInfo = CORA.info(infoSpec);
 			infoSpec.insertAfter = newInfo.getButton();
@@ -115,15 +198,7 @@ var CORA = (function(cora) {
 			view.className = className;
 		};
 
-		const createViewForChild = function(presentationChildRef) {
-			let cPresentationChildRef = CORA.coraData(presentationChildRef);
-			let cRefGroup = CORA.coraData(cPresentationChildRef
-				.getFirstChildByNameInData("refGroup"));
-			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
-			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-
-			let cPresentationChild = getMetadataById(refId);
-
+		const createViewForChild = function(cPresentationChildRef, cPresentationChild, refId) {
 			if (childIsText(cPresentationChild)) {
 				return createText(refId, cPresentationChildRef);
 			}
@@ -134,7 +209,7 @@ var CORA = (function(cora) {
 
 			if (childIsSurroundingContainer(cPresentationChild)) {
 				let pNonRepeatingChildRefHandler = createPNonRepeatingChildRefHandler(
-					cPresentationChild, cPresentationChildRef);
+						cPresentationChild, cPresentationChildRef);
 				return pNonRepeatingChildRefHandler.getView();
 			}
 			return createPChildRefHandler(cPresentationChild, cPresentationChildRef);
@@ -148,11 +223,11 @@ var CORA = (function(cora) {
 			let textClassName = "text";
 			if (cPresentationChildRef.containsChildWithNameInData("textStyle")) {
 				textClassName += " "
-					+ cPresentationChildRef.getFirstAtomicValueByNameInData("textStyle");
+						+ cPresentationChildRef.getFirstAtomicValueByNameInData("textStyle");
 			}
 			if (cPresentationChildRef.containsChildWithNameInData("childStyle")) {
 				textClassName += " "
-					+ cPresentationChildRef.getFirstAtomicValueByNameInData("childStyle");
+						+ cPresentationChildRef.getFirstAtomicValueByNameInData("childStyle");
 			}
 			let textSpan = CORA.gui.createSpanWithClassName(textClassName);
 			textSpan.appendChild(document.createTextNode(textProvider.getTranslation(presRef)));
@@ -179,7 +254,7 @@ var CORA = (function(cora) {
 
 		const getTextForLink = function(cPresentationChild) {
 			let cElementTextGroup = CORA.coraData(cPresentationChild
-				.getFirstChildByNameInData("elementText"));
+					.getFirstChildByNameInData("elementText"));
 			let elementTextId = cElementTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return textProvider.getTranslation(elementTextId);
 		};
@@ -188,19 +263,23 @@ var CORA = (function(cora) {
 			return "children" === cPresentationChild.getData().attributes.repeat;
 		};
 
-		const createPNonRepeatingChildRefHandler = function(cPresentationChild, cPresentationChildRef) {
-			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild, cPresentationChildRef);
+		const createPNonRepeatingChildRefHandler = function(cPresentationChild,
+				cPresentationChildRef) {
+			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
+					cPresentationChildRef);
 			childRefHandlerSpec.parentMetadataId = my.metadataId;
-			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
+			let factored = dependencies.pNonRepeatingChildRefHandlerFactory
+					.factor(childRefHandlerSpec);
+			return factored;
 		};
 
 		const createChildRefHandlerCommonSpec = function(cPresentationChild, cPresentationChildRef) {
 			let childRefHandlerSpec = {
-				parentPath: path,
-				cPresentation: cPresentationChild,
-				cParentPresentation: my.cParentPresentation,
-				mode: mode,
-				presentationSize: "bothEqual"
+				parentPath : path,
+				cPresentation : cPresentationChild,
+				cParentPresentation : my.cParentPresentation,
+				mode : mode,
+				presentationSize : "bothEqual"
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
@@ -210,16 +289,16 @@ var CORA = (function(cora) {
 		const possiblyAddStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("textStyle")) {
 				childRefHandlerSpec.textStyle = cPresentationChildRef
-					.getFirstAtomicValueByNameInData("textStyle");
+						.getFirstAtomicValueByNameInData("textStyle");
 			}
 			if (cPresentationChildRef.containsChildWithNameInData("childStyle")) {
 				childRefHandlerSpec.childStyle = cPresentationChildRef
-					.getFirstAtomicValueByNameInData("childStyle");
+						.getFirstAtomicValueByNameInData("childStyle");
 			}
 		};
 
 		const possiblyAddAlternativePresentationToSpec = function(cPresentationChildRef,
-			childRefHandlerSpec) {
+				childRefHandlerSpec) {
 			if (childHasAlternativePresentation(cPresentationChildRef)) {
 				let cAlternativePresentation = getAlternativePresenation(cPresentationChildRef);
 				childRefHandlerSpec.cAlternativePresentation = cAlternativePresentation;
@@ -227,9 +306,11 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const possiblySetNonDefaultPresentationSize = function(cPresentationChildRef, childRefHandlerSpec) {
+		const possiblySetNonDefaultPresentationSize = function(cPresentationChildRef,
+				childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("presentationSize")) {
-				childRefHandlerSpec.presentationSize = cPresentationChildRef.getFirstAtomicValueByNameInData("presentationSize");
+				childRefHandlerSpec.presentationSize = cPresentationChildRef
+						.getFirstAtomicValueByNameInData("presentationSize");
 			}
 		};
 
@@ -237,35 +318,37 @@ var CORA = (function(cora) {
 			return cChildRef.getNoOfChildrenWithNameInData("refGroup") === 2;
 		};
 
-		const possiblyAddAddTextToSpec = function(cPresentationChildRef,
-			childRefHandlerSpec) {
+		const possiblyAddAddTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("addText")) {
-				let cTextGroup = CORA.coraData(cPresentationChildRef.getFirstChildByNameInData("addText"));
+				let cTextGroup = CORA.coraData(cPresentationChildRef
+						.getFirstChildByNameInData("addText"));
 				let addText = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 				childRefHandlerSpec.addText = addText;
 			}
 		};
 
 		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef) {
-			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild, cPresentationChildRef);
+			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
+					cPresentationChildRef);
 			childRefHandlerSpec.cParentMetadata = cMetadataElement;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
-					.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
+						.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
 			}
+			// console.log("factor "+JSON.stringify(cPresentationChild.getData()))
 			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
 			return pChildRefHandler.getView();
 		};
 
 		const getAlternativePresenation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef
-				.getChildByNameInDataAndIndex("refGroup", 1));
+					.getChildByNameInDataAndIndex("refGroup", 1));
 
 			let cAlternativePresRef = CORA.coraData(cAlternativePresRefGroup
-				.getFirstChildByNameInData("ref"));
+					.getFirstChildByNameInData("ref"));
 			let alternativePresRefId = cAlternativePresRef
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+					.getFirstAtomicValueByNameInData("linkedRecordId");
 			return getMetadataById(alternativePresRefId);
 		};
 
@@ -283,10 +366,10 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			"type": "pMultipleChildren",
-			getPresentationId: getPresentationId,
-			init: init,
-			getView: getView
+			"type" : "pMultipleChildren",
+			getPresentationId : getPresentationId,
+			init : init,
+			getView : getView
 		});
 	};
 	return cora;

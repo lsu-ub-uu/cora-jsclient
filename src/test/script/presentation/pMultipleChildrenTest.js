@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2017, 2019 Uppsala University Library
+ * Copyright 2017, 2019, 2020 Uppsala University Library
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -38,9 +38,12 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 			"pNonRepeatingChildRefHandlerFactory" : CORATEST
 					.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		
 		this.spec = {
 			"metadataIdUsedInData" : "groupIdOneTextChildRepeat1to3",
 			"path" : {},
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 		var createBaseViewHolder = function() {
 			return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
@@ -362,3 +365,79 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
+
+/********/
+QUnit.test("testSurroundingContainerPermissionCalculatorCalledForEachChild", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+
+	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), "metadataTextVariable_textVariableId2");
+	
+});
+
+QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+
+	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	let view = pMultipleChildren.getView();
+	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
+	let factored2 = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1);
+	assert.strictEqual(view.childNodes[1], factored.getView());
+	assert.strictEqual(view.childNodes[2], factored2.getView());
+	
+	let factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
+
+	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
+	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
+	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
+	
+});
+
+QUnit.test("testSurroundingContainerPermissionWhenOeChildOkOneNotOk", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChild";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("pgGroupIdTwoTextChild"));
+	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("pgGroupIdTwoTextChild"));
+	
+	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId2");
+
+	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	let view = pMultipleChildren.getView();
+	let factored = this.dependencies.pChildRefHandlerFactory.getFactored(0);
+	let factored2 = this.dependencies.pChildRefHandlerFactory.getFactored(1);
+	assert.strictEqual(view.childNodes[1], factored.getView());
+	
+	assert.strictEqual(factored2, undefined);
+});
+
+QUnit.test("testPGroupPermissionCalculatorCalledForEachChild", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+
+	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), "metadataTextVariable_textVariableId2");
+	
+});
+

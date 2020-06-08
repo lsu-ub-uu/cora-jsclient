@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2018 Uppsala University Library
+ * Copyright 2017, 2018, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -20,80 +20,80 @@
 "use strict";
 
 QUnit.module("search/searchHandlerFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.providers = {
-			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-			"textProvider" : CORATEST.textProviderSpy(),
-			"metadataProvider" : CORATEST.metadataProviderSpy(),
-			"searchProvider" : CORATEST.searchProviderSpy(),
-			"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy()
+			"recordTypeProvider": CORATEST.recordTypeProviderSpy(),
+			"textProvider": CORATEST.textProviderSpy(),
+			"metadataProvider": CORATEST.metadataProviderSpy(),
+			"searchProvider": CORATEST.searchProviderSpy(),
+			"clientInstanceProvider": CORATEST.clientInstanceProviderSpy()
 		};
 		this.globalFactories = {
-			"ajaxCallFactory" : CORATEST.standardFactorySpy("ajaxCallSpy"),
-			"recordGuiFactory" : CORATEST.standardFactorySpy("recordGuiSpy"),
-			"managedGuiItemFactory" : CORATEST.standardFactorySpy("managedGuiItemSpy")
+			"ajaxCallFactory": CORATEST.standardFactorySpy("ajaxCallSpy"),
+			"recordGuiFactory": CORATEST.standardFactorySpy("recordGuiSpy"),
+			"managedGuiItemFactory": CORATEST.standardFactorySpy("managedGuiItemSpy")
 		};
 		this.dependencies = {
-			"providers" : this.providers,
-			"globalFactories" : this.globalFactories
+			"providers": this.providers,
+			"globalFactories": this.globalFactories
 
 		};
 		this.spec = {
-			"metadataId" : "someMetadataId",
-			"presentationId" : "somePresentationId",
-			"searchLink" : {
-				"requestMethod" : "GET",
-				"rel" : "search",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/searchResult/coraTextSearch",
-				"accept" : "application/vnd.uub.recordList+json"
+			"metadataId": "someMetadataId",
+			"presentationId": "somePresentationId",
+			"searchLink": {
+				"requestMethod": "GET",
+				"rel": "search",
+				"url": "http://epc.ub.uu.se/cora/rest/record/searchResult/coraTextSearch",
+				"accept": "application/vnd.uub.recordList+json"
 			}
 		};
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("init", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
 	assert.strictEqual(searchHandlerFactory.type, "searchHandlerFactory");
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
 	assert.strictEqual(searchHandlerFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-	var searchHandler = searchHandlerFactory.factor(this.spec);
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandler = searchHandlerFactory.factor(this.spec);
 	assert.strictEqual(searchHandler.type, "searchHandler");
 });
 
 QUnit.test("testFactorAddedIncomingDependencies", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-	var searchHandler = searchHandlerFactory.factor(this.spec);
-	var addedDep = searchHandler.getDependencies();
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandler = searchHandlerFactory.factor(this.spec);
+	let addedDep = searchHandler.getDependencies();
 	assert.strictEqual(addedDep.recordGuiFactory, this.globalFactories.recordGuiFactory);
 	assert.strictEqual(addedDep.ajaxCallFactory, this.globalFactories.ajaxCallFactory);
 	assert.strictEqual(addedDep.jsClient, this.providers.clientInstanceProvider.getJsClient());
 });
 
 QUnit.test("testFactorAddedCreatedDependencies", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-	var searchHandler = searchHandlerFactory.factor(this.spec);
-	var addedDep = searchHandler.getDependencies();
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandler = searchHandlerFactory.factor(this.spec);
+	let addedDep = searchHandler.getDependencies();
 	assert.strictEqual(addedDep.searchHandlerViewFactory.type, "searchHandlerViewFactory");
 	assert.strictEqual(addedDep.searchHandlerViewFactory.getDependencies().textProvider,
-			this.providers.textProvider);
+		this.providers.textProvider);
 	assert.strictEqual(addedDep.managedGuiItemFactory, this.globalFactories.managedGuiItemFactory);
 });
 
 QUnit.test("testFactorAddedDependenciesResultHandlerFactory", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-	var searchHandler = searchHandlerFactory.factor(this.spec);
-	var addedDep = searchHandler.getDependencies();
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandler = searchHandlerFactory.factor(this.spec);
+	let addedDep = searchHandler.getDependencies();
 	assert.strictEqual(addedDep.resultHandlerFactory.type, "resultHandlerFactory");
-	var dependenciesRH = addedDep.resultHandlerFactory.getDependencies();
+	let dependenciesRH = addedDep.resultHandlerFactory.getDependencies();
 	assert.strictEqual(dependenciesRH.textProvider, this.providers.textProvider);
 	assert.strictEqual(dependenciesRH.ajaxCallFactory, this.globalFactories.ajaxCallFactory);
 	assert.strictEqual(dependenciesRH.ajaxCallFactory, this.globalFactories.ajaxCallFactory);
@@ -102,14 +102,16 @@ QUnit.test("testFactorAddedDependenciesResultHandlerFactory", function(assert) {
 });
 
 QUnit.test("testFactorAddedDependenciesRecordHandlerFactory", function(assert) {
-	var searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-	var searchHandler = searchHandlerFactory.factor(this.spec);
-	var addedDep = searchHandler.getDependencies();
-	var dependenciesRH = addedDep.resultHandlerFactory.getDependencies();
-	var depRecordHandler = dependenciesRH.recordHandlerFactory.getDependencies();
+	let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
+	let searchHandler = searchHandlerFactory.factor(this.spec);
+	let addedDep = searchHandler.getDependencies();
+	let dependenciesRH = addedDep.resultHandlerFactory.getDependencies();
+	let depRecordHandler = dependenciesRH.recordHandlerFactory.getDependencies();
 	assert.strictEqual(depRecordHandler.recordHandlerViewFactory.type, "recordHandlerViewFactory");
 	assert.strictEqual(depRecordHandler.ajaxCallFactory, this.globalFactories.ajaxCallFactory);
 	assert.strictEqual(depRecordHandler.recordGuiFactory, this.globalFactories.recordGuiFactory);
 	assert.strictEqual(depRecordHandler.managedGuiItemFactory,
-			this.globalFactories.managedGuiItemFactory);
+		this.globalFactories.managedGuiItemFactory);
+	assert.strictEqual(depRecordHandler.metadataProvider,
+		this.providers.metadataProvider);
 });

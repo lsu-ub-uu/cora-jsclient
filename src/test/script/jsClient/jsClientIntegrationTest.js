@@ -52,16 +52,19 @@ var CORATEST = (function(coraTest) {
 			};
 			var presentationFactory = CORA.presentationFactory(specPresentationFactory);
 
+			var holderDependencies = {
+					"metadataProvider" : metadataProvider,
+					"pubSub" : pubSub,
+					"textProvider" : textProvider,
+					"jsBookkeeper" : jsBookkeeper,
+					"presentationFactory" : presentationFactory
+			};
 			var spec = {
 				"presentationId" : presentationId,
 				"metadataIdUsedInData" : metadataIdUsedInData,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"jsBookkeeper" : jsBookkeeper,
-				"presentationFactory" : presentationFactory
+				
 			};
-			var presentation = CORA.presentationHolder(spec);
+			var presentation = CORA.presentationHolder(holderDependencies, spec);
 
 			// // log all messages
 			// pubSub.subscribe("*", {}, undefined, function(dataFromMsg, msg) {

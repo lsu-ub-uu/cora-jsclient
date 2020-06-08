@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2020 Uppsala University Library
  *  Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -95,7 +95,8 @@ var CORA = (function(cora) {
 				"clientInstanceProvider" : providers.clientInstanceProvider,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"recordGuiFactory" : recordGuiFactory,
-				"managedGuiItemFactory" : managedGuiItemFactory
+				"managedGuiItemFactory" : managedGuiItemFactory,
+				metadataProvider : providers.metadataProvider
 			};
 			var recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandler);
 

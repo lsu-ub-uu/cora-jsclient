@@ -34,7 +34,8 @@ var CORATEST = (function(coraTest) {
 			"permissions": {
 				"write": [],
 				"read": []
-			}
+			},
+			recordPartPermissionCalculator: CORATEST.recordPartPermissionCalculatorSpy
 		};
 		const getDependencies = function() {
 			return dependencies;
@@ -102,4 +103,4 @@ var CORATEST = (function(coraTest) {
 		return out;
 	};
 	return coraTest;
-}(CORATEST));
+}(CORATEST || {}));

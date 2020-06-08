@@ -20,33 +20,36 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordHandlerFactory = function(dependencies) {
-		var out;
-		var indexHandlerDep = {
-			"ajaxCallFactory" : dependencies.ajaxCallFactory
+		let out;
+		let indexHandlerDep = {
+			"ajaxCallFactory": dependencies.ajaxCallFactory
 		};
+		let calculatorFactoryDep = {
+			metadataProvider : dependencies.metadataProvider
+		}
 
-		var dep = {
-			"globalFactories" : dependencies.globalFactories,
-			"recordHandlerViewFactory" : CORA.recordHandlerViewFactory(),
-			"ajaxCallFactory" : dependencies.ajaxCallFactory,
-			"recordGuiFactory" : dependencies.recordGuiFactory,
-			"managedGuiItemFactory" : dependencies.managedGuiItemFactory,
-			"indexHandlerFactory" : CORA.genericFactory("indexHandler",
-					indexHandlerDep)
+		let dep = {
+			"globalFactories": dependencies.globalFactories,
+			"recordHandlerViewFactory": CORA.recordHandlerViewFactory(),
+			"ajaxCallFactory": dependencies.ajaxCallFactory,
+			"recordGuiFactory": dependencies.recordGuiFactory,
+			"managedGuiItemFactory": dependencies.managedGuiItemFactory,
+			"indexHandlerFactory": CORA.genericFactory("indexHandler", indexHandlerDep),
+			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
 		};
-		function factor(recordHandlerSpec) {
+		const factor = function(recordHandlerSpec) {
 			dep.recordHandlerFactory = out;
 			return CORA.recordHandler(dep, recordHandlerSpec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "recordHandlerFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			"type": "recordHandlerFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 		return out;
 	};

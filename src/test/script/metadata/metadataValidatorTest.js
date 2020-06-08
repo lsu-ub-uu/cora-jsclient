@@ -19,26 +19,6 @@
  */
 "use strict";
 
-//CORATEST.metadataValidatorFactory = function(metadataProvider, pubSub) {
-//	let factor = function(metadataId, data) {
-//
-//		let spec = {
-//			"metadataId": metadataId,
-//			"data": data,
-//			"metadataProvider": metadataProvider,
-//			"pubSub": pubSub
-//		};
-//		let validationResult = CORA.metadataValidator(spec).validate();
-//		return {
-//			validationResult: validationResult,
-//			metadataProvider: metadataProvider,
-//			pubSub: pubSub
-//		};
-//	};
-//	return Object.freeze({
-//		factor: factor
-//	});
-//};
 
 QUnit.module("metadata/metadataValidatorTest.js", {
 	beforeEach: function() {
@@ -64,10 +44,6 @@ QUnit.module("metadata/metadataValidatorTest.js", {
 				containsValuableData: true
 			}
 		};
-
-		//		CORA.metadataValidator(this.dependencies, this.spec);
-		//		this.metadataValidatorFactory = CORATEST.metadataValidatorFactory(this.metadataProvider,
-		//			this.pubSub);
 	},
 	afterEach: function() {
 	}

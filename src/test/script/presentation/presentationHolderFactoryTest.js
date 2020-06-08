@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,14 +20,19 @@
 QUnit.module("presentation/presentationHolderFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
+				"metadataProvider" : new MetadataProviderStub(),
+				"pubSub" : CORATEST.pubSubSpy(),
+				"textProvider" : CORATEST.textProviderStub(),
+				"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
+				"jsBookkeeper" : CORATEST.jsBookkeeperSpy()
 		};
 		this.spec = {
 			"presentationId" : "pgGroupIdOneTextChild",
-			"metadataProvider" : new MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy(),
-			"textProvider" : CORATEST.textProviderStub(),
-			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
-			"jsBookkeeper" : CORATEST.jsBookkeeperSpy()
+			metadataIdUsedInData : "groupIdOneTextChild",
+			unfulfilledRecordPartConstraints : {
+				read : [],
+				write : []
+			}
 
 		};
 		this.presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
@@ -37,21 +42,33 @@ QUnit.module("presentation/presentationHolderFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
+	let presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
 	assert.strictEqual(presentationHolderFactory.type, "presentationHolderFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
+	let presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);
 	assert.strictEqual(presentationHolderFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var presentationHolder = this.presentationHolderFactory.factor(this.spec);
+	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
 	assert.strictEqual(presentationHolder.type, "presentationHolder");
 });
 
+QUnit.test("testPresentationHolderDependencies", function(assert) {
+	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
+	let factoredDependencies = presentationHolder.getDependencies();
+	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(factoredDependencies.presentationFactory, this.dependencies.presentationFactory);
+	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub);
+	//TODO: not sure these are used
+	assert.strictEqual(factoredDependencies.textProvider, this.dependencies.textProvider);
+	assert.strictEqual(factoredDependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
+
+});
+
 QUnit.test("testFactorSpec", function(assert) {
-	var presentationHolder = this.presentationHolderFactory.factor(this.spec);
+	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
 	assert.strictEqual(presentationHolder.getSpec(), this.spec);
 });

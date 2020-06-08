@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -242,6 +242,7 @@ QUnit.test("testRecordHandlerFactoryDependencies", function(assert) {
 	assert.strictEqual(factoredDep.ajaxCallFactory, factories.ajaxCallFactory);
 	assert.strictEqual(factoredDep.recordGuiFactory, factories.recordGuiFactory);
 	assert.strictEqual(factoredDep.managedGuiItemFactory, factories.managedGuiItemFactory);
+	assert.strictEqual(factoredDep.metadataProvider, this.providers.metadataProvider);
 
 	assert.strictEqual(factoredDep.globalFactories, jsClientFactoredDep.globalFactories);
 });

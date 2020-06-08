@@ -45,4 +45,4 @@ var CORATEST = (function(cora) {
 		return out;
 	};
 	return cora;
-}(CORATEST));
+}(CORATEST || {}));

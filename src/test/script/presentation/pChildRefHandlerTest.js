@@ -494,7 +494,7 @@ QUnit.test("testSendAdd", function(assert) {
 				"name" : "ref",
 				"children" : [ {
 					"name" : "linkedRecordType",
-					"value" : "metadata"
+					"value" : "metadataTextVariable"
 				}, {
 					"name" : "linkedRecordId",
 					"value" : "textVariableId"
@@ -532,7 +532,7 @@ QUnit.test("testSendAddBefore", function(assert) {
 				"name" : "ref",
 				"children" : [ {
 					"name" : "linkedRecordType",
-					"value" : "metadata"
+					"value" : "metadataTextVariable"
 				}, {
 					"name" : "linkedRecordId",
 					"value" : "textVariableId"
@@ -577,36 +577,47 @@ QUnit.test("testAddButtonWithAttributes", function(assert) {
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 	assert.strictEqual(factoredSpec.addMethod, pChildRefHandler.sendAdd);
 	pChildRefHandler.sendAdd();
+	
+	let addedData = this.dependencies.jsBookkeeper.getAddDataArray()[0];
 
 	var addData = {
-		"attributes" : {
-			"anAttribute" : [ "aFinalValue" ]
-		},
-		"childReference" : {
-			"children" : [ {
-				"name" : "ref",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "metadata"
-				}, {
-					"name" : "linkedRecordId",
-					"value" : "textVarRepeat1to3InGroupOneAttribute"
-				} ]
-			}, {
-				"name" : "repeatMin",
-				"value" : "0"
-			}, {
-				"name" : "repeatMax",
-				"value" : "2"
-			} ],
-			"name" : "childReference",
-			"repeatId" : "1"
-		},
-		"metadataId" : "textVarRepeat1to3InGroupOneAttribute",
-		"nameInData" : "textVarRepeat1to3InGroupOneAttribute",
-		"path" : {}
-	};
-	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
+			  "metadataId": "textVarRepeat1to3InGroupOneAttribute",
+			  "path": {},
+			  "childReference": {
+			    "name": "childReference",
+			    "repeatId": "1",
+			    "children": [
+			      {
+			        "name": "ref",
+			        "children": [
+			          {
+			            "name": "linkedRecordType",
+			            "value": "metadataTextVariable"
+			          },
+			          {
+			            "name": "linkedRecordId",
+			            "value": "textVarRepeat1to3InGroupOneAttribute"
+			          }
+			        ]
+			      },
+			      {
+			        "name": "repeatMin",
+			        "value": "0"
+			      },
+			      {
+			        "name": "repeatMax",
+			        "value": "2"
+			      }
+			    ]
+			  },
+			  "nameInData": "textVarRepeat1to3InGroupOneAttribute",
+			  "attributes": {
+			    "anAttribute": [
+			      "aFinalValue"
+			    ]
+			  }
+			};
+	assert.stringifyEqual(addedData, addData);
 });
 
 QUnit.test("testUploadButtonFor0toX", function(assert) {
@@ -723,7 +734,7 @@ QUnit.test("testHandleFilesReceiveAnswerForOneFile", function(assert) {
 				"name" : "ref",
 				"children" : [ {
 					"name" : "linkedRecordType",
-					"value" : "metadata"
+					"value" : "metadataRecordLink"
 				}, {
 					"name" : "linkedRecordId",
 					"value" : "myChildOfBinaryLink"
@@ -2010,7 +2021,7 @@ QUnit.test("testNewElementsAddedNotEnough", function(assert) {
 				"name" : "ref",
 				"children" : [ {
 					"name" : "linkedRecordType",
-					"value" : "metadata"
+					"value" : "metadataTextVariable"
 				}, {
 					"name" : "linkedRecordId",
 					"value" : "textVariableId"

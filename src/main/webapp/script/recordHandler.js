@@ -104,9 +104,11 @@ var CORA = (function(cora) {
 			let metadataId = metadataForRecordType.newMetadataId;
 
 			let permissions = createEmptyPermissions();
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, permissions);
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+					permissions);
 
-			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions, recordPartPermissionCalculator);
+			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions,
+					recordPartPermissionCalculator);
 
 			createAndAddViewsForNew(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
@@ -327,7 +329,8 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 
 			let metadataId = metadataForRecordType.metadataId;
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, permissions);
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+					permissions);
 
 			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
 				recordPartPermissionCalculator);
@@ -342,11 +345,10 @@ var CORA = (function(cora) {
 
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
 			let calculatorSpec = {
-				metadataId: metadataId,
-				permissions: permissions
+				metadataId : metadataId,
+				permissions : permissions
 			}
-			return dependencies.recordPartPermissionCalculatorFactory
-				.factor(calculatorSpec);
+			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		}
 
 		const createAndAddViewsForExisting = function(recordGuiIn, metadataId) {
@@ -547,7 +549,8 @@ var CORA = (function(cora) {
 			let permissions = recordGuiSpec.permissions;
 			let recordPartPermissionCalculator = recordGuiSpec.recordPartPermissionCalculator;
 
-			recordGui = createRecordGui(metadataId, data, dataDivider, permissions, recordPartPermissionCalculator);
+			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
+					recordPartPermissionCalculator);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
 			} else {

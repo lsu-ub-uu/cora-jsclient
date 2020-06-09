@@ -70,7 +70,6 @@ var CORA = (function(cora) {
 		}
 
 		function createRecordGui(metadataId, data) {
-			//TODO: permissions and permissionCalculator???
 			var dataDivider = getDataDividerFromData(data);
 			var recordGuiSpec = {
 				"metadataId" : metadataId,

@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		var metadataId = spec.metadataId;
 		var path = spec.path;
 		var cMetadataElement = getMetadataById(metadataId);
+//		console.log("cMetadataElement "+JSON.stringify(cMetadataElement.getData()))
 		initalizeRepeat();
 
 		function getMetadataById(id) {
@@ -46,6 +47,9 @@ var CORA = (function(cora) {
 			if (hasAttributes()) {
 				addMessage.attributes = collectAttributes();
 			}
+//			if(pubSub.type === "pubSubSpy"){
+//			console.log("pubsub "+JSON.stringify(pubSub.getMessages()));}
+//			console.log("r1")
 			pubSub.publish("add", addMessage);
 		}
 
@@ -78,9 +82,11 @@ var CORA = (function(cora) {
 				initializeMetadataGroup(nextLevelPath);
 			} else if (isRecordLink()) {
 				initializeMetadataRecordLink(nextLevelPath);
+//				console.log("r2")
 				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
 				initializeMetadataResourceLink(nextLevelPath);
+//				console.log("r3")
 				pubSub.publish("linkedResource", message);
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);
@@ -207,7 +213,8 @@ var CORA = (function(cora) {
 				"metadataProvider": metadataProvider,
 				"pubSub": pubSub
 			};
-			CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			metadataInitializer.initialize();
 		}
 
 		function isRecordLink() {
@@ -243,7 +250,8 @@ var CORA = (function(cora) {
 				"metadataProvider": metadataProvider,
 				"pubSub": pubSub
 			};
-			CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			metadataChildInitializer.initialize();
 		}
 
 		function createRefWithRef(ref) {
@@ -318,7 +326,8 @@ var CORA = (function(cora) {
 				"metadataProvider": metadataProvider,
 				"pubSub": pubSub
 			};
-			CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			metadataChildInitializer.initialize();
 		}
 
 		function possiblyInitializeLinkedRepeatId(nextLevelPath) {
@@ -331,7 +340,8 @@ var CORA = (function(cora) {
 					"metadataProvider": metadataProvider,
 					"pubSub": pubSub
 				};
-				CORA.metadataChildInitializer(dependencies, initializerSpec);
+				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+				metadataChildInitializer.initialize();
 			}
 		}
 
@@ -371,6 +381,7 @@ var CORA = (function(cora) {
 				"data": value,
 				"path": nextLevelPath
 			};
+//			console.log("r4")
 			pubSub.publish("setValue", message);
 		}
 

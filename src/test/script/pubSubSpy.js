@@ -28,6 +28,7 @@ var CORATEST = (function(coraTest) {
 		var unsubscriptionsPathBelow = [];
 
 		function publish(type, message) {
+//			console.log("publish "+JSON.stringify(message));
 			messages.push({
 				"type" : type,
 				"message" : message
@@ -71,6 +72,7 @@ var CORATEST = (function(coraTest) {
 		}
 		
 		return Object.freeze({
+			type : "pubSubSpy",
 			publish : publish,
 			getMessages : getMessages,
 			subscribe : subscribe,

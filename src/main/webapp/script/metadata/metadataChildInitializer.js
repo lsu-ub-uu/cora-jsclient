@@ -30,7 +30,6 @@ var CORA = (function(cora) {
 		var dataChildrenForMetadata;
 		
 		const initialize = function() {
-//			console.log("i initialize");
 			var nameInData = getNameInDataForMetadataId(ref);
 			var attributes = getAttributesForMetadataId(ref);
 			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
@@ -113,8 +112,10 @@ var CORA = (function(cora) {
 
 		function initializeChild() {
 			if (childCanRepeat()) {
+//				console.log("childcanrepeat")
 				initializeRepeatingChild();
 			} else {
+//				console.log("childNOtcanrepeat")
 				initializeNonRepeatingChild();
 			}
 		}
@@ -201,6 +202,7 @@ var CORA = (function(cora) {
 			if (hasData()) {
 				initializeNonRepeatingChildInstanceWithData();
 			} else {
+//console.log("no data");
 				initializeForMetadataWithIdAndDataAndRepeatId();
 			}
 		}

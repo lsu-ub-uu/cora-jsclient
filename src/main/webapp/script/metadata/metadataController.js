@@ -21,47 +21,50 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataController = function(dependencies, spec) {
-		var topLevelMetadataId = spec.metadataId;
-		var topLevelData = spec.data;
+		let topLevelMetadataId = spec.metadataId;
+		let topLevelData = spec.data;
 
-		initializeFirstLevel();
-		spec.pubSub.publish("newElementsAdded", {
-			"data" : "",
-			"path" : {}
-		});
-		spec.pubSub.publish("initComplete", {
-			"data" : "",
-			"path" : {}
-		});
+		const start = function() {
+			initializeFirstLevel();
+			spec.pubSub.publish("newElementsAdded", {
+				data: "",
+				path: {}
+			});
+			spec.pubSub.publish("initComplete", {
+				data: "",
+				path: {}
+			});
+		};
 
-		function initializeFirstLevel() {
-			var topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			var topLevelChildReferences = topLevelMetadataElement
-					.getFirstChildByNameInData('childReferences');
-			var topLevelPath = {};
+		const initializeFirstLevel = function() {
+			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
+			let topLevelChildReferences = topLevelMetadataElement
+				.getFirstChildByNameInData('childReferences');
+			let topLevelPath = {};
 			topLevelChildReferences.children.forEach(function(childReference) {
-				var initializerSpec = {
-					"childReference" : childReference,
-					"path" : topLevelPath,
-					"data" : topLevelData,
-					"metadataProvider" : spec.metadataProvider,
-					"pubSub" : spec.pubSub
+				let initializerSpec = {
+					childReference: childReference,
+					path: topLevelPath,
+					data: topLevelData,
+					metadataProvider: spec.metadataProvider,
+					pubSub: spec.pubSub
 				};
 				CORA.metadataChildInitializer(dependencies, initializerSpec);
 			});
 		}
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
 		}
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 
+		start();
 		return Object.freeze({
-			"type" : "metadataController",
-			getSpec : getSpec
+			type: "metadataController",
+			getSpec: getSpec
 		});
 	};
 	return cora;

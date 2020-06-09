@@ -105,10 +105,8 @@ var CORA = (function(cora) {
 
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
-					permissions);
-
-			recordGui = createRecordGui(metadataId, copiedData, undefined, permissions,
-					recordPartPermissionCalculator);
+				permissions);
+			recordGui = createRecordGui(metadataId, copiedData, undefined, recordPartPermissionCalculator);
 
 			createAndAddViewsForNew(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
@@ -128,13 +126,11 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createRecordGui = function(metadataId, data, dataDivider, permissions,
-			recordPartPermissionCalculator) {
+		const createRecordGui = function(metadataId, data, dataDivider, recordPartPermissionCalculator) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
 				data: data,
 				dataDivider: dataDivider,
-				permissions: permissions,
 				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
 
@@ -330,10 +326,8 @@ var CORA = (function(cora) {
 
 			let metadataId = metadataForRecordType.metadataId;
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
-					permissions);
-
-			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
-				recordPartPermissionCalculator);
+				permissions);
+			recordGui = createRecordGui(metadataId, data, dataDivider, recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, metadataId);
 			recordGui.initMetadataControllerStartingGui();
 
@@ -345,8 +339,8 @@ var CORA = (function(cora) {
 
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
 			let calculatorSpec = {
-				metadataId : metadataId,
-				permissions : permissions
+				metadataId: metadataId,
+				permissions: permissions
 			}
 			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		}
@@ -546,11 +540,9 @@ var CORA = (function(cora) {
 
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
-			let permissions = recordGuiSpec.permissions;
 			let recordPartPermissionCalculator = recordGuiSpec.recordPartPermissionCalculator;
-
-			recordGui = createRecordGui(metadataId, data, dataDivider, permissions,
-					recordPartPermissionCalculator);
+			recordGui = createRecordGui(metadataId, data, dataDivider,
+				recordPartPermissionCalculator);
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, metadataId);
 			} else {

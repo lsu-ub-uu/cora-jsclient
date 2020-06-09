@@ -22,9 +22,6 @@ QUnit.module("recordGui/recordGuiTest.js", {
 		this.dependencies = {
 			"metadataProvider": CORATEST.metadataProviderSpy(),
 			"textProvider": CORATEST.textProviderStub(),
-			// "recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-			// "uploadManager" : CORATEST.uploadManagerSpy(),
-			//
 			"pubSub": CORATEST.pubSubSpy(),
 			"dataHolder": CORATEST.dataHolderSpy(),
 			"jsBookkeeper": CORATEST.jsBookkeeperSpy(),
@@ -37,7 +34,6 @@ QUnit.module("recordGui/recordGuiTest.js", {
 			"metadataId": "someMetadataId",
 			"data": {},
 			"dataDivider": "someDataDivider",
-			permissions: { write: ["someWritePermission"] },
 			recordPartPermissionCalculator : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	},
@@ -76,7 +72,6 @@ QUnit.test("testGetjsBookkeeper", function(assert) {
 });
 
 QUnit.test("testGetPresentationHolder", function(assert) {
-	// Yes the method should be called getPresentationHolder
 	let recordGui = CORA.recordGui(this.dependencies, this.spec);
 	let presentation = recordGui.getPresentationHolder("presentationId", "metadataIdUsedInData");
 	let factoredPresentation = this.dependencies.presentationHolderFactory.getFactored(0);
@@ -94,7 +89,6 @@ QUnit.test("testGetPresentationHolderHasCorrectSpec", function(assert) {
 	assert.strictEqual(factoredSpec.textProvider, this.dependencies.textProvider);
 	assert.strictEqual(factoredSpec.jsBookkeeper, this.dependencies.jsBookkeeper);
 	assert.strictEqual(factoredSpec.presentationFactory, this.dependencies.presentationFactory);
-	assert.strictEqual(factoredSpec.permissions, this.spec.permissions);
 	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });
 
@@ -134,5 +128,5 @@ QUnit.test("testValidateDataHasCorrectSpec", function(assert) {
 	assert.strictEqual(factoredValidatorSpec.data, this.dependencies.dataHolder.getData());
 	assert.strictEqual(factoredValidatorSpec.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredValidatorSpec.pubSub, this.dependencies.pubSub);
-	assert.strictEqual(factoredValidatorSpec.permissions, this.spec.permissions);
+	assert.strictEqual(factoredValidatorSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });

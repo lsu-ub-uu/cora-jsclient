@@ -63,26 +63,14 @@ var CORA = (function(cora) {
 		};
 
 		const userHasRecordPartPermission = function(cChildReference) {
-			// console.log(JSON.stringify(cChildReference.getData()));
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(
-					recordType, recordId);
-
-			let nameInData = extractNameInData(cChildReference);
-			let writePermissions = spec.permissions.write;
-			if (writePermissions.includes(nameInData)) {
-				return true;
-			}
-			return false;
+			
+			return spec.recordPartPermissionCalculator
+					.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
 		};
-
-		const extractNameInData = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
-		};
+		
 
 		const validateDataChildForChildRefInvalid = function(childReference) {
 			let childValidatorSpec = {

@@ -613,7 +613,7 @@ function MetadataProviderStub() {
 								"name": "ref",
 								"children": [{
 									"name": "linkedRecordType",
-									"value": "metadata"
+									"value": "metadataTextVariable"
 								}, {
 									"name": "linkedRecordId",
 									"value": "textVariableId"

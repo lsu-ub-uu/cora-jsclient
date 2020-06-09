@@ -30,13 +30,15 @@ QUnit.module("metadata/metadataValidatorTest.js", {
 			pubSub: this.pubSub,
 			metadataChildValidatorFactory: this.metadataChildValidatorFactory
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
 			metadataId: "groupIdOneTextChild",
 			data: undefined,
 			permissions : {
 				write : [],
 				read : []
-			}
+			},
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 		this.spySpec = {
 			resultToReturn: {
@@ -251,6 +253,24 @@ QUnit.test("testChildResultHandledFalseReturnedFromChildWhenOneChildFalseOneTrue
 	assert.strictEqual(validationResult, false);
 });
 
+QUnit.test("testRecordPartPermissionCalculatorCalledCorrectly", function(assert) {
+	this.spec.data = {
+		"name": "groupIdOneTextChildWithWriteConstraints",
+		"children": [{
+			"name": "textVariableId",
+			"value": "A Value"
+		}]
+	};
+	this.spec.metadataId="groupIdOneTextChildWithWriteConstraints";
+	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
+	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
+
+	metadataValidator.validate();
+
+	let requestedId = this.recordPartPermissionCalculator.getWriteRequestedId(0);
+	assert.strictEqual(requestedId, "metadataTextVariable_textVariableId");
+});
+
 QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenWriteConstraintsNoPermissions", function(assert) {
 	this.spec.data = {
 		"name": "groupIdOneTextChildWithWriteConstraints",
@@ -261,6 +281,7 @@ QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenWriteConstrai
 	};
 	this.spec.metadataId="groupIdOneTextChildWithWriteConstraints";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
+//	addIdToReturnFalseForWrite("textVariableId");
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
 
 	metadataValidator.validate();

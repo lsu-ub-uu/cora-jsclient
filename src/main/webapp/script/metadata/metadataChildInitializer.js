@@ -32,7 +32,7 @@ var CORA = (function(cora) {
 		var attributes = getAttributesForMetadataId(ref);
 		var dataChildrenForMetadata = getDataChildrenForMetadata(nameInData,
 				attributes);
-		initializeChild();
+//		initializeChild();
 
 		function getNameInDataForMetadataId(refIn) {
 			var metadataElement = getMetadataById(refIn);
@@ -255,7 +255,13 @@ var CORA = (function(cora) {
 
 			CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
 		}
-
+		let out = Object.freeze({
+			type: "metadataChildInitializer",
+//			getDependencies: getDependencies,
+//			getSpec: getSpec,
+			initializeChild: initializeChild
+		});
+		return out;
 	};
 	return cora;
 }(CORA));

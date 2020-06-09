@@ -49,7 +49,8 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(childReference) {
+		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(
+			childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			if (childHasRecordPartConstraints(cChildReference)) {
 				return userHasRecordPartPermission(cChildReference);
@@ -62,19 +63,14 @@ var CORA = (function(cora) {
 		};
 
 		const userHasRecordPartPermission = function(cChildReference) {
-			let nameInData = extractNameInData(cChildReference);
-			let writePermissions = spec.permissions.write;
-			if (writePermissions.includes(nameInData)) {
-				return true;
-			}
-			return false;
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+
+			return spec.recordPartPermissionCalculator
+				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
 		};
 
-		const extractNameInData = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
-		};
 
 		const validateDataChildForChildRefInvalid = function(childReference) {
 			let childValidatorSpec = {

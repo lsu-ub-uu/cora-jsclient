@@ -26,14 +26,13 @@ var CORA = (function(cora) {
 
 		const getPresentationHolder = function(presentationId, metadataIdUsedInData) {
 			let spec1 = {
-				"presentationId" : presentationId,
-				"metadataIdUsedInData" : metadataIdUsedInData,
-				"metadataProvider" : dependencies.metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : dependencies.textProvider,
+				presentationId: presentationId,
+				metadataIdUsedInData: metadataIdUsedInData,
+				metadataProvider: dependencies.metadataProvider,
+				pubSub: pubSub,
+				textProvider: dependencies.textProvider,
 				jsBookkeeper : jsBookkeeper,
 				presentationFactory : dependencies.presentationFactory,
-				permissions : spec.permissions,
 				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
 			return dependencies.presentationHolderFactory.factor(spec1);
@@ -41,10 +40,10 @@ var CORA = (function(cora) {
 
 		const initMetadataControllerStartingGui = function() {
 			let specMetadataController = {
-				"metadataId" : spec.metadataId,
-				"data" : spec.data,
-				"metadataProvider" : dependencies.metadataProvider,
-				"pubSub" : dependencies.pubSub
+				metadataId: spec.metadataId,
+				data: spec.data,
+				metadataProvider: dependencies.metadataProvider,
+				pubSub: dependencies.pubSub
 			};
 			metadataController = dependencies.metadataControllerFactory
 					.factor(specMetadataController);
@@ -53,11 +52,11 @@ var CORA = (function(cora) {
 
 		const validateData = function() {
 			let validateSpec = {
-				"metadataId" : spec.metadataId,
-				"data" : dependencies.dataHolder.getData(),
-				"metadataProvider" : dependencies.metadataProvider,
-				"pubSub" : dependencies.pubSub,
-				"permissions" : spec.permissions
+				metadataId: spec.metadataId,
+				data: dependencies.dataHolder.getData(),
+				metadataProvider: dependencies.metadataProvider,
+				pubSub: dependencies.pubSub,
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 			let validator = dependencies.metadataValidatorFactory.factor(validateSpec);
 			return validator.validate();

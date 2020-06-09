@@ -49,8 +49,10 @@ var CORA = (function(cora) {
 					metadataProvider: spec.metadataProvider,
 					pubSub: spec.pubSub
 				};
+//				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+//				metadataChildInitializer.initialize();
 				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
-				metadataChildInitializer.initializeChild();
+				metadataChildInitializer.initialize();
 			});
 		}
 

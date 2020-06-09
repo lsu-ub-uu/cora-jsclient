@@ -34,9 +34,9 @@
 //			var dependencies = {
 //				"recordTypeProvider" : recordTypeProvider
 //			};
-//			var metadataController = CORA.metadataController(dependencies, spec);
+//			var metadataChildInitializer = CORA.metadataChildInitializer(dependencies, spec);
 //			return {
-//				metadataController : metadataController,
+//				metadataChildInitializer : metadataChildInitializer,
 //				metadataProvider : metadataProvider,
 //				pubSub : pubSub
 //			};
@@ -53,6 +53,7 @@
 QUnit.module("metadata/metadataChildInitializerTest.js", {
 	beforeEach : function() {
 		let metadataProvider = new MetadataProviderStub();
+		let pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy()
 		};
@@ -61,7 +62,7 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 			data : undefined,
 			path : {},
 			metadataProvider : metadataProvider,
-			pubSub : CORATEST.pubSubSpy()
+			pubSub : pubSub
 		};
 		
 		this.spec.childReference = {
@@ -86,47 +87,56 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 				}]
 		};
 
-		this.metadataProvider = new MetadataProviderStub();
-		this.pubSub = CORATEST.pubSubSpy();
-		this.metadataControllerFactory = CORATEST.metadataControllerFactory(this.metadataProvider,
-				this.pubSub);
+		this.metadataProvider = metadataProvider;
+		this.pubSub = pubSub;
+//		this.metadataControllerFactory = CORATEST.metadataControllerFactory(this.metadataProvider,
+//				this.pubSub);
 	},
 	afterEach : function() {
 	}
 });
-//
-//QUnit.test("testInit", function(assert) {
-//
-//	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-//	assert.strictEqual(metadataChildInitializer.type, "metadataChildInitializer");
-//});
 
-//QUnit.test("testGetSpec", function(assert) {
-//	var metadataController = CORA.metadataController(this.dependencies, this.spec);
-//	assert.strictEqual(metadataController.getSpec(), this.spec);
-//});
-//
-//QUnit.test("testInit2", function(assert) {
-//	var metadataController = this.metadataControllerFactory
-//			.factor("groupIdOneTextChild", undefined);
-//	assert.ok(metadataController !== undefined);
-//	var messages = this.pubSub.getMessages();
-//	assert.ok(messages !== undefined);
-//});
-//
-//QUnit.test("testInitGroupIdOneTextChild", function(assert) {
+QUnit.test("testInit", function(assert) {
+
+	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	assert.strictEqual(metadataChildInitializer.type, "metadataChildInitializer");
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	assert.strictEqual(metadataChildInitializer.getSpec(), this.spec);
+});
+QUnit.test("testGetDependecies", function(assert) {
+	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	assert.strictEqual(metadataChildInitializer.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testInit2", function(assert) {
+//	console.log("*************testInit2***********")
+	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+	assert.ok(metadataChildInitializer !== undefined);
+	var messages = this.pubSub.getMessages();
+//	console.log(JSON.stringify(messages))
+	assert.ok(messages !== undefined);
+//	console.log("END*************testInit2***********")
+});
+
+QUnit.test("testInitGroupIdOneTextChild", function(assert) {
+	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	metadataChildInitializer.initialize();
 //	this.metadataControllerFactory.factor("groupIdOneTextChild", undefined);
-//	var messages = this.pubSub.getMessages();
-//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
-//			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
-//
-//	assert.equal(messages.length, 3);
-//	assert.deepEqual(JSON.stringify(messages[1]),
-//			'{"type":"newElementsAdded","message":{"data":"","path":{}}}');
-//	assert.deepEqual(JSON.stringify(messages[2]),
-//	'{"type":"initComplete","message":{"data":"","path":{}}}');
-//});
-//
+	var messages = this.pubSub.getMessages();
+	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+
+	assert.equal(messages.length, 3);
+	assert.deepEqual(JSON.stringify(messages[1]),
+			'{"type":"newElementsAdded","message":{"data":"","path":{}}}');
+	assert.deepEqual(JSON.stringify(messages[2]),
+	'{"type":"initComplete","message":{"data":"","path":{}}}');
+});
+
 //QUnit.test("testInitGroupIdOneTextChildWithData", function(assert) {
 //	var data = {
 //		"name" : "groupIdOneTextChild",

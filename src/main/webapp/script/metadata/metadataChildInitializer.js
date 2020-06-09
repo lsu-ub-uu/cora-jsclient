@@ -25,25 +25,26 @@ var CORA = (function(cora) {
 		var childReference = CORA.coraData(spec.childReference);
 		var data = CORA.coraData(spec.data);
 
-		var cRef = CORA.coraData(childReference
-				.getFirstChildByNameInData("ref"));
+		var cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
 		var ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-		var nameInData = getNameInDataForMetadataId(ref);
-		var attributes = getAttributesForMetadataId(ref);
-		var dataChildrenForMetadata = getDataChildrenForMetadata(nameInData,
-				attributes);
-//		initializeChild();
-
+		var dataChildrenForMetadata;
+		
+		const initialize = function() {
+//			console.log("i initialize");
+			var nameInData = getNameInDataForMetadataId(ref);
+			var attributes = getAttributesForMetadataId(ref);
+			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
+			initializeChild();
+		}
+//		initialize();
 		function getNameInDataForMetadataId(refIn) {
 			var metadataElement = getMetadataById(refIn);
-			return metadataElement
-					.getFirstAtomicValueByNameInData("nameInData");
+			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
 		}
 
 		function getAttributesForMetadataId(refIn) {
 			var metadataElement = getMetadataById(refIn);
-			if (metadataElement
-					.containsChildWithNameInData("attributeReferences")) {
+			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
 				return getAttributesForMetadataElement(metadataElement);
 			}
 			return undefined;
@@ -56,8 +57,7 @@ var CORA = (function(cora) {
 			var attributeReference;
 			for (var i = 0; i < attributeReferences.children.length; i++) {
 				attributeReference = attributeReferences.children[i];
-				var attribute = getAttributeForAttributeReference(
-						attributeReference, i);
+				var attribute = getAttributeForAttributeReference(attributeReference, i);
 				attributesOut.children.push(attribute);
 			}
 			return attributesOut;
@@ -75,22 +75,19 @@ var CORA = (function(cora) {
 			var attributeMetadata = getMetadataById(attributeRef);
 			var attributeNameInData = attributeMetadata
 					.getFirstAtomicValueByNameInData("nameInData");
-			var finalValue = attributeMetadata
-					.getFirstAtomicValueByNameInData("finalValue");
+			var finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
 
-			return createAttributeWithNameAndValueAndRepeatId(
-					attributeNameInData, finalValue, index);
+			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
+					index);
 
 		}
 
 		function getRefValueFromAttributeRef(attributeReference) {
 			var cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference
-					.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 
-		function createAttributeWithNameAndValueAndRepeatId(attributeName,
-				attributeValue, repeatId) {
+		function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValue, repeatId) {
 			return {
 				"name" : "attribute",
 				"repeatId" : repeatId || "1",
@@ -107,11 +104,9 @@ var CORA = (function(cora) {
 		function getDataChildrenForMetadata(nameInDataIn, attributesIn) {
 			var dataChildrenForMetadataOut = [];
 			if (spec.data !== undefined
-					&& data.containsChildWithNameInDataAndAttributes(
-							nameInDataIn, attributesIn)) {
-				dataChildrenForMetadataOut = data
-						.getChildrenByNameInDataAndAttributes(nameInDataIn,
-								attributesIn);
+					&& data.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
+				dataChildrenForMetadataOut = data.getChildrenByNameInDataAndAttributes(
+						nameInDataIn, attributesIn);
 			}
 			return dataChildrenForMetadataOut;
 		}
@@ -152,16 +147,14 @@ var CORA = (function(cora) {
 
 		function calculateStartRepeatIdFromData() {
 			var currentMaxRepeatId = 0;
-			dataChildrenForMetadata
-					.forEach(function(child) {
-						currentMaxRepeatId = calculateMaxRepeatFromChildAndCurrentMaxRepeat(
-								child, currentMaxRepeatId);
-					});
+			dataChildrenForMetadata.forEach(function(child) {
+				currentMaxRepeatId = calculateMaxRepeatFromChildAndCurrentMaxRepeat(child,
+						currentMaxRepeatId);
+			});
 			return currentMaxRepeatId;
 		}
 
-		function calculateMaxRepeatFromChildAndCurrentMaxRepeat(child,
-				currentMaxRepeatId) {
+		function calculateMaxRepeatFromChildAndCurrentMaxRepeat(child, currentMaxRepeatId) {
 			var x = Number(child.repeatId);
 			if (!isNaN(x) && x > currentMaxRepeatId) {
 				x++;
@@ -171,8 +164,7 @@ var CORA = (function(cora) {
 		}
 
 		function calculateMinRepeat() {
-			var repeatMin = childReference
-					.getFirstAtomicValueByNameInData("repeatMin");
+			var repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
 			if (hasData()) {
 				var noOfData = dataChildrenForMetadata.length;
 				if (noOfData > repeatMin) {
@@ -192,20 +184,17 @@ var CORA = (function(cora) {
 		}
 
 		function childIsRepeatableButRepeatIdIsMissing(dataChild) {
-			return dataChild.repeatId === undefined
-					&& moreThanOneChildIsAllowed();
+			return dataChild.repeatId === undefined && moreThanOneChildIsAllowed();
 		}
 
 		function moreThanOneChildIsAllowed() {
-			var repeatMax = childReference
-					.getFirstAtomicValueByNameInData("repeatMax");
+			var repeatMax = childReference.getFirstAtomicValueByNameInData("repeatMax");
 			return Number(repeatMax) > 1 || repeatMax === "X";
 		}
 
 		function initializeRepeatingChildInstanceWithoutData(generatedRepeatId) {
 			var repeatIdString = String(generatedRepeatId);
-			initializeForMetadataWithIdAndDataAndRepeatId(undefined,
-					repeatIdString);
+			initializeForMetadataWithIdAndDataAndRepeatId(undefined, repeatIdString);
 		}
 
 		function initializeNonRepeatingChild() {
@@ -226,40 +215,45 @@ var CORA = (function(cora) {
 		}
 
 		function hasData() {
-			return data.getData() !== undefined
-					&& dataChildrenForMetadata.length > 0;
+			return data.getData() !== undefined && dataChildrenForMetadata.length > 0;
 		}
 
 		function childCanRepeat() {
-			var repeatMin = childReference
-					.getFirstAtomicValueByNameInData("repeatMin");
-			var repeatMax = childReference
-					.getFirstAtomicValueByNameInData("repeatMax");
+			var repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
+			var repeatMax = childReference.getFirstAtomicValueByNameInData("repeatMax");
 			return repeatMax === "X" || Number(repeatMax) > 1
 					|| (Number(repeatMin) === 0 && Number(repeatMax) === 1);
 		}
 
-		function initializeForMetadataWithIdAndDataAndRepeatId(dataChild,
-				repeatId) {
+		function initializeForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId) {
 			var initializerDep = {
-				"recordTypeProvider" :dependencies.recordTypeProvider,
+				"recordTypeProvider" : dependencies.recordTypeProvider,
 				"metadataProvider" : spec.metadataProvider,
 				"pubSub" : spec.pubSub
 			};
 			var initializerSpec = {
-					"metadataId" : ref,
-					"path" : spec.path,
-					"data" : dataChild,
-					"repeatId" : repeatId
+				"metadataId" : ref,
+				"path" : spec.path,
+				"data" : dataChild,
+				"repeatId" : repeatId
 			};
 
 			CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
 		}
+		
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			return spec;
+		};
+		
 		let out = Object.freeze({
-			type: "metadataChildInitializer",
-//			getDependencies: getDependencies,
-//			getSpec: getSpec,
-			initializeChild: initializeChild
+			type : "metadataChildInitializer",
+			 getDependencies: getDependencies,
+			 getSpec: getSpec,
+			initialize : initialize
 		});
 		return out;
 	};

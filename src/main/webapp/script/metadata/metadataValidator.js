@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 		const validateFirstLevel = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
-				.getFirstChildByNameInData('childReferences');
+					.getFirstChildByNameInData('childReferences');
 			return validateTopLevelChildren(topLevelChildReferences);
 		};
 
@@ -49,7 +49,8 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(childReference) {
+		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(
+				childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			if (childHasRecordPartConstraints(cChildReference)) {
 				return userHasRecordPartPermission(cChildReference);
@@ -62,25 +63,20 @@ var CORA = (function(cora) {
 		};
 
 		const userHasRecordPartPermission = function(cChildReference) {
-			let nameInData = extractNameInData(cChildReference);
-			let writePermissions = spec.permissions.write;
-			if (writePermissions.includes(nameInData)) {
-				return true;
-			}
-			return false;
-		};
-
-		const extractNameInData = function(cChildReference) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			let linkedRecordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return getMetadataById(linkedRecordId).getFirstAtomicValueByNameInData("nameInData");
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			
+			return spec.recordPartPermissionCalculator
+					.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
 		};
+		
 
 		const validateDataChildForChildRefInvalid = function(childReference) {
 			let childValidatorSpec = {
-				path: topLevelPath,
-				data: topLevelData,
-				childReference: childReference
+				path : topLevelPath,
+				data : topLevelData,
+				childReference : childReference
 			};
 			let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
 			let childResult = childValidator.validate();
@@ -102,10 +98,10 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type: "metadataValidator",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			validate: validateFirstLevel
+			type : "metadataValidator",
+			getDependencies : getDependencies,
+			getSpec : getSpec,
+			validate : validateFirstLevel
 		});
 	};
 	return cora;

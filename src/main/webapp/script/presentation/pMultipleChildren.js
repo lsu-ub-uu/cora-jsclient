@@ -297,7 +297,7 @@ var CORA = (function(cora) {
 		const possiblyAddAlternativePresentationToSpec = function(cPresentationChildRef,
 				childRefHandlerSpec) {
 			if (childHasAlternativePresentation(cPresentationChildRef)) {
-				let cAlternativePresentation = getAlternativePresenation(cPresentationChildRef);
+				let cAlternativePresentation = getAlternativePresentation(cPresentationChildRef);
 				childRefHandlerSpec.cAlternativePresentation = cAlternativePresentation;
 				possiblySetNonDefaultPresentationSize(cPresentationChildRef, childRefHandlerSpec);
 			}
@@ -333,12 +333,11 @@ var CORA = (function(cora) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
 						.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
 			}
-			// console.log("factor "+JSON.stringify(cPresentationChild.getData()))
 			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
 			return pChildRefHandler.getView();
 		};
 
-		const getAlternativePresenation = function(cPresentationChildRef) {
+		const getAlternativePresentation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef
 					.getChildByNameInDataAndIndex("refGroup", 1));
 

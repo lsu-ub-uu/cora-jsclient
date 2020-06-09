@@ -112,7 +112,6 @@ var CORA = (function(cora) {
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation,
 				"cParentPresentation" : cParentPresentation
-
 			};
 
 			let type = cPresentation.getData().attributes.type;

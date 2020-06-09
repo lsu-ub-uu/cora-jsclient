@@ -904,6 +904,77 @@ CORATEST.getDataDividerFromData = function(recordWeSendAsPartOfAnswer) {
 	return cDataDivider.getFirstAtomicValueByNameInData("linkedRecordId");
 };
 
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartNoPermissions", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+
+});
+
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneWritePermissions", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.record.permissions = {
+		write: ["someVariable"]
+	};
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.record.permissions.write);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+});
+
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoWritePermissions", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.record.permissions = {
+		write: ["someVariable", "someOtherVariable"]
+	};
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.record.permissions.write);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+});
+
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneReadPermissions", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.record.permissions = {
+		read: ["someVariable"]
+	};
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.record.permissions.read);
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+});
+
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoReadPermissions", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.record.permissions = {
+		read: ["someVariable", "someOtherVariable"]
+	};
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.record.permissions.read);
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+});
+
+QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartBothReadAndWritePermissions", function(
+	assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	this.record.permissions = {
+		read: ["someReadVariable", "someOtherReadVariable"],
+		write: ["someWriteVariable", "someOtherWriteVariable"]
+	};
+	this.answerCall(0);
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.record.permissions.read);
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.record.permissions.write);
+});
 
 QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 	this.spec.createNewRecord = "false";

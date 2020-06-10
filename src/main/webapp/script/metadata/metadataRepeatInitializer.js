@@ -341,7 +341,8 @@ var CORA = (function(cora) {
 					"path": nextLevelPath,
 					"data": spec.data,
 					"metadataProvider": metadataProvider,
-					"pubSub": pubSub
+					"pubSub": pubSub,
+					metadataRepeatInitializerFactory : dependencies.metadataRepeatInitializerFactory
 				};
 				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
 				metadataChildInitializer.initialize();

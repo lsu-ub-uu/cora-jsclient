@@ -49,10 +49,11 @@ var CORA = (function(cora) {
 					metadataProvider: spec.metadataProvider,
 					pubSub: spec.pubSub
 				};
+				dependencies.metadataChildInitializerFactory.factor(initializerSpec);
 //				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
 //				metadataChildInitializer.initialize();
-				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
-				metadataChildInitializer.initialize();
+//				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+//				metadataChildInitializer.initialize();
 			});
 		}
 
@@ -63,11 +64,15 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		}
+		const getDependencies = function() {
+			return dependencies;
+		}
 
 		start();
 		return Object.freeze({
 			type: "metadataController",
-			getSpec: getSpec
+			getSpec: getSpec,
+			getDependencies : getDependencies
 		});
 	};
 	return cora;

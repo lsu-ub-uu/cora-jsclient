@@ -18,58 +18,62 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.metadataControllerFactory = function(metadataProvider, pubSub) {
-		var factor = function(metadataId, data) {
-
-			var recordTypeProvider = CORATEST.recordTypeProviderSpy();
-
-			var spec = {
-				"metadataId" : metadataId,
-				"data" : data,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub
-			};
-			var dependencies = {
-				"recordTypeProvider" : recordTypeProvider,
-				metadataRepeatInitializerFactory : CORATEST.standardFactorySpy("metadataRepeatInitializerSpy")
-			};
-			var metadataController = CORA.metadataController(dependencies, spec);
-			return {
-				metadataController : metadataController,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub
-			};
-
-		};
-		return Object.freeze({
-			factor : factor
-		});
-	};
-
-	return coraTest;
-}(CORATEST || {}));
+//var CORATEST = (function(coraTest) {
+//	"use strict";
+//	coraTest.metadataControllerFactory = function(metadataProvider, pubSub) {
+//		var factor = function(metadataId, data) {
+//
+//			var recordTypeProvider = CORATEST.recordTypeProviderSpy();
+//
+//			var spec = {
+//				"metadataId" : metadataId,
+//				"data" : data,
+//				"metadataProvider" : metadataProvider,
+//				"pubSub" : pubSub
+//			};
+//			var dependencies = {
+//				"recordTypeProvider" : recordTypeProvider,
+//				metadataRepeatInitializerFactory : CORATEST.standardFactorySpy("metadataRepeatInitializerSpy")
+//			};
+//			var metadataController = CORA.metadataController(dependencies, spec);
+//			return {
+//				metadataController : metadataController,
+//				metadataProvider : metadataProvider,
+//				pubSub : pubSub
+//			};
+//
+//		};
+//		return Object.freeze({
+//			factor : factor
+//		});
+//	};
+//
+//	return coraTest;
+//}(CORATEST || {}));
 
 QUnit.module("metadata/metadataControllerTest.js", {
-	beforeEach : function() {
-		var metadataProvider = new MetadataProviderStub();
+	beforeEach: function() {
+		this.metadataProvider = new MetadataProviderStub();
+		this.metadataChildInitializerFactory = CORATEST.standardFactorySpy("metadataChildInitializerSpy");
+		this.pubSub = CORATEST.pubSubSpy();
+
 		this.dependencies = {
-			"recordTypeProvider" : CORATEST.recordTypeProviderSpy()
+			"recordTypeProvider": CORATEST.recordTypeProviderSpy(),
+			"metadataProvider": this.metadataProvider,
+			"pubSub": this.pubSub,
+			metadataChildInitializerFactory: this.metadataChildInitializerFactory
 		};
 		this.spec = {
-			"metadataId" : "groupIdOneTextChild",
-			"data" : undefined,
-			"metadataProvider" : metadataProvider,
-			"pubSub" : CORATEST.pubSubSpy()
+			"metadataId": "groupIdOneTextChild",
+			"data": undefined,
+			"metadataProvider": this.metadataProvider,
+			"pubSub": this.pubSub
 		};
 
-		this.metadataProvider = new MetadataProviderStub();
-		this.pubSub = CORATEST.pubSubSpy();
-		this.metadataControllerFactory = CORATEST.metadataControllerFactory(this.metadataProvider,
-				this.pubSub);
+		//		this.metadataControllerFactory = CORATEST.metadataControllerFactory(this.metadataProvider,
+		//				this.pubSub);
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -79,19 +83,31 @@ QUnit.module("metadata/metadataControllerTest.js", {
 //	assert.strictEqual(metadataController.type, "metadataController");
 //});
 //
-//QUnit.test("testGetSpec", function(assert) {
-//	var metadataController = CORA.metadataController(this.dependencies, this.spec);
-//	assert.strictEqual(metadataController.getSpec(), this.spec);
-//});
+QUnit.test("testGetSpec", function(assert) {
+	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	assert.strictEqual(metadataController.getSpec(), this.spec);
+});
+QUnit.test("testGetDependencies", function(assert) {
+	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	assert.strictEqual(metadataController.getDependencies(), this.dependencies);
+});
 
-//QUnit.test("testInit2", function(assert) {
+QUnit.test("testInit2", function(assert) {
+	var metadataController = CORA.metadataController(this.dependencies, this.spec);
 //	var metadataController = this.metadataControllerFactory
-//			.factor("groupIdOneTextChild", undefined);
-//	assert.ok(metadataController !== undefined);
+//		.factor("groupIdOneTextChild", undefined);
+	assert.ok(metadataController !== undefined);
+	let spec = this.metadataChildInitializerFactory.getSpec(0);
+	
+	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
+	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
+	let childRef = childReferences.children[0];
+	assert.stringifyEqual(spec.childReference, childRef);
+//	assert.strictEqual(spec.childReference, "");
 //	var messages = this.pubSub.getMessages();
 //	assert.ok(messages !== undefined);
-//});
-//
+});
+
 //QUnit.test("testInitGroupIdOneTextChild", function(assert) {
 ////	console.log("***************START******************************")
 //	this.metadataControllerFactory.factor("groupIdOneTextChild", undefined);

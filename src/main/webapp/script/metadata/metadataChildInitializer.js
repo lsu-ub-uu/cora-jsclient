@@ -35,7 +35,6 @@ var CORA = (function(cora) {
 			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
 			initializeChild();
 		}
-//		initialize();
 		function getNameInDataForMetadataId(refIn) {
 			var metadataElement = getMetadataById(refIn);
 			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
@@ -112,10 +111,8 @@ var CORA = (function(cora) {
 
 		function initializeChild() {
 			if (childCanRepeat()) {
-//				console.log("childcanrepeat")
 				initializeRepeatingChild();
 			} else {
-//				console.log("childNOtcanrepeat")
 				initializeNonRepeatingChild();
 			}
 		}
@@ -202,7 +199,6 @@ var CORA = (function(cora) {
 			if (hasData()) {
 				initializeNonRepeatingChildInstanceWithData();
 			} else {
-//console.log("no data");
 				initializeForMetadataWithIdAndDataAndRepeatId();
 			}
 		}
@@ -231,7 +227,8 @@ var CORA = (function(cora) {
 			var initializerDep = {
 				"recordTypeProvider" : dependencies.recordTypeProvider,
 				"metadataProvider" : spec.metadataProvider,
-				"pubSub" : spec.pubSub
+				"pubSub" : spec.pubSub,
+				metadataRepeatInitializerFactory :dependencies.metadataRepeatInitializerFactory
 			};
 			var initializerSpec = {
 				"metadataId" : ref,
@@ -239,10 +236,7 @@ var CORA = (function(cora) {
 				"data" : dataChild,
 				"repeatId" : repeatId
 			};
-			let repeatInitializer2 = dependencies.metadataRepeatInitializerFactory.factor( initializerSpec);
-			repeatInitializer2.initialize();
-			
-			let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+			let repeatInitializer = dependencies.metadataRepeatInitializerFactory.factor( initializerSpec);
 			repeatInitializer.initialize();
 		}
 		

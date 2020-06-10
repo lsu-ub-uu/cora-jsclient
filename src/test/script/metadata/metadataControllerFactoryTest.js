@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -63,4 +63,15 @@ QUnit.test("testSpecThatReallyShouldBeDependency", function(assert) {
 	var factoredSpec = metadataController.getSpec();
 	assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredSpec.pubSub, this.dependencies.pubSub);
+	
+	var factoredDependencies = metadataController.getDependencies();
+	assert.strictEqual(factoredDependencies.recordTypeProvider, this.dependencies.recordTypeProvider);
+	assert.strictEqual(factoredDependencies.metadataChildInitializerFactory.type, "genericFactory");
+	
+//	"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
+//	"metadataProvider" : new MetadataProviderStub(),
+//	"pubSub" : CORATEST.pubSubSpy(),
+//	//TODO: kolla denna, har bara lagt till för att få andra tester att gå igenom
+//	
+	
 });

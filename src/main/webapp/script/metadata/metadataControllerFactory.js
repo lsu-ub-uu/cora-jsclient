@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,7 +24,13 @@ var CORA = (function(cora) {
 			//TODO: borde ligga i dependencies och inte i spec
 			spec.metadataProvider = dependencies.metadataProvider;
 			spec.pubSub = dependencies.pubSub;
-			return CORA.metadataController(dependencies, spec);
+			
+			let controllerDependencies = {
+					recordTypeProvider : dependencies.recordTypeProvider,
+					metadataChildInitializerFactory : CORA.genericFactory("metadataChildInitializer",
+							dependencies)
+				};
+			return CORA.metadataController(controllerDependencies, spec);
 		};
 
 		function getDependencies() {

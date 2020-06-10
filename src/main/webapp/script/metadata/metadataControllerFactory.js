@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	cora.metadataControllerFactory = function(dependencies) {
 
 		var factor = function(spec) {
+			//TODO: borde ligga i dependencies och inte i spec
 			spec.metadataProvider = dependencies.metadataProvider;
 			spec.pubSub = dependencies.pubSub;
 			return CORA.metadataController(dependencies, spec);

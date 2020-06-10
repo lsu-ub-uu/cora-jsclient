@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("metadata/metadataChildInitializerTest.js", {
+QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 	beforeEach : function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -67,316 +67,392 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 	}
 });
 
-CORATEST.createChildReferenceForChildInitializerWithRepeatId = function(linkedRecordId,
-		linkedRecordType, repeatId, repeatMin, repeatMax) {
-	return {
-		"name" : "childReference",
-		"repeatId" : repeatId,
-		"children" : CORATEST.createRef(linkedRecordType, linkedRecordId, repeatMin, repeatMax)
-	};
-};
-CORATEST.createRef = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
-	return [ {
-		"name" : "ref",
-		"children" : [ {
-			"name" : "linkedRecordType",
-			"value" : linkedRecordType
-		}, {
-			"name" : "linkedRecordId",
-			"value" : linkedRecordId
-		} ]
-	}, {
-		"name" : "repeatMin",
-		"value" : repeatMin
-	}, {
-		"name" : "repeatMax",
-		"value" : repeatMax
-	} ]
-};
-
-CORATEST.createChildReferenceForChildInitializerWithNoRepeatId = function(linkedRecordId,
-		linkedRecordType, repeatMin, repeatMax) {
-	return {
-		"name" : "childReference",
-		"children" : CORATEST.createRef(linkedRecordType, linkedRecordId, repeatMin, repeatMax)
-	};
-};
-
-QUnit.test("testInit", function(assert) {
-
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	assert.strictEqual(metadataChildInitializer.type, "metadataChildInitializer");
-});
-
-QUnit.test("testGetSpec", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	assert.strictEqual(metadataChildInitializer.getSpec(), this.spec);
-});
-QUnit.test("testGetDependecies", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	assert.strictEqual(metadataChildInitializer.getDependencies(), this.dependencies);
-});
-
-QUnit.test("testInit2", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	assert.ok(metadataChildInitializer !== undefined);
-	var messages = this.pubSub.getMessages();
-	assert.ok(messages !== undefined);
-});
-
-QUnit.test("testInitGroupIdOneTextChild", function(assert) {
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-	let messages = this.pubSub.getMessages();
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
-			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
-
-	assert.equal(messages.length, 1);
-});
-
-QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectly", function(assert) {
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-	assert.strictEqual(repeatSpec.data, undefined);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
-	assert.ok(factored.getInitializeCalled());
-});
-
-QUnit.test("testInitGroupIdOneTextChildWithDataRepeatInitializerCalledCorrectly", function(assert) {
-	this.spec.data = {
-		"name" : "groupIdOneTextChild",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value"
-		} ]
-	};
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
-	assert.ok(factored.getInitializeCalled());
-});
-
-function createLinkedPathWithNameInDataAsString(nameInData) {
-	return JSON.stringify(createLinkedPathWithNameInData(nameInData));
-}
-
-QUnit.test("testGroupIdOneTextChildWithWrongDataRepeatInitializerCalledCorrectly",
-		function(assert) {
-			this.spec.data = {
-				"name" : "groupIdOneTextChild",
-				"children" : [ {
-					"name" : "textVariableIdNot",
-					"value" : "A Value"
-				} ]
-			};
-
-			let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies,
-					this.spec);
-			metadataChildInitializer.initialize();
-
-			let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-			assert.strictEqual(repeatSpec.metadataId, "textVariableId");
-			assert.strictEqual(repeatSpec.path, this.spec.path);
-
-			assert.stringifyEqual(repeatSpec.data, undefined);
-			assert.strictEqual(repeatSpec.repeatId, undefined);
-
-			let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
-			assert.ok(factored.getInitializeCalled());
-
-		});
-
-QUnit.test("testInitGroupIdOneTextChildWithFinalValue", function(assert) {
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableWithFinalValueId", "metadataTextVariable", "0", "1", "1");
-	this.spec.data = {
-		"name" : "groupIdOneTextVarChildWithFinalValue",
-		"children" : [ {
-			"name" : "textVariableIdNot",
-			"value" : "A Value"
-		} ]
-	};
-
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableWithFinalValueId");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, undefined);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
-	assert.ok(factored.getInitializeCalled());
-
-});
-
-// QUnit.test("testInitGroupIdTwoTextChildSecondChildHandledCorrectly", function(assert) {
-// this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-// "textVariableId2", "metadataTextVariable", "0", "1", "1");
-// let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-// metadataChildInitializer.initialize();
+//CORATEST.createChildReferenceForChildInitializerWithRepeatId = function(linkedRecordId,
+//		linkedRecordType, repeatId, repeatMin, repeatMax) {
+//	return {
+//		"name" : "childReference",
+//		"repeatId" : repeatId,
+//		"children" : CORATEST.createRef(linkedRecordType, linkedRecordId, repeatMin, repeatMax)
+//	};
+//};
+//CORATEST.createRef = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
+//	return [ {
+//		"name" : "ref",
+//		"children" : [ {
+//			"name" : "linkedRecordType",
+//			"value" : linkedRecordType
+//		}, {
+//			"name" : "linkedRecordId",
+//			"value" : linkedRecordId
+//		} ]
+//	}, {
+//		"name" : "repeatMin",
+//		"value" : repeatMin
+//	}, {
+//		"name" : "repeatMax",
+//		"value" : repeatMax
+//	} ]
+//};
 //
+//CORATEST.createChildReferenceForChildInitializerWithNoRepeatId = function(linkedRecordId,
+//		linkedRecordType, repeatMin, repeatMax) {
+//	return {
+//		"name" : "childReference",
+//		"children" : CORATEST.createRef(linkedRecordType, linkedRecordId, repeatMin, repeatMax)
+//	};
+//};
+//
+//QUnit.test("testInit", function(assert) {
+//
+//	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	assert.strictEqual(metadataChildInitializer.type, "metadataChildInitializer");
+//});
+//
+//QUnit.test("testGetSpec", function(assert) {
+//	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	assert.strictEqual(metadataChildInitializer.getSpec(), this.spec);
+//});
+//QUnit.test("testGetDependecies", function(assert) {
+//	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	assert.strictEqual(metadataChildInitializer.getDependencies(), this.dependencies);
+//});
+//
+//QUnit.test("testInit2", function(assert) {
+//	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	assert.ok(metadataChildInitializer !== undefined);
+//	var messages = this.pubSub.getMessages();
+//	assert.ok(messages !== undefined);
+//});
+//
+//QUnit.test("testInitGroupIdOneTextChild", function(assert) {
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//	let messages = this.pubSub.getMessages();
+//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+//
+//	assert.equal(messages.length, 1);
+//});
+//
+//QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectly", function(assert) {
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//
+//	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+//	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
+//	assert.strictEqual(repeatSpec.path, this.spec.path);
+//	assert.strictEqual(repeatSpec.data, undefined);
+//	assert.strictEqual(repeatSpec.repeatId, undefined);
+//
+//	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+//	assert.ok(factored.getInitializeCalled());
+//});
+//
+//QUnit.test("testInitGroupIdOneTextChildWithDataRepeatInitializerCalledCorrectly", function(assert) {
+//	this.spec.data = {
+//		"name" : "groupIdOneTextChild",
+//		"children" : [ {
+//			"name" : "textVariableId",
+//			"value" : "A Value"
+//		} ]
+//	};
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//
+//	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+//	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
+//	assert.strictEqual(repeatSpec.path, this.spec.path);
+//
+//	let expectedData = {
+//		"name" : "textVariableId",
+//		"value" : "A Value"
+//	};
+//	assert.stringifyEqual(repeatSpec.data, expectedData);
+//	assert.strictEqual(repeatSpec.repeatId, undefined);
+//
+//	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+//	assert.ok(factored.getInitializeCalled());
+//});
+//
+//// QUnit.test("testInitGroupIdOneTextChildWithData", function(assert) {
+//// let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//// metadataChildInitializer.initialize();
+//// let messages = this.pubSub.getMessages();
+//// assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//// + '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+//// assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+//// + '"path":' + createLinkedPathWithNameInDataAsString("textVariableId") + '}}');
+////
+//// assert.equal(messages.length, 2);
+//// });
+//
+//function createLinkedPathWithNameInDataAsString(nameInData) {
+//	return JSON.stringify(createLinkedPathWithNameInData(nameInData));
+//}
+//
+//QUnit.test("testGroupIdOneTextChildWithWrongDataRepeatInitializerCalledCorrectly", function(assert) {
+//	this.spec.data = {
+//		"name" : "groupIdOneTextChild",
+//		"children" : [ {
+//			"name" : "textVariableIdNot",
+//			"value" : "A Value"
+//		} ]
+//	};
+//
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//	
+//	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+//	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
+//	assert.strictEqual(repeatSpec.path, this.spec.path);
+//
+//	assert.stringifyEqual(repeatSpec.data, undefined);
+//	assert.strictEqual(repeatSpec.repeatId, undefined);
+//
+//	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+//	assert.ok(factored.getInitializeCalled());
+//	
+//	
+////	let messages = this.pubSub.getMessages();
+////	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+////			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+////
+////	assert.equal(messages.length, 1);
+//});
+////QUnit.test("testInitGroupIdOneTextChildWithWrongData", function(assert) {
+////	this.spec.data = {
+////			"name" : "groupIdOneTextChild",
+////			"children" : [ {
+////				"name" : "textVariableIdNot",
+////				"value" : "A Value"
+////			} ]
+////	};
+////	
+////	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+////	metadataChildInitializer.initialize();
+////	let messages = this.pubSub.getMessages();
+////	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+////			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+////	
+////	assert.equal(messages.length, 1);
+////});
+//
+//QUnit
+//		.test(
+//				"testInitGroupIdOneTextChildWithFinalValue",
+//				function(assert) {
+//					this.spec.childReference = CORATEST
+//							.createChildReferenceForChildInitializerWithRepeatId(
+//									"textVariableWithFinalValueId", "metadataTextVariable", "0",
+//									"1", "1");
+//					// console.log(JSON.stringify(this.spec.childReference))
+//					this.spec.data = {
+//						"name" : "groupIdOneTextVarChildWithFinalValue",
+//						"children" : [ {
+//							"name" : "textVariableIdNot",
+//							"value" : "A Value"
+//						} ]
+//					};
+//
+//					let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies,
+//							this.spec);
+//					metadataChildInitializer.initialize();
+//					var messages = this.pubSub.getMessages();
+//					assert
+//							.deepEqual(
+//									JSON.stringify(messages[0]),
+//									'{"type":"add","message":{'
+//											+ '"metadataId":"textVariableWithFinalValueId","path":{},"nameInData":"textVariableWithFinalValueId"}}');
+//
+//					assert
+//							.deepEqual(
+//									JSON.stringify(messages[1]),
+//									'{"type":"setValue","message":{"data":"someFinalValue",'
+//											+ '"path":'
+//											+ createLinkedPathWithNameInDataAsString("textVariableWithFinalValueId")
+//											+ '}}');
+//					assert.equal(messages.length, 2);
+//				});
+//
+//QUnit.test("testInitGroupIdTwoTextChildSecondChildHandledCorrectly", function(assert) {
+//	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
+//			"textVariableId2", "metadataTextVariable", "0", "1", "1");
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//
+//	var messages = this.pubSub.getMessages();
+//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//			+ '"metadataId":"textVariableId2","path":{},"nameInData":"textVariableId2"}}');
+//
+//	assert.equal(messages.length, 1);
+//});
+//
+//// QUnit.test("testInitGroupIdTwoTextChildWithData", function(assert) {
+//// var data = {
+//// "name" : "groupIdOneTextChild",
+//// "children" : [ {
+//// "name" : "textVariableId",
+//// "value" : "A Value"
+//// }, {
+//// "name" : "textVariableId2",
+//// "value" : "A Value2"
+//// } ]
+//// };
+////
+//// this.metadataControllerFactory.factor("groupIdTwoTextChild", data);
+//// var messages = this.pubSub.getMessages();
+//// assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//// + '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+//// assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+//// + '"path":' + createLinkedPathWithNameInDataAsString("textVariableId") + '}}');
+////
+//// assert.deepEqual(JSON.stringify(messages[2]), '{"type":"add","message":{'
+//// + '"metadataId":"textVariableId2","path":{},"nameInData":"textVariableId2"}}');
+//// assert.deepEqual(JSON.stringify(messages[3]),
+//// '{"type":"setValue","message":{"data":"A Value2",' + '"path":'
+//// + createLinkedPathWithNameInDataAsString("textVariableId2") + '}}');
+////
+//// assert.equal(messages.length, 6);
+//// });
+////
+//QUnit.test("testInitGroupIdTwoTextChildWithWrongData", function(assert) {
+//	var data = {
+//		"name" : "groupIdOneTextChild",
+//		"children" : [ {
+//			"name" : "textVariableId",
+//			"value" : "A Value"
+//		}, {
+//			"name" : "textVariableId2NOT",
+//			"value" : "A Value2"
+//		} ]
+//	};
+//	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
+//			"textVariableId2", "metadataTextVariable", "0", "1", "1");
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//	var messages = this.pubSub.getMessages();
+//
+//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//			+ '"metadataId":"textVariableId2","path":{},"nameInData":"textVariableId2"}}');
+//
+//	assert.equal(messages.length, 1);
+//});
+//
+//QUnit.test("testInitOneChildRepeat0to1", function(assert) {
+//	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
+//			"textVariableId", "metadataTextVariable", "0", "0", "1");
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//	var messages = this.pubSub.getMessages();
+//	assert.equal(messages.length, 0);
+//});
+//
+//QUnit.test("testInitOneChildRepeat0to1WithData", function(assert) {
+//	this.spec.data = {
+//		"name" : "groupIdOneTextChildRepeat0to1",
+//		"children" : [ {
+//			"name" : "textVariableId",
+//			"value" : "A Value"
+//		} ]
+//	};
+//	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
+//			"textVariableId", "metadataTextVariable", "0", "0", "1");
+//	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+//	metadataChildInitializer.initialize();
+//	var messages = this.pubSub.getMessages();
+//	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+//			+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
+//	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+//			+ '"path":' + createLinkedPathWithNameInDataAsString("textVariableId") + '}}');
+//
+//	assert.equal(messages.length, 2);
+//});
+//
+// QUnit
+// .test(
+// "testInitOneChildRepeat3to3",
+// function(assert) {
+// this.metadataControllerFactory.factor("groupIdOneTextChildRepeat3to3",
+// undefined);
 // var messages = this.pubSub.getMessages();
-// assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
-// + '"metadataId":"textVariableId2","path":{},"nameInData":"textVariableId2"}}');
+// assert
+// .deepEqual(
+// JSON.stringify(messages[0]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"0","nameInData":"textVariableId"}}');
+// assert
+// .deepEqual(
+// JSON.stringify(messages[1]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"1","nameInData":"textVariableId"}}');
+// assert
+// .deepEqual(
+// JSON.stringify(messages[2]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"2","nameInData":"textVariableId"}}');
 //
-// assert.equal(messages.length, 1);
+// assert.equal(messages.length, 5);
 // });
-
-QUnit.test("testInitGroupIdTwoTextChildWithData", function(assert) {
-	this.spec.data = {
-		"name" : "groupIdOneTextChild",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value"
-		}, {
-			"name" : "textVariableId2",
-			"value" : "A Value2"
-		} ]
-	};
-
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableId2", "metadataTextVariable", "0", "1", "1");
-
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId2");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[1]);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-
-});
 //
-QUnit.test("testInitGroupIdTwoTextChildWithWrongData", function(assert) {
-	this.spec.data = {
-		"name" : "groupIdOneTextChild",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value"
-		}, {
-			"name" : "textVariableId2NOT",
-			"value" : "A Value2"
-		} ]
-	};
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableId2", "metadataTextVariable", "0", "1", "1");
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId2");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, undefined);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-});
-
-QUnit.test("testInitOneChildRepeat0to1", function(assert) {
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableId", "metadataTextVariable", "0", "0", "1");
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
-	assert.strictEqual(factored, undefined);
-
-});
-
-QUnit.test("testInitOneChildRepeat0to1WithData", function(assert) {
-	this.spec.data = {
-		"name" : "groupIdOneTextChildRepeat0to1",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value"
-		} ]
-	};
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableId", "metadataTextVariable", "0", "0", "1");
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
-	assert.strictEqual(repeatSpec.repeatId, undefined);
-
-});
-
-QUnit.test("testInitOneChildRepeat3to3", function(assert) {
-	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-			"textVariableId", "metadataTextVariable", "2", "3", "3");
-	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-	metadataChildInitializer.initialize();
-	
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
-	assert.strictEqual(repeatSpec.path, this.spec.path);
-
-	assert.stringifyEqual(repeatSpec.data, undefined);
-	assert.strictEqual(repeatSpec.repeatId, "0");
-
-});
-
- QUnit.test("testInitOneChildRepeat3to3WithData", function(assert) {
-	 this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
-				"textVariableId", "metadataTextVariable", "2", "3", "3");
-	
-		this.spec.data = {
-		"name" : "groupIdOneTextChildRepeat0to1",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value",
-			"repeatId" : "one"
-		}, {
-			"name" : "textVariableId",
-			"value" : "A Value2",
-			"repeatId" : "two"
-		}, {
-			"name" : "textVariableId",
-			"value" : "A Value3",
-			"repeatId" : "three"
-		} ]
-	};
-		
-		let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
-		metadataChildInitializer.initialize();
-		
-		let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
-		assert.strictEqual(repeatSpec.repeatId, "one");
-		assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
-
-		let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
-		assert.strictEqual(repeatSpec2.repeatId, "two");
-		assert.stringifyEqual(repeatSpec2.data, this.spec.data.children[1]);
-		
-		let repeatSpec3 = this.dependencies.metadataRepeatInitializerFactory.getSpec(2);
-		assert.strictEqual(repeatSpec3.repeatId, "three");
-		assert.stringifyEqual(repeatSpec3.data, this.spec.data.children[2]);
-
-//	this.metadataControllerFactory.factor("groupIdOneTextChildRepeat3to3", data);
-});
-
+// QUnit
+// .test(
+// "testInitOneChildRepeat3to3WithData",
+// function(assert) {
+// var data = {
+// "name" : "groupIdOneTextChildRepeat0to1",
+// "children" : [ {
+// "name" : "textVariableId",
+// "value" : "A Value",
+// "repeatId" : "one"
+// }, {
+// "name" : "textVariableId",
+// "value" : "A Value2",
+// "repeatId" : "two"
+// }, {
+// "name" : "textVariableId",
+// "value" : "A Value3",
+// "repeatId" : "three"
+// } ]
+// };
+//
+// this.metadataControllerFactory.factor("groupIdOneTextChildRepeat3to3", data);
+// var messages = this.pubSub.getMessages();
+// assert
+// .deepEqual(
+// JSON.stringify(messages[0]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"one","nameInData":"textVariableId"}}');
+// assert.deepEqual(JSON.stringify(messages[1]),
+// '{"type":"setValue","message":{"data":"A Value",'
+// + '"path":'
+// + createLinkedPathWithNameInDataAndRepeatIdAsString(
+// "textVariableId", "one") + '}}');
+//
+// assert
+// .deepEqual(
+// JSON.stringify(messages[2]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"two","nameInData":"textVariableId"}}');
+// assert.deepEqual(JSON.stringify(messages[3]),
+// '{"type":"setValue","message":{"data":"A Value2",'
+// + '"path":'
+// + createLinkedPathWithNameInDataAndRepeatIdAsString(
+// "textVariableId", "two") + '}}');
+//
+// assert
+// .deepEqual(
+// JSON.stringify(messages[4]),
+// '{"type":"add","message":{'
+// + '"metadataId":"textVariableId","path":{},"repeatId":"three","nameInData":"textVariableId"}}');
+// assert.deepEqual(JSON.stringify(messages[5]),
+// '{"type":"setValue","message":{"data":"A Value3",'
+// + '"path":'
+// + createLinkedPathWithNameInDataAndRepeatIdAsString(
+// "textVariableId", "three") + '}}');
+//
+// assert.equal(messages.length, 8);
+// });
+//
 function createLinkedPathWithNameInDataAndRepeatIdAsString(nameInData, repeatId) {
 	return JSON.stringify(createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId));
 }

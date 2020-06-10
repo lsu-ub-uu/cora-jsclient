@@ -23,6 +23,7 @@ var CORATEST = (function(coraTest) {
 		
 		const initialize = function() {
 			initializeCalled = true;
+//			console.log("initializeCalled "+initializeCalled)
 //			return spySpec.resultToReturn;
 		};
 		

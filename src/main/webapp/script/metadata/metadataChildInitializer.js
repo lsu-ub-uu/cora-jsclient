@@ -239,9 +239,10 @@ var CORA = (function(cora) {
 				"data" : dataChild,
 				"repeatId" : repeatId
 			};
-
+			let repeatInitializer2 = dependencies.metadataRepeatInitializerFactory.factor( initializerSpec);
+			repeatInitializer2.initialize();
+			
 			let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
-//			console.log(repeatInitializer)
 			repeatInitializer.initialize();
 		}
 		

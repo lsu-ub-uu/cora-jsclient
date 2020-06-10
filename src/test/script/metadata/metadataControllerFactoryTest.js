@@ -22,7 +22,9 @@ QUnit.module("metadata/metadataControllerFactoryTest.js", {
 		this.dependencies = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
 			"metadataProvider" : new MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy()
+			"pubSub" : CORATEST.pubSubSpy(),
+			//TODO: kolla denna, har bara lagt till för att få andra tester att gå igenom
+			metadataRepeatInitializerFactory : CORATEST.standardFactorySpy("metadataRepeatInitializerSpy")
 		};
 		this.spec = {
 			"metadataId" : "groupIdOneTextChild",

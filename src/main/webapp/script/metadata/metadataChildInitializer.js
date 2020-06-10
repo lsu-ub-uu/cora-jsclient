@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016 Olov McKie
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -240,7 +240,9 @@ var CORA = (function(cora) {
 				"repeatId" : repeatId
 			};
 
-			CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+			let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+//			console.log(repeatInitializer)
+			repeatInitializer.initialize();
 		}
 		
 		const getDependencies = function() {

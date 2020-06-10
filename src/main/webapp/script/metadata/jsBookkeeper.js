@@ -49,11 +49,13 @@ var CORA = (function(cora) {
 			};
 			if (repeatMax === "1") {
 				initializerSpec.repeatId = undefined;
-				CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				repeatInitializer.initialize();
 			} else {
 				var startRepeatId = calculateStartRepeatId(currentData.children);
 				initializerSpec.repeatId = String(startRepeatId);
-				CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				repeatInitializer.initialize();
 				return String(startRepeatId);
 			}
 		}

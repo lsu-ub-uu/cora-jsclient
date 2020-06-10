@@ -26,7 +26,10 @@ var CORA = (function(cora) {
 		var path = spec.path;
 		var cMetadataElement = getMetadataById(metadataId);
 //		console.log("cMetadataElement "+JSON.stringify(cMetadataElement.getData()))
+		
+		const initialize = function() {
 		initalizeRepeat();
+		};
 
 		function getMetadataById(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
@@ -390,6 +393,14 @@ var CORA = (function(cora) {
 				publishVariableValue(spec.data.value, nextLevelPath);
 			}
 		}
+		
+		let out = Object.freeze({
+			type : "metadataRepeatInitializer",
+//			 getDependencies: getDependencies,
+//			 getSpec: getSpec,
+			initialize : initialize
+		});
+		return out;
 	};
 	return cora;
 }(CORA));

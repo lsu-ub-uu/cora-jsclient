@@ -73,5 +73,21 @@ QUnit.test("testSpecThatReallyShouldBeDependency", function(assert) {
 //	"pubSub" : CORATEST.pubSubSpy(),
 //	//TODO: kolla denna, har bara lagt till för att få andra tester att gå igenom
 //	
+});
+QUnit.test("testDependenciesForMetadataChildInitializerFactory", function(assert) {
+	let metadataController = this.metadataControllerFactory.factor(this.spec);
+	
+	let factoredDependencies = metadataController.getDependencies();
+	let metadataChildInitializerFactoryDep = factoredDependencies.metadataChildInitializerFactory.getDependencies();
+	assert.strictEqual(metadataChildInitializerFactoryDep.recordTypeProvider, this.dependencies.recordTypeProvider);
+	assert.strictEqual(metadataChildInitializerFactoryDep.metadataRepeatInitializerFactory.type, "genericFactory");
+	assert.strictEqual(metadataChildInitializerFactoryDep.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(metadataChildInitializerFactoryDep.pubSub, this.dependencies.pubSub);
+	
+//	"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
+//	"metadataProvider" : new MetadataProviderStub(),
+//	"pubSub" : CORATEST.pubSubSpy(),
+//	//TODO: kolla denna, har bara lagt till för att få andra tester att gå igenom
+//	
 	
 });

@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -341,9 +342,11 @@ var CORA = (function(cora) {
 					"path": nextLevelPath,
 					"data": spec.data,
 					"metadataProvider": metadataProvider,
-					"pubSub": pubSub,
-					metadataRepeatInitializerFactory : dependencies.metadataRepeatInitializerFactory
+					"pubSub": pubSub
 				};
+//				let metadataChildInitializer =
+//					dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
+				
 				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
 				metadataChildInitializer.initialize();
 			}
@@ -395,10 +398,18 @@ var CORA = (function(cora) {
 			}
 		}
 		
+		const getDependencies = function() {
+			return dependencies;
+		};
+		
+		const getSpec = function() {
+			return spec;
+		};
+		
 		let out = Object.freeze({
 			type : "metadataRepeatInitializer",
-//			 getDependencies: getDependencies,
-//			 getSpec: getSpec,
+			 getDependencies: getDependencies,
+			 getSpec: getSpec,
 			initialize : initialize
 		});
 		return out;

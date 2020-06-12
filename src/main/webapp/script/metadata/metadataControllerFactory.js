@@ -25,10 +25,20 @@ var CORA = (function(cora) {
 			spec.metadataProvider = dependencies.metadataProvider;
 			spec.pubSub = dependencies.pubSub;
 			
+			let metadataRepeatInitializerFactory = CORA.genericFactory("metadataRepeatInitializer",
+					dependencies);
+			let childInitializerFactoryDep ={
+					recordTypeProvider : dependencies.recordTypeProvider,
+					metadataRepeatInitializerFactory : metadataRepeatInitializerFactory,
+					metadataProvider : dependencies.metadataProvider,
+					pubSub : dependencies.pubSub
+			};
+			
+			
 			let controllerDependencies = {
 					recordTypeProvider : dependencies.recordTypeProvider,
 					metadataChildInitializerFactory : CORA.genericFactory("metadataChildInitializer",
-							dependencies)
+							childInitializerFactoryDep)
 				};
 			return CORA.metadataController(controllerDependencies, spec);
 		};

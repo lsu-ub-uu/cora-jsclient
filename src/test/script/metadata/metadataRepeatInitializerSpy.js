@@ -18,7 +18,7 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.metadataRepeatInitializerSpy = function(dependency, spec, spySpec) {
+	coraTest.metadataRepeatInitializerSpy = function(dependencies, spec, spySpec) {
 		let initializeCalled = false;
 		
 		const initialize = function() {

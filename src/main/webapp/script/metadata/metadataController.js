@@ -26,11 +26,11 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			initializeFirstLevel();
-			spec.pubSub.publish("newElementsAdded", {
+			dependencies.pubSub.publish("newElementsAdded", {
 				data: "",
 				path: {}
 			});
-			spec.pubSub.publish("initComplete", {
+			dependencies.pubSub.publish("initComplete", {
 				data: "",
 				path: {}
 			});
@@ -45,20 +45,14 @@ var CORA = (function(cora) {
 				let initializerSpec = {
 					childReference: childReference,
 					path: topLevelPath,
-					data: topLevelData,
-					metadataProvider: spec.metadataProvider,
-					pubSub: spec.pubSub
+					data: topLevelData
 				};
-				dependencies.metadataChildInitializerFactory.factor(initializerSpec);
-//				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
-//				metadataChildInitializer.initialize();
-//				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
-//				metadataChildInitializer.initialize();
+				dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
 			});
 		}
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
+			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
 		}
 
 		const getSpec = function() {

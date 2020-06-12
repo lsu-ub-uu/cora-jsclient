@@ -224,19 +224,20 @@ var CORA = (function(cora) {
 		}
 
 		function initializeForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId) {
-			var initializerDep = {
-				"recordTypeProvider" : dependencies.recordTypeProvider,
-				"metadataProvider" : spec.metadataProvider,
-				"pubSub" : spec.pubSub,
-				metadataRepeatInitializerFactory :dependencies.metadataRepeatInitializerFactory
-			};
+//			var initializerDep = {
+//				"recordTypeProvider" : dependencies.recordTypeProvider,
+//				"metadataProvider" : spec.metadataProvider,
+//				"pubSub" : spec.pubSub
+////				,
+////				metadataRepeatInitializerFactory :dependencies.metadataRepeatInitializerFactory
+//			};
 			var initializerSpec = {
 				"metadataId" : ref,
 				"path" : spec.path,
 				"data" : dataChild,
 				"repeatId" : repeatId
 			};
-			let repeatInitializer = dependencies.metadataRepeatInitializerFactory.factor( initializerSpec);
+			let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorRepeatInitializer(initializerSpec);
 			repeatInitializer.initialize();
 		}
 		

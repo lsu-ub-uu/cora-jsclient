@@ -25,7 +25,7 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
 			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
-			metadataRepeatInitializerFactory: CORATEST.standardFactorySpy("metadataRepeatInitializerSpy")
+			metadataChildAndRepeatInitializerFactory: CORATEST.metadataChildAndRepeatInitializerFactorySpy({})
 
 		};
 		this.spec = {
@@ -121,13 +121,13 @@ QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectly", functi
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 	assert.strictEqual(repeatSpec.data, undefined);
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
 });
 
@@ -142,14 +142,14 @@ QUnit.test("testInitGroupIdOneTextChildWithDataRepeatInitializerCalledCorrectly"
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
 });
 
@@ -171,14 +171,14 @@ QUnit.test("testGroupIdOneTextChildWithWrongDataRepeatInitializerCalledCorrectly
 		this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
 	assert.stringifyEqual(repeatSpec.data, undefined);
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
 
 });
@@ -197,14 +197,14 @@ QUnit.test("testInitGroupIdOneTextChildWithFinalValue", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableWithFinalValueId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
 	assert.stringifyEqual(repeatSpec.data, undefined);
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
 
 });
@@ -227,7 +227,7 @@ QUnit.test("testInitGroupIdTwoTextChildWithData", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId2");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
@@ -252,7 +252,7 @@ QUnit.test("testInitGroupIdTwoTextChildWithWrongData", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId2");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
@@ -266,7 +266,7 @@ QUnit.test("testInitOneChildRepeat0to1", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let factored = this.dependencies.metadataRepeatInitializerFactory.getFactored(0);
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.strictEqual(factored, undefined);
 
 });
@@ -284,7 +284,7 @@ QUnit.test("testInitOneChildRepeat0to1WithData", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
@@ -299,7 +299,7 @@ QUnit.test("testInitOneChildRepeat3to3", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 	assert.strictEqual(repeatSpec.path, this.spec.path);
 
@@ -332,15 +332,15 @@ QUnit.test("testInitOneChildRepeat3to3WithData", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "one");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 
-	let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
+	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(1);
 	assert.strictEqual(repeatSpec2.repeatId, "two");
 	assert.stringifyEqual(repeatSpec2.data, this.spec.data.children[1]);
 
-	let repeatSpec3 = this.dependencies.metadataRepeatInitializerFactory.getSpec(2);
+	let repeatSpec3 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(2);
 	assert.strictEqual(repeatSpec3.repeatId, "three");
 	assert.stringifyEqual(repeatSpec3.data, this.spec.data.children[2]);
 
@@ -377,15 +377,15 @@ QUnit.test("testInitOneChildRepeat3to3WithDataForOne", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "one");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 
-	let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
+	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(1);
 	assert.strictEqual(repeatSpec2.repeatId, "0");
 	assert.stringifyEqual(repeatSpec2.data, undefined);
 
-	let repeatSpec3 = this.dependencies.metadataRepeatInitializerFactory.getSpec(2);
+	let repeatSpec3 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(2);
 	assert.strictEqual(repeatSpec3.repeatId, "1");
 	assert.stringifyEqual(repeatSpec3.data, undefined);
 
@@ -410,15 +410,15 @@ QUnit.test("testInitOneChildRepeat3to3WithDataOCalculateRepeatId", function(asse
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "5");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 
-	let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
+	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(1);
 	assert.strictEqual(repeatSpec2.repeatId, "2");
 	assert.stringifyEqual(repeatSpec2.data, this.spec.data.children[1]);
 
-	let repeatSpec3 = this.dependencies.metadataRepeatInitializerFactory.getSpec(2);
+	let repeatSpec3 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(2);
 	assert.strictEqual(repeatSpec3.repeatId, "6");
 	assert.stringifyEqual(repeatSpec3.data, undefined);
 
@@ -431,7 +431,7 @@ QUnit.test("testInitOneChildRepeat1toX", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "0");
 	assert.stringifyEqual(repeatSpec.data, undefined);
 
@@ -451,7 +451,7 @@ QUnit.test("testInitOneChildRepeat1toXWithDataForOne", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "one");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 
@@ -476,10 +476,10 @@ QUnit.test("testInitOneChildRepeat1toXWithDataForTwo", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "one");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
-	let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
+	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(1);
 	assert.strictEqual(repeatSpec2.repeatId, "two");
 	assert.stringifyEqual(repeatSpec2.data, this.spec.data.children[1]);
 
@@ -499,7 +499,7 @@ QUnit.test("testInitOneChildRepeat0toXPreviouslyNotRepeating", function(assert) 
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "0");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
 
@@ -523,10 +523,10 @@ QUnit.test("testInitOneChildRepeat0toXPreviouslyNotRepeatingAddingNewChild", fun
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.repeatId, "0");
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
-	let repeatSpec2 = this.dependencies.metadataRepeatInitializerFactory.getSpec(1);
+	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(1);
 	assert.strictEqual(repeatSpec2.repeatId, "two");
 	assert.stringifyEqual(repeatSpec2.data, this.spec.data.children[1]);
 
@@ -559,7 +559,7 @@ QUnit.test("testInitOneChildRepeat0toXPreviouslyNotRepeatingAddingNewChild", fun
 //	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 //	metadataChildInitializer.initialize();
 //
-//	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+//	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 //	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
 //
 //	var path = createLinkedPathWithNameInData("textVariableId");
@@ -586,7 +586,7 @@ QUnit.test("testInitOneChildRepeat0toXPreviouslyNotRepeatingAddingNewChild", fun
 //	 let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 //		metadataChildInitializer.initialize();
 //		
-//		let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+//		let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 //		assert.strictEqual(repeatSpec.repeatId, undefined);
 //		assert.strictEqual(repeatSpec.path, this.spec.path);
 //		assert.strictEqual(repeatSpec.data, undefined);
@@ -633,7 +633,7 @@ QUnit.test("testInitTextVarRepeat1to1InGroupOneAttributeInGroupWithData", functi
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "groupIdOneTextChildOneAttribute");
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 	assert.strictEqual(repeatSpec.path, this.spec.path);
@@ -683,7 +683,7 @@ QUnit.test("testInitTextVarRepeat1to1InGroupOneAttributeInGroupWithWrongData", f
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "groupIdOneTextChildOneAttribute");
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 	assert.stringifyEqual(repeatSpec.data, undefined);
@@ -712,7 +712,7 @@ QUnit.test("testInitTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", functi
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initialize();
 
-	let repeatSpec = this.dependencies.metadataRepeatInitializerFactory.getSpec(0);
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(repeatSpec.metadataId, "groupIdOneTextChildTwoAttributes");
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);

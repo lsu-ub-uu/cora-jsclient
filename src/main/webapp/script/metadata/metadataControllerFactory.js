@@ -22,23 +22,22 @@ var CORA = (function(cora) {
 
 		var factor = function(spec) {
 			//TODO: borde ligga i dependencies och inte i spec
-			spec.metadataProvider = dependencies.metadataProvider;
-			spec.pubSub = dependencies.pubSub;
+//			spec.metadataProvider = dependencies.metadataProvider;
+//			spec.pubSub = dependencies.pubSub;
 			
-			let metadataRepeatInitializerFactory = CORA.genericFactory("metadataRepeatInitializer",
-					dependencies);
-			let childInitializerFactoryDep ={
+			let metadataChildAndRepeatInitializerDep = {
 					recordTypeProvider : dependencies.recordTypeProvider,
-					metadataRepeatInitializerFactory : metadataRepeatInitializerFactory,
 					metadataProvider : dependencies.metadataProvider,
 					pubSub : dependencies.pubSub
 			};
 			
+			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
 			
 			let controllerDependencies = {
 					recordTypeProvider : dependencies.recordTypeProvider,
-					metadataChildInitializerFactory : CORA.genericFactory("metadataChildInitializer",
-							childInitializerFactoryDep)
+					metadataProvider : dependencies.metadataProvider,
+					pubSub : dependencies.pubSub,
+					metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
 				};
 			return CORA.metadataController(controllerDependencies, spec);
 		};

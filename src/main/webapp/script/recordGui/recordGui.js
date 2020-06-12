@@ -39,6 +39,7 @@ var CORA = (function(cora) {
 		};
 
 		const initMetadataControllerStartingGui = function() {
+			//TODO: kolla spec och dependencies
 			let specMetadataController = {
 				metadataId: spec.metadataId,
 				data: spec.data,

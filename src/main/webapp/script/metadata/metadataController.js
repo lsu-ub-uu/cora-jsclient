@@ -23,6 +23,7 @@ var CORA = (function(cora) {
 	cora.metadataController = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
+		let topLevelPath = {};
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
 		const start = function() {
@@ -38,23 +39,27 @@ var CORA = (function(cora) {
 		};
 
 		const initializeFirstLevel = function() {
-			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			let topLevelChildReferences = topLevelMetadataElement
-				.getFirstChildByNameInData('childReferences');
-			let topLevelPath = {};
+			let topLevelChildReferences = extractTopLevelChildReferences();
 			topLevelChildReferences.children.forEach(function(childReference) {
-				let hasReadPermission = userHasRecordPartPermission(childReference);
-
-				if (hasReadPermission) {
-					let initializerSpec = {
-						childReference: childReference,
-						path: topLevelPath,
-						data: topLevelData
-					};
-					dependencies.metadataChildAndRepeatInitializerFactory
-						.factorChildInitializer(initializerSpec);
-				}
+				possiblyInitializeChild(childReference);
 			});
+		};
+
+		const extractTopLevelChildReferences = function() {
+			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
+			return topLevelMetadataElement
+				.getFirstChildByNameInData('childReferences');
+		}
+
+		const getMetadataById = function(id) {
+			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+		};
+
+		const possiblyInitializeChild = function(childReference) {
+			let hasReadPermission = userHasRecordPartPermission(childReference);
+			if (hasReadPermission) {
+				intitalizeChild(childReference);
+			}
 		};
 
 		const userHasRecordPartPermission = function(childReference) {
@@ -66,8 +71,14 @@ var CORA = (function(cora) {
 				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
 		};
 
-		const getMetadataById = function(id) {
-			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+		const intitalizeChild = function(childReference) {
+			let initializerSpec = {
+				childReference: childReference,
+				path: topLevelPath,
+				data: topLevelData
+			};
+			dependencies.metadataChildAndRepeatInitializerFactory
+				.factorChildInitializer(initializerSpec);
 		};
 
 		const getSpec = function() {
@@ -78,6 +89,7 @@ var CORA = (function(cora) {
 		};
 
 		start();
+
 		return Object.freeze({
 			type: "metadataController",
 			getSpec: getSpec,

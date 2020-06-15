@@ -18,21 +18,21 @@
  */
 "use strict";
 QUnit.module("metadata/metadataControllerFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.dependencies = {
-			recordTypeProvider : CORATEST.recordTypeProviderSpy(),
-			metadataProvider : new MetadataProviderStub(),
-			pubSub : CORATEST.pubSubSpy()
+			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
+			metadataProvider: new MetadataProviderStub(),
+			pubSub: CORATEST.pubSubSpy()
 		};
 		this.spec = {
-			metadataId : "groupIdOneTextChild",
-			data : undefined,
+			metadataId: "groupIdOneTextChild",
+			data: undefined,
 			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 		this.metadataControllerFactory = CORA.metadataControllerFactory(this.dependencies);
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -52,10 +52,11 @@ QUnit.test("testFactor", function(assert) {
 });
 
 QUnit.test("testSpec", function(assert) {
-	var metadataController = this.metadataControllerFactory.factor(this.spec);
-	var factoredSpec = metadataController.getSpec();
-	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
-	assert.strictEqual(factoredSpec.data, this.spec.data);
+	let metadataController = this.metadataControllerFactory.factor(this.spec);
+	let factoredSpec = metadataController.getSpec();
+	assert.strictEqual(factoredSpec, this.spec);
+//	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
+//	assert.strictEqual(factoredSpec.data, this.spec.data);
 });
 
 QUnit.test("testDependencies", function(assert) {
@@ -63,21 +64,21 @@ QUnit.test("testDependencies", function(assert) {
 	var factoredDependencies = metadataController.getDependencies();
 	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub);
-	
+
 	assert.strictEqual(factoredDependencies.recordTypeProvider, this.dependencies.recordTypeProvider);
 	assert.strictEqual(factoredDependencies.metadataChildAndRepeatInitializerFactory.type, "metadataChildAndRepeatInitializerFactory");
-	
+
 });
 QUnit.test("testDependenciesForMetadataChildAndRepeatInitializerFactory", function(assert) {
 	let metadataController = this.metadataControllerFactory.factor(this.spec);
-	
+
 	let factoredControllerDependencies = metadataController.getDependencies();
 	let metadataChildAndRepeatInitializerFactory = factoredControllerDependencies.metadataChildAndRepeatInitializerFactory;
-	
+
 	let factoredDependencies = metadataChildAndRepeatInitializerFactory.getDependencies();
-	
+
 	assert.strictEqual(factoredDependencies.recordTypeProvider, this.dependencies.recordTypeProvider);
 	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub);
-	
+
 });

@@ -105,8 +105,8 @@ QUnit.test("testInitMetadataControllerStartingGuiHasCorrectSpec", function(asser
 	let factoredSpec = this.dependencies.metadataControllerFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
 	assert.strictEqual(factoredSpec.data, this.spec.data);
-	assert.strictEqual(factoredSpec.metadataProvider, this.dependencies.metadataProvider);
-	assert.strictEqual(factoredSpec.pubSub, this.dependencies.pubSub);
+	assert.strictEqual(factoredSpec.data, this.spec.data);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });
 
 QUnit.test("testValidateDataUsesValidator", function(assert) {

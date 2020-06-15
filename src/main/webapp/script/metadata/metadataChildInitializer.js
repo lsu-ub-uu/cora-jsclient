@@ -210,7 +210,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
+			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
 		};
 
 		const hasData = function() {

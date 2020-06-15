@@ -32,7 +32,7 @@ var CORATEST = (function(coraTest) {
 		
 		return Object.freeze({
 			"type": "metadataChildInitializerSpy",
-			validate: initialize,
+			initialize: initialize,
 			getInitializeCalled: getInitializeCalled
 		});
 	};

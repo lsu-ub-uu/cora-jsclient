@@ -24,15 +24,15 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub,
 			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
 			metadataChildAndRepeatInitializerFactory: CORATEST.metadataChildAndRepeatInitializerFactorySpy({})
 
 		};
 		this.spec = {
 			data: undefined,
-			path: {},
-			metadataProvider: this.metadataProvider,
-			pubSub: this.pubSub
+			path: {}
 		};
 
 		this.spec.childReference = {

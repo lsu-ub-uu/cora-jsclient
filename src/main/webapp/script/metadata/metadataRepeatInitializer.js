@@ -120,6 +120,7 @@ var CORA = (function(cora) {
 			if (hasAttributes()) {
 				childPathPart.children.push(createAttributes());
 			}
+//			console.log("childPathPart "+JSON.stringify(childPathPart))
 			return childPathPart;
 		}
 
@@ -213,11 +214,9 @@ var CORA = (function(cora) {
 			var initializerSpec = {
 				"childReference": childReference,
 				"path": nextLevelPath,
-				"data": spec.data,
-				"metadataProvider": metadataProvider,
-				"pubSub": pubSub
+				"data": spec.data
 			};
-			let metadataInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
 			metadataInitializer.initialize();
 		}
 

@@ -288,6 +288,192 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 	assert.ok(factoredChild2.getInitializeCalled());
 });
 
+QUnit.test("testRecordLinkMessage", function(assert) {
+	this.spec.metadataId = "myLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	var messages = this.pubSub.getMessages();
+
+	var expectedAddForRecordLink = {
+		"type" : "add",
+		"message" : {
+			"metadataId" : "myLink",
+			"path" : {},
+			"nameInData" : "myLink"
+		}
+	};
+	assert.stringifyEqual(messages[0], expectedAddForRecordLink);
+
+	var expectedAddForLinkedRecordType = {
+			  "type": "linkedData",
+			  "message": {
+			    "path": {
+			      "name": "linkedPath",
+			      "children": [
+			        {
+			          "name": "nameInData",
+			          "value": "myLink"
+			        }
+			      ]
+			    }
+			  }
+			};
+	assert.stringifyEqual(messages[1], expectedAddForLinkedRecordType);
+	assert.equal(messages.length, 2);
+});
+
+CORATEST.createRefForRepeatIntitalizer = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
+	return {
+		"name": "childReference",
+		"repeatId": 1,
+		"children": [{
+			"name": "ref",
+			"children": [{
+				"name": "linkedRecordType",
+				"value": linkedRecordType
+			}, {
+				"name": "linkedRecordId",
+				"value": linkedRecordId
+			}],
+			"attributes": {
+				"type": "textVariable"
+			}
+		}, {
+			"name": "repeatMin",
+			"value": repeatMin
+		}, {
+			"name": "repeatMax",
+			"value": repeatMax
+		}]
+	}
+};
+
+QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataNoRepeatId", function(assert) {
+	this.spec.metadataId = "myLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myLink","children":[{"name":"linkedRecordType","value":"metadataTextVariable"}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myLink"}]});
+	
+	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
+	assert.stringifyEqual(linkedRecordIdSpec.data, this.spec.data);
+	assert.stringifyEqual(linkedRecordIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myLink"}]});
+
+});
+
+QUnit.test("testRecordLinkWithPathMessages", function(assert) {
+	this.spec.metadataId = "myPathLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	var messages = this.pubSub.getMessages();
+
+	var expectedAddForRecordLink = {
+		"type" : "add",
+		"message" : {
+			"metadataId" : "myPathLink",
+			"path" : {},
+			"nameInData" : "myPathLink"
+		}
+	};
+	assert.stringifyEqual(messages[0], expectedAddForRecordLink);
+	
+	let expectedAddForLinkedData = 
+			{
+				  "type": "linkedData",
+				  "message": {
+				    "path": {
+				      "name": "linkedPath",
+				      "children": [
+				        {
+				          "name": "nameInData",
+				          "value": "myPathLink"
+				        }
+				      ]
+				    }
+				  }
+				};
+	
+	assert.stringifyEqual(messages[1], expectedAddForLinkedData);
+	assert.stringifyEqual(messages[2], undefined);
+});
+
+QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWithLinkedPath", function(assert) {
+	this.spec.metadataId = "myPathLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myPathLink","children":[{"name":"linkedRecordType","value":"metadataTextVariable"}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myPathLink"}]});
+	
+	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
+	assert.stringifyEqual(linkedRecordIdSpec.data, this.spec.data);
+	assert.stringifyEqual(linkedRecordIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myPathLink"}]});
+
+	
+	let linkedRepeatTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(2);
+	let expectedRecordRepeatIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRepeatIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRepeatTypeSpec.childReference, expectedRecordRepeatIdReference);
+	assert.stringifyEqual(linkedRepeatTypeSpec.data, this.spec.data);
+	assert.stringifyEqual(linkedRepeatTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myPathLink"}]});
+});
+
+
+QUnit.test("testResourceLinkMessage", function(assert) {
+	this.spec.metadataId = "masterResLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	var messages = this.pubSub.getMessages();
+
+	var expectedAddForResourceLink = {
+		"type" : "add",
+		"message" : {
+			"metadataId" : "masterResLink",
+			"path" : {},
+			"nameInData" : "master"
+		}
+	};
+	assert.stringifyEqual(messages[0], expectedAddForResourceLink);
+
+//	var expectedAddForLinkedRecordType = {
+//			  "type": "linkedData",
+//			  "message": {
+//			    "path": {
+//			      "name": "linkedPath",
+//			      "children": [
+//			        {
+//			          "name": "nameInData",
+//			          "value": "myLink"
+//			        }
+//			      ]
+//			    }
+//			  }
+//			};
+//	assert.stringifyEqual(messages[1], expectedAddForLinkedRecordType);
+//	assert.equal(messages.length, 2);
+});
+
+
 //  QUnit.test("testInitGroupIdOneTextChildWithData", function(assert) {
 //  let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
 //  metadataRepeatInitializer.initialize();
@@ -1849,90 +2035,7 @@ function createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId) {
 // assert.equal(messages.length, 4);
 // });
 //
-// QUnit.test("testInitGroupWithOneRecordLink", function(assert) {
-// this.metadataControllerFactory.factor("groupIdOneRecordLinkChild", undefined);
-// var messages = this.pubSub.getMessages();
-//
-// var expectedAddForRecordLink = {
-// "type" : "add",
-// "message" : {
-// "metadataId" : "myLink",
-// "path" : {},
-// "nameInData" : "myLink"
-// }
-// };
-// assert.stringifyEqual(messages[0], expectedAddForRecordLink);
-//
-// var expectedAddForLinkedRecordType = {
-// "type" : "add",
-// "message" : {
-// "metadataId" : "linkedRecordTypeTextVar",
-// "path" : {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : "myLink"
-// } ]
-// },
-// "nameInData" : "linkedRecordType"
-// }
-// };
-// assert.stringifyEqual(messages[1], expectedAddForLinkedRecordType);
-//
-// var expectedSetValueForLinkedRecordType = {
-// "type" : "setValue",
-// "message" : {
-// "data" : "metadataTextVariable",
-// "path" : {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : "myLink"
-// }, {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : "linkedRecordType"
-// } ]
-//
-// } ]
-// }
-// }
-// };
-// assert.stringifyEqual(messages[2], expectedSetValueForLinkedRecordType);
-//
-// var expectedAddForLinkedRecordId = {
-// "type" : "add",
-// "message" : {
-// "metadataId" : "linkedRecordIdTextVar",
-// "path" : {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : "myLink"
-// } ]
-// },
-// "nameInData" : "linkedRecordId"
-// }
-// };
-// assert.stringifyEqual(messages[3], expectedAddForLinkedRecordId);
-//
-// var expectedLinkedData = {
-// "type" : "linkedData",
-// "message" : {
-// "path" : {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : "myLink"
-// } ]
-// }
-// }
-// };
-// assert.stringifyEqual(messages[4], expectedLinkedData);
-//
-// assert.equal(messages.length, 7);
-// });
+ 
 //
 // QUnit.test("testInitGroupWithOneRecordLinkWithFinalValue", function(assert) {
 // this.metadataControllerFactory.factor("groupIdOneRecordLinkChildWithFinalValue", undefined);

@@ -26,7 +26,6 @@ var CORA = (function(cora) {
 		var metadataId = spec.metadataId;
 		var path = spec.path;
 		var cMetadataElement = getMetadataById(metadataId);
-//		console.log("cMetadataElement "+JSON.stringify(cMetadataElement.getData()))
 		
 		const initialize = function() {
 		initalizeRepeat();
@@ -51,9 +50,6 @@ var CORA = (function(cora) {
 			if (hasAttributes()) {
 				addMessage.attributes = collectAttributes();
 			}
-//			if(pubSub.type === "pubSubSpy"){
-//			console.log("pubsub "+JSON.stringify(pubSub.getMessages()));}
-//			console.log("r1")
 			pubSub.publish("add", addMessage);
 		}
 
@@ -86,11 +82,9 @@ var CORA = (function(cora) {
 				initializeMetadataGroup(nextLevelPath);
 			} else if (isRecordLink()) {
 				initializeMetadataRecordLink(nextLevelPath);
-//				console.log("r2")
 				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
 				initializeMetadataResourceLink(nextLevelPath);
-//				console.log("r3")
 				pubSub.publish("linkedResource", message);
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);
@@ -249,11 +243,10 @@ var CORA = (function(cora) {
 			var initializerSpec = {
 				"childReference": recordTypeStaticChildReference,
 				"path": nextLevelPath,
-				"data": recordTypeData,
-				"metadataProvider": metadataProvider,
-				"pubSub": pubSub
+				"data": recordTypeData
 			};
-			let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataChildInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
+			
 			metadataChildInitializer.initialize();
 		}
 
@@ -325,11 +318,10 @@ var CORA = (function(cora) {
 			var initializerSpec = {
 				"childReference": recordIdStaticChildReference,
 				"path": nextLevelPath,
-				"data": recordIdData,
-				"metadataProvider": metadataProvider,
-				"pubSub": pubSub
+				"data": recordIdData
 			};
-			let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
+			let metadataChildInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
+			
 			metadataChildInitializer.initialize();
 		}
 
@@ -339,14 +331,11 @@ var CORA = (function(cora) {
 				var initializerSpec = {
 					"childReference": recordTypeStaticChildReference,
 					"path": nextLevelPath,
-					"data": spec.data,
-					"metadataProvider": metadataProvider,
-					"pubSub": pubSub
+					"data": spec.data
 				};
-//				let metadataChildInitializer =
-//					dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
+				let metadataChildInitializer =
+					dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
 				
-				let metadataChildInitializer = CORA.metadataChildInitializer(dependencies, initializerSpec);
 				metadataChildInitializer.initialize();
 			}
 		}

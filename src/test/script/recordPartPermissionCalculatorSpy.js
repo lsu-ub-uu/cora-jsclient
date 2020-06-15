@@ -28,42 +28,53 @@ var CORATEST = (function(coraTest) {
 
 
 		const hasFulfilledReadPermissionsForRecordPart = function(type, id) {
-			readRequestedIds.push(type+"_"+id);
-			if(idsToReturnFalseForRead.includes(type+"_"+id)){
+			readRequestedIds.push(type + "_" + id);
+			if (idsToReturnFalseForRead.includes(type + "_" + id)) {
 				return false;
 			}
 			return true;
 		}
 
 		const hasFulfilledWritePermissionsForRecordPart = function(type, id) {
-			writeRequestedIds.push(type+"_"+id);
-			if(idsToReturnFalseForWrite.includes(type+"_"+id)){
+			writeRequestedIds.push(type + "_" + id);
+			if (idsToReturnFalseForWrite.includes(type + "_" + id)) {
 				return false;
 			}
 			return true;
 		}
-		
-		const getReadRequestedId = function(index){
+
+		const getReadRequestedId = function(index) {
 			return readRequestedIds[index];
 		}
-		const getWriteRequestedId = function(index){
+
+		const getReadRequestedIdsArray = function() {
+			return readRequestedIds;
+		}
+
+		const getWriteRequestedId = function(index) {
 			return writeRequestedIds[index];
 		}
-		
-		const addIdToReturnFalseForRead = function(id){
+
+		const getWriteRequestedIdsArray = function() {
+			return writeRequestedIds;
+		}
+
+		const addIdToReturnFalseForRead = function(id) {
 			idsToReturnFalseForRead.push(id);
 		}
-		const addIdToReturnFalseForWrite = function(id){
+		const addIdToReturnFalseForWrite = function(id) {
 			idsToReturnFalseForWrite.push(id);
 		}
 
 		return Object.freeze({
-			hasFulfilledReadPermissionsForRecordPart : hasFulfilledReadPermissionsForRecordPart,
-			hasFulfilledWritePermissionsForRecordPart : hasFulfilledWritePermissionsForRecordPart,
-			getReadRequestedId : getReadRequestedId,
-			getWriteRequestedId : getWriteRequestedId,
-			addIdToReturnFalseForRead : addIdToReturnFalseForRead, 
-			addIdToReturnFalseForWrite : addIdToReturnFalseForWrite
+			hasFulfilledReadPermissionsForRecordPart: hasFulfilledReadPermissionsForRecordPart,
+			hasFulfilledWritePermissionsForRecordPart: hasFulfilledWritePermissionsForRecordPart,
+			getReadRequestedId: getReadRequestedId,
+			getReadRequestedIdsArray: getReadRequestedIdsArray,
+			getWriteRequestedId: getWriteRequestedId,
+			getWriteRequestedIdsArray: getWriteRequestedIdsArray,
+			addIdToReturnFalseForRead: addIdToReturnFalseForRead,
+			addIdToReturnFalseForWrite: addIdToReturnFalseForWrite
 		});
 	};
 	return coraTest;

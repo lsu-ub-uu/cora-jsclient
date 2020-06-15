@@ -19,14 +19,16 @@
 "use strict";
 QUnit.module("metadata/metadataControllerFactoryTest.js", {
 	beforeEach : function() {
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.dependencies = {
 			recordTypeProvider : CORATEST.recordTypeProviderSpy(),
 			metadataProvider : new MetadataProviderStub(),
 			pubSub : CORATEST.pubSubSpy()
 		};
 		this.spec = {
-			"metadataId" : "groupIdOneTextChild",
-			"data" : undefined
+			metadataId : "groupIdOneTextChild",
+			data : undefined,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 		this.metadataControllerFactory = CORA.metadataControllerFactory(this.dependencies);
 	},

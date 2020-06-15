@@ -25,19 +25,21 @@ QUnit.module("metadata/metadataControllerTest.js", {
 		this.metadataChildAndRepeatInitializerFactory = CORATEST.metadataChildAndRepeatInitializerFactorySpy({});
 		this.metadataChildInitializerFactory = CORATEST.standardFactorySpy("metadataChildInitializerSpy");
 		this.pubSub = CORATEST.pubSubSpy();
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 
 		this.dependencies = {
-			"recordTypeProvider": CORATEST.recordTypeProviderSpy(),
-			"metadataProvider": this.metadataProvider,
-			"pubSub": this.pubSub,
+			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub,
 			metadataChildInitializerFactory: this.metadataChildInitializerFactory,
 			metadataChildAndRepeatInitializerFactory: this.metadataChildAndRepeatInitializerFactory
 		};
 		this.spec = {
-			"metadataId": "groupIdOneTextChild",
-			"data": {"someData" : "data"},
-			"metadataProvider": this.metadataProvider,
-			"pubSub": this.pubSub
+			metadataId: "groupIdOneTextChild",
+			data: { "someData": "data" },
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 	},
 	afterEach: function() {
@@ -63,48 +65,81 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 	var metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.ok(metadataController !== undefined);
 	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
-	
+
 	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
 	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
 	let childReference = childReferences.children[0];
 	assert.stringifyEqual(spec.childReference, childReference);
-	
+
 	assert.deepEqual(spec.path, {});
 	assert.deepEqual(spec.data, this.spec.data);
 });
 
 QUnit.test("testCorrectSpecSentToChildIntitilizerFactorWhenTwoChildren", function(assert) {
 	this.spec.metadataId = "groupIdTwoTextChild";
-	
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.ok(metadataController !== undefined);
 	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
-	
+
 	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdTwoTextChild"));
 	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
 	let childReference = childReferences.children[0];
 	assert.stringifyEqual(spec.childReference, childReference);
-	
+
 	assert.deepEqual(spec.path, {});
 	assert.deepEqual(spec.data, this.spec.data);
 
 	let spec2 = this.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
-	
+
 	let childReference2 = childReferences.children[1];
 	assert.stringifyEqual(spec2.childReference, childReference2);
-	
+
 	assert.deepEqual(spec2.path, {});
 	assert.deepEqual(spec2.data, this.spec.data);
 });
 
 QUnit.test("testPubSubMessages", function(assert) {
 	CORA.metadataController(this.dependencies, this.spec);
-	
-	var messages = this.pubSub.getMessages();
+
+	let messages = this.pubSub.getMessages();
 
 	assert.equal(messages.length, 2);
 	assert.deepEqual(JSON.stringify(messages[0]),
-			'{"type":"newElementsAdded","message":{"data":"","path":{}}}');
+		'{"type":"newElementsAdded","message":{"data":"","path":{}}}');
 	assert.deepEqual(JSON.stringify(messages[1]),
-	'{"type":"initComplete","message":{"data":"","path":{}}}');
+		'{"type":"initComplete","message":{"data":"","path":{}}}');
+});
+
+QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) {
+	this.spec.data = {
+//		"name": "groupIdOneTextChildWithReadWriteConstraints",
+		name: "groupIdTwoTextChild",
+		children: [{
+			name: "textVariableId",
+			value: "A Value"
+		}]
+	};
+	this.spec.metadataId = "groupIdTwoTextChild";
+
+	CORA.metadataController(this.dependencies, this.spec);
+	
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 2);
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[1], "metadataTextVariable_textVariableId2");
+	
+
+
+	//	assert.ok(metadataController !== undefined);
+	//	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+
+	//	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
+	//	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
+	//	let childReference = childReferences.children[0];
+	//	assert.stringifyEqual(spec.childReference, childReference);
+	//	
+	//	assert.deepEqual(spec.path, {});
+	//	assert.deepEqual(spec.data, this.spec.data);
 });

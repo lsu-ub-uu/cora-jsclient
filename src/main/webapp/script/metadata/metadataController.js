@@ -23,31 +23,38 @@ var CORA = (function(cora) {
 	cora.metadataController = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
+		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
 		const start = function() {
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {
-				data: "",
-				path: {}
+				data : "",
+				path : {}
 			});
 			dependencies.pubSub.publish("initComplete", {
-				data: "",
-				path: {}
+				data : "",
+				path : {}
 			});
 		};
 
 		const initializeFirstLevel = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
-				.getFirstChildByNameInData('childReferences');
+					.getFirstChildByNameInData('childReferences');
 			let topLevelPath = {};
 			topLevelChildReferences.children.forEach(function(childReference) {
+				let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
+				recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(cRef
+						.getFirstAtomicValueByNameInData("linkedRecordType"), cRef
+						.getFirstAtomicValueByNameInData("linkedRecordId"));
+
 				let initializerSpec = {
-					childReference: childReference,
-					path: topLevelPath,
-					data: topLevelData
+					childReference : childReference,
+					path : topLevelPath,
+					data : topLevelData
 				};
-				dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
+				dependencies.metadataChildAndRepeatInitializerFactory
+						.factorChildInitializer(initializerSpec);
 			});
 		}
 
@@ -64,8 +71,8 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			type: "metadataController",
-			getSpec: getSpec,
+			type : "metadataController",
+			getSpec : getSpec,
 			getDependencies : getDependencies
 		});
 	};

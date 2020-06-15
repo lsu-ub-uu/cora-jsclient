@@ -123,7 +123,8 @@ QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) 
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[1], "metadataTextVariable_textVariableId2");
 	
 });
-QUnit.only("testRecordPartPermissionCalculatorCallsCorrectlyWhenPermissionMissingForOneChild", function(assert) {  
+
+QUnit.test("testRecordPartPermissionCalculatorCallsCorrectlyWhenPermissionMissingForOneChild", function(assert) {  
 	this.spec.metadataId = "groupIdTwoTextChild";
 	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
 	recordPartPermissionCalculatorSpy.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");

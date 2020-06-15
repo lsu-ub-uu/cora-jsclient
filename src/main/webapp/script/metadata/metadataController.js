@@ -28,56 +28,60 @@ var CORA = (function(cora) {
 		const start = function() {
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {
-				data : "",
-				path : {}
+				data: "",
+				path: {}
 			});
 			dependencies.pubSub.publish("initComplete", {
-				data : "",
-				path : {}
+				data: "",
+				path: {}
 			});
 		};
 
 		const initializeFirstLevel = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			let topLevelChildReferences = topLevelMetadataElement
-					.getFirstChildByNameInData('childReferences');
+				.getFirstChildByNameInData('childReferences');
 			let topLevelPath = {};
 			topLevelChildReferences.children.forEach(function(childReference) {
-				let cChildReference = CORA.coraData(childReference);
-				let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-				
-				let type = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-				let id = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-				let hasReadPermission = recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(type, id);
+				let hasReadPermission = userHasRecordPartPermission(childReference);
 
-				if(hasReadPermission){
+				if (hasReadPermission) {
 					let initializerSpec = {
-						childReference : childReference,
-						path : topLevelPath,
-						data : topLevelData
+						childReference: childReference,
+						path: topLevelPath,
+						data: topLevelData
 					};
 					dependencies.metadataChildAndRepeatInitializerFactory
-							.factorChildInitializer(initializerSpec);
+						.factorChildInitializer(initializerSpec);
 				}
 			});
-		}
+		};
+
+		const userHasRecordPartPermission = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return recordPartPermissionCalculator
+				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+		};
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
-		}
+		};
 
 		const getSpec = function() {
 			return spec;
-		}
+		};
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		start();
 		return Object.freeze({
-			type : "metadataController",
-			getSpec : getSpec,
-			getDependencies : getDependencies
+			type: "metadataController",
+			getSpec: getSpec,
+			getDependencies: getDependencies
 		});
 	};
 	return cora;

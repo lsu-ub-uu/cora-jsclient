@@ -111,15 +111,7 @@ QUnit.test("testPubSubMessages", function(assert) {
 		'{"type":"initComplete","message":{"data":"","path":{}}}');
 });
 
-QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) {
-	this.spec.data = {
-//		"name": "groupIdOneTextChildWithReadWriteConstraints",
-		name: "groupIdTwoTextChild",
-		children: [{
-			name: "textVariableId",
-			value: "A Value"
-		}]
-	};
+QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) {  
 	this.spec.metadataId = "groupIdTwoTextChild";
 
 	CORA.metadataController(this.dependencies, this.spec);
@@ -130,16 +122,24 @@ QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) 
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[1], "metadataTextVariable_textVariableId2");
 	
+});
+QUnit.only("testRecordPartPermissionCalculatorCallsCorrectlyWhenPermissionMissingForOneChild", function(assert) {  
+	this.spec.metadataId = "groupIdTwoTextChild";
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
+	
+	CORA.metadataController(this.dependencies, this.spec);
+	
+	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdTwoTextChild"));
+	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
+	
+	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let childReference2 = childReferences.children[1];
+	assert.stringifyEqual(spec.childReference, childReference2);
 
-
-	//	assert.ok(metadataController !== undefined);
-	//	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
-
-	//	let topGroup = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
-	//	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
-	//	let childReference = childReferences.children[0];
-	//	assert.stringifyEqual(spec.childReference, childReference);
-	//	
-	//	assert.deepEqual(spec.path, {});
-	//	assert.deepEqual(spec.data, this.spec.data);
+	assert.deepEqual(spec.path, {});
+	assert.deepEqual(spec.data, this.spec.data);
+	
+	let spec2 = this.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	assert.strictEqual(spec2, undefined);
 });

@@ -43,18 +43,22 @@ var CORA = (function(cora) {
 					.getFirstChildByNameInData('childReferences');
 			let topLevelPath = {};
 			topLevelChildReferences.children.forEach(function(childReference) {
-				let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
-				recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(cRef
-						.getFirstAtomicValueByNameInData("linkedRecordType"), cRef
-						.getFirstAtomicValueByNameInData("linkedRecordId"));
+				let cChildReference = CORA.coraData(childReference);
+				let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+				
+				let type = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+				let id = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+				let hasReadPermission = recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(type, id);
 
-				let initializerSpec = {
-					childReference : childReference,
-					path : topLevelPath,
-					data : topLevelData
-				};
-				dependencies.metadataChildAndRepeatInitializerFactory
-						.factorChildInitializer(initializerSpec);
+				if(hasReadPermission){
+					let initializerSpec = {
+						childReference : childReference,
+						path : topLevelPath,
+						data : topLevelData
+					};
+					dependencies.metadataChildAndRepeatInitializerFactory
+							.factorChildInitializer(initializerSpec);
+				}
 			});
 		}
 

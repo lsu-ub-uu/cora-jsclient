@@ -135,6 +135,7 @@ QUnit.test("testMessagesTextVariableFinalValue", function(assert) {
 	
 	assert.equal(messages.length, 2);
 });
+
 QUnit.test("testMessagesTextVariableWithWrongFinalValue", function(assert) {
 	this.spec.metadataId = "textVariableWithFinalValueId";
 	this.spec.data = {
@@ -327,7 +328,7 @@ QUnit.test("testRecordLinkMessage", function(assert) {
 CORATEST.createRefForRepeatIntitalizer = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
 	return {
 		"name": "childReference",
-		"repeatId": 1,
+		"repeatId": "1",
 		"children": [{
 			"name": "ref",
 			"children": [{
@@ -336,10 +337,11 @@ CORATEST.createRefForRepeatIntitalizer = function(linkedRecordType, linkedRecord
 			}, {
 				"name": "linkedRecordId",
 				"value": linkedRecordId
-			}],
-			"attributes": {
-				"type": "textVariable"
-			}
+			}]
+//		,
+//			"attributes": {
+//				"type": "textVariable"
+//			}
 		}, {
 			"name": "repeatMin",
 			"value": repeatMin
@@ -436,6 +438,99 @@ QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWith
 	assert.stringifyEqual(linkedRepeatTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myPathLink"}]});
 });
 
+QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerAbstractRecordTypeNOData", function(assert) {
+	this.spec.metadataId = "myAbstractLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myAbstractLink","children":[{"name":"linkedRecordType","value":""}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myAbstractLink"}]});
+	
+	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
+	assert.stringifyEqual(linkedRecordIdSpec.data, this.spec.data);
+	assert.stringifyEqual(linkedRecordIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myAbstractLink"}]});
+
+});
+
+QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerAbstractRecordTypeWithData", function(assert) {
+	this.spec.metadataId = "myAbstractLink";
+	 this.spec.data = {
+			 "name" : "myAbstractLink",
+			 "children" : [ {
+			 "name" : "linkedRecordType",
+			 "value" : "metadataTextVariable"
+			 }, {
+			 "name" : "linkedRecordId",
+			 "value" : "someRecordId"
+			 } ]
+			 };
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myAbstractLink","children":[{"name":"linkedRecordType","value":"metadataTextVariable"}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myAbstractLink"}]});
+	
+	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
+	assert.stringifyEqual(linkedRecordIdSpec.data, this.spec.data);
+	assert.stringifyEqual(linkedRecordIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myAbstractLink"}]});
+});
+
+QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerAbstractRecordTypeWithDataButNotRecordTypeData", function(assert) {
+	this.spec.metadataId = "myAbstractLink";
+	 this.spec.data = {
+			 "name" : "myAbstractLink",
+			 "children" : [ {
+			 "name" : "linkedRecordType",
+			 "value" : ""
+			 }, {
+			 "name" : "linkedRecordId",
+			 "value" : "someRecordId"
+			 } ]
+			 };
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myAbstractLink","children":[{"name":"linkedRecordType","value":""}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myAbstractLink"}]});
+});
+
+QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataFinalValue", function(assert) {
+	this.spec.metadataId = "myFinalValueLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let linkedRecordTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
+	assert.stringifyEqual(linkedRecordTypeSpec.data, {"name":"myFinalValueLink","children":[{"name":"linkedRecordType","value":"metadataTextVariable"}]});
+	assert.stringifyEqual(linkedRecordTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myFinalValueLink"}]});
+	
+	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
+	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
+	assert.stringifyEqual(linkedRecordIdSpec.data, {"name":"myFinalValueLink","children":[{"name":"linkedRecordId","value":"someInstance"}]});
+	assert.stringifyEqual(linkedRecordIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"myFinalValueLink"}]});
+
+});
 
 QUnit.test("testResourceLinkMessage", function(assert) {
 	this.spec.metadataId = "masterResLink";
@@ -454,23 +549,57 @@ QUnit.test("testResourceLinkMessage", function(assert) {
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedAddForResourceLink);
+	
+	var expectedLinkedResourceMessage = {
+			  "type": "linkedResource",
+			  "message": {
+			    "path": {
+			      "name": "linkedPath",
+			      "children": [
+			        {
+			          "name": "nameInData",
+			          "value": "master"
+			        }
+			      ]
+			    }
+			  }
+			};
+	assert.stringifyEqual(messages[1], expectedLinkedResourceMessage);
+});
 
-//	var expectedAddForLinkedRecordType = {
-//			  "type": "linkedData",
-//			  "message": {
-//			    "path": {
-//			      "name": "linkedPath",
-//			      "children": [
-//			        {
-//			          "name": "nameInData",
-//			          "value": "myLink"
-//			        }
-//			      ]
-//			    }
-//			  }
-//			};
-//	assert.stringifyEqual(messages[1], expectedAddForLinkedRecordType);
-//	assert.equal(messages.length, 2);
+QUnit.test("testResourceLinkCorrectCallsToChildAndRepeatInitalizer", function(assert) {
+	this.spec.metadataId = "masterResLink";
+	
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	
+	let streamIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
+	let expectedStreamIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "streamIdTextVar", "1", "1");
+	
+	assert.stringifyEqual(streamIdSpec.childReference, expectedStreamIdReference);
+	assert.stringifyEqual(streamIdSpec.data, this.spec.data);
+	assert.stringifyEqual(streamIdSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"master"}]});
+	
+	let fileNameSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
+	let expectedFileNameReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "filenameTextVar", "1", "1");
+	
+	assert.stringifyEqual(fileNameSpec.childReference, expectedFileNameReference);
+	assert.stringifyEqual(fileNameSpec.data, this.spec.data);
+	assert.stringifyEqual(fileNameSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"master"}]});
+	
+	let filesizeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(2);
+	let expectedFilesizeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "filesizeTextVar", "1", "1");
+	
+	assert.stringifyEqual(filesizeSpec.childReference, expectedFilesizeReference);
+	assert.stringifyEqual(filesizeSpec.data, this.spec.data);
+	assert.stringifyEqual(filesizeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"master"}]});
+	
+	let mimeTypeSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(3);
+	let expectedMimeTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "mimeTypeTextVar", "1", "1");
+	
+	assert.stringifyEqual(mimeTypeSpec.childReference, expectedMimeTypeReference);
+	assert.stringifyEqual(mimeTypeSpec.data, this.spec.data);
+	assert.stringifyEqual(mimeTypeSpec.path, {"name":"linkedPath","children":[{"name":"nameInData","value":"master"}]});
 });
 
 

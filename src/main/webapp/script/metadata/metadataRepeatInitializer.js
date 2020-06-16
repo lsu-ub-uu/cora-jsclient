@@ -26,7 +26,6 @@ var CORA = (function(cora) {
 		var metadataId = spec.metadataId;
 		var path = spec.path;
 		var cMetadataElement = getMetadataById(metadataId);
-		
 		const initialize = function() {
 		initalizeRepeat();
 		};
@@ -232,7 +231,9 @@ var CORA = (function(cora) {
 			var linkedRecordTypeValue = cRecordTypeGroup
 				.getFirstAtomicValueByNameInData("linkedRecordId");
 
+//			console.log("linkedRecordType "+linkedRecordTypeValue)
 			var implementingRecordType = getImplementingRecordType(linkedRecordTypeValue);
+//			console.log("implementingRecordType "+implementingRecordType)
 			var recordTypeData = {
 				"name": cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
 				"children": [{
@@ -253,7 +254,7 @@ var CORA = (function(cora) {
 		function createRefWithRef(ref) {
 			return {
 				"name": "childReference",
-				"repeatId": 1,
+				"repeatId": "1",
 				"children": [{
 					"name": "ref",
 					"children": [{
@@ -262,10 +263,7 @@ var CORA = (function(cora) {
 					}, {
 						"name": "linkedRecordId",
 						"value": ref
-					}],
-					"attributes": {
-						"type": "textVariable"
-					}
+					}]
 				}, {
 					"name": "repeatMin",
 					"value": "1"

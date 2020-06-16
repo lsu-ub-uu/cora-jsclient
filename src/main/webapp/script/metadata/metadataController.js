@@ -58,6 +58,7 @@ var CORA = (function(cora) {
 		const possiblyInitializeChild = function(childReference) {
 			let hasReadPermission = userHasRecordPartPermission(childReference);
 			if (hasReadPermission) {
+				console.log("read permission")
 				intitalizeChild(childReference);
 			}
 		};

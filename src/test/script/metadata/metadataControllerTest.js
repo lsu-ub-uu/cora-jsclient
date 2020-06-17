@@ -75,6 +75,15 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 	assert.deepEqual(spec.data, this.spec.data);
 });
 
+QUnit.test("testChildIntitilizerIsCalled", function(assert) {
+	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	assert.ok(metadataController !== undefined);
+	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(0);
+
+	assert.strictEqual(factored.getInitializeCalled(), true);
+
+});
+
 QUnit.test("testCorrectSpecSentToChildIntitilizerFactorWhenTwoChildren", function(assert) {
 	this.spec.metadataId = "groupIdTwoTextChild";
 

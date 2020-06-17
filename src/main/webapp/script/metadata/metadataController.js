@@ -47,8 +47,7 @@ var CORA = (function(cora) {
 
 		const extractTopLevelChildReferences = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			return topLevelMetadataElement
-				.getFirstChildByNameInData('childReferences');
+			return topLevelMetadataElement.getFirstChildByNameInData('childReferences');
 		}
 
 		const getMetadataById = function(id) {
@@ -58,7 +57,6 @@ var CORA = (function(cora) {
 		const possiblyInitializeChild = function(childReference) {
 			let hasReadPermission = userHasRecordPartPermission(childReference);
 			if (hasReadPermission) {
-				console.log("read permission")
 				intitalizeChild(childReference);
 			}
 		};
@@ -78,8 +76,9 @@ var CORA = (function(cora) {
 				path: topLevelPath,
 				data: topLevelData
 			};
-			dependencies.metadataChildAndRepeatInitializerFactory
+			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorChildInitializer(initializerSpec);
+			childInitializer.initialize();
 		};
 
 		const getSpec = function() {

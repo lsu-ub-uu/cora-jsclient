@@ -126,6 +126,7 @@ var CORA = (function(cora) {
 				return CORA.pGroup(childDependencies, specNew);
 			}
 			if (type === "pRecordLink") {
+				specNew.recordPartPermissionCalculatorFactory = dependencies.recordPartPermissionCalculatorFactory;
 				return CORA.pRecordLink(childDependencies, specNew);
 			}
 			if (type === "pCollVar") {

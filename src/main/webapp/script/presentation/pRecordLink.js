@@ -216,7 +216,8 @@ var CORA = (function(cora) {
 				"presentationId" : linkedPresentationId,
 				"metadataId" : linkedMetadataId,
 				"recordGuiFactory" : dependencies.recordGuiFactory,
-				"ajaxCallFactory" : dependencies.ajaxCallFactory
+				"ajaxCallFactory" : dependencies.ajaxCallFactory,
+				recordPartPermissionCalculatorFactory : spec.recordPartPermissionCalculatorFactory
 			};
 		}
 
@@ -457,10 +458,14 @@ var CORA = (function(cora) {
 		function getDependencies() {
 			return dependencies;
 		}
+		function getSpec() {
+			return spec;
+		}
 
 		out = Object.freeze({
 			"type" : "pRecordLink",
 			getDependencies : getDependencies,
+			getSpec : getSpec,
 			getView : getView,
 			handleMsg : handleMsg,
 			openLinkedRecord : openLinkedRecord,

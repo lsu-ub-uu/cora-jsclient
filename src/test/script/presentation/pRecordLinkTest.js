@@ -63,10 +63,13 @@ QUnit.module("presentation/pRecordLinkTest.js", {
 			"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy(),
 			 "recordTypeProvider" : CORATEST.recordTypeProviderSpy()
 		};
+		this.recordPartPermissionCalculatorFactory = CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy");
+		
 		this.spec = {
 			"path" : {},
 			"cPresentation" : CORA.coraData(this.dependencies.metadataProvider
-					.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"))
+					.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink")),
+			recordPartPermissionCalculatorFactory : this.recordPartPermissionCalculatorFactory
 		};
 
 		this.dataFromMsgWithLink = {
@@ -168,6 +171,16 @@ QUnit.module("presentation/pRecordLinkTest.js", {
 	},
 	afterEach : function() {
 	}
+});
+
+QUnit.test("testGetDependencies", function(assert) {
+	var pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+	assert.strictEqual(pRecordLink.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	var pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+	assert.strictEqual(pRecordLink.getSpec(), this.spec);
 });
 
 QUnit.test("testInitRecordLinkWithImplementingLinkedRecordType", function(assert) {

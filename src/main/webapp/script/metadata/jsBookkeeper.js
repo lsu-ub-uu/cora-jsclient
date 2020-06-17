@@ -1,5 +1,6 @@
 /*
  * Copyright 2016, 2018 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -37,20 +38,15 @@ var CORA = (function(cora) {
 			var ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			var repeatMax = cChildReference.getFirstAtomicValueByNameInData('repeatMax');
 
-//			let metadataChildAndRepeatInitializerDep = {
-//					recordTypeProvider : dependencies.recordTypeProvider,
-//					metadataProvider : spec.metadataProvider,
-//					pubSub : spec.pubSub
-//			};
 //			
 //			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
 			
-			var initializerDep = {
-				"recordTypeProvider" : dependencies.recordTypeProvider,
-				"metadataProvider" : spec.metadataProvider,
-				"pubSub" : spec.pubSub
-//				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
-			};
+//			var initializerDep = {
+//				"recordTypeProvider" : dependencies.recordTypeProvider,
+//				"metadataProvider" : spec.metadataProvider,
+//				"pubSub" : spec.pubSub
+////				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+//			};
 			var initializerSpec = {
 				"metadataId" : ref,
 				"path" : path,
@@ -58,12 +54,12 @@ var CORA = (function(cora) {
 			};
 			if (repeatMax === "1") {
 				initializerSpec.repeatId = undefined;
-				let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer =dependencies.metadataChildAndRepeatInitializerFactory.factorRepeatInitializer(initializerSpec);
 				repeatInitializer.initialize();
 			} else {
 				var startRepeatId = calculateStartRepeatId(currentData.children);
 				initializerSpec.repeatId = String(startRepeatId);
-				let repeatInitializer = CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer =dependencies.metadataChildAndRepeatInitializerFactory.factorRepeatInitializer(initializerSpec);
 				repeatInitializer.initialize();
 				return String(startRepeatId);
 			}

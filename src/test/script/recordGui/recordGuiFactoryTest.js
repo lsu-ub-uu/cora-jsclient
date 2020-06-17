@@ -104,6 +104,22 @@ QUnit.test("testFactorJsBookkeeperDependencies", function(assert) {
 	assert.strictEqual(jsBookkeeper.type, "jsBookkeeper");
 	let depBK = jsBookkeeper.getDependencies();
 	assert.strictEqual(depBK.recordTypeProvider,this.dependencies.providers.recordTypeProvider);
+	assert.strictEqual(depBK.metadataChildAndRepeatInitializerFactory.type, "metadataChildAndRepeatInitializerFactory");
+
+});
+QUnit.test("testDependenciesForMetadataChildAndRepeatInitializerFactory", function(assert) {
+	let recordGui = this.recordGuiFactory.factor(this.spec);
+	let jsBookkeeper = recordGui.getDependencies().jsBookkeeper;
+
+	let factoredBookkeeperDependencies = jsBookkeeper.getDependencies();
+	let metadataChildAndRepeatInitializerFactory = factoredBookkeeperDependencies.metadataChildAndRepeatInitializerFactory;
+
+	let factoredDependencies = metadataChildAndRepeatInitializerFactory.getDependencies();
+
+	assert.strictEqual(factoredDependencies.recordTypeProvider, this.dependencies.providers.recordTypeProvider);
+	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.providers.metadataProvider);
+	assert.strictEqual(factoredDependencies.pubSub,  recordGui.getDependencies().pubSub);
+
 });
 
 QUnit.test("testFactorDependencyPresentationFactory", function(assert) {
@@ -121,6 +137,18 @@ QUnit.test("testFactorDependencyPresentationFactory", function(assert) {
 	assert.strictEqual(dependenciesPF.dataDivider, this.spec.dataDivider);
 	assert.strictEqual(dependenciesPF.uploadManager, this.dependencies.uploadManager);
 	assert.strictEqual(dependenciesPF.ajaxCallFactory, this.dependencies.ajaxCallFactory);
+	assert.strictEqual(dependenciesPF.recordPartPermissionCalculatorFactory.type,
+	"genericFactory");
+});
+
+QUnit.test("testRecordPartPermissionCalculatorFactory", function(assert) {
+	let recordGui = this.recordGuiFactory.factor(this.spec);
+	let presentationFactory = recordGui.getDependencies().presentationFactory;
+	assert.strictEqual(presentationFactory.type, "presentationFactory");
+	let dependenciesPF = presentationFactory.getDependencies();
+	
+	let calculatorFactory = dependenciesPF.recordPartPermissionCalculatorFactory;
+	assert.strictEqual(calculatorFactory.getDependencies().metadataProvider, this.dependencies.providers.metadataProvider);
 });
 
 QUnit.test("testFactorDependencyPresentationHolderFactory", function(assert) {

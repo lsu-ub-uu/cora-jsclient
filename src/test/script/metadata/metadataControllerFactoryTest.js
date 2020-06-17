@@ -55,8 +55,6 @@ QUnit.test("testSpec", function(assert) {
 	let metadataController = this.metadataControllerFactory.factor(this.spec);
 	let factoredSpec = metadataController.getSpec();
 	assert.strictEqual(factoredSpec, this.spec);
-//	assert.strictEqual(factoredSpec.metadataId, this.spec.metadataId);
-//	assert.strictEqual(factoredSpec.data, this.spec.data);
 });
 
 QUnit.test("testDependencies", function(assert) {

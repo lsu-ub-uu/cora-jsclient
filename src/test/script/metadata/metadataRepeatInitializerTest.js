@@ -28,10 +28,6 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
 			metadataChildAndRepeatInitializerFactory: CORATEST
 				.metadataChildAndRepeatInitializerFactorySpy({})
-			// ,
-			// metadataRepeatInitializerFactory : CORATEST
-			// .standardFactorySpy("metadataRepeatInitializerSpy")
-
 		};
 		this.spec = {
 			metadataId: "textVariableId",

@@ -19,7 +19,7 @@
  */
 "use strict";
 QUnit.module("presentation/presentationFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
@@ -28,36 +28,37 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 		this.dataDivider = "systemX";
 
 		this.dependencies = {
-			"providers" : {
-				"metadataProvider" : this.metadataProvider,
-				"textProvider" : this.textProvider,
-				"recordTypeProvider" : this.recordTypeProvider,
-				"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy(),
+			"providers": {
+				"metadataProvider": this.metadataProvider,
+				"textProvider": this.textProvider,
+				"recordTypeProvider": this.recordTypeProvider,
+				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
 			},
-			"globalFactories" : {
-				"searchHandlerFactory" : CORATEST.standardFactorySpy("searchHandlerSpy")
+			"globalFactories": {
+				"searchHandlerFactory": CORATEST.standardFactorySpy("searchHandlerSpy")
 			},
-			"pubSub" : this.pubSub,
-			"jsBookkeeper" : this.jsBookkeeper,
-			"dataDivider" : this.dataDivider,
-			"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			"pubSub": this.pubSub,
+			"jsBookkeeper": this.jsBookkeeper,
+			"dataDivider": this.dataDivider,
+			"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+			recordPartPermissionCalculatorFactory : CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
 		this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
-			"path" : {},
-			"metadataIdUsedInData" : "textVariableId",
-			"cPresentation" : CORA.coraData(this.metadataProvider
-					.getMetadataById("pVarTextVariableId")),
-			"cParentPresentation" : null,
-			recordPartPermissionCalculator : this.recordPartPermissionCalculator
+			"path": {},
+			"metadataIdUsedInData": "textVariableId",
+			"cPresentation": CORA.coraData(this.metadataProvider
+				.getMetadataById("pVarTextVariableId")),
+			"cParentPresentation": null,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 		this.getMetadataAsCoraData = function(id) {
 			return CORA.coraData(this.metadataProvider.getMetadataById(id));
 		}
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -117,7 +118,7 @@ QUnit.test("testFactorPGroupDependencies", function(assert) {
 
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
-			"pNonRepeatingChildRefHandler");
+		"pNonRepeatingChildRefHandler");
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 });
 
@@ -127,32 +128,23 @@ QUnit.test("testFactorPGroupSpec", function(assert) {
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 	let pGroupSpec = pGroup.getSpec();
 
-	// assertCorrectSpecForFactored(assert, pGroupSpec);
 	assert.strictEqual(pGroupSpec.path, this.spec.path);
 	assert.strictEqual(pGroupSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
 	assert.strictEqual(pGroupSpec.cPresentation, this.spec.cPresentation);
 	assert.strictEqual(pGroupSpec.cParentPresentation, this.spec.cParentPresentation);
 	assert.strictEqual(pGroupSpec.recordPartPermissionCalculator,
-			this.spec.recordPartPermissionCalculator);
+		this.spec.recordPartPermissionCalculator);
 });
-
-// TODO: hur skriva så man har tillgång till this?
-// const assertCorrectSpecForFactored = function(assert, specIn){
-// assert.strictEqual(specIn.path, this.spec.path);
-// assert.strictEqual(specIn.metadataIdUsedInData, this.spec.metadataIdUsedInData);
-// assert.strictEqual(specIn.cPresentation, this.spec.cPresentation);
-// assert.strictEqual(specIn.cParentPresentation, this.spec.cParentPresentation);
-// }
 
 QUnit.test("testFactorPGroupAsMap", function(assert) {
 	this.dependencies.providers.metadataProvider = new MetadataCoordinatesProviderStub();
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 	this.spec = {
-		"path" : {},
-		"metadataIdUsedInData" : "coordinatesGroup",
-		"cPresentation" : CORA.coraData(this.dependencies.providers.metadataProvider
-				.getMetadataById("coordinatesPGroup")),
-		"cParentPresentation" : null
+		"path": {},
+		"metadataIdUsedInData": "coordinatesGroup",
+		"cPresentation": CORA.coraData(this.dependencies.providers.metadataProvider
+			.getMetadataById("coordinatesPGroup")),
+		"cParentPresentation": null
 	};
 	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 	let pMap = this.newPresentationFactory.factor(this.spec);
@@ -163,11 +155,11 @@ QUnit.test("testFactorPGroupAsMapDependencies", function(assert) {
 	this.dependencies.providers.metadataProvider = new MetadataCoordinatesProviderStub();
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 	this.spec = {
-		"path" : {},
-		"metadataIdUsedInData" : "coordinatesGroup",
-		"cPresentation" : CORA.coraData(this.dependencies.providers.metadataProvider
-				.getMetadataById("coordinatesPGroup")),
-		"cParentPresentation" : null
+		"path": {},
+		"metadataIdUsedInData": "coordinatesGroup",
+		"cPresentation": CORA.coraData(this.dependencies.providers.metadataProvider
+			.getMetadataById("coordinatesPGroup")),
+		"cParentPresentation": null
 	};
 	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 	let pMap = this.newPresentationFactory.factor(this.spec);
@@ -178,7 +170,7 @@ QUnit.test("testFactorPGroupAsMapDependencies", function(assert) {
 
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
-			"pNonRepeatingChildRefHandler");
+		"pNonRepeatingChildRefHandler");
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 
 	assert.strictEqual(dependencies.pMapViewFactory.type, "genericFactory");
@@ -196,49 +188,48 @@ QUnit.test("testFactorPChildRefHandlerDependencies", function(assert) {
 
 	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
 	assert
-			.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
-					"pRepeatingElement");
+		.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
+			"pRepeatingElement");
 
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
-			"pChildRefHandlerView");
+		"pChildRefHandlerView");
 	assert.strictEqual(dependencies.dataDivider, this.dependencies.dataDivider);
 
 });
 
-QUnit
-		.test("testFactorPRepeatingElementDependencies",
-				function(assert) {
-					this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-					this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
-					let pGroup = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPRepeatingElementDependencies",
+	function(assert) {
+		this.spec.metadataIdUsedInData = "groupIdOneTextChild";
+		this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+		let pGroup = this.newPresentationFactory.factor(this.spec);
 
-					let dependencies = pGroup.getDependencies().pChildRefHandlerFactory
-							.getDependencies().pRepeatingElementFactory.getDependencies();
-					assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-					assert.strictEqual(dependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
+		let dependencies = pGroup.getDependencies().pChildRefHandlerFactory
+			.getDependencies().pRepeatingElementFactory.getDependencies();
+		assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
+		assert.strictEqual(dependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
 
-				});
+	});
 
 QUnit.test("testFactorPNonRepeatingChildRefHandlerDependencies",
-		function(assert) {
-			this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-			this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
-			let pGroup = this.newPresentationFactory.factor(this.spec);
+	function(assert) {
+		this.spec.metadataIdUsedInData = "groupIdOneTextChild";
+		this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+		let pGroup = this.newPresentationFactory.factor(this.spec);
 
-			let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
-					.getDependencies();
-			assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
-			assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
+		let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
+			.getDependencies();
+		assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
+		assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
 
-			assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
-					"genericFactory");
-			assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
-					.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+		assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
+			"genericFactory");
+		assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
+			.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
 
-			assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
-			assert.strictEqual(dependencies.providers, this.dependencies.providers);
-		});
+		assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
+		assert.strictEqual(dependencies.providers, this.dependencies.providers);
+	});
 
 QUnit.test("testFactorPRepeatingContainer", function(assert) {
 	this.spec.metadataIdUsedInData = "textVariableId";
@@ -252,58 +243,72 @@ QUnit.test("testFactorPSurroundingContainer", function(assert) {
 	this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
 	this.spec.cPresentation = this.getMetadataAsCoraData("pTextVariablePlus2SContainer");
 	this.spec.cParentPresentation = this
-			.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
+		.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
 	let pSContainer = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pSContainer.type, "pSurroundingContainer");
 });
 
 QUnit.test("testFactorPRecordLink",
-		function(assert) {
-			this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-			this.spec.cPresentation = this
-					.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-			let pRecordLink = this.newPresentationFactory.factor(this.spec);
+	function(assert) {
+		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+		this.spec.cPresentation = this
+			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+		let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-			assert.strictEqual(pRecordLink.type, "pRecordLink");
-		});
+		assert.strictEqual(pRecordLink.type, "pRecordLink");
+	});
+	
+QUnit.test("testFactorPRecordLinkSpec", function(assert) {
+	this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+	this.spec.cPresentation = this.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+	let pRecordLink = this.newPresentationFactory.factor(this.spec);
+	let pRecordLinkSpec = pRecordLink.getSpec();
+
+	assert.strictEqual(pRecordLinkSpec.path, this.spec.path);
+	assert.strictEqual(pRecordLinkSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
+	assert.strictEqual(pRecordLinkSpec.cPresentation, this.spec.cPresentation);
+	assert.strictEqual(pRecordLinkSpec.cParentPresentation, this.spec.cParentPresentation);
+	assert.strictEqual(pRecordLinkSpec.recordPartPermissionCalculatorFactory,
+		this.dependencies.recordPartPermissionCalculatorFactory);
+});
 
 QUnit.test("testFactorPRecordLinkDependencies",
-		function(assert) {
-			this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-			this.spec.cPresentation = this
-					.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-			let pRecordLink = this.newPresentationFactory.factor(this.spec);
+	function(assert) {
+		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+		this.spec.cPresentation = this
+			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+		let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-			let factoredDependencies = pRecordLink.getDependencies();
+		let factoredDependencies = pRecordLink.getDependencies();
 
-			assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
+		assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
 
-			assert.strictEqual(factoredDependencies.globalFactories,
-					this.dependencies.globalFactories);
+		assert.strictEqual(factoredDependencies.globalFactories,
+			this.dependencies.globalFactories);
 
-			assert.strictEqual(factoredDependencies.recordTypeProvider,
-					this.dependencies.providers.recordTypeProvider);
-			assert.strictEqual(factoredDependencies.clientInstanceProvider,
-					this.dependencies.providers.clientInstanceProvider);
+		assert.strictEqual(factoredDependencies.recordTypeProvider,
+			this.dependencies.providers.recordTypeProvider);
+		assert.strictEqual(factoredDependencies.clientInstanceProvider,
+			this.dependencies.providers.clientInstanceProvider);
 
-			assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.type, "genericFactory");
-			assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.getTypeToFactor(),
-					"pRecordLinkView");
-		});
+		assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.type, "genericFactory");
+		assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.getTypeToFactor(),
+			"pRecordLinkView");
+	});
 
 QUnit.test("testFactorPRecordLinkViewDependencies",
-		function(assert) {
-			this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-			this.spec.cPresentation = this
-					.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-			let pRecordLink = this.newPresentationFactory.factor(this.spec);
+	function(assert) {
+		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+		this.spec.cPresentation = this
+			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+		let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-			let factoredDependencies = pRecordLink.getDependencies().pRecordLinkViewFactory
-					.getDependencies();
+		let factoredDependencies = pRecordLink.getDependencies().pRecordLinkViewFactory
+			.getDependencies();
 
-			assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
-		});
+		assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
+	});
 
 QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
@@ -315,7 +320,7 @@ QUnit.test("testFactorPResourceLink", function(assert) {
 	assert.strictEqual(pResourceLink.type, "pResourceLink");
 	let factoredDependencies = pResourceLink.getDependencies();
 	assert.strictEqual(factoredDependencies.metadataProvider,
-			this.dependencies.providers.metadataProvider);
+		this.dependencies.providers.metadataProvider);
 });
 
 QUnit.test("testFactorPNumVar", function(assert) {
@@ -338,9 +343,9 @@ QUnit.test("testFactorPNumVarDependencies", function(assert) {
 	assert.strictEqual(factoredDependencies.globalFactories, this.dependencies.globalFactories);
 
 	assert.strictEqual(factoredDependencies.recordTypeProvider,
-			this.dependencies.providers.recordTypeProvider);
+		this.dependencies.providers.recordTypeProvider);
 	assert.strictEqual(factoredDependencies.clientInstanceProvider,
-			this.dependencies.providers.clientInstanceProvider);
+		this.dependencies.providers.clientInstanceProvider);
 
 	assert.strictEqual(factoredDependencies.pNumVarViewFactory.type, "genericFactory");
 	assert.strictEqual(factoredDependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");

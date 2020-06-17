@@ -30,6 +30,7 @@ QUnit.module("recordViewerTest.js", {
 		this.presentationIdUsed = [];
 		var presentationIdUsed = this.presentationIdUsed;
 		this.pubSub = CORATEST.pubSubSpy();
+		this.recordGuiFactory = CORATEST.recordGuiFactorySpy();
 		this.recordGui = {
 			"getPresentationHolder" : function(presentationId) {
 				presentationIdUsed.push(presentationId);
@@ -48,24 +49,27 @@ QUnit.module("recordViewerTest.js", {
 			"pubSub" : this.pubSub
 		};
 
-		var recordGui = this.recordGui;
+//		var recordGui = this.recordGui;
 		this.metadataIdUsed = [];
-		var metadataIdUsed = this.metadataIdUsed;
+//		var metadataIdUsed = this.metadataIdUsed;
 		this.dataDividerUsed = [];
-		var dataDividerUsed = this.dataDividerUsed;
-		this.recordGuiFactorySpy = {
-			"factor" : function(spec) {
-				var metadataId = spec.metadataId;
-				var data = spec.data;
-				var dataDivider = spec.dataDivider;
-
-				metadataIdUsed.push(metadataId);
-				dataDividerUsed.push(dataDivider);
-				return recordGui;
-			}
-		};
+//		var dataDividerUsed = this.dataDividerUsed;
+//		this.recordGuiFactorySpy = {
+//			"factor" : function(spec) {
+//				var metadataId = spec.metadataId;
+//				var data = spec.data;
+//				var dataDivider = spec.dataDivider;
+//
+//				metadataIdUsed.push(metadataId);
+//				dataDividerUsed.push(dataDivider);
+//				return recordGui;
+//			}
+//		};
 
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
+		this.recordPartPermissionCalculatorFactory = CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
+
+		
 		this.recordViewerSpec = {
 			"read" : {
 				"requestMethod" : "GET",
@@ -75,14 +79,17 @@ QUnit.module("recordViewerTest.js", {
 			},
 			"presentationId" : "somePresentationId",
 			"metadataId" : "someMetadataId",
-			"recordGuiFactory" : this.recordGuiFactorySpy,
-			"ajaxCallFactory" : this.ajaxCallFactorySpy
+			"recordGuiFactory" : this.recordGuiFactory,
+			"ajaxCallFactory" : this.ajaxCallFactorySpy,
+			recordPartPermissionCalculatorFactory: this.recordPartPermissionCalculatorFactory
+			
 		};
+		this.recordToReturn = CORATEST.recordTypeList.dataList.data[4].record;
 		this.answerCall = function(no) {
 			var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			var jsonRecord = JSON.stringify({
 				// "record" : CORATEST.record
-				"record" : CORATEST.recordTypeList.dataList.data[4].record
+				"record" : this.recordToReturn
 			});
 			var answer = {
 				"spec" : ajaxCallSpy0.getSpec(),
@@ -127,11 +134,72 @@ QUnit.test("initCallToServer", function(assert) {
 
 	var busy = view.childNodes[1];
 	assert.strictEqual(busy.className, "busy toBeRemoved");
-
-	assert.strictEqual(this.metadataIdUsed[0], "someMetadataId");
-	assert.strictEqual(this.dataDividerUsed[0], "cora");
-
 });
+
+QUnit.test("testCorrectSpecToRecordGui", function(assert) {
+	CORA.recordViewer(this.recordViewerSpec);
+	this.answerCall(0);
+
+	let factoredSpec = this.recordGuiFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.metadataId, "someMetadataId");
+	assert.strictEqual(factoredSpec.dataDivider, "cora");
+	let expectedData =  CORATEST.recordTypeList.dataList.data[4].record.data;
+	assert.stringifyEqual(factoredSpec.data, expectedData);
+	let factoredCalculator = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getFactored(0);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
+	
+	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.strictEqual(calcualatorSpec.metadataId, this.recordViewerSpec.metadataId);
+});
+
+QUnit.test("testSpecToRecordGuiEmptyPermissions", function(assert) {
+	this.recordToReturn.permissions = undefined;
+	CORA.recordViewer(this.recordViewerSpec);
+	this.answerCall(0);
+
+	
+	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.stringifyEqual(calcualatorSpec.permissions.read, []);
+	assert.stringifyEqual(calcualatorSpec.permissions.write, []);
+});
+
+QUnit.test("testSpecToRecordGuiOnlyReadPermissions", function(assert) {
+	this.recordToReturn.permissions = {
+		read: ["someVariable"]
+	};
+	CORA.recordViewer(this.recordViewerSpec);
+	this.answerCall(0);
+	
+	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.stringifyEqual(calcualatorSpec.permissions.read, this.recordToReturn.permissions.read);
+	assert.stringifyEqual(calcualatorSpec.permissions.write, []);
+});
+
+QUnit.test("testSpecToRecordGuiOnlyWritePermissions", function(assert) {
+	this.recordToReturn.permissions = {
+			write: ["someVariable"]
+	};
+	CORA.recordViewer(this.recordViewerSpec);
+	this.answerCall(0);
+	
+	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.stringifyEqual(calcualatorSpec.permissions.write, this.recordToReturn.permissions.write);
+	assert.stringifyEqual(calcualatorSpec.permissions.read, []);
+});
+
+QUnit.test("testSpecToRecordGuiReadAndWritePermissions", function(assert) {
+	this.recordToReturn.permissions = {
+			write: ["someVariable"],
+			read: ["someVariableForRead"]
+	};
+	CORA.recordViewer(this.recordViewerSpec);
+	this.answerCall(0);
+	
+	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.stringifyEqual(calcualatorSpec.permissions.write, this.recordToReturn.permissions.write);
+	assert.stringifyEqual(calcualatorSpec.permissions.read, this.recordToReturn.permissions.read);
+});
+
 
 QUnit.test("errorMissingPresentation", function(assert) {
 	var recordGuiFactorySpy = {

@@ -395,13 +395,12 @@ var CORA = (function(cora) {
 
 		start();
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "metadataRepeatInitializer",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			initialize: initialize
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

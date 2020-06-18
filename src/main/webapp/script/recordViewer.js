@@ -91,9 +91,10 @@ var CORA = (function(cora) {
 		};
 
 		const getFetchedPermissions = function(fetchedPermissions) {
-			let permissionsNew = {};
-			permissionsNew.read = getReadPermission(fetchedPermissions);
-			permissionsNew.write = getWritePermission(fetchedPermissions);
+			let permissionsNew = {
+					read : getReadPermission(fetchedPermissions),
+					write : getWritePermission(fetchedPermissions)
+			};
 			return permissionsNew;
 		}
 

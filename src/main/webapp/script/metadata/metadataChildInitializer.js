@@ -245,13 +245,12 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type : "metadataChildInitializer",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			initialize : initialize
 		});
-		return out;
 	};
 	return cora;
 }(CORA));

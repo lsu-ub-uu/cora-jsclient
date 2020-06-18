@@ -23,37 +23,38 @@ var CORA = (function(cora) {
 
 		const factor = function(spec) {
 			let viewDep = {
-				"textProvider": dependencies.providers.textProvider
+				"textProvider" : dependencies.providers.textProvider
 			};
 
 			let depRecordHandlerFactory = {
-				recordHandlerViewFactory: CORA.recordHandlerViewFactory(),
-				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
-				recordGuiFactory: dependencies.globalFactories.recordGuiFactory,
-				managedGuiItemFactory: dependencies.globalFactories.managedGuiItemFactory,
-				metadataProvider: dependencies.providers.metadataProvider
+				recordHandlerViewFactory : CORA.recordHandlerViewFactory(),
+				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
+				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
+				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
+				metadataProvider : dependencies.providers.metadataProvider
 			};
 
 			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);
 
 			let depResultHandler = {
-				textProvider: dependencies.providers.textProvider,
-				recordHandlerFactory: recordHandlerFactory,
-				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
-				recordGuiFactory: dependencies.globalFactories.recordGuiFactory
+				textProvider : dependencies.providers.textProvider,
+				recordHandlerFactory : recordHandlerFactory,
+				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
+				recordGuiFactory : dependencies.globalFactories.recordGuiFactory
 			};
 			let calculatorFactoryDep = {
-					metadataProvider : dependencies.providers.metadataProvider
+				metadataProvider : dependencies.providers.metadataProvider
 			};
-			
+
 			let dep = {
-				searchHandlerViewFactory: CORA.searchHandlerViewFactory(viewDep),
-				managedGuiItemFactory: dependencies.globalFactories.managedGuiItemFactory,
-				recordGuiFactory: dependencies.globalFactories.recordGuiFactory,
-				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
-				resultHandlerFactory: CORA.resultHandlerFactory(depResultHandler),
-				jsClient: dependencies.providers.clientInstanceProvider.getJsClient(),
-				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
+				searchHandlerViewFactory : CORA.searchHandlerViewFactory(viewDep),
+				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
+				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
+				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
+				resultHandlerFactory : CORA.resultHandlerFactory(depResultHandler),
+				jsClient : dependencies.providers.clientInstanceProvider.getJsClient(),
+				recordPartPermissionCalculatorFactory : CORA.genericFactory(
+						"recordPartPermissionCalculator", calculatorFactoryDep)
 
 			};
 			return CORA.searchHandler(dep, spec);
@@ -64,9 +65,9 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type: "searchHandlerFactory",
-			getDependencies: getDependencies,
-			factor: factor
+			type : "searchHandlerFactory",
+			getDependencies : getDependencies,
+			factor : factor
 		});
 	};
 	return cora;

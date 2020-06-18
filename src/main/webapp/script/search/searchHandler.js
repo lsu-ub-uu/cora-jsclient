@@ -47,7 +47,8 @@ var CORA = (function(cora) {
 
 		const createSearchForm = function() {
 			let metadataId = spec.metadataId;
-			let permissionCalculator = createRecordPartPermissionCalculator(metadataId, createEmptyPermissions());
+			let permissionCalculator = createRecordPartPermissionCalculator(metadataId,
+					createEmptyPermissions());
 			recordGui = createRecordGui(metadataId, permissionCalculator);
 
 			addSearchFormFromRecordGuiToView(recordGui, metadataId);
@@ -55,11 +56,11 @@ var CORA = (function(cora) {
 
 			subscribeToChangesInForm();
 		};
-		
+
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
 			let calculatorSpec = {
-				metadataId: metadataId,
-				permissions: permissions
+				metadataId : metadataId,
+				permissions : permissions
 			}
 			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		};

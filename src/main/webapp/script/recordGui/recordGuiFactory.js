@@ -45,15 +45,15 @@ var CORA = (function(cora) {
 				textProvider : textProvider,
 				dataHolder : dataHolder
 			};
-			
+
 			let metadataChildAndRepeatInitializerDep = {
-					recordTypeProvider : dependencies.providers.recordTypeProvider,
-					metadataProvider : dependencies.providers.metadataProvider,
-					pubSub : pubSub
+				recordTypeProvider : dependencies.providers.recordTypeProvider,
+				metadataProvider : dependencies.providers.metadataProvider,
+				pubSub : pubSub
 			};
-			
-			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
-			
+
+			let metadataChildAndRepeatInitializerFactory = CORA
+					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
 
 			let depJSBookkeeper = {
 				recordTypeProvider : dependencies.providers.recordTypeProvider,
@@ -61,9 +61,9 @@ var CORA = (function(cora) {
 			};
 
 			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
-			
+
 			let calculatorFactoryDep = {
-					metadataProvider : metadataProvider
+				metadataProvider : metadataProvider
 			};
 
 			let dependenciesPresentationFactory = {
@@ -76,7 +76,8 @@ var CORA = (function(cora) {
 				dataDivider : dataDivider,
 				uploadManager : dependencies.uploadManager,
 				ajaxCallFactory : dependencies.ajaxCallFactory,
-				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
+				recordPartPermissionCalculatorFactory : CORA.genericFactory(
+						"recordPartPermissionCalculator", calculatorFactoryDep)
 			};
 
 			let dependenciesCF = {

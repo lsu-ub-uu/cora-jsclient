@@ -22,19 +22,20 @@ var CORA = (function(cora) {
 
 		const factor = function(spec) {
 			let metadataChildAndRepeatInitializerDep = {
-					recordTypeProvider : dependencies.recordTypeProvider,
-					metadataProvider : dependencies.metadataProvider,
-					pubSub : dependencies.pubSub
+				recordTypeProvider : dependencies.recordTypeProvider,
+				metadataProvider : dependencies.metadataProvider,
+				pubSub : dependencies.pubSub
 			};
-			
-			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
-			
+
+			let metadataChildAndRepeatInitializerFactory = CORA
+					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+
 			let controllerDependencies = {
-					recordTypeProvider : dependencies.recordTypeProvider,
-					metadataProvider : dependencies.metadataProvider,
-					pubSub : dependencies.pubSub,
-					metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
-				};
+				recordTypeProvider : dependencies.recordTypeProvider,
+				metadataProvider : dependencies.metadataProvider,
+				pubSub : dependencies.pubSub,
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+			};
 			return CORA.metadataController(controllerDependencies, spec);
 		};
 

@@ -66,20 +66,20 @@ var CORA = (function(cora) {
 			}
 			busy.hideWithEffect();
 		}
-		
+
 		const getRecordPartFromAnswer = function(answer) {
 			return JSON.parse(answer.responseText).record;
 		};
-		
+
 		const getPermissionsForRecordGuiFromRecord = function(record) {
 			let fetchedPermissions = record.permissions;
 			return getFetchedPermissionsOrEmpty(fetchedPermissions);
 		};
-		
+
 		const createEmptyPermissions = function() {
 			return {
-				write: [],
-				read: []
+				write : [],
+				read : []
 			};
 		};
 
@@ -89,29 +89,30 @@ var CORA = (function(cora) {
 			}
 			return createEmptyPermissions();
 		};
-		
-		const getFetchedPermissions = function(fetchedPermissions){
+
+		const getFetchedPermissions = function(fetchedPermissions) {
 			let permissionsNew = {};
 			permissionsNew.read = getReadPermission(fetchedPermissions);
 			permissionsNew.write = getWritePermission(fetchedPermissions);
 			return permissionsNew;
 		}
-		
-		const getReadPermission = function(fetchedPermissions){
-			return fetchedPermissions.read !== undefined ?  fetchedPermissions.read : [];
+
+		const getReadPermission = function(fetchedPermissions) {
+			return fetchedPermissions.read !== undefined ? fetchedPermissions.read : [];
 		}
-		
-		const getWritePermission = function(fetchedPermissions){
+
+		const getWritePermission = function(fetchedPermissions) {
 			return fetchedPermissions.write !== undefined ? fetchedPermissions.write : [];
 		}
-		
+
 		function createRecordGui(metadataId, data, permissions) {
 			let permissionSpec = {
-					metadataId : metadataId,
-					permissions : permissions
+				metadataId : metadataId,
+				permissions : permissions
 			};
-			let recordPartPermissionCalculator = spec.recordPartPermissionCalculatorFactory.factor(permissionSpec);
-			
+			let recordPartPermissionCalculator = spec.recordPartPermissionCalculatorFactory
+					.factor(permissionSpec);
+
 			let dataDivider = getDataDividerFromData(data);
 			let recordGuiSpec = {
 				"metadataId" : metadataId,

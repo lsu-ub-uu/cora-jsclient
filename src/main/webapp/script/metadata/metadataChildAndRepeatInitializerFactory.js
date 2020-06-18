@@ -20,43 +20,43 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataChildAndRepeatInitializerFactory = function(dependencies) {
 		let self;
-		
+
 		let metadataChildInititalizerDep = {
-				recordTypeProvider : dependencies.recordTypeProvider,
-				metadataProvider : dependencies.metadataProvider,
-				pubSub : dependencies.pubSub
-				
+			recordTypeProvider : dependencies.recordTypeProvider,
+			metadataProvider : dependencies.metadataProvider,
+			pubSub : dependencies.pubSub
+
 		};
 		let metadataRepeatInititalizerDep = {
-				recordTypeProvider : dependencies.recordTypeProvider,
-				metadataProvider : dependencies.metadataProvider,
-				pubSub : dependencies.pubSub
+			recordTypeProvider : dependencies.recordTypeProvider,
+			metadataProvider : dependencies.metadataProvider,
+			pubSub : dependencies.pubSub
 		};
 
-		let metadataChildInitializerFactory =  CORA.genericFactory(
-				"metadataChildInitializer", metadataChildInititalizerDep);
-		let metadataRepeatInitializerFactory =  CORA.genericFactory(
-				"metadataRepeatInitializer", metadataRepeatInititalizerDep);
-		
+		let metadataChildInitializerFactory = CORA.genericFactory("metadataChildInitializer",
+				metadataChildInititalizerDep);
+		let metadataRepeatInitializerFactory = CORA.genericFactory("metadataRepeatInitializer",
+				metadataRepeatInititalizerDep);
+
 		const factorChildInitializer = function(spec) {
 			metadataChildInititalizerDep.metadataChildAndRepeatInitializerFactory = self;
 			return metadataChildInitializerFactory.factor(spec);
 		};
-		
+
 		const factorRepeatInitializer = function(spec) {
 			metadataRepeatInititalizerDep.metadataChildAndRepeatInitializerFactory = self;
 			return metadataRepeatInitializerFactory.factor(spec);
 		};
-		
-		const getDependencies = function () {
+
+		const getDependencies = function() {
 			return dependencies;
 		};
-		
-		const getChildInitializerFactory = function(){
+
+		const getChildInitializerFactory = function() {
 			return metadataChildInitializerFactory;
 		};
-		
-		const getRepeatInitializerFactory = function(){
+
+		const getRepeatInitializerFactory = function() {
 			return metadataRepeatInitializerFactory;
 		};
 

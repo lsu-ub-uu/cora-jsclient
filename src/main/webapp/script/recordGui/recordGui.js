@@ -42,8 +42,7 @@ var CORA = (function(cora) {
 			let specMetadataController = {
 				metadataId: spec.metadataId,
 				data: spec.data,
-				metadataProvider: dependencies.metadataProvider,
-				pubSub: dependencies.pubSub
+				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
 			metadataController = dependencies.metadataControllerFactory
 					.factor(specMetadataController);

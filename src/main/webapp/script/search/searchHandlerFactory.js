@@ -42,13 +42,19 @@ var CORA = (function(cora) {
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				recordGuiFactory: dependencies.globalFactories.recordGuiFactory
 			};
+			let calculatorFactoryDep = {
+					metadataProvider : dependencies.providers.metadataProvider
+			};
+			
 			let dep = {
 				searchHandlerViewFactory: CORA.searchHandlerViewFactory(viewDep),
 				managedGuiItemFactory: dependencies.globalFactories.managedGuiItemFactory,
 				recordGuiFactory: dependencies.globalFactories.recordGuiFactory,
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				resultHandlerFactory: CORA.resultHandlerFactory(depResultHandler),
-				jsClient: dependencies.providers.clientInstanceProvider.getJsClient()
+				jsClient: dependencies.providers.clientInstanceProvider.getJsClient(),
+				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
+
 			};
 			return CORA.searchHandler(dep, spec);
 		}

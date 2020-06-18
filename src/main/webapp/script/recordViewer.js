@@ -20,19 +20,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.recordViewer = function(spec) {
 
-		var view = CORA.gui.createSpanWithClassName("recordViewer");
+		let view = CORA.gui.createSpanWithClassName("recordViewer");
 
-		var messageHolder = CORA.messageHolder();
+		let messageHolder = CORA.messageHolder();
 		view.appendChild(messageHolder.getView());
 
-		var busy = CORA.busy();
+		let busy = CORA.busy();
 		view.appendChild(busy.getView());
 
 		fetchDataFromServer(processFetchedRecord);
 		function fetchDataFromServer(callAfterAnswer) {
 			busy.show();
-			var readLink = spec.read;
-			var callSpec = {
+			let readLink = spec.read;
+			let callSpec = {
 				"requestMethod" : readLink.requestMethod,
 				"url" : readLink.url,
 				"contentType" : readLink.contentType,
@@ -44,7 +44,7 @@ var CORA = (function(cora) {
 		}
 		function callError(answer) {
 			busy.hideWithEffect();
-			var messageSpec = {
+			let messageSpec = {
 				"message" : answer.status,
 				"type" : CORA.message.ERROR
 			};
@@ -52,9 +52,11 @@ var CORA = (function(cora) {
 		}
 
 		function processFetchedRecord(answer) {
-			var data = getDataPartOfRecordFromAnswer(answer);
+			let record = getRecordPartFromAnswer(answer);
+			let data = record.data;
+			let permissions = getPermissionsForRecordGuiFromRecord(record);
 			try {
-				var recordGui = createRecordGui(spec.metadataId, data);
+				let recordGui = createRecordGui(spec.metadataId, data, permissions);
 				addToShowView(recordGui, spec.metadataId);
 				recordGui.initMetadataControllerStartingGui();
 			} catch (error) {
@@ -64,38 +66,79 @@ var CORA = (function(cora) {
 			}
 			busy.hideWithEffect();
 		}
+		
+		const getRecordPartFromAnswer = function(answer) {
+			return JSON.parse(answer.responseText).record;
+		};
+		
+		const getPermissionsForRecordGuiFromRecord = function(record) {
+			let fetchedPermissions = record.permissions;
+			return getFetchedPermissionsOrEmpty(fetchedPermissions);
+		};
+		
+		const createEmptyPermissions = function() {
+			return {
+				write: [],
+				read: []
+			};
+		};
 
-		function getDataPartOfRecordFromAnswer(answer) {
-			return JSON.parse(answer.responseText).record.data;
+		const getFetchedPermissionsOrEmpty = function(fetchedPermissions) {
+			if (fetchedPermissions) {
+				return getFetchedPermissions(fetchedPermissions);
+			}
+			return createEmptyPermissions();
+		};
+		
+		const getFetchedPermissions = function(fetchedPermissions){
+			let permissionsNew = {};
+			permissionsNew.read = getReadPermission(fetchedPermissions);
+			permissionsNew.write = getWritePermission(fetchedPermissions);
+			return permissionsNew;
 		}
-
-		function createRecordGui(metadataId, data) {
-			var dataDivider = getDataDividerFromData(data);
-			var recordGuiSpec = {
+		
+		const getReadPermission = function(fetchedPermissions){
+			return fetchedPermissions.read !== undefined ?  fetchedPermissions.read : [];
+		}
+		
+		const getWritePermission = function(fetchedPermissions){
+			return fetchedPermissions.write !== undefined ? fetchedPermissions.write : [];
+		}
+		
+		function createRecordGui(metadataId, data, permissions) {
+			let permissionSpec = {
+					metadataId : metadataId,
+					permissions : permissions
+			};
+			let recordPartPermissionCalculator = spec.recordPartPermissionCalculatorFactory.factor(permissionSpec);
+			
+			let dataDivider = getDataDividerFromData(data);
+			let recordGuiSpec = {
 				"metadataId" : metadataId,
 				"data" : data,
-				"dataDivider" : dataDivider
+				"dataDivider" : dataDivider,
+				recordPartPermissionCalculator : recordPartPermissionCalculator
 			};
 			return spec.recordGuiFactory.factor(recordGuiSpec);
 		}
 
-		function getDataDividerFromData(data) {
-			var cData = CORA.coraData(data);
-			var cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			var cDataDivider = CORA.coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
+		const getDataDividerFromData = function(data) {
+			let cData = CORA.coraData(data);
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cDataDivider = CORA.coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
 			return cDataDivider.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function addToShowView(recordGuiToAdd, metadataIdUsedInData) {
-			var showViewId = spec.presentationId;
-			var showView = recordGuiToAdd.getPresentationHolder(showViewId, metadataIdUsedInData)
+		const addToShowView = function(recordGuiToAdd, metadataIdUsedInData) {
+			let showViewId = spec.presentationId;
+			let showView = recordGuiToAdd.getPresentationHolder(showViewId, metadataIdUsedInData)
 					.getView();
 			view.appendChild(showView);
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
 		return Object.freeze({
 			getView : getView,

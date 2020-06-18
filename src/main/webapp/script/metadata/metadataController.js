@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
- * Copyright 2017, 2019 Uppsala University Library
+ * Copyright 2017, 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,47 +21,79 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataController = function(dependencies, spec) {
-		var topLevelMetadataId = spec.metadataId;
-		var topLevelData = spec.data;
+		let topLevelMetadataId = spec.metadataId;
+		let topLevelData = spec.data;
+		let topLevelPath = {};
+		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
-		initializeFirstLevel();
-		spec.pubSub.publish("newElementsAdded", {
-			"data" : "",
-			"path" : {}
-		});
-		spec.pubSub.publish("initComplete", {
-			"data" : "",
-			"path" : {}
-		});
-
-		function initializeFirstLevel() {
-			var topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			var topLevelChildReferences = topLevelMetadataElement
-					.getFirstChildByNameInData('childReferences');
-			var topLevelPath = {};
-			topLevelChildReferences.children.forEach(function(childReference) {
-				var initializerSpec = {
-					"childReference" : childReference,
-					"path" : topLevelPath,
-					"data" : topLevelData,
-					"metadataProvider" : spec.metadataProvider,
-					"pubSub" : spec.pubSub
-				};
-				CORA.metadataChildInitializer(dependencies, initializerSpec);
+		const start = function() {
+			initializeFirstLevel();
+			dependencies.pubSub.publish("newElementsAdded", {
+				data: "",
+				path: {}
 			});
+			dependencies.pubSub.publish("initComplete", {
+				data: "",
+				path: {}
+			});
+		};
+
+		const initializeFirstLevel = function() {
+			let topLevelChildReferences = extractTopLevelChildReferences();
+			topLevelChildReferences.children.forEach(function(childReference) {
+				possiblyInitializeChild(childReference);
+			});
+		};
+
+		const extractTopLevelChildReferences = function() {
+			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
+			return topLevelMetadataElement.getFirstChildByNameInData('childReferences');
 		}
 
-		function getMetadataById(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
-		}
+		const getMetadataById = function(id) {
+			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+		};
 
-		function getSpec() {
+		const possiblyInitializeChild = function(childReference) {
+			let hasReadPermission = userHasRecordPartPermission(childReference);
+			if (hasReadPermission) {
+				intitalizeChild(childReference);
+			}
+		};
+
+		const userHasRecordPartPermission = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return recordPartPermissionCalculator
+				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+		};
+
+		const intitalizeChild = function(childReference) {
+			let initializerSpec = {
+				childReference: childReference,
+				path: topLevelPath,
+				data: topLevelData
+			};
+			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
+				.factorChildInitializer(initializerSpec);
+			childInitializer.initialize();
+		};
+
+		const getSpec = function() {
 			return spec;
-		}
+		};
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		start();
 
 		return Object.freeze({
-			"type" : "metadataController",
-			getSpec : getSpec
+			type: "metadataController",
+			getSpec: getSpec,
+			getDependencies: getDependencies
 		});
 	};
 	return cora;

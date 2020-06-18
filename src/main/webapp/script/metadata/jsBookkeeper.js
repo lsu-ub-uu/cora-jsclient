@@ -1,5 +1,6 @@
 /*
  * Copyright 2016, 2018 Olov McKie
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,84 +20,83 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.jsBookkeeper = function(dependencies, spec) {
-		var pubSub = spec.pubSub;
+		let pubSub = spec.pubSub;
 
-		function setValue(data) {
+		const setValue = function(data) {
 			pubSub.publish("setValue", data);
-		}
+		};
 
-		function add(data) {
-			var childReference = data.childReference;
-			var path = data.path;
-			var currentData = spec.dataHolder.getData();
+		const add = function(data) {
+			let childReference = data.childReference;
+			let path = data.path;
+			let currentData = spec.dataHolder.getData();
 			if (path.children !== undefined) {
 				currentData = spec.dataHolder.findContainer(currentData, path);
 			}
-			var cChildReference = CORA.coraData(childReference);
-			var cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			var ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			var repeatMax = cChildReference.getFirstAtomicValueByNameInData('repeatMax');
+			let cChildReference = CORA.coraData(childReference);
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			let repeatMax = cChildReference.getFirstAtomicValueByNameInData('repeatMax');
 
-			var initializerDep = {
-				"recordTypeProvider" : dependencies.recordTypeProvider,
-				"metadataProvider" : spec.metadataProvider,
-				"pubSub" : spec.pubSub
-			};
-			var initializerSpec = {
+			let initializerSpec = {
 				"metadataId" : ref,
 				"path" : path,
 				"data" : undefined
 			};
 			if (repeatMax === "1") {
 				initializerSpec.repeatId = undefined;
-				CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
+						.factorRepeatInitializer(initializerSpec);
+				repeatInitializer.initialize();
 			} else {
-				var startRepeatId = calculateStartRepeatId(currentData.children);
+				let startRepeatId = calculateStartRepeatId(currentData.children);
 				initializerSpec.repeatId = String(startRepeatId);
-				CORA.metadataRepeatInitializer(initializerDep, initializerSpec);
+				let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
+						.factorRepeatInitializer(initializerSpec);
+				repeatInitializer.initialize();
 				return String(startRepeatId);
 			}
-		}
+		};
 
-		function calculateStartRepeatId(dataChildrenForMetadata) {
+		const calculateStartRepeatId = function(dataChildrenForMetadata) {
 			return calculateStartRepeatIdFromData(dataChildrenForMetadata);
-		}
+		};
 
-		function calculateStartRepeatIdFromData(dataChildrenForMetadata) {
-			var currentMaxRepeatId = 0;
+		const calculateStartRepeatIdFromData = function(dataChildrenForMetadata) {
+			let currentMaxRepeatId = 0;
 			dataChildrenForMetadata.forEach(function(child) {
 				currentMaxRepeatId = calculateMaxRepeatFromChildAndCurrentMaxRepeat(child,
 						currentMaxRepeatId);
 			});
 			return currentMaxRepeatId;
-		}
+		};
 
-		function calculateMaxRepeatFromChildAndCurrentMaxRepeat(child, currentMaxRepeatId) {
-			var x = Number(child.repeatId);
+		const calculateMaxRepeatFromChildAndCurrentMaxRepeat = function(child, currentMaxRepeatId) {
+			let x = Number(child.repeatId);
 			if (!isNaN(x) && x >= currentMaxRepeatId) {
 				x++;
 				return x;
 			}
 			return currentMaxRepeatId;
-		}
+		};
 
-		function remove(data) {
+		const remove = function(data) {
 			pubSub.publish("remove", data);
 			pubSub.unsubscribePathBelow(data.path);
-		}
+		};
 
-		function move(data) {
+		const move = function(data) {
 			pubSub.publish("move", data);
-		}
+		};
 
-		function addBefore(data) {
-			var addedRepeatId = add(data);
+		const addBefore = function(data) {
+			let addedRepeatId = add(data);
 
-			var newPath = calculateNewPath(data.metadataId, data.path, addedRepeatId);
+			let newPath = calculateNewPath(data.metadataId, data.path, addedRepeatId);
 
-			var parentPath = data.path;
+			let parentPath = data.path;
 
-			var moveData = {
+			let moveData = {
 				"path" : parentPath,
 				"metadataId" : data.metadataId,
 				"moveChild" : newPath,
@@ -104,32 +104,31 @@ var CORA = (function(cora) {
 				"newPosition" : "before"
 			};
 			move(moveData);
+		};
 
-		}
-
-		function calculateNewPath(metadataIdToAdd, parentPath, repeatId) {
+		const calculateNewPath = function(metadataIdToAdd, parentPath, repeatId) {
 			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd,
 					repeatId, parentPath);
-		}
+		};
 
-		function calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd, repeatId,
-				parentPath) {
-			var pathSpec = {
+		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd,
+				repeatId, parentPath) {
+			let pathSpec = {
 				"metadataProvider" : spec.metadataProvider,
 				"metadataIdToAdd" : metadataIdToAdd,
 				"repeatId" : repeatId,
 				"parentPath" : parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
 			"type" : "jsBookkeeper",

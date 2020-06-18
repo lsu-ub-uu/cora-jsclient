@@ -25,7 +25,8 @@ QUnit.module("search/searchHandlerTest.js", {
 			"searchHandlerViewFactory" : CORATEST.standardFactorySpy("searchHandlerViewSpy"),
 			"recordGuiFactory" : CORATEST.standardFactorySpy("recordGuiSpy"),
 			"ajaxCallFactory" : CORATEST.standardFactorySpy("ajaxCallSpy"),
-			"resultHandlerFactory" : CORATEST.standardFactorySpy("resultHandlerSpy")
+			"resultHandlerFactory" : CORATEST.standardFactorySpy("resultHandlerSpy"),
+			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
 		this.spec = {
 			"metadataId" : "someMetadataId",
@@ -89,12 +90,21 @@ QUnit.test("testGetView", function(assert) {
 	assert.strictEqual(searchHandler.getView(), factoredView.getView());
 });
 
-QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
+QUnit.test("testInitRecordGuiCorrectSpecToFactory", function(assert) {
 	CORA.searchHandler(this.dependencies, this.spec);
-	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "someMetadataId");
-	assert.deepEqual(factoredSpec.permissions.write, []);
-	assert.deepEqual(factoredSpec.permissions.read, []);
+	let factoredGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	assert.strictEqual(factoredGuiSpec.metadataId, "someMetadataId");
+	
+	let calculatorFactory = this.dependencies.recordPartPermissionCalculatorFactory;
+	let factoredCalculator = calculatorFactory.getFactored(0);
+	assert.strictEqual(factoredGuiSpec.recordPartPermissionCalculator, factoredCalculator);
+	assert.ok(factoredCalculator);
+	
+	let calculatorSpec = calculatorFactory.getSpec(0);
+	assert.strictEqual(calculatorSpec.metadataId, "someMetadataId");
+	assert.deepEqual(calculatorSpec.permissions.write, []);
+	assert.deepEqual(calculatorSpec.permissions.read, []);
+	
 });
 
 QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {

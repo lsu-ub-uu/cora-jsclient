@@ -808,7 +808,7 @@ QUnit.test("testHandleMessageRemoveWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataHolder when trying to remove:TypeError: dataStructure is undefined";
+	let expectedErrorMessage = "path(undefined) not found in dataHolder when trying to remove.";
 
 	assert.throws(function() {
 		dataHolder.handleMsg({}, "x/y/z/remove");
@@ -1509,7 +1509,7 @@ QUnit.test("testHandleMessageAddWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]} Error:TypeError: parentPath is undefined";
+	let expectedErrorMessage = "path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]}";
 
 	assert.throws(function() {
 		dataHolder.handleMsg({}, "root/textVariableId/add");
@@ -1560,7 +1560,7 @@ QUnit.test("testHandleMessageSetValueWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataHolder:TypeError: dataStructure is undefined";
+	let expectedErrorMessage = "path(undefined) not found in dataHolder.";
 
 	assert.throws(function() {
 		dataHolder.handleMsg({}, "root/textVariableId/setValue");

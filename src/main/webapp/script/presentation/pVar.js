@@ -76,6 +76,9 @@ var CORA = (function(cora) {
 			onkeyupFunction : onkeyup
 		};
 
+		const disableVar = function(){
+			
+		};
 		if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 			var cEmptyTextId = CORA
 					.coraData(cPresentation.getFirstChildByNameInData("emptyTextId"));
@@ -88,7 +91,43 @@ var CORA = (function(cora) {
 		var previousValue = "";
 		pubSub.subscribe("setValue", path, undefined, handleMsg);
 		pubSub.subscribe("validationError", path, undefined, handleValidationError);
-
+		
+		let topLevelPath = createTopLevelPath();
+		
+		
+		pubSub.subscribe("disable", topLevelPath, undefined, disableVar);
+		
+		function createTopLevelPath(){
+			if(pathHasChildren()){
+				var cPath = CORA.coraData(path);
+				if (cPath.containsChildWithNameInData("linkedPath")) {
+					return createPathWithOnlyTopLevelInformation(cPath);
+				}
+			}
+			return {};
+		}
+		
+		function pathHasChildren(){
+			return path.children !== undefined;
+		}
+		
+		function createPathWithOnlyTopLevelInformation(cPath){
+			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
+			let newTopLevelPath = {
+					"name" : "linkedPath",
+					"children": [
+						{
+							"name": "nameInData",
+							"value": pathNameInData
+						}]
+			};
+			if(cPath.containsChildWithNameInData("attributes")){
+				let attributes = cPath.getFirstChildByNameInData("attributes");
+				newTopLevelPath.children.push(attributes);
+			}
+			return newTopLevelPath;
+		}
+		
 		function getOutputFormat() {
 			if (cPresentation.containsChildWithNameInData("outputFormat")) {
 				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
@@ -245,7 +284,8 @@ var CORA = (function(cora) {
 			handleValidationError : handleValidationError,
 			openTextIdRecord : openTextIdRecord,
 			openDefTextIdRecord : openDefTextIdRecord,
-			openMetadataIdRecord : openMetadataIdRecord
+			openMetadataIdRecord : openMetadataIdRecord,
+			disableVar : disableVar
 		});
 
 	};

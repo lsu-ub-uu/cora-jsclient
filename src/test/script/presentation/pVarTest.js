@@ -61,21 +61,26 @@ var CORATEST = (function(coraTest) {
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.testVariableSubscription = function(attachedPVar, assert) {
+	coraTest.testVariableSubscription = function(attachedPVar, assert, path, disablePath) {
 		var subscriptions = attachedPVar.pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 2);
+		assert.deepEqual(subscriptions.length, 3);
 
 		var firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
-		assert.deepEqual(firstSubsription.path, {});
+		assert.deepEqual(firstSubsription.path, path);
 		var pVar = attachedPVar.pVar;
 		assert.ok(firstSubsription.functionToCall === pVar.handleMsg);
 
 		var secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
-		assert.deepEqual(secondSubsription.path, {});
+		assert.deepEqual(secondSubsription.path, path);
 		var pVar = attachedPVar.pVar;
 		assert.ok(secondSubsription.functionToCall === pVar.handleValidationError);
+		
+		var disableSubsription = subscriptions[2];
+		assert.strictEqual(disableSubsription.type, "disable");
+		assert.stringifyEqual(disableSubsription.path, disablePath);
+		assert.ok(disableSubsription.functionToCall === pVar.disableVar);
 
 	};
 
@@ -128,7 +133,7 @@ QUnit.test("testInitText", function(assert) {
 	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	assert.strictEqual(attachedPVar.pVar.type, "pVar");
 
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path, attachedPVar.spec.path);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -187,11 +192,173 @@ QUnit.test("testGetRegexpShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", f
 
 QUnit.test("testInitTextArea", function(assert) {
 	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path, attachedPVar.spec.path);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
 
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+let pathWithTwoLevels = {
+		  "name": "linkedPath",
+		  "children": [
+		    {
+		      "name": "nameInData",
+		      "value": "recordInfo"
+		    },
+		    {
+		      "name": "linkedPath",
+		      "children": [
+		        {
+		          "name": "nameInData",
+		          "value": "dataDivider"
+		        }
+		      ]
+		    }
+		  ]
+		};
+
+QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
+	let topLevelPath = {
+			"name" : "linkedPath",
+			"children": [
+				{
+					"name": "nameInData",
+					"value": "recordInfo"
+				}]
+	};
+	var attachedPVar = this.pVarFactory.factor(pathWithTwoLevels, "textVariableId", "textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithTwoLevels, topLevelPath);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+	
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+
+let pathWithThreeLevels = {
+		  "name": "linkedPath",
+		  "children": [
+		    {
+		      "name": "nameInData",
+		      "value": "recordInfo"
+		    },
+		    {
+		      "name": "linkedPath",
+		      "children": [
+		        {
+		          "name": "nameInData",
+		          "value": "dataDivider"
+		        },
+		        {
+		          "name": "linkedPath",
+		          "children": [
+		            {
+		              "name": "nameInData",
+		              "value": "linkedRecordType"
+		            }
+		          ]
+		        }
+		      ]
+		    }
+		  ]
+		};
+
+QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
+	let topLevelPath = {
+			"name" : "linkedPath",
+			"children": [
+				{
+					"name": "nameInData",
+					"value": "recordInfo"
+				}]
+	};
+	var attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId", "textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithThreeLevels, topLevelPath);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+	
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+let pathWithRepeatId = {
+		  "name": "linkedPath",
+		  "children": [
+		    {
+		      "name": "nameInData",
+		      "value": "userRole"
+		    },
+		    {
+		      "name": "repeatId",
+		      "value": "0"
+		    },
+		    {
+		      "name": "linkedPath",
+		      "children": [
+		        {
+		          "name": "nameInData",
+		          "value": "userRole"
+		        }
+		      ]
+		    }
+		  ]
+		};
+QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
+	let topLevelPath = {
+			"name" : "linkedPath",
+			"children": [
+				{
+					"name": "nameInData",
+					"value": "userRole"
+				}]
+	};
+	var attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId", "textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithRepeatId, topLevelPath);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+	
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+	
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+let pathWithAttribute = {"name":"linkedPath","children":[{"name":"nameInData","value":"textPart"},{"name":"attributes","children":[{"name":"attribute","repeatId":"1","children":[{"name":"attributeName","value":"type"},{"name":"attributeValue","value":"alternative"}]}]},{"name":"linkedPath","children":[{"name":"nameInData","value":"text"}]}]};
+QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
+	let topLevelPath = {
+			  "name": "linkedPath",
+			  "children": [
+			    {
+			      "name": "nameInData",
+			      "value": "textPart"
+			    },
+			    {
+			      "name": "attributes",
+			      "children": [
+			        {
+			          "name": "attribute",
+			          "repeatId": "1",
+			          "children": [
+			            {
+			              "name": "attributeName",
+			              "value": "type"
+			            },
+			            {
+			              "name": "attributeValue",
+			              "value": "alternative"
+			            }
+			          ]
+			        }
+			      ]
+			    }
+			  ]
+			};
+	var attachedPVar = this.pVarFactory.factor(pathWithAttribute, "textVariableId", "textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithAttribute, topLevelPath);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+	
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+	
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
@@ -272,7 +439,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, {}, {});
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -317,7 +484,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, {}, {});
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 
@@ -457,7 +624,7 @@ QUnit.test("testInitTextOutput", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, {}, {});
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 
@@ -498,7 +665,7 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert);
+	CORATEST.testVariableSubscription(attachedPVar, assert, {}, {});
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 

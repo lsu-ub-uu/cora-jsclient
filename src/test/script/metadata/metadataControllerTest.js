@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016 Olov McKie
- * Copyright 2016, 2017, 2018, 2019 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -48,21 +48,21 @@ QUnit.module("metadata/metadataControllerTest.js", {
 
 QUnit.test("testInit", function(assert) {
 
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.strictEqual(metadataController.type, "metadataController");
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.strictEqual(metadataController.getSpec(), this.spec);
 });
 QUnit.test("testGetDependencies", function(assert) {
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.strictEqual(metadataController.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.ok(metadataController !== undefined);
 	let spec = this.metadataChildAndRepeatInitializerFactory.getChildSpec(0);
 
@@ -76,7 +76,7 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 });
 
 QUnit.test("testChildIntitilizerIsCalled", function(assert) {
-	var metadataController = CORA.metadataController(this.dependencies, this.spec);
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.ok(metadataController !== undefined);
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(0);
 

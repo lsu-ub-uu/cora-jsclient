@@ -1,6 +1,5 @@
 /*
- * Copyright 2015, 2016 Olov McKie
- * Copyright 2016, 2017, 2018, 2019, 2020 Uppsala University Library
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -338,22 +337,6 @@ QUnit.test("testInitOneChildRepeat3to3WithData", function(assert) {
 	assert.stringifyEqual(repeatSpec3.data, this.spec.data.children[2]);
 
 });
-
-// function createLinkedPathWithNameInDataAndRepeatIdAsString(nameInData, repeatId) {
-// return JSON.stringify(createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId));
-// }
-// function createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId) {
-// return {
-// "name" : "linkedPath",
-// "children" : [ {
-// "name" : "nameInData",
-// "value" : nameInData
-// }, {
-// "name" : "repeatId",
-// "value" : repeatId
-// } ]
-// };
-// }
 
 QUnit.test("testInitOneChildRepeat3to3WithDataForOne", function(assert) {
 	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(

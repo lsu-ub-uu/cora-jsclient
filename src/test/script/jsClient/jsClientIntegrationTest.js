@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -23,26 +23,25 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.dependenciesFactory = function(metadataProvider, pubSub, textProvider) {
 		var factor = function(metadataId, presentationId, metadataIdUsedInData) {
-			var specDataHolder = {
+			let specDataHolder = {
 				"metadataId" : metadataId,
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub
 			};
-			var dataHolder = CORA.dataHolder(specDataHolder);
-			var depJSBookkeeper = {
+			let dataHolder = CORA.dataHolder(specDataHolder);
+			let depJSBookkeeper = {
 				"recordTypeProvider" : CORATEST.recordTypeProviderSpy()
 			};
-			var specJSBookkeeper = {
+			let specJSBookkeeper = {
 				"metadataId" : metadataId,
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub,
 				"textProvider" : textProvider,
 				"dataHolder" : dataHolder
 			};
-			var jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
+			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
-			var specPresentationFactory = {
-
+			let specPresentationFactory = {
 				"providers" : {
 					"metadataProvider" : metadataProvider,
 					"textProvider" : textProvider,
@@ -50,38 +49,43 @@ var CORATEST = (function(coraTest) {
 				"pubSub" : pubSub,
 				"jsBookkeeper" : jsBookkeeper
 			};
-			var presentationFactory = CORA.presentationFactory(specPresentationFactory);
+			let presentationFactory = CORA.presentationFactory(specPresentationFactory);
 
-			var holderDependencies = {
+			let holderDependencies = {
 					"metadataProvider" : metadataProvider,
 					"pubSub" : pubSub,
 					"textProvider" : textProvider,
 					"jsBookkeeper" : jsBookkeeper,
 					"presentationFactory" : presentationFactory
 			};
-			var spec = {
+			let spec = {
 				"presentationId" : presentationId,
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				
 			};
-			var presentation = CORA.presentationHolder(holderDependencies, spec);
+			let presentation = CORA.presentationHolder(holderDependencies, spec);
 
-			// // log all messages
-			// pubSub.subscribe("*", {}, undefined, function(dataFromMsg, msg) {
-			// console.log("msg: " + msg);
-			// console.log("dataFromMsg: " + JSON.stringify(dataFromMsg));
-			// });
-			var specMetadataController = {
+			let metadataChildAndRepeatInitializerDep = {
+					recordTypeProvider : CORATEST.recordTypeProviderSpy(),
+					metadataProvider : metadataProvider,
+					pubSub : pubSub
+			};
+			
+			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+			
+			let specMetadataController = {
 				"metadataId" : metadataId,
 				"data" : undefined,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub
+				recordPartPermissionCalculator : CORATEST.recordPartPermissionCalculatorSpy(),
+				"metadataProvider" : metadataProvider
 			};
-			var depMetadataController = {
+			let depMetadataController = {
 				"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-				metadataRepeatInitializerFactory : CORATEST.standardFactorySpy("metadataRepeatInitializerSpy")
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory,
+				metadataProvider : metadataProvider,
+				pubSub : pubSub
 			};
-			var metadataController = CORA.metadataController(depMetadataController, specMetadataController);
+			let metadataController = CORA.metadataController(depMetadataController, specMetadataController);
 
 			return Object.freeze({
 				jsBookkeeper : jsBookkeeper,
@@ -115,7 +119,7 @@ QUnit.module("jsClient/jsClientIntegrationTest.js", {
 });
 
 QUnit.test("testIntegrateCoraPubSubPVar", function(assert) {
-	var path = {
+	let path = {
 		"name" : "linkedPath",
 		"children" : [ {
 			"name" : "nameInData",
@@ -123,27 +127,27 @@ QUnit.test("testIntegrateCoraPubSubPVar", function(assert) {
 		} ]
 	};
 
-	var cPVarPresentation = CORA.coraData(this.metadataProvider
+	let cPVarPresentation = CORA.coraData(this.metadataProvider
 			.getMetadataById("pVarTextVariableIdOutput"));
-	var dependencies = {
+	let dependencies = {
 		"metadataProvider" : this.metadataProvider,
 		"pubSub" : this.pubSub,
 		"textProvider" : this.textProvider,
 		"pVarViewFactory" : this.pVarViewFactory
 	};
-	var spec = {
+	let spec = {
 		"path" : path,
 		"metadataIdUsedInData" : "textVariableId",
 		"cPresentation" : cPVarPresentation
 	};
-	var pVar = CORA.pVar(dependencies, spec);
+	let pVar = CORA.pVar(dependencies, spec);
 
 	pVar.setValue("A Value");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "A Value");
 
-	var type = "setValue";
-	var data = {
+	let type = "setValue";
+	let data = {
 		"data" : "A new value",
 		"path" : path
 	};
@@ -152,216 +156,211 @@ QUnit.test("testIntegrateCoraPubSubPVar", function(assert) {
 	assert.equal(pVarViewSpy.getValue(), "A new value");
 });
 
-//TODO: fix when repeatInitializerFactory and metadataChildInitializerFactory är på plats
-//QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", function(assert) {
-//	var metadataId = "groupIdOneTextChild";
-//	var presentationId = "pgGroupIdOneTextChild";
-//	var metadataIdUsedInData = "groupIdOneTextChild";
-//
-//	var dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-//			metadataIdUsedInData);
-//	var presentation = dependencies.presentation;
-//	var dataHolder = dependencies.dataHolder;
-//
-//	var view = presentation.getView();
-//	this.fixture.appendChild(view);
-//
-//	var pGroupView = view.firstChild;
-//	var childRefHandler = pGroupView.childNodes[1];
-//
-//	var pVarView = childRefHandler.firstChild.firstChild.firstChild;
-//	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
-//	var input = pVarView.firstChild;
-//	assert.deepEqual(input.value, "");
-//
-//	var path2 = {
-//		"name" : "linkedPath",
-//		"children" : [ {
-//			"name" : "nameInData",
-//			"value" : "textVariableId"
-//		} ]
-//	};
-//	var data2 = {
-//		"path" : path2,
-//		"data" : "a Value"
-//	};
-//	this.pubSub.publish("setValue", data2);
-////	assert.deepEqual(input.value, "a Value");
-//
-//	assert.deepEqual(dataHolder.getData(), {
-//		"children" : [ {
-//			"name" : "textVariableId",
-//			"value" : "a Value"
-//		} ],
-//		"name" : "groupIdOneTextChild"
-//	});
-//});
+QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", function(assert) {
+	let metadataId = "groupIdOneTextChild";
+	let presentationId = "pgGroupIdOneTextChild";
+	let metadataIdUsedInData = "groupIdOneTextChild";
 
-//TODO: fix when repeatInitializerFactory and metadataChildInitializerFactory är på plats
-//QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataControllerTwoLevels", function(
-//		assert) {
-//	var metadataId = "groupInGroupOneTextChild";
-//	var presentationId = "pgGroupInGroupIdOneTextOneTextChild";
-//	var metadataIdUsedInData = "groupInGroupOneTextChild";
-//
-//	var dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-//			metadataIdUsedInData);
-//
-//	var presentation = dependencies.presentation;
-//	var dataHolder = dependencies.dataHolder;
-//
-//	var view = presentation.getView();
-//	this.fixture.appendChild(view);
-//
-//	var topPGroupView = view.childNodes[0];
-//
-//	var childRefHandler1 = topPGroupView.childNodes[2];
-//	var pGroupView = childRefHandler1.childNodes[0].firstChild.firstChild;
-//	
-//	var childRefHandler2 = pGroupView.childNodes[2];
-//
-//	var pVarView = childRefHandler2.firstChild.firstChild.firstChild;
-//	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
-//	var input = pVarView.firstChild;
-//	assert.deepEqual(input.value, "");
-//
-//	var path2 = {
-//		"name" : "linkedPath",
-//		"children" : [ {
-//			"name" : "nameInData",
-//			"value" : "groupIdOneTextChild"
-//		}, {
-//			"name" : "linkedPath",
-//			"children" : [ {
-//				"name" : "nameInData",
-//				"value" : "textVariableId"
-//			} ]
-//		} ]
-//	};
-//	var data2 = {
-//		"path" : path2,
-//		"data" : "a Value one level down"
-//	};
-//	this.pubSub.publish("setValue", data2);
-//	assert.deepEqual(input.value, "a Value one level down");
-//
-//	assert.deepEqual(dataHolder.getData(), {
-//		"children" : [ {
-//			"children" : [ {
-//				"name" : "textVariableId",
-//				"value" : "a Value one level down"
-//			} ],
-//			"name" : "groupIdOneTextChild"
-//		} ],
-//		"name" : "groupInGroupOneTextChild"
-//	});
-//});
+	let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
+			metadataIdUsedInData);
+	let presentation = dependencies.presentation;
+	let dataHolder = dependencies.dataHolder;
 
-//TODO: fix when repeatInitializerFactory and metadataChildInitializerFactory är på plats
-//QUnit.test("testIntegrateRepeatingContainer",
-//		function(assert) {
-//			var metadataId = "groupIdOneTextChildRepeat1to3";
-//			var presentationId = "pgGroupIdRepeatingContainerRepeat1to3";
-//			var metadataIdUsedInData = "groupIdOneTextChild";
-//
-//			var dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-//					metadataIdUsedInData);
-//
-//			var presentation = dependencies.presentation;
-//
-//			var view = presentation.getView();
-//			this.fixture.appendChild(view);
-//
-//			var topPGroupView = view.firstChild;
-//			var headline = topPGroupView.childNodes[1];
-//			assert.strictEqual(headline.textContent, "En rubrik");
-//
-//			var repeatingContainer = topPGroupView.childNodes[2];
-//			assert.deepEqual(repeatingContainer.className,
-//					"pChildRefHandler h2TextStyle fourChildStyle pTextVariableIdRContainer");
-//
-//			var childrenView = repeatingContainer.firstChild;
-//			var repeatingElement = childrenView.firstChild;
-//			var pVarView = repeatingElement.firstChild;
-//			assert.deepEqual(pVarView.className,
-//					"pRepeatingContainer pTextVariableIdRContainer default");
-//		});
+	let view = presentation.getView();
+	this.fixture.appendChild(view);
 
-//TODO: fix when repeatInitializerFactory and metadataChildInitializerFactory är på plats
-//QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataControllerSurroundingC", function(
-//		assert) {
-//	var metadataId = "groupIdTwoTextChildRepeat1to5";
-//	var presentationId = "pgGroupIdTwoTextChildSurrounding2TextPGroup";
-//	var metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-//
-//	var dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-//			metadataIdUsedInData);
-//
-//	var presentation = dependencies.presentation;
-//
-//	var view = presentation.getView();
-//	this.fixture.appendChild(view);
-//
-//	var topPGroupView = view.firstChild;
-//
-//	var pNonRepeatingChildRefHandlerView = topPGroupView.childNodes[1];
-//
-//	var surroundingContainer = pNonRepeatingChildRefHandlerView.childNodes[0];
-//
-//	var headline = surroundingContainer.childNodes[1];
-//	assert.strictEqual(headline.textContent, "En rubrik");
-//
-//	var childRefHandler1 = surroundingContainer.childNodes[2];
-//	var childrenView = childRefHandler1.firstChild;
-//	var repeatingElement = childrenView.firstChild;
-//	var pVarView = repeatingElement.firstChild;
-//	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
-//
-//	var childRefHandler2 = surroundingContainer.childNodes[3];
-//	var childrenView2 = childRefHandler2.firstChild;
-//	var repeatingElement2 = childrenView2.firstChild;
-//	var pVarView2 = repeatingElement2.firstChild;
-//	assert.deepEqual(pVarView2.className, "pVar pVarTextVariableId2 default");
-//});
+	let pGroupView = view.firstChild;
+	let childRefHandler = pGroupView.childNodes[1];
 
-//TODO: fix when repeatInitializerFactory and metadataChildInitializerFactory är på plats
-// QUnit.test("testIntegrateSurroundingContainerInSurroundingContainer", function(assert) {
-//	var metadataId = "groupIdTwoTextChildRepeat1to5";
-//	var presentationId = "pgGroupIdTwoTextChildSurrounding2TextPGroup2";
-//	var metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-//
-//	var dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-//			metadataIdUsedInData);
-//
-//	var presentation = dependencies.presentation;
-//
-//	var view = presentation.getView();
-//	this.fixture.appendChild(view);
-//
-//	var topPGroupView = view.firstChild;
-//	var pNonRepeatingChildRefHandlerView = topPGroupView.childNodes[1];
-//
-//	var surroundingContainer = pNonRepeatingChildRefHandlerView.childNodes[0];
-//
-//	var headline = surroundingContainer.childNodes[1];
-//	assert.strictEqual(headline.textContent, "En rubrik");
-//
-//	var pNonRepeatingChildRefHandlerView2 = surroundingContainer.childNodes[2];
-//
-//	var surroundingContainerLevel2 = pNonRepeatingChildRefHandlerView2.childNodes[0];
-//
-//	var headline2 = surroundingContainerLevel2.childNodes[1];
-//	assert.strictEqual(headline2.textContent, "En rubrik");
-//
-//	var childRefHandler1 = surroundingContainerLevel2.childNodes[2];
-//	var childrenView = childRefHandler1.firstChild;
-//	var repeatingElement = childrenView.firstChild;
-//	var pVarView = repeatingElement.firstChild;
-//	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
-//
-//	var childRefHandler2 = surroundingContainerLevel2.childNodes[3];
-//	var childrenView2 = childRefHandler2.firstChild;
-//	var repeatingElement2 = childrenView2.firstChild;
-//	var pVarView2 = repeatingElement2.firstChild;
-//	assert.deepEqual(pVarView2.className, "pVar pVarTextVariableId2 default");
-//});
+	let pVarView = childRefHandler.firstChild.firstChild.firstChild;
+	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
+	let input = pVarView.firstChild;
+	assert.deepEqual(input.value, "");
+
+	let path2 = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		} ]
+	};
+	let data2 = {
+		"path" : path2,
+		"data" : "a Value"
+	};
+	this.pubSub.publish("setValue", data2);
+//	assert.deepEqual(input.value, "a Value");
+
+	assert.deepEqual(dataHolder.getData(), {
+		"children" : [ {
+			"name" : "textVariableId",
+			"value" : "a Value"
+		} ],
+		"name" : "groupIdOneTextChild"
+	});
+});
+
+QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataControllerTwoLevels", function(
+		assert) {
+	let metadataId = "groupInGroupOneTextChild";
+	let presentationId = "pgGroupInGroupIdOneTextOneTextChild";
+	let metadataIdUsedInData = "groupInGroupOneTextChild";
+
+	let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
+			metadataIdUsedInData);
+
+	let presentation = dependencies.presentation;
+	let dataHolder = dependencies.dataHolder;
+
+	let view = presentation.getView();
+	this.fixture.appendChild(view);
+
+	let topPGroupView = view.childNodes[0];
+
+	let childRefHandler1 = topPGroupView.childNodes[2];
+	let pGroupView = childRefHandler1.childNodes[0].firstChild.firstChild;
+	
+	let childRefHandler2 = pGroupView.childNodes[2];
+
+	let pVarView = childRefHandler2.firstChild.firstChild.firstChild;
+	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
+	let input = pVarView.firstChild;
+	assert.deepEqual(input.value, "");
+
+	let path2 = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "groupIdOneTextChild"
+		}, {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "textVariableId"
+			} ]
+		} ]
+	};
+	let data2 = {
+		"path" : path2,
+		"data" : "a Value one level down"
+	};
+	this.pubSub.publish("setValue", data2);
+	assert.deepEqual(input.value, "a Value one level down");
+
+	assert.deepEqual(dataHolder.getData(), {
+		"children" : [ {
+			"children" : [ {
+				"name" : "textVariableId",
+				"value" : "a Value one level down"
+			} ],
+			"name" : "groupIdOneTextChild"
+		} ],
+		"name" : "groupInGroupOneTextChild"
+	});
+});
+
+QUnit.test("testIntegrateRepeatingContainer",
+		function(assert) {
+			let metadataId = "groupIdOneTextChildRepeat1to3";
+			let presentationId = "pgGroupIdRepeatingContainerRepeat1to3";
+			let metadataIdUsedInData = "groupIdOneTextChild";
+
+			let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
+					metadataIdUsedInData);
+
+			let presentation = dependencies.presentation;
+
+			let view = presentation.getView();
+			this.fixture.appendChild(view);
+
+			let topPGroupView = view.firstChild;
+			let headline = topPGroupView.childNodes[1];
+			assert.strictEqual(headline.textContent, "En rubrik");
+
+			let repeatingContainer = topPGroupView.childNodes[2];
+			assert.deepEqual(repeatingContainer.className,
+					"pChildRefHandler h2TextStyle fourChildStyle pTextVariableIdRContainer");
+
+			let childrenView = repeatingContainer.firstChild;
+			let repeatingElement = childrenView.firstChild;
+			let pVarView = repeatingElement.firstChild;
+			assert.deepEqual(pVarView.className,
+					"pRepeatingContainer pTextVariableIdRContainer default");
+		});
+
+QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataControllerSurroundingC", function(
+		assert) {
+	let metadataId = "groupIdTwoTextChildRepeat1to5";
+	let presentationId = "pgGroupIdTwoTextChildSurrounding2TextPGroup";
+	let metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+
+	let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
+			metadataIdUsedInData);
+
+	let presentation = dependencies.presentation;
+
+	let view = presentation.getView();
+	this.fixture.appendChild(view);
+
+	let topPGroupView = view.firstChild;
+
+	let pNonRepeatingChildRefHandlerView = topPGroupView.childNodes[1];
+
+	let surroundingContainer = pNonRepeatingChildRefHandlerView.childNodes[0];
+
+	let headline = surroundingContainer.childNodes[1];
+	assert.strictEqual(headline.textContent, "En rubrik");
+
+	let childRefHandler1 = surroundingContainer.childNodes[2];
+	let childrenView = childRefHandler1.firstChild;
+	let repeatingElement = childrenView.firstChild;
+	let pVarView = repeatingElement.firstChild;
+	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
+
+	let childRefHandler2 = surroundingContainer.childNodes[3];
+	let childrenView2 = childRefHandler2.firstChild;
+	let repeatingElement2 = childrenView2.firstChild;
+	let pVarView2 = repeatingElement2.firstChild;
+	assert.deepEqual(pVarView2.className, "pVar pVarTextVariableId2 default");
+});
+
+ QUnit.test("testIntegrateSurroundingContainerInSurroundingContainer", function(assert) {
+	let metadataId = "groupIdTwoTextChildRepeat1to5";
+	let presentationId = "pgGroupIdTwoTextChildSurrounding2TextPGroup2";
+	let metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
+
+	let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
+			metadataIdUsedInData);
+
+	let presentation = dependencies.presentation;
+
+	let view = presentation.getView();
+	this.fixture.appendChild(view);
+
+	let topPGroupView = view.firstChild;
+	let pNonRepeatingChildRefHandlerView = topPGroupView.childNodes[1];
+
+	let surroundingContainer = pNonRepeatingChildRefHandlerView.childNodes[0];
+
+	let headline = surroundingContainer.childNodes[1];
+	assert.strictEqual(headline.textContent, "En rubrik");
+
+	let pNonRepeatingChildRefHandlerView2 = surroundingContainer.childNodes[2];
+
+	let surroundingContainerLevel2 = pNonRepeatingChildRefHandlerView2.childNodes[0];
+
+	let headline2 = surroundingContainerLevel2.childNodes[1];
+	assert.strictEqual(headline2.textContent, "En rubrik");
+
+	let childRefHandler1 = surroundingContainerLevel2.childNodes[2];
+	let childrenView = childRefHandler1.firstChild;
+	let repeatingElement = childrenView.firstChild;
+	let pVarView = repeatingElement.firstChild;
+	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
+
+	let childRefHandler2 = surroundingContainerLevel2.childNodes[3];
+	let childrenView2 = childRefHandler2.firstChild;
+	let repeatingElement2 = childrenView2.firstChild;
+	let pVarView2 = repeatingElement2.firstChild;
+	assert.deepEqual(pVarView2.className, "pVar pVarTextVariableId2 default");
+});

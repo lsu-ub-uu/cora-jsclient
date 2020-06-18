@@ -67,9 +67,9 @@ var CORA = (function(cora) {
 			busy.hideWithEffect();
 		}
 		
-		function getRecordPartFromAnswer(answer) {
+		const getRecordPartFromAnswer = function(answer) {
 			return JSON.parse(answer.responseText).record;
-		}
+		};
 		
 		const getPermissionsForRecordGuiFromRecord = function(record) {
 			let fetchedPermissions = record.permissions;
@@ -122,23 +122,23 @@ var CORA = (function(cora) {
 			return spec.recordGuiFactory.factor(recordGuiSpec);
 		}
 
-		function getDataDividerFromData(data) {
+		const getDataDividerFromData = function(data) {
 			let cData = CORA.coraData(data);
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			let cDataDivider = CORA.coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
 			return cDataDivider.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function addToShowView(recordGuiToAdd, metadataIdUsedInData) {
+		const addToShowView = function(recordGuiToAdd, metadataIdUsedInData) {
 			let showViewId = spec.presentationId;
 			let showView = recordGuiToAdd.getPresentationHolder(showViewId, metadataIdUsedInData)
 					.getView();
 			view.appendChild(showView);
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
 		return Object.freeze({
 			getView : getView,

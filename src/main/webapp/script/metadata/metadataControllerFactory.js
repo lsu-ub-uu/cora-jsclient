@@ -20,7 +20,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataControllerFactory = function(dependencies) {
 
-		var factor = function(spec) {
+		const factor = function(spec) {
 			let metadataChildAndRepeatInitializerDep = {
 					recordTypeProvider : dependencies.recordTypeProvider,
 					metadataProvider : dependencies.metadataProvider,
@@ -38,7 +38,7 @@ var CORA = (function(cora) {
 			return CORA.metadataController(controllerDependencies, spec);
 		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 

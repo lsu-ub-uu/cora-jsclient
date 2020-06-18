@@ -35,7 +35,7 @@ var CORA = (function(cora) {
 			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
 			initializeChild();
 		};
-		
+
 		const getNameInDataForMetadataId = function(refIn) {
 			let metadataElement = getMetadataById(refIn);
 			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
@@ -86,7 +86,8 @@ var CORA = (function(cora) {
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue,
+				repeatId) {
 			return {
 				"name" : "attribute",
 				"repeatId" : repeatId || "1",
@@ -136,7 +137,7 @@ var CORA = (function(cora) {
 			return dataChildrenForMetadata[index] !== undefined;
 		};
 
-		const  calculateStartRepeatId = function() {
+		const calculateStartRepeatId = function() {
 			let generatedRepeatId = 0;
 			if (hasData()) {
 				generatedRepeatId = calculateStartRepeatIdFromData();
@@ -162,7 +163,7 @@ var CORA = (function(cora) {
 			return currentMaxRepeatId;
 		};
 
-		const calculateMinRepeat =function() {
+		const calculateMinRepeat = function() {
 			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
 			if (hasData()) {
 				let noOfData = dataChildrenForMetadata.length;

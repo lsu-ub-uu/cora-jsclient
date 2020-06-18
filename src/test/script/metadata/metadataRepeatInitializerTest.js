@@ -352,8 +352,6 @@ QUnit.test("testRecordLinkWithMessagesNonEmptyPathInSpec", function(assert) {
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedAddForRecordLink);
-
-
 });
 
 QUnit.test("testRecordLinkWithPathMessages", function(assert) {

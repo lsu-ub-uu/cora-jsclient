@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020 Uppsala University Library
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -50,15 +50,15 @@ var CORA = (function(cora) {
 		
 		const getDependencies = function () {
 			return dependencies;
-		}
+		};
 		
 		const getChildInitializerFactory = function(){
 			return metadataChildInitializerFactory;
-		}
+		};
 		
 		const getRepeatInitializerFactory = function(){
 			return metadataRepeatInitializerFactory;
-		}
+		};
 
 		let out = Object.freeze({
 			"type" : "metadataChildAndRepeatInitializerFactory",

@@ -35,7 +35,7 @@ var CORA = (function(cora) {
 			let cMetadataElement = getMetadataById(id);
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData('nameInData');
 			let dataContainerPart = {
-				name: nameInData
+				name : nameInData
 			};
 
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
@@ -52,8 +52,6 @@ var CORA = (function(cora) {
 				addGroupParts(dataContainerPart, cMetadataElement);
 				return dataContainerPart;
 			}
-
-			// it is a variable
 			dataContainerPart.value = "";
 			return dataContainerPart;
 		};
@@ -71,12 +69,12 @@ var CORA = (function(cora) {
 			if (cMetadataElement.containsChildWithNameInData("attributeReferences")) {
 				dataContainerPart.attributes = createAttributesContainer(cMetadataElement);
 			}
-		}
+		};
 
 		const createAttributesContainer = function(cMetadataElement) {
 			let attributeContainer = {};
 			let attributeReferences = cMetadataElement
-				.getFirstChildByNameInData('attributeReferences');
+					.getFirstChildByNameInData('attributeReferences');
 			attributeReferences.children.forEach(function(attributeReference) {
 				let ref = getRefValueFromAttributeRef(attributeReference);
 				let attribute = getMetadataById(ref);
@@ -185,8 +183,8 @@ var CORA = (function(cora) {
 				return findContainerAndParent(container, childPath);
 			}
 			return {
-				parent: dataContainers,
-				container: container
+				parent : dataContainers,
+				container : container
 			};
 		};
 
@@ -203,7 +201,7 @@ var CORA = (function(cora) {
 			let cdataContainers = CORA.coraData(dataContainers);
 
 			return cdataContainers.getFirstChildByNameInDataAndAttributesAndRepeatId(nameInData,
-				attributes, repeatId);
+					attributes, repeatId);
 		};
 
 		const pathSpecifiesMoreLevels = function(path) {
@@ -214,13 +212,14 @@ var CORA = (function(cora) {
 			tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 		};
 
-		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
+		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd,
+				repeatId) {
 			try {
 				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(parentPath)
-					+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
-					+ " Error:" + e);
+						+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
+						+ " Error:" + e);
 			}
 		};
 
@@ -242,7 +241,7 @@ var CORA = (function(cora) {
 				removeContainerWithPath(path);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder"
-					+ " when trying to remove:" + e);
+						+ " when trying to remove:" + e);
 			}
 		};
 
@@ -278,15 +277,15 @@ var CORA = (function(cora) {
 		start();
 
 		return Object.freeze({
-			type: "dataHolder",
-			getSpec: getSpec,
-			handleMsg: handleMsg,
-			getData: getData,
-			getDataWithActionLinks: getDataWithActionLinks,
-			setValue: setValue,
-			addChild: addChild,
-			remove: remove,
-			findContainer: findContainer
+			type : "dataHolder",
+			getSpec : getSpec,
+			handleMsg : handleMsg,
+			getData : getData,
+			getDataWithActionLinks : getDataWithActionLinks,
+			setValue : setValue,
+			addChild : addChild,
+			remove : remove,
+			findContainer : findContainer
 		});
 	};
 	return cora;

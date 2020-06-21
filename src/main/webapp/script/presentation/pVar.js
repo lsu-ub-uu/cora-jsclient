@@ -77,8 +77,9 @@ var CORA = (function(cora) {
 		};
 
 		const disableVar = function(){
-			
+			pVarView.disable();
 		};
+		
 		if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 			var cEmptyTextId = CORA
 					.coraData(cPresentation.getFirstChildByNameInData("emptyTextId"));

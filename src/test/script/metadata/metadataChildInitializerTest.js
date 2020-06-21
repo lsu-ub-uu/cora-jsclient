@@ -108,6 +108,19 @@ QUnit.test("testGetDependecies", function(assert) {
 	assert.strictEqual(metadataChildInitializer.getDependencies(), this.dependencies);
 });
 
+QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectlyFromTopLevelInitialize", function(assert) {
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	metadataChildInitializer.initializeTopLevel();
+
+	let repeatSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
+	assert.strictEqual(repeatSpec.metadataId, "textVariableId");
+	assert.strictEqual(repeatSpec.path, this.spec.path);
+	assert.strictEqual(repeatSpec.data, undefined);
+	assert.strictEqual(repeatSpec.repeatId, undefined);
+
+	let factored = this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
+	assert.ok(factored.getInitializeCalled());
+});
 
 QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectly", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
@@ -590,5 +603,25 @@ QUnit.test("testInitTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", functi
 	assert.strictEqual(repeatSpec.metadataId, "groupIdOneTextChildTwoAttributes");
 	assert.strictEqual(repeatSpec.repeatId, undefined);
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[0]);
+
+});
+
+QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectlyFromTopLevelInitializeWithoutWritePermission", function(assert) {
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	metadataChildInitializer.initializeTopLevel(false);
+	
+	let messages = this.pubSub.getMessages();
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children": [
+				{
+					"name": "nameInData",
+					"value": "textVariableId"
+				}]
+	};
+
+	assert.equal(messages.length, 1);
+	assert.deepEqual(JSON.stringify(messages[0]),
+		'{"type":"disable","message":{"data":"","path":'+JSON.stringify(expectedPath)+'}}');
 
 });

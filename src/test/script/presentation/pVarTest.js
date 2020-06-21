@@ -785,3 +785,11 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 	attachedPVar.pVar.openMetadataIdRecord(event);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
+
+QUnit.test("testDisable", function(assert) {
+	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	attachedPVar.pVar.disableVar();
+
+	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.equal(pVarViewSpy.getDisabledCalled(), true);
+});

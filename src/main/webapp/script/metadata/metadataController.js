@@ -62,13 +62,19 @@ var CORA = (function(cora) {
 		};
 
 		const userHasRecordPartPermission = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+//			let cChildReference = CORA.coraData(childReference);
+			let cRef = getCRef(childReference);
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			return recordPartPermissionCalculator
 				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
 		};
+		
+		const getCRef = function(childReference){
+			let cChildReference = CORA.coraData(childReference);
+			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			
+		}
 
 		const intitalizeChild = function(childReference) {
 			let initializerSpec = {
@@ -78,8 +84,49 @@ var CORA = (function(cora) {
 			};
 			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorChildInitializer(initializerSpec);
-			childInitializer.initialize();
+			let hasWritePermission = hasWritePermissions(childReference);
+			childInitializer.initializeTopLevel(hasWritePermission);
+//			if(isMissingWritePermissions(childReference)){
+//				dependencies.pubSub.publish("disable", {
+//				data: "",
+//				path: {}
+//			});
+//			}
 		};
+		
+		const hasWritePermissions = function(childReference){
+			let cRef = getCRef(childReference);
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return recordPartPermissionCalculator
+				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+		}
+		
+//		const createNextLevelPathPart = function() {
+//			let cRef = getCRef(childReference);
+//			
+//			let childPathPart = createLinkedPathWithNameInData();
+//
+////			if (hasRepeatId()) {
+////				childPathPart.children.push(createRepeatId());
+////			}
+////
+////			if (hasAttributes()) {
+////				childPathPart.children.push(createAttributes());
+////			}
+//			return childPathPart;
+//		};
+//
+//		const createLinkedPathWithNameInData = function(cRef) {
+//			let nameInData = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+//			return {
+//				name: "linkedPath",
+//				children: [{
+//					name: "nameInData",
+//					value: nameInData
+//				}]
+//			};
+//		};
 
 		const getSpec = function() {
 			return spec;

@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018 Olov McKie
- * Copyright 2018 , 2019 Uppsala University Library
+ * Copyright 2018 , 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -335,4 +335,13 @@ QUnit.test("testSetValueOutputLink", function(assert) {
 	pVarView.setValue("http://www.some.domain.nu");
 	assert.strictEqual(valueView.href, "http://www.some.domain.nu/");
 	assert.strictEqual(valueView.text, "http://www.some.domain.nu");
+});
+
+QUnit.test("testDisableInput", function(assert) {
+	var pVarView = this.getPVarView();
+	var valueView = this.getValueView();
+
+	assert.strictEqual(valueView.disabled, false);
+	pVarView.disable();
+	assert.strictEqual(valueView.disabled, true);
 });

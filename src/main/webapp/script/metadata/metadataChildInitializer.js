@@ -29,6 +29,25 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		let dataChildrenForMetadata;
 
+		const initializeTopLevel = function(hasWritePermission) {
+			initialize();
+			if(!hasWritePermission){
+				let pathForTopLevelChild = {
+						"name" : "linkedPath",
+						"children": [
+							{
+								"name": "nameInData",
+								"value": getNameInDataForMetadataId(ref)
+							}]
+				};
+				
+				dependencies.pubSub.publish("disable", {
+					data: "",
+					path: pathForTopLevelChild
+				});
+			}
+		};
+		
 		const initialize = function() {
 			let nameInData = getNameInDataForMetadataId(ref);
 			let attributes = getAttributesForMetadataId(ref);
@@ -249,7 +268,8 @@ var CORA = (function(cora) {
 			type : "metadataChildInitializer",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
-			initialize : initialize
+			initialize : initialize,
+			initializeTopLevel : initializeTopLevel
 		});
 	};
 	return cora;

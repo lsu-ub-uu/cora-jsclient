@@ -47,7 +47,6 @@ QUnit.module("metadata/metadataControllerTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-
 	let metadataController = CORA.metadataController(this.dependencies, this.spec);
 	assert.strictEqual(metadataController.type, "metadataController");
 });
@@ -80,8 +79,8 @@ QUnit.test("testChildIntitilizerIsCalled", function(assert) {
 	assert.ok(metadataController !== undefined);
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(0);
 
-	assert.strictEqual(factored.getInitializeCalled(), true);
-
+	assert.strictEqual(factored.getInitializeTopLevelCalled(), true);
+	assert.strictEqual(factored.getHasWritePermission(), true);
 });
 
 QUnit.test("testCorrectSpecSentToChildIntitilizerFactorWhenTwoChildren", function(assert) {
@@ -133,7 +132,7 @@ QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) 
 	
 });
 
-QUnit.test("testRecordPartPermissionCalculatorCallsCorrectlyWhenPermissionMissingForOneChild", function(assert) {  
+QUnit.test("testChildIntializerIsFactoredCorrectlyWhenPermissionMissingForOneChild", function(assert) {  
 	this.spec.metadataId = "groupIdTwoTextChild";
 	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
 	recordPartPermissionCalculatorSpy.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
@@ -152,4 +151,18 @@ QUnit.test("testRecordPartPermissionCalculatorCallsCorrectlyWhenPermissionMissin
 	
 	let spec2 = this.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 	assert.strictEqual(spec2, undefined);
+});
+
+QUnit.test("testHasPermissionIsFalseWhenChildIsMissingWritePermission", function(assert) {  
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
+	
+	let metadataController = CORA.metadataController(this.dependencies, this.spec);
+	assert.ok(metadataController !== undefined);
+	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(0);
+
+	assert.strictEqual(factored.getInitializeTopLevelCalled(), true);
+	assert.strictEqual(factored.getHasWritePermission(), false);
+	
+
 });

@@ -20,6 +20,8 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.metadataChildInitializerSpy = function(dependency, spec, spySpec) {
 		let initializeCalled = false;
+		let initializeTopLevelCalled = false;
+		let hasWritePermission;
 		
 		const initialize = function() {
 			initializeCalled = true;
@@ -29,10 +31,27 @@ var CORATEST = (function(coraTest) {
 			return initializeCalled;
 		};
 		
+		const initializeTopLevel = function(hasWritePermissionIn) {
+			hasWritePermission = hasWritePermissionIn;
+			initializeTopLevelCalled = true;
+		};
+
+		const getInitializeTopLevelCalled = function() {
+			return initializeTopLevelCalled;
+		};
+		
+		const getHasWritePermission = function(){
+			return hasWritePermission;
+		};
+		
+		
 		return Object.freeze({
 			"type": "metadataChildInitializerSpy",
 			initialize: initialize,
-			getInitializeCalled: getInitializeCalled
+			getInitializeCalled: getInitializeCalled,
+			initializeTopLevel : initializeTopLevel,
+			getInitializeTopLevelCalled: getInitializeTopLevelCalled,
+			getHasWritePermission : getHasWritePermission
 		});
 	};
 	return coraTest;

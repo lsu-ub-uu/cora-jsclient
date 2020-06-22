@@ -20,23 +20,24 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pNumVarView = function(dependencies, spec) {
-		var out;
-		var view;
-		var valueView;
-		var baseClassName = "pNumVar " + spec.presentationId;
-		var info;
-		var state = "ok";
+		let out;
+		let view;
+		let valueView;
+		let baseClassName = "pNumVar " + spec.presentationId;
+		let info;
+		let state = "ok";
 
-		function start() {
+		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
 
 			createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
-		}
-		function createInfo() {
-			var infoSpec = {
+		};
+		
+		const createInfo = function() {
+			let infoSpec = {
 				"appendTo" : view,
 				"afterLevelChange" : updateClassName,
 				"level1" : [ {
@@ -49,26 +50,27 @@ var CORA = (function(cora) {
 			};
 			possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
-		}
-		function possiblyAddLevel2Info(infoSpec) {
+		};
+		
+		const possiblyAddLevel2Info = function(infoSpec) {
 			if (specInfoHasTechnicalInfo()) {
 				addLevelTechnicalInfoAsLevel2(infoSpec);
 			}
-		}
+		};
 
-		function specInfoHasTechnicalInfo() {
+		const specInfoHasTechnicalInfo = function() {
 			return spec.info.technicalInfo;
-		}
+		};
 
-		function addLevelTechnicalInfoAsLevel2(infoSpec) {
+		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
 			infoSpec.level2 = [];
 			spec.info.technicalInfo.forEach(function(techInfo) {
 				infoSpec.level2.push(createTechInfoPart(techInfo));
 			});
-		}
+		};
 
-		function createTechInfoPart(techInfo) {
-			var techInfoPart = {
+		const createTechInfoPart = function(techInfo) {
+			let techInfoPart = {
 				"className" : "technicalView",
 				"text" : techInfo.text
 			};
@@ -77,10 +79,10 @@ var CORA = (function(cora) {
 				techInfoPart.onclickMethod = techInfo.onclickMethod;
 			}
 			return techInfoPart;
-		}
+		};
 
-		function updateClassName() {
-			var className = baseClassName;
+		const updateClassName = function() {
+			let className = baseClassName;
 			if (stateIndicatesError()) {
 				className += " error";
 			}
@@ -91,94 +93,95 @@ var CORA = (function(cora) {
 				className += " infoActive";
 			}
 			view.className = className;
-		}
+		};
 
-		function stateIndicatesError() {
+		const stateIndicatesError = function() {
 			return state === "error";
-		}
-		function stateIndicatesErrorStillFocused() {
+		};
+		
+		const stateIndicatesErrorStillFocused = function() {
 			return state === "errorStillFocused";
-		}
+		};
 
-		function infoIsShown() {
+		const infoIsShown = function() {
 			return info.getInfoLevel() !== 0;
-		}
+		};
 
-		function createValueView() {
+		const createValueView = function() {
 			if (spec.mode === "input") {
 				valueView = createInput();
 			} else {
 				valueView = createOutput();
 			}
-		}
+		};
 
-		function createInput() {
+		const createInput = function() {
 			valueView = createTextTypeInput();
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			return valueView;
-		}
+		};
 
-		function possiblyAddOnkeyupEvent(valueViewIn) {
+		const possiblyAddOnkeyupEvent = function(valueViewIn) {
 			if (spec.onkeyupFunction !== undefined) {
 				valueViewIn.onkeyup = function() {
 					spec.onkeyupFunction(valueViewIn.value);
 				};
 			}
-		}
+		};
 
-		function possiblyAddOnblurEvent(valueViewIn) {
+		const possiblyAddOnblurEvent = function(valueViewIn) {
 			if (spec.onblurFunction !== undefined) {
 				valueViewIn.onblur = function() {
 					spec.onblurFunction(valueViewIn.value);
 				};
 			}
-		}
+		};
 
-		function createTextTypeInput() {
-			var inputNew = document.createElement("input");
+		const createTextTypeInput = function() {
+			let inputNew = document.createElement("input");
 			inputNew.setValue = function(value) {
 				inputNew.value = value;
 			};
 			return inputNew;
-		}
+		};
 
-		function createOutput() {
+		const createOutput = function() {
 			return createOutputText();
-		}
+		};
 
-		function createOutputText() {
-			var outputNew = CORA.gui.createSpanWithClassName("value");
+		const createOutputText = function() {
+			let outputNew = CORA.gui.createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};
 			return outputNew;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function setValue(value) {
+		const setValue = function(value) {
 			valueView.setValue(value);
-		}
+		};
 
-		function setState(stateIn) {
+		const setState = function(stateIn) {
 			state = stateIn;
 			updateClassName();
-		}
+		};
 		
 		const disable = function(){
 			valueView.disabled = true;
-		}
+		};
 
 		out = Object.freeze({
 			"type" : "pNumVarView",

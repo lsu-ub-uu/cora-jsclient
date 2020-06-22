@@ -223,8 +223,12 @@ var CORA = (function(cora) {
 
 		const showAddButton = function() {
 			return spec.hasWritePermissionsForRecordPart 
-			&& ((isRepeating && !isStaticNoOfChildren) || calculateIsZeroToOne());
+			&& additionalChildrenCanBeAdded();
 		};
+		
+		const  additionalChildrenCanBeAdded = function(){
+			return ((isRepeating && !isStaticNoOfChildren) || calculateIsZeroToOne());
+		}
 
 		const calculateIsZeroToOne = function() {
 			return repeatMin === "0" && repeatMax === "1";

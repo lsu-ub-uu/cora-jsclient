@@ -22,195 +22,217 @@ var CORA = (function(cora) {
 	cora.pNumVar = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
-		let textProvider = dependencies.textProvider;
 		let jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		let cPresentation = spec.cPresentation;
-		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-
 		let metadataId = spec.metadataIdUsedInData;
-
-		let cMetadataElement = getMetadataById(metadataId);
-		let min = getValueByNameInData("min");
-		let max = getValueByNameInData("max");
-		let warningMin = getValueByNameInData("warningMin");
-		let warningMax = getValueByNameInData("warningMax");
-		let numberOfDecimals = getValueByNameInData("numberOfDecimals");
-		let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-
-		let textId = getTextId(cMetadataElement, "textId");
-		let text = textProvider.getTranslation(textId);
-
-		let defTextId = getTextId(cMetadataElement, "defTextId");
-		let defText = textProvider.getTranslation(defTextId);
-
-		let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-
-		let pNumVarViewSpec = {
-			"mode" : mode,
-			"presentationId" : presentationId,
-			"info" : {
-				"text" : text,
-				"defText" : defText,
-				"technicalInfo" : [ {
-					"text" : "textId: " + textId,
-					onclickMethod : openTextIdRecord
-				}, {
-					"text" : "defTextId: " + defTextId,
-					onclickMethod : openDefTextIdRecord
-				}, {
-					"text" : "metadataId: " + metadataId,
-					onclickMethod : openMetadataIdRecord
-				}, {
-					"text" : "nameInData: " + nameInData
-				}, {
-					"text" : "presentationId: " + presentationId
-				}, {
-					"text" : "min: " + min
-				}, {
-					"text" : "max: " + max
-				}, {
-					"text" : "warningMin: " + warningMin
-				}, {
-					"text" : "warningMax: " + warningMax
-				} ]
-			},
-			"onblurFunction" : onBlur,
-			onkeyupFunction : onkeyup
-		};
-
-		let pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
 		let state = "ok";
 		let previousValue = "";
-		
-		const disableNumVar = function(){
-			pNumVarView.disable();
+		let pNumVarView;
+		let cMetadataElement;
+		let text;
+		let defText;
+		let min;
+		let max;
+		let warningMin;
+		let warningMax;
+		let numberOfDecimals;
+
+		const start = function() {
+			initializeGlobalVariables();
+			factorPNumVarView();
+			subscribeToPubSub();
+		};
+
+		const initializeGlobalVariables = function(){
+			cMetadataElement = getMetadataById();
+			min = getValueByNameInData("min");
+			max = getValueByNameInData("max");
+			warningMin = getValueByNameInData("warningMin");
+			warningMax = getValueByNameInData("warningMax");
+			numberOfDecimals = getValueByNameInData("numberOfDecimals");
 		};
 		
-		pubSub.subscribe("setValue", path, undefined, handleMsg);
-		pubSub.subscribe("validationError", path, undefined, handleValidationError);
-		
-		let topLevelPath = createTopLevelPath();
-		pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
+		const factorPNumVarView = function() {
+			let pNumVarViewSpec = initializePNumVarViewSpec();
+			pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
+		};
 
-		function getTextId(cMetadataElementIn, textNameInData) {
+		const initializePNumVarViewSpec = function() {
+			let textProvider = dependencies.textProvider;
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
+
+			return {
+				"mode": mode,
+				"presentationId": presentationId,
+				"info": {
+					"text": text,
+					"defText": defText,
+					"technicalInfo": [{
+						"text": "textId: " + textId,
+						onclickMethod: openTextIdRecord
+					}, {
+						"text": "defTextId: " + defTextId,
+						onclickMethod: openDefTextIdRecord
+					}, {
+						"text": "metadataId: " + metadataId,
+						onclickMethod: openMetadataIdRecord
+					}, {
+						"text": "nameInData: " + nameInData
+					}, {
+						"text": "presentationId: " + presentationId
+					}, {
+						"text": "min: " + min
+					}, {
+						"text": "max: " + max
+					}, {
+						"text": "warningMin: " + warningMin
+					}, {
+						"text": "warningMax: " + warningMax
+					}]
+				},
+				"onblurFunction": onBlur,
+				onkeyupFunction: onkeyup
+			};
+		};
+
+		const subscribeToPubSub = function() {
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
+
+			let topLevelPath = createTopLevelPath();
+			pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
+		};
+
+		const disableNumVar = function() {
+			pNumVarView.disable();
+		};
+
+		const getTextId = function(cMetadataElementIn, textNameInData) {
 			let cTextGroup = CORA.coraData(cMetadataElementIn
-					.getFirstChildByNameInData(textNameInData));
+				.getFirstChildByNameInData(textNameInData));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
-		
-		function createTopLevelPath(){
-			if(pathHasChildren()){
+		};
+
+
+		const createTopLevelPath = function() {
+			if (pathHasChildren()) {
 				let cPath = CORA.coraData(path);
 				if (cPath.containsChildWithNameInData("linkedPath")) {
 					return createPathWithOnlyTopLevelInformation(cPath);
 				}
 			}
-			
+
 			return path;
-		}
-		
-		function pathHasChildren(){
+		};
+
+		const pathHasChildren = function() {
 			return path.children !== undefined;
-		}
-		
-		function createPathWithOnlyTopLevelInformation(cPath){
+		};
+
+		const createPathWithOnlyTopLevelInformation = function(cPath) {
 			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
 			let newTopLevelPath = {
-					"name" : "linkedPath",
-					"children": [
-						{
-							"name": "nameInData",
-							"value": pathNameInData
-						}]
+				"name": "linkedPath",
+				"children": [
+					{
+						"name": "nameInData",
+						"value": pathNameInData
+					}]
 			};
-			if(cPath.containsChildWithNameInData("attributes")){
+			if (cPath.containsChildWithNameInData("attributes")) {
 				let attributes = cPath.getFirstChildByNameInData("attributes");
 				newTopLevelPath.children.push(attributes);
 			}
 			return newTopLevelPath;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return pNumVarView.getView();
-		}
+		};
 
-		function setValue(value) {
+		const setValue = function(value) {
 			state = "ok";
 			previousValue = value;
 			pNumVarView.setValue(value);
-		}
+		};
 
-		function handleMsg(dataFromMsg) {
+		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();
-		}
+		};
 
-		function handleValidationError() {
+		const handleValidationError = function() {
 			state = "error";
 			updateView();
-		}
+		};
 
-		function getMetadataById(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
+		const getMetadataById = function() {
+			return CORA.coraData(metadataProvider.getMetadataById(metadataId));
+		};
 
-		function getText() {
+		const getText = function() {
 			return text;
-		}
+		};
 
-		function getDefText() {
+		const getDefText = function() {
 			return defText;
-		}
+		};
 
-		function getMin() {
+		const getMin = function() {
 			return min;
-		}
+		};
 
-		function getValueByNameInData(nameInData) {
+		const getValueByNameInData = function(nameInData) {
 			return cMetadataElement.getFirstAtomicValueByNameInData(nameInData);
-		}
+		};
 
-		function getMax() {
+		const getMax = function() {
 			return max;
-		}
+		};
 
-		function getWarningMin() {
+		const getWarningMin = function() {
 			return warningMin;
-		}
+		};
 
-		function getWarningMax() {
+		const getWarningMax = function() {
 			return warningMax;
-		}
+		};
 
-		function getNumberOfDecimals() {
+		const getNumberOfDecimals = function() {
 			return numberOfDecimals;
 
-		}
+		};
 
-		function onBlur(valueFromView) {
+		const onBlur = function(valueFromView) {
 			handleValueFromView(valueFromView, "error");
-		}
+		};
 
-		function handleValueFromView(valueFromView, errorState) {
+		const handleValueFromView = function(valueFromView, errorState) {
 			if (valueFromView !== "") {
 				checkValueBetweenMinAndMaxIfNumber(valueFromView, errorState);
 			}
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
-					"data" : valueFromView,
-					"path" : path
+					"data": valueFromView,
+					"path": path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
-		}
+		};
 
-		function checkValueBetweenMinAndMaxIfNumber(valueFromView, errorState) {
+		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView, errorState) {
 			let validator = CORA.numberVariableValidator({
-				"metadataProvider" : metadataProvider,
+				"metadataProvider": metadataProvider,
 			});
 			let validationAnswer = validator.validateData(valueFromView, cMetadataElement);
 
@@ -219,81 +241,83 @@ var CORA = (function(cora) {
 			} else {
 				state = errorState;
 			}
-		}
+		};
 
-		function onkeyup(valueFromView) {
+		const onkeyup = function(valueFromView) {
 			handleValueFromView(valueFromView, "errorStillFocused");
-		}
+		};
 
-		function updateView() {
+		const updateView = function() {
 			pNumVarView.setState(state);
-		}
+		};
 
-		function valueHasChanged(valueFromView) {
+		const valueHasChanged = function(valueFromView) {
 			return valueFromView !== previousValue;
-		}
+		};
 
-		function getState() {
+		const getState = function() {
 			return state;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function openLinkedRecordForLink(event, link) {
+		const openLinkedRecordForLink = function(event, link) {
 			let loadInBackground = "false";
 			if (event.ctrlKey) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink" : link,
-				"loadInBackground" : loadInBackground
+				"readLink": link,
+				"loadInBackground": loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-		}
+		};
 
-		function openTextIdRecord(event) {
+		const openTextIdRecord = function(event) {
 			openLinkedRecordForLink(event,
-					cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-		}
+				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
+		};
 
-		function openDefTextIdRecord(event) {
+		const openDefTextIdRecord = function(event) {
 			openLinkedRecordForLink(event,
-					cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
+				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
 		}
 
-		function openMetadataIdRecord(event) {
+		const openMetadataIdRecord = function(event) {
 			openLinkedRecordForLink(event, cPresentation
-					.getFirstChildByNameInData("presentationOf").actionLinks.read);
+				.getFirstChildByNameInData("presentationOf").actionLinks.read);
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
+
+		start();
 
 		return Object.freeze({
-			"type" : "pNumVar",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			setValue : setValue,
-			handleMsg : handleMsg,
-			getText : getText,
-			getDefText : getDefText,
-			getMin : getMin,
-			getMax : getMax,
-			getWarningMin : getWarningMin,
-			getWarningMax : getWarningMax,
-			getNumberOfDecimals : getNumberOfDecimals,
-			getState : getState,
-			onBlur : onBlur,
-			onkeyup : onkeyup,
-			handleValidationError : handleValidationError,
-			openTextIdRecord : openTextIdRecord,
-			openDefTextIdRecord : openDefTextIdRecord,
-			openMetadataIdRecord : openMetadataIdRecord,
-			disableNumVar : disableNumVar
+			type: "pNumVar",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			setValue: setValue,
+			handleMsg: handleMsg,
+			getText: getText,
+			getDefText: getDefText,
+			getMin: getMin,
+			getMax: getMax,
+			getWarningMin: getWarningMin,
+			getWarningMax: getWarningMax,
+			getNumberOfDecimals: getNumberOfDecimals,
+			getState: getState,
+			onBlur: onBlur,
+			onkeyup: onkeyup,
+			handleValidationError: handleValidationError,
+			openTextIdRecord: openTextIdRecord,
+			openDefTextIdRecord: openDefTextIdRecord,
+			openMetadataIdRecord: openMetadataIdRecord,
+			disableNumVar: disableNumVar
 		});
 	};
 	return cora;

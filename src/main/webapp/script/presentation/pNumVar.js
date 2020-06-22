@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -83,8 +83,18 @@ var CORA = (function(cora) {
 		var pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
 		var state = "ok";
 		var previousValue = "";
+		
+		const disableNumVar = function(){
+//			pVarView.disable();
+		};
+		
 		pubSub.subscribe("setValue", path, undefined, handleMsg);
 		pubSub.subscribe("validationError", path, undefined, handleValidationError);
+		
+//		let topLevelPath = createTopLevelPath();
+		let topLevelPath = {};
+		
+		pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
 
 		function getTextId(cMetadataElementIn, textNameInData) {
 			var cTextGroup = CORA.coraData(cMetadataElementIn
@@ -252,7 +262,8 @@ var CORA = (function(cora) {
 			handleValidationError : handleValidationError,
 			openTextIdRecord : openTextIdRecord,
 			openDefTextIdRecord : openDefTextIdRecord,
-			openMetadataIdRecord : openMetadataIdRecord
+			openMetadataIdRecord : openMetadataIdRecord,
+			disableNumVar : disableNumVar
 		});
 	};
 	return cora;

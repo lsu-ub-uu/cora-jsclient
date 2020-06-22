@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -61,9 +61,9 @@ var CORATEST = (function(coraTest) {
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert) {
+	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, disablePath) {
 		var subscriptions = attachedPNumVar.pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 2);
+		assert.deepEqual(subscriptions.length, 3);
 
 		var firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
@@ -74,8 +74,13 @@ var CORATEST = (function(coraTest) {
 		var secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
 		assert.deepEqual(secondSubsription.path, {});
-		var pNumVar = attachedPNumVar.pNumVar;
+//		var pNumVar = attachedPNumVar.pNumVar;
 		assert.ok(secondSubsription.functionToCall === pNumVar.handleValidationError);
+		
+		var disableSubsription = subscriptions[2];
+		assert.strictEqual(disableSubsription.type, "disable");
+		assert.stringifyEqual(disableSubsription.path, disablePath);
+		assert.ok(disableSubsription.functionToCall === pNumVar.disableNumVar);
 
 	};
 
@@ -137,7 +142,7 @@ QUnit.test("testInitText", function(assert) {
 	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.type, "pNumVar");
 
-	CORATEST.testNumVariableSubscription(attachedPNumVar, assert);
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, );
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");

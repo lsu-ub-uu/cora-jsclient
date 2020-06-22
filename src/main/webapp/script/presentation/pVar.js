@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -91,11 +91,12 @@ var CORA = (function(cora) {
 		var state = "ok";
 		var previousValue = "";
 		pubSub.subscribe("setValue", path, undefined, handleMsg);
+//		console.log("setValue "+JSON.stringify(path))
 		pubSub.subscribe("validationError", path, undefined, handleValidationError);
 		
 		let topLevelPath = createTopLevelPath();
 		
-		
+//		console.log("subscribe "+JSON.stringify(topLevelPath))
 		pubSub.subscribe("disable", topLevelPath, undefined, disableVar);
 		
 		function createTopLevelPath(){
@@ -105,7 +106,8 @@ var CORA = (function(cora) {
 					return createPathWithOnlyTopLevelInformation(cPath);
 				}
 			}
-			return {};
+			
+			return path;
 		}
 		
 		function pathHasChildren(){

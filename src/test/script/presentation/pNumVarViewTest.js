@@ -268,3 +268,12 @@ QUnit.test("testSetValueOutputText", function(assert) {
 	assert.strictEqual(valueView.innerHTML, "a Value");
 });
 
+QUnit.test("testDisableInput", function(assert) {
+	var pNumVarView = this.getPNumVarView();
+	var valueView = this.getValueView();
+
+	assert.strictEqual(valueView.disabled, false);
+	pNumVarView.disable();
+	assert.strictEqual(valueView.disabled, true);
+});
+

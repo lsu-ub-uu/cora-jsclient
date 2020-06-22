@@ -175,6 +175,10 @@ var CORA = (function(cora) {
 			state = stateIn;
 			updateClassName();
 		}
+		
+		const disable = function(){
+			valueView.disabled = true;
+		}
 
 		out = Object.freeze({
 			"type" : "pNumVarView",
@@ -183,7 +187,8 @@ var CORA = (function(cora) {
 			getView : getView,
 			setValue : setValue,
 			updateClassName : updateClassName,
-			setState : setState
+			setState : setState,
+			disable : disable
 		});
 		start();
 		return out;

@@ -61,19 +61,19 @@ var CORATEST = (function(coraTest) {
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, disablePath) {
+	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, path, disablePath) {
 		var subscriptions = attachedPNumVar.pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 3);
 
 		var firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
-		assert.deepEqual(firstSubsription.path, {});
+		assert.deepEqual(firstSubsription.path, path);
 		var pNumVar = attachedPNumVar.pNumVar;
 		assert.ok(firstSubsription.functionToCall === pNumVar.handleMsg);
 
 		var secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
-		assert.deepEqual(secondSubsription.path, {});
+		assert.deepEqual(secondSubsription.path, path);
 //		var pNumVar = attachedPNumVar.pNumVar;
 		assert.ok(secondSubsription.functionToCall === pNumVar.handleValidationError);
 		
@@ -139,10 +139,11 @@ QUnit.test("testGetView", function(assert) {
 });
 
 QUnit.test("testInitText", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let path = {};
+	var attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.type, "pNumVar");
 
-	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, );
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, path, path);
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
@@ -192,8 +193,144 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
 });
 
+let firstLevelNumPath = {
+	"name" : "linkedPath",
+	"children" : [ {
+		"name" : "nameInData",
+		"value" : "textVariableId"
+	} ]
+};
 
+QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
+	let topLevelPath = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		} ]
+	};
+	var attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPath, "numVariableId",
+			"pNumVarNumVariableId");
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, firstLevelNumPath, topLevelPath);
+	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+});
 
+let numPathWithTwoLevels = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "recordInfo"
+		}, {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "numVariableId"
+			} ]
+		} ]
+	};
+
+QUnit.test("testInitNumWithTwoLevelPath", function(assert) {
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "recordInfo"
+			} ]
+	};
+	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
+	"pNumVarNumVariableId");
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithTwoLevels, expectedPath);
+	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+});
+
+let numPathWithThreeLevels = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "recordInfo"
+		}, {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "dataDivider"
+			}, {
+				"name" : "linkedPath",
+				"children" : [ {
+					"name" : "nameInData",
+					"value" : "numVariableId"
+				} ]
+			} ]
+		} ]
+	};
+
+QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "recordInfo"
+			} ]
+	};
+	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithThreeLevels, "numVariableId",
+	"pNumVarNumVariableId");
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithThreeLevels, expectedPath);
+	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+});
+
+let numPathWithAttribute = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textPart"
+		}, {
+			"name" : "attributes",
+			"children" : [ {
+				"name" : "attribute",
+				"repeatId" : "1",
+				"children" : [ {
+					"name" : "attributeName",
+					"value" : "type"
+				}, {
+					"name" : "attributeValue",
+					"value" : "alternative"
+				} ]
+			} ]
+		}, {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "numVariableId"
+			} ]
+		} ]
+	};
+
+QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "textPart"
+			}, {
+				"name" : "attributes",
+				"children" : [ {
+					"name" : "attribute",
+					"repeatId" : "1",
+					"children" : [ {
+						"name" : "attributeName",
+						"value" : "type"
+					}, {
+						"name" : "attributeValue",
+						"value" : "alternative"
+					} ]
+				} ]
+			} ]
+		};
+	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithAttribute, "numVariableId",
+	"pNumVarNumVariableId");
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithAttribute, expectedPath);
+	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+});
+	
 QUnit.test("testSetValueInput", function(assert) {
 	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	attachedPNumVar.pNumVar.setValue("3");
@@ -320,7 +457,8 @@ QUnit.test("testChangedValueError", function(assert) {
 });
 
 QUnit.test("testInitNumberOutput", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
+	let path = {};
+	var attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableIdOutput");
 	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	var expectedPNumVarViewSpec = {
@@ -358,7 +496,7 @@ QUnit.test("testInitNumberOutput", function(assert) {
 	});
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
 
-	CORATEST.testNumVariableSubscription(attachedPNumVar, assert);
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, path, path);
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
@@ -467,4 +605,12 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 	event.ctrlKey = false;
 	attachedPNumVar.pNumVar.openMetadataIdRecord(event);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testDisable", function(assert) {
+	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	attachedPNumVar.pNumVar.disableNumVar();
+
+	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	assert.equal(pNumVarViewSpy.getDisabledCalled(), true);
 });

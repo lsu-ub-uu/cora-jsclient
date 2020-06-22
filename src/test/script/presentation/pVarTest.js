@@ -210,7 +210,7 @@ let firstLevelPath = {
 	} ]
 };
 
-QUnit.test("testInitTextAreaWithFirstPath", function(assert) {
+QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
 	let topLevelPath = {
 		"name" : "linkedPath",
 		"children" : [ {
@@ -357,7 +357,7 @@ let pathWithAttribute = {
 		} ]
 	} ]
 };
-QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
+QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 	let topLevelPath = {
 		"name" : "linkedPath",
 		"children" : [ {

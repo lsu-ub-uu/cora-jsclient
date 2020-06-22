@@ -20,41 +20,57 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.pNumVarViewSpy = function(dependencies, spec) {
-		var addedViews = [];
-		var addedToolViews = [];
-		var showDataF = null;
-		var view = document.createElement("span");
-		var state;
-		var value;
-		function getView() {
+		let addedViews = [];
+		let addedToolViews = [];
+		let showDataF = null;
+		let view = document.createElement("span");
+		let state;
+		let value;
+		let disabledCalled = false;
+		
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
-		function getSpec() {
+		};
+		
+		const getSpec = function() {
 			return spec;
-		}
-		function setValue(valueIn) {
+		};
+		
+		const setValue = function(valueIn) {
 			value = valueIn;
-		}
-		function getValue() {
+		};
+		
+		const getValue = function() {
 			return value;
-		}
-		function setState(stateIn) {
+		};
+		
+		const setState = function(stateIn) {
 			state = stateIn;
-		}
-		function getState() {
+		};
+		const getState = function() {
 			return state;
-		}
-		function callOnblurWithValue(valueToSet){
+		};
+		
+		const callOnblurWithValue = function(valueToSet){
 			spec.onblurFunction(valueToSet);
-		}
-		function callOnkeyupWithValue(valueToSet){
+		};
+		
+		const callOnkeyupWithValue = function(valueToSet){
 			spec.onkeyupFunction(valueToSet);
-		}
-		var out = Object.freeze({
+		};
+		
+		const disable = function(){
+			disabledCalled = true;
+		};
+		const getDisabledCalled = function(){
+			return disabledCalled;
+		};
+		
+		return Object.freeze({
 			"type" : "pNumVarViewSpy",
 			getDependencies : getDependencies,
 			getView : getView,
@@ -64,9 +80,10 @@ var CORATEST = (function(coraTest) {
 			setState : setState,
 			getState : getState,
 			callOnblurWithValue:callOnblurWithValue,
-			callOnkeyupWithValue:callOnkeyupWithValue
+			callOnkeyupWithValue:callOnkeyupWithValue,
+			disable : disable,
+			getDisabledCalled : getDisabledCalled
 		});
-		return out;
 	};
 	return coraTest;
 }(CORATEST || {}));

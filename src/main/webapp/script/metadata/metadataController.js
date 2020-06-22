@@ -62,7 +62,6 @@ var CORA = (function(cora) {
 		};
 
 		const userHasRecordPartPermission = function(childReference) {
-//			let cChildReference = CORA.coraData(childReference);
 			let cRef = getCRef(childReference);
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -86,12 +85,6 @@ var CORA = (function(cora) {
 				.factorChildInitializer(initializerSpec);
 			let hasWritePermission = hasWritePermissions(childReference);
 			childInitializer.initializeTopLevel(hasWritePermission);
-//			if(isMissingWritePermissions(childReference)){
-//				dependencies.pubSub.publish("disable", {
-//				data: "",
-//				path: {}
-//			});
-//			}
 		};
 		
 		const hasWritePermissions = function(childReference){
@@ -102,32 +95,6 @@ var CORA = (function(cora) {
 				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
 		}
 		
-//		const createNextLevelPathPart = function() {
-//			let cRef = getCRef(childReference);
-//			
-//			let childPathPart = createLinkedPathWithNameInData();
-//
-////			if (hasRepeatId()) {
-////				childPathPart.children.push(createRepeatId());
-////			}
-////
-////			if (hasAttributes()) {
-////				childPathPart.children.push(createAttributes());
-////			}
-//			return childPathPart;
-//		};
-//
-//		const createLinkedPathWithNameInData = function(cRef) {
-//			let nameInData = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-//			return {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: nameInData
-//				}]
-//			};
-//		};
-
 		const getSpec = function() {
 			return spec;
 		};

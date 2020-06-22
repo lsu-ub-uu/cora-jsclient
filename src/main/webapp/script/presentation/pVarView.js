@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2020 Uppsala University Library
  * Copyright 2016, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -20,67 +20,69 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pVarView = function(dependencies, spec) {
-		var out;
-		var view;
-		var valueView;
-		var baseClassName = "pVar " + spec.presentationId;
-		var info;
-		var state = "ok";
+		let out;
+		let view;
+		let valueView;
+		let baseClassName = "pVar " + spec.presentationId;
+		let info;
+		let state = "ok";
 
-		function start() {
+		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			info = createInfo();
 
 			createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
-		}
-		function createInfo() {
-			var infoSpec = {
-				"appendTo" : view,
-				"afterLevelChange" : updateClassName,
-				"level1" : [ {
-					"className" : "textView",
-					"text" : spec.info.text
+		};
+
+		const createInfo = function() {
+			let infoSpec = {
+				"appendTo": view,
+				"afterLevelChange": updateClassName,
+				"level1": [{
+					"className": "textView",
+					"text": spec.info.text
 				}, {
-					"className" : "defTextView",
-					"text" : spec.info.defText
-				} ]
+					"className": "defTextView",
+					"text": spec.info.defText
+				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
-		}
-		function possiblyAddLevel2Info(infoSpec) {
+		};
+
+		const possiblyAddLevel2Info = function(infoSpec) {
 			if (specInfoHasTechnicalInfo()) {
 				addLevelTechnicalInfoAsLevel2(infoSpec);
 			}
-		}
+		};
 
-		function specInfoHasTechnicalInfo() {
+		const specInfoHasTechnicalInfo = function() {
 			return spec.info.technicalInfo;
-		}
+		};
 
-		function addLevelTechnicalInfoAsLevel2(infoSpec) {
+		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
 			infoSpec.level2 = [];
 			spec.info.technicalInfo.forEach(function(techInfo) {
 				infoSpec.level2.push(createTechInfoPart(techInfo));
 			});
-		}
+		};
 
-		function createTechInfoPart(techInfo) {
-			var techInfoPart = {
-				"className" : "technicalView",
-				"text" : techInfo.text
+		const createTechInfoPart = function(techInfo) {
+			let techInfoPart = {
+				"className": "technicalView",
+				"text": techInfo.text
 			};
 
 			if (techInfo.onclickMethod !== undefined) {
 				techInfoPart.onclickMethod = techInfo.onclickMethod;
 			}
 			return techInfoPart;
-		}
+		};
 
-		function updateClassName() {
-			var className = baseClassName;
+		const updateClassName = function() {
+			let className = baseClassName;
 			if (stateIndicatesError()) {
 				className += " error";
 			}
@@ -91,59 +93,60 @@ var CORA = (function(cora) {
 				className += " infoActive";
 			}
 			view.className = className;
-		}
+		};
 
-		function stateIndicatesError() {
+		const stateIndicatesError = function() {
 			return state === "error";
-		}
-		function stateIndicatesErrorStillFocused() {
+		};
+
+		const stateIndicatesErrorStillFocused = function() {
 			return state === "errorStillFocused";
-		}
+		};
 
-		function infoIsShown() {
+		const infoIsShown = function() {
 			return info.getInfoLevel() !== 0;
-		}
+		};
 
-		function createValueView() {
+		const createValueView = function() {
 			if (spec.mode === "input") {
 				valueView = createInput();
 			} else {
 				valueView = createOutput();
 			}
-		}
+		};
 
-		function createInput() {
+		const createInput = function() {
 			valueView = createTextTypeInput();
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);
 			return valueView;
-		}
+		};
 
-		function possiblyAddOnkeyupEvent(valueViewIn) {
+		const possiblyAddOnkeyupEvent = function(valueViewIn) {
 			if (spec.onkeyupFunction !== undefined) {
 				valueViewIn.onkeyup = function() {
 					spec.onkeyupFunction(valueViewIn.value);
 				};
 			}
-		}
+		};
 
-		function possiblyAddOnblurEvent(valueViewIn) {
+		const possiblyAddOnblurEvent = function(valueViewIn) {
 			if (spec.onblurFunction !== undefined) {
 				valueViewIn.onblur = function() {
 					spec.onblurFunction(valueViewIn.value);
 				};
 			}
-		}
+		};
 
-		function possiblyAddPlaceholderText(inputNew) {
+		const possiblyAddPlaceholderText = function(inputNew) {
 			if (spec.placeholderText !== undefined) {
 				inputNew.placeholder = spec.placeholderText;
 			}
-		}
+		};
 
-		function createTextTypeInput() {
-			var inputNew = document.createElement(getInputTypeFromSpec());
+		const createTextTypeInput = function() {
+			let inputNew = document.createElement(getInputTypeFromSpec());
 			if (spec.inputFormat === "password") {
 				inputNew.setAttribute("type", "password");
 			}
@@ -152,83 +155,83 @@ var CORA = (function(cora) {
 				inputNew.value = value;
 			};
 			return inputNew;
-		}
+		};
 
-		function getInputTypeFromSpec() {
+		const getInputTypeFromSpec = function() {
 			if (spec.inputType !== undefined) {
 				return spec.inputType;
 			}
 			return "input";
-		}
+		};
 
-		function createOutput() {
+		const createOutput = function() {
 			if (spec.outputFormat === "image") {
 				return createOutputImage();
 			} else if (spec.outputFormat === "link") {
 				return createOutputLink();
 			}
 			return createOutputText();
-		}
+		};
 
-		function createOutputImage() {
-			var outputNew = document.createElement("img");
+		const createOutputImage = function() {
+			let outputNew = document.createElement("img");
 			outputNew.setValue = function(value) {
 				outputNew.src = value;
 			};
 			return outputNew;
 		}
 
-		function createOutputLink() {
-			var outputNew = document.createElement("a");
+		const createOutputLink = function() {
+			let outputNew = document.createElement("a");
 			outputNew.setValue = function(value) {
 				outputNew.href = value;
 				outputNew.text = value;
 			};
 			return outputNew;
-		}
+		};
 
-		function createOutputText() {
-			var outputNew = CORA.gui.createSpanWithClassName("value");
+		const createOutputText = function() {
+			let outputNew = CORA.gui.createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};
 			return outputNew;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function setValue(value) {
+		const setValue = function(value) {
 			valueView.setValue(value);
-		}
+		};
 
-		function setState(stateIn) {
+		const setState = function(stateIn) {
 			state = stateIn;
 			updateClassName();
-		}
-		
-		const disable = function(){
+		};
+
+		const disable = function() {
 			valueView.disabled = true;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "pVarView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			setValue : setValue,
-			updateClassName : updateClassName,
-			setState : setState,
-			disable : disable
+			type: "pVarView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			setValue: setValue,
+			updateClassName: updateClassName,
+			setState: setState,
+			disable: disable
 		});
 		start();
 		return out;

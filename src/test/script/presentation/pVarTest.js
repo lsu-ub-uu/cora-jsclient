@@ -22,10 +22,10 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
 			fixture, pVarViewFactory) {
-		var factor = function(path, metadataIdUsedInData, pVarPresentationId) {
-			var cPVarPresentation = CORA.coraData(metadataProvider
+		let factor = function(path, metadataIdUsedInData, pVarPresentationId) {
+			let cPVarPresentation = CORA.coraData(metadataProvider
 					.getMetadataById(pVarPresentationId));
-			var dependencies = {
+			let dependencies = {
 				"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy(),
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub,
@@ -33,12 +33,12 @@ var CORATEST = (function(coraTest) {
 				"jsBookkeeper" : jsBookkeeper,
 				"pVarViewFactory" : pVarViewFactory
 			};
-			var spec = {
+			let spec = {
 				"path" : path,
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPVarPresentation
 			};
-			var pVar = CORA.pVar(dependencies, spec);
+			let pVar = CORA.pVar(dependencies, spec);
 			return {
 				spec : spec,
 				pVar : pVar,
@@ -62,22 +62,22 @@ var CORATEST = (function(coraTest) {
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.testVariableSubscription = function(attachedPVar, assert, path, disablePath) {
-		var subscriptions = attachedPVar.pubSub.getSubscriptions();
+		let subscriptions = attachedPVar.pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 3);
 
-		var firstSubsription = subscriptions[0];
+		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
 		assert.deepEqual(firstSubsription.path, path);
-		var pVar = attachedPVar.pVar;
+		let pVar = attachedPVar.pVar;
 		assert.ok(firstSubsription.functionToCall === pVar.handleMsg);
 
-		var secondSubsription = subscriptions[1];
+		let secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
 		assert.deepEqual(secondSubsription.path, path);
-		var pVar = attachedPVar.pVar;
+//		var pVar = attachedPVar.pVar;C
 		assert.ok(secondSubsription.functionToCall === pVar.handleValidationError);
 
-		var disableSubsription = subscriptions[2];
+		let disableSubsription = subscriptions[2];
 		assert.strictEqual(disableSubsription.type, "disable");
 		assert.stringifyEqual(disableSubsription.path, disablePath);
 		assert.ok(disableSubsription.functionToCall === pVar.disableVar);
@@ -85,7 +85,7 @@ var CORATEST = (function(coraTest) {
 	};
 
 	coraTest.testVariableMetadata = function(attachedPVar, assert) {
-		var pVar = attachedPVar.pVar;
+		let pVar = attachedPVar.pVar;
 		assert.strictEqual(pVar.getText(), "Exempel textvariabel");
 		assert.strictEqual(pVar.getDefText(), "Detta är en exempeldefinition "
 				+ "för en textvariabel.");
@@ -93,11 +93,11 @@ var CORATEST = (function(coraTest) {
 	};
 
 	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
-		var dataArray = jsBookkeeper.getDataArray();
+		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);
 	};
 	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-		var dataArray = jsBookkeeper.getDataArray();
+		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 1);
 		assert.strictEqual(dataArray[0].data, value);
 	};
@@ -120,17 +120,17 @@ QUnit.module("presentation/pVarTest.js", {
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	assert.strictEqual(attachedPVar.pVar.getDependencies(), attachedPVar.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	assert.strictEqual(attachedPVar.pVar.getSpec(), attachedPVar.spec);
 });
 
 QUnit.test("testInitText", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	assert.strictEqual(attachedPVar.pVar.type, "pVar");
 
 	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path,
@@ -143,11 +143,11 @@ QUnit.test("testInitText", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -182,19 +182,49 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 });
 
 QUnit.test("testGetRegexpShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", function(assert) {
-	var pVarTextVariableId2 = this.metadataProvider.getMetadataById("pVarTextVariableId2");
-	var presentationOf2 = pVarTextVariableId2.children[1].children[1].value;
-	var textVariableId2 = this.metadataProvider.getMetadataById(presentationOf2);
+	let pVarTextVariableId2 = this.metadataProvider.getMetadataById("pVarTextVariableId2");
+	let presentationOf2 = pVarTextVariableId2.children[1].children[1].value;
+	let textVariableId2 = this.metadataProvider.getMetadataById(presentationOf2);
 	assert.strictEqual(textVariableId2.children[0].value, "(^[0-9A-Za-z]{2,50}$)");
 
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId2");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId2");
 	assert.strictEqual(attachedPVar.pVar.getRegEx(), "^[0-9A-Öa-ö\\s!*.]{2,50}$");
 });
 
 QUnit.test("testInitTextArea", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path,
 			attachedPVar.spec.path);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+let firstLevelPathWithRepeatId = {
+	"name" : "linkedPath",
+	"children" : [ {
+		"name" : "nameInData",
+		"value" : "textVariableId"
+	}, {
+		"name" : "repeatId",
+		"value" : "0"
+	} ]
+};
+
+QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
+	let expectedDisablePath = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		} ]
+	};
+	let attachedPVar = this.pVarFactory.factor(firstLevelPathWithRepeatId, "textVariableId",
+			"textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPathWithRepeatId,
+			expectedDisablePath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -211,16 +241,16 @@ let firstLevelPath = {
 };
 
 QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
-	let topLevelPath = {
+	let expectedPath = {
 		"name" : "linkedPath",
 		"children" : [ {
 			"name" : "nameInData",
 			"value" : "textVariableId"
 		} ]
 	};
-	var attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
 			"textVariableIdTextAreaPVar");
-	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPath, topLevelPath);
+	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPath, expectedPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -250,7 +280,7 @@ QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
 			"value" : "recordInfo"
 		} ]
 	};
-	var attachedPVar = this.pVarFactory.factor(pathWithTwoLevels, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(pathWithTwoLevels, "textVariableId",
 			"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithTwoLevels, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
@@ -288,7 +318,7 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 			"value" : "recordInfo"
 		} ]
 	};
-	var attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId",
 			"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithThreeLevels, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
@@ -321,7 +351,7 @@ QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 			"value" : "userRole"
 		} ]
 	};
-	var attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId",
 			"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithRepeatId, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
@@ -378,7 +408,7 @@ QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 			} ]
 		} ]
 	};
-	var attachedPVar = this.pVarFactory.factor(pathWithAttribute, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(pathWithAttribute, "textVariableId",
 			"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithAttribute, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
@@ -389,10 +419,10 @@ QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -427,12 +457,12 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 });
 
 QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
 			"textVariableIdShowTextAreaFalsePVar");
 
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -474,11 +504,11 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 });
 
 QUnit.test("testInitTextInputFormatPassword", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
 			"pVarTextVariableIdInputPassword");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -515,32 +545,32 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 });
 
 QUnit.test("testSetValueInput", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	attachedPVar.pVar.setValue("A Value");
 
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "A Value");
 });
 
 QUnit.test("testHandleMessage", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var data = {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let data = {
 		"data" : "A new value",
 		"path" : {}
 	};
 	attachedPVar.pVar.handleMsg(data);
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "A new value");
 });
 
 QUnit.test("testChangedValueEmpty", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var data = {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let data = {
 		"data" : "notEmpty",
 		"path" : {}
 	};
 	attachedPVar.pVar.handleMsg(data);
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnblurWithValue("");
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -548,8 +578,8 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnblurWithValue("hej");
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -560,8 +590,8 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueError", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnblurWithValue("hej####/(&/%&/¤/");
 	assert.equal(pVarViewSpy.getState(), "error");
 	assert.equal(attachedPVar.pVar.getState(), "error");
@@ -569,25 +599,25 @@ QUnit.test("testChangedValueError", function(assert) {
 });
 
 QUnit.test("testHandleValidationError", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var message = {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let message = {
 		"metadataId" : "textVariableId",
 		"path" : {}
 	};
 	attachedPVar.pVar.handleValidationError(message);
 	assert.equal(attachedPVar.pVar.getState(), "error");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getState(), "error");
 });
 
 QUnit.test("testChangedValueEmpty", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var data = {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let data = {
 		"data" : "notEmpty",
 		"path" : {}
 	};
 	attachedPVar.pVar.handleMsg(data);
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnkeyupWithValue("");
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -595,8 +625,8 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnkeyupWithValue("hej");
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -606,8 +636,8 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueError", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnkeyupWithValue("hej####/(&/%&/¤/");
 	assert.equal(pVarViewSpy.getState(), "errorStillFocused");
 	assert.equal(attachedPVar.pVar.getState(), "errorStillFocused");
@@ -615,10 +645,10 @@ QUnit.test("testChangedValueError", function(assert) {
 });
 
 QUnit.test("testInitTextOutput", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableIdOutput");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableIdOutput");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -655,11 +685,11 @@ QUnit.test("testInitTextOutput", function(assert) {
 });
 
 QUnit.test("testInitTextOutputFormatImage", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
 			"pVarTextVariableIdOutputImage");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
-	var expectedPVarViewSpec = {
+	let expectedPVarViewSpec = {
 		"info" : {
 			"defText" : "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo" : [],
@@ -696,36 +726,36 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 });
 
 QUnit.test("testSetValueTextOutput", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableIdOutput");
-	var valueView = attachedPVar.valueView;
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableIdOutput");
+	attachedPVar.valueView;
 
 	attachedPVar.pVar.setValue("A Value");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "A Value");
 });
 
 QUnit.test("testSetValueTextOutputFormatImage", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId",
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
 			"pVarTextVariableIdOutputImage");
-	var valueView = attachedPVar.valueView;
+	attachedPVar.valueView;
 
 	attachedPVar.pVar.setValue("http://www.some.domain.nu/image01.jpg");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "http://www.some.domain.nu/image01.jpg");
 });
 
 QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
-	var message = {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let message = {
 		"metadataId" : "textVariableId",
 		"path" : {}
 	};
 	attachedPVar.pVar.handleValidationError(message);
 	assert.equal(attachedPVar.pVar.getState(), "error");
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getState(), "error");
 
-	var data = {
+	let data = {
 		"data" : "A new value",
 		"path" : {}
 	};
@@ -734,14 +764,14 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 });
 
 QUnit.test("testOpenTextIdRecord", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPVar.pVar.openTextIdRecord(event);
 
-	var jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -753,21 +783,21 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
-	event.ctrlKey = false;
-	attachedPVar.pVar.openTextIdRecord(event);
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	attachedPVar.pVar.openTextIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 
 QUnit.test("testOpenDefTextIdRecord", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPVar.pVar.openDefTextIdRecord(event);
 
-	var jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -780,20 +810,21 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
-	event.ctrlKey = false;
-	attachedPVar.pVar.openDefTextIdRecord(event);
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	attachedPVar.pVar.openDefTextIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
-QUnit.test("testOpenMetadataIdRecord", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 
-	var event = document.createEvent('Event');
+QUnit.test("testOpenMetadataIdRecord", function(assert) {
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPVar.pVar.openMetadataIdRecord(event);
 
-	var jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -806,16 +837,16 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
-	event.ctrlKey = false;
-	attachedPVar.pVar.openMetadataIdRecord(event);
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	attachedPVar.pVar.openMetadataIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 
 QUnit.test("testDisable", function(assert) {
-	var attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	attachedPVar.pVar.disableVar();
 
-	var pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });

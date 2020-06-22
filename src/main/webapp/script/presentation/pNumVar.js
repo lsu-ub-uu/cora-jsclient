@@ -20,34 +20,34 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pNumVar = function(dependencies, spec) {
-		var metadataProvider = dependencies.metadataProvider;
-		var pubSub = dependencies.pubSub;
-		var textProvider = dependencies.textProvider;
-		var jsBookkeeper = dependencies.jsBookkeeper;
-		var path = spec.path;
-		var cPresentation = spec.cPresentation;
-		var recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		let metadataProvider = dependencies.metadataProvider;
+		let pubSub = dependencies.pubSub;
+		let textProvider = dependencies.textProvider;
+		let jsBookkeeper = dependencies.jsBookkeeper;
+		let path = spec.path;
+		let cPresentation = spec.cPresentation;
+		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 
-		var metadataId = spec.metadataIdUsedInData;
+		let metadataId = spec.metadataIdUsedInData;
 
-		var cMetadataElement = getMetadataById(metadataId);
-		var min = getValueByNameInData("min");
-		var max = getValueByNameInData("max");
-		var warningMin = getValueByNameInData("warningMin");
-		var warningMax = getValueByNameInData("warningMax");
-		var numberOfDecimals = getValueByNameInData("numberOfDecimals");
-		var mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+		let cMetadataElement = getMetadataById(metadataId);
+		let min = getValueByNameInData("min");
+		let max = getValueByNameInData("max");
+		let warningMin = getValueByNameInData("warningMin");
+		let warningMax = getValueByNameInData("warningMax");
+		let numberOfDecimals = getValueByNameInData("numberOfDecimals");
+		let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 
-		var textId = getTextId(cMetadataElement, "textId");
-		var text = textProvider.getTranslation(textId);
+		let textId = getTextId(cMetadataElement, "textId");
+		let text = textProvider.getTranslation(textId);
 
-		var defTextId = getTextId(cMetadataElement, "defTextId");
-		var defText = textProvider.getTranslation(defTextId);
+		let defTextId = getTextId(cMetadataElement, "defTextId");
+		let defText = textProvider.getTranslation(defTextId);
 
-		var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+		let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 
-		var pNumVarViewSpec = {
+		let pNumVarViewSpec = {
 			"mode" : mode,
 			"presentationId" : presentationId,
 			"info" : {
@@ -80,9 +80,9 @@ var CORA = (function(cora) {
 			onkeyupFunction : onkeyup
 		};
 
-		var pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
-		var state = "ok";
-		var previousValue = "";
+		let pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
+		let state = "ok";
+		let previousValue = "";
 		
 		const disableNumVar = function(){
 			pNumVarView.disable();
@@ -95,14 +95,14 @@ var CORA = (function(cora) {
 		pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
 
 		function getTextId(cMetadataElementIn, textNameInData) {
-			var cTextGroup = CORA.coraData(cMetadataElementIn
+			let cTextGroup = CORA.coraData(cMetadataElementIn
 					.getFirstChildByNameInData(textNameInData));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 		
 		function createTopLevelPath(){
 			if(pathHasChildren()){
-				var cPath = CORA.coraData(path);
+				let cPath = CORA.coraData(path);
 				if (cPath.containsChildWithNameInData("linkedPath")) {
 					return createPathWithOnlyTopLevelInformation(cPath);
 				}
@@ -199,7 +199,7 @@ var CORA = (function(cora) {
 			}
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
-				var data = {
+				let data = {
 					"data" : valueFromView,
 					"path" : path
 				};
@@ -209,10 +209,10 @@ var CORA = (function(cora) {
 		}
 
 		function checkValueBetweenMinAndMaxIfNumber(valueFromView, errorState) {
-			var validator = CORA.numberVariableValidator({
+			let validator = CORA.numberVariableValidator({
 				"metadataProvider" : metadataProvider,
 			});
-			var validationAnswer = validator.validateData(valueFromView, cMetadataElement);
+			let validationAnswer = validator.validateData(valueFromView, cMetadataElement);
 
 			if (validationAnswer) {
 				state = "ok";
@@ -242,11 +242,11 @@ var CORA = (function(cora) {
 		}
 
 		function openLinkedRecordForLink(event, link) {
-			var loadInBackground = "false";
+			let loadInBackground = "false";
 			if (event.ctrlKey) {
 				loadInBackground = "true";
 			}
-			var openInfo = {
+			let openInfo = {
 				"readLink" : link,
 				"loadInBackground" : loadInBackground
 			};

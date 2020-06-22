@@ -20,259 +20,271 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pVar = function(dependencies, spec) {
-		var metadataProvider = dependencies.metadataProvider;
-		var pubSub = dependencies.pubSub;
-		var textProvider = dependencies.textProvider;
-		var jsBookkeeper = dependencies.jsBookkeeper;
-		var path = spec.path;
-		var cPresentation = spec.cPresentation;
-		var recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 
-		var metadataId = spec.metadataIdUsedInData;
+		let metadataProvider = dependencies.metadataProvider;
+		let pubSub = dependencies.pubSub;
+		let jsBookkeeper = dependencies.jsBookkeeper;
+		let path = spec.path;
+		let cPresentation = spec.cPresentation;
+		let state = "ok";
+		let previousValue = "";
+		let pVarView;
+		let cMetadataElement;
+		let text;
+		let defText;
+		let regEx;
 
-		var cMetadataElement = getMetadataById(metadataId);
-
-		var mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-		var outputFormat = getOutputFormat();
-		var inputFormat = getInputFormat();
-
-		var textId = getTextId(cMetadataElement, "textId");
-		var text = textProvider.getTranslation(textId);
-
-		var defTextId = getTextId(cMetadataElement, "defTextId");
-		var defText = textProvider.getTranslation(defTextId);
-
-		var regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-		var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-
-		var pVarViewSpec = {
-			"mode" : mode,
-			"inputType" : getInputType(),
-			"outputFormat" : outputFormat,
-			"inputFormat" : inputFormat,
-			"presentationId" : presentationId,
-			"info" : {
-				"text" : text,
-				"defText" : defText,
-				"technicalInfo" : [ {
-					"text" : "textId: " + textId,
-					onclickMethod : openTextIdRecord
-				}, {
-					"text" : "defTextId: " + defTextId,
-					onclickMethod : openDefTextIdRecord
-				}, {
-					"text" : "metadataId: " + metadataId,
-					onclickMethod : openMetadataIdRecord
-				}, {
-					"text" : "nameInData: " + nameInData
-				}, {
-					"text" : "regEx: " + regEx
-				}, {
-					"text" : "presentationId: " + presentationId
-				} ]
-			},
-			"onblurFunction" : onBlur,
-			onkeyupFunction : onkeyup
+		const start = function() {
+			let textProvider = dependencies.textProvider;
+			let pVarViewSpec = intializePVarViewSpec(textProvider);
+			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
+			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
+			subscribeToPubSub();
 		};
 
-		const disableVar = function(){
-			pVarView.disable();
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
-		
-		if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-			var cEmptyTextId = CORA
-					.coraData(cPresentation.getFirstChildByNameInData("emptyTextId"));
-			var emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
-			var emptyText = textProvider.getTranslation(emptyTextId);
-			pVarViewSpec.placeholderText = emptyText;
-		}
-		var pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
-		var state = "ok";
-		var previousValue = "";
-		pubSub.subscribe("setValue", path, undefined, handleMsg);
-//		console.log("setValue "+JSON.stringify(path))
-		pubSub.subscribe("validationError", path, undefined, handleValidationError);
-		
-		let topLevelPath = createTopLevelPath();
-		
-//		console.log("subscribe "+JSON.stringify(topLevelPath))
-		pubSub.subscribe("disable", topLevelPath, undefined, disableVar);
-		
-		function createTopLevelPath(){
-			if(pathHasChildren()){
-				var cPath = CORA.coraData(path);
-				if (cPath.containsChildWithNameInData("linkedPath")) {
-					return createPathWithOnlyTopLevelInformation(cPath);
-				}
-			}
-			
-			return path;
-		}
-		
-		function pathHasChildren(){
-			return path.children !== undefined;
-		}
-		
-		function createPathWithOnlyTopLevelInformation(cPath){
-			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
-			let newTopLevelPath = {
-					"name" : "linkedPath",
-					"children": [
-						{
-							"name": "nameInData",
-							"value": pathNameInData
-						}]
-			};
-			if(cPath.containsChildWithNameInData("attributes")){
-				let attributes = cPath.getFirstChildByNameInData("attributes");
-				newTopLevelPath.children.push(attributes);
-			}
-			return newTopLevelPath;
-		}
-		
-		function getOutputFormat() {
+
+		const getOutputFormat = function() {
 			if (cPresentation.containsChildWithNameInData("outputFormat")) {
 				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
 			}
 			return "text";
-		}
+		};
 
-		function getInputFormat() {
+		const getInputFormat = function() {
 			if (cPresentation.containsChildWithNameInData("inputFormat")) {
 				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
 			}
 			return "text";
-		}
+		};
 
-		function getInputType() {
+		const getTextId = function(cMetadataElementIn, textNameInData) {
+			let cTextGroup = CORA.coraData(cMetadataElementIn
+					.getFirstChildByNameInData(textNameInData));
+			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const getInputType = function() {
 			if (cPresentation.containsChildWithNameInData("inputType")) {
 				return cPresentation.getFirstAtomicValueByNameInData("inputType");
 			}
 			return "input";
+		};
+
+		const subscribeToPubSub = function() {
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			let topLevelPath = createPathForDisable();
+			pubSub.subscribe("disable", topLevelPath, undefined, disableVar);
+		};
+
+		const createPathForDisable = function() {
+			if (pathHasChildren()) {
+				let cPath = CORA.coraData(path);
+				let createPath = createPathWithOnlyTopLevelInformation(cPath);
+				return createPath;
+			}
+			return path;
+		};
+
+		const intializePVarViewSpec = function(textProvider) {
+			let metadataId = spec.metadataIdUsedInData;
+			cMetadataElement = getMetadataById(metadataId);
+			let outputFormat = getOutputFormat();
+			let inputFormat = getInputFormat();
+			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
+			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+
+			return {
+				"mode" : mode,
+				"inputType" : getInputType(),
+				"outputFormat" : outputFormat,
+				"inputFormat" : inputFormat,
+				"presentationId" : presentationId,
+				"info" : {
+					"text" : text,
+					"defText" : defText,
+					"technicalInfo" : [ {
+						"text" : "textId: " + textId,
+						onclickMethod : openTextIdRecord
+					}, {
+						"text" : "defTextId: " + defTextId,
+						onclickMethod : openDefTextIdRecord
+					}, {
+						"text" : "metadataId: " + metadataId,
+						onclickMethod : openMetadataIdRecord
+					}, {
+						"text" : "nameInData: " + nameInData
+					}, {
+						"text" : "regEx: " + regEx
+					}, {
+						"text" : "presentationId: " + presentationId
+					} ]
+				},
+				"onblurFunction" : onBlur,
+				onkeyupFunction : onkeyup
+			};
+		};
+
+		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+				let cEmptyTextId = CORA.coraData(cPresentation
+						.getFirstChildByNameInData("emptyTextId"));
+				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+				let emptyText = textProvider.getTranslation(emptyTextId);
+				pVarViewSpec.placeholderText = emptyText;
+			}
+		};
+
+		const pathHasChildren = function() {
+			return path.children !== undefined;
+		};
+
+		const createPathWithOnlyTopLevelInformation = function(cPath) {
+			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
+			let newTopLevelPath = {
+				"name" : "linkedPath",
+				"children" : [ {
+					"name" : "nameInData",
+					"value" : pathNameInData
+				} ]
+			};
+			possiblyAddAttributes(cPath, newTopLevelPath);
+			return newTopLevelPath;
+		};
+
+		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
+			if (cPath.containsChildWithNameInData("attributes")) {
+				let attributes = cPath.getFirstChildByNameInData("attributes");
+				newTopLevelPath.children.push(attributes);
+			}
 		}
 
-		function getTextId(cMetadataElementIn, textNameInData) {
-			var cTextGroup = CORA.coraData(cMetadataElementIn
-					.getFirstChildByNameInData(textNameInData));
-			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
-
-		function getView() {
+		const getView = function() {
 			return pVarView.getView();
-		}
+		};
 
-		function setValue(value) {
+		const setValue = function(value) {
 			state = "ok";
 			previousValue = value;
 			pVarView.setValue(value);
-		}
+		};
 
-		function handleMsg(dataFromMsg) {
+		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();
-		}
+		};
 
-		function handleValidationError() {
+		const handleValidationError = function() {
 			state = "error";
 			updateView();
-		}
+		};
 
-		function getMetadataById(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
-
-		function getText() {
+		const getText = function() {
 			return text;
-		}
+		};
 
-		function getDefText() {
+		const getDefText = function() {
 			return defText;
-		}
+		};
 
-		function getRegEx() {
+		const getRegEx = function() {
 			return regEx;
-		}
+		};
 
-		function onBlur(valueFromView) {
+		const onBlur = function(valueFromView) {
 			handleValueFromView(valueFromView, "error");
-		}
+		};
 
-		function handleValueFromView(valueFromView, errorState) {
+		const handleValueFromView = function(valueFromView, errorState) {
 			checkRegEx(valueFromView, errorState);
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
-				var data = {
+				let data = {
 					"data" : valueFromView,
 					"path" : path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
-		}
+		};
 
-		function checkRegEx(valueFromView, errorState) {
-			var value = valueFromView;
+		const checkRegEx = function(valueFromView, errorState) {
+			let value = valueFromView;
 			if (value.length === 0 || new RegExp(regEx).test(value)) {
 				state = "ok";
 			} else {
 				state = errorState;
 			}
-		}
+		};
 
-		function onkeyup(valueFromView) {
+		const onkeyup = function(valueFromView) {
 			handleValueFromView(valueFromView, "errorStillFocused");
-		}
+		};
 
-		function updateView() {
+		const updateView = function() {
 			pVarView.setState(state);
-		}
+		};
 
-		function valueHasChanged(valueFromView) {
+		const valueHasChanged = function(valueFromView) {
 			return valueFromView !== previousValue;
-		}
+		};
 
-		function getState() {
+		const getState = function() {
 			return state;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function openLinkedRecordForLink(event, link) {
-			var loadInBackground = "false";
+		const openLinkedRecordForLink = function(event, link) {
+			let loadInBackground = "false";
 			if (event.ctrlKey) {
 				loadInBackground = "true";
 			}
-			var openInfo = {
+			let openInfo = {
 				"readLink" : link,
 				"loadInBackground" : loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-		}
+		};
 
-		function openTextIdRecord(event) {
+		const openTextIdRecord = function(event) {
 			openLinkedRecordForLink(event,
 					cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-		}
+		};
 
-		function openDefTextIdRecord(event) {
+		const openDefTextIdRecord = function(event) {
 			openLinkedRecordForLink(event,
 					cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
-		}
+		};
 
-		function openMetadataIdRecord(event) {
+		const openMetadataIdRecord = function(event) {
 			openLinkedRecordForLink(event, cPresentation
 					.getFirstChildByNameInData("presentationOf").actionLinks.read);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
+		const disableVar = function() {
+			pVarView.disable();
+		};
+
+		start();
 		return Object.freeze({
-			"type" : "pVar",
+			type : "pVar",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,

@@ -36,6 +36,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 			"pRepeatingElementFactory" : CORATEST.standardFactorySpy("pRepeatingElementSpy"),
 			"dataDivider" : "systemY"
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		
 		this.spec = {
 			"parentPath" : {},
 			"cParentMetadata" : CORA.coraData(this.metadataProvider
@@ -45,7 +47,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 			"cAlternativePresentation" : CORA.coraData(this.metadataProvider
 					.getMetadataById("pVarTextVariableIdOutput")),
 			"presentationSize" : "bothEqual",
-			"mode" : "input"
+			"mode" : "input", 
+			hasWritePermissionsForRecordPart : true
 		};
 
 		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy, recordType) {
@@ -1740,6 +1743,46 @@ QUnit.test("testHideChildrensRemoveAndAddBeforeButtonWhenAtMinRepeatNotCalledFor
 			assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
 			assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 		});
+
+QUnit.test("testShowAddAndAddBeforeButtonWhenBelowMaxRepeatWhenNoPermission", function(assert) {
+	this.spec.cParentMetadata = CORA.coraData(this.metadataProvider
+			.getMetadataById("groupIdOneTextChildRepeat1to3"));
+	this.spec.hasWritePermissionsForRecordPart = false;
+	var pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
+	var view = pChildRefHandler.getView();
+	this.fixture.appendChild(view);
+
+	var factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.addMethod, undefined);
+//	assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
+//	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
+//	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
+
+//	pChildRefHandler.add("textVariableId", "one");
+//	assert.strictEqual(factoredView.getShowButtonViewCalled(), 1);
+//	assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
+//	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 1);
+//	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
+//
+//	pChildRefHandler.add("textVariableId", "two");
+//	assert.strictEqual(factoredView.getShowButtonViewCalled(), 2);
+//	assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
+//	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 2);
+//	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
+//
+//	pChildRefHandler.add("textVariableId", "three");
+//	assert.strictEqual(factoredView.getShowButtonViewCalled(), 2);
+//	assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
+//	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 2);
+//	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 1);
+//
+//	// call remove function in pChildRefHandler
+//	this.dependencies.pubSub.getSubscriptions()[3].functionToCall();
+//	assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
+//	assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
+//	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 3);
+//	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 1);
+});
 
 QUnit.test("testHandleMessageRightMetadataId", function(assert) {
 	var pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);

@@ -40,7 +40,6 @@ var CORA = (function(cora) {
 								"value": getNameInDataForMetadataId(ref)
 							}]
 				};
-				console.log("pathForTopLevelChild "+JSON.stringify(pathForTopLevelChild))
 				dependencies.pubSub.publish("disable", {
 					data: "",
 					path: pathForTopLevelChild

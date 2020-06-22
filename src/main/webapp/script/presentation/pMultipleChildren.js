@@ -87,24 +87,24 @@ var CORA = (function(cora) {
 					.getFirstChildByNameInData("refGroup"));
 			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
 		const constraintsShouldBeChecked = function() {
 			return spec.recordPartPermissionCalculator !== undefined;
-		}
+		};
 
 		const presentationHasPresentationOf = function(cPresentationChild) {
 			return presentationHasMultiplePresentationsOf(cPresentationChild)
 					|| presentationHasSinglePresentationOf(cPresentationChild);
-		}
+		};
 
 		const presentationHasMultiplePresentationsOf = function(cPresentationChild) {
 			return cPresentationChild.containsChildWithNameInData("presentationsOf");
-		}
+		};
 
 		const presentationHasSinglePresentationOf = function(cPresentationChild) {
 			return cPresentationChild.containsChildWithNameInData("presentationOf");
-		}
+		};
 
 		const handleSingleOrMultiplePresentationOf = function(cPresentationChild,
 				cPresentationChildRef, refId) {
@@ -115,7 +115,7 @@ var CORA = (function(cora) {
 			else {
 				handleSinglePresentationOf(cPresentationChildRef, cPresentationChild, refId);
 			}
-		}
+		};
 
 		const handleMultiplePresentationsOf = function(cPresentationChildRef, cPresentationChild,
 				refId) {
@@ -124,27 +124,36 @@ var CORA = (function(cora) {
 				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
 						cPresentationChild, refId);
 			});
-		}
+		};
 
 		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
 				cPresentationChild, refId) {
 			let cChildReference = CORA.coraData(childReference);
-			let hasPermission = checkHasPermission(cChildReference);
+			let hasReadPermission = checkHasReadPermission(cChildReference);
 
-			if (hasPermission) {
-				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId);
+			if (hasReadPermission) {
+				let hasWritePermission = checkHasWritePermission(cChildReference);
+				let childView = createViewForChild(cPresentationChildRef, cPresentationChild, refId, hasWritePermission);
 				view.appendChild(childView);
 			}
-		}
+		};
 
-		const checkHasPermission = function(cChildReference) {
+		const checkHasReadPermission = function(cChildReference) {
 			let presentationOfType = cChildReference
 					.getFirstAtomicValueByNameInData("linkedRecordType");
 			let presentationOfId = cChildReference
 					.getFirstAtomicValueByNameInData("linkedRecordId");
 			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
 					presentationOfType, presentationOfId);
-		}
+		};
+		const checkHasWritePermission = function(cChildReference) {
+			let presentationOfType = cChildReference
+			.getFirstAtomicValueByNameInData("linkedRecordType");
+			let presentationOfId = cChildReference
+			.getFirstAtomicValueByNameInData("linkedRecordId");
+			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(
+					presentationOfType, presentationOfId);
+		};
 
 		const handleSinglePresentationOf = function(cPresentationChildRef, cPresentationChild,
 				refId) {
@@ -153,7 +162,7 @@ var CORA = (function(cora) {
 
 			possiblyAppendChildView(presentationOfGroup, cPresentationChildRef, cPresentationChild,
 					refId);
-		}
+		};
 
 		const createInfo = function() {
 			let infoSpec = {
@@ -197,7 +206,7 @@ var CORA = (function(cora) {
 			view.className = className;
 		};
 
-		const createViewForChild = function(cPresentationChildRef, cPresentationChild, refId) {
+		const createViewForChild = function(cPresentationChildRef, cPresentationChild, refId, hasWritePermission) {
 			if (childIsText(cPresentationChild)) {
 				return createText(refId, cPresentationChildRef);
 			}
@@ -211,7 +220,7 @@ var CORA = (function(cora) {
 						cPresentationChild, cPresentationChildRef);
 				return pNonRepeatingChildRefHandler.getView();
 			}
-			return createPChildRefHandler(cPresentationChild, cPresentationChildRef);
+			return createPChildRefHandler(cPresentationChild, cPresentationChildRef, hasWritePermission);
 		};
 
 		const childIsText = function(cChild) {
@@ -324,10 +333,11 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef) {
+		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef, hasWritePermission) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
 					cPresentationChildRef);
 			childRefHandlerSpec.cParentMetadata = cMetadataElement;
+			childRefHandlerSpec.hasWritePermissionsForRecordPart = hasWritePermission;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef

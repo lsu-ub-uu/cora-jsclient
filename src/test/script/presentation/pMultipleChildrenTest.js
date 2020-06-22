@@ -96,7 +96,8 @@ QUnit.test("testFirstPChildRefHandlerSpec",
 			assert.strictEqual(factoredSpec.textStyle, "h1TextStyle");
 			assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
 			assert.strictEqual(factoredSpec.mode, "input");
-		});
+			assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, true);
+});
 
 QUnit.test("testFirstMinimizedDefaultPChildRefHandlerSpec", function(assert) {
 	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
@@ -366,7 +367,6 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
 
-/********/
 QUnit.test("testSurroundingContainerPermissionCalculatorCalledForEachChild", function(assert) {
 	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
 	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
@@ -406,7 +406,7 @@ QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(asser
 	
 });
 
-QUnit.test("testSurroundingContainerPermissionWhenOeChildOkOneNotOk", function(assert) {
+QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(assert) {
 	this.my.metadataId = "groupIdTwoTextChild";
 	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
 			.getMetadataById("pgGroupIdTwoTextChild"));
@@ -439,5 +439,30 @@ QUnit.test("testPGroupPermissionCalculatorCalledForEachChild", function(assert) 
 	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
 	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), "metadataTextVariable_textVariableId2");
 	
+});
+
+QUnit.test("testFirstPChildRefHandlerSpecWhenNoWritePermission", function(assert) {
+	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
+	
+	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	var view = pMultipleChildren.getView();
+	this.fixture.appendChild(view);
+
+	
+	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
+	assert.strictEqual(this.getId(factoredSpec.cParentMetadata), "groupIdOneTextChildRepeat1to3");
+	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
+	assert.strictEqual(this.getId(factoredSpec.cParentPresentation),
+			"pgGroupIdOneTextChildMinimized");
+	assert.strictEqual(this.getId(factoredSpec.cAlternativePresentation),
+			"pVarTextVariableIdOutput");
+	assert.strictEqual(factoredSpec.minimizedDefault, undefined);
+
+	assert.strictEqual(factoredSpec.textStyle, "h1TextStyle");
+	assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
+	assert.strictEqual(factoredSpec.mode, "input");
+	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, false);
 });
 

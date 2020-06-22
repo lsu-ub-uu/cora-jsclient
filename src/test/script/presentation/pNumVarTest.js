@@ -22,10 +22,10 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPNumVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
 			fixture, pNumVarViewFactory) {
-		var factor = function(path, metadataIdUsedInData, pNumVarPresentationId) {
-			var cPNumVarPresentation = CORA.coraData(metadataProvider
+		let factor = function(path, metadataIdUsedInData, pNumVarPresentationId) {
+			let cPNumVarPresentation = CORA.coraData(metadataProvider
 					.getMetadataById(pNumVarPresentationId));
-			var dependencies = {
+			let dependencies = {
 				"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy(),
 				"metadataProvider" : metadataProvider,
 				"pubSub" : pubSub,
@@ -33,12 +33,12 @@ var CORATEST = (function(coraTest) {
 				"jsBookkeeper" : jsBookkeeper,
 				"pNumVarViewFactory" : pNumVarViewFactory
 			};
-			var spec = {
+			let spec = {
 				"path" : path,
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPNumVarPresentation
 			};
-			var pNumVar = CORA.pNumVar(dependencies, spec);
+			let pNumVar = CORA.pNumVar(dependencies, spec);
 			return {
 				spec : spec,
 				pNumVar : pNumVar,
@@ -62,22 +62,22 @@ var CORATEST = (function(coraTest) {
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, path, disablePath) {
-		var subscriptions = attachedPNumVar.pubSub.getSubscriptions();
+		let subscriptions = attachedPNumVar.pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 3);
 
-		var firstSubsription = subscriptions[0];
+		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
 		assert.deepEqual(firstSubsription.path, path);
-		var pNumVar = attachedPNumVar.pNumVar;
+		let pNumVar = attachedPNumVar.pNumVar;
 		assert.ok(firstSubsription.functionToCall === pNumVar.handleMsg);
 
-		var secondSubsription = subscriptions[1];
+		let secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
 		assert.deepEqual(secondSubsription.path, path);
-//		var pNumVar = attachedPNumVar.pNumVar;
+//		let pNumVar = attachedPNumVar.pNumVar;
 		assert.ok(secondSubsription.functionToCall === pNumVar.handleValidationError);
 		
-		var disableSubsription = subscriptions[2];
+		let disableSubsription = subscriptions[2];
 		assert.strictEqual(disableSubsription.type, "disable");
 		assert.stringifyEqual(disableSubsription.path, disablePath);
 		assert.ok(disableSubsription.functionToCall === pNumVar.disableNumVar);
@@ -85,7 +85,7 @@ var CORATEST = (function(coraTest) {
 	};
 
 	coraTest.testNumVariableMetadata = function(attachedPNumVar, assert) {
-		var pNumVar = attachedPNumVar.pNumVar;
+		let pNumVar = attachedPNumVar.pNumVar;
 		assert.strictEqual(pNumVar.getText(), "numVariableIdText");
 		assert.strictEqual(pNumVar.getDefText(), "numVariableIdDefText");
 		assert.strictEqual(pNumVar.getMin(), "0");
@@ -96,11 +96,11 @@ var CORATEST = (function(coraTest) {
 	};
 
 	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
-		var dataArray = jsBookkeeper.getDataArray();
+		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);
 	};
 	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-		var dataArray = jsBookkeeper.getDataArray();
+		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 1);
 		assert.strictEqual(dataArray[0].data, value);
 	};
@@ -123,24 +123,24 @@ QUnit.module("presentation/pNumVarTest.js", {
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.getDependencies(), attachedPNumVar.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.getSpec(), attachedPNumVar.spec);
 });
 
 QUnit.test("testGetView", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var spyView = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let spyView = this.pNumVarViewFactory.getFactored(0);
 	assert.strictEqual(attachedPNumVar.pNumVar.getView(), spyView.getView());
 });
 
 QUnit.test("testInitText", function(assert) {
 	let path = {};
-	var attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.type, "pNumVar");
 
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, path, path);
@@ -152,11 +152,11 @@ QUnit.test("testInitText", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
-	var expectedPNumVarViewSpec = {
+	let expectedPNumVarViewSpec = {
 		"info" : {
 			"defText" : "numVariableIdDefText",
 			"technicalInfo" : [],
@@ -209,7 +209,7 @@ QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 			"value" : "textVariableId"
 		} ]
 	};
-	var attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPath, "numVariableId",
+	let attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPath, "numVariableId",
 			"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, firstLevelNumPath, topLevelPath);
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
@@ -332,32 +332,32 @@ QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
 });
 	
 QUnit.test("testSetValueInput", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	attachedPNumVar.pNumVar.setValue("3");
 
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getValue(), "3");
 });
 
 QUnit.test("testHandleMessage", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var data = {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let data = {
 		"data" : "2",
 		"path" : {}
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getValue(), "2");
 });
 
 QUnit.test("testChangedValueEmpty", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var data = {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let data = {
 		"data" : "1",
 		"path" : {}
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
@@ -365,8 +365,8 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
@@ -377,8 +377,8 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueNotANumberError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("not a number");
 	assert.equal(pNumVarViewSpy.getState(), "error");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
@@ -386,8 +386,8 @@ QUnit.test("testChangedValueNotANumberError", function(assert) {
 });
 
 QUnit.test("testChangedValueMaxError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("200");
 	assert.equal(pNumVarViewSpy.getState(), "error");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
@@ -395,41 +395,41 @@ QUnit.test("testChangedValueMaxError", function(assert) {
 });
 
 QUnit.test("testChangedValueMinError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("-1");
 	assert.equal(pNumVarViewSpy.getState(), "error");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("3.45");
 	assert.equal(pNumVarViewSpy.getState(), "error");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 QUnit.test("testHandleValidationError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var message = {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let message = {
 		"metadataId" : "textVariableId",
 		"path" : {}
 	};
 	attachedPNumVar.pNumVar.handleValidationError(message);
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getState(), "error");
 });
 
 QUnit.test("testChangedValueEmptyAfterKeyUp", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var data = {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let data = {
 		"data" : "notEmpty",
 		"path" : {}
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
@@ -437,8 +437,8 @@ QUnit.test("testChangedValueEmptyAfterKeyUp", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
@@ -448,8 +448,8 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueError", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("999");
 	assert.equal(pNumVarViewSpy.getState(), "errorStillFocused");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "errorStillFocused");
@@ -458,10 +458,10 @@ QUnit.test("testChangedValueError", function(assert) {
 
 QUnit.test("testInitNumberOutput", function(assert) {
 	let path = {};
-	var attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableIdOutput");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableIdOutput");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
-	var expectedPNumVarViewSpec = {
+	let expectedPNumVarViewSpec = {
 		"info" : {
 			"defText" : "numVariableIdDefText",
 			"technicalInfo" : [],
@@ -501,26 +501,26 @@ QUnit.test("testInitNumberOutput", function(assert) {
 });
 
 QUnit.test("testSetValueTextOutput", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
-	var valueView = attachedPNumVar.valueView;
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
+	let valueView = attachedPNumVar.valueView;
 
 	attachedPNumVar.pNumVar.setValue("7");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getValue(), "7");
 });
 
 QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
-	var message = {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
+	let message = {
 		"metadataId" : "numVariableId",
 		"path" : {}
 	};
 	attachedPNumVar.pNumVar.handleValidationError(message);
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getState(), "error");
 
-	var data = {
+	let data = {
 		"data" : "5",
 		"path" : {}
 	};
@@ -529,14 +529,14 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 });
 
 QUnit.test("testOpenTextIdRecord", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPNumVar.pNumVar.openTextIdRecord(event);
 
-	var jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -548,21 +548,21 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
-	event.ctrlKey = false;
-	attachedPNumVar.pNumVar.openTextIdRecord(event);
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	attachedPNumVar.pNumVar.openTextIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 
 QUnit.test("testOpenDefTextIdRecord", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPNumVar.pNumVar.openDefTextIdRecord(event);
 
-	var jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -575,20 +575,20 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
+	let event2 = document.createEvent('Event');
 	event.ctrlKey = false;
-	attachedPNumVar.pNumVar.openDefTextIdRecord(event);
+	attachedPNumVar.pNumVar.openDefTextIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 QUnit.test("testOpenMetadataIdRecord", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	attachedPNumVar.pNumVar.openMetadataIdRecord(event);
 
-	var jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
-	var expectedOpenInfo = {
+	let jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
@@ -601,16 +601,16 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
-	var event = document.createEvent('Event');
+	let event2 = document.createEvent('Event');
 	event.ctrlKey = false;
-	attachedPNumVar.pNumVar.openMetadataIdRecord(event);
+	attachedPNumVar.pNumVar.openMetadataIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 
 QUnit.test("testDisable", function(assert) {
-	var attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	attachedPNumVar.pNumVar.disableNumVar();
 
-	var pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.equal(pNumVarViewSpy.getDisabledCalled(), true);
 });

@@ -113,6 +113,9 @@ var CORA = (function(cora) {
 			if (isStaticNoOfChildren) {
 				return false;
 			}
+			if(!spec.hasWritePermissionsForRecordPart){
+				return false;
+			}
 			return true;
 		};
 
@@ -121,6 +124,9 @@ var CORA = (function(cora) {
 				return false;
 			}
 			if (!isRepeating) {
+				return false;
+			}
+			if(!spec.hasWritePermissionsForRecordPart){
 				return false;
 			}
 			return true;
@@ -137,6 +143,9 @@ var CORA = (function(cora) {
 				return false;
 			}
 			if (userCanUploadFile) {
+				return false;
+			}
+			if(!spec.hasWritePermissionsForRecordPart){
 				return false;
 			}
 			return true;

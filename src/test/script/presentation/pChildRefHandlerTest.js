@@ -2148,3 +2148,36 @@ QUnit.test("testAddTextIsPickedFromSpecWhenExistInSpec", function(assert) {
 	};
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 });
+
+QUnit.test("testRepeatingElementSpecWhenRepeatingButNoWritePermission", function(assert) {
+	this.spec.cParentMetadata = CORA.coraData(this.metadataProvider
+			.getMetadataById("groupIdOneTextChildRepeat1to3"));
+	this.spec.hasWritePermissionsForRecordPart = false;
+
+	var pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
+
+	var factoredView = this.dependencies.pChildRefHandlerViewFactory.getFactored(0);
+	pChildRefHandler.add("textVariableId", "one");
+	var pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
+
+	var factoredSpec = pRepeatingElementFactory.getSpec(0);
+	var expectedPath = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		}, {
+			"name" : "repeatId",
+			"value" : "one"
+		} ]
+	};
+	var expectedSpec = {
+		"path" : expectedPath,
+		"pChildRefHandlerView" : factoredView,
+		"pChildRefHandler" : pChildRefHandler,
+		"userCanRemove" : false,
+		"userCanMove" : false,
+		"userCanAddBefore" : false
+	};
+	assert.stringifyEqual(factoredSpec, expectedSpec);
+});

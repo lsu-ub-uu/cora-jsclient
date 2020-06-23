@@ -28,28 +28,16 @@ var CORA = (function(cora) {
 		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		let dataChildrenForMetadata;
+		let attributes;
 
 		const initializeTopLevel = function(hasWritePermission) {
 			initialize();
-			if(!hasWritePermission){
-				let pathForTopLevelChild = {
-						"name" : "linkedPath",
-						"children": [
-							{
-								"name": "nameInData",
-								"value": getNameInDataForMetadataId(ref)
-							}]
-				};
-				dependencies.pubSub.publish("disable", {
-					data: "",
-					path: pathForTopLevelChild
-				});
-			}
+			possiblyPublishDisableMessage(hasWritePermission);
 		};
-		
+
 		const initialize = function() {
 			let nameInData = getNameInDataForMetadataId(ref);
-			let attributes = getAttributesForMetadataId(ref);
+			attributes = getAttributesForMetadataId(ref);
 			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
 			initializeChild();
 		};
@@ -255,6 +243,37 @@ var CORA = (function(cora) {
 			repeatInitializer.initialize();
 		};
 
+		const possiblyPublishDisableMessage = function(hasWritePermission) {
+			if (!hasWritePermission) {
+				let pathForTopLevelChild = createPath();
+				publishDisableMessage(pathForTopLevelChild);
+			}
+		};
+
+		const createPath = function() {
+			let pathForTopLevelChild = {
+				"name" : "linkedPath",
+				"children" : [ {
+					"name" : "nameInData",
+					"value" : getNameInDataForMetadataId(ref)
+				} ]
+			};
+			possiblyAddAttributesToPath(pathForTopLevelChild);
+			return pathForTopLevelChild;
+		};
+
+		const possiblyAddAttributesToPath = function(pathForTopLevelChild) {
+			if (attributes !== undefined) {
+				pathForTopLevelChild.children.push(attributes);
+			}
+		}
+
+		const publishDisableMessage = function(pathForTopLevelChild) {
+			dependencies.pubSub.publish("disable", {
+				data : "",
+				path : pathForTopLevelChild
+			});
+		}
 		const getDependencies = function() {
 			return dependencies;
 		};

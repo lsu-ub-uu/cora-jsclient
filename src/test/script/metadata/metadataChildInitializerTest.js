@@ -606,7 +606,7 @@ QUnit.test("testInitTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", functi
 
 });
 
-QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectlyFromTopLevelInitializeWithoutWritePermission", function(assert) {
+QUnit.test("testGroupIdOneTextChildDisableSubMessageFromTopLevelInitializeWithoutWritePermission", function(assert) {
 	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	metadataChildInitializer.initializeTopLevel(false);
 	
@@ -624,4 +624,39 @@ QUnit.test("testInitGroupIdOneTextChildRepeatInitializerCalledCorrectlyFromTopLe
 	assert.deepEqual(JSON.stringify(messages[0]),
 		'{"type":"disable","message":{"data":"","path":'+JSON.stringify(expectedPath)+'}}');
 
+});
+QUnit.test("testGroupIdOneTextChildDisableSubMessageWithAttributesFromTopLevelInitializeWithoutWritePermission", function(assert) {
+	this.spec.childReference = CORATEST.createChildReferenceForChildInitializerWithRepeatId(
+			"groupIdOneTextChildOneAttribute", "metadataGroup", "0", "1", "1");
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	metadataChildInitializer.initializeTopLevel(false);
+	
+	let messages = this.pubSub.getMessages();
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children": [
+				{
+					"name": "nameInData",
+					"value": "groupIdOneTextChildOneAttribute"
+				}, {
+					"name" : "attributes",
+					"children" : [ {
+						"name" : "attribute",
+						"repeatId" : "1",
+						"children" : [ {
+							"name" : "attributeName",
+							"value" : "anAttribute"
+						}, {
+							"name" : "attributeValue",
+							"value" : "aFinalValue"
+						} ]
+					} ]
+				}
+				]
+	};
+	
+	assert.equal(messages.length, 1);
+	assert.deepEqual(JSON.stringify(messages[0]),
+			'{"type":"disable","message":{"data":"","path":'+JSON.stringify(expectedPath)+'}}');
+	
 });

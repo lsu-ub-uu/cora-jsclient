@@ -44,7 +44,7 @@ var CORA = (function(cora) {
 			subscribeToPubSub();
 		};
 
-		const initializeGlobalVariables = function(){
+		const initializeGlobalVariables = function() {
 			cMetadataElement = getMetadataById();
 			min = getValueByNameInData("min");
 			max = getValueByNameInData("max");
@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 			warningMax = getValueByNameInData("warningMax");
 			numberOfDecimals = getValueByNameInData("numberOfDecimals");
 		};
-		
+
 		const factorPNumVarView = function() {
 			let pNumVarViewSpec = initializePNumVarViewSpec();
 			pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
@@ -106,10 +106,8 @@ var CORA = (function(cora) {
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-
 			let topLevelPath = createTopLevelPath();
 			pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
-//			console.log("disable subscribe "+JSON.stringify(topLevelPath))
 		};
 
 		const disableNumVar = function() {
@@ -126,13 +124,8 @@ var CORA = (function(cora) {
 		const createTopLevelPath = function() {
 			if (pathHasChildren()) {
 				let cPath = CORA.coraData(path);
-				if (cPath.containsChildWithNameInData("linkedPath")) {
-					return createPathWithOnlyTopLevelInformation(cPath);
-				}else{
-					console.log("path "+JSON.stringify(path))
-				}
+				return createPathWithOnlyTopLevelInformation(cPath);
 			}
-
 			return path;
 		};
 
@@ -144,17 +137,20 @@ var CORA = (function(cora) {
 			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
 			let newTopLevelPath = {
 				"name": "linkedPath",
-				"children": [
-					{
-						"name": "nameInData",
-						"value": pathNameInData
-					}]
+				"children": [{
+					"name": "nameInData",
+					"value": pathNameInData
+				}]
 			};
+			possiblyAddAttributes(cPath, newTopLevelPath);
+			return newTopLevelPath;
+		};
+
+		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
 			if (cPath.containsChildWithNameInData("attributes")) {
 				let attributes = cPath.getFirstChildByNameInData("attributes");
 				newTopLevelPath.children.push(attributes);
 			}
-			return newTopLevelPath;
 		};
 
 		const getView = function() {

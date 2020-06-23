@@ -74,7 +74,6 @@ var CORATEST = (function(coraTest) {
 		let secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
 		assert.deepEqual(secondSubsription.path, path);
-//		var pVar = attachedPVar.pVar;C
 		assert.ok(secondSubsription.functionToCall === pVar.handleValidationError);
 
 		let disableSubsription = subscriptions[2];
@@ -202,18 +201,44 @@ QUnit.test("testInitTextArea", function(assert) {
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
-let firstLevelPathWithRepeatId = {
-	"name" : "linkedPath",
-	"children" : [ {
-		"name" : "nameInData",
-		"value" : "textVariableId"
-	}, {
-		"name" : "repeatId",
-		"value" : "0"
-	} ]
-};
+QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
+	let firstLevelPath = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		} ]
+	};
+	
+	let expectedPath = {
+		"name" : "linkedPath",
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textVariableId"
+		} ]
+	};
+	let attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
+			"textVariableIdTextAreaPVar");
+	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPath, expectedPath);
+	CORATEST.testVariableMetadata(attachedPVar, assert);
+
+	assert.equal(attachedPVar.pVar.getState(), "ok");
+
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
 
 QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
+	let firstLevelPathWithRepeatId = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "textVariableId"
+			}, {
+				"name" : "repeatId",
+				"value" : "0"
+			} ]
+		};
+	
 	let expectedDisablePath = {
 		"name" : "linkedPath",
 		"children" : [ {
@@ -232,47 +257,21 @@ QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
-let firstLevelPath = {
-	"name" : "linkedPath",
-	"children" : [ {
-		"name" : "nameInData",
-		"value" : "textVariableId"
-	} ]
-};
-
-QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
-	let expectedPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textVariableId"
-		} ]
-	};
-	let attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
-			"textVariableIdTextAreaPVar");
-	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPath, expectedPath);
-	CORATEST.testVariableMetadata(attachedPVar, assert);
-
-	assert.equal(attachedPVar.pVar.getState(), "ok");
-
-	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
-});
-
-let pathWithTwoLevels = {
-	"name" : "linkedPath",
-	"children" : [ {
-		"name" : "nameInData",
-		"value" : "recordInfo"
-	}, {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "dataDivider"
-		} ]
-	} ]
-};
-
 QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
+	let pathWithTwoLevels = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "recordInfo"
+			}, {
+				"name" : "linkedPath",
+				"children" : [ {
+					"name" : "nameInData",
+					"value" : "dataDivider"
+				} ]
+			} ]
+		};
+	
 	let topLevelPath = {
 		"name" : "linkedPath",
 		"children" : [ {
@@ -290,28 +289,28 @@ QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
-let pathWithThreeLevels = {
-	"name" : "linkedPath",
-	"children" : [ {
-		"name" : "nameInData",
-		"value" : "recordInfo"
-	}, {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "dataDivider"
-		}, {
+QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
+	let pathWithThreeLevels = {
 			"name" : "linkedPath",
 			"children" : [ {
 				"name" : "nameInData",
-				"value" : "linkedRecordType"
+				"value" : "recordInfo"
+			}, {
+				"name" : "linkedPath",
+				"children" : [ {
+					"name" : "nameInData",
+					"value" : "dataDivider"
+				}, {
+					"name" : "linkedPath",
+					"children" : [ {
+						"name" : "nameInData",
+						"value" : "linkedRecordType"
+					} ]
+				} ]
 			} ]
-		} ]
-	} ]
-};
-
-QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
-	let topLevelPath = {
+		};
+	
+	let expectedPath = {
 		"name" : "linkedPath",
 		"children" : [ {
 			"name" : "nameInData",
@@ -320,7 +319,7 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 	};
 	let attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId",
 			"textVariableIdTextAreaPVar");
-	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithThreeLevels, topLevelPath);
+	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithThreeLevels, expectedPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -16,154 +16,187 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
- */
-var CORA = (function(cora) {
+ */var CORA = (function(cora) {
 	"use strict";
 	cora.pCollectionVar = function(dependencies, spec) {
-		var path = spec.path;
-		var cPresentation = spec.cPresentation;
-		var metadataProvider = dependencies.metadataProvider;
-		var pubSub = dependencies.pubSub;
-		var textProvider = dependencies.textProvider;
-		var jsBookkeeper = dependencies.jsBookkeeper;
-		var recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-		var presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
-		var cPresentationGroup = CORA.coraData(presentationGroup);
-		var metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		let path = spec.path;
+		let cPresentation = spec.cPresentation;
+		let metadataProvider = dependencies.metadataProvider;
+		let pubSub = dependencies.pubSub;
+		let textProvider = dependencies.textProvider;
+		let jsBookkeeper = dependencies.jsBookkeeper;
+		let state = "ok";
+		let previousValue = "";
+		let cMetadataElement;
+		let view;
+		let presentationId;
+		let mode;
+		let nameInData;
+		let originalClassName;
+		let text;
+		let defText;
+		let metadataId;
+		let valueView;
+		let info;
 
-		var cMetadataElement = getMetadataById(metadataId);
-		var mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-		var nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-
-		var view = createBaseView();
-		var originalClassName = view.className;
-		var valueView = createValueView();
-		view.appendChild(valueView);
-
-		var state = "ok";
-		var previousValue = "";
-		pubSub.subscribe("setValue", path, undefined, handleMsg);
-		pubSub.subscribe("validationError", path, undefined, handleValidationError);
-
-		var textId = getTextId(cMetadataElement, "textId");
-		var text = textProvider.getTranslation(textId);
-
-		var defTextId = getTextId(cMetadataElement, "defTextId");
-		var defText = textProvider.getTranslation(defTextId);
-
-		var info = createInfo();
-		var infoButton = info.getButton();
-		view.appendChild(infoButton);
-
-		function createBaseView() {
-			return CORA.gui.createSpanWithClassName("pCollVar " + presentationId);
-		}
-		function createValueView() {
+		const start = function() {
+			initializeGlobalVariables();
+			createValueViewAndAppendToView();
+			createInfoButtonAndAppendToView();
+			setOnBlurIfModeIsInput();
+			subscribeToPubSub();
+		};
+		
+		const initializeGlobalVariables = function() {
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
+			let cPresentationGroup = CORA.coraData(presentationGroup);
+			metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			cMetadataElement = getMetadataById(metadataId);
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			view = createBaseView();
+			originalClassName = view.className;  
+		};
+		
+		const createValueViewAndAppendToView = function() {
+			valueView = createValueView();
+			view.appendChild(valueView);
+		};
+		
+		const createInfoButtonAndAppendToView = function() {
+			info = createInfoSpec();
+			let infoButton = info.getButton();
+			view.appendChild(infoButton);
+		};
+		
+		const setOnBlurIfModeIsInput = function() {
 			if (mode === "input") {
-				return createInput();
+				valueView.onblur = onBlur;
 			}
-			return createOutput();
-		}
+		};
+		
+		const subscribeToPubSub = function(){
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
+		};
 
-		function createInput() {
-			return createCollectionInput();
-		}
+		const createInfoSpec = function() {
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
 
-		function createCollectionInput() {
-			var inputNew = document.createElement("select");
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
 
-			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-				var cEmptyTextId = CORA.coraData(cPresentation
-						.getFirstChildByNameInData("emptyTextId"));
-				var emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
-
-				var optionText = textProvider.getTranslation(emptyTextId);
-				var emptyTextOption = new Option(optionText, "");
-				inputNew.appendChild(emptyTextOption);
-				inputNew.value = "";
-			}
-
-			var collectionItemReferencesChildren = getCollectionItemReferencesChildren();
-
-			collectionItemReferencesChildren.forEach(function(ref) {
-				var option = createOptionForRef(ref);
-				inputNew.appendChild(option);
-			});
-			return inputNew;
-		}
-
-		function getCollectionItemReferencesChildren() {
-			var cRefCollection = CORA.coraData(cMetadataElement
-					.getFirstChildByNameInData("refCollection"));
-			var refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
-			var cMetadataCollection = getMetadataById(refCollectionId);
-			var collectionItemReferences = cMetadataCollection
-					.getFirstChildByNameInData("collectionItemReferences");
-			return collectionItemReferences.children;
-		}
-
-		function createOptionForRef(ref) {
-			var cItemRef = CORA.coraData(ref);
-			var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-
-			var item = getMetadataById(itemRefId);
-			var value = item.getFirstAtomicValueByNameInData("nameInData");
-
-			var cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
-			var textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-
-			var optionText = textProvider.getTranslation(textIdToTranslate);
-
-			return new Option(optionText, value);
-		}
-
-		function createOutput() {
-			return CORA.gui.createSpanWithClassName("value");
-		}
-
-		function createInfo() {
-			var infoSpec = {
-				"appendTo" : view,
-				"afterLevelChange" : updateView,
-				"level1" : [ {
-					"className" : "textView",
-					"text" : text
+			let infoSpec = {
+				"appendTo": view,
+				"afterLevelChange": updateView,
+				"level1": [{
+					"className": "textView",
+					"text": text
 				}, {
-					"className" : "defTextView",
-					"text" : defText
-				} ],
-				"level2" : [ {
-					"className" : "textIdView",
-					"text" : "textId: " + textId
+					"className": "defTextView",
+					"text": defText
+				}],
+				"level2": [{
+					"className": "textIdView",
+					"text": "textId: " + textId
 				}, {
-					"className" : "defTextIdView",
-					"text" : "defTextId: " + defTextId
+					"className": "defTextIdView",
+					"text": "defTextId: " + defTextId
 				}, {
-					"className" : "metadataIdView",
-					"text" : "metadataId: " + metadataId
+					"className": "metadataIdView",
+					"text": "metadataId: " + metadataId
 				}, {
-					"className" : "technicalView",
-					"text" : "nameInData: " + nameInData
+					"className": "technicalView",
+					"text": "nameInData: " + nameInData
 				}, {
-					"className" : "technicalView",
-					"text" : "presentationId: " + presentationId
-				} ]
+					"className": "technicalView",
+					"text": "presentationId: " + presentationId
+				}]
 			};
 			return CORA.info(infoSpec);
 		}
+		const createBaseView = function() {
+			return CORA.gui.createSpanWithClassName("pCollVar " + presentationId);
+		};
 
-		function getTextId(cMetadataElementIn, textNameInData) {
-			var cTextGroup = CORA.coraData(cMetadataElementIn
-					.getFirstChildByNameInData(textNameInData));
+		const createValueView = function() {
+			if (mode === "input") {
+				return createCollectionInput();
+			}
+			return createOutput();
+		};
+
+		const createCollectionInput = function() {
+			let inputNew = document.createElement("select");
+
+			appendEmptyTextOptionIfEmptyTextId(inputNew);
+
+			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+
+			collectionItemReferencesChildren.forEach(function(ref) {
+				let option = createOptionForRef(ref);
+				inputNew.appendChild(option);
+			});
+			return inputNew;
+		};
+		
+		const appendEmptyTextOptionIfEmptyTextId = function(inputNew) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+				let cEmptyTextId = CORA.coraData(cPresentation
+					.getFirstChildByNameInData("emptyTextId"));
+				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+
+				let optionText = textProvider.getTranslation(emptyTextId);
+				let emptyTextOption = new Option(optionText, "");
+				inputNew.appendChild(emptyTextOption);
+				inputNew.value = "";
+			}
+		};
+
+		const getCollectionItemReferencesChildren = function() {
+			let cRefCollection = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("refCollection"));
+			let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cMetadataCollection = getMetadataById(refCollectionId);
+			let collectionItemReferences = cMetadataCollection
+				.getFirstChildByNameInData("collectionItemReferences");
+			return collectionItemReferences.children;
+		};
+
+		const createOptionForRef = function(ref) {
+			let cItemRef = CORA.coraData(ref);
+			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+
+			let item = getMetadataById(itemRefId);
+			let value = item.getFirstAtomicValueByNameInData("nameInData");
+
+			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
+			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+
+			let optionText = textProvider.getTranslation(textIdToTranslate);
+
+			return new Option(optionText, value);
+		};
+
+		const createOutput = function() {
+			return CORA.gui.createSpanWithClassName("value");
+		};
+
+
+		const getTextId = function(cMetadataElementIn, textNameInData) {
+			let cTextGroup = CORA.coraData(cMetadataElementIn
+				.getFirstChildByNameInData(textNameInData));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function setValue(value) {
+		const setValue = function(value) {
 			state = "ok";
 			previousValue = value;
 			if (mode === "input") {
@@ -171,80 +204,80 @@ var CORA = (function(cora) {
 			} else {
 				setValueForOutput(value);
 			}
-		}
+		};
 
-		function setValueForOutput(value) {
+		const setValueForOutput = function(value) {
 			setValueForCollectionOutput(value);
-		}
+		};
 
-		function setValueForCollectionOutput(value) {
+		const setValueForCollectionOutput = function(value) {
 			if (value === "") {
 				valueView.textContent = "";
 			} else {
 				setOutputValueFromItemReference(value);
 			}
-		}
+		};
 
-		function findItemReferenceForValue(value) {
-			var collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+		const findItemReferenceForValue = function(value) {
+			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
 			return collectionItemReferencesChildren.find(function(ref) {
-				var cItemRef = CORA.coraData(ref);
-				var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+				let cItemRef = CORA.coraData(ref);
+				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 
-				var item = getMetadataById(itemRefId);
-				var refValue = item.getFirstAtomicValueByNameInData("nameInData");
+				let item = getMetadataById(itemRefId);
+				let refValue = item.getFirstAtomicValueByNameInData("nameInData");
 				return refValue === value;
 			});
-		}
+		};
 
-		function setOutputValueFromItemReference(value) {
-			var itemReference = findItemReferenceForValue(value);
-			var cItemRef = CORA.coraData(itemReference);
-			var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+		const setOutputValueFromItemReference = function(value) {
+			let itemReference = findItemReferenceForValue(value);
+			let cItemRef = CORA.coraData(itemReference);
+			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 
-			var item = getMetadataById(itemRefId);
-			var cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
-			var textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			var outputText = textProvider.getTranslation(textIdToTranslate);
+			let item = getMetadataById(itemRefId);
+			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
+			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			let outputText = textProvider.getTranslation(textIdToTranslate);
 			valueView.textContent = outputText;
-		}
+		};
 
-		function handleMsg(dataFromMsg) {
+		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();
-		}
+		};
 
-		function handleValidationError() {
+		const handleValidationError = function() {
 			state = "error";
 			updateView();
-		}
+		};
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
+		};
 
-		function getText() {
+		const getText = function() {
 			return text;
-		}
+		};
 
-		function getDefText() {
+		const getDefText = function() {
 			return defText;
-		}
+		};
 
-		function onBlur() {
+		const onBlur = function() {
 			updateView();
 			if (valueHasChanged()) {
-				var data = {
-					"data" : valueView.value,
-					"path" : path
+				let data = {
+					"data": valueView.value,
+					"path": path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueView.value;
 			}
-		}
+		};
 
-		function updateView() {
-			var className = originalClassName;
+		const updateView = function() {
+			let className = originalClassName;
 			if (state === "error") {
 				className += " error";
 			}
@@ -252,35 +285,39 @@ var CORA = (function(cora) {
 				className += " infoActive";
 			}
 			view.className = className;
-		}
+		};
 
-		function valueHasChanged() {
+		const valueHasChanged = function() {
 			if (valueView.value !== previousValue) {
 				return true;
 			}
 			return false;
-		}
+		};
 
-		function getState() {
+		const getState = function() {
 			return state;
-		}
+		};
+		
+		const initializeViewModelObject = function(){
+			view.modelObject = out;
+		};
 
-		var out = Object.freeze({
-			"type" : "pCollVar",
-			getView : getView,
-			setValue : setValue,
-			handleMsg : handleMsg,
-			getText : getText,
-			getDefText : getDefText,
-			getState : getState,
-			onBlur : onBlur,
-			handleValidationError : handleValidationError
+		start();
+
+		let out = Object.freeze({
+			type: "pCollVar",
+			getView: getView,
+			setValue: setValue,
+			handleMsg: handleMsg,
+			getText: getText,
+			getDefText: getDefText,
+			getState: getState,
+			onBlur: onBlur,
+			handleValidationError: handleValidationError
 		});
+		
+		initializeViewModelObject();
 
-		view.modelObject = out;
-		if (mode === "input") {
-			valueView.onblur = onBlur;
-		}
 		return out;
 	};
 	return cora;

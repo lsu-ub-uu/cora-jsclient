@@ -466,3 +466,12 @@ QUnit.test("testFirstPChildRefHandlerSpecWhenNoWritePermission", function(assert
 	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, false);
 });
 
+QUnit.test("testFirstPChildRefHandlerSpecWhenNoConstraints", function(assert) {
+	this.spec.recordPartPermissionCalculator = undefined;
+	var pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	var factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, true);
+});
+

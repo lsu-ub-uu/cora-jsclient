@@ -109,6 +109,7 @@ var CORA = (function(cora) {
 
 			let topLevelPath = createTopLevelPath();
 			pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
+//			console.log("disable subscribe "+JSON.stringify(topLevelPath))
 		};
 
 		const disableNumVar = function() {
@@ -127,6 +128,8 @@ var CORA = (function(cora) {
 				let cPath = CORA.coraData(path);
 				if (cPath.containsChildWithNameInData("linkedPath")) {
 					return createPathWithOnlyTopLevelInformation(cPath);
+				}else{
+					console.log("path "+JSON.stringify(path))
 				}
 			}
 

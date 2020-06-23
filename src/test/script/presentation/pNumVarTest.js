@@ -215,6 +215,34 @@ QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
+let firstLevelNumPathWithRepeatId = {
+		  "name": "linkedPath",
+		  "children": [
+		    {
+		      "name": "nameInData",
+		      "value": "textVariableId"
+		    },
+		    {
+		      "name": "repeatId",
+		      "value": "0"
+		    }
+		  ]
+		};
+
+	QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
+		let expectedPath = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "textVariableId"
+			} ]
+		};
+		let attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPathWithRepeatId, "numVariableId",
+				"pNumVarNumVariableId");
+		CORATEST.testNumVariableSubscription(attachedPNumVar, assert, firstLevelNumPathWithRepeatId, expectedPath);
+		CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+	});
+
 let numPathWithTwoLevels = {
 		"name" : "linkedPath",
 		"children" : [ {

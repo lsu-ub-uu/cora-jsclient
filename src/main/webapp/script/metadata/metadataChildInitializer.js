@@ -259,7 +259,6 @@ var CORA = (function(cora) {
 				} ]
 			};
 			possiblyAddAttributesToPath(pathForTopLevelChild);
-			console.log("pathForTopLevelChild "+JSON.stringify(pathForTopLevelChild));
 			return pathForTopLevelChild;
 		};
 

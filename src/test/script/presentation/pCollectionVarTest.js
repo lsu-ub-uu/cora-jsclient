@@ -84,7 +84,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.testCollectionVariableSubscription = function(attachedPCollectionVar, assert) {
 		let subscriptions = attachedPCollectionVar.pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 2);
+		assert.deepEqual(subscriptions.length, 3);
 
 		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
@@ -366,39 +366,108 @@ QUnit.test("testHandleValidationErrorResetByChangingValue", function(assert) {
 	assert.strictEqual(dataArray[0].data, "false");
 });
 
-//QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
-//	let firstLevelPath = {
-//		"name": "linkedPath",
-//		"children": [{
-//			"name": "nameInData",
-//			"value": "textVariableId"
-//		}]
-//	};
-//
-//	let expectedPath = {
-//		"name": "linkedPath",
-//		"children": [{
-//			"name": "nameInData",
-//			"value": "textVariableId"
-//		}]
-//	};
-////	let spec = {
-////			"path": firstLevelPath,	
-////			"cPresentation": cPCollectionVarPresentation
-////		};
-////	
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
-//	"userSuppliedIdNoEmptyTextIdCollectionVarPCollVar");
-//	
-////	let pCollectionVar = CORA.pCollectionVar(this.dependencies, spec);
-//	
-//	
-////	let attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
-////		"textVariableIdTextAreaPVar");
-////	CORATEST.testVariableSubscription(attachedPCollectionVar, assert, firstLevelPath, expectedPath);
-////	CORATEST.testVariableMetadata(attachedPVar, assert);
-////
-////	assert.equal(attachedPVar.pVar.getState(), "ok");
-//
-//	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
-//});
+QUnit.test("testPubSubMessagesWithFirstLevelPath", function(assert) {
+	let firstLevelPath = CORATEST.firstLevelPath;
+
+	let expectedPath = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textVariableId"
+		}]
+	};
+	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
+			.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
+	let spec = {
+			path: firstLevelPath,	
+			cPresentation: cPCollectionVarPresentation
+		};
+	
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, spec);
+	let subscriptions = this.pubSub.getSubscriptions();
+	assert.deepEqual(subscriptions.length, 3);
+	
+	let disableSubscription = subscriptions[2];
+	
+	assert.strictEqual(disableSubscription.type, "disable");
+	assert.deepEqual(disableSubscription.path, expectedPath);
+	assert.ok(pCollectionVar.disableCollectionVar);
+	assert.ok(disableSubscription.functionToCall === pCollectionVar.disableCollectionVar);
+});
+
+QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
+	let pathWithTwoLevels = CORATEST.pathWithTwoLevels;
+
+	let expectedPath = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}]
+	};
+	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
+			.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
+	let spec = {
+			path: pathWithTwoLevels,	
+			cPresentation: cPCollectionVarPresentation
+		};
+	
+	CORA.pCollectionVar(this.dependencies, spec);
+	let subscriptions = this.pubSub.getSubscriptions();
+	
+	let disableSubscription = subscriptions[2];
+	assert.deepEqual(disableSubscription.path, expectedPath);
+});
+
+QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
+	let pathWithAttribute = CORATEST.twoLevelPathWithAttribute;
+
+	let expectedPath = {
+			"name" : "linkedPath",
+			"children" : [ {
+				"name" : "nameInData",
+				"value" : "textPart"
+			}, {
+				"name" : "attributes",
+				"children" : [ {
+					"name" : "attribute",
+					"repeatId" : "1",
+					"children" : [ {
+						"name" : "attributeName",
+						"value" : "type"
+					}, {
+						"name" : "attributeValue",
+						"value" : "alternative"
+					} ]
+				} ]
+			} ]
+		};
+	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
+			.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
+	let spec = {
+			path: pathWithAttribute,	
+			cPresentation: cPCollectionVarPresentation
+		};
+	
+	CORA.pCollectionVar(this.dependencies, spec);
+	let subscriptions = this.pubSub.getSubscriptions();
+	
+	let disableSubscription = subscriptions[2];
+	assert.deepEqual(disableSubscription.path, expectedPath);
+});
+
+QUnit.test("testDisable", function(assert) {
+	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
+			.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
+	let spec = {
+			path: {},	
+			cPresentation: cPCollectionVarPresentation
+		};
+	let collectionVar = CORA.pCollectionVar(this.dependencies, spec);
+	let view = collectionVar.getView();
+	let valueView = view.childNodes[0];
+	assert.notOk(valueView.disabled)
+	collectionVar.disableCollectionVar();
+	
+	assert.ok(valueView.disabled)
+});

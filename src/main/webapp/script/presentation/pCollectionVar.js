@@ -40,46 +40,35 @@
 		let info;
 
 		const start = function() {
-			initializeGlobalVariables();
-			createValueViewAndAppendToView();
-			createInfoButtonAndAppendToView();
-			setOnBlurIfModeIsInput();
-			subscribeToPubSub();
-		};
-		
-		const initializeGlobalVariables = function() {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
-			let cPresentationGroup = CORA.coraData(presentationGroup);
-			metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			extractMetadataId();
 			cMetadataElement = getMetadataById(metadataId);
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			view = createBaseView();
-			originalClassName = view.className;  
-		};
-		
-		const createValueViewAndAppendToView = function() {
+			originalClassName = view.className;
 			valueView = createValueView();
 			view.appendChild(valueView);
-		};
-		
-		const createInfoButtonAndAppendToView = function() {
 			info = createInfoSpec();
 			let infoButton = info.getButton();
 			view.appendChild(infoButton);
-		};
-		
-		const setOnBlurIfModeIsInput = function() {
 			if (mode === "input") {
 				valueView.onblur = onBlur;
 			}
+			subscribeToPubSub();
 		};
-		
-		const subscribeToPubSub = function(){
+
+		const extractMetadataId = function() {
+			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
+			let cPresentationGroup = CORA.coraData(presentationGroup);
+			metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			pubSub.subscribe("disable", createTopLevelPath(), undefined, disableCollectionVar);
 		};
 
 		const createInfoSpec = function() {
@@ -90,60 +79,53 @@
 			defText = textProvider.getTranslation(defTextId);
 
 			let infoSpec = {
-				"appendTo": view,
-				"afterLevelChange": updateView,
-				"level1": [{
-					"className": "textView",
-					"text": text
+				appendTo: view,
+				afterLevelChange: updateView,
+				level1: [{
+					className: "textView",
+					text: text
 				}, {
-					"className": "defTextView",
-					"text": defText
+					className: "defTextView",
+					text: defText
 				}],
-				"level2": [{
-					"className": "textIdView",
-					"text": "textId: " + textId
+				level2: [{
+					className: "textIdView",
+					text: "textId: " + textId
 				}, {
-					"className": "defTextIdView",
-					"text": "defTextId: " + defTextId
+					className: "defTextIdView",
+					text: "defTextId: " + defTextId
 				}, {
-					"className": "metadataIdView",
-					"text": "metadataId: " + metadataId
+					className: "metadataIdView",
+					text: "metadataId: " + metadataId
 				}, {
-					"className": "technicalView",
-					"text": "nameInData: " + nameInData
+					className: "technicalView",
+					text: "nameInData: " + nameInData
 				}, {
-					"className": "technicalView",
-					"text": "presentationId: " + presentationId
+					className: "technicalView",
+					text: "presentationId: " + presentationId
 				}]
 			};
 			return CORA.info(infoSpec);
-		}
+		};
+		
 		const createBaseView = function() {
 			return CORA.gui.createSpanWithClassName("pCollVar " + presentationId);
 		};
 
 		const createValueView = function() {
 			if (mode === "input") {
-				return createCollectionInput();
+				return createInput();
 			}
 			return createOutput();
+		};
+
+		const createInput = function() {
+			return createCollectionInput();
 		};
 
 		const createCollectionInput = function() {
 			let inputNew = document.createElement("select");
 
-			appendEmptyTextOptionIfEmptyTextId(inputNew);
-
-			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
-
-			collectionItemReferencesChildren.forEach(function(ref) {
-				let option = createOptionForRef(ref);
-				inputNew.appendChild(option);
-			});
-			return inputNew;
-		};
-		
-		const appendEmptyTextOptionIfEmptyTextId = function(inputNew) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let cEmptyTextId = CORA.coraData(cPresentation
 					.getFirstChildByNameInData("emptyTextId"));
@@ -154,6 +136,14 @@
 				inputNew.appendChild(emptyTextOption);
 				inputNew.value = "";
 			}
+
+			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+
+			collectionItemReferencesChildren.forEach(function(ref) {
+				let option = createOptionForRef(ref);
+				inputNew.appendChild(option);
+			});
+			return inputNew;
 		};
 
 		const getCollectionItemReferencesChildren = function() {
@@ -184,7 +174,6 @@
 		const createOutput = function() {
 			return CORA.gui.createSpanWithClassName("value");
 		};
-
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			let cTextGroup = CORA.coraData(cMetadataElementIn
@@ -223,7 +212,6 @@
 			return collectionItemReferencesChildren.find(function(ref) {
 				let cItemRef = CORA.coraData(ref);
 				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-
 				let item = getMetadataById(itemRefId);
 				let refValue = item.getFirstAtomicValueByNameInData("nameInData");
 				return refValue === value;
@@ -234,7 +222,6 @@
 			let itemReference = findItemReferenceForValue(value);
 			let cItemRef = CORA.coraData(itemReference);
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-
 			let item = getMetadataById(itemRefId);
 			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
 			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -256,6 +243,42 @@
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
+		const createTopLevelPath = function() {
+			if (pathHasChildren()) {
+				let cPath = CORA.coraData(path);
+				return createPathWithOnlyTopLevelInformation(cPath);
+			}
+			return path;
+		};
+
+		const pathHasChildren = function() {
+			return path.children !== undefined;
+		};
+
+		const createPathWithOnlyTopLevelInformation = function(cPath) {
+			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
+			let newTopLevelPath = {
+				name: "linkedPath",
+				children: [{
+					name: "nameInData",
+					value: pathNameInData
+				}]
+			};
+			possiblyAddAttributes(cPath, newTopLevelPath);
+			return newTopLevelPath;
+		};
+
+		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
+			if (cPath.containsChildWithNameInData("attributes")) {
+				let attributes = cPath.getFirstChildByNameInData("attributes");
+				newTopLevelPath.children.push(attributes);
+			}
+		};
+
+		const disableCollectionVar = function() {
+			valueView.disabled = true;
+		};
+
 		const getText = function() {
 			return text;
 		};
@@ -268,8 +291,8 @@
 			updateView();
 			if (valueHasChanged()) {
 				let data = {
-					"data": valueView.value,
-					"path": path
+					data: valueView.value,
+					path: path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueView.value;
@@ -297,8 +320,8 @@
 		const getState = function() {
 			return state;
 		};
-		
-		const initializeViewModelObject = function(){
+
+		const initializeViewModelObject = function() {
 			view.modelObject = out;
 		};
 
@@ -313,9 +336,10 @@
 			getDefText: getDefText,
 			getState: getState,
 			onBlur: onBlur,
-			handleValidationError: handleValidationError
+			handleValidationError: handleValidationError,
+			disableCollectionVar: disableCollectionVar
 		});
-		
+
 		initializeViewModelObject();
 
 		return out;

@@ -68,11 +68,11 @@ var CORA = (function(cora) {
 			return recordPartPermissionCalculator
 				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
 		};
-		
-		const getCRef = function(childReference){
+
+		const getCRef = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			
+
 		}
 
 		const intitalizeChild = function(childReference) {
@@ -86,15 +86,15 @@ var CORA = (function(cora) {
 			let hasWritePermission = hasWritePermissions(childReference);
 			childInitializer.initializeTopLevel(hasWritePermission);
 		};
-		
-		const hasWritePermissions = function(childReference){
+
+		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			return recordPartPermissionCalculator
 				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
 		}
-		
+
 		const getSpec = function() {
 			return spec;
 		};

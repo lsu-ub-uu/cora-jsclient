@@ -1,4 +1,5 @@
 FROM ubuntu:latest
+ENV MOZ_FORCE_DISABLE_E10S=true
 ARG uid
 ARG gid
 ARG sut_path

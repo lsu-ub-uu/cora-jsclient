@@ -35,23 +35,23 @@ var CORA = (function(cora) {
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
 		};
-		
+
 		const createInfo = function() {
 			let infoSpec = {
-				"appendTo" : view,
-				"afterLevelChange" : updateClassName,
-				"level1" : [ {
-					"className" : "textView",
-					"text" : spec.info.text
+				"appendTo": view,
+				"afterLevelChange": updateClassName,
+				"level1": [{
+					"className": "textView",
+					"text": spec.info.text
 				}, {
-					"className" : "defTextView",
-					"text" : spec.info.defText
-				} ]
+					"className": "defTextView",
+					"text": spec.info.defText
+				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
 			return dependencies.infoFactory.factor(infoSpec);
 		};
-		
+
 		const possiblyAddLevel2Info = function(infoSpec) {
 			if (specInfoHasTechnicalInfo()) {
 				addLevelTechnicalInfoAsLevel2(infoSpec);
@@ -71,8 +71,8 @@ var CORA = (function(cora) {
 
 		const createTechInfoPart = function(techInfo) {
 			let techInfoPart = {
-				"className" : "technicalView",
-				"text" : techInfo.text
+				"className": "technicalView",
+				"text": techInfo.text
 			};
 
 			if (techInfo.onclickMethod !== undefined) {
@@ -98,7 +98,7 @@ var CORA = (function(cora) {
 		const stateIndicatesError = function() {
 			return state === "error";
 		};
-		
+
 		const stateIndicatesErrorStillFocused = function() {
 			return state === "errorStillFocused";
 		};
@@ -178,20 +178,20 @@ var CORA = (function(cora) {
 			state = stateIn;
 			updateClassName();
 		};
-		
-		const disable = function(){
+
+		const disable = function() {
 			valueView.disabled = true;
 		};
 
 		out = Object.freeze({
-			"type" : "pNumVarView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			setValue : setValue,
-			updateClassName : updateClassName,
-			setState : setState,
-			disable : disable
+			"type": "pNumVarView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			setValue: setValue,
+			updateClassName: updateClassName,
+			setState: setState,
+			disable: disable
 		});
 		start();
 		return out;

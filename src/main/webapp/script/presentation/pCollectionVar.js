@@ -107,7 +107,7 @@
 			};
 			return CORA.info(infoSpec);
 		};
-		
+
 		const createBaseView = function() {
 			return CORA.gui.createSpanWithClassName("pCollVar " + presentationId);
 		};

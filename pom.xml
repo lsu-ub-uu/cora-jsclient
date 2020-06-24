@@ -33,6 +33,7 @@
 		<docker.buildArg.sut_path>${project.basedir}</docker.buildArg.sut_path>
 		<docker.keepRunning>false</docker.keepRunning>
 		<docker.keepContainer>false</docker.keepContainer>
+		<docker.allContainers>true</docker.allContainers>
 		<docker.verbose>true</docker.verbose>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>

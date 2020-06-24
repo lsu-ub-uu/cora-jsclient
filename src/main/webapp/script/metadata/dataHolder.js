@@ -142,7 +142,7 @@ var CORA = (function(cora) {
 			try {
 				setValueInContainerListUsingPath(path, value);
 			} catch (e) {
-				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder.");
+				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder:" + e);
 			}
 		};
 
@@ -218,7 +218,8 @@ var CORA = (function(cora) {
 				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(parentPath)
-						+ ") not found in dataContainers:" + JSON.stringify(dataContainer));
+						+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
+						+ " Error:" + e);
 			}
 		};
 
@@ -240,7 +241,7 @@ var CORA = (function(cora) {
 				removeContainerWithPath(path);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder"
-						+ " when trying to remove.");
+						+ " when trying to remove:" + e);
 			}
 		};
 

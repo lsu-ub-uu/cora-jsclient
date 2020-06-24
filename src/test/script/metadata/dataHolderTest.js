@@ -808,14 +808,25 @@ QUnit.test("testHandleMessageRemoveWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataHolder when trying to remove.";
+	let messageToHandle = "x/y/z/remove";
+	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder when trying to remove";
 
-	assert.throws(function() {
-		dataHolder.handleMsg({}, "x/y/z/remove");
-	},
-		new Error(expectedErrorMessage)
-	);
+	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
 });
+
+const assertThrownException = function(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith) {
+	assert.throws(function() {
+		dataHolder.handleMsg({}, messageToHandle);
+	},
+		function(caughtError) {
+			return checkCatchedErrorStartsWith(caughtError, expectedErrorMessageStartsWith)
+		}
+	);
+};
+
+const checkCatchedErrorStartsWith = function(caughtError, expectedErrorMessageStartsWith) {
+	return caughtError.toString().startsWith(expectedErrorMessageStartsWith);
+};
 
 QUnit.test("testHandleMessageMoveAfter", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
@@ -1441,11 +1452,11 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath
 	let path2 = createLinkedPathWithNameInData("myLinkNOT");
 	dataFromMsg.path = path2;
 
-	let expectedErrorMessage = "path({\"name\":\"linkedPath\",\"children\":[{\"name\":\"nameInData\",\"value\":\"myLinkNOT\"}]}) not found in dataHolder:Error: name(myLinkNOT) with attributes (undefined) and repeatId (undefined) not found in children to coraData";
+	let expectedErrorMessageStartsWith = "path({\"name\":\"linkedPath\",\"children\":[{\"name\":\"nameInData\",\"value\":\"myLinkNOT\"}]}) not found in dataHolder:Error: name(myLinkNOT) with attributes (undefined) and repeatId (undefined) not found in children to coraData";
 
 	assert.throws(function() {
 		dataHolder.handleMsg(dataFromMsg, msg);
-	}, new Error(expectedErrorMessage));
+	}, new Error(expectedErrorMessageStartsWith));
 });
 
 
@@ -1509,13 +1520,15 @@ QUnit.test("testHandleMessageAddWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]}";
+	let messageToHandle = "root/textVariableId/add";
+	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]}";
 
-	assert.throws(function() {
-		dataHolder.handleMsg({}, "root/textVariableId/add");
-	},
-		new Error(expectedErrorMessage)
-	);
+	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
+//	assert.throws(function() {
+//		dataHolder.handleMsg({}, "root/textVariableId/add");
+//	},
+//		new Error(expectedErrorMessageStartsWith)
+//	);
 });
 
 QUnit.test("testHandleMessageSetValue", function(assert) {
@@ -1560,14 +1573,10 @@ QUnit.test("testHandleMessageSetValueWrongPath", function(assert) {
 	let path3 = createLinkedPathWithNameInData("groupIdOneTextChild");
 	path3.children.push(createLinkedPathWithNameInData("textVariableId"));
 
-	let expectedErrorMessage = "path(undefined) not found in dataHolder.";
+	let messageToHandle = "root/textVariableId/setValue";
+	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder";
 
-	assert.throws(function() {
-		dataHolder.handleMsg({}, "root/textVariableId/setValue");
-	},
-		new Error(expectedErrorMessage)
-	);
-
+	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
 });
 
 QUnit.test("testHandleMessageNoHandledType", function(assert) {

@@ -22,6 +22,6 @@ module.exports = function(config) {
 	config.set(karma_config({
 		singleRun : false,
 		reporters : [ 'dots', 'coverage', 'html' ],
-		browsers : [ 'FirefoxHeadless' ]
+		browsers : [ 'FirefoxHeadless', 'ChromiumHeadless' ]
 	}));
 };

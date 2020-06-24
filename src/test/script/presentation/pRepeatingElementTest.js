@@ -287,19 +287,26 @@ QUnit.test("testHideDragButton", function(assert) {
 	assert.visible(dragButton, "buttonView should be visible");
 });
 
-QUnit.test("testHideDragButtonWhenDragButtonNotPresent", function(assert) {
+QUnit.only("testHideAndShowDragButtonWhenDragButtonNotPresent", function(assert) {
 	this.spec.userCanMove = false;
 	var pRepeatingElement = CORA.pRepeatingElement(this.dependencies, this.spec);
 	var view = pRepeatingElement.getView();
 	this.fixture.appendChild(view);
 
 	var buttonView = view.childNodes[0];
+	var removeButton = buttonView.childNodes[0];
+	assert.strictEqual(removeButton.className, "iconButton removeButton");
+	var addBeforeButton = buttonView.childNodes[1];
+	assert.strictEqual(addBeforeButton.className, "iconButton addBeforeButton");
 	
-	assert.strictEqual(buttonView.childNodes.length, 2);
+	let numOfChildrenWhenDragButtonIsMissing = 2;
+	
+	assert.strictEqual(buttonView.childNodes.length, numOfChildrenWhenDragButtonIsMissing);
 
-	//since dragButton is undefined, hide is not called from hideDragButton(), 
-	//this crashed before
+	//since dragButton is undefined, hide/show is not called from 
+	//hideDragButton()/showDragButton(), this crashed before
 	pRepeatingElement.hideDragButton();
+	pRepeatingElement.showDragButton();
 });
 
 QUnit.test("testAddBeforeButtonOnclick", function(assert) {

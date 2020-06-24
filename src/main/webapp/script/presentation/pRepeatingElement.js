@@ -217,7 +217,9 @@ var CORA = (function(cora) {
 		};
 
 		const hideDragButton = function() {
-			hide(dragButton);
+			if(dragButton !== undefined){
+				hide(dragButton);
+			}
 		};
 
 		const showDragButton = function() {

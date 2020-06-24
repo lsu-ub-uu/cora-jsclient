@@ -21,38 +21,38 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
-			fixture, pVarViewFactory) {
+		fixture, pVarViewFactory) {
 		let factor = function(path, metadataIdUsedInData, pVarPresentationId) {
 			let cPVarPresentation = CORA.coraData(metadataProvider
-					.getMetadataById(pVarPresentationId));
+				.getMetadataById(pVarPresentationId));
 			let dependencies = {
-				"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy(),
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"jsBookkeeper" : jsBookkeeper,
-				"pVarViewFactory" : pVarViewFactory
+				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
+				"metadataProvider": metadataProvider,
+				"pubSub": pubSub,
+				"textProvider": textProvider,
+				"jsBookkeeper": jsBookkeeper,
+				"pVarViewFactory": pVarViewFactory
 			};
 			let spec = {
-				"path" : path,
-				"metadataIdUsedInData" : metadataIdUsedInData,
-				"cPresentation" : cPVarPresentation
+				"path": path,
+				"metadataIdUsedInData": metadataIdUsedInData,
+				"cPresentation": cPVarPresentation
 			};
 			let pVar = CORA.pVar(dependencies, spec);
 			return {
-				spec : spec,
-				pVar : pVar,
-				fixture : fixture,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub,
-				textProvider : textProvider,
-				jsBookkeeper : jsBookkeeper,
-				dependencies : dependencies
+				spec: spec,
+				pVar: pVar,
+				fixture: fixture,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				jsBookkeeper: jsBookkeeper,
+				dependencies: dependencies
 			};
 
 		};
 		return Object.freeze({
-			factor : factor
+			factor: factor
 		});
 	};
 
@@ -87,7 +87,7 @@ var CORATEST = (function(coraTest) {
 		let pVar = attachedPVar.pVar;
 		assert.strictEqual(pVar.getText(), "Exempel textvariabel");
 		assert.strictEqual(pVar.getDefText(), "Detta är en exempeldefinition "
-				+ "för en textvariabel.");
+			+ "för en textvariabel.");
 		assert.strictEqual(pVar.getRegEx(), "^[0-9A-Öa-ö\\s!*.]{2,50}$");
 	};
 
@@ -104,7 +104,7 @@ var CORATEST = (function(coraTest) {
 }(CORATEST || {}));
 
 QUnit.module("presentation/pVarTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -112,9 +112,9 @@ QUnit.module("presentation/pVarTest.js", {
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
 		this.pVarFactory = CORATEST.attachedPVarFactory(this.metadataProvider, this.pubSub,
-				this.textProvider, this.jsBookkeeper, this.fixture, this.pVarViewFactory);
+			this.textProvider, this.jsBookkeeper, this.fixture, this.pVarViewFactory);
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -133,7 +133,7 @@ QUnit.test("testInitText", function(assert) {
 	assert.strictEqual(attachedPVar.pVar.type, "pVar");
 
 	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path,
-			attachedPVar.spec.path);
+		attachedPVar.spec.path);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -147,35 +147,35 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "input",
-		"mode" : "input",
-		"outputFormat" : "text",
-		"inputFormat" : "text",
-		"placeholderText" : "Skriv din text här",
-		"presentationId" : "pVarTextVariableId"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "input",
+		"mode": "input",
+		"outputFormat": "text",
+		"inputFormat": "text",
+		"placeholderText": "Skriv din text här",
+		"presentationId": "pVarTextVariableId"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: pVarTextVariableId"
+		"text": "presentationId: pVarTextVariableId"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -193,7 +193,7 @@ QUnit.test("testGetRegexpShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", f
 QUnit.test("testInitTextArea", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, attachedPVar.spec.path,
-			attachedPVar.spec.path);
+		attachedPVar.spec.path);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -203,16 +203,16 @@ QUnit.test("testInitTextArea", function(assert) {
 
 QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
 	let firstLevelPath = CORATEST.firstLevelPath;
-	
+
 	let expectedPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textVariableId"
-		} ]
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textVariableId"
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(firstLevelPath, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPath, expectedPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
@@ -223,18 +223,18 @@ QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
 
 QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 	let firstLevelPathWithRepeatId = CORATEST.firstLevelPathWithRepeatId;
-	
+
 	let expectedDisablePath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textVariableId"
-		} ]
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textVariableId"
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(firstLevelPathWithRepeatId, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, firstLevelPathWithRepeatId,
-			expectedDisablePath);
+		expectedDisablePath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -245,14 +245,14 @@ QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
 	let pathWithTwoLevels = CORATEST.pathWithTwoLevels;
 	let topLevelPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "recordInfo"
-		} ]
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(pathWithTwoLevels, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithTwoLevels, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
@@ -263,34 +263,34 @@ QUnit.test("testInitTextAreaWithTwoLevelPath", function(assert) {
 
 QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 	let pathWithThreeLevels = {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "recordInfo"
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "dataDivider"
 			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "dataDivider"
-				}, {
-					"name" : "linkedPath",
-					"children" : [ {
-						"name" : "nameInData",
-						"value" : "linkedRecordType"
-					} ]
-				} ]
-			} ]
-		};
-	
+				"name": "linkedPath",
+				"children": [{
+					"name": "nameInData",
+					"value": "linkedRecordType"
+				}]
+			}]
+		}]
+	};
+
 	let expectedPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "recordInfo"
-		} ]
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithThreeLevels, expectedPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
@@ -302,14 +302,14 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 	let pathWithRepeatId = CORATEST.twoLevelPathWithRepeatId;
 	let topLevelPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "userRole"
-		} ]
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "userRole"
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithRepeatId, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
@@ -321,27 +321,27 @@ QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 	let twoLevelPathWithAttribute = CORATEST.twoLevelPathWithAttribute;
 	let topLevelPath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textPart"
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textPart"
 		}, {
-			"name" : "attributes",
-			"children" : [ {
-				"name" : "attribute",
-				"repeatId" : "1",
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : "type"
+			"name": "attributes",
+			"children": [{
+				"name": "attribute",
+				"repeatId": "1",
+				"children": [{
+					"name": "attributeName",
+					"value": "type"
 				}, {
-					"name" : "attributeValue",
-					"value" : "alternative"
-				} ]
-			} ]
-		} ]
+					"name": "attributeValue",
+					"value": "alternative"
+				}]
+			}]
+		}]
 	};
 	let attachedPVar = this.pVarFactory.factor(twoLevelPathWithAttribute, "textVariableId",
-			"textVariableIdTextAreaPVar");
+		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, twoLevelPathWithAttribute, topLevelPath);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
@@ -355,75 +355,75 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "textarea",
-		"mode" : "input",
-		"outputFormat" : "text",
-		"inputFormat" : "text",
-		"placeholderText" : "Skriv din text här",
-		"presentationId" : "textVariableIdTextAreaPVar"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "textarea",
+		"mode": "input",
+		"outputFormat": "text",
+		"inputFormat": "text",
+		"placeholderText": "Skriv din text här",
+		"presentationId": "textVariableIdTextAreaPVar"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: textVariableIdTextAreaPVar"
+		"text": "presentationId: textVariableIdTextAreaPVar"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
 
 QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
-			"textVariableIdShowTextAreaFalsePVar");
+		"textVariableIdShowTextAreaFalsePVar");
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "input",
-		"mode" : "input",
-		"outputFormat" : "text",
-		"inputFormat" : "text",
-		"placeholderText" : "Skriv din text här",
-		"presentationId" : "textVariableIdShowTextAreaFalsePVar"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "input",
+		"mode": "input",
+		"outputFormat": "text",
+		"inputFormat": "text",
+		"placeholderText": "Skriv din text här",
+		"presentationId": "textVariableIdShowTextAreaFalsePVar"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: textVariableIdShowTextAreaFalsePVar"
+		"text": "presentationId: textVariableIdShowTextAreaFalsePVar"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -437,38 +437,38 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 
 QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
-			"pVarTextVariableIdInputPassword");
+		"pVarTextVariableIdInputPassword");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "input",
-		"mode" : "input",
-		"outputFormat" : "text",
-		"inputFormat" : "password",
-		"presentationId" : "pVarTextVariableId"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "input",
+		"mode": "input",
+		"outputFormat": "text",
+		"inputFormat": "password",
+		"presentationId": "pVarTextVariableId"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: pVarTextVariableId"
+		"text": "presentationId: pVarTextVariableId"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -487,8 +487,8 @@ QUnit.test("testSetValueInput", function(assert) {
 QUnit.test("testHandleMessage", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	let data = {
-		"data" : "A new value",
-		"path" : {}
+		"data": "A new value",
+		"path": {}
 	};
 	attachedPVar.pVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -498,8 +498,8 @@ QUnit.test("testHandleMessage", function(assert) {
 QUnit.test("testChangedValueEmpty", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	let data = {
-		"data" : "notEmpty",
-		"path" : {}
+		"data": "notEmpty",
+		"path": {}
 	};
 	attachedPVar.pVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -533,8 +533,8 @@ QUnit.test("testChangedValueError", function(assert) {
 QUnit.test("testHandleValidationError", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	let message = {
-		"metadataId" : "textVariableId",
-		"path" : {}
+		"metadataId": "textVariableId",
+		"path": {}
 	};
 	attachedPVar.pVar.handleValidationError(message);
 	assert.equal(attachedPVar.pVar.getState(), "error");
@@ -545,8 +545,8 @@ QUnit.test("testHandleValidationError", function(assert) {
 QUnit.test("testChangedValueEmpty", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	let data = {
-		"data" : "notEmpty",
-		"path" : {}
+		"data": "notEmpty",
+		"path": {}
 	};
 	attachedPVar.pVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -581,34 +581,34 @@ QUnit.test("testInitTextOutput", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "input",
-		"mode" : "output",
-		"outputFormat" : "text",
-		"inputFormat" : "text",
-		"presentationId" : "pVarTextVariableIdOutput"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "input",
+		"mode": "output",
+		"outputFormat": "text",
+		"inputFormat": "text",
+		"presentationId": "pVarTextVariableIdOutput"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: pVarTextVariableIdOutput"
+		"text": "presentationId: pVarTextVariableIdOutput"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -618,38 +618,38 @@ QUnit.test("testInitTextOutput", function(assert) {
 
 QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
-			"pVarTextVariableIdOutputImage");
+		"pVarTextVariableIdOutputImage");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info" : {
-			"defText" : "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo" : [],
-			"text" : "Exempel textvariabel"
+		"info": {
+			"defText": "Detta är en exempeldefinition för en textvariabel.",
+			"technicalInfo": [],
+			"text": "Exempel textvariabel"
 		},
-		"onblurFunction" : attachedPVar.pVar.onBlur,
-		"onkeyupFunction" : attachedPVar.pVar.onkeyup,
-		"inputType" : "input",
-		"mode" : "output",
-		"outputFormat" : "image",
-		"inputFormat" : "text",
-		"presentationId" : "pVarTextVariableId"
+		"onblurFunction": attachedPVar.pVar.onBlur,
+		"onkeyupFunction": attachedPVar.pVar.onkeyup,
+		"inputType": "input",
+		"mode": "output",
+		"outputFormat": "image",
+		"inputFormat": "text",
+		"presentationId": "pVarTextVariableId"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text" : "textId: textVariableIdText",
-		"onclickMethod" : attachedPVar.pVar.openTextIdRecord
+		"text": "textId: textVariableIdText",
+		"onclickMethod": attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text" : "defTextId: textVariableIdDefText",
-		"onclickMethod" : attachedPVar.pVar.openDefTextIdRecord
+		"text": "defTextId: textVariableIdDefText",
+		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text" : "metadataId: textVariableId",
-		"onclickMethod" : attachedPVar.pVar.openMetadataIdRecord
+		"text": "metadataId: textVariableId",
+		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text" : "nameInData: textVariableId"
+		"text": "nameInData: textVariableId"
 	}, {
-		"text" : "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text" : "presentationId: pVarTextVariableId"
+		"text": "presentationId: pVarTextVariableId"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -668,7 +668,7 @@ QUnit.test("testSetValueTextOutput", function(assert) {
 
 QUnit.test("testSetValueTextOutputFormatImage", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId",
-			"pVarTextVariableIdOutputImage");
+		"pVarTextVariableIdOutputImage");
 	attachedPVar.valueView;
 
 	attachedPVar.pVar.setValue("http://www.some.domain.nu/image01.jpg");
@@ -679,8 +679,8 @@ QUnit.test("testSetValueTextOutputFormatImage", function(assert) {
 QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 	let attachedPVar = this.pVarFactory.factor({}, "textVariableId", "pVarTextVariableId");
 	let message = {
-		"metadataId" : "textVariableId",
-		"path" : {}
+		"metadataId": "textVariableId",
+		"path": {}
 	};
 	attachedPVar.pVar.handleValidationError(message);
 	assert.equal(attachedPVar.pVar.getState(), "error");
@@ -688,8 +688,8 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 	assert.equal(pVarViewSpy.getState(), "error");
 
 	let data = {
-		"data" : "A new value",
-		"path" : {}
+		"data": "A new value",
+		"path": {}
 	};
 	attachedPVar.pVar.handleMsg(data);
 	assert.equal(pVarViewSpy.getState(), "ok");
@@ -704,13 +704,13 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 
 	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
 	let expectedOpenInfo = {
-		"readLink" : {
-			"requestMethod" : "GET",
-			"rel" : "read",
-			"url" : "http://localhost:8080/therest/rest/record/text/" + "textVariableId" + "Text",
-			"accept" : "application/vnd.uub.record+json"
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/text/" + "textVariableId" + "Text",
+			"accept": "application/vnd.uub.record+json"
 		},
-		"loadInBackground" : "false"
+		"loadInBackground": "false"
 	};
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
@@ -730,14 +730,14 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 
 	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
 	let expectedOpenInfo = {
-		"readLink" : {
-			"requestMethod" : "GET",
-			"rel" : "read",
-			"url" : "http://localhost:8080/therest/rest/record/text/" + "textVariableId"
-					+ "DefText",
-			"accept" : "application/vnd.uub.record+json"
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/text/" + "textVariableId"
+				+ "DefText",
+			"accept": "application/vnd.uub.record+json"
 		},
-		"loadInBackground" : "false"
+		"loadInBackground": "false"
 	};
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
@@ -757,14 +757,14 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 
 	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
 	let expectedOpenInfo = {
-		"readLink" : {
-			"requestMethod" : "GET",
-			"rel" : "read",
-			"url" : "http://localhost:8080/therest/rest/record/" + "metadataTextVariable/"
-					+ "textVariableTextVar",
-			"accept" : "application/vnd.uub.record+json"
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/" + "metadataTextVariable/"
+				+ "textVariableTextVar",
+			"accept": "application/vnd.uub.record+json"
 		},
-		"loadInBackground" : "false"
+		"loadInBackground": "false"
 	};
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");

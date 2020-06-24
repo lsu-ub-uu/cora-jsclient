@@ -95,16 +95,16 @@ CORATEST.createChildReferenceForChildInitializerWithNoRepeatId = function(linked
 };
 
 QUnit.test("testInit", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildInitializer.type, "metadataChildInitializer");
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildInitializer.getSpec(), this.spec);
 });
 QUnit.test("testGetDependecies", function(assert) {
-	var metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
+	let metadataChildInitializer = CORA.metadataChildInitializer(this.dependencies, this.spec);
 	assert.strictEqual(metadataChildInitializer.getDependencies(), this.dependencies);
 });
 

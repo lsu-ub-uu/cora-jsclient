@@ -82,7 +82,6 @@ var CORA = (function(cora) {
 				data: spec.data,
 				path: nextLevelPath
 			};
-			//possiblypublishDisableMessage - var??
 			if (isGroup()) {
 				initializeMetadataGroup(nextLevelPath);
 			} else if (isRecordLink()) {

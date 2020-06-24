@@ -73,33 +73,33 @@ QUnit.module("presentation/pVarViewTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	assert.strictEqual(pVarView.type, "pVarView");
 	assert.ok(this.pVarView);
 });
 
 QUnit.test("getSpec", function(assert) {
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	assert.strictEqual(pVarView.getSpec(), this.spec);
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	assert.strictEqual(pVarView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("getView", function(assert) {
-	var view = this.getView();
+	let view = this.getView();
 	assert.strictEqual(view.nodeName, "SPAN");
 });
 
 QUnit.test("testClassName", function(assert) {
-	var view = this.getView();
+	let view = this.getView();
 	assert.strictEqual(view.className, "pVar somePresentationId");
 });
 
 QUnit.test("testInfoSpec", function(assert) {
-	var expectedSpec = {
+	let expectedSpec = {
 		"appendTo" : {},
 		"level1" : [ {
 			"className" : "textView",
@@ -121,9 +121,9 @@ QUnit.test("testInfoSpec", function(assert) {
 			"text" : "metadataId: metadataId"
 		} ]
 	};
-	var pVarView = this.getPVarView();
-	var infoSpy = this.dependencies.infoFactory.getFactored(0);
-	var usedSpec = infoSpy.getSpec();
+	let pVarView = this.getPVarView();
+	let infoSpy = this.dependencies.infoFactory.getFactored(0);
+	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
 	assert.strictEqual(usedSpec.appendTo, this.getView());
 	assert.strictEqual(usedSpec.afterLevelChange, pVarView.updateClassName);
@@ -133,14 +133,14 @@ QUnit.test("testInfoSpec", function(assert) {
 
 });
 QUnit.test("testInfoButtonAddedToView", function(assert) {
-	var view = this.getView();
+	let view = this.getView();
 	assert.strictEqual(view.childNodes[1].className, "infoButtonSpy");
 
 });
 
 QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 	this.spec.info.technicalInfo = null;
-	var expectedSpec = {
+	let expectedSpec = {
 		"appendTo" : {},
 		"level1" : [ {
 			"className" : "textView",
@@ -150,17 +150,17 @@ QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 			"text" : "someDefText"
 		} ]
 	};
-	var pVarView = this.getPVarView();
-	var infoSpy = this.dependencies.infoFactory.getFactored(0);
-	var usedSpec = infoSpy.getSpec();
+	let pVarView = this.getPVarView();
+	let infoSpy = this.dependencies.infoFactory.getFactored(0);
+	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
 	assert.strictEqual(usedSpec.appendTo, pVarView.getView());
 });
 
 QUnit.test("testActiveInfoShownInClassName", function(assert) {
-	var pVarView = this.getPVarView();
-	var view = this.getView();
-	var infoSpy = this.dependencies.infoFactory.getFactored(0);
+	let pVarView = this.getPVarView();
+	let view = this.getView();
+	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	assert.strictEqual(view.className, "pVar somePresentationId");
 	infoSpy.setInfoLevel(0);
 	pVarView.updateClassName();
@@ -174,9 +174,9 @@ QUnit.test("testActiveInfoShownInClassName", function(assert) {
 });
 
 QUnit.test("testStateShownInClassName", function(assert) {
-	var pVarView = this.getPVarView();
-	var view = this.getView();
-	var infoSpy = this.dependencies.infoFactory.getFactored(0);
+	let pVarView = this.getPVarView();
+	let view = this.getView();
+	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	assert.strictEqual(view.className, "pVar somePresentationId");
 	pVarView.setState("error");
 	assert.strictEqual(view.className, "pVar somePresentationId error");
@@ -191,21 +191,21 @@ QUnit.test("testStateShownInClassName", function(assert) {
 });
 
 QUnit.test("testInput", function(assert) {
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
 });
 
 QUnit.test("testInputUnknownTypeIsText", function(assert) {
 	this.spec.inputType = undefined;
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
 });
 
 QUnit.test("testInputTypeTextArea", function(assert) {
 	this.spec.inputType = "textarea";
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "TEXTAREA");
 	assert.strictEqual(valueView.type, "textarea");
 });
@@ -214,48 +214,48 @@ QUnit.test("testInputFormatPassword", function(assert) {
 	this.spec.inputType = "input";
 	this.spec.inputFormat = "password";
 	
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "password");
 });
 
 QUnit.test("testInputPlaceholder", function(assert) {
 	this.spec.placeholderText = "placeholderText";
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.placeholder, "placeholderText");
 });
 
 QUnit.test("testInputOnblur", function(assert) {
-	var valueFromView = "";
+	let valueFromView = "";
 	this.spec.onblurFunction = function(value) {
 		valueFromView = value;
 	};
 
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	pVarView.setValue("a Value");
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	CORATESTHELPER.simulateBlur(this.getValueView());
 	assert.strictEqual(valueFromView, "a Value");
 });
 QUnit.test("testInputOnblurNotSet", function(assert) {
-	var valueFromView = "";
+	let valueFromView = "";
 
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	pVarView.setValue("a Value");
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	CORATESTHELPER.simulateBlur(this.getValueView());
 	assert.strictEqual(valueFromView, "");
 });
 
 QUnit.test("testInputOnkeyup", function(assert) {
-	var valueFromView = "";
+	let valueFromView = "";
 	this.spec.onkeyupFunction = function(value) {
 		valueFromView = value;
 	};
 
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	pVarView.setValue("a Value");
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 
 	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
 
@@ -263,11 +263,11 @@ QUnit.test("testInputOnkeyup", function(assert) {
 });
 
 QUnit.test("testInputOnkeyupNotSet", function(assert) {
-	var valueFromView = "";
+	let valueFromView = "";
 
-	var pVarView = this.getPVarView();
+	let pVarView = this.getPVarView();
 	pVarView.setValue("a Value");
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 
 	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
 
@@ -276,7 +276,7 @@ QUnit.test("testInputOnkeyupNotSet", function(assert) {
 
 QUnit.test("testOutputText", function(assert) {
 	this.spec.mode = "output";
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "SPAN");
 	assert.strictEqual(valueView.className,"value");
 });
@@ -284,13 +284,13 @@ QUnit.test("testOutputText", function(assert) {
 QUnit.test("testOutputImage", function(assert) {
 	this.spec.mode = "output";
 	this.spec.outputFormat = "image";
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "IMG");
 });
 
 QUnit.test("testSetValueInput", function(assert) {
-	var pVarView = this.getPVarView();
-	var valueView = this.getValueView();
+	let pVarView = this.getPVarView();
+	let valueView = this.getValueView();
 
 	assert.strictEqual(valueView.value, "");
 	pVarView.setValue("a Value");
@@ -299,8 +299,8 @@ QUnit.test("testSetValueInput", function(assert) {
 
 QUnit.test("testSetValueOutputText", function(assert) {
 	this.spec.mode = "output";
-	var pVarView = this.getPVarView();
-	var valueView = this.getValueView();
+	let pVarView = this.getPVarView();
+	let valueView = this.getValueView();
 
 	assert.strictEqual(valueView.innerHTML, "");
 	pVarView.setValue("a Value");
@@ -310,8 +310,8 @@ QUnit.test("testSetValueOutputText", function(assert) {
 QUnit.test("testSetValueOutputImage", function(assert) {
 	this.spec.mode = "output";
 	this.spec.outputFormat = "image";
-	var pVarView = this.getPVarView();
-	var valueView = this.getValueView();
+	let pVarView = this.getPVarView();
+	let valueView = this.getValueView();
 
 	assert.strictEqual(valueView.src, "");
 	pVarView.setValue("http://www.some.domain.nu/image01.jpg");
@@ -321,15 +321,15 @@ QUnit.test("testSetValueOutputImage", function(assert) {
 QUnit.test("testOutputLink", function(assert) {
 	this.spec.mode = "output";
 	this.spec.outputFormat = "link";
-	var valueView = this.getValueView();
+	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "A");
 });
 
 QUnit.test("testSetValueOutputLink", function(assert) {
 	this.spec.mode = "output";
 	this.spec.outputFormat = "link";
-	var pVarView = this.getPVarView();
-	var valueView = this.getValueView();
+	let pVarView = this.getPVarView();
+	let valueView = this.getValueView();
 
 	assert.strictEqual(valueView.href, "");
 	pVarView.setValue("http://www.some.domain.nu");
@@ -338,8 +338,8 @@ QUnit.test("testSetValueOutputLink", function(assert) {
 });
 
 QUnit.test("testDisableInput", function(assert) {
-	var pVarView = this.getPVarView();
-	var valueView = this.getValueView();
+	let pVarView = this.getPVarView();
+	let valueView = this.getValueView();
 
 	assert.strictEqual(valueView.disabled, false);
 	pVarView.disable();

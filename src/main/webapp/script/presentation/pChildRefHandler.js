@@ -113,7 +113,7 @@ var CORA = (function(cora) {
 			if (isStaticNoOfChildren) {
 				return false;
 			}
-			if(!spec.hasWritePermissionsForRecordPart){
+			if (!spec.hasWritePermissionsForRecordPart) {
 				return false;
 			}
 			return true;
@@ -126,7 +126,7 @@ var CORA = (function(cora) {
 			if (!isRepeating) {
 				return false;
 			}
-			if(!spec.hasWritePermissionsForRecordPart){
+			if (!spec.hasWritePermissionsForRecordPart) {
 				return false;
 			}
 			return true;
@@ -145,7 +145,7 @@ var CORA = (function(cora) {
 			if (userCanUploadFile) {
 				return false;
 			}
-			if(!spec.hasWritePermissionsForRecordPart){
+			if (!spec.hasWritePermissionsForRecordPart) {
 				return false;
 			}
 			return true;
@@ -231,11 +231,11 @@ var CORA = (function(cora) {
 		};
 
 		const showAddButton = function() {
-			return spec.hasWritePermissionsForRecordPart 
-			&& additionalChildrenCanBeAdded();
+			return spec.hasWritePermissionsForRecordPart
+				&& additionalChildrenCanBeAdded();
 		};
-		
-		const  additionalChildrenCanBeAdded = function(){
+
+		const additionalChildrenCanBeAdded = function() {
 			return ((isRepeating && !isStaticNoOfChildren) || calculateIsZeroToOne());
 		}
 

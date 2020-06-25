@@ -20,8 +20,8 @@
 	<name>JS Client for Cora</name>
 
 	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>12</maven.compiler.source>
+		<maven.compiler.target>12</maven.compiler.target>
 		<sonar.language>js</sonar.language>
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 		<sonar.sources>src/main/webapp/script</sonar.sources>
@@ -34,6 +34,8 @@
 		<docker.keepRunning>false</docker.keepRunning>
 		<docker.keepContainer>false</docker.keepContainer>
 		<docker.verbose>true</docker.verbose>
+		<docker.buildArg.uid>1001</docker.buildArg.uid>
+		<docker.buildArg.gid>1001</docker.buildArg.gid>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
 		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>

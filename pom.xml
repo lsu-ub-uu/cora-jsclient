@@ -6,9 +6,12 @@
 	be useful, ~ but WITHOUT ANY WARRANTY; without even the implied warranty 
 	of ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the ~ GNU General 
 	Public License for more details. ~ ~ You should have received a copy of the 
-	GNU General Public License ~ along with Cora. If not, see <http://www.gnu.org/licenses />. -->
+	GNU General Public License ~ along with Cora. If not, see <http://www.gnu.org/licenses 
+	/>. -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -50,8 +53,8 @@
 		<connection>scm:git:https://github.com/lsu-ub-uu/cora-jsclient.git</connection>
 		<developerConnection>scm:git:https://github.com/lsu-ub-uu/cora-jsclient.git</developerConnection>
 		<url>https://github.com/lsu-ub-uu/cora-jsclient.git</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<profiles>
 		<profile>
@@ -150,6 +153,7 @@
 							<execution>
 								<id>Build karma docker and run tests</id>
 								<phase>pre-integration-test</phase>
+								<!-- <phase>none</phase> -->
 								<goals>
 									<!-- "build" should be used to create the images with the artifact -->
 									<goal>build</goal>
@@ -159,6 +163,7 @@
 							<execution>
 								<id>Stop karma container</id>
 								<phase>post-integration-test</phase>
+								<!-- <phase>none</phase> -->
 								<goals>
 									<goal>stop</goal>
 								</goals>
@@ -193,6 +198,11 @@
 						</dependencies>
 					</plugin>
 				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>skip-karma-tests</id>
+			<build>
 			</build>
 		</profile>
 	</profiles>

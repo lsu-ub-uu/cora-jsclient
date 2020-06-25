@@ -116,8 +116,7 @@
 							<images>
 								<image>
 									<alias>karma</alias>
-									<name>karma-browser-test-runner:latest</name>
-<!-- 									<name>karma-test-browser:latest</name> -->
+									<name>karma-test:latest</name>
 									<build>
 										<contextDir>${project.basedir}</contextDir>
 										<dockerFile>Dockerfile</dockerFile>
@@ -145,9 +144,9 @@
 								<id>start</id>
 								<phase>test</phase>
 								<goals>
-<!-- 									<goal>build</goal> -->
-<!-- 									<goal>start</goal> -->
-									<goal>remove</goal>
+									<goal>build</goal>
+									<goal>start</goal>
+<!-- 									<goal>remove</goal> -->
 								</goals>
 							</execution>
 						</executions>

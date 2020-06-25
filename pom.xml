@@ -116,7 +116,8 @@
 							<images>
 								<image>
 									<alias>karma</alias>
-									<name>karma-test-browser:latest</name>
+									<name>karma-browser-test-runner:latest</name>
+<!-- 									<name>karma-test-browser:latest</name> -->
 									<build>
 										<contextDir>${project.basedir}</contextDir>
 										<dockerFile>Dockerfile</dockerFile>

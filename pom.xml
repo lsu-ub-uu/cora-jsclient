@@ -144,8 +144,9 @@
 								<id>start</id>
 								<phase>test</phase>
 								<goals>
-									<goal>build</goal>
-									<goal>start</goal>
+<!-- 									<goal>build</goal> -->
+<!-- 									<goal>start</goal> -->
+									<goal>remove</goal>
 								</goals>
 							</execution>
 						</executions>

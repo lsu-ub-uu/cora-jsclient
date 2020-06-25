@@ -57,11 +57,11 @@
 			<build>
 				<pluginManagement>
 					<plugins>
-						<plugin>
-							<groupId>com.githug.eirslett</groupId>
-							<artifactId>frontend-maven-plugin</artifactId>
-							<version>${frontend-maven-plugin.version}</version>
-						</plugin>
+<!-- 						<plugin> -->
+<!-- 							<groupId>com.githug.eirslett</groupId> -->
+<!-- 							<artifactId>frontend-maven-plugin</artifactId> -->
+<!-- 							<version>${frontend-maven-plugin.version}</version> -->
+<!-- 						</plugin> -->
 						<plugin>
 							<groupId>io.fabric8</groupId>
 							<artifactId>docker-maven-plugin</artifactId>
@@ -75,40 +75,40 @@
 					</plugins>
 				</pluginManagement>
 				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend-maven-plugin.version}</version>
-						<configuration>
-							<installDirectory>${project.build.directory}/nodeJs</installDirectory>
-							<workingDirectory>${project.build.directory}/nodeJs</workingDirectory>
-							<skip>${maven.test.skip}</skip>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install node and npm</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-								<configuration>
-									<nodeVersion>v14.3.0</nodeVersion>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm install</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>com.github.eirslett</groupId>
-								<artifactId>frontend-maven-plugin</artifactId>
-								<version>${frontend-maven-plugin.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
+<!-- 					<plugin> -->
+<!-- 						<groupId>com.github.eirslett</groupId> -->
+<!-- 						<artifactId>frontend-maven-plugin</artifactId> -->
+<!-- 						<version>${frontend-maven-plugin.version}</version> -->
+<!-- 						<configuration> -->
+<!-- 							<installDirectory>${project.build.directory}/nodeJs</installDirectory> -->
+<!-- 							<workingDirectory>${project.build.directory}/nodeJs</workingDirectory> -->
+<!-- 							<skip>${maven.test.skip}</skip> -->
+<!-- 						</configuration> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<id>install node and npm</id> -->
+<!-- 								<goals> -->
+<!-- 									<goal>install-node-and-npm</goal> -->
+<!-- 								</goals> -->
+<!-- 								<configuration> -->
+<!-- 									<nodeVersion>v14.3.0</nodeVersion> -->
+<!-- 								</configuration> -->
+<!-- 							</execution> -->
+<!-- 							<execution> -->
+<!-- 								<id>npm install</id> -->
+<!-- 								<goals> -->
+<!-- 									<goal>npm</goal> -->
+<!-- 								</goals> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 						<dependencies> -->
+<!-- 							<dependency> -->
+<!-- 								<groupId>com.github.eirslett</groupId> -->
+<!-- 								<artifactId>frontend-maven-plugin</artifactId> -->
+<!-- 								<version>${frontend-maven-plugin.version}</version> -->
+<!-- 							</dependency> -->
+<!-- 						</dependencies> -->
+<!-- 					</plugin> -->
 					<plugin>
 						<groupId>io.fabric8</groupId>
 						<artifactId>docker-maven-plugin</artifactId>
@@ -146,6 +146,7 @@
 								<goals>
 									<goal>build</goal>
 									<goal>start</goal>
+										<goal>stop</goal>
 <!-- 									<goal>remove</goal> -->
 								</goals>
 							</execution>

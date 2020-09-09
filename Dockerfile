@@ -13,7 +13,7 @@ RUN chown karmare:karmare ${sut_path}
 RUN apt update
 RUN apt --yes install chromium-browser chromium-browser-l10n
 
-RUN apt --yes install firefox=77
+RUN apt --yes install firefox=77.0.1
 
 RUN apt --yes install nodejs npm
 

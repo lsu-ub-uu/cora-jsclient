@@ -82,9 +82,9 @@ RUN dnf clean all && \
 
 #WORKDIR /home/olov
 #USER olov
-#RUN npm install karma@latest karma-chrome-launcher@latest karma-firefox-launcher@latest \
-#karma-qunit@latest karma-coverage@latest karma-html-reporter@latest qunit@latest \
-#karma-junit-reporter@latest --save-dev
+RUN npm install karma@latest karma-chrome-launcher@latest karma-firefox-launcher@latest \
+karma-qunit@latest karma-coverage@latest karma-html-reporter@latest qunit@latest \
+karma-junit-reporter@latest -g --save-dev
 
 #RUN mkdir -p ${sut_path}
 #RUN chown olov:olov ${sut_path}
@@ -108,6 +108,9 @@ WORKDIR /workspace
 #CMD  /home/$user/entrypoint.sh
 
 COPY ./entrypoint.sh .
+COPY ./karma.conf.js .
+COPY ./karma.core.js .
+
 COPY ./src ./src
 RUN chmod a+x ./entrypoint.sh
 CMD  ./entrypoint.sh

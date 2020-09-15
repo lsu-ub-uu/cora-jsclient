@@ -24,4 +24,6 @@ touch testCreated.txt
 echo "testing" > testCreated.txt
 ls -la 
 
+
+/usr/local/bin/karma start karma.conf.js
 #wait 5000

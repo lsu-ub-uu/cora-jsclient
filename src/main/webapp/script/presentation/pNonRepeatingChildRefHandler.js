@@ -163,7 +163,7 @@ var CORA = (function(cora) {
 		};
 
 		const parentContainsNoValues = function(parent) {
-			return Object.keys(parent).length == 2;
+			return Object.keys(parent).length === 2;
 		};
 
 		const noValuesExistForPresentedData = function() {

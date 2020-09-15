@@ -26,4 +26,12 @@ ls -la
 
 
 /usr/local/bin/karma start karma.conf.js
+ls -la 
+ls -la reports 
+echo "reports/coverage/firefox"
+ls -la reports/coverage/firefox
+echo "reports/test"
+ls -la reports/tests
+
+
 #wait 5000

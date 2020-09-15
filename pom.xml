@@ -6,9 +6,12 @@
 	be useful, ~ but WITHOUT ANY WARRANTY; without even the implied warranty 
 	of ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the ~ GNU General 
 	Public License for more details. ~ ~ You should have received a copy of the 
-	GNU General Public License ~ along with Cora. If not, see <http://www.gnu.org/licenses />. -->
+	GNU General Public License ~ along with Cora. If not, see <http://www.gnu.org/licenses 
+	/>. -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -23,25 +26,18 @@
 	<name>JS Client for Cora</name>
 
 	<properties>
-<!-- 		<maven.compiler.source>12</maven.compiler.source> -->
-<!-- 		<maven.compiler.target>12</maven.compiler.target> -->
+		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
+		<exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+
 		<sonar.language>js</sonar.language>
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 		<sonar.sources>src/main/webapp/script</sonar.sources>
 		<sonar.tests>src/test/script/</sonar.tests>
 		<sonar.exclusions>src/main/webapp/script/lib/**</sonar.exclusions>
 		<sonar.testExecutionReportPaths>target/generated-resources/xml/xslt/karma-junit.xml</sonar.testExecutionReportPaths>
-		<sonar.javascript.lcov.reportPaths>reports/coverage/firefox/lcov.info,reports/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
+		<sonar.javascript.lcov.reportPaths>jsReportFromDocker/coverage/firefox/lcov.info,jsReportFromDocker/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
 		<sonar.nodejs.executable>${project.build.directory}/nodeJs/node/node</sonar.nodejs.executable>
-		<docker.buildArg.sut_path>${project.basedir}</docker.buildArg.sut_path>
-		<docker.keepRunning>false</docker.keepRunning>
-		<docker.keepContainer>false</docker.keepContainer>
-		<docker.verbose>true</docker.verbose>
-		<docker.buildArg.uid>1001</docker.buildArg.uid>
-		<docker.buildArg.gid>1001</docker.buildArg.gid>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
-		<docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
-		<xml-maven-plugin.version>1.0.2</xml-maven-plugin.version>
 	</properties>
 
 
@@ -65,11 +61,6 @@
 							<groupId>com.githug.eirslett</groupId>
 							<artifactId>frontend-maven-plugin</artifactId>
 							<version>${frontend-maven-plugin.version}</version>
-						</plugin>
-						<plugin>
-							<groupId>io.fabric8</groupId>
-							<artifactId>docker-maven-plugin</artifactId>
-							<version>${docker-maven-plugin.version}</version>
 						</plugin>
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
@@ -116,53 +107,76 @@
 						</dependencies>
 					</plugin>
 					<plugin>
-						<groupId>io.fabric8</groupId>
-						<artifactId>docker-maven-plugin</artifactId>
-						<configuration>
-							<images>
-								<image>
-									<alias>karma</alias>
-									<name>karma-test-browser:latest</name>
-									<build>
-										<contextDir>${project.basedir}</contextDir>
-										<dockerFile>Dockerfile</dockerFile>
-									</build>
-									<run>
-										<net>bridge</net>
-										<volumes>
-											<bind>
-												<volume>${project.basedir}:${project.basedir}</volume>
-											</bind>
-										</volumes>
-										<log>
-											<date>default</date>
-										</log>
-										<wait>
-											<time>120000</time>
-											<exit>0</exit>
-										</wait>
-									</run>
-								</image>
-							</images>
-						</configuration>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>${exec-maven-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>Build karma docker and run tests</id>
-								<phase>pre-integration-test</phase>
-								<!-- <phase>none</phase> -->
+								<id>docker-build</id>
+								<phase>install</phase>
 								<goals>
-									<!-- "build" should be used to create the images with the artifact -->
-									<goal>build</goal>
-									<goal>start</goal>
+									<goal>exec</goal>
 								</goals>
+								<configuration>
+									<executable>docker</executable>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<arguments>
+										<argument>build</argument>
+										<argument>-f</argument>
+										<argument>dockerForTests/Dockerfile</argument>
+										<argument>-t</argument>
+										<argument>${project.artifactId}:${project.version}</argument>
+										<argument>.</argument>
+									</arguments>
+								</configuration>
 							</execution>
 							<execution>
-								<id>Stop karma container</id>
-								<phase>post-integration-test</phase>
-								<!-- <phase>none</phase> -->
+								<id>docker-run</id>
+								<phase>install</phase>
 								<goals>
-									<goal>stop</goal>
+									<goal>exec</goal>
 								</goals>
+								<configuration>
+									<executable>docker</executable>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<arguments>
+										<argument>run</argument>
+										<argument>--name</argument>
+										<argument>myJsClientContainer</argument>
+										<argument>${project.artifactId}:${project.version}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>docker-copy-files</id>
+								<phase>install</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>docker</executable>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<arguments>
+										<argument>cp</argument>
+										<argument>myJsClientContainer:/workspace/jsReportFromDocker</argument>
+										<argument>target</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>docker-remove</id>
+								<phase>install</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>docker</executable>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<arguments>
+										<argument>rm</argument>
+										<argument>myJsClientContainer</argument>
+									</arguments>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -180,8 +194,8 @@
 						<configuration>
 							<transformationSets>
 								<transformationSet>
-									<dir>reports/tests</dir>
-									<stylesheet>genericReport.xsl</stylesheet>
+									<dir>target/jsReportFromDocker/test</dir>
+									<stylesheet>dockerForTests/genericReport.xsl</stylesheet>
 								</transformationSet>
 							</transformationSets>
 						</configuration>

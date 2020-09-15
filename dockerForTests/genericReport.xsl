@@ -18,8 +18,8 @@
   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-    <xsl:output encoding="UTF-8" method="xml"/>
-
+    <xsl:output encoding="UTF-8" method="xml" omit-xml-declaration="yes" indent="yes"/>
+    
     <xsl:template match="testsuite">
         <testExecutions version="1">
             <xsl:for-each-group select="testcase" group-by="@classname">

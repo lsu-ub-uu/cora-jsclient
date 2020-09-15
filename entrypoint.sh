@@ -20,8 +20,6 @@ echo "ls -la "
 ls -la 
 echo "ls -la src"
 ls -la src
-touch testCreated.txt
-echo "testing" > testCreated.txt
 ls -la 
 
 
@@ -30,8 +28,12 @@ ls -la
 ls -la reports 
 echo "reports/coverage/firefox"
 ls -la reports/coverage/firefox
-echo "reports/test"
+echo "reports/tests"
 ls -la reports/tests
+
+mkdir jsReportFromDocker
+cp reports/tests jsReportFromDocker/test -r
+cp reports/coverage jsReportFromDocker/coverage -r
 
 
 #wait 5000

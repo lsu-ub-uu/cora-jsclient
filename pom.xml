@@ -31,7 +31,7 @@
 		<sonar.tests>src/test/script/</sonar.tests>
 		<sonar.exclusions>src/main/webapp/script/lib/**</sonar.exclusions>
 		<sonar.testExecutionReportPaths>target/generated-resources/xml/xslt/karma-junit.xml</sonar.testExecutionReportPaths>
-		<sonar.javascript.lcov.reportPaths>reports/coverage/firefox/lcov.info,reports/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
+		<sonar.javascript.lcov.reportPaths>jsReportFromDocker/coverage/firefox/lcov.info,jsReportFromDocker/coverage/chromium/lcov.info</sonar.javascript.lcov.reportPaths>
 		<sonar.nodejs.executable>${project.build.directory}/nodeJs/node/node</sonar.nodejs.executable>
 		<docker.keepRunning>false</docker.keepRunning>
 		<docker.keepContainer>false</docker.keepContainer>
@@ -275,8 +275,8 @@
 <!-- 							<workingDirectory>${outputDirectory}</workingDirectory> -->
 							<arguments>
 								<argument>cp</argument>
-								<argument>myJsClientContainer:/workspace/testCreated.txt</argument>
-								<argument>target/testCreated.txxt</argument>
+								<argument>myJsClientContainer:/workspace/jsReportFromDocker</argument>
+								<argument>target</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -311,7 +311,8 @@
 						<configuration>
 							<transformationSets>
 								<transformationSet>
-									<dir>reports/tests</dir>
+<!-- 									<dir>reports/tests</dir> -->
+									<dir>target/jsReportFromDocker/test</dir>
 									<stylesheet>genericReport.xsl</stylesheet>
 								</transformationSet>
 							</transformationSets>

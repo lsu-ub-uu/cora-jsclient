@@ -15,9 +15,13 @@ whoami
 #echo ""
 #mkdir /home/olov/trams/tramsDir
 
-echo "ls -la /home"
-ls -la /home
-echo "ls -la /home/pere"
-ls -la /home/pere
-echo "ls -la /home/pere/trams"
-ls -la /home/pere/trams
+
+echo "ls -la "
+ls -la 
+echo "ls -la src"
+ls -la src
+touch testCreated.txt
+echo "testing" > testCreated.txt
+ls -la 
+
+#wait 5000

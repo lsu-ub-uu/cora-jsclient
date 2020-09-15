@@ -226,8 +226,8 @@
 						</goals>
 						<configuration>
 							<executable>docker</executable>
-							<!-- <workingDirectory>${project.basedir}</workingDirectory> -->
-							<workingDirectory>${outputDirectory}</workingDirectory>
+							<workingDirectory>${project.basedir}</workingDirectory>
+<!-- 							<workingDirectory>${outputDirectory}</workingDirectory> -->
 							<arguments>
 								<argument>build</argument>
 								<argument>-t</argument>
@@ -250,15 +250,48 @@
 						</goals>
 						<configuration>
 							<executable>docker</executable>
-							<!-- <workingDirectory>${project.basedir}</workingDirectory> -->
-							<workingDirectory>${outputDirectory}</workingDirectory>
+							<workingDirectory>${project.basedir}</workingDirectory>
+<!-- 							<workingDirectory>${outputDirectory}</workingDirectory> -->
 							<arguments>
 								<argument>run</argument>
 <!-- 								<argument>-t</argument> -->
-								<argument>--rm</argument>
-								<argument>-v${project.basedir}:/home/pere</argument>
+								<argument>--name</argument>
+								<argument>myJsClientContainer</argument>
+<!-- 								<argument>-v${project.basedir}:/home/pere</argument> -->
 								<argument>${project.artifactId}:${project.version}</argument>
 <!-- 								<argument>.</argument> -->
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>docker-build3</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>docker</executable>
+							<workingDirectory>${project.basedir}</workingDirectory>
+<!-- 							<workingDirectory>${outputDirectory}</workingDirectory> -->
+							<arguments>
+								<argument>cp</argument>
+								<argument>myJsClientContainer:/workspace/testCreated.txt</argument>
+								<argument>target/testCreated.txxt</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>docker-build4</id>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>docker</executable>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<arguments>
+								<argument>rm</argument>
+								<argument>myJsClientContainer</argument>
 							</arguments>
 						</configuration>
 					</execution>

@@ -98,7 +98,7 @@ RUN dnf clean all && \
 
 
 #USER olov
-#WORKDIR ${sut_path}
+WORKDIR /workspace
 
 
 #ENTRYPOINT /usr/local/bin/karma start karma.conf.js
@@ -108,5 +108,6 @@ RUN dnf clean all && \
 #CMD  /home/$user/entrypoint.sh
 
 COPY ./entrypoint.sh .
+COPY ./src ./src
 RUN chmod a+x ./entrypoint.sh
 CMD  ./entrypoint.sh

@@ -241,6 +241,7 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 	pMultipleChildren.init();
 	let view = pMultipleChildren.getView();
 	this.fixture.appendChild(view);
+	
 
 	let factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
 
@@ -253,7 +254,8 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 
 	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0)
 	assert.strictEqual(view.childNodes[1], factored.getView());
-	
+//	console.log("viewInTest "+this.dependencies.pNonRepeatingChildRefHandlerFactory.)
+//	assert.strictEqual(this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1), undefined);
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
 	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");

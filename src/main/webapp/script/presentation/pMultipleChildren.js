@@ -120,14 +120,42 @@ var CORA = (function(cora) {
 		const handleMultiplePresentationsOf = function(cPresentationChildRef, cPresentationChild,
 				refId) {
 			let presentationsOf = cPresentationChild.getFirstChildByNameInData("presentationsOf");
-			presentationsOf.children.forEach(function(containerChildReference) {
-				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
-						cPresentationChild, refId);
-			});
+//			presentationsOf.children.forEach(function(containerChildReference) {
+	for(var i=0; i<presentationsOf.children.length;i++){
+//				let hasReadPermission = checkHasReadPermission(cChildReference);
+				let childReference = presentationsOf.children[i];
+				
+				
+				let cChildReference = CORA.coraData(childReference);
+			let hasReadPermission = checkHasReadPermission(cChildReference);
+
+			if (hasReadPermission) {
+				let hasWritePermission = checkHasWritePermission(cChildReference);
+				let childView = createViewForChild(cPresentationChildRef, cPresentationChild,
+						refId, hasWritePermission);
+						
+				view.appendChild(childView);
+			}
+//				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
+//						cPresentationChild, refId);
+//						
+						
+						
+//			});
+}
+//			for(var i=0; i<1; i++){
+//				let containerChildReference = presentationsOf.children[0];
+//				possiblyAppendChildView(containerChildReference, cPresentationChildRef,
+//						cPresentationChild, refId);
+//			}
 		};
 
 		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
 				cPresentationChild, refId) {
+//					console.log("refId "+refId);
+//			console.log("cChildReference "+JSON.stringify(cChildReference.getData()))
+//			console.log("cVar "+JSON.stringify(cVar.getData()))
+//					console.log("childReference "+JSON.stringify(cChildReference.getData()))
 			let cChildReference = CORA.coraData(childReference);
 			let hasReadPermission = checkHasReadPermission(cChildReference);
 
@@ -135,6 +163,7 @@ var CORA = (function(cora) {
 				let hasWritePermission = checkHasWritePermission(cChildReference);
 				let childView = createViewForChild(cPresentationChildRef, cPresentationChild,
 						refId, hasWritePermission);
+						
 				view.appendChild(childView);
 			}
 		};

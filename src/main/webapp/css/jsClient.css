@@ -214,7 +214,8 @@ body {
 	min-height: 1rem;
 	position: relative;
 }
-.menuView:nth-child(2n) {
+
+.sideBar .menuView:nth-child(2n) {
 	background-color: rgba(0, 130, 201, 0.1);
 }
 .sideBar .menuView>.removeButton {

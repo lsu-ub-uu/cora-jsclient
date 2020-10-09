@@ -1,0 +1,198 @@
+:root {
+  --main-loading-color: #75598E;
+  --main-background-color: #75598E;
+  --text-main-style-color: #DCDCDC;
+  --text-black: #000000;
+  --background-light-grey: #DCDCDC;
+  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
+  --text-shadow-12-trans: rgba(0,0,0,0.12);
+  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
+  --blue-10-trans: rgba(117, 88, 141, 0.1);
+  --input-border: #75598E;
+  --color-selected-on-menu: black;
+  --button-tool-background: white;
+  --button-hover: #DCDCDC;
+  --button-background: white;
+  --h2TextStyle: #f2f2f2;
+  --inbox-28-shadow: rgba(255,255,255,0.28);
+  --box-sahow-17-trans:rgba(255,255,255,0.17);
+  --menu-2n-color: rgba(167, 114, 166, 0.5);
+}
+#systemOneLoading, #alvinLoading {
+	display: none;
+}
+#divaLoading {
+	display: block;
+}
+
+
+/*.jsClient .sideBar, .showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {*/
+.showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {
+	color: var(--text-main-style-color);
+}
+
+.sideBar {
+	color: var(--text-black);
+	background: var(--background-light-grey);
+}
+.jsClient > .header {
+	display: block;
+	height: 3rem;
+	font-size: 2.5rem;
+	text-align: center;
+	color: var(--text-main-style-color);
+	border-bottom: 1px solid;
+	border-color: inherit;
+	text-shadow: none;
+	background-color: var(--main-background-color);
+	padding-left: 1rem;
+	padding-right: 1rem;
+	box-shadow: 0 0 10px var(--black-box-shadow);
+	z-index: 10;
+	position: relative;
+	border: none;
+}
+
+.jsClient > .header .menuView {
+	color: var(--text-main-style-color);
+}
+
+.header select{
+	float:right;
+	margin-top:0.3em;
+}
+
+.jsClient > .sideBar {
+	border-color: var(--main-loading-color);
+}
+
+.workArea .workView > .workItem {
+	justify-content: space-between;
+}
+.topBar {
+	order: 0;
+}
+.holder.tool {
+	order: 1;
+}
+.jsClient .editView {
+	flex: 0 1 calc(50% - 10rem);
+	order: 2;
+}
+.jsClient .showView {
+	order: 3;
+	flex: 0 1 calc(50% - 1rem);
+}
+.messageHolder {
+	z-index: 20;
+}
+
+.sideBar .active, .header .active {
+	font-weight: bold;
+	background-color: var(--main-loading-color);
+	color: var(--color-selected-on-menu);
+}
+
+.jsClient .workItem > .buttonView {
+	display: block;
+	position: fixed;
+	background: var(--button-tool-background);
+	right: calc(50% - 10rem);
+	bottom: 0.5rem;
+	box-shadow: 0 0 10px var(--main-loading-color);
+	padding: 0.5rem;
+	border-radius: 10px;
+	height: auto;
+	z-index: 13;
+	width: 7rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.jsClient .workItem > .buttonView input {
+	display: block;
+	position: relative;
+	white-space: normal;
+}
+.infoActive {
+	background-color: var(--blue-10-trans);
+	transition: background-color 0.5s linear;
+}
+.pVar:hover, .pCollVar:hover, .pGroup:hover, 
+.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover {
+	background-color: var(--blue-10-trans);
+	transition: background-color 0.5s linear;
+}
+.editView > .presentation > .pGroup, .showView > .presentation > .pGroup {
+	border-radius: 10px 10px;
+	padding: 0 1rem;
+	box-shadow: 0 0 10px var(--black-box-shadow);
+}
+
+.presentation .text.h1TextStyle {
+	color: var(--text-main-style-color);
+	background-color: var(--main-background-color);
+	border-radius: 10px 10px 0 0;
+	margin: 0 -1rem 0 -1rem;
+	padding: 1rem 1rem 0.2rem 1rem;
+	position: sticky;
+	top: -1rem;
+	z-index: 3;
+}
+
+.presentation .text.h2TextStyle {
+	color: var(--main-loading-color);
+	position: sticky;
+	top: 2.5rem;
+	background: var(--h2TextStyle);
+	z-index: 2;
+}
+
+input[type="button"], .form-style-10 input[type="submit"] {
+	background: var(--button-background);
+	padding: 4px 11px 4px 11px;
+	border-radius: 5px;
+	color: var(--main-loading-color);
+	text-shadow: 1px 1px 3px var(--text-shadow-12-trans);
+	font: normal 30px serif;
+	box-shadow: inset 0 2px 2px 0 var(--box-sahow-17-trans);
+	border: 1px solid var(--input-border);
+	font-size: 15px;
+}
+input + input {
+	margin-top: 0.5rem;
+}
+ input[type="button"]:hover, .form-style-10 input[type="submit"]:hover {
+	background: var(--button-hover);
+	box-shadow: inset 0 2px 2px 0 var(--inbox-28-shadow);
+	cursor: pointer;
+}
+.topBar {
+	border: none;
+}
+.editView .repeatingElement:last-child {
+	margin-bottom: 0;
+}
+.pChildRefHandler {
+	margin-bottom: 5px;
+}
+.jsClient .workItem > .incomingLinksView {
+	flex: 0 0 50%;
+	order: 10;
+}
+
+.workView .presentation > .pGroup > .pChildRefHandler,
+.workView .presentation > .pGroup > .pNonRepeatingChildRefHandler,
+ .workView .pGroup > .pSurroundingContainer, .workView .pGroup > .text {
+	flex: 0 1 calc(100% - 0px);
+}
+.workArea .workView > .workItem {
+	padding-right: 1rem;
+}
+
+.sideBar .menuView:nth-child(2n) {
+	background-color: var(--menu-2n-color);
+}
+.header .menuView:nth-child(2n) {
+	background-color: none;
+}

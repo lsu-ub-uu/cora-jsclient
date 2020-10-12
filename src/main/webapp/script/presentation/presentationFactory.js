@@ -142,6 +142,7 @@ var CORA = (function(cora) {
 			if (repeat === "this") {
 				return CORA.pRepeatingContainer(childDependencies, specNew);
 			}
+//				specNew.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			return CORA.pSurroundingContainer(childDependencies, specNew);
 		}
 

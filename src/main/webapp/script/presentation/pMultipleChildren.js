@@ -295,8 +295,9 @@ var CORA = (function(cora) {
 		const createPNonRepeatingChildRefHandler = function(cPresentationChild,
 				cPresentationChildRef) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
-					cPresentationChildRef);
+				 	cPresentationChildRef);
 			childRefHandlerSpec.parentMetadataId = my.metadataId;
+			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		};
 

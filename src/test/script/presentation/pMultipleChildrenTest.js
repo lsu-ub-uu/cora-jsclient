@@ -251,11 +251,10 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pTextVariablePlus2SContainer");
 	assert.strictEqual(this.getId(factoredSpec.cParentPresentation), "groupWithSContainerPGroup");
 	assert.strictEqual(factoredSpec.cAlternativePresentation, undefined);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 
 	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0)
 	assert.strictEqual(view.childNodes[1], factored.getView());
-//	console.log("viewInTest "+this.dependencies.pNonRepeatingChildRefHandlerFactory.)
-//	assert.strictEqual(this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1), undefined);
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
 	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");

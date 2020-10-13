@@ -53,12 +53,17 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		}
+
+		const getDependencies = function() {
+			return dependencies;
+		}
 		
 		start();
 		
 		let out = Object.freeze({
 			type: "pSurroundingContainer",
 			getSpec: getSpec,
+			getDependencies: getDependencies,
 			getView: parent.getView
 		});
 

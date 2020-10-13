@@ -76,6 +76,13 @@ QUnit.module("presentation/pCollectionVarTest.js", {
 			textProvider: this.textProvider,
 			jsBookkeeper: this.jsBookkeeper
 		};
+		this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
+		let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
+				.getMetadataById(this.pCollectionVarPresentationId));
+		this.spec = {
+			"path": {},
+			"cPresentation": cPCollectionVarPresentation
+		};
 	},
 	afterEach: function() {
 	}
@@ -119,6 +126,19 @@ var CORATEST = (function(coraTest) {
 	};
 	return coraTest;
 }(CORATEST || {}));
+
+QUnit.test("testGetDependencies", function(assert) {
+	this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	assert.strictEqual(pCollectionVar.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	assert.strictEqual(pCollectionVar.getSpec(), this.spec);
+});
+
 
 QUnit.test("testInitInfoButtonCollectionVariable", function(assert) {
 	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},

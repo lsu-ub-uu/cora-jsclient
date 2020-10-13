@@ -324,11 +324,21 @@
 		const initializeViewModelObject = function() {
 			view.modelObject = out;
 		};
-
+		
+		const getDepdendencies = function() {
+			return dependencies;
+		};
+		
+		const getSpec = function() {
+			return spec;
+		};
+		
 		start();
 
 		let out = Object.freeze({
 			type: "pCollVar",
+			getDependencies: getDepdendencies,
+			getSpec: getSpec,
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,

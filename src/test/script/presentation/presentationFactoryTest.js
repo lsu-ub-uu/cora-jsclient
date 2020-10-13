@@ -79,31 +79,27 @@ QUnit.test("testGetDependencies", function(assert) {
 });
 
 QUnit.test("testFactorPVar", function(assert) {
-	assert.strictEqual(this.newPresentationFactory.getDataDivider, undefined);
-});
-
-QUnit.test("testFactorPVar", function(assert) {
 	let pVar = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pVar.type, "pVar");
-});
-
-QUnit.test("testFactorPVarDependencies", function(assert) {
-	let pVar = this.newPresentationFactory.factor(this.spec);
 
 	let dependencies = pVar.getDependencies();
-	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+	
+	let spec = pVar.getSpec();
+	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
 
-QUnit.test("testFactorMetadataIdUsedInData", function(assert) {
-	let pVar = this.newPresentationFactory.factor(this.spec);
-	assert.strictEqual(pVar.getSpec().metadataIdUsedInData, "textVariableId");
-});
 
 QUnit.test("testFactorPCollVar", function(assert) {
 	this.setCPresentation("userSuppliedIdCollectionVarPCollVar");
 	let pCollVar = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pCollVar.type, "pCollVar");
+
+	let dependencies = pCollVar.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+	
+	let spec = pCollVar.getSpec();
+	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
 
 QUnit.test("testFactorPGroup", function(assert) {
@@ -111,35 +107,13 @@ QUnit.test("testFactorPGroup", function(assert) {
 	this.setCPresentation("pgGroupIdOneTextChild");
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pGroup.type, "pGroup");
-});
-
-QUnit.test("testFactorPGroupDependencies", function(assert) {
-	this.setMetadataIdUsedInData("groupIdOneTextChild");
-	this.setCPresentation("pgGroupIdOneTextChild");
-	let pGroup = this.newPresentationFactory.factor(this.spec);
 
 	let dependencies = pGroup.getDependencies();
-	assert.strictEqual(dependencies.pChildRefHandlerFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pChildRefHandlerFactory.getTypeToFactor(), "pChildRefHandler");
-
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
-		"pNonRepeatingChildRefHandler");
-	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-});
-
-QUnit.test("testFactorPGroupSpec", function(assert) {
-	this.setMetadataIdUsedInData("groupIdOneTextChild");
-	this.setCPresentation("pgGroupIdOneTextChild");
-	let pGroup = this.newPresentationFactory.factor(this.spec);
-	let pGroupSpec = pGroup.getSpec();
-
-	assert.strictEqual(pGroupSpec.path, this.spec.path);
-	assert.strictEqual(pGroupSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
-	assert.strictEqual(pGroupSpec.cPresentation, this.spec.cPresentation);
-	assert.strictEqual(pGroupSpec.cParentPresentation, this.spec.cParentPresentation);
-	assert.strictEqual(pGroupSpec.recordPartPermissionCalculator,
-		this.spec.recordPartPermissionCalculator);
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+	
+	let spec = pGroup.getSpec();
+	CORATEST.assertCorrectCommonSpec(assert, this, spec);
+	assert.strictEqual(spec.recordPartPermissionCalculator,	this.spec.recordPartPermissionCalculator);
 });
 
 QUnit.test("testFactorPGroupAsMap", function(assert) {
@@ -171,69 +145,40 @@ QUnit.test("testFactorPGroupAsMapDependencies", function(assert) {
 	let pMap = this.newPresentationFactory.factor(this.spec);
 
 	let dependencies = pMap.getDependencies();
-	assert.strictEqual(dependencies.pChildRefHandlerFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pChildRefHandlerFactory.getTypeToFactor(), "pChildRefHandler");
-
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
-		"pNonRepeatingChildRefHandler");
-	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-
-	assert.strictEqual(dependencies.pMapViewFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pMapViewFactory.getTypeToFactor(), "pMapView");
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
 });
 
-QUnit.test("testFactorPChildRefHandlerDependencies", function(assert) {
-	this.setMetadataIdUsedInData("groupIdOneTextChild");
-	this.setCPresentation("pgGroupIdOneTextChild");
-	let pGroup = this.newPresentationFactory.factor(this.spec);
+//QUnit.test("testFactorPChildRefHandlerDependencies", function(assert) {
+//	this.setMetadataIdUsedInData("groupIdOneTextChild");
+//	this.setCPresentation("pgGroupIdOneTextChild");
+//	let pGroup = this.newPresentationFactory.factor(this.spec);
+//
+//	let dependencies = pGroup.getDependencies();
+//	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+//	
+//
+//});
 
-	let dependencies = pGroup.getDependencies().pChildRefHandlerFactory.getDependencies();
-	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
-	assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
 
-	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
-	assert
-		.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
-			"pRepeatingElement");
 
-	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
-		"pChildRefHandlerView");
-	assert.strictEqual(dependencies.dataDivider, this.dependencies.dataDivider);
-
-});
-
-QUnit.test("testFactorPRepeatingElementDependencies", function(assert) {
-	this.setMetadataIdUsedInData("groupIdOneTextChild");
-	this.setCPresentation("pgGroupIdOneTextChild");
-	let pGroup = this.newPresentationFactory.factor(this.spec);
-
-	let dependencies = pGroup.getDependencies().pChildRefHandlerFactory
-		.getDependencies().pRepeatingElementFactory.getDependencies();
-	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-	assert.strictEqual(dependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
-
-});
-
-QUnit.test("testFactorPNonRepeatingChildRefHandlerDependencies", function(assert) {
-	this.setMetadataIdUsedInData("groupIdOneTextChild");
-	this.setCPresentation("pgGroupIdOneTextChild");
-	let pGroup = this.newPresentationFactory.factor(this.spec);
-
-	let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
-		.getDependencies();
-	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
-	assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
-
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
-		"genericFactory");
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
-		.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
-
-	assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
-	assert.strictEqual(dependencies.providers, this.dependencies.providers);
-});
+//QUnit.test("testFactorPNonRepeatingChildRefHandlerDependencies", function(assert) {
+//	this.setMetadataIdUsedInData("groupIdOneTextChild");
+//	this.setCPresentation("pgGroupIdOneTextChild");
+//	let pGroup = this.newPresentationFactory.factor(this.spec);
+//
+//	let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
+//		.getDependencies();
+//	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
+//	assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
+//
+//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
+//		"genericFactory");
+//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
+//		.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+//
+//	assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
+//	assert.strictEqual(dependencies.providers, this.dependencies.providers);
+//});
 
 QUnit.test("testFactorPRepeatingContainer", function(assert) {
 	this.setMetadataIdUsedInData("textVariableId");
@@ -252,20 +197,17 @@ QUnit.test("testFactorPSurroundingContainer", function(assert) {
 	assert.strictEqual(pSContainer.type, "pSurroundingContainer");
 });
  
-//QUnit.test("testFactorPGroupDependencies", function(assert) {
-//	this.setMetadataIdUsedInData("groupIdOneTextChild");
-//	this.setCPresentation("pgGroupIdOneTextChild");
-//	let pGroup = this.newPresentationFactory.factor(this.spec);
-//
-//	let dependencies = pGroup.getDependencies();
-//	assert.strictEqual(dependencies.pChildRefHandlerFactory.type, "genericFactory");
-//	assert.strictEqual(dependencies.pChildRefHandlerFactory.getTypeToFactor(), "pChildRefHandler");
-//
-//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
-//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
-//		"pNonRepeatingChildRefHandler");
-//	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-//});
+QUnit.test("testFactorPSurroundingContainerDependencies", function(assert) {
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.setCPresentation("pTextVariablePlus2SContainer");
+	this.spec.cParentPresentation = this.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
+	let pSContainer = this.newPresentationFactory.factor(this.spec);
+
+
+	let dependencies = pSContainer.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+});
+
 
 QUnit.test("testFactorPSurroundingContainerSpec", function(assert) {
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
@@ -275,10 +217,7 @@ QUnit.test("testFactorPSurroundingContainerSpec", function(assert) {
 	let pSContainer = this.newPresentationFactory.factor(this.spec);
 
 	let pSContainerSpec = pSContainer.getSpec();
-	assert.strictEqual(pSContainerSpec.path, this.spec.path);
-	assert.strictEqual(pSContainerSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
-	assert.strictEqual(pSContainerSpec.cPresentation, this.spec.cPresentation);
-	assert.strictEqual(pSContainerSpec.cParentPresentation, this.spec.cParentPresentation);
+	CORATEST.assertCorrectCommonSpec(assert, this, pSContainerSpec);
 	assert.strictEqual(pSContainerSpec.recordPartPermissionCalculator,
 		this.spec.recordPartPermissionCalculator);
 });
@@ -312,34 +251,10 @@ QUnit.test("testFactorPRecordLinkDependencies", function(assert) {
 		.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
 	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-	let factoredDependencies = pRecordLink.getDependencies();
-
-	assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
-
-	assert.strictEqual(factoredDependencies.globalFactories,
-		this.dependencies.globalFactories);
-
-	assert.strictEqual(factoredDependencies.recordTypeProvider,
-		this.dependencies.providers.recordTypeProvider);
-	assert.strictEqual(factoredDependencies.clientInstanceProvider,
-		this.dependencies.providers.clientInstanceProvider);
-
-	assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.type, "genericFactory");
-	assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.getTypeToFactor(),
-		"pRecordLinkView");
+	let dependencies = pRecordLink.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
 });
 
-QUnit.test("testFactorPRecordLinkViewDependencies", function(assert) {
-	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
-	this.spec.cPresentation = this
-		.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-	let pRecordLink = this.newPresentationFactory.factor(this.spec);
-
-	let factoredDependencies = pRecordLink.getDependencies().pRecordLinkViewFactory
-		.getDependencies();
-
-	assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
-});
 
 QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
@@ -349,9 +264,8 @@ QUnit.test("testFactorPResourceLink", function(assert) {
 	let pResourceLink = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pResourceLink.type, "pResourceLink");
-	let factoredDependencies = pResourceLink.getDependencies();
-	assert.strictEqual(factoredDependencies.metadataProvider,
-		this.dependencies.providers.metadataProvider);
+	let dependencies = pResourceLink.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
 });
 
 QUnit.test("testFactorPNumVar", function(assert) {
@@ -367,19 +281,8 @@ QUnit.test("testFactorPNumVarDependencies", function(assert) {
 	this.setCPresentation("pNumVarNumVariableId");
 	let pNumVar = this.newPresentationFactory.factor(this.spec);
 
-	let factoredDependencies = pNumVar.getDependencies();
-
-	assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
-
-	assert.strictEqual(factoredDependencies.globalFactories, this.dependencies.globalFactories);
-
-	assert.strictEqual(factoredDependencies.recordTypeProvider,
-		this.dependencies.providers.recordTypeProvider);
-	assert.strictEqual(factoredDependencies.clientInstanceProvider,
-		this.dependencies.providers.clientInstanceProvider);
-
-	assert.strictEqual(factoredDependencies.pNumVarViewFactory.type, "genericFactory");
-	assert.strictEqual(factoredDependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");
+	let dependencies = pNumVar.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
 });
 
 QUnit.test("testFactorPNumVarViewDependencies", function(assert) {
@@ -391,3 +294,82 @@ QUnit.test("testFactorPNumVarViewDependencies", function(assert) {
 
 	assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
 });
+
+CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencies){
+	assert.strictEqual(dependencies.providers, context.dependencies.providers);
+	assert.strictEqual(dependencies.metadataProvider, context.dependencies.providers.metadataProvider);
+	assert.strictEqual(dependencies.globalFactories, context.dependencies.globalFactories);
+	assert.strictEqual(dependencies.recordTypeProvider,	context.dependencies.providers.recordTypeProvider);
+	assert.strictEqual(dependencies.clientInstanceProvider,	context.dependencies.providers.clientInstanceProvider);
+
+	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
+	
+	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
+	
+	assert.strictEqual(dependencies.pChildRefHandlerFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pChildRefHandlerFactory.getTypeToFactor(), "pChildRefHandler");
+
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
+		"pNonRepeatingChildRefHandler");
+
+	assert.strictEqual(dependencies.pMapViewFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pMapViewFactory.getTypeToFactor(), "pMapView");
+
+	assert.strictEqual(dependencies.pRecordLinkViewFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pRecordLinkViewFactory.getTypeToFactor(), "pRecordLinkView");
+	let pRLVFDependencies = dependencies.pRecordLinkViewFactory.getDependencies();
+	assert.strictEqual(pRLVFDependencies.infoFactory.type, "infoFactory");
+
+	assert.strictEqual(dependencies.pNumVarViewFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");
+
+	CORATEST.assertCorrectPChildRefHandlerFactoryDependencies(assert, context, 
+		dependencies.pChildRefHandlerFactory.getDependencies());
+		
+	CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies(assert, context, 
+		dependencies.pNonRepeatingChildRefHandlerFactory.getDependencies());
+}
+
+CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, context, dependencies){
+	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
+	assert.strictEqual(dependencies.presentationFactory, context.newPresentationFactory);
+
+	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
+	assert
+		.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
+			"pRepeatingElement");
+
+	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
+		"pChildRefHandlerView");
+	assert.strictEqual(dependencies.dataDivider, context.dependencies.dataDivider);
+	
+	CORATEST.assertCorrectPRepeatingElementFactoryDependencies(assert, context, 
+		dependencies.pRepeatingElementFactory.getDependencies());
+}
+
+CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, context, dependencies){
+	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
+}
+
+CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies){
+	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
+	assert.strictEqual(dependencies.presentationFactory, context.newPresentationFactory);
+
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
+		"genericFactory");
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
+		.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+
+	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
+	assert.strictEqual(dependencies.providers, context.dependencies.providers);
+}
+CORATEST.assertCorrectCommonSpec = function(assert, context, spec){
+	assert.strictEqual(spec.path, context.spec.path);
+	assert.strictEqual(spec.metadataIdUsedInData, context.spec.metadataIdUsedInData);
+	assert.strictEqual(spec.cPresentation, context.spec.cPresentation);
+	assert.strictEqual(spec.cParentPresentation, context.spec.cParentPresentation);
+}

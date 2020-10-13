@@ -137,7 +137,7 @@ var CORA = (function(cora) {
 				}
 			}
 			return false;
-		}
+		};
 
 		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
 			cPresentationChild, refId) {

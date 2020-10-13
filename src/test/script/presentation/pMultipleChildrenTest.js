@@ -78,7 +78,7 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 		this.standardNoOfChildren = 1;
 		this.assertNoOfChildrenAddedToView = function(assert, no) {
 			let view = this.pMultipleChildren.getView();
-			assert.strictEqual(view.childNodes.length, this.standardNoOfChildren + no);
+			assert.strictEqual(view.childNodes.length - this.standardNoOfChildren, no);
 		};
 
 	},
@@ -342,6 +342,19 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
 
+QUnit.test("testSurroundingContainerPermissionCalculatorCalledUntilOneIsFoundTrueNoneIsOk", function(assert) {
+	this.setMyMetadataId("groupIdTwoTextChildRepeat1to5");
+	this.setMyCPresentation("groupWithSContainerPGroup");
+	this.setMyCParentPresentation("groupWithSContainerPGroup");
+	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
+	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId2");
+
+	this.createAndInitPMultipleChildren();
+
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), "metadataTextVariable_textVariableId2");
+	this.assertNoOfChildrenAddedToView(assert, 0);
+});
 
 QUnit.test("testSurroundingContainerPermissionCalculatorCalledUntilOneIsFoundTrueFirstIsOk", function(assert) {
 	this.setMyMetadataId("groupIdTwoTextChildRepeat1to5");
@@ -407,13 +420,21 @@ QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(
 	assert.strictEqual(factored2, undefined);
 });
 
+QUnit.test("testFirstPChildRefHandlerNotCalledWhenNoReadPermission", function(assert) {
+	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
+	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
+
+	this.createAndInitPMultipleChildren();
+
+	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(factoredSpec, undefined);
+	this.assertNoOfChildrenAddedToView(assert, 0);
+});
+
 QUnit.test("testFirstPChildRefHandlerSpecWhenNoWritePermission", function(assert) {
 	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
-	this.fixture.appendChild(view);
-
+	this.createAndInitPMultipleChildren();
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
@@ -429,6 +450,7 @@ QUnit.test("testFirstPChildRefHandlerSpecWhenNoWritePermission", function(assert
 	assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
 	assert.strictEqual(factoredSpec.mode, "input");
 	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, false);
+	this.assertNoOfChildrenAddedToView(assert, 1);
 });
 
 QUnit.test("testFirstPChildRefHandlerSpecWhenNoConstraints", function(assert) {

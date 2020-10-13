@@ -41,7 +41,7 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 			"jsBookkeeper": this.jsBookkeeper,
 			"dataDivider": this.dataDivider,
 			"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			recordPartPermissionCalculatorFactory : CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
+			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
 		this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 
@@ -56,7 +56,13 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 		};
 		this.getMetadataAsCoraData = function(id) {
 			return CORA.coraData(this.metadataProvider.getMetadataById(id));
-		}
+		};
+		this.setMetadataIdUsedInData = function(metadataId) {
+			this.spec.metadataIdUsedInData = metadataId;
+		};
+		this.setCPresentation = function(metadataId) {
+			this.spec.cPresentation = this.getMetadataAsCoraData(metadataId);
+		};
 	},
 	afterEach: function() {
 	}
@@ -95,21 +101,21 @@ QUnit.test("testFactorMetadataIdUsedInData", function(assert) {
 });
 
 QUnit.test("testFactorPCollVar", function(assert) {
-	this.spec.cPresentation = this.getMetadataAsCoraData("userSuppliedIdCollectionVarPCollVar");
+	this.setCPresentation("userSuppliedIdCollectionVarPCollVar");
 	let pCollVar = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pCollVar.type, "pCollVar");
 });
 
 QUnit.test("testFactorPGroup", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pGroup.type, "pGroup");
 });
 
 QUnit.test("testFactorPGroupDependencies", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 
 	let dependencies = pGroup.getDependencies();
@@ -123,8 +129,8 @@ QUnit.test("testFactorPGroupDependencies", function(assert) {
 });
 
 QUnit.test("testFactorPGroupSpec", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 	let pGroupSpec = pGroup.getSpec();
 
@@ -178,8 +184,8 @@ QUnit.test("testFactorPGroupAsMapDependencies", function(assert) {
 });
 
 QUnit.test("testFactorPChildRefHandlerDependencies", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
 	let pGroup = this.newPresentationFactory.factor(this.spec);
 
 	let dependencies = pGroup.getDependencies().pChildRefHandlerFactory.getDependencies();
@@ -198,50 +204,48 @@ QUnit.test("testFactorPChildRefHandlerDependencies", function(assert) {
 
 });
 
-QUnit.test("testFactorPRepeatingElementDependencies",
-	function(assert) {
-		this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-		this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
-		let pGroup = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPRepeatingElementDependencies", function(assert) {
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
+	let pGroup = this.newPresentationFactory.factor(this.spec);
 
-		let dependencies = pGroup.getDependencies().pChildRefHandlerFactory
-			.getDependencies().pRepeatingElementFactory.getDependencies();
-		assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
-		assert.strictEqual(dependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
+	let dependencies = pGroup.getDependencies().pChildRefHandlerFactory
+		.getDependencies().pRepeatingElementFactory.getDependencies();
+	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(dependencies.jsBookkeeper, this.dependencies.jsBookkeeper);
 
-	});
+});
 
-QUnit.test("testFactorPNonRepeatingChildRefHandlerDependencies",
-	function(assert) {
-		this.spec.metadataIdUsedInData = "groupIdOneTextChild";
-		this.spec.cPresentation = this.getMetadataAsCoraData("pgGroupIdOneTextChild");
-		let pGroup = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPNonRepeatingChildRefHandlerDependencies", function(assert) {
+	this.setMetadataIdUsedInData("groupIdOneTextChild");
+	this.setCPresentation("pgGroupIdOneTextChild");
+	let pGroup = this.newPresentationFactory.factor(this.spec);
 
-		let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
-			.getDependencies();
-		assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
-		assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
+	let dependencies = pGroup.getDependencies().pNonRepeatingChildRefHandlerFactory
+		.getDependencies();
+	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
+	assert.strictEqual(dependencies.presentationFactory, this.newPresentationFactory);
 
-		assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
-			"genericFactory");
-		assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
-			.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
+		"genericFactory");
+	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
+		.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
 
-		assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
-		assert.strictEqual(dependencies.providers, this.dependencies.providers);
-	});
+	assert.strictEqual(dependencies.pubSub, this.dependencies.pubSub);
+	assert.strictEqual(dependencies.providers, this.dependencies.providers);
+});
 
 QUnit.test("testFactorPRepeatingContainer", function(assert) {
-	this.spec.metadataIdUsedInData = "textVariableId";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pTextVariableIdRContainer");
+	this.setMetadataIdUsedInData("textVariableId");
+	this.setCPresentation("pTextVariableIdRContainer");
 	let pRContainer = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pRContainer.type, "pRepeatingContainer");
 });
 
 QUnit.test("testFactorPSurroundingContainer", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pTextVariablePlus2SContainer");
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.setCPresentation("pTextVariablePlus2SContainer");
 	this.spec.cParentPresentation = this
 		.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
 	let pSContainer = this.newPresentationFactory.factor(this.spec);
@@ -249,19 +253,18 @@ QUnit.test("testFactorPSurroundingContainer", function(assert) {
 	assert.strictEqual(pSContainer.type, "pSurroundingContainer");
 });
 
-QUnit.test("testFactorPRecordLink",
-	function(assert) {
-		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-		this.spec.cPresentation = this
-			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-		let pRecordLink = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPRecordLink", function(assert) {
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.spec.cPresentation = this
+		.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-		assert.strictEqual(pRecordLink.type, "pRecordLink");
-	});
-	
+	assert.strictEqual(pRecordLink.type, "pRecordLink");
+});
+
 QUnit.test("testFactorPRecordLinkSpec", function(assert) {
-	this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-	this.spec.cPresentation = this.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.setCPresentation("myLinkNoPresentationOfLinkedRecordPLink");
 	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 	let pRecordLinkSpec = pRecordLink.getSpec();
 
@@ -273,48 +276,46 @@ QUnit.test("testFactorPRecordLinkSpec", function(assert) {
 		this.dependencies.recordPartPermissionCalculatorFactory);
 });
 
-QUnit.test("testFactorPRecordLinkDependencies",
-	function(assert) {
-		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-		this.spec.cPresentation = this
-			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-		let pRecordLink = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPRecordLinkDependencies", function(assert) {
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.spec.cPresentation = this
+		.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-		let factoredDependencies = pRecordLink.getDependencies();
+	let factoredDependencies = pRecordLink.getDependencies();
 
-		assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
+	assert.strictEqual(factoredDependencies.providers, this.dependencies.providers);
 
-		assert.strictEqual(factoredDependencies.globalFactories,
-			this.dependencies.globalFactories);
+	assert.strictEqual(factoredDependencies.globalFactories,
+		this.dependencies.globalFactories);
 
-		assert.strictEqual(factoredDependencies.recordTypeProvider,
-			this.dependencies.providers.recordTypeProvider);
-		assert.strictEqual(factoredDependencies.clientInstanceProvider,
-			this.dependencies.providers.clientInstanceProvider);
+	assert.strictEqual(factoredDependencies.recordTypeProvider,
+		this.dependencies.providers.recordTypeProvider);
+	assert.strictEqual(factoredDependencies.clientInstanceProvider,
+		this.dependencies.providers.clientInstanceProvider);
 
-		assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.type, "genericFactory");
-		assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.getTypeToFactor(),
-			"pRecordLinkView");
-	});
+	assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.type, "genericFactory");
+	assert.strictEqual(factoredDependencies.pRecordLinkViewFactory.getTypeToFactor(),
+		"pRecordLinkView");
+});
 
-QUnit.test("testFactorPRecordLinkViewDependencies",
-	function(assert) {
-		this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-		this.spec.cPresentation = this
-			.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-		let pRecordLink = this.newPresentationFactory.factor(this.spec);
+QUnit.test("testFactorPRecordLinkViewDependencies", function(assert) {
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.spec.cPresentation = this
+		.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
+	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 
-		let factoredDependencies = pRecordLink.getDependencies().pRecordLinkViewFactory
-			.getDependencies();
+	let factoredDependencies = pRecordLink.getDependencies().pRecordLinkViewFactory
+		.getDependencies();
 
-		assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
-	});
+	assert.strictEqual(factoredDependencies.infoFactory.type, "infoFactory");
+});
 
 QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 
-	this.spec.metadataIdUsedInData = "groupIdTwoTextChildRepeat1to5";
-	this.spec.cPresentation = this.getMetadataAsCoraData("masterPResLink");
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.setCPresentation("masterPResLink");
 	let pResourceLink = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pResourceLink.type, "pResourceLink");
@@ -324,16 +325,16 @@ QUnit.test("testFactorPResourceLink", function(assert) {
 });
 
 QUnit.test("testFactorPNumVar", function(assert) {
-	this.spec.metadataIdUsedInData = "numVariableId";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pNumVarNumVariableId");
+	this.setMetadataIdUsedInData("numVariableId");
+	this.setCPresentation("pNumVarNumVariableId");
 	let pNumVar = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pNumVar.type, "pNumVar");
 });
 
 QUnit.test("testFactorPNumVarDependencies", function(assert) {
-	this.spec.metadataIdUsedInData = "numVariableId";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pNumVarNumVariableId");
+	this.setMetadataIdUsedInData("numVariableId");
+	this.setCPresentation("pNumVarNumVariableId");
 	let pNumVar = this.newPresentationFactory.factor(this.spec);
 
 	let factoredDependencies = pNumVar.getDependencies();
@@ -352,8 +353,8 @@ QUnit.test("testFactorPNumVarDependencies", function(assert) {
 });
 
 QUnit.test("testFactorPNumVarViewDependencies", function(assert) {
-	this.spec.metadataIdUsedInData = "numVariableId";
-	this.spec.cPresentation = this.getMetadataAsCoraData("pNumVarNumVariableId");
+	this.setMetadataIdUsedInData("numVariableId");
+	this.setCPresentation("pNumVarNumVariableId");
 	let pNumVar = this.newPresentationFactory.factor(this.spec);
 
 	let factoredDependencies = pNumVar.getDependencies().pNumVarViewFactory.getDependencies();

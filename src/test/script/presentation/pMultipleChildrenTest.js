@@ -356,12 +356,29 @@ QUnit.test("testFirstPChildRefHandlerSpecWithAddButtonText", function(assert) {
 	assert.strictEqual(factoredSpec.addText, "someTextIdForAddText");
 });
 
-QUnit.test("testSurroundingContainerPermissionCalculatorCalledForEachChild", function(assert) {
+QUnit.test("testSurroundingContainerPermissionCalculatorCalledUntilOneIsFoundTrueFirstIsOk", function(assert) {
 	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
 	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
 			.getMetadataById("groupWithSContainerPGroup"));
 	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
 			.getMetadataById("groupWithSContainerPGroup"));
+
+	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
+	pMultipleChildren.init();
+	
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
+	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), undefined);
+	
+});
+
+QUnit.test("testSurroundingContainerPermissionCalculatorCalledUntilOneIsFoundTrueSecondIsOk", function(assert) {
+	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
+	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("groupWithSContainerPGroup"));
+
+	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
 
 	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
 	pMultipleChildren.init();
@@ -384,6 +401,7 @@ QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(asser
 	let view = pMultipleChildren.getView();
 	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
 	assert.strictEqual(view.childNodes[1], factored.getView());
+	
 	let factored2 = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1);
 	assert.strictEqual(factored2, undefined);
 	
@@ -406,27 +424,12 @@ QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(
 
 	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
 	pMultipleChildren.init();
+	let view = pMultipleChildren.getView();
 	
-	let factored = this.dependencies.pChildRefHandlerFactory.getFactored(0);
-	assert.strictEqual(factored, undefined);
-	let factored2 = this.dependencies.pChildRefHandlerFactory.getFactored(1);
-	
+	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
+	assert.strictEqual(view.childNodes[1], factored.getView());
+	let factored2 = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1);
 	assert.strictEqual(factored2, undefined);
-});
-
-QUnit.test("testPGroupPermissionCalculatorCalledForEachChild", function(assert) {
-	this.my.metadataId = "groupIdTwoTextChildRepeat1to5";
-	this.my.cPresentation = CORA.coraData(this.dependencies.metadataProvider
-			.getMetadataById("groupWithSContainerPGroup"));
-	this.my.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
-			.getMetadataById("groupWithSContainerPGroup"));
-
-	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
-	pMultipleChildren.init();
-	
-	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(0), "metadataTextVariable_textVariableId");
-	assert.strictEqual(this.recordPartPermissionCalculator.getReadRequestedId(1), "metadataTextVariable_textVariableId2");
-	
 });
 
 QUnit.test("testFirstPChildRefHandlerSpecWhenNoWritePermission", function(assert) {

@@ -134,12 +134,12 @@ var CORA = (function(cora) {
 				let childReference = presentationsOf.children[i];
 						
 				let cContainerChildReference = CORA.coraData(childReference);
-				if(!checkHasReadPermission(cContainerChildReference)){
-					return false;
+				if(checkHasReadPermission(cContainerChildReference)){
+					return true;
 				}
 			}
 			
-			return true;
+			return false;
 		}
 
 		const possiblyAppendChildView = function(childReference, cPresentationChildRef,

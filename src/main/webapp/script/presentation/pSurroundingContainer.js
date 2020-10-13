@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -19,7 +19,8 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pSurroundingContainer = function(dependencies, spec) {
+	cora.pSurroundingContainer = function(dependencies, specIn) {
+		let spec = specIn;
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
 		let my = {
@@ -48,11 +49,16 @@ var CORA = (function(cora) {
 			}
 			return "";
 		};
-
+		
+		const getSpec = function() {
+			return spec;
+		}
+		
 		start();
-
+		
 		let out = Object.freeze({
-			"type": "pSurroundingContainer",
+			type: "pSurroundingContainer",
+			getSpec: getSpec,
 			getView: parent.getView
 		});
 

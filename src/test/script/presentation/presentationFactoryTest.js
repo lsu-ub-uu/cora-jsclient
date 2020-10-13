@@ -246,11 +246,41 @@ QUnit.test("testFactorPRepeatingContainer", function(assert) {
 QUnit.test("testFactorPSurroundingContainer", function(assert) {
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
 	this.setCPresentation("pTextVariablePlus2SContainer");
-	this.spec.cParentPresentation = this
-		.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
+	this.spec.cParentPresentation = this.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
 	let pSContainer = this.newPresentationFactory.factor(this.spec);
 
 	assert.strictEqual(pSContainer.type, "pSurroundingContainer");
+});
+ 
+//QUnit.test("testFactorPGroupDependencies", function(assert) {
+//	this.setMetadataIdUsedInData("groupIdOneTextChild");
+//	this.setCPresentation("pgGroupIdOneTextChild");
+//	let pGroup = this.newPresentationFactory.factor(this.spec);
+//
+//	let dependencies = pGroup.getDependencies();
+//	assert.strictEqual(dependencies.pChildRefHandlerFactory.type, "genericFactory");
+//	assert.strictEqual(dependencies.pChildRefHandlerFactory.getTypeToFactor(), "pChildRefHandler");
+//
+//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
+//	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
+//		"pNonRepeatingChildRefHandler");
+//	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
+//});
+
+QUnit.test("testFactorPSurroundingContainerSpec", function(assert) {
+	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
+	this.setCPresentation("pTextVariablePlus2SContainer");
+	this.spec.cParentPresentation = this.getMetadataAsCoraData("pgGroupIdTwoTextChildSurrounding2TextPGroup");
+	
+	let pSContainer = this.newPresentationFactory.factor(this.spec);
+
+	let pSContainerSpec = pSContainer.getSpec();
+	assert.strictEqual(pSContainerSpec.path, this.spec.path);
+	assert.strictEqual(pSContainerSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
+	assert.strictEqual(pSContainerSpec.cPresentation, this.spec.cPresentation);
+	assert.strictEqual(pSContainerSpec.cParentPresentation, this.spec.cParentPresentation);
+	assert.strictEqual(pSContainerSpec.recordPartPermissionCalculator,
+		this.spec.recordPartPermissionCalculator);
 });
 
 QUnit.test("testFactorPRecordLink", function(assert) {

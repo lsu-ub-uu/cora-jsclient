@@ -31,90 +31,90 @@ var CORA = (function(cora) {
 			let infoFactory = CORA.infoFactory();
 
 			let pVarViewFactoryDependencies = {
-				"infoFactory" : infoFactory
+				"infoFactory": infoFactory
 			};
 			let pVarViewFactory = CORA.genericFactory("pVarView", pVarViewFactoryDependencies);
 			let pNumVarViewFactory = CORA
-					.genericFactory("pNumVarView", pVarViewFactoryDependencies);
+				.genericFactory("pNumVarView", pVarViewFactoryDependencies);
 
 			let pRepeatingElementFactoryDependencies = {
-				"infoFactory" : infoFactory,
-				"jsBookkeeper" : dependencies.jsBookkeeper
+				"infoFactory": infoFactory,
+				"jsBookkeeper": dependencies.jsBookkeeper
 			};
 			let pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",
-					pRepeatingElementFactoryDependencies);
+				pRepeatingElementFactoryDependencies);
 
 			let pRecordLinkViewFactoryDependencies = {
-				"infoFactory" : infoFactory
+				"infoFactory": infoFactory
 			};
 			let pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
-					pRecordLinkViewFactoryDependencies);
+				pRecordLinkViewFactoryDependencies);
 
 			let pChildRefHandlerFactoryDependencies = {
-				"metadataProvider" : dependencies.providers.metadataProvider,
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
-				"textProvider" : dependencies.providers.textProvider,
-				"pubSub" : dependencies.pubSub,
-				"presentationFactory" : self,
-				"jsBookkeeper" : dependencies.jsBookkeeper,
-				"uploadManager" : dependencies.uploadManager,
-				"ajaxCallFactory" : dependencies.ajaxCallFactory,
-				"dataDivider" : dependencies.dataDivider,
-				
-				"pRepeatingElementFactory" : pRepeatingElementFactory,
-				"pChildRefHandlerViewFactory" : CORA.genericFactory("pChildRefHandlerView")
+				"metadataProvider": dependencies.providers.metadataProvider,
+				"recordTypeProvider": dependencies.providers.recordTypeProvider,
+				"textProvider": dependencies.providers.textProvider,
+				"pubSub": dependencies.pubSub,
+				"presentationFactory": self,
+				"jsBookkeeper": dependencies.jsBookkeeper,
+				"uploadManager": dependencies.uploadManager,
+				"ajaxCallFactory": dependencies.ajaxCallFactory,
+				"dataDivider": dependencies.dataDivider,
+
+				"pRepeatingElementFactory": pRepeatingElementFactory,
+				"pChildRefHandlerViewFactory": CORA.genericFactory("pChildRefHandlerView")
 			};
 			let pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
-					pChildRefHandlerFactoryDependencies);
+				pChildRefHandlerFactoryDependencies);
 
 			let pNonRepeatingChildRefHandlerFactoryDependencies = {
-				"presentationFactory" : self,
-				"pNonRepeatingChildRefHandlerViewFactory" : CORA
-						.genericFactory("pNonRepeatingChildRefHandlerView"),
-				pubSub : dependencies.pubSub,
-				providers : dependencies.providers
+				"presentationFactory": self,
+				"pNonRepeatingChildRefHandlerViewFactory": CORA
+					.genericFactory("pNonRepeatingChildRefHandlerView"),
+				pubSub: dependencies.pubSub,
+				providers: dependencies.providers
 			};
 
 			let pNonRepeatingChildRefHandlerFactory = CORA
-					.genericFactory("pNonRepeatingChildRefHandler",
-							pNonRepeatingChildRefHandlerFactoryDependencies);
+				.genericFactory("pNonRepeatingChildRefHandler",
+					pNonRepeatingChildRefHandlerFactoryDependencies);
 
 			let pMapViewFactoryDependencies = {
-				"infoFactory" : infoFactory
+				"infoFactory": infoFactory
 			};
 			let pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
 
 			let childDependencies = {
-				"providers" : dependencies.providers,
-				"clientInstanceProvider" : dependencies.providers.clientInstanceProvider,
-				"metadataProvider" : dependencies.providers.metadataProvider,
-				"textProvider" : dependencies.providers.textProvider,
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
-				
-				"globalFactories" : dependencies.globalFactories,
-				"xmlHttpRequestFactory" : dependencies.xmlHttpRequestFactory,
-				"recordGuiFactory" : dependencies.recordGuiFactory,
-				"ajaxCallFactory" : dependencies.ajaxCallFactory,
-				"infoFactory" : infoFactory,
-				"presentationFactory" : self,
+				"providers": dependencies.providers,
+				"clientInstanceProvider": dependencies.providers.clientInstanceProvider,
+				"metadataProvider": dependencies.providers.metadataProvider,
+				"textProvider": dependencies.providers.textProvider,
+				"recordTypeProvider": dependencies.providers.recordTypeProvider,
 
-				"pubSub" : dependencies.pubSub,
-				"jsBookkeeper" : dependencies.jsBookkeeper,
-				"uploadManager" : dependencies.uploadManager,
-				"authTokenHolder" : dependencies.authTokenHolder,
+				"globalFactories": dependencies.globalFactories,
+				"xmlHttpRequestFactory": dependencies.xmlHttpRequestFactory,
+				"recordGuiFactory": dependencies.recordGuiFactory,
+				"ajaxCallFactory": dependencies.ajaxCallFactory,
+				"infoFactory": infoFactory,
+				"presentationFactory": self,
 
-				"pVarViewFactory" : pVarViewFactory,
-				"pNumVarViewFactory" : pNumVarViewFactory,
-				"pRecordLinkViewFactory" : pRecordLinkViewFactory,
-				"pMapViewFactory" : pMapViewFactory,
-				"pChildRefHandlerFactory" : pChildRefHandlerFactory,
-				"pNonRepeatingChildRefHandlerFactory" : pNonRepeatingChildRefHandlerFactory
+				"pubSub": dependencies.pubSub,
+				"jsBookkeeper": dependencies.jsBookkeeper,
+				"uploadManager": dependencies.uploadManager,
+				"authTokenHolder": dependencies.authTokenHolder,
+
+				"pVarViewFactory": pVarViewFactory,
+				"pNumVarViewFactory": pNumVarViewFactory,
+				"pRecordLinkViewFactory": pRecordLinkViewFactory,
+				"pMapViewFactory": pMapViewFactory,
+				"pChildRefHandlerFactory": pChildRefHandlerFactory,
+				"pNonRepeatingChildRefHandlerFactory": pNonRepeatingChildRefHandlerFactory
 			};
 			let specNew = {
-				"path" : path,
-				"metadataIdUsedInData" : metadataIdUsedInData,
-				"cPresentation" : cPresentation,
-				"cParentPresentation" : cParentPresentation
+				"path": path,
+				"metadataIdUsedInData": metadataIdUsedInData,
+				"cPresentation": cPresentation,
+				"cParentPresentation": cParentPresentation
 			};
 
 			let type = cPresentation.getData().attributes.type;
@@ -151,7 +151,7 @@ var CORA = (function(cora) {
 
 		const shouldBePresentedAsMap = function(cPresentation) {
 			return cPresentation.containsChildWithNameInData("presentAs")
-					&& "map" === cPresentation.getFirstAtomicValueByNameInData("presentAs");
+				&& "map" === cPresentation.getFirstAtomicValueByNameInData("presentAs");
 		};
 
 		const getDependencies = function() {
@@ -159,9 +159,9 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type" : "presentationFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			"type": "presentationFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 		self = out;
 		return out;

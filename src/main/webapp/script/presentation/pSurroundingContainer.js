@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 			}
 			return "";
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
@@ -57,9 +57,9 @@ var CORA = (function(cora) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		start();
-		
+
 		let out = Object.freeze({
 			type: "pSurroundingContainer",
 			getSpec: getSpec,

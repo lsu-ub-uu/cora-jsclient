@@ -77,7 +77,7 @@ var CORA = (function(cora) {
 		const createDownload = function() {
 			resourceView = document.createElement("a");
 			resourceView.appendChild(document.createTextNode(dependencies.textProvider
-					.getTranslation("resourceLinkDownloadText")));
+				.getTranslation("resourceLinkDownloadText")));
 			resourceView.target = "_blank";
 		};
 
@@ -111,21 +111,21 @@ var CORA = (function(cora) {
 		const getView = function() {
 			return parent.getView();
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
-		const getSpec = function(){
+
+		const getSpec = function() {
 			return spec;
 		};
-		
+
 		let out = Object.freeze({
-			type : "pResourceLink",
-			getDependencies : getDependencies,
+			type: "pResourceLink",
+			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView : getView,
-			handleMsg : handleMsg
+			getView: getView,
+			handleMsg: handleMsg
 		});
 		start();
 		return out;

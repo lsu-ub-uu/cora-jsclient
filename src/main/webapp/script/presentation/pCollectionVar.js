@@ -324,15 +324,15 @@
 		const initializeViewModelObject = function() {
 			view.modelObject = out;
 		};
-		
+
 		const getDepdendencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
-		
+
 		start();
 
 		let out = Object.freeze({

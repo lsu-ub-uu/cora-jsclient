@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2019 Uppsala University Library
+ * Copyright 2018, 2019, 2020 Uppsala University Library
  * Copyright 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -20,33 +20,34 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pMap = function(dependencies, spec) {
-		var metadataProvider = dependencies.metadataProvider;
-		var textProvider = dependencies.textProvider;
-		var pubSub = dependencies.pubSub;
+		let metadataProvider = dependencies.metadataProvider;
+		let textProvider = dependencies.textProvider;
+		let pubSub = dependencies.pubSub;
 
-		var path = spec.path;
+		let path = spec.path;
 
-		var mapStarted = false;
-		var longitudeValue = "";
-		var latitudeValue = "";
-		var newElementsAddedSubscriptionId = "";
+		let mapStarted = false;
+		let longitudeValue = "";
+		let latitudeValue = "";
+		let newElementsAddedSubscriptionId = "";
 
-		var pMapView;
-		var view;
-		var cPresentation = spec.cPresentation;
-		var presentationId;
-		var metadataId = spec.metadataIdUsedInData;
-		var cMetadataElement;
-		var nameInData;
-		var textId;
-		var text;
-		var defTextId;
-		var defText;
-		var longitudePath;
-		var latitudePath;
-		var markerActive = false;
+		let pMapView;
+		let view;
+		let cPresentation = spec.cPresentation;
+		let presentationId;
+		let metadataId = spec.metadataIdUsedInData;
+		let cMetadataElement;
+		let nameInData;
+		let textId;
+		let text;
+		let defTextId;
+		let defText;
+		let longitudePath;
+		let latitudePath;
+		let markerActive = false;
+		let newElementsAddedHasBeenCalled = false;
 
-		function start() {
+		const start = function() {
 			presentationId = getPresentationId();
 
 			cMetadataElement = getMetadataById(metadataId);
@@ -56,94 +57,91 @@ var CORA = (function(cora) {
 			subscribeToMessagesForMap();
 
 			createView();
-
 		}
 
-		function getTextInfoFromMetadata() {
-			var cTextGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("textId"));
+		const getTextInfoFromMetadata = function() {
+			let cTextGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("textId"));
 			textId = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			text = textProvider.getTranslation(textId);
 
-			var cDefTextGroup = CORA.coraData(cMetadataElement
-					.getFirstChildByNameInData("defTextId"));
+			let cDefTextGroup = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("defTextId"));
 			defTextId = cDefTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			defText = textProvider.getTranslation(defTextId);
-
 		}
 
-		function subscribeToMessagesForMap() {
+		const subscribeToMessagesForMap = function() {
 			subscribeTonewElementsAddedMessageForStartup();
 			subscribeToSetValueForCoordinatesValues();
 			subscribeToViewJustMadeVisibleForStartup();
 			subscribeTopresentationShownForStartup();
 		}
 
-		function subscribeTonewElementsAddedMessageForStartup() {
+		const subscribeTonewElementsAddedMessageForStartup = function() {
 			newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded", {}, undefined,
-					newElementsAdded);
+				newElementsAdded);
 		}
 
-		function subscribeToSetValueForCoordinatesValues() {
-			var cChildReferences = CORA.coraData(cMetadataElement
-					.getFirstChildByNameInData("childReferences"));
-			var childReferences = cChildReferences.getChildrenByNameInData("childReference");
+		const subscribeToSetValueForCoordinatesValues = function() {
+			let cChildReferences = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("childReferences"));
+			let childReferences = cChildReferences.getChildrenByNameInData("childReference");
 			childReferences.forEach(subscribeToSetValueIfLatitudeOrLongitude);
 		}
 
-		function subscribeToViewJustMadeVisibleForStartup() {
+		const subscribeToViewJustMadeVisibleForStartup = function() {
 			pubSub.subscribe("viewJustMadeVisible", {}, undefined, viewJustMadeVisible);
 		}
-		function subscribeTopresentationShownForStartup() {
+
+		const subscribeTopresentationShownForStartup = function() {
 			pubSub.subscribe("presentationShown", {}, undefined, viewJustMadeVisible);
 		}
 
-		function getIdFromChildReference(childReference) {
-			var cChildReference = CORA.coraData(childReference);
-			var cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+		const getIdFromChildReference = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 
-		function getNameInDataForChildId(idOfChildToOurGroup) {
-			var cMetadataForChild = getMetadataById(idOfChildToOurGroup);
+		const getNameInDataForChildId = function(idOfChildToOurGroup) {
+			let cMetadataForChild = getMetadataById(idOfChildToOurGroup);
 			return cMetadataForChild.getFirstAtomicValueByNameInData("nameInData");
 		}
 
-		function subscribeToSetValueIfLatitudeOrLongitude(childReference) {
-			var idOfChildToOurGroup = getIdFromChildReference(childReference);
-			var nameInDataForChild = getNameInDataForChildId(idOfChildToOurGroup);
+		const subscribeToSetValueIfLatitudeOrLongitude = function(childReference) {
+			let idOfChildToOurGroup = getIdFromChildReference(childReference);
+			let nameInDataForChild = getNameInDataForChildId(idOfChildToOurGroup);
 
 			if ("longitude" === nameInDataForChild) {
 				longitudePath = calculateNewPathForMetadataIdUsingParentPath(idOfChildToOurGroup,
-						path);
+					path);
 				subscribeToSetValueForIdOfChildWithFunctionToCall(idOfChildToOurGroup,
-						handleSetValueLongitude, longitudePath);
+					handleSetValueLongitude, longitudePath);
 			}
 
 			if ("latitude" === nameInDataForChild) {
 				latitudePath = calculateNewPathForMetadataIdUsingParentPath(idOfChildToOurGroup,
-						path);
+					path);
 				subscribeToSetValueForIdOfChildWithFunctionToCall(idOfChildToOurGroup,
-						handleSetValueLatitude, latitudePath);
+					handleSetValueLatitude, latitudePath);
 			}
 		}
 
-		function subscribeToSetValueForIdOfChildWithFunctionToCall(idOfChildToOurGroup,
-				methodToCall, childPath) {
+		const subscribeToSetValueForIdOfChildWithFunctionToCall = function(idOfChildToOurGroup,
+			methodToCall, childPath) {
 			pubSub.subscribe("setValue", childPath, undefined, methodToCall);
 		}
 
-		function calculateNewPathForMetadataIdUsingParentPath(metadataIdToAdd, parentPath) {
-			var pathSpec = {
-				"metadataProvider" : dependencies.metadataProvider,
-				"metadataIdToAdd" : metadataIdToAdd,
-				"parentPath" : parentPath
+		const calculateNewPathForMetadataIdUsingParentPath = function(metadataIdToAdd, parentPath) {
+			let pathSpec = {
+				"metadataProvider": dependencies.metadataProvider,
+				"metadataIdToAdd": metadataIdToAdd,
+				"parentPath": parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		}
 
-		var newElementsAddedHasBeenCalled = false;
-
-		function newElementsAdded() {
+		const newElementsAdded = function() {
 			newElementsAddedHasBeenCalled = true;
 			if (mapNotStarted() && viewIsCurrentlyVisible()) {
 				unsubscribeFromnewElementsAdded();
@@ -151,43 +149,43 @@ var CORA = (function(cora) {
 			}
 		}
 
-		function viewIsCurrentlyVisible() {
+		const viewIsCurrentlyVisible = function() {
 			return view.offsetHeight > 0;
 		}
 
-		function viewJustMadeVisible() {
+		const viewJustMadeVisible = function() {
 			if (mapNotStarted() && newElementsAddedHasBeenCalled && viewIsCurrentlyVisible()) {
 				startMap();
 			}
 		}
 
-		function mapNotStarted() {
+		const mapNotStarted = function() {
 			return !mapStarted;
 		}
 
-		function startMap() {
+		const startMap = function() {
 			mapStarted = true;
 			pMapView.startMap();
 			possiblyHandleMarkerInView();
 		}
 
-		function handleSetValueLongitude(dataFromMsg) {
+		const handleSetValueLongitude = function(dataFromMsg) {
 			longitudeValue = dataFromMsg.data;
 			possiblyHandleMarkerInView();
 		}
 
-		function handleSetValueLatitude(dataFromMsg) {
+		const handleSetValueLatitude = function(dataFromMsg) {
 			latitudeValue = dataFromMsg.data;
 			possiblyHandleMarkerInView();
 		}
 
-		function possiblyHandleMarkerInView() {
+		const possiblyHandleMarkerInView = function() {
 			if (mapStarted) {
 				handleMarkerInView();
 			}
 		}
 
-		function handleMarkerInView() {
+		const handleMarkerInView = function() {
 			if (enoughDataToPlaceMarker()) {
 				setMarkerInView();
 			} else {
@@ -195,91 +193,96 @@ var CORA = (function(cora) {
 			}
 		}
 
-		function enoughDataToPlaceMarker() {
+		const enoughDataToPlaceMarker = function() {
 			return longitudeValue !== "" && latitudeValue !== "";
 		}
 
-		function setMarkerInView() {
+		const setMarkerInView = function() {
 			pMapView.setMarker(latitudeValue, longitudeValue);
 			markerActive = true;
 		}
 
-		function possiblyRemoveMarker() {
+		const possiblyRemoveMarker = function() {
 			if (markerActive) {
 				pMapView.removeMarker();
 				markerActive = false;
 			}
 		}
 
-		function unsubscribeFromnewElementsAdded() {
+		const unsubscribeFromnewElementsAdded = function() {
 			pubSub.unsubscribe(newElementsAddedSubscriptionId);
 		}
 
-		function createView() {
-			var mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			var pMapViewSpec = {
-				"mode" : mode,
-				"info" : {
-					"text" : text,
-					"defText" : defText,
-					"technicalInfo" : [ {
-						"text" : "textId: " + textId
+		const createView = function() {
+			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			let pMapViewSpec = {
+				"mode": mode,
+				"info": {
+					"text": text,
+					"defText": defText,
+					"technicalInfo": [{
+						"text": "textId: " + textId
 					}, {
-						"text" : "defTextId: " + defTextId
+						"text": "defTextId: " + defTextId
 					}, {
-						"text" : "metadataId: " + metadataId
+						"text": "metadataId: " + metadataId
 					}, {
-						"text" : "nameInData: " + nameInData
+						"text": "nameInData: " + nameInData
 					}, {
-						"text" : "presentationId: " + presentationId
-					} ]
+						"text": "presentationId: " + presentationId
+					}]
 				},
-				setLatLngMethod : publishLatLngValues
+				setLatLngMethod: publishLatLngValues
 			};
 			pMapView = dependencies.pMapViewFactory.factor(pMapViewSpec);
 			view = pMapView.getView();
 		}
 
-		function publishLatLngValues(lat, lng) {
-			var latitudeData = {
-				"data" : lat,
-				"path" : latitudePath
+		const publishLatLngValues = function(lat, lng) {
+			let latitudeData = {
+				"data": lat,
+				"path": latitudePath
 			};
 			pubSub.publish("setValue", latitudeData);
 
-			var longitudeData = {
-				"data" : lng,
-				"path" : longitudePath
+			let longitudeData = {
+				"data": lng,
+				"path": longitudePath
 			};
 			pubSub.publish("setValue", longitudeData);
 		}
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		}
 
-		function getPresentationId() {
-			var recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+		const getPresentationId = function() {
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		}
 
-		function getView() {
+		const getView = function() {
 			return view;
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		var out = Object.freeze({
-			"type" : "pMap",
-			getView : getView,
-			getDependencies : getDependencies,
-			newElementsAdded : newElementsAdded,
-			handleSetValueLongitude : handleSetValueLongitude,
-			handleSetValueLatitude : handleSetValueLatitude,
-			publishLatLngValues : publishLatLngValues,
-			viewJustMadeVisible : viewJustMadeVisible
+		const getSpec = function() {
+			return spec;
+		}
+
+		let out = Object.freeze({
+			"type": "pMap",
+			getView: getView,
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			newElementsAdded: newElementsAdded,
+			handleSetValueLongitude: handleSetValueLongitude,
+			handleSetValueLatitude: handleSetValueLatitude,
+			publishLatLngValues: publishLatLngValues,
+			viewJustMadeVisible: viewJustMadeVisible
 		});
 		start();
 		view.modelObject = out;

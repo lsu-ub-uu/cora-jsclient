@@ -129,6 +129,12 @@ QUnit.test("testFactorPGroupAsMap", function(assert) {
 	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 	let pMap = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pMap.type, "pMap");
+
+	let dependencies = pMap.getDependencies();
+	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
+	
+	let spec = pMap.getSpec();
+	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
 
 QUnit.test("testFactorPGroupAsMapDependencies", function(assert) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
 *
  * This file is part of Cora.
@@ -20,21 +20,21 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
-		var cPresentation = spec.cPresentation;
+		let cPresentation = spec.cPresentation;
 
-		var my = {};
-		var parent;
-		var hasOutputFormat;
-		var resourceView;
+		let my = {};
+		let parent;
+		let hasOutputFormat;
+		let resourceView;
 
-		function start() {
+		const start = function() {
 			initParent();
 			hasOutputFormat = presentationHasOutputFormat();
 			createResourceViewIfOutputFormatInMetadata();
 			subscribeToLinkedResourceMessage();
-		}
+		};
 
-		function initParent() {
+		const initParent = function() {
 			my.metadataId = "metadataGroupForResourceLinkGroup";
 
 			my.cPresentation = cPresentation;
@@ -43,80 +43,87 @@ var CORA = (function(cora) {
 
 			parent = CORA.pMultipleChildren(dependencies, spec, my);
 			parent.init();
-		}
+		};
 
-		function createBaseViewHolder() {
-			var presentationId = parent.getPresentationId();
+		const createBaseViewHolder = function() {
+			let presentationId = parent.getPresentationId();
 			return CORA.gui.createDivWithClassName("pResourceLink " + presentationId);
-		}
+		};
 
-		function presentationHasOutputFormat() {
+		const presentationHasOutputFormat = function() {
 			return cPresentation.containsChildWithNameInData("outputFormat");
-		}
+		};
 
-		function createResourceViewIfOutputFormatInMetadata() {
+		const createResourceViewIfOutputFormatInMetadata = function() {
 			if (hasOutputFormat) {
 				createResourceViewFromOutputFormat();
 			}
-		}
+		};
 
-		function createResourceViewFromOutputFormat() {
-			var outputFormatType = cPresentation.getFirstAtomicValueByNameInData("outputFormat");
+		const createResourceViewFromOutputFormat = function() {
+			let outputFormatType = cPresentation.getFirstAtomicValueByNameInData("outputFormat");
 			if (outputFormatType === "image") {
 				createImage();
 			} else {
 				createDownload();
 			}
 			setCommonAttributesOnResourceView();
-		}
+		};
 
-		function createImage() {
+		const createImage = function() {
 			resourceView = document.createElement("img");
-		}
+		};
 
-		function createDownload() {
+		const createDownload = function() {
 			resourceView = document.createElement("a");
 			resourceView.appendChild(document.createTextNode(dependencies.textProvider
 					.getTranslation("resourceLinkDownloadText")));
 			resourceView.target = "_blank";
-		}
+		};
 
-		function setCommonAttributesOnResourceView() {
+		const setCommonAttributesOnResourceView = function() {
 			resourceView.className = "master";
 			parent.getView().appendChild(resourceView);
-		}
+		};
 
-		function setInfoInLinkedResourceView(dataFromMsg) {
+		const setInfoInLinkedResourceView = function(dataFromMsg) {
 			if (hasOutputFormat) {
-				var url = dataFromMsg.data.actionLinks.read.url;
+				let url = dataFromMsg.data.actionLinks.read.url;
 				resourceView.href = url + "?" + getTokenRequestParameter();
 				resourceView.src = url + "?" + getTokenRequestParameter();
 			}
-		}
+		};
 
-		function getTokenRequestParameter() {
-			var tokenRequestParamenter = "authToken=";
+		const getTokenRequestParameter = function() {
+			let tokenRequestParamenter = "authToken=";
 			tokenRequestParamenter += dependencies.authTokenHolder.getCurrentAuthToken();
 			return tokenRequestParamenter;
-		}
+		};
 
-		function subscribeToLinkedResourceMessage() {
+		const subscribeToLinkedResourceMessage = function() {
 			dependencies.pubSub.subscribe("linkedResource", spec.path, undefined, handleMsg);
-		}
+		};
 
-		function handleMsg(dataFromMsg) {
+		const handleMsg = function(dataFromMsg) {
 			setInfoInLinkedResourceView(dataFromMsg);
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return parent.getView();
-		}
-		function getDependencies() {
+		};
+		
+		const getDependencies = function() {
 			return dependencies;
-		}
-		var out = Object.freeze({
-			"type" : "pResourceLink",
+		};
+		
+		const getSpec = function(){
+			return spec;
+		};
+		
+		let out = Object.freeze({
+			type : "pResourceLink",
 			getDependencies : getDependencies,
+			getSpec: getSpec,
 			getView : getView,
 			handleMsg : handleMsg
 		});

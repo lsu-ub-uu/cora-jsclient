@@ -52,18 +52,18 @@ var CORA = (function(cora) {
 
 			let pChildRefHandlerFactoryDependencies = {
 				"metadataProvider" : dependencies.providers.metadataProvider,
-				"pubSub" : dependencies.pubSub,
+				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
 				"textProvider" : dependencies.providers.textProvider,
+				"pubSub" : dependencies.pubSub,
 				"presentationFactory" : self,
 				"jsBookkeeper" : dependencies.jsBookkeeper,
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
 				"uploadManager" : dependencies.uploadManager,
 				"ajaxCallFactory" : dependencies.ajaxCallFactory,
+				"dataDivider" : dependencies.dataDivider,
+				
 				"pRepeatingElementFactory" : pRepeatingElementFactory,
-				"pChildRefHandlerViewFactory" : CORA.genericFactory("pChildRefHandlerView"),
-				"dataDivider" : dependencies.dataDivider
+				"pChildRefHandlerViewFactory" : CORA.genericFactory("pChildRefHandlerView")
 			};
-
 			let pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
 					pChildRefHandlerFactoryDependencies);
 
@@ -86,26 +86,29 @@ var CORA = (function(cora) {
 
 			let childDependencies = {
 				"providers" : dependencies.providers,
-				"globalFactories" : dependencies.globalFactories,
-				"infoFactory" : infoFactory,
 				"clientInstanceProvider" : dependencies.providers.clientInstanceProvider,
 				"metadataProvider" : dependencies.providers.metadataProvider,
-				"pubSub" : dependencies.pubSub,
 				"textProvider" : dependencies.providers.textProvider,
-				"jsBookkeeper" : dependencies.jsBookkeeper,
-				"presentationFactory" : self,
+				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
+				
+				"globalFactories" : dependencies.globalFactories,
 				"xmlHttpRequestFactory" : dependencies.xmlHttpRequestFactory,
 				"recordGuiFactory" : dependencies.recordGuiFactory,
-				"recordTypeProvider" : dependencies.providers.recordTypeProvider,
-				"uploadManager" : dependencies.uploadManager,
 				"ajaxCallFactory" : dependencies.ajaxCallFactory,
+				"infoFactory" : infoFactory,
+				"presentationFactory" : self,
+
+				"pubSub" : dependencies.pubSub,
+				"jsBookkeeper" : dependencies.jsBookkeeper,
+				"uploadManager" : dependencies.uploadManager,
+				"authTokenHolder" : dependencies.authTokenHolder,
+
 				"pVarViewFactory" : pVarViewFactory,
 				"pNumVarViewFactory" : pNumVarViewFactory,
 				"pRecordLinkViewFactory" : pRecordLinkViewFactory,
+				"pMapViewFactory" : pMapViewFactory,
 				"pChildRefHandlerFactory" : pChildRefHandlerFactory,
-				"pNonRepeatingChildRefHandlerFactory" : pNonRepeatingChildRefHandlerFactory,
-				"authTokenHolder" : dependencies.authTokenHolder,
-				"pMapViewFactory" : pMapViewFactory
+				"pNonRepeatingChildRefHandlerFactory" : pNonRepeatingChildRefHandlerFactory
 			};
 			let specNew = {
 				"path" : path,
@@ -118,6 +121,12 @@ var CORA = (function(cora) {
 			if (type === "pVar") {
 				return CORA.pVar(childDependencies, specNew);
 			}
+			if (type === "pCollVar") {
+				return CORA.pCollectionVar(childDependencies, specNew);
+			}
+			if (type === "pNumVar") {
+				return CORA.pNumVar(childDependencies, specNew);
+			}
 			if (type === "pGroup") {
 				if (shouldBePresentedAsMap(cPresentation)) {
 					return CORA.pMap(childDependencies, specNew);
@@ -129,14 +138,8 @@ var CORA = (function(cora) {
 				specNew.recordPartPermissionCalculatorFactory = dependencies.recordPartPermissionCalculatorFactory;
 				return CORA.pRecordLink(childDependencies, specNew);
 			}
-			if (type === "pCollVar") {
-				return CORA.pCollectionVar(childDependencies, specNew);
-			}
 			if (type === "pResourceLink") {
 				return CORA.pResourceLink(childDependencies, specNew);
-			}
-			if (type === "pNumVar") {
-				return CORA.pNumVar(childDependencies, specNew);
 			}
 			let repeat = cPresentation.getData().attributes.repeat;
 			if (repeat === "this") {
@@ -144,16 +147,16 @@ var CORA = (function(cora) {
 			}
 			specNew.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			return CORA.pSurroundingContainer(childDependencies, specNew);
-		}
+		};
 
 		const shouldBePresentedAsMap = function(cPresentation) {
 			return cPresentation.containsChildWithNameInData("presentAs")
 					&& "map" === cPresentation.getFirstAtomicValueByNameInData("presentAs");
-		}
+		};
 
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		let out = Object.freeze({
 			"type" : "presentationFactory",
@@ -162,7 +165,6 @@ var CORA = (function(cora) {
 		});
 		self = out;
 		return out;
-
 	};
 	return cora;
 }(CORA));

@@ -52,11 +52,11 @@ var CORA = (function(cora) {
 		
 		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 		
 		start();
 		

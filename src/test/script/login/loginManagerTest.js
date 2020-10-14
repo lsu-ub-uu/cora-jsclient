@@ -220,6 +220,26 @@ QUnit
 					"type": "appTokenLogin",
 					"userId": "coraUser:4412982402853626",
 					"appToken": "b27039e1-593d-4d95-a69a-b33aa8c0924a"
+				}, {
+					"text": "divaEverything",
+					"type": "appTokenLogin",
+					"userId": "coraUser:490742519075086",
+					"appToken": "593db7b0-9513-4b69-96e5-5f8e34ca996f"
+				}, {
+					"text": "divaSystemAdmin",
+					"type": "appTokenLogin",
+					"userId": "coraUser:491055276494310",
+					"appToken": "62555e84-ee89-4978-851f-85d25e310129"
+				}, {
+					"text": "divaDomainAdminUU",
+					"type": "appTokenLogin",
+					"userId": "coraUser:491144693381458",
+					"appToken": "f74b69af-f255-48c6-8e8f-af36cbef3090"
+				}, {
+					"text": "divaDomainAdminKTH",
+					"type": "appTokenLogin",
+					"userId": "coraUser:491201365536105",
+					"appToken": "a3466862-1bb3-41d1-bfda-85ee12338feb"
 				},
 				{
 					"text": "alvin user",

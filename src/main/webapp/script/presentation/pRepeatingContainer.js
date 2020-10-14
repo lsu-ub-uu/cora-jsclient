@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -20,64 +20,78 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingContainer = function(dependencies, spec) {
-		var path = spec.path;
-		var cPresentation = spec.cPresentation;
-		var metadataProvider = dependencies.metadataProvider;
-		var textProvider = dependencies.textProvider;
-		var presentationFactory = dependencies.presentationFactory;
+		let path = spec.path;
+		let cPresentation = spec.cPresentation;
+		let metadataProvider = dependencies.metadataProvider;
+		let textProvider = dependencies.textProvider;
+		let presentationFactory = dependencies.presentationFactory;
+		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		let view;
 
-		var recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+		const start = function() {
+			view = createBaseView();
+		};
 
-		var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-		var view = createBaseView();
+		const createBaseView = function() {
+			let viewNew = CORA.gui.createSpanWithClassName("pRepeatingContainer " + presentationId);
 
-		function createBaseView() {
-			var viewNew = CORA.gui.createSpanWithClassName("pRepeatingContainer " + presentationId);
-
-			var presentationChildren = cPresentation.getFirstChildByNameInData("childReferences").children;
+			let presentationChildren = cPresentation.getFirstChildByNameInData("childReferences").children;
 
 			presentationChildren.forEach(function(presentationChildRef) {
 				viewNew.appendChild(createViewForChild(presentationChildRef));
 			});
-
 			return viewNew;
-		}
-		function createViewForChild(presentationChildRef) {
-			var refId = getRefId(presentationChildRef);
-			var cPresentationChild = getMetadataById(refId);
+		};
+
+		const createViewForChild = function(presentationChildRef) {
+			let refId = getRefId(presentationChildRef);
+			let cPresentationChild = getMetadataById(refId);
 			if (cPresentationChild.getData().name === "text") {
-				var text = CORA.gui.createSpanWithClassName("text");
+				let text = CORA.gui.createSpanWithClassName("text");
 				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
 				return text;
 			}
-			var presentationSpec = {
-				"path" : path,
-				"metadataIdUsedInData" : spec.metadataIdUsedInData,
-				"cPresentation" : cPresentationChild
+			let presentationSpec = {
+				"path": path,
+				"metadataIdUsedInData": spec.metadataIdUsedInData,
+				"cPresentation": cPresentationChild
 			};
-			var presentation = presentationFactory.factor(presentationSpec);
+			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();
-		}
+		};
 
-		function getRefId(presentationChildRef) {
-			var cPresentationChildRef = CORA.coraData(presentationChildRef);
-			var cRefGroup = CORA.coraData(cPresentationChildRef
-					.getFirstChildByNameInData("refGroup"));
-			var cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
+		const getRefId = function(presentationChildRef) {
+			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let cRefGroup = CORA.coraData(cPresentationChildRef
+				.getFirstChildByNameInData("refGroup"));
+			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		var out = Object.freeze({
-			"type" : "pRepeatingContainer",
-			getView : getView
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			return spec;
+		};
+
+		start();
+
+		let out = Object.freeze({
+			type: "pRepeatingContainer",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView
 		});
 		view.modelObject = out;
 		return out;

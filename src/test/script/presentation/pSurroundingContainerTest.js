@@ -102,6 +102,16 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 	}
 });
 
+QUnit.test("testGetSpec", function(assert) {
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
+	assert.strictEqual(pSurroundingContainer.getSpec(), this.spec);
+});
+
+QUnit.test("testGetDependencies", function(assert) {
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
+	assert.strictEqual(pSurroundingContainer.getDependencies(), this.dependencies);
+});
+
 QUnit.test("testInit", function(assert) {
 	var pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
 	var view = pSurroundingContainer.getView();

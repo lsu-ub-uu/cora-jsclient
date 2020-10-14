@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -71,9 +71,35 @@ QUnit.module("presentation/pRepeatingContainerTest.js", {
 		this.pRepeatingContainerFactory = CORATEST.attachedPRepeatingContainerFactory(
 				this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
 				this.jsBookkeeper, this.fixture);
+				
+		this.dependencies = {
+			"metadataProvider" : this.metadataProvider,
+			"pubSub" : this.pubSub,
+			"textProvider" : this.textProvider,
+			"presentationFactory" : this.presentationFactory,
+			"jsBookkeeper" : this.jsBookkeeper
+		};
+		this.pRepeatingContainerId = "pTextVariableIdRContainer";
+		this.cPRepeatingContainer = CORA.coraData(this.metadataProvider
+					.getMetadataById(this.pRepeatingContainerId));
+		this.spec = {
+			"path" : {},
+			"cPresentation" : this.cPRepeatingContainer,
+		};
+			
 	},
 	afterEach : function() {
 	}
+});
+
+QUnit.test("testGetDependencies", function(assert) {
+	var pRepeatingContainer = CORA.pRepeatingContainer(this.dependencies, this.spec);
+	assert.strictEqual(pRepeatingContainer.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	var pRepeatingContainer = CORA.pRepeatingContainer(this.dependencies, this.spec);
+	assert.strictEqual(pRepeatingContainer.getSpec(), this.spec);
 });
 
 QUnit.test("testInit",

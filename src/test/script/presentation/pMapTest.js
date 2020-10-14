@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2019 Uppsala University Library
+ * Copyright 2018, 2019, 2020 Uppsala University Library
  * Copyright 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -39,6 +39,16 @@ QUnit.module("presentation/pMapTest.js", {
 	},
 	afterEach : function() {
 	}
+});
+
+QUnit.test("testGetDependencies", function(assert) {
+	var pMap = CORA.pMap(this.dependencies, this.spec);
+	assert.strictEqual(pMap.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	var pMap = CORA.pMap(this.dependencies, this.spec);
+	assert.strictEqual(pMap.getSpec(), this.spec);
 });
 
 QUnit.test("testInit", function(assert) {

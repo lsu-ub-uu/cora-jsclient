@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2020 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -69,14 +69,43 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy"),
+		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.newAttachedPResourceLink = CORATEST.attachedPResourceLinkFactory(
 				this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
 				this.jsBookkeeper, this.recordTypeProvider, this.fixture);
+				
+		this.dependencies = {
+			"authTokenHolder" : CORATEST.authTokenHolderSpy(),
+			"metadataProvider" : this.metadataProvider,
+			"pubSub" : this.pubSub,
+			"textProvider" : this.textProvider,
+			"presentationFactory" : this.presentationFactory,
+			"jsBookkeeper" : this.jsBookkeeper,
+			"recordTypeProvider" : this.recordTypeProvider,
+			"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+		};
+		this.presentationId = "masterPResLink";
+		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));
+		this.spec = {
+			"path" : {},
+			"cPresentation" : this.cPresentation,
+			"cParentPresentation" : undefined,
+			"dataDivider" : "systemX"
+		};
 	},
 	afterEach : function() {
 	}
+});
+
+QUnit.test("testGetDependencies", function(assert) {
+	var pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
+	assert.strictEqual(pResourceLink.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	var pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
+	assert.strictEqual(pResourceLink.getSpec(), this.spec);
 });
 
 QUnit.test("testInit", function(assert) {

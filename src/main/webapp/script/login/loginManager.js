@@ -29,58 +29,58 @@ var CORA = (function(cora) {
 		var loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
 			loginOptions.push({
-				"text" : "appToken as 141414",
-				"type" : "appTokenLogin",
-				"userId" : "141414",
-				"appToken" : "63e6bd34-02a1-4c82-8001-158c104cae0e"
+				text: "appToken as 141414",
+				type: "appTokenLogin",
+				userId: "141414",
+				appToken: "63e6bd34-02a1-4c82-8001-158c104cae0e"
 			});
 			loginOptions.push({
-				"text" : "appToken as 151515 alvin",
-				"type" : "appTokenLogin",
-				"userId" : "151515",
-				"appToken" : "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
+				text: "appToken as 151515 alvin",
+				type: "appTokenLogin",
+				userId: "151515",
+				appToken: "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
 			});
 			loginOptions.push({
-				"text" : "appToken as 161616 diva",
-				"type" : "appTokenLogin",
-				"userId" : "161616",
-				"appToken" : "f7973be9-02e0-4c42-979b-09e42372a02a"
+				text: "appToken as 161616 diva",
+				type: "appTokenLogin",
+				userId: "161616",
+				appToken: "f7973be9-02e0-4c42-979b-09e42372a02a"
 			});
 			loginOptions.push({
-				"text" : "diva user",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:4412982402853626",
-				"appToken" : "b27039e1-593d-4d95-a69a-b33aa8c0924a"
+				text: "diva user",
+				type: "appTokenLogin",
+				userId: "coraUser:4412982402853626",
+				appToken: "b27039e1-593d-4d95-a69a-b33aa8c0924a"
 			});
 			loginOptions.push({
-				"text" : "divaEverything",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:490742519075086",
-				"appToken" : "593db7b0-9513-4b69-96e5-5f8e34ca996f"
+				text: "divaEverything",
+				type: "appTokenLogin",
+				userId: "coraUser:490742519075086",
+				appToken: "2e57eb36-55b9-4820-8c44-8271baab4e8e"
 			});
 			loginOptions.push({
-				"text" : "divaSystemAdmin",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:491055276494310",
-				"appToken" : "62555e84-ee89-4978-851f-85d25e310129"
+				text: "divaSystemAdmin",
+				type: "appTokenLogin",
+				userId: "coraUser:491055276494310",
+				appToken: "0c240296-0315-4e48-a991-4e6350e73413"
 			});
 			loginOptions.push({
-				"text" : "divaDomainAdminUU",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:491144693381458",
-				"appToken" : "f74b69af-f255-48c6-8e8f-af36cbef3090"
+				text: "divaDomainAdminUU",
+				type: "appTokenLogin",
+				userId: "coraUser:491144693381458",
+				appToken: "89ad2b42-785a-4421-a647-f959cdb85f4a"
 			});
 			loginOptions.push({
-				"text" : "divaDomainAdminKTH",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:491201365536105",
-				"appToken" : "a3466862-1bb3-41d1-bfda-85ee12338feb"
+				text: "divaDomainAdminKTH",
+				type: "appTokenLogin",
+				userId: "coraUser:491201365536105",
+				appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
 			});
 			loginOptions.push({
-				"text" : "alvin user",
-				"type" : "appTokenLogin",
-				"userId" : "coraUser:4412566252284358",
-				"appToken" : "935ae709-4056-4b3d-85d2-469b304acfae"
+				text: "alvin user",
+				type: "appTokenLogin",
+				userId: "coraUser:4412566252284358",
+				appToken: "935ae709-4056-4b3d-85d2-469b304acfae"
 			});
 		}
 		var loginOrigin;
@@ -92,8 +92,8 @@ var CORA = (function(cora) {
 		function start() {
 			fetchAllLoginInfoFromServer();
 			var viewSpec = {
-				"loginMethod" : login,
-				"logoutMethod" : logout
+				"loginMethod": login,
+				"logoutMethod": logout
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
 		}
@@ -104,22 +104,22 @@ var CORA = (function(cora) {
 
 		function fetchLoginUnitFromServer() {
 			var callSpec = {
-				"requestMethod" : "GET",
-				"url" : spec.baseUrl + "record/loginUnit",
-				"loadMethod" : fetchLoginUnitCallback,
-				"errorMethod" : fetchLoginUnitErrorCallback,
-				"timeoutMethod" : fetchLoginUnitTimeoutCallback
+				"requestMethod": "GET",
+				"url": spec.baseUrl + "record/loginUnit",
+				"loadMethod": fetchLoginUnitCallback,
+				"errorMethod": fetchLoginUnitErrorCallback,
+				"timeoutMethod": fetchLoginUnitTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		}
 
 		function fetchLoginFromServer() {
 			var callSpec = {
-				"requestMethod" : "GET",
-				"url" : spec.baseUrl + "record/login",
-				"loadMethod" : fetchLoginCallback,
-				"errorMethod" : fetchLoginErrorCallback,
-				"timeoutMethod" : fetchLoginTimeoutCallback
+				"requestMethod": "GET",
+				"url": spec.baseUrl + "record/login",
+				"loadMethod": fetchLoginCallback,
+				"errorMethod": fetchLoginErrorCallback,
+				"timeoutMethod": fetchLoginTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		}
@@ -148,8 +148,8 @@ var CORA = (function(cora) {
 				var url = getUrlFromLoginRecord(loginData);
 				var type = getTypeFromLoginRecord(loginData);
 				logins[recordId] = {
-					"url" : url,
-					"type" : type
+					"url": url,
+					type: type
 				};
 				if ("ldap" === type) {
 					logins[recordId].metadataId = getMetadataIdFromLoginRecord(loginData);
@@ -183,7 +183,7 @@ var CORA = (function(cora) {
 		function getPresentationIdFromLoginRecord(recordData) {
 			var cRecord = CORA.coraData(recordData);
 			var cMetadataIdGroup = CORA.coraData(cRecord
-					.getFirstChildByNameInData("ldapPresentation"));
+				.getFirstChildByNameInData("ldapPresentation"));
 
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
@@ -199,9 +199,9 @@ var CORA = (function(cora) {
 				var loginUnitId = cRecordInfo.getFirstAtomicValueByNameInData("id");
 
 				var loginOption = {
-					"text" : getTranslatedText(textId),
-					"type" : logins[loginId].type,
-					"url" : logins[loginId].url
+					text: getTranslatedText(textId),
+					type: logins[loginId].type,
+					"url": logins[loginId].url
 				}
 				loginOption = possiblyAddLdapAttributes(loginOption, loginId, loginUnitId);
 				loginOptions.push(loginOption);
@@ -270,12 +270,12 @@ var CORA = (function(cora) {
 
 		function appTokenLogin(userId, appToken) {
 			var loginSpec = {
-				"requestMethod" : "POST",
-				"url" : spec.appTokenBaseUrl + "apptokenverifier/rest/apptoken/",
-				"accept" : "",
-				"authInfoCallback" : appTokenAuthInfoCallback,
-				"errorCallback" : appTokenErrorCallback,
-				"timeoutCallback" : appTokenTimeoutCallback
+				"requestMethod": "POST",
+				"url": spec.appTokenBaseUrl + "apptokenverifier/rest/apptoken/",
+				"accept": "",
+				"authInfoCallback": appTokenAuthInfoCallback,
+				"errorCallback": appTokenErrorCallback,
+				"timeoutCallback": appTokenTimeoutCallback
 			};
 			var factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
 			factoredAppTokenLogin.login(userId, appToken);
@@ -285,7 +285,7 @@ var CORA = (function(cora) {
 			window.addEventListener("message", receiveMessage, false);
 			var url = loginOption.url;
 			var loginSpec = {
-				"url" : url
+				"url": url
 			};
 			loginOrigin = getIdpLoginServerPartFromUrl(url);
 			createdWebRedirectLogin = dependencies.webRedirectLoginFactory.factor(loginSpec);
@@ -293,7 +293,7 @@ var CORA = (function(cora) {
 
 		function getIdpLoginServerPartFromUrl(urlToWedredirectLogin) {
 			var targetPart = urlToWedredirectLogin.substring(urlToWedredirectLogin
-					.indexOf("target=") + 7);
+				.indexOf("target=") + 7);
 			var lengthOfHttps = "https://".length;
 			return targetPart.substring(0, targetPart.indexOf("/", lengthOfHttps));
 		}
@@ -317,12 +317,12 @@ var CORA = (function(cora) {
 
 		function startLoginForLoginOption(loginOption) {
 			var ldapLoginSpec = {
-				"metadataId" : loginOption.metadataId,
-				"presentationId" : loginOption.presentationId,
-				"jsClient" : spec.jsClient
+				"metadataId": loginOption.metadataId,
+				"presentationId": loginOption.presentationId,
+				"jsClient": spec.jsClient
 			};
 			var ldapLoginJsClientIntegrator = dependencies.ldapLoginJsClientIntegratorFactory
-					.factor(ldapLoginSpec);
+				.factor(ldapLoginSpec);
 			startedLdapLogins[loginOption.loginUnitId] = ldapLoginJsClientIntegrator;
 		}
 
@@ -352,7 +352,7 @@ var CORA = (function(cora) {
 
 		function failedToLogout(errorObject) {
 			return (errorObject.status === 0 || errorObject.status === 404)
-					&& errorObject.spec.requestMethod === "DELETE";
+				&& errorObject.spec.requestMethod === "DELETE";
 		}
 
 		function appTokenTimeoutCallback() {
@@ -362,13 +362,13 @@ var CORA = (function(cora) {
 		function logout() {
 			var deleteLink = authInfo.actionLinks['delete'];
 			var callSpec = {
-				"requestMethod" : deleteLink.requestMethod,
-				"url" : deleteLink.url,
-				"loadMethod" : logoutCallback,
-				"errorMethod" : appTokenErrorCallback,
-				"timeoutMethod" : appTokenTimeoutCallback,
-				"data" : authInfo.token,
-				"timeoutInMS" : 15000
+				"requestMethod": deleteLink.requestMethod,
+				"url": deleteLink.url,
+				"loadMethod": logoutCallback,
+				"errorMethod": appTokenErrorCallback,
+				"timeoutMethod": appTokenTimeoutCallback,
+				"data": authInfo.token,
+				"timeoutInMS": 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		}
@@ -396,27 +396,27 @@ var CORA = (function(cora) {
 
 		function messageIsFromWindowOpenedFromHere(event) {
 			return loginOrigin === event.origin
-					&& createdWebRedirectLogin.getOpenedWindow() === event.source;
+				&& createdWebRedirectLogin.getOpenedWindow() === event.source;
 		}
 
 		out = Object.freeze({
-			"type" : "loginManager",
-			getDependencies : getDependencies,
-			getHtml : getHtml,
-			login : login,
-			logout : logout,
-			appTokenAuthInfoCallback : appTokenAuthInfoCallback,
-			appTokenErrorCallback : appTokenErrorCallback,
-			appTokenTimeoutCallback : appTokenTimeoutCallback,
-			logoutCallback : logoutCallback,
-			getSpec : getSpec,
-			receiveMessage : receiveMessage,
-			fetchLoginUnitCallback : fetchLoginUnitCallback,
-			fetchLoginUnitErrorCallback : fetchLoginUnitErrorCallback,
-			fetchLoginUnitTimeoutCallback : fetchLoginUnitTimeoutCallback,
-			fetchLoginCallback : fetchLoginCallback,
-			fetchLoginErrorCallback : fetchLoginErrorCallback,
-			fetchLoginTimeoutCallback : fetchLoginTimeoutCallback
+			type: "loginManager",
+			getDependencies: getDependencies,
+			getHtml: getHtml,
+			login: login,
+			logout: logout,
+			appTokenAuthInfoCallback: appTokenAuthInfoCallback,
+			appTokenErrorCallback: appTokenErrorCallback,
+			appTokenTimeoutCallback: appTokenTimeoutCallback,
+			logoutCallback: logoutCallback,
+			getSpec: getSpec,
+			receiveMessage: receiveMessage,
+			fetchLoginUnitCallback: fetchLoginUnitCallback,
+			fetchLoginUnitErrorCallback: fetchLoginUnitErrorCallback,
+			fetchLoginUnitTimeoutCallback: fetchLoginUnitTimeoutCallback,
+			fetchLoginCallback: fetchLoginCallback,
+			fetchLoginErrorCallback: fetchLoginErrorCallback,
+			fetchLoginTimeoutCallback: fetchLoginTimeoutCallback
 		});
 		start();
 		return out;

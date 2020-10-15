@@ -81,7 +81,7 @@ QUnit.module("login/loginManagerTest.js",
 			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
 
 			this.authInfo = {
-				"userId": "141414",
+				userId: "141414",
 				"token": "fake authToken from here",
 				"validForNoSeconds": "131",
 				"actionLinks": {
@@ -94,8 +94,8 @@ QUnit.module("login/loginManagerTest.js",
 			};
 			this.loginWithWebRedirect = function() {
 				this.loginOption = {
-					"text": "Uppsala webredirect",
-					"type": "webRedirectLogin",
+					text: "Uppsala webredirect",
+					type: "webRedirectLogin",
 					"url": "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
 				};
 				this.loginManager.login(this.loginOption);
@@ -198,54 +198,54 @@ QUnit
 			this.answerListLoginsCall(1);
 			var expectedLoginOptions = [
 				{
-					"text": "appToken as 141414",
-					"type": "appTokenLogin",
-					"userId": "141414",
-					"appToken": "63e6bd34-02a1-4c82-8001-158c104cae0e"
+					text: "appToken as 141414",
+					type: "appTokenLogin",
+					userId: "141414",
+					appToken: "63e6bd34-02a1-4c82-8001-158c104cae0e"
 				},
 				{
-					"text": "appToken as 151515 alvin",
-					"type": "appTokenLogin",
-					"userId": "151515",
-					"appToken": "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
+					text: "appToken as 151515 alvin",
+					type: "appTokenLogin",
+					userId: "151515",
+					appToken: "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
 				},
 				{
-					"text": "appToken as 161616 diva",
-					"type": "appTokenLogin",
-					"userId": "161616",
-					"appToken": "f7973be9-02e0-4c42-979b-09e42372a02a"
+					text: "appToken as 161616 diva",
+					type: "appTokenLogin",
+					userId: "161616",
+					appToken: "f7973be9-02e0-4c42-979b-09e42372a02a"
 				},
 				{
-					"text": "diva user",
-					"type": "appTokenLogin",
-					"userId": "coraUser:4412982402853626",
-					"appToken": "b27039e1-593d-4d95-a69a-b33aa8c0924a"
+					text: "diva user",
+					type: "appTokenLogin",
+					userId: "coraUser:4412982402853626",
+					appToken: "b27039e1-593d-4d95-a69a-b33aa8c0924a"
 				}, {
-					"text": "divaEverything",
-					"type": "appTokenLogin",
-					"userId": "coraUser:490742519075086",
-					"appToken": "593db7b0-9513-4b69-96e5-5f8e34ca996f"
+					text: "divaEverything",
+					type: "appTokenLogin",
+					userId: "coraUser:490742519075086",
+					appToken: "2e57eb36-55b9-4820-8c44-8271baab4e8e"
 				}, {
-					"text": "divaSystemAdmin",
-					"type": "appTokenLogin",
-					"userId": "coraUser:491055276494310",
-					"appToken": "62555e84-ee89-4978-851f-85d25e310129"
+					text: "divaSystemAdmin",
+					type: "appTokenLogin",
+					userId: "coraUser:491055276494310",
+					appToken: "0c240296-0315-4e48-a991-4e6350e73413"
 				}, {
-					"text": "divaDomainAdminUU",
-					"type": "appTokenLogin",
-					"userId": "coraUser:491144693381458",
-					"appToken": "f74b69af-f255-48c6-8e8f-af36cbef3090"
+					text: "divaDomainAdminUU",
+					type: "appTokenLogin",
+					userId: "coraUser:491144693381458",
+					appToken: "89ad2b42-785a-4421-a647-f959cdb85f4a"
 				}, {
-					"text": "divaDomainAdminKTH",
-					"type": "appTokenLogin",
-					"userId": "coraUser:491201365536105",
-					"appToken": "a3466862-1bb3-41d1-bfda-85ee12338feb"
+					text: "divaDomainAdminKTH",
+					type: "appTokenLogin",
+					userId: "coraUser:491201365536105",
+					appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
 				},
 				{
-					"text": "alvin user",
-					"type": "appTokenLogin",
-					"userId": "coraUser:4412566252284358",
-					"appToken": "935ae709-4056-4b3d-85d2-469b304acfae"
+					text: "alvin user",
+					type: "appTokenLogin",
+					userId: "coraUser:4412566252284358",
+					appToken: "935ae709-4056-4b3d-85d2-469b304acfae"
 				},
 				{
 					text: "translated_uuLoginUnitText",
@@ -257,8 +257,8 @@ QUnit
 					type: "webRedirect",
 					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
 				}, {
-					"text": "translated_uuSystemOneLDAPLoginUnitText",
-					"type": "ldap",
+					text: "translated_uuSystemOneLDAPLoginUnitText",
+					type: "ldap",
 					"url": "http://www.google.se",
 					"metadataId": "ldapGroup",
 					"presentationId": "ldapPGroup",
@@ -287,8 +287,8 @@ QUnit
 					type: "webRedirect",
 					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
 				}, {
-					"text": "translated_uuSystemOneLDAPLoginUnitText",
-					"type": "ldap",
+					text: "translated_uuSystemOneLDAPLoginUnitText",
+					type: "ldap",
 					"url": "http://www.google.se",
 					"metadataId": "ldapGroup",
 					"presentationId": "ldapPGroup",
@@ -349,8 +349,8 @@ QUnit.test("testInitLoginManagerViewSpec", function(assert) {
 QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text": "someText",
-		"type": "appTokenLogin"
+		text: "someText",
+		type: "appTokenLogin"
 	});
 	var factored1 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.ok(factored1);
@@ -366,10 +366,10 @@ QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 QUnit.test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text": "someText",
-		"type": "appTokenLogin",
-		"userId": "testUserId",
-		"appToken": "testAppToken"
+		text: "someText",
+		type: "appTokenLogin",
+		userId: "testUserId",
+		appToken: "testAppToken"
 	});
 	var factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.strictEqual(factored0.getUserId(0), "testUserId");
@@ -469,8 +469,8 @@ QUnit.test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(a
 QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text": "someText",
-		"type": "appTokenLogin"
+		text: "someText",
+		type: "appTokenLogin"
 	});
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
 	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
@@ -538,8 +538,8 @@ QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) 
 QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text": "someText",
-		"type": "ldap",
+		text: "someText",
+		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId"
 	});
@@ -555,8 +555,8 @@ QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
 QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text": "someText",
-		"type": "ldap",
+		text: "someText",
+		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
@@ -575,8 +575,8 @@ QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(asse
 QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text": "someText",
-		"type": "ldap",
+		text: "someText",
+		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
@@ -595,8 +595,8 @@ QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function
 QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
 	var loginManager = this.loginManager;
 	var spec = {
-		"text": "someText",
-		"type": "ldap",
+		text: "someText",
+		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
@@ -614,8 +614,8 @@ QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(asse
 QUnit.test("testCloseHolderIsCalledOnShowLdap", function(assert) {
 	var loginManager = this.loginManager;
 	loginManager.login({
-		"text": "someText",
-		"type": "ldap",
+		text: "someText",
+		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId"
 	});

@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 		var menuView = createMenuView(spec.textProvider.getTranslation("theClient_uploadMenuText"));
 
 		function createMenuView(text) {
-			var menuViewNew = CORA.gui.createSpanWithClassName("menuView");
+			var menuViewNew = CORA.gui.createSpanWithClassName("upload");
 			menuViewNew.textContent = text;
 			return menuViewNew;
 		}

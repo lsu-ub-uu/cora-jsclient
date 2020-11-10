@@ -148,14 +148,14 @@ var CORATEST = (function(coraTest) {
 QUnit.test("testUploadQue", function(assert) {
 	var uploadManager = this.uploadManager;
 	var menuView = this.uploadManager.view.getMenuView();
-	assert.strictEqual(menuView.className, "menuView");
+	assert.strictEqual(menuView.className, "upload");
 
 	uploadManager.upload(this.uploadSpec);
 
 	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
 	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
 
-	assert.strictEqual(menuView.className, "menuView uploading");
+	assert.strictEqual(menuView.className, "upload uploading");
 
 	uploadManager.upload(this.uploadSpec);
 	assert.strictEqual(this.ajaxCallFactorySpy.getFactored(1), undefined);
@@ -165,7 +165,7 @@ QUnit.test("testUploadQue", function(assert) {
 	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy1);
 
 	uploadManager.uploadFinished();
-	assert.strictEqual(menuView.className, "menuView");
+	assert.strictEqual(menuView.className, "upload");
 });
 
 QUnit.test("testUploadError", function(assert) {

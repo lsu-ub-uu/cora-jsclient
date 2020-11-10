@@ -50,7 +50,7 @@ QUnit.test("testGetSpec", function(assert) {
 QUnit.test("testGetMenuView", function(assert) {
 	var uploadManagerView = CORA.uploadManagerView(this.spec);
 	var menuView = uploadManagerView.getMenuView();
-	assert.strictEqual(menuView.className, "menuView");
+	assert.strictEqual(menuView.className, "upload");
 	assert.strictEqual(menuView.nodeName, "SPAN");
 	assert.strictEqual(menuView.textContent, this.spec.textProvider
 			.getTranslation("theClient_uploadMenuText"));
@@ -104,8 +104,8 @@ QUnit.test("activateDeactivate", function(assert) {
 
 	var menuView = uploadManagerView.getMenuView();
 
-	assert.strictEqual(menuView.className, "menuView");
+	assert.strictEqual(menuView.className, "upload");
 	uploadManagerView.activate();
-	assert.strictEqual(menuView.className, "menuView uploading");
+	assert.strictEqual(menuView.className, "upload uploading");
 	uploadManagerView.deactivate();
 });

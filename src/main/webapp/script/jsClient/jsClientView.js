@@ -67,7 +67,7 @@ var CORA = (function(cora) {
 		function addReloadProvidersButton() {
 			reloadProvidersButton = CORA.gui.createSpanWithClassName("menuView");
 			reloadProvidersButton.onclick = spec.reloadProvidersMethod;
-			reloadProvidersButton.textContent = "reloadProviders";
+			reloadProvidersButton.textContent = "Ladda om";
 			header.appendChild(reloadProvidersButton);
 		}
 

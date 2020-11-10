@@ -102,7 +102,7 @@ QUnit.test("testReloadProvidersButton", function(assert) {
 	assert.strictEqual(header.childNodes.length, 4);
 	var reloadProvidersButton = header.childNodes[2];
 	assert.strictEqual(reloadProvidersButton.onclick, this.spec.reloadProvidersMethod);
-	assert.strictEqual(reloadProvidersButton.textContent, "reloadProviders");
+	assert.strictEqual(reloadProvidersButton.textContent, "Ladda om");
 });
 
 QUnit.test("testReloadProvidersButtonStatus", function(assert) {

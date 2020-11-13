@@ -223,7 +223,6 @@ input + input {
 	background: url("../images/divaIcon2.svg") no-repeat scroll;
 	content: "";
 	background-position: -3px -27px;
-	opacity: 0.3;
 	height: 24px;
 	width: 26px;
 	transform: scale(1.2, 1.2);
@@ -269,10 +268,10 @@ input + input {
 .holder.loginManagerView {
 	background: var(--background-light-grey);
 	padding: 4px;
-	top: 2.5rem;
+	top: 2.45rem;
 	right: 0rem;
 	overflow: auto;
-	max-height: calc(100% - 4rem - 4px);
+	max-height: calc(100% - 4rem - 0.8px);
 	font-size: 0.8rem;
 	padding: 0.8rem;
 	border: 1px solid #75598E;

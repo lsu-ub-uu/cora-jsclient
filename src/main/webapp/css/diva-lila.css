@@ -37,8 +37,8 @@
 }
 .jsClient > .header {
 	display: block;
-	height: 3rem;
-	font-size: 2.5rem;
+	height: 2.5rem;
+	font-size: 2rem;
 	text-align: center;
 	color: var(--text-main-style-color);
 	border-bottom: 1px solid;
@@ -59,11 +59,21 @@
 
 .header select{
 	float:right;
-	margin-top:0.3em;
+	margin-top:0.4em;
+	/*! margin-left: 60rem; */
 }
 
 .jsClient > .sideBar {
 	border-color: var(--main-loading-color);
+	width: 20rem;
+	overflow: hidden;
+	height: calc(100% - 2.5rem);
+}
+
+.jsClient > .sideBar:hover {
+	overflow: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--main-loading-color) var(--background-light-grey);
 }
 
 .workArea .workView > .workItem {
@@ -195,4 +205,86 @@ input + input {
 }
 .header .menuView:nth-child(2n) {
 	background-color: none;
+}
+.header .logoHeader {
+	background: url("../images/divaIcon2.svg") no-repeat scroll;
+	content: "";
+	background-position: -0px -0px;
+	opacity: 0.8;
+	height: 20px;
+	width: 60px;
+	transform: scale(1.2, 1.2);
+	position: absolute;
+	left: 6rem;
+	top: 0.6rem;
+	z-index: -1;
+}
+.header .menu {
+	background: url("../images/divaIcon2.svg") no-repeat scroll;
+	content: "";
+	background-position: -3px -27px;
+	opacity: 0.3;
+	height: 24px;
+	width: 26px;
+	transform: scale(1.2, 1.2);
+	position: absolute;
+	left: 1.2rem;
+	top: 0.75rem;
+	z-index: -1;
+	float: left;
+	border: 0px;
+}
+
+.header .logoHeaderLogo {
+	background: url("../images/divaIcon2.svg") no-repeat scroll;
+	content: "";
+	background-position: -60px -0px;
+	opacity: 0.4;
+	height: 28px;
+	width: 30px;
+	transform: scale(0.9, 0.9);
+	position: absolute;
+	left: 4rem;
+	top: 0.5rem;
+	z-index: -1;
+}
+
+.jsClient > .header .menuView {
+	top: 0.3rem;
+	left: 20rem;
+	padding-left: 1rem;
+}
+
+.iconButton.loginManagerView{
+	
+	margin-top: 0rem;
+	right: 1rem;
+	margin-right: 0rem;
+	top: 0.4rem;
+}
+.workView .pVar {
+		border-radius: 10px;
+}
+
+.holder.loginManagerView {
+	background: var(--background-light-grey);
+	padding: 4px;
+	top: 2.5rem;
+	right: 0rem;
+	overflow: auto;
+	max-height: calc(100% - 4rem - 4px);
+	font-size: 0.8rem;
+	padding: 0.8rem;
+	border: 1px solid #75598E;
+	overflow: hidden;
+	
+}
+
+.holder.loginManagerView:hover {
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-loading-color) var(--background-light-grey);
+	  overflow-y: auto;
+}
+.jsClient > .workArea {
+	height: calc(100% - 2.5rem);
 }

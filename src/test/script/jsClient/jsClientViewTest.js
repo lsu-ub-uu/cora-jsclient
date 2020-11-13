@@ -99,7 +99,7 @@ QUnit.test("testReloadProvidersButton", function(assert) {
 	var mainView = jsClientView.getView();
 
 	var header = jsClientView.getHeader();
-	assert.strictEqual(header.childNodes.length, 4);
+	assert.strictEqual(header.childNodes.length, 7);
 	var reloadProvidersButton = header.childNodes[2];
 	assert.strictEqual(reloadProvidersButton.onclick, this.spec.reloadProvidersMethod);
 	assert.strictEqual(reloadProvidersButton.textContent, "Ladda om");
@@ -110,7 +110,7 @@ QUnit.test("testReloadProvidersButtonStatus", function(assert) {
 	var mainView = jsClientView.getView();
 
 	var header = jsClientView.getHeader();
-	assert.strictEqual(header.childNodes.length, 4);
+	assert.strictEqual(header.childNodes.length, 7);
 	var reloadProvidersButton = header.childNodes[2];
 	assert.strictEqual(reloadProvidersButton.className, "menuView");
 	jsClientView.setReloadingProviders(true);
@@ -128,7 +128,7 @@ QUnit.test("testSetLanguageButton", function(assert) {
 	var mainView = jsClientView.getView();
 
 	var header = jsClientView.getHeader();
-	assert.strictEqual(header.childNodes.length, 4);
+	assert.strictEqual(header.childNodes.length, 7);
 	var languageChoice = header.childNodes[3];
 	assert.strictEqual(languageChoice.type, "select-one");
 	assert.strictEqual(languageChoice.options[0].value, "sv");
@@ -259,7 +259,7 @@ QUnit.test("testAddLoginManagerView", function(assert) {
 	var someView = CORA.gui.createSpanWithClassName("loginManagerView");
 	jsClientView.addLoginManagerView(someView);
 
-	assert.strictEqual(jsClientView.getHeader().childNodes[4], someView);
+	assert.strictEqual(jsClientView.getHeader().childNodes[7], someView);
 });
 
 QUnit.test("testAddGlobalView", function(assert) {
@@ -268,7 +268,7 @@ QUnit.test("testAddGlobalView", function(assert) {
 	var someView = CORA.gui.createSpanWithClassName("globalView");
 	jsClientView.addGlobalView(someView);
 
-	assert.strictEqual(jsClientView.getHeader().childNodes[4], someView);
+	assert.strictEqual(jsClientView.getHeader().childNodes[7], someView);
 });
 
 QUnit.test("testSetErrorMessage", function(assert) {

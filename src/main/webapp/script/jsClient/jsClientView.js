@@ -29,11 +29,14 @@ var CORA = (function(cora) {
 		var workArea;
 		var messageHolder;
 		var reloadProvidersButton;
+		var logo;
+		var logoImage;
 
 		function start() {
 			mainView = createMainView();
 			addReloadProvidersButton();
 			addSetLanguageChoice();
+			addLogoHeader();
 			mainView.modelObject = out;
 		}
 
@@ -69,6 +72,15 @@ var CORA = (function(cora) {
 			reloadProvidersButton.onclick = spec.reloadProvidersMethod;
 			reloadProvidersButton.textContent = "Ladda om";
 			header.appendChild(reloadProvidersButton);
+		}
+		function addLogoHeader() {
+			logo = CORA.gui.createDivWithClassName("logoHeader");
+			header.appendChild(logo);
+			logoImage = CORA.gui.createDivWithClassName("logoHeaderLogo");
+			header.appendChild(logoImage);
+			var menu = document.createElement("button");
+			menu.className = "menu";
+			header.appendChild(menu);
 		}
 
 		function setReloadingProviders(status) {

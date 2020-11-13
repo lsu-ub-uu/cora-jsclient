@@ -277,7 +277,7 @@ img {
 	opacity: 1;
 }
 
-.workView .pVar, .workView .pCollVar {
+.workView {
 	display: flex;
 	flex-wrap: wrap;
 }

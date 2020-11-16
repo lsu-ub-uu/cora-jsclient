@@ -19,8 +19,8 @@
 	display: block;
 }
 
-.showView .presentation .text.color-light-grey, .showView .presentation .text.h1TextStyle {
-	color: var(--color-light-grey);
+.showView .presentation .text.color-light-grey, .showView .presentation {
+	color: var(--color-grey);
 }
 
 .workView .pVar {
@@ -143,13 +143,15 @@
 }
 
 .presentation .text.h1TextStyle {
-	color: var(--color-light-grey);
-	background-color: var(--main-loading-color);
-	border-radius: 10px 10px 0 0;
+	color: var(--main-loading-color);
+	font-size: 1.2rem;
+  font-weight: bold;
+	background-color: var(--color-light-grey);
+	border-radius: 10px 0 0 0;
 	margin: 0 -1rem 0 -1rem;
-	padding: 1rem 1rem 0.2rem 1rem;
-	position: sticky;
-	top: -1rem;
+	padding: 0.4rem 1rem 0.4rem 1rem;
+  position: sticky;
+	top: 0rem;
 	z-index: 3;
 }
 
@@ -313,4 +315,10 @@ input + input {
 
 .sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover{
 	text-decoration: none; 
+}
+
+.editView, .showView {
+	overflow: auto;
+	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
+	scrollbar-width: thin;
 }

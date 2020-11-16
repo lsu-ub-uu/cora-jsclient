@@ -584,3 +584,8 @@ body {
 .indexOrder input[type="button"]{
 	margin-left: 1rem;
 }
+
+/* Spike */
+.header .logoHeader, .logoHeaderLogo{
+	position: absolute;
+}

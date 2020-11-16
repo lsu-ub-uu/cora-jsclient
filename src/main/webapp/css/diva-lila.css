@@ -1,19 +1,13 @@
 :root {
   --main-loading-color: #75598E;
-  --main-background-color: #75598E;
-  --text-main-style-color: #DCDCDC;
-  --text-black: #000000;
-  --background-light-grey: #DCDCDC;
+  --color-light-grey: #DCDCDC;
+  --color-white: white;
+  --color-grey: #131313;
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
   --blue-10-trans: rgba(117, 88, 141, 0.1);
-  --input-border: #75598E;
   --color-selected-on-menu: black;
-  --button-tool-background: white;
-  --button-hover: #DCDCDC;
-  --button-background: white;
-  --h2TextStyle: #f2f2f2;
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.5);
@@ -25,26 +19,34 @@
 	display: block;
 }
 
-
-/*.jsClient .sideBar, .showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {*/
-.showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {
-	color: var(--text-main-style-color);
+.showView .presentation .text.color-light-grey, .showView .presentation .text.h1TextStyle {
+	color: var(--color-light-grey);
 }
 
-.sideBar {
-	color: var(--text-black);
-	background: var(--background-light-grey);
+.workView .pVar {
+		border-radius: 10px;
 }
+
+.jsClient{
+	color: var(--color-grey);
+}
+
+.jsClient > .header .menuView {
+	top: 0.3rem;
+	left: 20rem;
+	padding-left: 1rem;
+}
+
 .jsClient > .header {
 	display: block;
 	height: 2.5rem;
 	font-size: 2rem;
 	text-align: center;
-	color: var(--text-main-style-color);
+	color: var(--color-light-grey);
 	border-bottom: 1px solid;
 	border-color: inherit;
 	text-shadow: none;
-	background-color: var(--main-background-color);
+	background-color: var(--main-loading-color);
 	padding-left: 1rem;
 	padding-right: 1rem;
 	box-shadow: 0 0 10px var(--black-box-shadow);
@@ -54,26 +56,27 @@
 }
 
 .jsClient > .header .menuView {
-	color: var(--text-main-style-color);
+	color: var(--color-light-grey);
+}
+
+.jsClient > .sideBar {
+	width: 20rem;
+	overflow: auto;
+	scrollbar-width: thin;
+	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
+	height: calc(100% - 2.5rem);
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
+	border: 0px;
+}
+
+.sideBar {
+	color: var(--color-grey);
+	background: var(--color-white);
 }
 
 .header select{
 	float:right;
 	margin-top:0.4em;
-	/*! margin-left: 60rem; */
-}
-
-.jsClient > .sideBar {
-	border-color: var(--main-loading-color);
-	width: 20rem;
-	overflow: hidden;
-	height: calc(100% - 2.5rem);
-}
-
-.jsClient > .sideBar:hover {
-	overflow: auto;
-	scrollbar-width: thin;
-	scrollbar-color: var(--main-loading-color) var(--background-light-grey);
 }
 
 .workArea .workView > .workItem {
@@ -106,7 +109,7 @@
 .jsClient .workItem > .buttonView {
 	display: block;
 	position: fixed;
-	background: var(--button-tool-background);
+	background: var(--color-light-grey);
 	right: calc(50% - 10rem);
 	bottom: 0.5rem;
 	box-shadow: 0 0 10px var(--main-loading-color);
@@ -140,8 +143,8 @@
 }
 
 .presentation .text.h1TextStyle {
-	color: var(--text-main-style-color);
-	background-color: var(--main-background-color);
+	color: var(--color-light-grey);
+	background-color: var(--main-loading-color);
 	border-radius: 10px 10px 0 0;
 	margin: 0 -1rem 0 -1rem;
 	padding: 1rem 1rem 0.2rem 1rem;
@@ -150,30 +153,30 @@
 	z-index: 3;
 }
 
-.presentation .text.h2TextStyle {
+.presentation .text.color-light-grey {
 	color: var(--main-loading-color);
 	position: sticky;
 	top: 2.5rem;
-	background: var(--h2TextStyle);
+	background: var(--color-light-grey);
 	z-index: 2;
 }
 
 input[type="button"], .form-style-10 input[type="submit"] {
-	background: var(--button-background);
+	background: var(--color-light-grey);
 	padding: 4px 11px 4px 11px;
 	border-radius: 5px;
 	color: var(--main-loading-color);
 	text-shadow: 1px 1px 3px var(--text-shadow-12-trans);
 	font: normal 30px serif;
 	box-shadow: inset 0 2px 2px 0 var(--box-sahow-17-trans);
-	border: 1px solid var(--input-border);
+	border: 1px solid var(--main-loading-color);
 	font-size: 15px;
 }
 input + input {
 	margin-top: 0.5rem;
 }
  input[type="button"]:hover, .form-style-10 input[type="submit"]:hover {
-	background: var(--button-hover);
+	background: var(--color-light-grey);
 	box-shadow: inset 0 2px 2px 0 var(--inbox-28-shadow);
 	cursor: pointer;
 }
@@ -248,44 +251,29 @@ input + input {
 	z-index: -1;
 }
 
-.jsClient > .header .menuView {
-	top: 0.3rem;
-	left: 20rem;
-	padding-left: 1rem;
-}
-
 .iconButton.loginManagerView{
-	
 	margin-top: 0rem;
 	right: 1rem;
 	margin-right: 0rem;
 	top: 0.4rem;
 }
-.workView .pVar {
-		border-radius: 10px;
-}
+
 
 .holder.loginManagerView {
-	background: var(--background-light-grey);
+	background: var(--color-light-grey);
 	padding: 4px;
 	top: 2.5rem;
 	right: 0rem;
-	overflow: auto;
-	max-height: calc(100% - 4.18rem);
+	max-height: calc(100% - 4.14rem);
 	font-size: 0.8rem;
 	padding: 0.8rem;
-	border: 1px solid #75598E;
-	overflow: hidden;
-	
-	box-shadow: 0 0 10px rgba(0,0,0,.2);
+	border: 1px solid var(--main-loading-color);
+	overflow: auto;
+	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
+	scrollbar-width: thin;
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
 	border: 0px;
-	background: white;
-}
-
-.holder.loginManagerView:hover {
-    scrollbar-width: thin;
-    scrollbar-color: var(--main-loading-color) var(--background-light-grey);
-	  overflow-y: auto;
+	background: var(--color-white);
 }
 
 .menuOption {
@@ -294,10 +282,35 @@ input + input {
 
 .menuOption:hover {
     background: var(--main-loading-color);
-	  color: white;
+	  color: var(--color-white);
 	border-radius: 5px
 }
 
-.jsClient > .workArea {
-	height: calc(100% - 2.5rem);
+
+.header.clickable {
+    padding: 3px;
+}
+
+.header.clickable:hover {
+	background: var(--main-loading-color);
+	border-radius: 5px;
+	color: var(--color-white);
+}
+
+.openGuiItemHandlerView > .recordType, .recordTypesView .recordType, .searchesView > .searchRecord {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.sideBar .header {
+    border-bottom: 0px;
+}
+
+.recordTypeGroupHeadline{
+	color: var(--main-loading-color);
+	font-size: 1.2rem;
+}
+
+.sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover{
+	text-decoration: none; 
 }

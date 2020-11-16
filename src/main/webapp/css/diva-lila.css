@@ -109,7 +109,7 @@
 .jsClient .workItem > .buttonView {
 	display: block;
 	position: fixed;
-	background: var(--color-light-grey);
+	background: var(--color-white);
 	right: calc(50% - 10rem);
 	bottom: 0.5rem;
 	box-shadow: 0 0 10px var(--main-loading-color);
@@ -162,7 +162,7 @@
 }
 
 input[type="button"], .form-style-10 input[type="submit"] {
-	background: var(--color-light-grey);
+	background: var(--color-white);
 	padding: 4px 11px 4px 11px;
 	border-radius: 5px;
 	color: var(--main-loading-color);
@@ -176,7 +176,7 @@ input + input {
 	margin-top: 0.5rem;
 }
  input[type="button"]:hover, .form-style-10 input[type="submit"]:hover {
-	background: var(--color-light-grey);
+	background: var(--menu-2n-color);
 	box-shadow: inset 0 2px 2px 0 var(--inbox-28-shadow);
 	cursor: pointer;
 }

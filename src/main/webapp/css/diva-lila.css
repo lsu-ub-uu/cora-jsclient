@@ -268,15 +268,18 @@ input + input {
 .holder.loginManagerView {
 	background: var(--background-light-grey);
 	padding: 4px;
-	top: 2.45rem;
+	top: 2.5rem;
 	right: 0rem;
 	overflow: auto;
-	max-height: calc(100% - 4.2rem);
+	max-height: calc(100% - 4.18rem);
 	font-size: 0.8rem;
 	padding: 0.8rem;
 	border: 1px solid #75598E;
 	overflow: hidden;
 	
+	box-shadow: 0 0 10px rgba(0,0,0,.2);
+	border: 0px;
+	background: white;
 }
 
 .holder.loginManagerView:hover {
@@ -284,6 +287,17 @@ input + input {
     scrollbar-color: var(--main-loading-color) var(--background-light-grey);
 	  overflow-y: auto;
 }
+
+.menuOption {
+	padding: 5px;
+}
+
+.menuOption:hover {
+    background: var(--main-loading-color);
+	  color: white;
+	border-radius: 5px
+}
+
 .jsClient > .workArea {
 	height: calc(100% - 2.5rem);
 }

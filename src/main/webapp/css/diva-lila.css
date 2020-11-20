@@ -49,7 +49,7 @@
 	background-color: var(--main-loading-color);
 	padding-left: 1rem;
 	padding-right: 1rem;
-	box-shadow: 0 0 10px var(--black-box-shadow);
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
 	z-index: 10;
 	position: relative;
 	border: none;
@@ -67,9 +67,6 @@
 	height: calc(100% - 2.5rem);
 	box-shadow: 0 0 10px var(--black-box-10-shadow);
 	border: 0px;
-}
-
-.sideBar {
 	color: var(--color-grey);
 	background: var(--color-white);
 }
@@ -102,7 +99,7 @@
 
 .sideBar .active, .header .active {
 	font-weight: bold;
-	background-color: var(--main-loading-color);
+	background-color: var(--main-loading-color) !important;
 	color: var(--color-selected-on-menu);
 }
 
@@ -139,7 +136,7 @@
 .editView > .presentation > .pGroup, .showView > .presentation > .pGroup {
 	border-radius: 10px 10px;
 	padding: 0 1rem;
-	box-shadow: 0 0 10px var(--black-box-shadow);
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
 }
 
 .presentation .text.h1TextStyle {
@@ -321,4 +318,8 @@ input + input {
 	overflow: auto;
 	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
 	scrollbar-width: thin;
+}
+
+.childrenView {
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
 }

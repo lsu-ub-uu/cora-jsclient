@@ -319,7 +319,3 @@ input + input {
 	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
 	scrollbar-width: thin;
 }
-
-.childrenView {
-	box-shadow: 0 0 10px var(--black-box-10-shadow);
-}

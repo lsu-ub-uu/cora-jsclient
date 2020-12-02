@@ -30,11 +30,11 @@ var CORA = (function(cora) {
 		function indexDataList() {
 			ongoingIndexing = true;
 			var indexHandlerSpec = {
-				"loadMethod" : indexingFinished,
-				"timeoutMethod" : timeoutMethod
+				"loadMethod": indexingFinished,
+				"timeoutMethod": timeoutMethod
 			};
 			indexHandler = dependencies.indexHandlerFactory
-					.factor(indexHandlerSpec);
+				.factor(indexHandlerSpec);
 			addIndexOrderView();
 			indexData();
 		}
@@ -70,13 +70,13 @@ var CORA = (function(cora) {
 			var dataRecord = uploadQue.shift();
 			if (dataRecord !== undefined) {
 				startNextUploadIfStillOngoingIndexing(dataRecord);
-			}else{
+			} else {
 				indexOrderView.removeChild(cancelButton);
 			}
 		}
 
-		function startNextUploadIfStillOngoingIndexing(dataRecord){
-			if(ongoingIndexing){
+		function startNextUploadIfStillOngoingIndexing(dataRecord) {
+			if (ongoingIndexing) {
 				startNextUpload(dataRecord);
 			}
 		}
@@ -97,18 +97,18 @@ var CORA = (function(cora) {
 			var recordTypeText = getTextFromTextProvider("theClient_indexedRecordTypeText");
 			var recordIdText = getTextFromTextProvider("theClient_indexedRecordIdText");
 			return recordTypeText + ": " + type + ", " + recordIdText + ": "
-					+ id;
+				+ id;
 		}
 
 		function extractRecordInfoFromCurrentRecord() {
 			var cRecord = CORA.coraData(currentRecord.data);
 			return CORA.coraData(cRecord
-					.getFirstChildByNameInData("recordInfo"));
+				.getFirstChildByNameInData("recordInfo"));
 		}
 
 		function extractAtomicTypeFromRecordInfo(cRecordInfo) {
 			var cType = CORA.coraData(cRecordInfo
-					.getFirstChildByNameInData("type"));
+				.getFirstChildByNameInData("type"));
 			return cType.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 
@@ -118,16 +118,16 @@ var CORA = (function(cora) {
 
 		function startNextUpload(dataRecord) {
 			currentRecord = dataRecord;
-			if(recordHasIndexLink(currentRecord)){
+			if (recordHasIndexLink(currentRecord)) {
 				indexHandler.indexData(dataRecord);
-			}else{
+			} else {
 				startNextUploadIfThereIsMoreInQueue();
 			}
 		}
-		
-		 function recordHasIndexLink(record) {
-            return record.actionLinks.index !== undefined;
-        }
+
+		function recordHasIndexLink(record) {
+			return record.actionLinks.index !== undefined;
+		}
 
 		function timeoutMethod() {
 			var child = CORA.gui.createSpanWithClassName("indexItem");
@@ -152,7 +152,7 @@ var CORA = (function(cora) {
 		function cancelIndexing() {
 			ongoingIndexing = false;
 			cancelButton.value = dependencies.textProvider
-					.getTranslation("theClient_resumeIndexingText");
+				.getTranslation("theClient_resumeIndexingText");
 			cancelButton.onclick = resumeIndexing;
 		}
 
@@ -164,7 +164,7 @@ var CORA = (function(cora) {
 			ongoingIndexing = true;
 			startNextUploadIfThereIsMoreInQueue();
 			cancelButton.value = dependencies.textProvider
-					.getTranslation("theClient_cancelIndexingText");
+				.getTranslation("theClient_cancelIndexingText");
 			cancelButton.onclick = cancelIndexing;
 		}
 
@@ -177,16 +177,16 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "indexListHandler",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			indexDataList : indexDataList,
-			indexingFinished : indexingFinished,
-			timeoutMethod : timeoutMethod,
-			getNumberOfIndexedRecords : getNumberOfIndexedRecords,
-			cancelIndexing : cancelIndexing,
-			getOngoingIndexing : getOngoingIndexing,
-			resumeIndexing : resumeIndexing
+			"type": "indexListHandler",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			indexDataList: indexDataList,
+			indexingFinished: indexingFinished,
+			timeoutMethod: timeoutMethod,
+			getNumberOfIndexedRecords: getNumberOfIndexedRecords,
+			cancelIndexing: cancelIndexing,
+			getOngoingIndexing: getOngoingIndexing,
+			resumeIndexing: resumeIndexing
 
 		});
 	};

@@ -118,8 +118,16 @@ var CORA = (function(cora) {
 
 		function startNextUpload(dataRecord) {
 			currentRecord = dataRecord;
-			indexHandler.indexData(dataRecord);
+			if(recordHasIndexLink(currentRecord)){
+				indexHandler.indexData(dataRecord);
+			}else{
+				startNextUploadIfThereIsMoreInQueue();
+			}
 		}
+		
+		 function recordHasIndexLink(record) {
+            return record.actionLinks.index !== undefined;
+        }
 
 		function timeoutMethod() {
 			var child = CORA.gui.createSpanWithClassName("indexItem");

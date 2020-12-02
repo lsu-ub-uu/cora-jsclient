@@ -277,7 +277,40 @@ QUnit
 								"contentType" : "application/vnd.uub.record+json",
 								"url" : "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch",
 								"accept" : "application/vnd.uub.record+json"
-							}
+							},
+						    "index": {
+						      "requestMethod": "POST",
+						      "rel": "index",
+						      "body": {
+						        "children": [
+						          {
+						            "children": [
+						              {
+						                "name": "linkedRecordType",
+						                "value": "recordType"
+						              },
+						              {
+						                "name": "linkedRecordId",
+						                "value": "search"
+						              }
+						            ],
+						            "name": "recordType"
+						          },
+						          {
+						            "name": "recordId",
+						            "value": "coraTextSearch"
+						          },
+						          {
+						            "name": "type",
+						            "value": "index"
+						          }
+						        ],
+						        "name": "workOrder"
+						      },
+						      "contentType": "application/vnd.uub.record+json",
+						      "url": "http://localhost:8080/therest/rest/record/workOrder/",
+						      "accept": "application/vnd.uub.record+json"
+						    }
 						}
 					};
 					var x = provider.getSearchById("coraTextSearch");

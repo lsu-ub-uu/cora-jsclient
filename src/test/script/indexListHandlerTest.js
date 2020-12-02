@@ -162,13 +162,13 @@ QUnit.test("testIndexTimeoutMethod", function(assert) {
 	assert.strictEqual(indexOrder.lastChild.textContent, "TIMEOUT");
 });
 
-QUnit.test("testIndexDataWasCalledForAllInList", function(assert) {
+QUnit.test("testIndexDataWasCalledForAllInListWithIndexLink", function(assert) {
 	this.dependencies.indexHandlerFactory =  CORATEST.standardFactorySpy("indexHandlerCallingLoadMethodSpy");
 	var indexListHandler = CORA.indexListHandler(this.dependencies, this.spec);
 	indexListHandler.indexDataList();
 	var factoredIndexHandler = this.dependencies.indexHandlerFactory.getFactored(0);
 
-	assert.stringifyEqual(indexListHandler.getNumberOfIndexedRecords(), 11);
+	assert.stringifyEqual(indexListHandler.getNumberOfIndexedRecords(), 3);
 
 });
 

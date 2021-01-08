@@ -270,5 +270,125 @@ var CORATEST = (function(coraTest) {
 			}
 		]
 	};
+
+
+	coraTest.childReferenceForTopLevelGroup = {
+		"name": "childReferences",
+		"children": [
+			{
+				"name": "childReference",
+				"repeatId": "0",
+				"children": [
+					{
+						"name": "ref",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataGroup"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textGroup"
+						}]
+					}, {
+						"name": "repeatMin",
+						"value": "1"
+					}, {
+						"name": "repeatMax",
+						"value": "1"
+					}, {
+						"name": "recordPartConstraint",
+						"value": ""
+					}]
+			}
+			,
+			{
+				"name": "childReference",
+				"repeatId": "2",
+				"children": [
+					{
+						"name": "ref",
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "metadataTextVariable"
+							},
+							{
+								"name": "linkedRecordId",
+  								"value": "textIdTopLevel"
+							}
+						]
+					},
+					{
+						"name": "repeatMin",
+						"value": "1"
+					},
+					{
+						"name": "repeatMax",
+						"value": "1"
+					},
+					{
+						"name": "recordPartConstraint",
+						"value": "readWrite"
+					}
+				]
+			}
+		]
+	};
+
+	coraTest.childReferenceForChildGroup = {
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadataTextVariable"
+					}, {
+						"name": "linkedRecordId",
+						"value": "textIdSecondLevel"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "write"
+				}]
+		}]
+	};
+	
+	coraTest.childReferenceForChildGroupThirdLevel = {
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadataGroup"
+					}, {
+						"name": "linkedRecordId",
+						"value": "textGroupGroup"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
+				}, {
+					"name": "recordPartConstraint",
+					"value": "write"
+				}]
+		}]
+	};
+
 	return coraTest;
 }(CORATEST || {}));

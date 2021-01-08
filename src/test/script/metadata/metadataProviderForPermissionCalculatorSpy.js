@@ -19,48 +19,20 @@
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.metadataProviderNewSpy = function() {
+	coraTest.metadataProviderForPermissionCalculatorSpy = function() {
 
 		var fetchedMetadataIds = [];
 		var fetchedMetadata = [];
 		var callWhenReloadedMethod;
 		var noOfReloads = 0;
-		let childReferences = {
-			"name": "childReferences",
-			"children": [{
-				"name": "childReference",
-				"repeatId": "0",
-				"children": [
-					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
-						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
-						}]
-					}, {
-						"name": "repeatMin",
-						"value": "1"
-					}, {
-						"name": "repeatMax",
-						"value": "1"
-					}]
-			}]
-		};
+		let childReferences = new Map();
 
 		function getMetadataById(metadataId) {
 			fetchedMetadataIds.push(metadataId);
 
-			let metadata = {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
-				},
-				"children": [childReferences].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
-			};
-			if (metadataId === "textVariableId") {
+			let metadata;
+
+			if (metadataId.startsWith("textId")) {
 				metadata = {
 					"name": "metadata",
 					"children": [{
@@ -73,6 +45,16 @@ var CORATEST = (function(coraTest) {
 					}
 				}
 			}
+			else {
+				metadata = {
+					"name": "metadata",
+					"attributes": {
+						"type": "group"
+					},
+					"children": [childReferences.get(metadataId)].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
+				};
+			}
+
 			fetchedMetadata.push(metadata);
 			return metadata;
 		}
@@ -134,13 +116,13 @@ var CORATEST = (function(coraTest) {
 			return callWhenReloadedMethod;
 		}
 		function callWhenReloadedMethod() {
-			return "";
+			callWhenReloadedMethod();
 		}
 		function getNoOfReloads() {
 			return noOfReloads;
 		}
-		function setChildReferences(childReferencesIn) {
-			childReferences = childReferencesIn;
+		function setChildReferences(childReferenceKey, childReferenceValue) {
+			childReferences.set(childReferenceKey, childReferenceValue);
 		}
 		return Object.freeze({
 			getMetadataById: getMetadataById,

@@ -25,20 +25,13 @@ var CORA = (function(cora) {
 		let fullfilledReadRecordParts = [];
 		let recordPartsHasReadConstraints = [];
 		let recordPartsHasWriteConstraints = [];
-		let writePermissions = spec.permissions.write;
 		let readPermissions = spec.permissions.read;
+		let writePermissions = spec.permissions.write;
 
 		const start = function() {
-			calculateRecordPartPermissions();
-		};
-
-		const calculateRecordPartPermissions = function() {
 			let topLevelChildReferences = getChildReferences();
-			topLevelChildReferences.children.forEach(function(childReference) {
-				handleRecordPartPermissionsForChildReference(childReference);
-			});
+			calculateRecordPartPermissions(topLevelChildReferences);
 		};
-
 		const getChildReferences = function() {
 			let metadataGroup = metadataProvider.getMetadataById(spec.metadataId);
 			let cMetadataGroup = CORA.coraData(metadataGroup);
@@ -46,12 +39,30 @@ var CORA = (function(cora) {
 
 		};
 
+		const calculateRecordPartPermissions = function(childReferences) {
+			childReferences.children.forEach(function(childReference) {
+				handleRecordPartPermissionsForChildReference(childReference);
+			});
+		};
+
+
 		const handleRecordPartPermissionsForChildReference = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			let childId = getChildId(cChildReference);
 			let nameInData = extractNameInData(childId);
 			handleReadRecordPartPermissions(cChildReference, nameInData);
 			handleWriteRecordPartPermissions(cChildReference, nameInData);
+			
+			if (isGroup(cChildReference)){
+				let metadataGroup = metadataProvider.getMetadataById(childId);
+				let cMetadataGroup = CORA.coraData(metadataGroup);
+				calculateRecordPartPermissions( cMetadataGroup.getFirstChildByNameInData('childReferences'));
+			}
+		};
+		
+		const isGroup = function(cChildReference) {
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") === "metadataGroup";
 		};
 
 		const getChildId = function(cChildReference) {

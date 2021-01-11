@@ -116,7 +116,7 @@ var CORATEST = (function(coraTest) {
 			return callWhenReloadedMethod;
 		}
 		function callWhenReloadedMethod() {
-			callWhenReloadedMethod();
+//			callWhenReloadedMethod();
 		}
 		function getNoOfReloads() {
 			return noOfReloads;

@@ -18,6 +18,7 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
+
 	coraTest.childReferenceWithOneWriteConstraint = {
 		"name": "childReferences",
 		"children": [{
@@ -45,6 +46,7 @@ var CORATEST = (function(coraTest) {
 				}]
 		}]
 	};
+
 	coraTest.childReferenceWithTwoWriteConstraint = {
 		"name": "childReferences",
 		"children": [{
@@ -95,6 +97,7 @@ var CORATEST = (function(coraTest) {
 				}]
 		}]
 	};
+
 	coraTest.childReferenceWithOneReadWriteConstraint = {
 		"name": "childReferences",
 		"children": [{
@@ -172,6 +175,7 @@ var CORATEST = (function(coraTest) {
 				}]
 		}]
 	};
+
 	coraTest.childReferenceWithOneWriteAndTwoReadWriteConstraint = {
 		"name": "childReferences",
 		"children": [
@@ -271,7 +275,6 @@ var CORATEST = (function(coraTest) {
 		]
 	};
 
-
 	coraTest.childReferenceForTopLevelGroup = {
 		"name": "childReferences",
 		"children": [
@@ -294,9 +297,6 @@ var CORATEST = (function(coraTest) {
 					}, {
 						"name": "repeatMax",
 						"value": "1"
-					}, {
-						"name": "recordPartConstraint",
-						"value": ""
 					}]
 			}
 			,
@@ -313,7 +313,7 @@ var CORATEST = (function(coraTest) {
 							},
 							{
 								"name": "linkedRecordId",
-  								"value": "textIdTopLevel"
+								"value": "textIdTopLevel"
 							}
 						]
 					},
@@ -361,7 +361,7 @@ var CORATEST = (function(coraTest) {
 				}]
 		}]
 	};
-	
+
 	coraTest.childReferenceForChildGroupThirdLevel = {
 		"name": "childReferences",
 		"children": [{
@@ -386,6 +386,102 @@ var CORATEST = (function(coraTest) {
 				}, {
 					"name": "recordPartConstraint",
 					"value": "write"
+				}]
+		}]
+	};
+
+	coraTest.childReferenceForChildGroupWhenRepeatMaxIsMoreThanOne = {
+		"name": "childReferences",
+		"children": [
+			{
+				"name": "childReference",
+				"repeatId": "0",
+				"children": [
+					{
+						"name": "ref",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataGroup"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textGroup"
+						}]
+					}, {
+						"name": "repeatMin",
+						"value": "1"
+					}, {
+						"name": "repeatMax",
+						"value": "2"
+					}]
+			}
+		]
+	};
+
+	coraTest.childReferenceForChildGroupHasWriteConstrains = {
+		"name": "childReferences",
+		"children": [
+			{
+				"name": "childReference",
+				"repeatId": "0",
+				"children": [
+					{
+						"name": "ref",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataGroup"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textGroup"
+						}]
+					}, {
+						"name": "repeatMin",
+						"value": "1"
+					}, {
+						"name": "repeatMax",
+						"value": "1"
+					}, {
+						"name": "recordPartConstraint",
+						"value": "write"
+					}]
+			}
+		]
+	};
+	
+	
+//	function createNameInDataTextIdDefTextId2(id) {
+//			return [{
+//				"name": "nameInData",
+//				"value": id + "NameInData"
+//			}, {
+//				"name": "textId",
+//				"value": id + "Text"
+//			}, {
+//				"name": "defTextId",
+//				"value": id + "DefText"
+//			}];
+//		}
+	
+		coraTest.childReferenceForChildGroupSecondLevelWithoutConstrains = {
+		"name": "childReferences",
+		"children": [{
+			"name": "childReference",
+			"repeatId": "0",
+			"children": [
+				{
+					"name": "ref",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadataGroup"
+					}, {
+						"name": "linkedRecordId",
+						"value": "textGroupGroup"
+					}]
+				}, {
+					"name": "repeatMin",
+					"value": "1"
+				}, {
+					"name": "repeatMax",
+					"value": "1"
 				}]
 		}]
 	};

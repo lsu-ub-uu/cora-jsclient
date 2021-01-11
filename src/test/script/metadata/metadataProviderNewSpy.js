@@ -21,10 +21,10 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.metadataProviderNewSpy = function() {
 
-		var fetchedMetadataIds = [];
-		var fetchedMetadata = [];
-		var callWhenReloadedMethod;
-		var noOfReloads = 0;
+		let fetchedMetadataIds = [];
+		let fetchedMetadata = [];
+		let callWhenReloadedMethod;
+		let noOfReloads = 0;
 		let childReferences = {
 			"name": "childReferences",
 			"children": [{
@@ -132,9 +132,6 @@ var CORATEST = (function(coraTest) {
 		}
 		function getCallWhenReloadedMethod() {
 			return callWhenReloadedMethod;
-		}
-		function callWhenReloadedMethod() {
-			return "";
 		}
 		function getNoOfReloads() {
 			return noOfReloads;

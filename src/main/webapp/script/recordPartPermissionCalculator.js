@@ -48,10 +48,13 @@ var CORA = (function(cora) {
 
 		const handleRecordPartPermissionsForChildReference = function(childReference, unfulfilledWritePermissionInParentHierarchy) {
 			let cChildReference = CORA.coraData(childReference);
-			let childId = getLinkedRecordId(cChildReference);
+			let childId = getLinkedRecordId(cChildReference);	
+			let nameInData = extractNameInData(childId);
 
-			let unfulfilledWritePermissionInParentHierarchyChild = handleRecordPartPermissionsForCoraChildReference(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy);
-			possiblyRecurseForGroupChildren(cChildReference, childId, unfulfilledWritePermissionInParentHierarchyChild);
+			let fulfilledReadPermissionOnGroupParent = handleReadRecordPartPermissions(cChildReference, nameInData);
+			let unfulfilledWritePermissionInParentHierarchyChild = handleWriteRecordPartPermissions(cChildReference, nameInData, unfulfilledWritePermissionInParentHierarchy);
+				
+			possiblyRecurseForGroupChildren(cChildReference, childId, unfulfilledWritePermissionInParentHierarchyChild, fulfilledReadPermissionOnGroupParent);
 		};
 
 		const getLinkedRecordId = function(cChildReference) {
@@ -59,28 +62,24 @@ var CORA = (function(cora) {
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const handleRecordPartPermissionsForCoraChildReference = function(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy) {
-			let nameInData = extractNameInData(childId);
-			handleReadRecordPartPermissions(cChildReference, nameInData);
-			return handleWriteRecordPartPermissions(cChildReference, nameInData, unfulfilledWritePermissionInParentHierarchy);
-		};
-
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
 				let combinedChildId = createCombinedChildId(cChildReference);
 				recordPartsHasReadConstraints.push(combinedChildId);
 				possiblyAddfulfilledReadRecordParts(nameInData, combinedChildId);
+				return fulfilledReadRecordParts.includes(combinedChildId);
 			}
+			return true;
 		};
 
-		const possiblyRecurseForGroupChildren = function(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy) {
-			if (permissionForChildShouldBeHandled(cChildReference)) {
+		const possiblyRecurseForGroupChildren = function(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy, fulfilledReadPermissionOnGroupParent) {
+			if (permissionForChildShouldBeHandled(cChildReference, fulfilledReadPermissionOnGroupParent)) {
 				calculateRecordPartPermissions(getChildReferences(childId), unfulfilledWritePermissionInParentHierarchy);
 			}
 		};
 
-		const permissionForChildShouldBeHandled = function(cChildReference) {
-			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference);
+		const permissionForChildShouldBeHandled = function(cChildReference, fulfilledReadPermissionOnGroupParent) {
+			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference) && fulfilledReadPermissionOnGroupParent;
 		};
 
 		const repeatMaxIsOne = function(cChildReference) {

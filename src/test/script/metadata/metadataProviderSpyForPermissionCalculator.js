@@ -19,7 +19,7 @@
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.metadataProviderForPermissionCalculatorSpy = function() {
+	coraTest.metadataProviderSpyForPermissionCalculator = function() {
 
 		var fetchedMetadataIds = [];
 		var fetchedMetadata = [];
@@ -33,74 +33,15 @@ var CORATEST = (function(coraTest) {
 			let metadata;
 
 			if (metadataId.startsWith("textId")) {
-				metadata = {
-					"name": "metadata",
-					"children": [{
-						"name": "regEx",
-						"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
-					}]
-						.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId)),
-					"attributes": {
-						"type": "textVariable"
-					}
-				}
+				metadata = coraTest.createJsonAtomicTextVariable(metadataId);
 			}
 			else {
-				metadata = {
-					"name": "metadata",
-					"attributes": {
-						"type": "group"
-					},
-					"children": [childReferences.get(metadataId)].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
-				};
+				metadata = coraTest.createJsonGroup(childReferences.get(metadataId), metadataId);
 			}
 
 			fetchedMetadata.push(metadata);
 			return metadata;
 		}
-
-		function createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet) {
-			return [createRecordInfoJson(idToGet)]
-				.concat(createNameInDataTextIdDefTextId2(idToGet));
-		}
-		function createRecordInfoJson(id) {
-			return {
-				"name": "recordInfo",
-				"children": [{
-					"name": "id",
-					"value": id
-				}, {
-					"name": "type",
-					"value": "metadataGroup"
-				}, {
-					"name": "createdBy",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "user"
-					}, {
-						"name": "linkedRecordId",
-						"value": "userId"
-					}]
-				}, {
-					"name": "updatedBy",
-					"value": "userId"
-				}]
-			};
-		}
-
-		function createNameInDataTextIdDefTextId2(id) {
-			return [{
-				"name": "nameInData",
-				"value": id + "NameInData"
-			}, {
-				"name": "textId",
-				"value": id + "Text"
-			}, {
-				"name": "defTextId",
-				"value": id + "DefText"
-			}];
-		}
-
 
 		function getFetchedMetadataId(no) {
 			return fetchedMetadataIds[no];
@@ -108,15 +49,15 @@ var CORATEST = (function(coraTest) {
 		function getFetchedMetadata(no) {
 			return fetchedMetadata[no];
 		}
+		function getNumberOfCallsToGetMetadataById() {
+			return fetchedMetadataIds.length
+		}
 		function reload(callWhenReloadedMethodIn) {
 			noOfReloads++;
 			callWhenReloadedMethod = callWhenReloadedMethodIn;
 		}
 		function getCallWhenReloadedMethod() {
 			return callWhenReloadedMethod;
-		}
-		function callWhenReloadedMethod() {
-//			callWhenReloadedMethod();
 		}
 		function getNoOfReloads() {
 			return noOfReloads;
@@ -132,7 +73,8 @@ var CORATEST = (function(coraTest) {
 			getCallWhenReloadedMethod: getCallWhenReloadedMethod,
 			getNoOfReloads: getNoOfReloads,
 			callWhenReloadedMethod: callWhenReloadedMethod,
-			setChildReferences: setChildReferences
+			setChildReferences: setChildReferences,
+			getNumberOfCallsToGetMetadataById: getNumberOfCallsToGetMetadataById
 		});
 	};
 	return coraTest;

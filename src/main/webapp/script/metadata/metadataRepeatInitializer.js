@@ -225,7 +225,8 @@ var CORA = (function(cora) {
 			let initializerSpec = {
 				childReference: childReference,
 				path: nextLevelPath,
-				data: data
+				data: data,
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 			let metadataChildInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
 			let hasWritePermission = hasWritePermissions(childReference);

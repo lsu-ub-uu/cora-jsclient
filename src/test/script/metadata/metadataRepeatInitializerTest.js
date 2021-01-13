@@ -209,6 +209,7 @@ QUnit.test("testGroupOneTextChildWithData", function(assert) {
 	assert.stringifyEqual(repeatSpec.childReference, expectedChildReferenceTextVariableId);
 	assert.stringifyEqual(repeatSpec.data, this.spec.data);
 	assert.stringifyEqual(repeatSpec.path, expectedNextLevelPathForGroupIdOneTextChild);
+	assert.stringifyEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
@@ -235,6 +236,8 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 	assert.stringifyEqual(repeatSpec.childReference, expectedChildReferenceTextVariableId);
 	assert.stringifyEqual(repeatSpec.data, undefined);
 	assert.stringifyEqual(repeatSpec.path, expectedNextLevelPathForGroupIdTwoTextChild);
+	assert.stringifyEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
+
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);

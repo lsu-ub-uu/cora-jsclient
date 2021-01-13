@@ -48,7 +48,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 					.getMetadataById("pVarTextVariableIdOutput")),
 			"presentationSize" : "bothEqual",
 			"mode" : "input", 
-			hasWritePermissionsForRecordPart : true
+			hasWritePermissionsForRecordPart : true,
+			"recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 		};
 
 		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy, recordType) {
@@ -491,7 +492,7 @@ QUnit.test("testSendAdd", function(assert) {
 			.getMetadataById("groupIdOneTextChildRepeat1toX"));
 	let pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
 	pChildRefHandler.sendAdd();
-	let addData = {
+	let expectedAddData = {
 		"childReference" : {
 			"children" : [ {
 				"name" : "ref",
@@ -514,9 +515,10 @@ QUnit.test("testSendAdd", function(assert) {
 		},
 		"metadataId" : "textVariableId",
 		"nameInData" : "textVariableId",
-		"path" : {}
+		"path" : {},
+		"recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 	};
-	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
+	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], expectedAddData);
 	let messages = this.dependencies.pubSub.getMessages();
 	assert.deepEqual(messages.length, 1);
 	assert.deepEqual(messages[0].type, "newElementsAdded");
@@ -553,7 +555,8 @@ QUnit.test("testSendAddBefore", function(assert) {
 		"metadataId" : "textVariableId",
 		"nameInData" : "textVariableId",
 		"path" : {},
-		"addBeforePath" : "someFakePath"
+		"addBeforePath" : "someFakePath",
+		"recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddBeforeDataArray()[0], addBeforeData);
 	let messages = this.dependencies.pubSub.getMessages();
@@ -618,9 +621,10 @@ QUnit.test("testAddButtonWithAttributes", function(assert) {
 			    "anAttribute": [
 			      "aFinalValue"
 			    ]
-			  }
+			  },
+			  "recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 			};
-	assert.stringifyEqual(addedData, addData);
+	assert.deepEqual(addedData, addData);
 });
 
 QUnit.test("testUploadButtonFor0toX", function(assert) {
@@ -754,7 +758,8 @@ QUnit.test("testHandleFilesReceiveAnswerForOneFile", function(assert) {
 		},
 		"metadataId" : "myChildOfBinaryLink",
 		"nameInData" : "myChildOfBinaryLink",
-		"path" : {}
+		"path" : {},
+		"recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
 
@@ -2053,7 +2058,8 @@ QUnit.test("testNewElementsAddedNotEnough", function(assert) {
 		},
 		"metadataId" : "textVariableId",
 		"nameInData" : "textVariableId",
-		"path" : {}
+		"path" : {},
+		"recordPartPermissionCalculator" : this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray().length, 1);

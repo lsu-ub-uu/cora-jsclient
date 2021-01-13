@@ -352,18 +352,32 @@ var CORA = (function(cora) {
 
 		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef,
 			hasWritePermission) {
+			let childRefHandlerSpec = createPChildRefHandlerSpec(cPresentationChild, cPresentationChildRef,
+			hasWritePermission);
+			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
+			return pChildRefHandler.getView();
+		};
+		
+		const createPChildRefHandlerSpec = function(cPresentationChild, cPresentationChildRef,
+			hasWritePermission) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
 				cPresentationChildRef);
 			childRefHandlerSpec.cParentMetadata = cMetadataElement;
 			childRefHandlerSpec.hasWritePermissionsForRecordPart = hasWritePermission;
+			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			
+			possiblyAddRepatingToShow(childRefHandlerSpec, cPresentationChildRef);
+			return childRefHandlerSpec;
+		}
+		
+		const possiblyAddRepatingToShow= function(childRefHandlerSpec, cPresentationChildRef){
+			
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
 			}
-			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
-			return pChildRefHandler.getView();
-		};
+		}
 
 		const getAlternativePresentation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef

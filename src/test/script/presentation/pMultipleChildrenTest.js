@@ -117,6 +117,7 @@ QUnit.test("testFirstPChildRefHandlerSpec", function(assert) {
 	assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
 	assert.strictEqual(factoredSpec.mode, "input");
 	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, true);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator)
 });
 
 QUnit.test("testFirstMinimizedDefaultPChildRefHandlerSpec", function(assert) {

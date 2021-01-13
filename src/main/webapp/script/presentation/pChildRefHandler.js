@@ -504,7 +504,8 @@ var CORA = (function(cora) {
 				"metadataId": metadataId,
 				"path": spec.parentPath,
 				"childReference": cParentMetadataChildRefPart.getData(),
-				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData")
+				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
+				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
 			};
 			if (metadataHasAttributes) {
 				data.attributes = collectedAttributes;

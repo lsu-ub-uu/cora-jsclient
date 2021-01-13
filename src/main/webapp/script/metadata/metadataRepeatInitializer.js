@@ -203,10 +203,26 @@ var CORA = (function(cora) {
 			let nextLevelChildReferences = cMetadataElement
 				.getFirstChildByNameInData('childReferences');
 			nextLevelChildReferences.children.forEach(function(childReference) {
-				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, 
-					spec.data);
+				if(userHasRecordPartPermission(childReference)) {
+					createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, 
+						spec.data);
+				}
 			});
 		};
+		
+		const userHasRecordPartPermission = function(childReference) {
+			let cRef = getCRef(childReference);
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return spec.recordPartPermissionCalculator
+				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+		};
+		
+		const getCRef = function(childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+
+		}
 
 		const createSpecAndInitalizeMetadataChildInitializer = function(childReference, nextLevelPath, data) {
 			let initializerSpec = {
@@ -215,8 +231,17 @@ var CORA = (function(cora) {
 				data: data
 			};
 			let metadataChildInitializer = dependencies.metadataChildAndRepeatInitializerFactory.factorChildInitializer(initializerSpec);
-			metadataChildInitializer.initialize();
+			let hasWritePermission = hasWritePermissions(childReference);
+			metadataChildInitializer.initializeTopLevel(hasWritePermission);
 		};
+		
+		const hasWritePermissions = function(childReference) {
+			let cRef = getCRef(childReference);
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return spec.recordPartPermissionCalculator
+				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+		}
 
 		const isRecordLink = function() {
 			let type = cMetadataElement.getData().attributes.type;

@@ -22,6 +22,8 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			pubSub: this.pubSub,
@@ -33,7 +35,8 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 			metadataId: "textVariableId",
 			path: {},
 			data: undefined,
-			repeatId: undefined
+			repeatId: undefined,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 	},
 	afterEach: function() {
@@ -187,7 +190,7 @@ QUnit.test("testGroupOneTextChildWithNODataChildAndRepeatInitializerCalledCorrec
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testGroupOneTextChildWithData", function(assert) {
@@ -209,7 +212,7 @@ QUnit.test("testGroupOneTextChildWithData", function(assert) {
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCorrectly", function(
@@ -235,7 +238,7 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 
 	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 
@@ -245,7 +248,7 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 
 	let factoredChild2 = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(1);
-	assert.ok(factoredChild2.getInitializeCalled());
+	assert.ok(factoredChild2.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testRecordLinkMessage", function(assert) {
@@ -606,3 +609,73 @@ function createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId) {
 		}]
 	};
 }
+
+QUnit.test("testRecordPartReadPermissionsWhenPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+	
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
+});
+
+QUnit.test("testRecordPartReadPermissionsWhenNOPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+	
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.equal(factoredChild, undefined);
+});
+
+QUnit.test("testRecordPartWritePermissionsWhenPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	let callsToHasFulfilledWritePermissionsForRecordPart = recordPartPermissionCalculatorSpy.getWriteRequestedIdsArray();
+	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+	
+
+let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
+	assert.strictEqual(factoredChild.getHasWritePermission(), true);
+});
+
+QUnit.test("testRecordPartWritePermissionsWhenPermissionNOExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.strictEqual(factoredChild.getHasWritePermission(), false);
+});

@@ -236,7 +236,8 @@ var CORA = (function(cora) {
 				"metadataId" : ref,
 				"path" : spec.path,
 				"data" : dataChild,
-				"repeatId" : repeatId
+				"repeatId" : repeatId,
+				"recordPartPermissionCalculator" : spec.recordPartPermissionCalculator
 			};
 			let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 					.factorRepeatInitializer(initializerSpec);

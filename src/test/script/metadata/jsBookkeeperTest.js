@@ -69,7 +69,7 @@ QUnit.module("metadata/jsBookkeeperTest.js", {
 	}
 });
 
-CORATEST.createRefForJsBookkkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
+CORATEST.createRefForJsBookkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
 	return {
 		"name": "childReference",
 		"repeatId": "1",
@@ -128,7 +128,7 @@ QUnit.test("testSetValue", function(assert) {
 });
 
 QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkkeeper("metadataTextVariable", "textVariableId", "1", "1");
+	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "1");
 
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
@@ -148,7 +148,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 });
 
 QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkkeeper("metadataTextVariable", "textVariableId", "1", "4");
+	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "4");
 
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {

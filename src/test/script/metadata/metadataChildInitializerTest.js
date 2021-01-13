@@ -22,6 +22,7 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			pubSub: this.pubSub,
@@ -31,7 +32,8 @@ QUnit.module("metadata/metadataChildInitializerTest.js", {
 		};
 		this.spec = {
 			data: undefined,
-			path: {}
+			path: {},
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 
 		this.spec.childReference = {
@@ -238,6 +240,7 @@ QUnit.test("testInitGroupIdTwoTextChildWithData", function(assert) {
 
 	assert.stringifyEqual(repeatSpec.data, this.spec.data.children[1]);
 	assert.strictEqual(repeatSpec.repeatId, undefined);
+	assert.deepEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
 
 });
 
@@ -310,6 +313,7 @@ QUnit.test("testInitOneChildRepeat3to3", function(assert) {
 
 	assert.stringifyEqual(repeatSpec.data, undefined);
 	assert.strictEqual(repeatSpec.repeatId, "0");
+	assert.deepEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
 
 });
 

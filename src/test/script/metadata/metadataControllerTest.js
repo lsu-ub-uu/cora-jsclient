@@ -69,6 +69,7 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 	let childReferences = topGroup.getFirstChildByNameInData("childReferences");
 	let childReference = childReferences.children[0];
 	assert.stringifyEqual(spec.childReference, childReference);
+	assert.deepEqual(spec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 
 	assert.deepEqual(spec.path, {});
 	assert.deepEqual(spec.data, this.spec.data);

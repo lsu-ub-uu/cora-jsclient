@@ -79,7 +79,8 @@ var CORA = (function(cora) {
 			let initializerSpec = {
 				childReference: childReference,
 				path: topLevelPath,
-				data: topLevelData
+				data: topLevelData,
+				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
 			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorChildInitializer(initializerSpec);

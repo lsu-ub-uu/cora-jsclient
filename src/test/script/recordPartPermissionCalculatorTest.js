@@ -25,6 +25,7 @@ QUnit.module("recordPartPermissionCalculatorTest.js", {
 		this.dependencies = {
 			metadataProvider: this.metadataProviderSpy
 		};
+		this.metadataProvider = this.dependencies.metadataProvider;
 		this.spec = {
 			metadataId: "textGroupTopLevel",
 			permissions: {
@@ -38,7 +39,7 @@ QUnit.module("recordPartPermissionCalculatorTest.js", {
 });
 
 QUnit.test("testType", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 	
@@ -46,7 +47,7 @@ QUnit.test("testType", function(assert) {
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
@@ -54,7 +55,7 @@ QUnit.test("testGetDependencies", function(assert) {
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
@@ -62,11 +63,11 @@ QUnit.test("testGetSpec", function(assert) {
 });
 
 QUnit.test("testNoPermissions", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(calculator.getFulfilledReadRecordParts().length, 0);
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("SomeType", "SomeID"), true);
@@ -74,7 +75,7 @@ QUnit.test("testNoPermissions", function(assert) {
 });
 
 QUnit.test("testEmptyPermissions", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	
 	this.spec.permissions = {
 		write: [],
@@ -82,7 +83,7 @@ QUnit.test("testEmptyPermissions", function(assert) {
 	};
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(calculator.getFulfilledReadRecordParts().length, 0);
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("SomeType", "SomeID"), true);
@@ -90,7 +91,7 @@ QUnit.test("testEmptyPermissions", function(assert) {
 });
 
 QUnit.test("testNoPermissionsAndWriteConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
 	
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
@@ -102,7 +103,7 @@ QUnit.test("testNoPermissionsAndWriteConstraints", function(assert) {
 });
 
 QUnit.test("testWithReadWritePermissionsNoConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	this.spec.permissions = {
 		write: ["textIdVariableNameInData"],
 		read: ["textIdVariableNameInData"]
@@ -110,7 +111,7 @@ QUnit.test("testWithReadWritePermissionsNoConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(calculator.getFulfilledReadRecordParts().length, 0);
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("metadataTextVariable", "textIdVariable"), true);
@@ -118,7 +119,7 @@ QUnit.test("testWithReadWritePermissionsNoConstraints", function(assert) {
 });
 
 QUnit.test("testWritePermissionsMatchingConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
 	this.spec.permissions = {
 		write: ["textIdVariableNameInData"],
 		read: ["textIdVariableNameInData"]
@@ -126,12 +127,12 @@ QUnit.test("testWritePermissionsMatchingConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledWriteRecordParts = calculator.getFulfilledWriteRecordParts();
 	assert.strictEqual(fulfilledWriteRecordParts.length, 1);
 	assert.strictEqual(fulfilledWriteRecordParts[0], "metadataTextVariable_textIdVariable");
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textIdVariable");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(1), "textIdVariable");
 
 	let fulfilledReadRecordParts = calculator.getFulfilledReadRecordParts();
 	assert.strictEqual(fulfilledReadRecordParts.length, 0);
@@ -142,7 +143,7 @@ QUnit.test("testWritePermissionsMatchingConstraints", function(assert) {
 });
 
 QUnit.test("testWithTwoWritePermissionsMatchingConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "write"]]));
 	this.spec.permissions = {
 		write: ["textIdVariableNameInData", "textIdAnotherVariableNameInData"],
 		read: ["textIdVariableNameInData", "textIdAnotherVariableNameInData"]
@@ -150,7 +151,7 @@ QUnit.test("testWithTwoWritePermissionsMatchingConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledWriteRecordParts = calculator.getFulfilledWriteRecordParts();
 	assert.strictEqual(fulfilledWriteRecordParts.length, 2);
 	assert.strictEqual(fulfilledWriteRecordParts[0], "metadataTextVariable_textIdVariable");
@@ -164,7 +165,7 @@ QUnit.test("testWithTwoWritePermissionsMatchingConstraints", function(assert) {
 });
 
 QUnit.test("testWithOneWritePermissionsAndTwoConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "write"]]));
 	this.spec.permissions = {
 		write: ["textIdVariableNameInData"],
 		read: ["textIdVariableNameInData"]
@@ -172,7 +173,7 @@ QUnit.test("testWithOneWritePermissionsAndTwoConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	let callGetMetadataId = this.dependencies.metadataProvider.getFetchedMetadataId(0)
+	let callGetMetadataId = this.metadataProvider.getFetchedMetadataId(0)
 	assert.strictEqual(callGetMetadataId, "textGroupTopLevel");
 	let fulfilledWriteRecordParts = calculator.getFulfilledWriteRecordParts();
 	assert.strictEqual(fulfilledWriteRecordParts.length, 1);
@@ -186,7 +187,7 @@ QUnit.test("testWithOneWritePermissionsAndTwoConstraints", function(assert) {
 });
 
 QUnit.test("testWithTwoWritePermissionsOneConstraint", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "write"]]));
 	this.spec.permissions = {
 		write: ["textIdVariableNameInData", "textIdAnotherVariableNameInData"],
 		read: ["textIdVariableNameInData", "textIdAnotherVariableNameInData"]
@@ -194,7 +195,7 @@ QUnit.test("testWithTwoWritePermissionsOneConstraint", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledWriteRecordParts = calculator.getFulfilledWriteRecordParts();
 	assert.strictEqual(fulfilledWriteRecordParts.length, 1);
 	assert.strictEqual(fulfilledWriteRecordParts[0], "metadataTextVariable_textIdVariable");
@@ -206,7 +207,7 @@ QUnit.test("testWithTwoWritePermissionsOneConstraint", function(assert) {
 });
 
 QUnit.test("testNoPermissionsReadWriteConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"]]));
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
@@ -221,7 +222,7 @@ QUnit.test("testNoPermissionsReadWriteConstraints", function(assert) {
 
 
 QUnit.test("testWithReadPermissionsNoConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable"]]));
 	this.spec.permissions = {
 		write: [],
 		read: ["textIdVariableNameInData"]
@@ -229,7 +230,7 @@ QUnit.test("testWithReadPermissionsNoConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(calculator.getFulfilledReadRecordParts().length, 0);
 
@@ -238,7 +239,7 @@ QUnit.test("testWithReadPermissionsNoConstraints", function(assert) {
 });
 
 QUnit.test("testWithReadPermissionsMatchingConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"]]));
 	this.spec.permissions = {
 		write: [],
 		read: ["textIdVariableNameInData"]
@@ -246,11 +247,11 @@ QUnit.test("testWithReadPermissionsMatchingConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledReadRecordParts = calculator.getFulfilledReadRecordParts();
 	assert.strictEqual(fulfilledReadRecordParts.length, 1);
 	assert.strictEqual(fulfilledReadRecordParts[0], "metadataTextVariable_textIdVariable");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textIdVariable");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(1), "textIdVariable");
 
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 
@@ -261,7 +262,7 @@ QUnit.test("testWithReadPermissionsMatchingConstraints", function(assert) {
 });
 
 QUnit.test("testWithTwoReadPermissionsMatchingConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
 	this.spec.permissions = {
 		write: [],
 		read: ["textIdVariableNameInData", "textIdAnotherVariableNameInData"]
@@ -269,7 +270,7 @@ QUnit.test("testWithTwoReadPermissionsMatchingConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledReadRecordParts = calculator.getFulfilledReadRecordParts();
 	assert.strictEqual(fulfilledReadRecordParts.length, 2);
 	assert.strictEqual(fulfilledReadRecordParts[0], "metadataTextVariable_textIdVariable");
@@ -283,7 +284,7 @@ QUnit.test("testWithTwoReadPermissionsMatchingConstraints", function(assert) {
 });
 
 QUnit.test("testWithOneReadPermissionsAndTwoConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
 	this.spec.permissions = {
 		write: [],
 		read: ["textIdVariableNameInData"]
@@ -291,7 +292,7 @@ QUnit.test("testWithOneReadPermissionsAndTwoConstraints", function(assert) {
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	let callGetMetadataId = this.dependencies.metadataProvider.getFetchedMetadataId(0)
+	let callGetMetadataId = this.metadataProvider.getFetchedMetadataId(0)
 	assert.strictEqual(callGetMetadataId, "textGroupTopLevel");
 	let fulfilledReadRecordParts = calculator.getFulfilledReadRecordParts();
 	assert.strictEqual(fulfilledReadRecordParts.length, 1);
@@ -304,7 +305,7 @@ QUnit.test("testWithOneReadPermissionsAndTwoConstraints", function(assert) {
 });
 
 QUnit.test("testWithOneReadOneWritePermissionMultipleConstraints", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherWriteVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdVariable", "readWrite"], ["metadataTextVariable", "textIdAnotherWriteVariable", "write"], ["metadataTextVariable", "textIdAnotherVariable", "readWrite"]]));
 	this.spec.permissions = {
 		write: ["textIdAnotherWriteVariableNameInData"],
 		read: ["textIdAnotherVariableNameInData", "textIdAnotherWriteVariableNameInData"]
@@ -312,7 +313,7 @@ QUnit.test("testWithOneReadOneWritePermissionMultipleConstraints", function(asse
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
 	let fulfilledReadRecordParts = calculator.getFulfilledReadRecordParts();
 	assert.strictEqual(fulfilledReadRecordParts.length, 1);
 	assert.strictEqual(fulfilledReadRecordParts[0], "metadataTextVariable_textIdAnotherVariable");
@@ -330,16 +331,16 @@ QUnit.test("testWithOneReadOneWritePermissionMultipleConstraints", function(asse
 });
 
 QUnit.test("testNoPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(2), "textGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(3), "textIdSecondLevel");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(4), "textIdTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(1), "textGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(2), "textGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(3), "textIdSecondLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(4), "textIdTopLevel");
 
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("SomeType", "SomeID"), true);
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("metadataTextVariable", "textIdTopLevel"), false);
@@ -351,19 +352,19 @@ QUnit.test("testNoPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(as
 });
 
 QUnit.test("testNoPermissionsWithOneGroupAndOneAtomicOnThirdLevel", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupGroup", "write"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroupGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdThirdLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupGroup", "write"]]));
+	this.metadataProvider.setChildReferences("textGroupGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdThirdLevel", "write"]]));
 
 	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(2), "textGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(3), "textGroupGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(4), "textGroupGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(5), "textIdThirdLevel");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(6), "textIdTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(1), "textGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(2), "textGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(3), "textGroupGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(4), "textGroupGroup");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(5), "textIdThirdLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(6), "textIdTopLevel");
 
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("SomeType", "SomeID"), true);
 	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart("metadataTextVariable", "textIdTopLevel"), false);
@@ -377,8 +378,8 @@ QUnit.test("testNoPermissionsWithOneGroupAndOneAtomicOnThirdLevel", function(ass
 });
 
 QUnit.test("testPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
 	this.spec.permissions = {
 		read: [],
 		write: ["textIdSecondLevelNameInData"]
@@ -394,8 +395,8 @@ QUnit.test("testPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(asse
 });
 
 QUnit.test("testPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup"], ["metadataTextVariable", "textIdTopLevel", "readWrite"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
 	this.spec.permissions = {
 		read: ["textIdTopLevelNameInData"],
 		write: ["textIdTopLevelNameInData", "textIdSecondLevelNameInData"]
@@ -411,8 +412,8 @@ QUnit.test("testPermissionsWithOneGroupAndOneAtomicOnSecondLevel", function(asse
 });
 
 QUnit.test("testPermissionsWithOneGroupAndRepeatMaxMoreThanOne", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", undefined, "2"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", undefined, "2"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
 	this.spec.permissions = {
 		read: [],
 		write: []
@@ -426,8 +427,8 @@ QUnit.test("testPermissionsWithOneGroupAndRepeatMaxMoreThanOne", function(assert
 
 
 QUnit.test("testPermissionsWithOneGroupWithWriteConstrain", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup","write"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup","write"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel", "write"]]));
 	this.spec.permissions = {
 		read: [],
 		write: ["textIdSecondLevelNameInData"]
@@ -441,9 +442,9 @@ QUnit.test("testPermissionsWithOneGroupWithWriteConstrain", function(assert) {
 
 
 QUnit.test("testPermissionsWithOneGroupWithWriteConstraint", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", "write"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupGroup"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroupGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdThirdLevel", "write"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", "write"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupGroup"]]));
+	this.metadataProvider.setChildReferences("textGroupGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdThirdLevel", "write"]]));
 	this.spec.permissions = {
 		read: [],
 		write: ["textIdThirdLevelNameInData"]
@@ -461,8 +462,8 @@ QUnit.test("testPermissionsWithOneGroupWithWriteConstraint", function(assert) {
 
 
 QUnit.test("testPermissionsGroupHasUnfullfilledReadPermissions", function(assert) {
-	this.dependencies.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", "readWrite"]]));
-	this.dependencies.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel"]]));
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroup", "readWrite"]]));
+	this.metadataProvider.setChildReferences("textGroup", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdSecondLevel"]]));
 
 	this.spec.permissions = {
 		read: [],
@@ -471,9 +472,30 @@ QUnit.test("testPermissionsGroupHasUnfullfilledReadPermissions", function(assert
 	
 	CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
 	
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
-	assert.strictEqual(this.dependencies.metadataProvider.getFetchedMetadataId(1), "textGroup");
-	assert.strictEqual(this.dependencies.metadataProvider.getNumberOfCallsToGetMetadataById(), 2);
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "textGroupTopLevel");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(1), "textGroup");
+	assert.strictEqual(this.metadataProvider.getNumberOfCallsToGetMetadataById(), 2);
+});
+
+QUnit.test("testCircularDependencyOnChildReferences", function(assert) {
+	this.metadataProvider.setChildReferences(this.spec.metadataId, CORATEST.createJsonForChildReference([["metadataGroup", "textGroupLevel2"]]));
+	this.metadataProvider.setChildReferences("textGroupLevel2", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupBranch1Level3"], ["metadataGroup", "textGroupBranch2Level3"]]));
+	this.metadataProvider.setChildReferences("textGroupBranch1Level3", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupBranch1Level4"]]));
+	this.metadataProvider.setChildReferences("textGroupBranch1Level4", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupBranch1Level5"]]));
+	this.metadataProvider.setChildReferences("textGroupBranch1Level5", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupLevel2"]]));
+	
+	this.metadataProvider.setChildReferences("textGroupBranch2Level3", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupBranch2Level4"]]));
+	this.metadataProvider.setChildReferences("textGroupBranch2Level4", CORATEST.createJsonForChildReference([["metadataGroup", "textGroupBranch2Level5"]]));
+	this.metadataProvider.setChildReferences("textGroupBranch2Level5", CORATEST.createJsonForChildReference([["metadataTextVariable", "textIdBranch2Level5", "write"]]));
+
+	this.spec.permissions = {
+		read: [],
+		write: []
+	};
+	
+	let calculator = CORA.recordPartPermissionCalculator(this.dependencies, this.spec);
+	
+	assert.strictEqual(calculator.hasFulfilledWritePermissionsForRecordPart("metadataTextVariable", "textIdBranch2Level5"), false);	
 });
 
 

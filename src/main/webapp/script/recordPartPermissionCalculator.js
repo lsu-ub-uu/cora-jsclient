@@ -27,6 +27,7 @@ var CORA = (function(cora) {
 		let recordPartsHasWriteConstraints = [];
 		let readPermissions = spec.permissions.read;
 		let writePermissions = spec.permissions.write;
+		let visitedChildReferences = [];
 
 		const start = function() {
 			let topLevelChildReferences = getChildReferences(spec.metadataId);
@@ -48,12 +49,12 @@ var CORA = (function(cora) {
 
 		const handleRecordPartPermissionsForChildReference = function(childReference, unfulfilledWritePermissionInParentHierarchy) {
 			let cChildReference = CORA.coraData(childReference);
-			let childId = getLinkedRecordId(cChildReference);	
+			let childId = getLinkedRecordId(cChildReference);
 			let nameInData = extractNameInData(childId);
 
 			let fulfilledReadPermissionOnGroupParent = handleReadRecordPartPermissions(cChildReference, nameInData);
 			let unfulfilledWritePermissionInParentHierarchyChild = handleWriteRecordPartPermissions(cChildReference, nameInData, unfulfilledWritePermissionInParentHierarchy);
-				
+
 			possiblyRecurseForGroupChildren(cChildReference, childId, unfulfilledWritePermissionInParentHierarchyChild, fulfilledReadPermissionOnGroupParent);
 		};
 
@@ -63,6 +64,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
+
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
 				let combinedChildId = createCombinedChildId(cChildReference);
 				recordPartsHasReadConstraints.push(combinedChildId);
@@ -74,13 +76,19 @@ var CORA = (function(cora) {
 
 		const possiblyRecurseForGroupChildren = function(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy, fulfilledReadPermissionOnGroupParent) {
 			if (permissionForChildShouldBeHandled(cChildReference, fulfilledReadPermissionOnGroupParent)) {
+				visitedChildReferences.push(createCombinedChildId(cChildReference));
 				calculateRecordPartPermissions(getChildReferences(childId), unfulfilledWritePermissionInParentHierarchy);
 			}
 		};
 
 		const permissionForChildShouldBeHandled = function(cChildReference, fulfilledReadPermissionOnGroupParent) {
-			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference) && fulfilledReadPermissionOnGroupParent;
+			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference)
+				&& fulfilledReadPermissionOnGroupParent && isTheFirstVisitToChildReference(cChildReference);
 		};
+		const isTheFirstVisitToChildReference = function(cChildReference) {
+			let combinedId = createCombinedChildId(cChildReference);
+			return !visitedChildReferences.includes(combinedId);
+		}
 
 		const repeatMaxIsOne = function(cChildReference) {
 			return cChildReference.getFirstChildByNameInData("repeatMax").value === "1";
@@ -124,8 +132,8 @@ var CORA = (function(cora) {
 			}
 			return unfulfilledWritePermissionInParentHierarchy;
 		};
-		
-		const handlePermissionsForChildWithWriteConstraint = function(combinedChildId, nameInData, unfulfilledWritePermissionInParentHierarchy){
+
+		const handlePermissionsForChildWithWriteConstraint = function(combinedChildId, nameInData, unfulfilledWritePermissionInParentHierarchy) {
 			recordPartsHasWriteConstraints.push(combinedChildId);
 			if (unfulfilledWritePermissionInParentHierarchy) {
 				return true;

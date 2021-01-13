@@ -405,6 +405,8 @@ QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWith
 	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myPathLink", "children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
 	assert.stringifyEqual(linkedRecordTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myPathLink" }] });
 
+
+
 	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
 	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
@@ -417,6 +419,8 @@ QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWith
 	assert.stringifyEqual(linkedRepeatTypeSpec.childReference, expectedRecordRepeatIdReference);
 	assert.stringifyEqual(linkedRepeatTypeSpec.data, this.spec.data);
 	assert.stringifyEqual(linkedRepeatTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myPathLink" }] });
+
+	assert.stringifyEqual(this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(3), undefined);
 });
 
 QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerAbstractRecordTypeNOData", function(assert) {

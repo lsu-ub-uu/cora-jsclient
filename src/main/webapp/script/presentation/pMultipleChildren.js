@@ -139,13 +139,13 @@ var CORA = (function(cora) {
 			return false;
 		};
 
-		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
+		const possiblyAppendChildView = function(ref, cPresentationChildRef,
 			cPresentationChild, refId) {
-			let cChildReference = CORA.coraData(childReference);
-			let hasReadPermission = checkHasReadPermission(cChildReference);
+			let cRef = CORA.coraData(ref);
+			let hasReadPermission = checkHasReadPermission(cRef);
 
 			if (hasReadPermission) {
-				let hasWritePermission = checkHasWritePermission(cChildReference);
+				let hasWritePermission = checkHasWritePermission(cRef);
 				let childView = createViewForChild(cPresentationChildRef, cPresentationChild,
 					refId, hasWritePermission);
 
@@ -162,11 +162,9 @@ var CORA = (function(cora) {
 				presentationOfType, presentationOfId);
 		};
 
-		const checkHasWritePermission = function(cChildReference) {
-			let presentationOfType = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordType");
-			let presentationOfId = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+		const checkHasWritePermission = function(cRef) {
+			let presentationOfType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let presentationOfId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(
 				presentationOfType, presentationOfId);
 		};

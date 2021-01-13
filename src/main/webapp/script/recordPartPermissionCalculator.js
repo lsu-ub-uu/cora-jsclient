@@ -182,14 +182,21 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		const hasFulfilledReadPermissionsForRecordPart = function(recordType, recordId) {
+		const hasFulfilledReadPermissionsForRecordPart = function(cRef) {
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+
 			if (!recordPartsHasReadConstraints.includes(recordType + "_" + recordId)) {
 				return true;
 			}
 			return fulfilledReadRecordParts.includes(recordType + "_" + recordId);
 		};
 
-		const hasFulfilledWritePermissionsForRecordPart = function(recordType, recordId) {
+		const hasFulfilledWritePermissionsForRecordPart = function(cRef) {
+			
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			
 			if (!recordPartsHasWriteConstraints.includes(recordType + "_" + recordId)) {
 				return true;
 			}

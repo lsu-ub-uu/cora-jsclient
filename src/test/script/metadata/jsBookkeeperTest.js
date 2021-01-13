@@ -134,7 +134,8 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 	let data = {
 			"metadataId" : "textVariableId",
 			"path" : {},
-			"childReference" : childReferenceTextVariableId
+			"childReference" : childReferenceTextVariableId,
+			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	jsBookkeeper.add(data);
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
@@ -142,6 +143,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, undefined);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
 	
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
@@ -154,7 +156,8 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", f
 	let data = {
 			"metadataId" : "textVariableId",
 			"path" : {},
-			"childReference" : childReferenceTextVariableId
+			"childReference" : childReferenceTextVariableId,
+			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	jsBookkeeper.add(data);
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
@@ -162,6 +165,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", f
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, "1");
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
 	
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());

@@ -71,25 +71,25 @@ QUnit.test("testNoPermissions", function(assert) {
 	assert.strictEqual(calculator.getFulfilledWriteRecordParts().length, 0);
 	assert.strictEqual(calculator.getFulfilledReadRecordParts().length, 0);
 	
-//	let cx = CORATEST.createRef("SomeType", "SomeId");
+//	let cx = CORATEST.createCRef("SomeType", "SomeId");
 //	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart(cx), true);
 	CORATEST.assertCalculatorHasFulfilledReadPermission(assert,calculator, "SomeType", "SomeId", true);
-//	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart(CORATEST.createRef("SomeType", "SomeId")), true);
+//	assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart(CORATEST.createCRef("SomeType", "SomeId")), true);
 //	assert.strictEqual(calculator.hasFulfilledWritePermissionsForRecordPart(cx), true);
 	CORATEST.assertCalculatorHasFulfilledWritePermission(assert,calculator, "SomeType", "SomeId", true);
 });
-CORATEST.createRef = function(linkedRecordType, linkedRecordId){
+CORATEST.createCRef = function(linkedRecordType, linkedRecordId){
 	let ref = { children: [{ name: "linkedRecordType", value: linkedRecordType }, { name: "linkedRecordId", value: linkedRecordId }] };
 	return CORA.coraData(ref);
 };
 
 CORATEST.assertCalculatorHasFulfilledReadPermission = function (assert, calculator, linkedRecordType, linkedRecordId, assertToValue){
-	let cRef = CORATEST.createRef(linkedRecordType, linkedRecordId);
+	let cRef = CORATEST.createCRef(linkedRecordType, linkedRecordId);
 	return assert.strictEqual(calculator.hasFulfilledReadPermissionsForRecordPart(cRef), assertToValue);
 };
 
 CORATEST.assertCalculatorHasFulfilledWritePermission = function (assert, calculator, linkedRecordType, linkedRecordId, assertToValue){
-	let cRef = CORATEST.createRef(linkedRecordType, linkedRecordId);
+	let cRef = CORATEST.createCRef(linkedRecordType, linkedRecordId);
 	return assert.strictEqual(calculator.hasFulfilledWritePermissionsForRecordPart(cRef), assertToValue);
 }
 

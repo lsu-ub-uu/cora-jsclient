@@ -203,21 +203,18 @@ var CORA = (function(cora) {
 			let nextLevelChildReferences = cMetadataElement
 				.getFirstChildByNameInData('childReferences');
 			nextLevelChildReferences.children.forEach(function(childReference) {
-				if(userHasRecordPartPermission(childReference)) {
-					createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, 
+				if (userHasRecordPartPermission(childReference)) {
+					createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath,
 						spec.data);
 				}
 			});
 		};
-		
+
 		const userHasRecordPartPermission = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return spec.recordPartPermissionCalculator
-				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(cRef);
 		};
-		
+
 		const getCRef = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
@@ -234,13 +231,10 @@ var CORA = (function(cora) {
 			let hasWritePermission = hasWritePermissions(childReference);
 			metadataChildInitializer.initializeTopLevel(hasWritePermission);
 		};
-		
+
 		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return spec.recordPartPermissionCalculator
-				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
 		}
 
 		const isRecordLink = function() {
@@ -269,7 +263,7 @@ var CORA = (function(cora) {
 					value: implementingRecordType
 				}]
 			};
-			createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference, 
+			createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference,
 				nextLevelPath, recordTypeData);
 		};
 

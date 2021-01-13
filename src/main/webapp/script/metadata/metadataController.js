@@ -63,10 +63,7 @@ var CORA = (function(cora) {
 
 		const userHasRecordPartPermission = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return recordPartPermissionCalculator
-				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+			return recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(cRef);
 		};
 
 		const getCRef = function(childReference) {
@@ -90,10 +87,7 @@ var CORA = (function(cora) {
 
 		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return recordPartPermissionCalculator
-				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+			return recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
 		}
 
 		const getSpec = function() {

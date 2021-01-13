@@ -153,20 +153,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const checkHasReadPermission = function(cChildReference) {
-			let presentationOfType = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordType");
-			let presentationOfId = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+		const checkHasReadPermission = function(cRef) {
 			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
-				presentationOfType, presentationOfId);
+				cRef);
 		};
 
 		const checkHasWritePermission = function(cRef) {
-			let presentationOfType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let presentationOfId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(
-				presentationOfType, presentationOfId);
+				cRef);
 		};
 
 		const handleSinglePresentationOf = function(cPresentationChildRef, cPresentationChild,

@@ -19,75 +19,48 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.firstLevelPath = {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVariableId"
-			} ]
-		};
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textVariableId"
+		}]
+	};
 	coraTest.firstLevelPathWithRepeatId = {
-			"name": "linkedPath",
-			"children": [
-				{
-					"name": "nameInData",
-					"value": "textVariableId"
-				},
-				{
-					"name": "repeatId",
-					"value": "0"
-				}
-			]
-		};
+		"name": "linkedPath",
+		"children": [
+			{
+				"name": "nameInData",
+				"value": "textVariableId"
+			},
+			{
+				"name": "repeatId",
+				"value": "0"
+			}
+		]
+	};
 	coraTest.pathWithTwoLevels = {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "recordInfo"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "dataDivider"
-				} ]
-			} ]
-		};
-	coraTest.numPathWithThreeLevels = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}, {
 			"name": "linkedPath",
 			"children": [{
 				"name": "nameInData",
-				"value": "recordInfo"
-			}, {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "dataDivider"
-				}, {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "numVariableId"
-					}]
-				}]
+				"value": "dataDivider"
 			}]
-		};
-	coraTest.twoLevelPathWithAttribute = {
+		}]
+	};
+	coraTest.numPathWithThreeLevels = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}, {
 			"name": "linkedPath",
 			"children": [{
 				"name": "nameInData",
-				"value": "textPart"
-			}, {
-				"name": "attributes",
-				"children": [{
-					"name": "attribute",
-					"repeatId": "1",
-					"children": [{
-						"name": "attributeName",
-						"value": "type"
-					}, {
-						"name": "attributeValue",
-						"value": "alternative"
-					}]
-				}]
+				"value": "dataDivider"
 			}, {
 				"name": "linkedPath",
 				"children": [{
@@ -95,22 +68,65 @@ var CORATEST = (function(coraTest) {
 					"value": "numVariableId"
 				}]
 			}]
-		};
+		}]
+	};
+	coraTest.twoLevelPathWithAttribute = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "textPart"
+		}, {
+			"name": "attributes",
+			"children": [{
+				"name": "attribute",
+				"repeatId": "1",
+				"children": [{
+					"name": "attributeName",
+					"value": "type"
+				}, {
+					"name": "attributeValue",
+					"value": "alternative"
+				}]
+			}]
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "numVariableId"
+			}]
+		}]
+	};
 	coraTest.twoLevelPathWithRepeatId = {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "userRole"
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "userRole"
+		}, {
+			"name": "repeatId",
+			"value": "0"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "userRole"
+			}]
+		}]
+	};
+	coraTest.twoLevelPathWithRepeatIdAtLowestLevel = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "userRole"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "userRole"
 			}, {
-				"name" : "repeatId",
-				"value" : "0"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "userRole"
-				} ]
-			} ]
-		}
+				"name": "repeatId",
+				"value": "0"
+			}]
+		}]
+	};
 	return coraTest;
 }(CORATEST || {}));

@@ -16,7 +16,8 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
- */var CORA = (function(cora) {
+ */
+var CORA = (function(cora) {
 	"use strict";
 	cora.pCollectionVar = function(dependencies, spec) {
 		let path = spec.path;
@@ -68,7 +69,8 @@
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			pubSub.subscribe("disable", createTopLevelPath(), undefined, disableCollectionVar);
+			pubSub.subscribe("disable", ensureNoRepeatIdInLowestLevelOfPath(), undefined,
+				disableCollectionVar);
 		};
 
 		const createInfoSpec = function() {
@@ -243,36 +245,36 @@
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-		const createTopLevelPath = function() {
+		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			if (pathHasChildren()) {
-				let cPath = CORA.coraData(path);
-				return createPathWithOnlyTopLevelInformation(cPath);
+				removeRepeatIdFromLowestLevelOfPath();
 			}
 			return path;
+		};
+		const removeRepeatIdFromLowestLevelOfPath = function() {
+			let lowestPath = getLowestPathPointer(path);
+			let cLowestPath = CORA.coraData(lowestPath);
+			if (cLowestPath.containsChildWithNameInData("repeatId")) {
+				removeRepeatIdFromPathPart(cLowestPath, lowestPath);
+			}
+		};
+
+		const getLowestPathPointer = function(inPath) {
+			var cPath = CORA.coraData(inPath);
+			if (cPath.containsChildWithNameInData("linkedPath")) {
+				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
+			}
+			return inPath;
+		};
+
+		const removeRepeatIdFromPathPart = function(cLowestPath, lowestPath) {
+			let repeatIdObject = cLowestPath.getFirstChildByNameInData("repeatId");
+			let children = lowestPath.children;
+			lowestPath.children = children.filter((item) => item !== repeatIdObject);
 		};
 
 		const pathHasChildren = function() {
 			return path.children !== undefined;
-		};
-
-		const createPathWithOnlyTopLevelInformation = function(cPath) {
-			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
-			let newTopLevelPath = {
-				name: "linkedPath",
-				children: [{
-					name: "nameInData",
-					value: pathNameInData
-				}]
-			};
-			possiblyAddAttributes(cPath, newTopLevelPath);
-			return newTopLevelPath;
-		};
-
-		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
-			if (cPath.containsChildWithNameInData("attributes")) {
-				let attributes = cPath.getFirstChildByNameInData("attributes");
-				newTopLevelPath.children.push(attributes);
-			}
 		};
 
 		const disableCollectionVar = function() {

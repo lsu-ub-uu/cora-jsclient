@@ -35,7 +35,7 @@ QUnit.test("testBlankPath", function(assert) {
 	let pathUtils = CORA.pathUtils();
 	let path = {};
 	let returnedPath = pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-	assert.strictEqual(returnedPath, path);
+	assert.deepEqual(returnedPath, path);
 });
 
 QUnit.test("testOneLevelPathNoRepeatId", function(assert) {

@@ -76,36 +76,13 @@ var CORA = (function(cora) {
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			let topLevelPath = createTopLevelPath();
-			pubSub.subscribe("disable", topLevelPath, undefined, disableVar);
+			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
+			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
-
-		const createTopLevelPath = function() {
-			if (pathHasChildren()) {
-				let cPath = CORA.coraData(path);
-				return createPathWithOnlyTopLevelInformation(cPath);
-			}
-			return path;
-		};
-
-		const createPathWithOnlyTopLevelInformation = function(cPath) {
-			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
-			let newTopLevelPath = {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": pathNameInData
-				}]
-			};
-			possiblyAddAttributes(cPath, newTopLevelPath);
-			return newTopLevelPath;
-		};
-
-		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
-			if (cPath.containsChildWithNameInData("attributes")) {
-				let attributes = cPath.getFirstChildByNameInData("attributes");
-				newTopLevelPath.children.push(attributes);
-			}
+		
+		const ensureNoRepeatIdInLowestLevelOfPath = function() {
+			let pathUtils = CORA.pathUtils();
+			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
 		};
 
 		const intializePVarViewSpec = function(textProvider) {
@@ -163,11 +140,6 @@ var CORA = (function(cora) {
 				pVarViewSpec.placeholderText = emptyText;
 			}
 		};
-
-		const pathHasChildren = function() {
-			return path.children !== undefined;
-		};
-
 
 		const getView = function() {
 			return pVarView.getView();

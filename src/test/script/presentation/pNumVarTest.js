@@ -207,7 +207,7 @@ QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
-QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
+QUnit.test("testNumWithFirstLevelPathWithRepeatId", function(assert) {
 	let firstLevelNumPathWithRepeatId = CORATEST.firstLevelPathWithRepeatId;
 	let expectedPath = {
 		"name": "linkedPath",
@@ -222,13 +222,28 @@ QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
-QUnit.test("testInitNumWithTwoLevelPath", function(assert) {
+QUnit.test("testNumWithTwoLevelPath", function(assert) {
 	let numPathWithTwoLevels = CORATEST.pathWithTwoLevels;
+	let expectedPath = numPathWithTwoLevels;
+	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
+		"pNumVarNumVariableId");
+	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithTwoLevels, expectedPath);
+	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
+});
+
+QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
+	let numPathWithTwoLevels = CORATEST.twoLevelPathWithRepeatIdAtLowestLevel;
 	let expectedPath = {
 		"name": "linkedPath",
 		"children": [{
 			"name": "nameInData",
-			"value": "recordInfo"
+			"value": "userRole"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "userRole"
+			}]
 		}]
 	};
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
@@ -239,13 +254,7 @@ QUnit.test("testInitNumWithTwoLevelPath", function(assert) {
 
 QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
 	let numPathWithThreeLevels = CORATEST.numPathWithThreeLevels;
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "recordInfo"
-		}]
-	};
+	let expectedPath = numPathWithThreeLevels;
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithThreeLevels, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithThreeLevels, expectedPath);
@@ -254,26 +263,7 @@ QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
 
 QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
 	let numPathWithAttribute = CORATEST.twoLevelPathWithAttribute;
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textPart"
-		}, {
-			"name": "attributes",
-			"children": [{
-				"name": "attribute",
-				"repeatId": "1",
-				"children": [{
-					"name": "attributeName",
-					"value": "type"
-				}, {
-					"name": "attributeValue",
-					"value": "alternative"
-				}]
-			}]
-		}]
-	};
+	let expectedPath = numPathWithAttribute;
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithAttribute, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithAttribute, expectedPath);

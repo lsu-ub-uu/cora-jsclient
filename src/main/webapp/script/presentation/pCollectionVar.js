@@ -246,35 +246,8 @@ var CORA = (function(cora) {
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-			if (pathHasChildren()) {
-				removeRepeatIdFromLowestLevelOfPath();
-			}
-			return path;
-		};
-		const removeRepeatIdFromLowestLevelOfPath = function() {
-			let lowestPath = getLowestPathPointer(path);
-			let cLowestPath = CORA.coraData(lowestPath);
-			if (cLowestPath.containsChildWithNameInData("repeatId")) {
-				removeRepeatIdFromPathPart(cLowestPath, lowestPath);
-			}
-		};
-
-		const getLowestPathPointer = function(inPath) {
-			var cPath = CORA.coraData(inPath);
-			if (cPath.containsChildWithNameInData("linkedPath")) {
-				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
-			}
-			return inPath;
-		};
-
-		const removeRepeatIdFromPathPart = function(cLowestPath, lowestPath) {
-			let repeatIdObject = cLowestPath.getFirstChildByNameInData("repeatId");
-			let children = lowestPath.children;
-			lowestPath.children = children.filter((item) => item !== repeatIdObject);
-		};
-
-		const pathHasChildren = function() {
-			return path.children !== undefined;
+			let pathUtils = CORA.pathUtils();
+			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
 		};
 
 		const disableCollectionVar = function() {

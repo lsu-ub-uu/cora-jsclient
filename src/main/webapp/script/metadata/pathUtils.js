@@ -20,7 +20,8 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pathUtils = function() {
 
-		const ensureNoRepeatIdInLowestLevelOfPath = function(path) {
+		const ensureNoRepeatIdInLowestLevelOfPath = function(pathIn) {
+			let path = JSON.parse(JSON.stringify(pathIn));
 			if (pathHasChildren(path)) {
 				removeRepeatIdFromLowestLevelOfPath(path);
 			}

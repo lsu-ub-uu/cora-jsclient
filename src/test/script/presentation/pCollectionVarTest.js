@@ -513,7 +513,6 @@ QUnit.test("testPubSubMessagesWithTwoLevelPathWithRepeatIdLowestLevel", function
 		path: pathWithAttribute,
 		cPresentation: cPCollectionVarPresentation
 	};
-
 	CORA.pCollectionVar(this.dependencies, spec);
 	let subscriptions = this.pubSub.getSubscriptions();
 

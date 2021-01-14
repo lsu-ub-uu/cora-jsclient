@@ -106,8 +106,8 @@ var CORA = (function(cora) {
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			let topLevelPath = createTopLevelPath();
-			pubSub.subscribe("disable", topLevelPath, undefined, disableNumVar);
+			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
+			pubSub.subscribe("disable", disablePath, undefined, disableNumVar);
 		};
 
 		const disableNumVar = function() {
@@ -120,37 +120,9 @@ var CORA = (function(cora) {
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-
-		const createTopLevelPath = function() {
-			if (pathHasChildren()) {
-				let cPath = CORA.coraData(path);
-				return createPathWithOnlyTopLevelInformation(cPath);
-			}
-			return path;
-		};
-
-		const pathHasChildren = function() {
-			return path.children !== undefined;
-		};
-
-		const createPathWithOnlyTopLevelInformation = function(cPath) {
-			let pathNameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
-			let newTopLevelPath = {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": pathNameInData
-				}]
-			};
-			possiblyAddAttributes(cPath, newTopLevelPath);
-			return newTopLevelPath;
-		};
-
-		const possiblyAddAttributes = function(cPath, newTopLevelPath) {
-			if (cPath.containsChildWithNameInData("attributes")) {
-				let attributes = cPath.getFirstChildByNameInData("attributes");
-				newTopLevelPath.children.push(attributes);
-			}
+		const ensureNoRepeatIdInLowestLevelOfPath = function() {
+			let pathUtils = CORA.pathUtils();
+			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
 		};
 
 		const getView = function() {

@@ -239,6 +239,7 @@ var CORA = (function(cora) {
 				"repeatId": repeatId,
 				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
 			};
+			
 			let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorRepeatInitializer(initializerSpec);
 			repeatInitializer.initialize();
@@ -247,10 +248,7 @@ var CORA = (function(cora) {
 		const possiblyPublishDisableMessage = function(hasWritePermission) {
 			if (!hasWritePermission) {
 				let pathForTopLevelChild = createNextLevelPath();
-//				console.log(JSON.stringify(pathForTopLevelChild))
 				publishDisableMessage(pathForTopLevelChild);
-//				publishDisableMessage(createNextLevelPath());
-				console.log("disable",JSON.stringify(createNextLevelPath()))
 			}
 		};
 
@@ -263,24 +261,6 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
-
-		const createPath = function() {
-			let pathForTopLevelChild = {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": getNameInDataForMetadataId(ref)
-				}]
-			};
-			possiblyAddAttributesToPath(pathForTopLevelChild);
-			return pathForTopLevelChild;
-		};
-
-		const possiblyAddAttributesToPath = function(pathForTopLevelChild) {
-			if (attributes !== undefined) {
-				pathForTopLevelChild.children.push(attributes);
-			}
-		}
 
 		const publishDisableMessage = function(pathForTopLevelChild) {
 			dependencies.pubSub.publish("disable", {

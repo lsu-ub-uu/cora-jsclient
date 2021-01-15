@@ -25,10 +25,9 @@ var CORA = (function(cora) {
 		let topLevelData = spec.data;
 		let topLevelPath = {};
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
-
+			
 		const start = function() {
 			initializeFirstLevel();
-			console.log("metadatacontroller i initializeFirstLevel")
 			dependencies.pubSub.publish("newElementsAdded", {
 				data: "",
 				path: {}

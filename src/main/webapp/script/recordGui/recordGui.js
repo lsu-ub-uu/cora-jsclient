@@ -44,6 +44,7 @@ var CORA = (function(cora) {
 				data: spec.data,
 				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
+
 			metadataController = dependencies.metadataControllerFactory
 					.factor(specMetadataController);
 			return metadataController;
@@ -57,6 +58,7 @@ var CORA = (function(cora) {
 				pubSub: dependencies.pubSub,
 				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
+
 			let validator = dependencies.metadataValidatorFactory.factor(validateSpec);
 			return validator.validate();
 		};

@@ -26,13 +26,15 @@ QUnit.module("presentation/presentationHolderFactoryTest.js", {
 				"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
 				"jsBookkeeper" : CORATEST.jsBookkeeperSpy()
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
 			"presentationId" : "pgGroupIdOneTextChild",
 			metadataIdUsedInData : "groupIdOneTextChild",
 			unfulfilledRecordPartConstraints : {
 				read : [],
 				write : []
-			}
+			},
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 
 		};
 		this.presentationHolderFactory = CORA.presentationHolderFactory(this.dependencies);

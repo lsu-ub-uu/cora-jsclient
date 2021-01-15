@@ -49,6 +49,7 @@ var CORA = (function(cora) {
 				"cPresentation" : cPresentation,
 				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
+
 			let presentation = presentationFactory.factor(presentationSpec);
 			return presentation.getView();
 		};

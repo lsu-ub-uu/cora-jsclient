@@ -287,6 +287,7 @@ var CORA = (function(cora) {
 				cPresentationChildRef);
 			childRefHandlerSpec.parentMetadataId = my.metadataId;
 			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
+
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		};
 

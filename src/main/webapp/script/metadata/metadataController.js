@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			initializeFirstLevel();
+			console.log("metadatacontroller i initializeFirstLevel")
 			dependencies.pubSub.publish("newElementsAdded", {
 				data: "",
 				path: {}

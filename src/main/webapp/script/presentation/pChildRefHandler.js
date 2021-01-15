@@ -90,6 +90,9 @@ var CORA = (function(cora) {
 
 
 			subscribeToMessagesFromForm();
+//			console.log("metadataId ", metadataId)
+//			console.log("permissions ", spec.hasWritePermissionsForRecordPart)
+			
 			userCanUploadFile = showFileUpload();
 			userCanRemove = calculateUserCanRemove();
 			userCanMove = calculateUserCanMove();
@@ -99,6 +102,7 @@ var CORA = (function(cora) {
 			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			dependencies.pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
 			if (spec.minNumberOfRepeatingToShow !== undefined) {
+				console.log("subscribe1")
 				newElementsAddedSubscriptionId = dependencies.pubSub.subscribe("newElementsAdded",
 					{}, undefined, newElementsAdded);
 			}
@@ -121,12 +125,15 @@ var CORA = (function(cora) {
 
 		const calculateUserCanMove = function() {
 			if (spec.mode !== "input") {
+//				console.log("not input  ", spec.mode)
 				return false;
 			}
 			if (!isRepeating) {
+//				console.log("not repeating  ", metadataId)
 				return false;
 			}
 			if (!spec.hasWritePermissionsForRecordPart) {
+//				console.log("cant move  ", metadataId)
 				return false;
 			}
 			return true;
@@ -495,6 +502,7 @@ var CORA = (function(cora) {
 		const sendAdd = function() {
 			let data = createAddData();
 			let createdRepeatId = dependencies.jsBookkeeper.add(data);
+			console.log("pChildRef data",JSON.stringify(data))
 			sendNewElementsAdded();
 			return createdRepeatId;
 		};
@@ -514,6 +522,7 @@ var CORA = (function(cora) {
 		};
 
 		const sendNewElementsAdded = function() {
+			console.log("pChildRef sendNewElementsAdded")
 			dependencies.pubSub.publish("newElementsAdded", {
 				"data": "",
 				"path": {}

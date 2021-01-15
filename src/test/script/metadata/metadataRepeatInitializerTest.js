@@ -23,7 +23,7 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
-		
+
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			pubSub: this.pubSub,
@@ -87,6 +87,64 @@ QUnit.test("testMessagesTextVariableWithData", function(assert) {
 		+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
 	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
 		+ '"path":' + createLinkedPathWithNameInDataAsString("textVariableId") + '}}');
+
+	assert.equal(messages.length, 2);
+});
+
+QUnit.test("testMessagesNonEmptyParentPathTextVariableWithData", function(assert) {
+	this.spec.data = {
+		"name": "textVariableId",
+		"value": "A Value"
+	};
+	this.spec.path = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "type"
+			}]
+		}]
+	};
+
+	let expectedSetValuePath = {
+		"name": "linkedPath",
+		"children": [
+			{
+				"name": "nameInData",
+				"value": "recordInfo"
+			},
+			{
+				"name": "linkedPath",
+				"children": [
+					{
+						"name": "nameInData",
+						"value": "type"
+					},
+					{
+						"name": "linkedPath",
+						"children": [
+							{
+								"name": "nameInData",
+								"value": "textVariableId"
+							}
+						]
+					}
+				]
+			}
+		]
+
+	};
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	let messages = this.pubSub.getMessages();
+	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+		+ '"metadataId":"textVariableId","path":' + (JSON.stringify(this.spec.path)) + ',"nameInData":"textVariableId"}}');
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+		+ '"path":' + (JSON.stringify(expectedSetValuePath)) + '}}');
 
 	assert.equal(messages.length, 2);
 });
@@ -300,7 +358,7 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataNoRepeatId"
 	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
 
 	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
-	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myLink","children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
+	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myLink", "children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
 	assert.stringifyEqual(linkedRecordTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myLink" }] });
 
 	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
@@ -624,7 +682,7 @@ QUnit.test("testRecordPartReadPermissionsWhenPermissionExists", function(
 	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
-	
+
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
@@ -643,7 +701,7 @@ QUnit.test("testRecordPartReadPermissionsWhenNOPermissionExists", function(
 	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
 	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
-	
+
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
@@ -661,9 +719,9 @@ QUnit.test("testRecordPartWritePermissionsWhenPermissionExists", function(
 	let callsToHasFulfilledWritePermissionsForRecordPart = recordPartPermissionCalculatorSpy.getWriteRequestedIdsArray();
 	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart.length, 1);
 	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
-	
 
-let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
 	assert.ok(factoredChild.getInitializeTopLevelCalled());
 	assert.strictEqual(factoredChild.getHasWritePermission(), true);

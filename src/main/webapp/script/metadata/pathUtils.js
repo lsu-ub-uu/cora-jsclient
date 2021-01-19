@@ -56,12 +56,11 @@ var CORA = (function(cora) {
 
 
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "pathUtils",
 			ensureNoRepeatIdInLowestLevelOfPath: ensureNoRepeatIdInLowestLevelOfPath
 		});
 
-		return out;
 	};
 	return cora;
 }(CORA));

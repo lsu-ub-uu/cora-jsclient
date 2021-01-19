@@ -239,7 +239,7 @@ var CORA = (function(cora) {
 				"repeatId": repeatId,
 				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
 			};
-			
+
 			let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorRepeatInitializer(initializerSpec);
 			repeatInitializer.initialize();

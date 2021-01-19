@@ -348,11 +348,11 @@ var CORA = (function(cora) {
 		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef,
 			hasWritePermission) {
 			let childRefHandlerSpec = createPChildRefHandlerSpec(cPresentationChild, cPresentationChildRef,
-			hasWritePermission);
+				hasWritePermission);
 			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
 			return pChildRefHandler.getView();
 		};
-		
+
 		const createPChildRefHandlerSpec = function(cPresentationChild, cPresentationChildRef,
 			hasWritePermission) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
@@ -361,13 +361,13 @@ var CORA = (function(cora) {
 			childRefHandlerSpec.hasWritePermissionsForRecordPart = hasWritePermission;
 			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
-			
+
 			possiblyAddRepatingToShow(childRefHandlerSpec, cPresentationChildRef);
 			return childRefHandlerSpec;
 		}
-		
-		const possiblyAddRepatingToShow= function(childRefHandlerSpec, cPresentationChildRef){
-			
+
+		const possiblyAddRepatingToShow = function(childRefHandlerSpec, cPresentationChildRef) {
+
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");

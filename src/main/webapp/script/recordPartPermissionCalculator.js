@@ -193,10 +193,10 @@ var CORA = (function(cora) {
 		};
 
 		const hasFulfilledWritePermissionsForRecordPart = function(cRef) {
-			
+
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			
+
 			if (!recordPartsHasWriteConstraints.includes(recordType + "_" + recordId)) {
 				return true;
 			}

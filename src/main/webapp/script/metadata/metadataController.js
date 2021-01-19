@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		let topLevelData = spec.data;
 		let topLevelPath = {};
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
-			
+
 		const start = function() {
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {

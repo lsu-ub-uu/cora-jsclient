@@ -79,7 +79,7 @@ var CORA = (function(cora) {
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
-		
+
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
 			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);

@@ -64,11 +64,7 @@ var CORA = (function(cora) {
 
 		const userHasRecordPartPermission = function(cChildReference) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-
-			return spec.recordPartPermissionCalculator
-				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
 		};
 
 

@@ -27,15 +27,44 @@ var CORATEST = (function(coraTest) {
 		let idsToReturnFalseForWrite = [];
 
 
-		const hasFulfilledReadPermissionsForRecordPart = function(type, id) {
+//		const hasFulfilledReadPermissionsForRecordPart = function(type, id) {
+//			readRequestedIds.push(type + "_" + id);
+//			if (idsToReturnFalseForRead.includes(type + "_" + id)) {
+//				return false;
+//			}
+//			return true;
+//		}
+//
+//		const hasFulfilledWritePermissionsForRecordPart = function(type, id) {
+//			writeRequestedIds.push(type + "_" + id);
+//			if (idsToReturnFalseForWrite.includes(type + "_" + id)) {
+//				return false;
+//			}
+//			return true;
+//		}
+		const hasFulfilledReadPermissionsForRecordPart = function(cRef) {
+			let type = getLinkedRecordTypeFromCRef(cRef);
+			let id = getLinkedRecordIdFromCRef(cRef);
+			
 			readRequestedIds.push(type + "_" + id);
 			if (idsToReturnFalseForRead.includes(type + "_" + id)) {
 				return false;
 			}
 			return true;
 		}
+		
+		const getLinkedRecordTypeFromCRef= function(cRef){
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+		};
+		
+		const getLinkedRecordIdFromCRef= function(cRef){
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
 
-		const hasFulfilledWritePermissionsForRecordPart = function(type, id) {
+		const hasFulfilledWritePermissionsForRecordPart = function(cRef) {
+			let type = getLinkedRecordTypeFromCRef(cRef);
+			let id = getLinkedRecordIdFromCRef(cRef);
+			
 			writeRequestedIds.push(type + "_" + id);
 			if (idsToReturnFalseForWrite.includes(type + "_" + id)) {
 				return false;

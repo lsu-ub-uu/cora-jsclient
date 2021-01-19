@@ -21,51 +21,83 @@ var CORA = (function(cora) {
 	cora.recordPartPermissionCalculator = function(dependencies, spec) {
 
 		let metadataProvider = dependencies.metadataProvider;
-		let fullfilledWriteRecordParts = [];
-		let fullfilledReadRecordParts = [];
+		let fulfilledWriteRecordParts = [];
+		let fulfilledReadRecordParts = [];
 		let recordPartsHasReadConstraints = [];
 		let recordPartsHasWriteConstraints = [];
-		let writePermissions = spec.permissions.write;
 		let readPermissions = spec.permissions.read;
+		let writePermissions = spec.permissions.write;
+		let visitedChildReferences = [];
 
 		const start = function() {
-			calculateRecordPartPermissions();
+			let topLevelChildReferences = getChildReferences(spec.metadataId);
+			calculateRecordPartPermissions(topLevelChildReferences, false);
 		};
 
-		const calculateRecordPartPermissions = function() {
-			let topLevelChildReferences = getChildReferences();
-			topLevelChildReferences.children.forEach(function(childReference) {
-				handleRecordPartPermissionsForChildReference(childReference);
-			});
-		};
-
-		const getChildReferences = function() {
-			let metadataGroup = metadataProvider.getMetadataById(spec.metadataId);
+		const getChildReferences = function(childId) {
+			let metadataGroup = metadataProvider.getMetadataById(childId);
 			let cMetadataGroup = CORA.coraData(metadataGroup);
 			return cMetadataGroup.getFirstChildByNameInData('childReferences');
 
 		};
 
-		const handleRecordPartPermissionsForChildReference = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			let childId = getChildId(cChildReference);
-			let nameInData = extractNameInData(childId);
-			handleReadRecordPartPermissions(cChildReference, nameInData);
-			handleWriteRecordPartPermissions(cChildReference, nameInData);
+		const calculateRecordPartPermissions = function(childReferences, unfulfilledWritePermissionInParentHierarchy) {
+			childReferences.children.forEach(function(childReference) {
+				handleRecordPartPermissionsForChildReference(childReference, unfulfilledWritePermissionInParentHierarchy);
+			});
 		};
 
-		const getChildId = function(cChildReference) {
+		const handleRecordPartPermissionsForChildReference = function(childReference, unfulfilledWritePermissionInParentHierarchy) {
+			let cChildReference = CORA.coraData(childReference);
+			let childId = getLinkedRecordId(cChildReference);
+			let nameInData = extractNameInData(childId);
+
+			let fulfilledReadPermissionOnGroupParent = handleReadRecordPartPermissions(cChildReference, nameInData);
+			let unfulfilledWritePermissionInParentHierarchyChild = handleWriteRecordPartPermissions(cChildReference, nameInData, unfulfilledWritePermissionInParentHierarchy);
+
+			possiblyRecurseForGroupChildren(cChildReference, childId, unfulfilledWritePermissionInParentHierarchyChild, fulfilledReadPermissionOnGroupParent);
+		};
+
+		const getLinkedRecordId = function(cChildReference) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
+
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
-				let childCombinedId = getChildCombinedId(cChildReference);
-				recordPartsHasReadConstraints.push(childCombinedId);
-				possiblyAddFullfilledReadRecordParts(nameInData, childCombinedId);
+				let combinedChildId = createCombinedChildId(cChildReference);
+				recordPartsHasReadConstraints.push(combinedChildId);
+				possiblyAddfulfilledReadRecordParts(nameInData, combinedChildId);
+				return fulfilledReadRecordParts.includes(combinedChildId);
 			}
+			return true;
+		};
+
+		const possiblyRecurseForGroupChildren = function(cChildReference, childId, unfulfilledWritePermissionInParentHierarchy, fulfilledReadPermissionOnGroupParent) {
+			if (permissionForChildShouldBeHandled(cChildReference, fulfilledReadPermissionOnGroupParent)) {
+				visitedChildReferences.push(createCombinedChildId(cChildReference));
+				calculateRecordPartPermissions(getChildReferences(childId), unfulfilledWritePermissionInParentHierarchy);
+			}
+		};
+
+		const permissionForChildShouldBeHandled = function(cChildReference, fulfilledReadPermissionOnGroupParent) {
+			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference)
+				&& fulfilledReadPermissionOnGroupParent && isTheFirstVisitToChildReference(cChildReference);
+		};
+		const isTheFirstVisitToChildReference = function(cChildReference) {
+			let combinedId = createCombinedChildId(cChildReference);
+			return !visitedChildReferences.includes(combinedId);
 		}
+
+		const repeatMaxIsOne = function(cChildReference) {
+			return cChildReference.getFirstChildByNameInData("repeatMax").value === "1";
+		};
+
+		const referencePointsToGroup = function(cChildReference) {
+			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") === "metadataGroup";
+		};
 
 		const childHasReadWriteRecordPartConstraints = function(cChildReference) {
 			if (childHasRecordPartConstraints(cChildReference)) {
@@ -80,37 +112,49 @@ var CORA = (function(cora) {
 
 		const evaluateReadWriteConstraintExists = function(cChildReference) {
 			let constraint = cChildReference
-					.getFirstAtomicValueByNameInData("recordPartConstraint");
+				.getFirstAtomicValueByNameInData("recordPartConstraint");
 			return constraint !== undefined && "readWrite" === constraint;
 		}
 
-		const possiblyAddFullfilledReadRecordParts = function(nameInData, childCombinedId) {
+		const possiblyAddfulfilledReadRecordParts = function(nameInData, combinedChildId) {
 			if (userHasReadWritePermissionsForRecordPartContraint(nameInData)) {
-				fullfilledReadRecordParts.push(childCombinedId);
+				fulfilledReadRecordParts.push(combinedChildId);
 			}
 		};
 
-		const handleWriteRecordPartPermissions = function(cChildReference, nameInData) {
+		const handleWriteRecordPartPermissions = function(cChildReference, nameInData, unfulfilledWritePermissionInParentHierarchy) {
+			let combinedChildId = createCombinedChildId(cChildReference);
 			if (childHasWriteRecordPartConstraints(cChildReference)) {
-				let childCombinedId = getChildCombinedId(cChildReference);
-				recordPartsHasWriteConstraints.push(childCombinedId);
-				possiblyAddFullfilledWriteRecordParts(nameInData, childCombinedId);
+				return handlePermissionsForChildWithWriteConstraint(combinedChildId, nameInData, unfulfilledWritePermissionInParentHierarchy);
 			}
+			if (unfulfilledWritePermissionInParentHierarchy) {
+				recordPartsHasWriteConstraints.push(combinedChildId);
+			}
+			return unfulfilledWritePermissionInParentHierarchy;
+		};
+
+		const handlePermissionsForChildWithWriteConstraint = function(combinedChildId, nameInData, unfulfilledWritePermissionInParentHierarchy) {
+			recordPartsHasWriteConstraints.push(combinedChildId);
+			if (unfulfilledWritePermissionInParentHierarchy) {
+				return true;
+			}
+			possiblyAddfulfilledWriteRecordParts(nameInData, combinedChildId);
+			return !fulfilledWriteRecordParts.includes(combinedChildId);
 		};
 
 		const childHasWriteRecordPartConstraints = function(cChildReference) {
 			return childHasRecordPartConstraints(cChildReference);
 		};
 
-		const getChildCombinedId = function(cChildReference) {
+		const createCombinedChildId = function(cChildReference) {
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") + "_"
-					+ cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+				+ cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const possiblyAddFullfilledWriteRecordParts = function(nameInData, childCombinedId) {
+		const possiblyAddfulfilledWriteRecordParts = function(nameInData, combinedChildId) {
 			if (userHasPermissionsForRecordPartContraint(nameInData)) {
-				fullfilledWriteRecordParts.push(childCombinedId);
+				fulfilledWriteRecordParts.push(combinedChildId);
 			}
 		};
 
@@ -138,38 +182,45 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		const hasFulfilledReadPermissionsForRecordPart = function(recordType, recordId) {
+		const hasFulfilledReadPermissionsForRecordPart = function(cRef) {
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+
 			if (!recordPartsHasReadConstraints.includes(recordType + "_" + recordId)) {
 				return true;
 			}
-			return fullfilledReadRecordParts.includes(recordType + "_" + recordId);
+			return fulfilledReadRecordParts.includes(recordType + "_" + recordId);
 		};
 
-		const hasFulfilledWritePermissionsForRecordPart = function(recordType, recordId) {
+		const hasFulfilledWritePermissionsForRecordPart = function(cRef) {
+			
+			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
+			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			
 			if (!recordPartsHasWriteConstraints.includes(recordType + "_" + recordId)) {
 				return true;
 			}
-			return fullfilledWriteRecordParts.includes(recordType + "_" + recordId);
+			return fulfilledWriteRecordParts.includes(recordType + "_" + recordId);
 		};
 
 		const getFulfilledWriteRecordParts = function() {
-			return fullfilledWriteRecordParts;
+			return fulfilledWriteRecordParts;
 		};
 
 		const getFulfilledReadRecordParts = function() {
-			return fullfilledReadRecordParts;
+			return fulfilledReadRecordParts;
 		};
 
 		start();
 
 		return Object.freeze({
-			type : "recordPartPermissionCalculator",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			hasFulfilledReadPermissionsForRecordPart : hasFulfilledReadPermissionsForRecordPart,
-			hasFulfilledWritePermissionsForRecordPart : hasFulfilledWritePermissionsForRecordPart,
-			getFulfilledWriteRecordParts : getFulfilledWriteRecordParts,
-			getFulfilledReadRecordParts : getFulfilledReadRecordParts
+			type: "recordPartPermissionCalculator",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			hasFulfilledReadPermissionsForRecordPart: hasFulfilledReadPermissionsForRecordPart,
+			hasFulfilledWritePermissionsForRecordPart: hasFulfilledWritePermissionsForRecordPart,
+			getFulfilledWriteRecordParts: getFulfilledWriteRecordParts,
+			getFulfilledReadRecordParts: getFulfilledReadRecordParts
 		});
 	};
 	return cora;

@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		let topLevelData = spec.data;
 		let topLevelPath = {};
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
-
+			
 		const start = function() {
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {
@@ -63,10 +63,7 @@ var CORA = (function(cora) {
 
 		const userHasRecordPartPermission = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return recordPartPermissionCalculator
-				.hasFulfilledReadPermissionsForRecordPart(recordType, recordId);
+			return recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(cRef);
 		};
 
 		const getCRef = function(childReference) {
@@ -79,7 +76,8 @@ var CORA = (function(cora) {
 			let initializerSpec = {
 				childReference: childReference,
 				path: topLevelPath,
-				data: topLevelData
+				data: topLevelData,
+				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
 			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
 				.factorChildInitializer(initializerSpec);
@@ -89,10 +87,7 @@ var CORA = (function(cora) {
 
 		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
-			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
-			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-			return recordPartPermissionCalculator
-				.hasFulfilledWritePermissionsForRecordPart(recordType, recordId);
+			return recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
 		}
 
 		const getSpec = function() {

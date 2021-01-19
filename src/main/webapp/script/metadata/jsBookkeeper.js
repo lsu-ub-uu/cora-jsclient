@@ -41,7 +41,8 @@ var CORA = (function(cora) {
 			let initializerSpec = {
 				"metadataId" : ref,
 				"path" : path,
-				"data" : undefined
+				"data" : undefined,
+				"recordPartPermissionCalculator" : data.recordPartPermissionCalculator
 			};
 			if (repeatMax === "1") {
 				initializerSpec.repeatId = undefined;

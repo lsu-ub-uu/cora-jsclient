@@ -69,7 +69,7 @@ QUnit.module("metadata/jsBookkeeperTest.js", {
 	}
 });
 
-CORATEST.createRefForJsBookkkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
+CORATEST.createRefForJsBookkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
 	return {
 		"name": "childReference",
 		"repeatId": "1",
@@ -128,13 +128,14 @@ QUnit.test("testSetValue", function(assert) {
 });
 
 QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkkeeper("metadataTextVariable", "textVariableId", "1", "1");
+	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "1");
 
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
 			"path" : {},
-			"childReference" : childReferenceTextVariableId
+			"childReference" : childReferenceTextVariableId,
+			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	jsBookkeeper.add(data);
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
@@ -142,19 +143,21 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, undefined);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
 	
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());
 });
 
 QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkkeeper("metadataTextVariable", "textVariableId", "1", "4");
+	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "4");
 
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
 			"path" : {},
-			"childReference" : childReferenceTextVariableId
+			"childReference" : childReferenceTextVariableId,
+			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
 	jsBookkeeper.add(data);
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
@@ -162,6 +165,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", f
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, "1");
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
 	
 	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
 	assert.ok(factored.getInitializeCalled());

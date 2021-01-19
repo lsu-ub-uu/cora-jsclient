@@ -113,10 +113,6 @@ var CORATEST = (function(coraTest) {
 						"name" : "linkedRecordId",
 						"value" : ref
 					} ]
-				// ,
-				// "attributes": {
-				// "type": attribute
-				// }
 				}, {
 					"name" : "repeatMin",
 					"value" : repeatMin

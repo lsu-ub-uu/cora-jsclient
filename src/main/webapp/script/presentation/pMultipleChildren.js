@@ -139,13 +139,13 @@ var CORA = (function(cora) {
 			return false;
 		};
 
-		const possiblyAppendChildView = function(childReference, cPresentationChildRef,
+		const possiblyAppendChildView = function(ref, cPresentationChildRef,
 			cPresentationChild, refId) {
-			let cChildReference = CORA.coraData(childReference);
-			let hasReadPermission = checkHasReadPermission(cChildReference);
+			let cRef = CORA.coraData(ref);
+			let hasReadPermission = checkHasReadPermission(cRef);
 
 			if (hasReadPermission) {
-				let hasWritePermission = checkHasWritePermission(cChildReference);
+				let hasWritePermission = checkHasWritePermission(cRef);
 				let childView = createViewForChild(cPresentationChildRef, cPresentationChild,
 					refId, hasWritePermission);
 
@@ -153,22 +153,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const checkHasReadPermission = function(cChildReference) {
-			let presentationOfType = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordType");
-			let presentationOfId = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+		const checkHasReadPermission = function(cRef) {
 			return spec.recordPartPermissionCalculator.hasFulfilledReadPermissionsForRecordPart(
-				presentationOfType, presentationOfId);
+				cRef);
 		};
 
-		const checkHasWritePermission = function(cChildReference) {
-			let presentationOfType = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordType");
-			let presentationOfId = cChildReference
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+		const checkHasWritePermission = function(cRef) {
 			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(
-				presentationOfType, presentationOfId);
+				cRef);
 		};
 
 		const handleSinglePresentationOf = function(cPresentationChildRef, cPresentationChild,
@@ -295,6 +287,7 @@ var CORA = (function(cora) {
 				cPresentationChildRef);
 			childRefHandlerSpec.parentMetadataId = my.metadataId;
 			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
+
 			return dependencies.pNonRepeatingChildRefHandlerFactory.factor(childRefHandlerSpec);
 		};
 
@@ -354,18 +347,32 @@ var CORA = (function(cora) {
 
 		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef,
 			hasWritePermission) {
+			let childRefHandlerSpec = createPChildRefHandlerSpec(cPresentationChild, cPresentationChildRef,
+			hasWritePermission);
+			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
+			return pChildRefHandler.getView();
+		};
+		
+		const createPChildRefHandlerSpec = function(cPresentationChild, cPresentationChildRef,
+			hasWritePermission) {
 			let childRefHandlerSpec = createChildRefHandlerCommonSpec(cPresentationChild,
 				cPresentationChildRef);
 			childRefHandlerSpec.cParentMetadata = cMetadataElement;
 			childRefHandlerSpec.hasWritePermissionsForRecordPart = hasWritePermission;
+			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			
+			possiblyAddRepatingToShow(childRefHandlerSpec, cPresentationChildRef);
+			return childRefHandlerSpec;
+		}
+		
+		const possiblyAddRepatingToShow= function(childRefHandlerSpec, cPresentationChildRef){
+			
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
 			}
-			let pChildRefHandler = dependencies.pChildRefHandlerFactory.factor(childRefHandlerSpec);
-			return pChildRefHandler.getView();
-		};
+		}
 
 		const getAlternativePresentation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef

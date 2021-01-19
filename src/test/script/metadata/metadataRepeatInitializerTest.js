@@ -22,6 +22,8 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			pubSub: this.pubSub,
@@ -33,7 +35,8 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 			metadataId: "textVariableId",
 			path: {},
 			data: undefined,
-			repeatId: undefined
+			repeatId: undefined,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 	},
 	afterEach: function() {
@@ -84,6 +87,64 @@ QUnit.test("testMessagesTextVariableWithData", function(assert) {
 		+ '"metadataId":"textVariableId","path":{},"nameInData":"textVariableId"}}');
 	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
 		+ '"path":' + createLinkedPathWithNameInDataAsString("textVariableId") + '}}');
+
+	assert.equal(messages.length, 2);
+});
+
+QUnit.test("testMessagesNonEmptyParentPathTextVariableWithData", function(assert) {
+	this.spec.data = {
+		"name": "textVariableId",
+		"value": "A Value"
+	};
+	this.spec.path = {
+		"name": "linkedPath",
+		"children": [{
+			"name": "nameInData",
+			"value": "recordInfo"
+		}, {
+			"name": "linkedPath",
+			"children": [{
+				"name": "nameInData",
+				"value": "type"
+			}]
+		}]
+	};
+
+	let expectedSetValuePath = {
+		"name": "linkedPath",
+		"children": [
+			{
+				"name": "nameInData",
+				"value": "recordInfo"
+			},
+			{
+				"name": "linkedPath",
+				"children": [
+					{
+						"name": "nameInData",
+						"value": "type"
+					},
+					{
+						"name": "linkedPath",
+						"children": [
+							{
+								"name": "nameInData",
+								"value": "textVariableId"
+							}
+						]
+					}
+				]
+			}
+		]
+
+	};
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	let messages = this.pubSub.getMessages();
+	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+		+ '"metadataId":"textVariableId","path":' + (JSON.stringify(this.spec.path)) + ',"nameInData":"textVariableId"}}');
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+		+ '"path":' + (JSON.stringify(expectedSetValuePath)) + '}}');
 
 	assert.equal(messages.length, 2);
 });
@@ -187,7 +248,7 @@ QUnit.test("testGroupOneTextChildWithNODataChildAndRepeatInitializerCalledCorrec
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testGroupOneTextChildWithData", function(assert) {
@@ -206,10 +267,11 @@ QUnit.test("testGroupOneTextChildWithData", function(assert) {
 	assert.stringifyEqual(repeatSpec.childReference, expectedChildReferenceTextVariableId);
 	assert.stringifyEqual(repeatSpec.data, this.spec.data);
 	assert.stringifyEqual(repeatSpec.path, expectedNextLevelPathForGroupIdOneTextChild);
+	assert.stringifyEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCorrectly", function(
@@ -232,10 +294,12 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 	assert.stringifyEqual(repeatSpec.childReference, expectedChildReferenceTextVariableId);
 	assert.stringifyEqual(repeatSpec.data, undefined);
 	assert.stringifyEqual(repeatSpec.path, expectedNextLevelPathForGroupIdTwoTextChild);
+	assert.stringifyEqual(repeatSpec.recordPartPermissionCalculator, this.recordPartPermissionCalculator);
+
 
 	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(0);
-	assert.ok(factoredChild.getInitializeCalled());
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
 
 	let repeatSpec2 = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 
@@ -245,7 +309,7 @@ QUnit.test("testGroupTwoTextChildrenWithNODataChildAndRepeatInitializerCalledCor
 
 	let factoredChild2 = this.dependencies.metadataChildAndRepeatInitializerFactory
 		.getFactoredChildIntitializers(1);
-	assert.ok(factoredChild2.getInitializeCalled());
+	assert.ok(factoredChild2.getInitializeTopLevelCalled());
 });
 
 QUnit.test("testRecordLinkMessage", function(assert) {
@@ -294,7 +358,7 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataNoRepeatId"
 	let expectedRecordTypeReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordTypeTextVar", "1", "1");
 
 	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
-	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myLink","children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
+	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myLink", "children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
 	assert.stringifyEqual(linkedRecordTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myLink" }] });
 
 	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
@@ -405,6 +469,8 @@ QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWith
 	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myPathLink", "children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
 	assert.stringifyEqual(linkedRecordTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myPathLink" }] });
 
+
+
 	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
 	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
@@ -417,6 +483,8 @@ QUnit.test("testRecordLinkMessageCorrectCallToChildAndRepeatInitalizerNoDataWith
 	assert.stringifyEqual(linkedRepeatTypeSpec.childReference, expectedRecordRepeatIdReference);
 	assert.stringifyEqual(linkedRepeatTypeSpec.data, this.spec.data);
 	assert.stringifyEqual(linkedRepeatTypeSpec.path, { "name": "linkedPath", "children": [{ "name": "nameInData", "value": "myPathLink" }] });
+
+	assert.stringifyEqual(this.dependencies.metadataChildAndRepeatInitializerFactory.getFactoredChildIntitializers(3), undefined);
 });
 
 QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerAbstractRecordTypeNOData", function(assert) {
@@ -602,3 +670,73 @@ function createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId) {
 		}]
 	};
 }
+
+QUnit.test("testRecordPartReadPermissionsWhenPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
+});
+
+QUnit.test("testRecordPartReadPermissionsWhenNOPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForRead("metadataTextVariable_textVariableId");
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let callsToHasFulfilledReadPermissionsForRecordPart = recordPartPermissionCalculatorSpy.getReadRequestedIdsArray();
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledReadPermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.equal(factoredChild, undefined);
+});
+
+QUnit.test("testRecordPartWritePermissionsWhenPermissionExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	let callsToHasFulfilledWritePermissionsForRecordPart = recordPartPermissionCalculatorSpy.getWriteRequestedIdsArray();
+	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart.length, 1);
+	assert.equal(callsToHasFulfilledWritePermissionsForRecordPart[0], "metadataTextVariable_textVariableId");
+
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.ok(factoredChild.getInitializeTopLevelCalled());
+	assert.strictEqual(factoredChild.getHasWritePermission(), true);
+});
+
+QUnit.test("testRecordPartWritePermissionsWhenPermissionNOExists", function(
+	assert) {
+	this.spec.metadataId = "groupIdOneTextChild";
+	let recordPartPermissionCalculatorSpy = this.spec.recordPartPermissionCalculator;
+	recordPartPermissionCalculatorSpy.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+
+	let factoredChild = this.dependencies.metadataChildAndRepeatInitializerFactory
+		.getFactoredChildIntitializers(0);
+	assert.strictEqual(factoredChild.getHasWritePermission(), false);
+});

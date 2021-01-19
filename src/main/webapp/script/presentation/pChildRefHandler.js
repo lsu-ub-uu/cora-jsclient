@@ -90,6 +90,7 @@ var CORA = (function(cora) {
 
 
 			subscribeToMessagesFromForm();
+
 			userCanUploadFile = showFileUpload();
 			userCanRemove = calculateUserCanRemove();
 			userCanMove = calculateUserCanMove();
@@ -402,10 +403,11 @@ var CORA = (function(cora) {
 		const factorPresentation = function(path, cPresentation, metadataIdToAdd) {
 			let metadataIdUsedInData = metadataIdToAdd;
 			let presentationSpec = {
-				"path": path,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPresentation,
-				"cParentPresentation": spec.cParentPresentation
+				path: path,
+				metadataIdUsedInData: metadataIdUsedInData,
+				cPresentation: cPresentation,
+				cParentPresentation: spec.cParentPresentation,
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 			return dependencies.presentationFactory.factor(presentationSpec);
 		};
@@ -504,8 +506,10 @@ var CORA = (function(cora) {
 				"metadataId": metadataId,
 				"path": spec.parentPath,
 				"childReference": cParentMetadataChildRefPart.getData(),
-				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData")
+				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
+				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
 			};
+
 			if (metadataHasAttributes) {
 				data.attributes = collectedAttributes;
 			}

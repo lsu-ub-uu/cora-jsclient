@@ -28,18 +28,11 @@ var CORATEST = (function(coraTest) {
 		var fetchedRecordTypeId = [];
 		var fetchedMetadataByRecordTypeId = [];
 		var allRecordTypesNo = 0;
+		var metadata = {"abstract":"false"};
 
 		function getRecordTypeById(recordTypeId) {
 			fetchedRecordTypeId.push(recordTypeId);
 			return recordTypeId;
-			// if (recordTypeArray[recordTypeId] !== undefined) {
-			// return recordTypeArray[recordTypeId];
-			// } else {
-			//
-			// // default:
-			// console.log("Id(" + recordTypeId + ") not found in recordTypeProviderSpy");
-			// throw new Error("Id(" + recordTypeId + ") not found in recordTypeProviderSpy");
-			// }
 		}
 
 		function getAllRecordTypes() {
@@ -67,7 +60,6 @@ var CORATEST = (function(coraTest) {
 		function getNoOfReloads(){
 			return noOfReloads;
 		}
-		var metadata = {"abstract":"false"};
 		function getMetadataByRecordTypeId(recordTypeId) {
 			fetchedMetadataByRecordTypeId.push(recordTypeId);
 			if("metadata" === recordTypeId){
@@ -103,6 +95,9 @@ var CORATEST = (function(coraTest) {
         	requestedGroupIds.push(groupId);
         	return [];
         }
+		const setMetadata = function(metadataIn){
+			metadata = metadataIn;
+		}
 		return Object.freeze({
 			"type" : "recordTypeProviderSpy",
 			getRecordTypeById : getRecordTypeById,
@@ -116,7 +111,8 @@ var CORATEST = (function(coraTest) {
 			getFetchedMetadataByRecordTypeId : getFetchedMetadataByRecordTypeId,
 			getFetchedRecordTypeId : getFetchedRecordTypeId,
 			getAllRecordTypesFetchedNo : getAllRecordTypesFetchedNo,
-			getRecordTypesByGroupId : getRecordTypesByGroupId
+			getRecordTypesByGroupId : getRecordTypesByGroupId, 
+			setMetadata: setMetadata
 		});
 	};
 	return coraTest;

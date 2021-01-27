@@ -8917,6 +8917,7 @@ function MetadataProviderStub() {
 											},
 											{
 												"name": "linkedRecordId",
+//												"value": "metadata"
 												"value": "metadataTextVariable"
 											}]
 									},
@@ -8938,6 +8939,66 @@ function MetadataProviderStub() {
 						"name": "linkedRecordPresentations"
 					}]
 				};
+			case "myLinkAbstractPresentationOfLinkedRecordOutputPLink":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pRecordLink"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "myLinkPresentationOfLinkedRecordOutputPLink"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataRecordLink"
+						}, {
+							"name": "linkedRecordId",
+							"value": "myLink"
+						}],
+						"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "output"
+					}, {
+						"children": [
+							{
+								"repeatId": "1",
+								"children": [
+									{
+										"name": "presentedRecordType",
+										"children": [
+											{
+												"name": "linkedRecordType",
+												"value": "recordType"
+											},
+											{
+												"name": "linkedRecordId",
+												"value": "metadata"
+//												"value": "metadataTextVariable"
+											}]
+									},
+									{
+										"name": "presentation",
+										"children": [
+											{
+												"name": "linkedRecordType",
+												"value": "presentation"
+											},
+											{
+												"name": "linkedRecordId",
+												"value": "metadataTextVariableViewPGroup"
+											}]
+									}],
+								"name": "linkedRecordPresentation"
+							}
+						],
+						"name": "linkedRecordPresentations"
+					}]
+				};	
 			case "myLinkPresentationOfLinkedRecordInputPLink":
 				return {
 					"name": "presentation",

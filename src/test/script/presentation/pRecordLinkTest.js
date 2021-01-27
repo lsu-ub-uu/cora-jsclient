@@ -826,7 +826,36 @@ QUnit.test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroup", functio
 	pRecordLink.handleMsg(dataFromMsg, "linkedData");
 	this.answerCall2(0);
 
-	// FOR LINKED PRESENATION:
+	// FOR LINKED PRESENTATION:
+	assert.strictEqual(pRecordLink.type, "pRecordLink");
+	assert.deepEqual(view.className, "pRecordLinkViewSpyView");
+
+	let pRecordLinkView = this.dependencies.pRecordLinkViewFactory.getFactored(0);
+	let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
+	assert.strictEqual(linkedRecordView.className, "recordViewer");
+
+	assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
+	assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0), undefined);
+
+	assert.strictEqual(this.dependencies.recordGuiFactory.getSpec(0).metadataId,
+			"metadataTextVariableGroup");
+});
+
+QUnit.test("testInitRecordLinkOutputWithAbstractLinkedRecordPresentationsGroup", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+			.getMetadataById("myLinkAbstractPresentationOfLinkedRecordOutputPLink"));
+			
+	this.dependencies.recordTypeProvider.setMetadata({"abstract":"false", "parentId":"metadata"});		
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+	let view = pRecordLink.getView();
+	let childrenView = view.firstChild;
+	this.fixture.appendChild(view);
+
+	let dataFromMsg = this.dataFromMsgWithLink;
+	pRecordLink.handleMsg(dataFromMsg, "linkedData");
+	this.answerCall2(0);
+
+	// FOR LINKED PRESENTATION:
 	assert.strictEqual(pRecordLink.type, "pRecordLink");
 	assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
@@ -956,6 +985,33 @@ QUnit
 					assert.strictEqual(pRecordLinkView.getChildrenHidden(), 0);
 
 				});
+				
+//QUnit.test("testRecordLinkWithLinkedRecordPresentationAbstractType", function(assert) {
+//	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+//			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
+//	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+//	let view = pRecordLink.getView();
+//	let childrenView = view.firstChild;
+//	this.fixture.appendChild(view);
+//
+//	let dataFromMsg = this.dataFromMsgWithLink;
+//	pRecordLink.handleMsg(dataFromMsg, "linkedData");
+//	this.answerCall2(0);
+//
+//	// FOR LINKED PRESENATION:
+//	assert.strictEqual(pRecordLink.type, "pRecordLink");
+//	assert.deepEqual(view.className, "pRecordLinkViewSpyView");
+//
+//	let pRecordLinkView = this.dependencies.pRecordLinkViewFactory.getFactored(0);
+//	let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
+//	assert.strictEqual(linkedRecordView.className, "recordViewer");
+//
+//	assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
+//	assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0), undefined);
+//
+//	assert.strictEqual(this.dependencies.recordGuiFactory.getSpec(0).metadataId,
+//			"metadataTextVariableGroup");
+//});				
 
 QUnit.test("testHandleMsgWithLinkShowsOpenLinkInView", function(assert) {
 	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider

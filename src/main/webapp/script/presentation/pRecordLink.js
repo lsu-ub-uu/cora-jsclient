@@ -27,6 +27,7 @@ var CORA = (function(cora) {
 		let cPresentation = spec.cPresentation;
 		let metadataProvider = dependencies.metadataProvider;
 		let textProvider = dependencies.textProvider;
+		let recordTypeProvider = dependencies.recordTypeProvider;
 
 		let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
 		let cPresentationGroup = CORA.coraData(presentationGroup);
@@ -160,20 +161,34 @@ var CORA = (function(cora) {
 
 		const createLinkedRecordTypeFilter = function(data) {
 			let cData = CORA.coraData(data);
-			let recordTypeId = cData
+			let recordTypeIdInData = cData
 				.getFirstAtomicValueByNameInData("linkedRecordType");
-
+				
+			let dataRecordTypeDefinition = recordTypeProvider.getMetadataByRecordTypeId(recordTypeIdInData);
+			let parent = dataRecordTypeDefinition.parentId;
+			
 			return function(child) {
 				let cChild = CORA.coraData(child);
 				let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
-				let filterLinkedRecordType = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
-				return filterLinkedRecordType === recordTypeId;
+				return isSameRecordTypeOrImplementing(recordTypeIdInData, parent, cPresentedRecordType);
 			};
 		};
 
 		const presentationExistsForLinkedRecordType = function(linkedRecordPresentation) {
 			return linkedRecordPresentation !== undefined;
 		};
+		
+		const isSameRecordTypeOrImplementing = function(recordTypeIdInData, parent, cPresentedRecordType){
+			let recordTypeIdInLink = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
+			let sameRecordType = recordTypeIdInLink === recordTypeIdInData;
+			let isParentToRecordTypeInData = recordTypeIsParent(parent, recordTypeIdInLink); 
+				
+			return sameRecordType || isParentToRecordTypeInData;
+		}
+		
+		const recordTypeIsParent = function(parent, recordTypeIdInLink){
+			return parent !== undefined &&  recordTypeIdInLink == parent; 
+		}
 
 		const showOrHideOpenLinkedRecordButton = function(payloadFromMsg) {
 			if (messageContainsDataWithActionLinks(payloadFromMsg)) {
@@ -240,7 +255,7 @@ var CORA = (function(cora) {
 
 		const createInputForLinkedRecordType = function() {
 			let recordTypePVarId = "linkedRecordTypePVar";
-			let recordTypeDefinition = dependencies.recordTypeProvider.getMetadataByRecordTypeId(linkedRecordType);
+			let recordTypeDefinition = recordTypeProvider.getMetadataByRecordTypeId(linkedRecordType);
 			if (linkedRecordTypeIsImplementing(recordTypeDefinition)) {
 				recordTypePVarId = "linkedRecordTypeOutputPVar";
 			}

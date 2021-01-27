@@ -163,10 +163,10 @@ var CORA = (function(cora) {
 			let cData = CORA.coraData(data);
 			let recordTypeIdInData = cData
 				.getFirstAtomicValueByNameInData("linkedRecordType");
-				
+
 			let dataRecordTypeDefinition = recordTypeProvider.getMetadataByRecordTypeId(recordTypeIdInData);
 			let parent = dataRecordTypeDefinition.parentId;
-			
+
 			return function(child) {
 				let cChild = CORA.coraData(child);
 				let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
@@ -177,17 +177,17 @@ var CORA = (function(cora) {
 		const presentationExistsForLinkedRecordType = function(linkedRecordPresentation) {
 			return linkedRecordPresentation !== undefined;
 		};
-		
-		const isSameRecordTypeOrImplementing = function(recordTypeIdInData, parent, cPresentedRecordType){
+
+		const isSameRecordTypeOrImplementing = function(recordTypeIdInData, parent, cPresentedRecordType) {
 			let recordTypeIdInLink = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
 			let sameRecordType = recordTypeIdInLink === recordTypeIdInData;
-			let isParentToRecordTypeInData = recordTypeIsParent(parent, recordTypeIdInLink); 
-				
+			let isParentToRecordTypeInData = recordTypeIsParent(parent, recordTypeIdInLink);
+
 			return sameRecordType || isParentToRecordTypeInData;
 		}
-		
-		const recordTypeIsParent = function(parent, recordTypeIdInLink){
-			return parent !== undefined &&  recordTypeIdInLink == parent; 
+
+		const recordTypeIsParent = function(parent, recordTypeIdInLink) {
+			return parent !== undefined && recordTypeIdInLink === parent;
 		}
 
 		const showOrHideOpenLinkedRecordButton = function(payloadFromMsg) {

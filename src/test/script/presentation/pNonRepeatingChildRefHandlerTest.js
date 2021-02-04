@@ -32,10 +32,13 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 					.standardFactorySpy("pNonRepeatingChildRefHandlerViewSpy"),
 			pubSub : CORATEST.pubSubSpy()
 		};
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+
 		this.spec = {
 			"parentPath" : {},
 			"parentMetadataId" : "someParentMetadataId",
 			mode : "input",
+			"recordPartPermissionCalculator": this.recordPartPermissionCalculator,
 			"cPresentation" : CORA.coraData({
 				"name" : "presentation",
 				"children" : [ {
@@ -158,6 +161,7 @@ QUnit.test("testInitCreatesPresentation",
 			var factoredAlternativePresentationSpec = this.dependencies.presentationFactory
 					.getSpec(1);
 			assert.strictEqual(factoredAlternativePresentationSpec, undefined);
+			assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator)
 
 		});
 

@@ -77,7 +77,8 @@ var CORA = (function(cora) {
 				path: spec.parentPath,
 				metadataIdUsedInData: spec.parentMetadataId,
 				cPresentation: cPresentation,
-				cParentPresentation: spec.cParentPresentation
+				cParentPresentation: spec.cParentPresentation,
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 			return dependencies.presentationFactory.factor(presentationSpec);
 		};

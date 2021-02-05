@@ -1160,12 +1160,14 @@ QUnit.test("fetchListCheckError", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
 	ajaxCallSpy.getSpec().errorMethod({
-		status: 404
+		status: 404,
+		response: "Some error from spy"
+		
 	});
 
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let item = managedGuiItem.getAddedWorkPresentation(0);
-	assert.strictEqual(item.textContent, "404");
+	assert.strictEqual(item.textContent, "404 Some error from spy");
 });
 
 QUnit.test("checkRightGuiCreatedPresentationMetadataIsMissing", function(assert) {

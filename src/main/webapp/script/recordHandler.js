@@ -518,7 +518,7 @@ var CORA = (function(cora) {
 		const callError = function(answer) {
 			busy.hideWithEffect();
 			let messageSpec = {
-				message: answer.status,
+				message: answer.status + " "+answer.response,
 				type: CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);

@@ -29,14 +29,14 @@ function start() {
 	} else if (href.indexOf("diva") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDiva();
-	} else if (href.indexOf("localhost:8080") !== -1 ) {
-		useLocalhostWithPort("8080","8180", "SystemOne local dev", "systemone");
-	} else if (href.indexOf("localhost:8081") !== -1 ) {
+	} else if (href.indexOf("localhost:38080") !== -1 ) {
+		useLocalhostWithPort("38080","38180", "SystemOne local dev", "systemone");
+	} else if (href.indexOf("localhost:38081") !== -1 ) {
 		enableCSS("alvinCSS");
-		useLocalhostWithPort("8081","8181","ALVIN local dev", "alvin");
-	} else if (href.indexOf("localhost:8082") !== -1 ) {
+		useLocalhostWithPort("38081","38181","ALVIN local dev", "alvin");
+	} else if (href.indexOf("localhost:38082") !== -1 ) {
 		enableCSS("divaLilaCSS");
-		useLocalhostWithPort("8082","8182", "DiVA local dev", "diva");
+		useLocalhostWithPort("38082","38182", "DiVA local dev", "diva");
 	} else if (href.indexOf("116:8080") !== -1) {
 		useDevWithPort("8080","8180", "SystemOne dev", "systemone");
 	} else if (href.indexOf("116:8081") !== -1) {

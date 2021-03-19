@@ -207,7 +207,7 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	flex: 0 1 calc(100% - 0px);
 }
 .workArea .workView > .workItem {
-	padding-right: 1rem;
+	padding-right: 0.3rem;
 }
 
 .sideBar .menuView:nth-child(2n) {

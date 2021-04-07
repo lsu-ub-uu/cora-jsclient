@@ -1022,8 +1022,13 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 	this.spec.fetchLatestDataFromServer = "false";
 	this.spec.partOfList = "true";
+	this.record.permissions = {
+		write: ["someWriteVariable"],
+		read: ["someReadVariable"]
+	};
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+	
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
@@ -1047,8 +1052,8 @@ QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
 	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.record.permissions.write);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.record.permissions.read);
 	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
 	assert.strictEqual(recordGuiSpec.recordPartPermissionCalculator, factoredCalculator);
 });

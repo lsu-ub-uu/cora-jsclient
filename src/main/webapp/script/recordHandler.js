@@ -84,7 +84,7 @@ var CORA = (function(cora) {
 					fetchDataFromServer(processFetchedRecord);
 				} else {
 					fetchedRecord = spec.record;
-					let permissions = createEmptyPermissions();
+					let permissions = preparePermissionsForRecordGuiFromFetchedRecord();
 					tryToProcessFetchedRecordData(fetchedRecord.data, permissions);
 				}
 			}

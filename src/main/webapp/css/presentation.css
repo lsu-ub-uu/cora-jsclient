@@ -441,47 +441,47 @@ position: relative;
 	display: block;
 }
 
-.workView .tenChildStyle input {
+.workView .tenChildStyle {
 	width: 100%;
 }
 
-.workView .nineChildStyle input{
+.workView .nineChildStyle {
 	width: 90%;
 }
 
-.workView .eightChildStyle input {
+.workView .eightChildStyle {
 	width: 80%;
 }
 
-.workView .sevenChildStyle input {
+.workView .sevenChildStyle {
 	width: 70%;
 }
 
-.workView .sixChildStyle input {
+.workView .sixChildStyle {
 	width: 60%;
 }
 
-.workView .fiveChildStyle input{
+.workView .fiveChildStyle {
 	width: 50%;
 }
 
-.workView .fourChildStyle input{
+.workView .fourChildStyle {
 	width: 40%;
 }
 
-.workView .threeChildStyle input{
+.workView .threeChildStyle {
 	width: 30%;
 }
 
-.workView .twoChildStyle input{
+.workView .twoChildStyle {
 	width: 20%;
 }
 
-.workView .oneChildStyle input{
+.workView .oneChildStyle {
 	width: 10%;
 }
 
-.workView .zeroChildStyle input{
+.workView .zeroChildStyle {
 	width: 0;
 }
 

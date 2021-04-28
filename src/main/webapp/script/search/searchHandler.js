@@ -126,6 +126,9 @@ var CORA = (function(cora) {
 		};
 
 		const sendSearchQueryToServer = function() {
+			let busy = CORA.busy();
+			view.addSearchResultToSearchResultHolder(busy.getView());
+			busy.show();
 			let link = spec.searchLink;
 			let callSpec = {
 				"url" : link.url,

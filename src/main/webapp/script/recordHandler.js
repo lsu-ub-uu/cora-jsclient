@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
  * Copyright 2016, 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -408,6 +408,7 @@ var CORA = (function(cora) {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
 				type: CORA.message.INFO,
+				renderHtml : false,
 				timeout: 0
 			};
 			messageHolder.createMessage(messageSpec);

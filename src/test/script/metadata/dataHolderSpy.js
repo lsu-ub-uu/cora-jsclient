@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2021 Uppsala University Library
  * Copyright 2017 Olov McKie
  * 
  * This file is part of Cora.
@@ -39,10 +39,15 @@ var CORATEST = (function(coraTest) {
 		function getDataWithActionLinks() {
 			return dataWithActionLinks;
 		}
+		
+		function setData(dataIn){
+			data = dataIn;
+		}
 		return Object.freeze({
 			"type" : "dataHolderSpy",
 			getData : getData,
-			getDataWithActionLinks : getDataWithActionLinks
+			getDataWithActionLinks : getDataWithActionLinks,
+			setData : setData
 		});
 	};
 	return coraTest;

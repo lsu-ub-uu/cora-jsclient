@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2021 Uppsala Universitet
  *
  * This file is part of Cora.
  *
@@ -19,36 +20,52 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.message = function(spec) {
-		var timeout = getTimeoutFromSpecOrDefault();
-		var view = createView();
-		view.appendChild(createRemoveButton());
-		var messageText = createMessageText();
-		view.appendChild(messageText);
-		var hideTimeout = possiblySetHideTimeout();
-		var hideIfTransitionendNotCalled;
+		let renderHtml;
+		let timeout;
+		let view;
+		let messageText;
+		let hideTimeout;
+		let hideIfTransitionendNotCalled;
 
-		function getTimeoutFromSpecOrDefault() {
+		const start = function() {
+			renderHtml = getRenderHtmlFromSpecOrDefault();
+			timeout = getTimeoutFromSpecOrDefault();
+			view = createView();
+			view.appendChild(createRemoveButton());
+			messageText = createMessageText();
+			view.appendChild(messageText);
+			hideTimeout = possiblySetHideTimeout();
+		}
+
+		const getRenderHtmlFromSpecOrDefault = function() {
+			return spec.renderHtml !== undefined ? spec.renderHtml : true;
+		}
+		const getTimeoutFromSpecOrDefault = function() {
 			return spec.timeout !== undefined ? spec.timeout : spec.type.defaultTimeout;
 		}
 
-		function createView() {
+		const createView = function() {
 			return CORA.gui.createDivWithClassName("message " + spec.type.className);
 		}
 
-		function createMessageText() {
+		const createMessageText = function() {
 			var textNew = CORA.gui.createSpanWithClassName("messageText");
-			textNew.innerHTML = spec.message;
+			if (renderHtml) {
+				textNew.innerHTML = spec.message;
+			} else {
+				textNew.appendChild(document.createTextNode(spec.message));
+			}
 			return textNew;
 		}
 
-		function createRemoveButton() {
+		const createRemoveButton = function() {
 			var removeFunction = function() {
 				view.modelObject.hideWithEffect();
 			};
 			return CORA.gui.createRemoveButton(removeFunction);
 		}
 
-		function possiblySetHideTimeout() {
+		const possiblySetHideTimeout = function() {
 			var hideFunction = function() {
 				view.modelObject.hideWithEffect();
 			};
@@ -58,27 +75,27 @@ var CORA = (function(cora) {
 			return timeoutToBeCalled;
 		}
 
-		function getTimeout() {
+		const getTimeout = function() {
 			return timeout;
 		}
 
-		function getView() {
+		const getView = function() {
 			return view;
 		}
 
-		function hide() {
+		const hide = function() {
 			clearHideTimeout();
 			if (view.parentNode) {
 				view.parentNode.removeChild(view);
 			}
 		}
 
-		function clearHideTimeout() {
+		const clearHideTimeout = function() {
 			window.clearTimeout(hideTimeout);
 			window.clearTimeout(hideIfTransitionendNotCalled);
 		}
 
-		function hideWithEffect() {
+		const hideWithEffect = function() {
 			hideIfTransitionendNotCalled = window.setTimeout(function() {
 				view.modelObject.hide();
 			}, 1000);
@@ -90,32 +107,38 @@ var CORA = (function(cora) {
 			view.className = view.className + " toBeRemoved";
 		}
 
+		start();
+
 		var out = Object.freeze({
-			getTimeout : getTimeout,
-			getView : getView,
-			hide : hide,
-			clearHideTimeout : clearHideTimeout,
-			hideWithEffect : hideWithEffect
+			getTimeout: getTimeout,
+			getView: getView,
+			hide: hide,
+			clearHideTimeout: clearHideTimeout,
+			hideWithEffect: hideWithEffect
 		});
 		view.modelObject = out;
 		return out;
 	};
 
 	cora.message.ERROR = {
-		"className" : "error",
-		"defaultTimeout" : 0
+		"className": "error",
+		"defaultTimeout": 0
 	};
 	cora.message.WARNING = {
-		"className" : "warning",
-		"defaultTimeout" : 10000
+		"className": "warning",
+		"defaultTimeout": 10000
 	};
 	cora.message.INFO = {
-		"className" : "info",
-		"defaultTimeout" : 5000
+		"className": "info",
+		"defaultTimeout": 5000
 	};
 	cora.message.POSITIVE = {
-		"className" : "positive",
-		"defaultTimeout" : 3000
+		"className": "positive",
+		"defaultTimeout": 3000
 	};
 	return cora;
 }(CORA));
+
+function newFunction(textNew, spec) {
+	textNew.appendChild(document.createTextNode(spec.message));
+}

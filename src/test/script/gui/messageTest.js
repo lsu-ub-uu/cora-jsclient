@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2021 Uppsala Universitet
  *
  * This file is part of Cora.
  *
@@ -67,6 +68,33 @@ QUnit.test("testInit", function(assert) {
 	assert.strictEqual(removeButton.className, "iconButton removeButton");
 	// to prevent rouge timers call remove on elements after test has completed
 	message.clearHideTimeout();
+});
+
+QUnit.test("testHtmlInMessage", function(assert) {
+	var messageSpec = {
+		message : "<span>some text</span>",
+		type : CORA.message.ERROR
+	};
+	var message = CORA.message(messageSpec);
+	var view = message.getView();
+	this.fixture.appendChild(view);
+
+	var messageText = view.childNodes[1];
+	assert.strictEqual(messageText.textContent, "some text");
+});
+
+QUnit.test("testHtmlInMessage", function(assert) {
+	var messageSpec = {
+		message : "<span>some text</span>",
+		type : CORA.message.ERROR,
+		renderHtml : false
+	};
+	var message = CORA.message(messageSpec);
+	var view = message.getView();
+	this.fixture.appendChild(view);
+
+	var messageText = view.childNodes[1];
+	assert.strictEqual(messageText.textContent, "<span>some text</span>");
 });
 
 QUnit.test("testInitWithoutTimeout", function(assert) {
@@ -207,7 +235,7 @@ QUnit.test("testHideWithEffectTransitionendNotCalled", function(assert) {
 	assert.visible(view);
 	message.hideWithEffect();
 
-	var timeout = window.setTimeout(function() {
+	window.setTimeout(function() {
 		assert.strictEqual(view.className, " toBeRemoved", "if toBeRemoved is still here,"
 				+ " has the message not been removed by transitionend event");
 		assert.strictEqual(view.parentNode, null, "message should be removed after max 1000ms");

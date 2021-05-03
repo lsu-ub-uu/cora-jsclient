@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
  * Copyright 2016, 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recordHandlerTest.js", {
+QUnit.module.only("recordHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
@@ -261,12 +261,25 @@ QUnit.test("testInitRecordHandlerViewButtonCreated", function(assert) {
 QUnit.test("testShowData", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	this.answerCall(0);
+	let data = {
+		data: "<span>A new value</span>",
+		path: {}
+	};
+	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
+	factoredRecordGui.dataHolder.setData(data);
 	recordHandler.showData();
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let messageHolder = managedGuiItem.getAddedWorkPresentation(0);
 
 	assert.strictEqual(messageHolder.className, "messageHolder");
-	// TODO: move to view...
+	// TODO: move messageHolder to view...
+	let firstChild = messageHolder.childNodes[0];
+	assert.strictEqual(firstChild.className, "message info");
+	let message = firstChild.childNodes[1];
+	assert.strictEqual(message.innerHTML, '{\"data\":\"&lt;span&gt;A new value&lt;/span&gt;\",\"path\":{}}');
+	var messageText = message.childNodes[0];
+	assert.strictEqual(messageText.textContent, '{\"data\":\"<span>A new value</span>\",\"path\":{}}');
+
 });
 
 QUnit.test("testCopyAsNew", function(assert) {

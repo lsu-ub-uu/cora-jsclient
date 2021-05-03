@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019 Uppsala University Library
+ * Copyright 2017, 2019, 2021 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -20,92 +20,104 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.searchHandlerView = function(dependencies, spec) {
-		var view;
-		var searchFormHolder;
-		var buttonView;
-		var resultHolder;
+		let view;
+		let searchFormHolder;
+		let buttonView;
+		let resultHolder;
+		let busy;
 
-		function start() {
+		const start = function() {
 			var workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createSearchFormHolderAndAddTo(workItemView);
 			createButtonViewAndAddTo(searchFormHolder);
 			createSearchButtonIn(buttonView);
 			createResultHolderAndAddTo(workItemView);
+			createBusy();
 		}
 
-		function createWorkItemView() {
+		const createWorkItemView = function() {
 			var workItemViewSpec = {
-				"extraClassName" : "search"
+				"extraClassName": "search"
 			};
 			return dependencies.workItemViewFactory.factor(workItemViewSpec);
 		}
 
-		function createSearchFormHolderAndAddTo(addTo) {
+		const createSearchFormHolderAndAddTo = function(addTo) {
 			searchFormHolder = CORA.gui.createSpanWithClassName("searchFormHolder");
 			addTo.addViewToView(searchFormHolder);
 		}
 
-		function createButtonViewAndAddTo(addTo) {
+		const createButtonViewAndAddTo = function(addTo) {
 			buttonView = CORA.gui.createSpanWithClassName("buttonView");
 			addTo.appendChild(buttonView);
 		}
 
-		function createSearchButtonIn(buttonViewToAddTo) {
+		const createSearchButtonIn = function(buttonViewToAddTo) {
 			var searchButton = createButton();
 			buttonViewToAddTo.appendChild(searchButton);
 		}
 
-		function createButton() {
+		const createButton = function() {
 			var buttonSpec = {
-					type : "input",
-					className : "searchButton",
-					text : dependencies.textProvider.getTranslation("theClient_searchButtonText"),
-					action : {
-						method : spec.searchMethod
-					}
+				type: "input",
+				className: "searchButton",
+				text: dependencies.textProvider.getTranslation("theClient_searchButtonText"),
+				action: {
+					method: spec.searchMethod
+				}
 			};
 			return CORA.gui.inputButton(buttonSpec);
 		}
 
-		function createResultHolderAndAddTo(addTo) {
+		const createResultHolderAndAddTo = function(addTo) {
 			resultHolder = CORA.gui.createSpanWithClassName("searchResultHolder");
 			addTo.addViewToView(resultHolder);
 		}
 
-		function getView() {
+		const createBusy = function() {
+			busy = dependencies.busyFactory.factor();
+			busy.show();
+		}
+
+		const getView = function() {
 			return view;
 		}
 
-		function addPresentationToSearchFormHolder(presentationToAdd) {
+		const addPresentationToSearchFormHolder = function(presentationToAdd) {
 			searchFormHolder.insertBefore(presentationToAdd, searchFormHolder.lastChild);
 		}
 
-		function addSearchResultToSearchResultHolder(resultToAdd) {
+		const addSearchResultToSearchResultHolder = function(resultToAdd) {
 			resultHolder.appendChild(resultToAdd);
 		}
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
 		}
 
-		function clearResultHolder(){
-			 resultHolder.innerHTML = "";
+		const clearResultHolder = function() {
+			resultHolder.innerHTML = "";
+		}
+
+		const setSearchRunning = function() {
+			resultHolder.insertBefore(busy.getView(), resultHolder.firstChild);
 		}
 
 		start();
 		return Object.freeze({
-			"type" : "searchHandlerView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addPresentationToSearchFormHolder : addPresentationToSearchFormHolder,
-			addSearchResultToSearchResultHolder : addSearchResultToSearchResultHolder,
-			clearResultHolder : clearResultHolder
+			"type": "searchHandlerView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			addPresentationToSearchFormHolder: addPresentationToSearchFormHolder,
+			addSearchResultToSearchResultHolder: addSearchResultToSearchResultHolder,
+			clearResultHolder: clearResultHolder,
+			setSearchRunning: setSearchRunning
 		});
 	};
 	return cora;

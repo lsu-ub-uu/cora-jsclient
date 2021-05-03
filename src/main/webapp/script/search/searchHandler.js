@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2020 Uppsala University Library
+ * Copyright 2017, 2020, 2021 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 	cora.searchHandler = function(dependencies, spec) {
 		let view;
 		let recordGui;
+		let searchTimeoutTime = 400;
 		let delaySearchTimer;
 
 		const start = function() {
@@ -86,7 +87,7 @@ var CORA = (function(cora) {
 			window.clearTimeout(delaySearchTimer);
 			delaySearchTimer = window.setTimeout(function() {
 				search();
-			}, 400);
+			}, searchTimeoutTime);
 		};
 
 		const createRecordGui = function(metadataId, permissionCalculator) {
@@ -126,6 +127,7 @@ var CORA = (function(cora) {
 		};
 
 		const sendSearchQueryToServer = function() {
+			view.setSearchRunning();
 			let link = spec.searchLink;
 			let callSpec = {
 				"url" : link.url,
@@ -161,16 +163,21 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
+		
+		const setSearchTimeoutTime = function(time){
+			searchTimeoutTime = time;
+		}
 
 		start();
 		return Object.freeze({
 			"type" : "searchHandler",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
-			search : search,
+			search : search, 
 			handleSearchResult : handleSearchResult,
 			getView : getView,
-			handleMsg : handleMsg
+			handleMsg : handleMsg,
+			setSearchTimeoutTime : setSearchTimeoutTime
 		});
 	};
 	return cora;

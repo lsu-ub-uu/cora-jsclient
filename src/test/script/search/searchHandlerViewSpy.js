@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2021 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -26,7 +26,8 @@ var CORATEST = (function(coraTest) {
 		var searchResultsAddedToSearchResultHolder = [];
 
 		var noOfCallsToClearResultHolder = 0;
-		
+		var noOfCallsToSetSearchRunning = 0;
+
 		function getView() {
 			return view;
 		}
@@ -44,24 +45,32 @@ var CORATEST = (function(coraTest) {
 		function getAddedSearchResultToSearchResultHolder(number) {
 			return searchResultsAddedToSearchResultHolder[number];
 		}
-		
-		function clearResultHolder(){
+
+		function clearResultHolder() {
 			noOfCallsToClearResultHolder++;
 		}
 
-		function getNoOfCallsToClearResultHolder(){
+		function getNoOfCallsToClearResultHolder() {
 			return noOfCallsToClearResultHolder;
 		}
-		
+		function setSearchRunning() {
+			noOfCallsToSetSearchRunning++;
+		}
+		function getNoOfCallsToSetSearchRunning() {
+			return noOfCallsToSetSearchRunning;
+		}
+
 		return Object.freeze({
-			"type" : "searchHandlerViewSpy",
-			getView : getView,
-			addPresentationToSearchFormHolder : addPresentationToSearchFormHolder,
-			getPresentationsAddedToSearchForm : getPresentationsAddedToSearchForm,
-			addSearchResultToSearchResultHolder : addSearchResultToSearchResultHolder,
-			getAddedSearchResultToSearchResultHolder : getAddedSearchResultToSearchResultHolder,
-			clearResultHolder : clearResultHolder,
-			getNoOfCallsToClearResultHolder : getNoOfCallsToClearResultHolder
+			"type": "searchHandlerViewSpy",
+			getView: getView,
+			addPresentationToSearchFormHolder: addPresentationToSearchFormHolder,
+			getPresentationsAddedToSearchForm: getPresentationsAddedToSearchForm,
+			addSearchResultToSearchResultHolder: addSearchResultToSearchResultHolder,
+			getAddedSearchResultToSearchResultHolder: getAddedSearchResultToSearchResultHolder,
+			clearResultHolder: clearResultHolder,
+			getNoOfCallsToClearResultHolder: getNoOfCallsToClearResultHolder,
+			setSearchRunning: setSearchRunning,
+			getNoOfCallsToSetSearchRunning: getNoOfCallsToSetSearchRunning
 		});
 	};
 	return coraTest;

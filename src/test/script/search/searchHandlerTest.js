@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019, 2020 Uppsala University Library
+ * Copyright 2017, 2019, 2020, 2021 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -162,8 +162,12 @@ QUnit.test("testSearch", function(assert) {
 	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	let factoredView = this.dependencies.searchHandlerViewFactory.getFactored(0);
+	assert.strictEqual(factoredView.getNoOfCallsToSetSearchRunning(), 0);	
 	searchHandler.search();
 	assert.strictEqual(factoredGui.getDataValidated(), 1);
+
+	assert.strictEqual(factoredView.getNoOfCallsToSetSearchRunning(), 1);	
 
 	let ajaxCallSpec = this.dependencies.ajaxCallFactory.getSpec(0);
 	assert.strictEqual(ajaxCallSpec.url, this.spec.searchLink.url);
@@ -194,12 +198,12 @@ QUnit.test("testSearchThroughMessageSetValue", function(assert) {
 	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	
 	let ajaxCallFactory = this.dependencies.ajaxCallFactory;
 	let spec = this.spec;
-
 	window.setTimeout(function() {
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 
@@ -215,7 +219,7 @@ QUnit.test("testSearchThroughMessageSetValue", function(assert) {
 		});
 		assert.strictEqual(ajaxCallSpec.loadMethod, searchHandler.handleSearchResult);
 		done();
-	}, 1050);
+	}, 50); 
 });
 
 QUnit.test("testSearchThroughMessageRemove", function(assert) {
@@ -223,6 +227,7 @@ QUnit.test("testSearchThroughMessageRemove", function(assert) {
 	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("dummyData", "x/y/z/remove");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	
@@ -230,7 +235,7 @@ QUnit.test("testSearchThroughMessageRemove", function(assert) {
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 		
 		done();
-	}, 600);
+	}, 50);
 });
 
 QUnit.test("testSearchDoesNotSearchAgainForRemoveOnValidate", function(assert) {
@@ -239,6 +244,7 @@ QUnit.test("testSearchDoesNotSearchAgainForRemoveOnValidate", function(assert) {
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("thisMessageWouldHaveBeenCreatedByValidate", "x/y/z/remove");
 	searchHandler.search();
 	assert.strictEqual(factoredGui.getDataValidated(), 1);
@@ -248,7 +254,7 @@ QUnit.test("testSearchDoesNotSearchAgainForRemoveOnValidate", function(assert) {
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 		
 		done();
-	}, 600);
+	}, 50);
 });
 
 QUnit.test("testSearchThroughMessageNotSetValueOrRemove", function(assert) {
@@ -256,6 +262,7 @@ QUnit.test("testSearchThroughMessageNotSetValueOrRemove", function(assert) {
 	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("dummyData", "x/y/z/other");
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
 	
@@ -263,7 +270,7 @@ QUnit.test("testSearchThroughMessageNotSetValueOrRemove", function(assert) {
 		assert.strictEqual(factoredGui.getDataValidated(), 0);
 		
 		done();
-	}, 600);
+	}, 50);
 });
 
 QUnit.test("testSearchThroughMessageShouldOnlyCallOnceOnFastMultipleCalls", function(assert) {
@@ -271,6 +278,7 @@ QUnit.test("testSearchThroughMessageShouldOnlyCallOnceOnFastMultipleCalls", func
 	let searchHandler = CORA.searchHandler(this.dependencies, this.spec);
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
 	searchHandler.handleMsg("dummyData", "x/y/z/setValue");
@@ -281,7 +289,7 @@ QUnit.test("testSearchThroughMessageShouldOnlyCallOnceOnFastMultipleCalls", func
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 		
 		done();
-	}, 600);
+	}, 50);
 });
 
 QUnit.test("testSearchNotValidDataNoAjaxCall", function(assert) {
@@ -310,6 +318,7 @@ QUnit.test("testSearchNotValidDoesNotAddUpToMinNoOfRepeatingForRemoveOnValidate"
 	factoredGui.setValidateAnswer(false);
 
 	assert.strictEqual(factoredGui.getDataValidated(), 0);
+	searchHandler.setSearchTimeoutTime(1);
 	searchHandler.handleMsg("thisMessageWouldHaveBeenCreatedByValidate", "x/y/z/remove");
 	searchHandler.search();
 	assert.strictEqual(factoredGui.getDataValidated(), 1);
@@ -319,7 +328,7 @@ QUnit.test("testSearchNotValidDoesNotAddUpToMinNoOfRepeatingForRemoveOnValidate"
 		assert.strictEqual(factoredGui.getDataValidated(), 1);
 		
 		done();
-	}, 600);
+	}, 50);
 });
 
 QUnit.test("testHandleSearchResultCreatesAResultHandler", function(assert) {

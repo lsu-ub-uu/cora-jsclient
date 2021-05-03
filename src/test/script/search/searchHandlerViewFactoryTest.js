@@ -57,8 +57,14 @@ QUnit.test("factorTestDependencies", function(assert) {
 			"workItemViewFactory");
 	assert.strictEqual(searchHandlerView.getDependencies().messageHolderFactory.type,
 			"messageHolderFactory");
+
+	assert.strictEqual(searchHandlerView.getDependencies().busyFactory.type,
+			"genericFactory");
+	assert.strictEqual(searchHandlerView.getDependencies().busyFactory.getTypeToFactor(),
+			"busy");
+
 	assert.strictEqual(searchHandlerView.getDependencies().textProvider,
-			this.dependencies.textProvider);
+			this.dependencies.textProvider); 
 });
 
 QUnit.test("factorTestSpec", function(assert) {

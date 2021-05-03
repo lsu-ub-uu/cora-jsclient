@@ -1,6 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2021 Uppsala Universitet
  *
  * This file is part of Cora.
  *
@@ -17,30 +16,40 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
+var CORATEST = (function(coraTest) {
 	"use strict";
-	cora.searchHandlerViewFactory = function(dependencies) {
+	coraTest.busySpy = function(spec) {
+		var spyView = document.createElement("span");
+		spyView.className = "busySpySpan";
+		var showIsCalledNoOfTimes = 0;
 
-		var dep = {
-			"textProvider" : dependencies.textProvider,
-			"workItemViewFactory" : CORA.workItemViewFactory(),
-			"messageHolderFactory" : CORA.messageHolderFactory(),
-			busyFactory : CORA.genericFactory("busy")
-		};
-
-		function factor(spec) {
-			return CORA.searchHandlerView(dep, spec);
+		function getView() {
+			return spyView;
 		}
 
-		function getDependencies() {
-			return dependencies;
+		function show() {
+			showIsCalledNoOfTimes++;
 		}
 
+		function hide() {
+		}
+
+		function hideWithEffect() {
+		}
+		function addBeforeShowFunction(func) {
+		}
+		function getShowIsCalledNoOfTimes(){
+			return showIsCalledNoOfTimes;
+		}
 		return Object.freeze({
-			"type" : "searchHandlerViewFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			"type": "busySpy",
+			getView: getView,
+			show: show,
+			hide: hide,
+			hideWithEffect: hideWithEffect,
+			addBeforeShowFunction: addBeforeShowFunction,
+			getShowIsCalledNoOfTimes: getShowIsCalledNoOfTimes
 		});
 	};
-	return cora;
-}(CORA));
+	return coraTest;
+}(CORATEST || {}));

@@ -138,7 +138,3 @@ var CORA = (function(cora) {
 	};
 	return cora;
 }(CORA));
-
-function newFunction(textNew, spec) {
-	textNew.appendChild(document.createTextNode(spec.message));
-}

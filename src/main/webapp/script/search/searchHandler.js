@@ -32,7 +32,7 @@ var CORA = (function(cora) {
 
 		const createView = function() {
 			let viewSpec = {
-				"searchMethod" : search
+				searchMethod: search
 			};
 			return dependencies.searchHandlerViewFactory.factor(viewSpec);
 		};
@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 		const createSearchForm = function() {
 			let metadataId = spec.metadataId;
 			let permissionCalculator = createRecordPartPermissionCalculator(metadataId,
-					createEmptyPermissions());
+				createEmptyPermissions());
 			recordGui = createRecordGui(metadataId, permissionCalculator);
 
 			addSearchFormFromRecordGuiToView(recordGui, metadataId);
@@ -60,8 +60,8 @@ var CORA = (function(cora) {
 
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
 			let calculatorSpec = {
-				metadataId : metadataId,
-				permissions : permissions
+				metadataId: metadataId,
+				permissions: permissions
 			}
 			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		};
@@ -92,22 +92,22 @@ var CORA = (function(cora) {
 
 		const createRecordGui = function(metadataId, permissionCalculator) {
 			let recordGuiSpec = {
-				"metadataId" : metadataId,
-				recordPartPermissionCalculator : permissionCalculator
+				metadataId: metadataId,
+				recordPartPermissionCalculator: permissionCalculator
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
 		};
 
 		const createEmptyPermissions = function() {
 			return {
-				write : [],
-				read : []
+				write: [],
+				read: []
 			};
 		};
 
 		const addSearchFormFromRecordGuiToView = function(recordGuiToAdd, metadataIdUsedInData) {
 			let presentationView = recordGuiToAdd.getPresentationHolder(spec.presentationId,
-					metadataIdUsedInData).getView();
+				metadataIdUsedInData).getView();
 			view.addPresentationToSearchFormHolder(presentationView);
 		};
 
@@ -121,8 +121,8 @@ var CORA = (function(cora) {
 			}
 			window.clearTimeout(delaySearchTimer);
 			recordGui.pubSub.publish("addUpToMinNumberOfRepeating", {
-				"data" : "",
-				"path" : {}
+				data: "",
+				path: {}
 			});
 		};
 
@@ -130,22 +130,22 @@ var CORA = (function(cora) {
 			view.setSearchRunning();
 			let link = spec.searchLink;
 			let callSpec = {
-				"url" : link.url,
-				"requestMethod" : link.requestMethod,
-				"accept" : link.accept,
-				"parameters" : {
-					"searchData" : JSON.stringify(recordGui.dataHolder.getData())
+				url: link.url,
+				requestMethod: link.requestMethod,
+				accept: link.accept,
+				parameters: {
+					searchData: JSON.stringify(recordGui.dataHolder.getData())
 				},
-				"loadMethod" : handleSearchResult
+				loadMethod: handleSearchResult
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
 		const handleSearchResult = function(answerIn) {
 			let resultHandlerSpec = {
-				"dataList" : JSON.parse(answerIn.responseText).dataList,
-				"jsClient" : dependencies.jsClient,
-				"triggerWhenResultIsChoosen" : spec.triggerWhenResultIsChoosen
+				dataList: JSON.parse(answerIn.responseText).dataList,
+				jsClient: dependencies.jsClient,
+				triggerWhenResultIsChoosen: spec.triggerWhenResultIsChoosen
 			};
 			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();
@@ -163,21 +163,21 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
-		
-		const setSearchTimeoutTime = function(time){
+
+		const setSearchTimeoutTime = function(time) {
 			searchTimeoutTime = time;
 		}
 
 		start();
 		return Object.freeze({
-			"type" : "searchHandler",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			search : search, 
-			handleSearchResult : handleSearchResult,
-			getView : getView,
-			handleMsg : handleMsg,
-			setSearchTimeoutTime : setSearchTimeoutTime
+			type: "searchHandler",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			search: search,
+			handleSearchResult: handleSearchResult,
+			getView: getView,
+			handleMsg: handleMsg,
+			setSearchTimeoutTime: setSearchTimeoutTime
 		});
 	};
 	return cora;

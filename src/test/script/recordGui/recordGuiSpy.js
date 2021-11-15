@@ -83,8 +83,8 @@ var CORATEST = (function(coraTest) {
 		const setSpec = function(specIn) {
 			spec = specIn;
 		};
-		let out = Object.freeze({
-			"type": "recordGuiSpy",
+		return Object.freeze({
+			type: "recordGuiSpy",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			pubSub: pubSub,
@@ -100,7 +100,6 @@ var CORATEST = (function(coraTest) {
 			getReturnedPresentations: getReturnedPresentations,
 			setSpec: setSpec,
 		});
-		return out;
 	};
 	return coraTest;
 }(CORATEST || {}));

@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,87 +20,88 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.resultHandlerView = function(dependencies, spec) {
-		var view;
-		var resultsHolder;
+		let view;
+		let resultsHolder;
 
-		function start() {
+		const start = function() {
 			view = createView();
 			createInfo();
 			createResultsHolder();
-		}
+		};
 
-		function createView() {
+		const createView = function() {
 			return CORA.gui.createSpanWithClassName("resultHolder");
-		}
+		};
 
-		function createResultsHolder() {
-			resultsHolder = CORA.gui.createSpanWithClassName("resultsHolder");
+		const createResultsHolder = function() {
+			resultsHolder = CORA.gui.createSpanWithClassName("resultsHolderPage");
 			view.appendChild(resultsHolder);
-		}
+		};
 
-		function createInfo() {
-			var infoHolder = CORA.gui.createSpanWithClassName("infoHolder");
+		const createInfo = function() {
+			let infoHolder = CORA.gui.createSpanWithClassName("infoHolder");
 			view.appendChild(infoHolder);
 			infoHolder.textContent = spec.fromNo + " - " + spec.toNo + " " + spec.ofText + " "
-					+ spec.totalNo;
-		}
+				+ spec.totalNo;
+		};
 
-		function addChildPresentation(presentationToAdd, record) {
-			var childView = createRecordView(record);
+		const addChildPresentation = function(presentationToAdd, record) {
+			let childView = createRecordView(record);
 			childView.appendChild(presentationToAdd);
 			resultsHolder.appendChild(childView);
-		}
-		function createRecordView(record) {
-			var newView = CORA.gui.createSpanWithClassName("listItem");
+		};
+
+		const createRecordView = function(record) {
+			let newView = CORA.gui.createSpanWithClassName("listItem");
 			newView.onclick = function(event) {
-				var loadInBackground = "false";
+				let loadInBackground = "false";
 				if (event.ctrlKey) {
 					loadInBackground = "true";
 				}
-				var openInfo = {
-					"record" : record,
-					"loadInBackground" : loadInBackground
+				let openInfo = {
+					"record": record,
+					"loadInBackground": loadInBackground
 				};
 				spec.resultHandler.openRecord(openInfo);
 			};
 			return newView;
-		}
+		};
 
 		function addButton(text, onclickMethod, className) {
-			var button = createButton(text, onclickMethod, className);
+			let button = createButton(text, onclickMethod, className);
 			view.childNodes[1].appendChild(button);
 			return button;
-		}
+		};
 
 		function createButton(text, onclickMethod, className) {
-			var button = document.createElement("input");
+			let button = document.createElement("input");
 			button.type = "button";
 			button.value = text;
 			button.onclick = onclickMethod;
 			button.className = className;
 			return button;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		start();
 		return Object.freeze({
-			"type" : "resultHandlerView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addChildPresentation : addChildPresentation,
-			addButton : addButton
+			type: "resultHandlerView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			addChildPresentation: addChildPresentation,
+			addButton: addButton
 		});
 	};
 	return cora;

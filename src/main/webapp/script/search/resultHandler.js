@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2018 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,103 +20,99 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.resultHandler = function(dependencies, spec) {
-		var out;
-		var view;
-		var showIndexButton = false;
-
-		function start() {
+		let out;
+		let view;
+		let showIndexButton = false;
+		const start = function() {
 			view = createView();
 			createAndAddPresentationsForEachResultItem();
 			possiblyAddIndexButton();
-		}
+		};
 
-		function createView() {
-			var viewSpec = {
-				"ofText" : dependencies.textProvider
-						.getTranslation("theClient_resultListOfText"),
-				"fromNo" : spec.dataList.fromNo,
-				"toNo" : spec.dataList.toNo,
-				"totalNo" : spec.dataList.totalNo,
-				"resultHandler" : out
+		const createView = function() {
+			let viewSpec = {
+				ofText: dependencies.textProvider.getTranslation("theClient_resultListOfText"),
+				fromNo: spec.dataList.fromNo,
+				toNo: spec.dataList.toNo,
+				totalNo: spec.dataList.totalNo,
+				resultHandler: out
 			};
 			return dependencies.resultHandlerViewFactory.factor(viewSpec);
-		}
+		};
 
-		function createAndAddPresentationsForEachResultItem() {
-			var data = spec.dataList.data;
+		const createAndAddPresentationsForEachResultItem = function() {
+			let data = spec.dataList.data;
 			data.forEach(tryToAddResultItemToView);
-		}
+		};
 
-		function tryToAddResultItemToView(recordContainer) {
+		const tryToAddResultItemToView = function(recordContainer) {
 			addResultItemToWorkView(recordContainer.record);
-		}
+		};
 
-		function addResultItemToWorkView(result) {
-			if(result.actionLinks.index !== undefined){
+		const addResultItemToWorkView = function(result) {
+			if (result.actionLinks.index !== undefined) {
 				showIndexButton = true;
 			}
-			var recordHandlerSpec = {
-				"fetchLatestDataFromServer" : "false",
-				"partOfList" : "true",
-				"createNewRecord" : "false",
-				"record" : result,
-				"jsClient" : dependencies.jsClient
+			let recordHandlerSpec = {
+				fetchLatestDataFromServer: "false",
+				partOfList: "true",
+				createNewRecord: "false",
+				record: result,
+				jsClient: dependencies.jsClient
 			};
-			var recordHandlerNew = dependencies.recordHandlerFactory
-					.factor(recordHandlerSpec);
-			view.addChildPresentation(recordHandlerNew.getManagedGuiItem()
-					.getListView(), result);
-		}
+			let recordHandlerNew = dependencies.recordHandlerFactory.factor(recordHandlerSpec);
+			view.addChildPresentation(recordHandlerNew.getManagedGuiItem().getListView(), result);
+		};
 
-		function openRecord(openInfo) {
+		const openRecord = function(openInfo) {
 			if (spec.triggerWhenResultIsChoosen !== undefined) {
 				spec.triggerWhenResultIsChoosen(openInfo);
 			} else {
 				openRecordUsingJsClient(openInfo);
 			}
-		}
+		};
 
-		function openRecordUsingJsClient(openInfoIn) {
-			var openInfo = {
-				"readLink" : openInfoIn.record.actionLinks.read,
-				"loadInBackground" : openInfoIn.loadInBackground
+		const openRecordUsingJsClient = function(openInfoIn) {
+			let openInfo = {
+				readLink: openInfoIn.record.actionLinks.read,
+				loadInBackground: openInfoIn.loadInBackground
 			};
 			dependencies.jsClient.openRecordUsingReadLink(openInfo);
-		}
+		};
 
-		function possiblyAddIndexButton(){
-			if(showIndexButton) {
+		const possiblyAddIndexButton = function() {
+			if (showIndexButton) {
 				view.addButton("INDEX", indexDataList, "indexButton");
 			}
-		}
+		};
 
-		function indexDataList() {
-			var indexListSpec = {
-				"dataList" : spec.dataList
+		const indexDataList = function() {
+			let indexListSpec = {
+				"dataList": spec.dataList
 			};
-			var indexListHandler = dependencies.indexListHandlerFactory
-					.factor(indexListSpec);
+			let indexListHandler = dependencies.indexListHandlerFactory.factor(indexListSpec);
 			indexListHandler.indexDataList();
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
-		function getView() {
+		};
+		
+		const getView = function() {
 			return view.getView();
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "resultHandler",
-			getView : getView,
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			openRecord : openRecord,
-			indexDataList : indexDataList
+			type: "resultHandler",
+			getView: getView,
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			openRecord: openRecord,
+			indexDataList: indexDataList
 		});
 		start();
 		return out;

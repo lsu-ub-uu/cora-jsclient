@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,118 +19,112 @@
  */
 "use strict";
 
-QUnit.module("search/resultHandlerViewTest.js", {
-	beforeEach : function() {
-		this.dependencies = {
+QUnit.module("search/resultHandlerViewTest.js", hooks => {
+	const test = QUnit.test;
+	let dependencies;
+	let spec;
+	let resultHandlerView;
+	hooks.beforeEach(() => {
+		dependencies = {
 		};
-		this.spec = {
-			"ofText" : "av",
-			"fromNo" : "1",
-			"toNo" : "15",
-			"totalNo" : "1520000",
-			"resultHandler" : CORATEST.resultHandlerSpy()
+		spec = {
+			"ofText": "av",
+			"fromNo": "1",
+			"toNo": "15",
+			"totalNo": "1520000",
+			"resultHandler": CORATEST.resultHandlerSpy()
 		};
-	},
-	afterEach : function() {
-	}
+		resultHandlerView = CORA.resultHandlerView(dependencies, spec);
+	});
+	hooks.afterEach(() => {
+		//no after
+	});
+
+	test("testInit", function(assert) {
+		assert.strictEqual(resultHandlerView.type, "resultHandlerView");
+	});
+
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(resultHandlerView.getDependencies(), dependencies);
+	});
+
+	test("testGetSpec", function(assert) {
+		assert.strictEqual(resultHandlerView.getSpec(), spec);
+	});
+
+	test("testGetView", function(assert) {
+		let view = resultHandlerView.getView();
+		assert.strictEqual(view.nodeName, "SPAN");
+		assert.strictEqual(view.className, "resultHolder");
+	});
+
+	test("testInfoPartOfView", function(assert) {
+		let infoHolder = resultHandlerView.getView().firstChild;
+		assert.strictEqual(infoHolder.nodeName, "SPAN");
+		assert.strictEqual(infoHolder.className, "infoHolder");
+	});
+
+	test("testInfoPartContainsInfo", function(assert) {
+		let infoHolder = resultHandlerView.getView().firstChild;
+		assert.strictEqual(infoHolder.textContent, "1 - 15 av 1520000");
+	});
+
+	test("testResultsPartOfView", function(assert) {
+		let resultsHolder = resultHandlerView.getView().childNodes[1];
+		assert.strictEqual(resultsHolder.nodeName, "SPAN");
+		assert.strictEqual(resultsHolder.className, "resultsHolderPage");
+	});
+
+	test("testAddChildPresentation", function(assert) {
+		let resultsHolder = resultHandlerView.getView().childNodes[1];
+		let childToAdd = document.createElement("span");
+		resultHandlerView.addChildPresentation(childToAdd);
+		assert.strictEqual(resultsHolder.firstChild.firstChild, childToAdd);
+	});
+
+	test("testAddChildPresentationClickable", function(assert) {
+		let resultsHolder = resultHandlerView.getView().childNodes[1];
+		let childToAdd = document.createElement("span");
+		let record = {};
+		resultHandlerView.addChildPresentation(childToAdd, record);
+
+		let firstListItem = resultsHolder.firstChild;
+		let event = document.createEvent('Event');
+		firstListItem.onclick(event);
+
+		let firstOpenInfo = spec.resultHandler.getOpenedRecord(0);
+		assert.strictEqual(firstOpenInfo.record, record);
+		assert.strictEqual(firstOpenInfo.loadInBackground, "false");
+	});
+
+	test("testAddChildPresentationClickableLoadInBackground", function(assert) {
+		let resultsHolder = resultHandlerView.getView().childNodes[1];
+		let childToAdd = document.createElement("span");
+		let record = {};
+		resultHandlerView.addChildPresentation(childToAdd, record);
+
+		let firstListItem = resultsHolder.firstChild;
+		let event = document.createEvent('Event');
+		event.ctrlKey = true;
+		firstListItem.onclick(event);
+
+		let firstOpenInfo = spec.resultHandler.getOpenedRecord(0);
+		assert.strictEqual(firstOpenInfo.record, record);
+		assert.strictEqual(firstOpenInfo.loadInBackground, "true");
+	});
+
+	test("addButton", function(assert) {
+		let resultsHolder = resultHandlerView.getView().childNodes[1];
+		let clicked = false;
+		let onclickMethod = function() {
+			clicked = true;
+		};
+		resultHandlerView.addButton("text", onclickMethod, "indexButton");
+
+		let button = resultsHolder.childNodes[0];
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.value, "text");
+		assert.strictEqual(button.onclick, onclickMethod);
+		assert.strictEqual(button.className, "indexButton");
+	});
 });
-
-QUnit.test("testInit", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(resultHandlerView.type, "resultHandlerView");
-});
-
-QUnit.test("testGetDependencies", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(resultHandlerView.getDependencies(), this.dependencies);
-});
-
-QUnit.test("testGetSpec", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(resultHandlerView.getSpec(), this.spec);
-});
-
-QUnit.test("testGetView", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var view = resultHandlerView.getView();
-	assert.strictEqual(view.nodeName, "SPAN");
-	assert.strictEqual(view.className, "resultHolder");
-});
-
-QUnit.test("testInfoPartOfView", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var infoHolder = resultHandlerView.getView().firstChild;
-	assert.strictEqual(infoHolder.nodeName, "SPAN");
-	assert.strictEqual(infoHolder.className, "infoHolder");
-});
-
-QUnit.test("testInfoPartContainsInfo", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var infoHolder = resultHandlerView.getView().firstChild;
-	assert.strictEqual(infoHolder.textContent, "1 - 15 av 1520000");
-});
-
-QUnit.test("testResultsPartOfView", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var resultsHolder = resultHandlerView.getView().childNodes[1];
-	assert.strictEqual(resultsHolder.nodeName, "SPAN");
-	assert.strictEqual(resultsHolder.className, "resultsHolder");
-});
-
-QUnit.test("testAddChildPresentation", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var resultsHolder = resultHandlerView.getView().childNodes[1];
-	var childToAdd = document.createElement("span");
-	resultHandlerView.addChildPresentation(childToAdd);
-	assert.strictEqual(resultsHolder.firstChild.firstChild, childToAdd);
-});
-
-QUnit.test("testAddChildPresentationClickable", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var resultsHolder = resultHandlerView.getView().childNodes[1];
-	var childToAdd = document.createElement("span");
-	var record = {};
-	resultHandlerView.addChildPresentation(childToAdd, record);
-
-	var firstListItem = resultsHolder.firstChild;
-	var event = document.createEvent('Event');
-	firstListItem.onclick(event);
-
-	var firstOpenInfo = this.spec.resultHandler.getOpenedRecord(0);
-	assert.strictEqual(firstOpenInfo.record, record);
-	assert.strictEqual(firstOpenInfo.loadInBackground, "false");
-});
-
-QUnit.test("testAddChildPresentationClickableLoadInBackground", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var resultsHolder = resultHandlerView.getView().childNodes[1];
-	var childToAdd = document.createElement("span");
-	var record = {};
-	resultHandlerView.addChildPresentation(childToAdd, record);
-
-	var firstListItem = resultsHolder.firstChild;
-	var event = document.createEvent('Event');
-	event.ctrlKey = true;
-	firstListItem.onclick(event);
-
-	var firstOpenInfo = this.spec.resultHandler.getOpenedRecord(0);
-	assert.strictEqual(firstOpenInfo.record, record);
-	assert.strictEqual(firstOpenInfo.loadInBackground, "true");
-});
-
-QUnit.test("addButton", function(assert) {
-	var resultHandlerView = CORA.resultHandlerView(this.dependencies, this.spec);
-	var resultsHolder = resultHandlerView.getView().childNodes[1];
-	var clicked = false;
-	var onclickMethod = function() {
-		clicked = true;
-	};
-	resultHandlerView.addButton("text", onclickMethod, "indexButton");
-
-	var button = resultsHolder.childNodes[0];
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.value, "text");
-	assert.strictEqual(button.onclick, onclickMethod);
-	assert.strictEqual(button.className, "indexButton");
-});
-

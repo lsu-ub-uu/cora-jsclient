@@ -67,13 +67,13 @@ var CORA = (function(cora) {
 			return newView;
 		};
 
-		function addButton(text, onclickMethod, className) {
+		const addButton=function(text, onclickMethod, className) {
 			let button = createButton(text, onclickMethod, className);
 			view.childNodes[1].appendChild(button);
 			return button;
 		};
 
-		function createButton(text, onclickMethod, className) {
+		const createButton = function(text, onclickMethod, className) {
 			let button = document.createElement("input");
 			button.type = "button";
 			button.value = text;

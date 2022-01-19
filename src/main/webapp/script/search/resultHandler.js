@@ -97,7 +97,7 @@ var CORA = (function(cora) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getView = function() {
 			return view.getView();
 		};

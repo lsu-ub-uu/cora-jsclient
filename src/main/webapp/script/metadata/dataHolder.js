@@ -48,24 +48,27 @@ var CORA = (function(cora) {
 
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
 			let type = cMetadataElement.getData().attributes.type;
-			if (isTypeThatPossiblyHasAttributes(type)) {
-				addGroupParts(dataContainerPart, cMetadataElement);
+			if(isGroup(type) || isResourceLink(type) || isRecordLink(type)){
+				dataContainerPart.children = [];
+				possiblyAddAttributes(dataContainerPart, cMetadataElement, type);
 				return dataContainerPart;
+			}
+			if (isTypeThatPossiblyHasAttributes(type)) {
+				possiblyAddAttributes(dataContainerPart, cMetadataElement, type);
 			}
 			dataContainerPart.value = "";
 			return dataContainerPart;
 		};
 
 		const isTypeThatPossiblyHasAttributes = function(type) {
-			return isGroup(type) || isResourceLink(type) || isRecordLink(type);
+			return isGroup(type) || isResourceLink(type) || isRecordLink(type) || type=== "textVariable";
 		};
 
 		const isGroup = function(type) {
 			return type === "group";
 		};
 
-		const addGroupParts = function(dataContainerPart, cMetadataElement) {
-			dataContainerPart.children = [];
+		const possiblyAddAttributes = function(dataContainerPart, cMetadataElement, type) {
 			if (cMetadataElement.containsChildWithNameInData("attributeReferences")) {
 				dataContainerPart.attributes = createAttributesContainer(cMetadataElement);
 			}

@@ -271,7 +271,6 @@ var CORA = (function(cora) {
 
 		const validateTextVariable = function() {
 			let regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-//			console.log("value "+data.value+" regex: "+regEx+" "+new RegExp(regEx).test(data.value))
 			return new RegExp(regEx).test(data.value);
 		};
 

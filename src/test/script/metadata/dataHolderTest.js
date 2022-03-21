@@ -112,6 +112,24 @@ QUnit.test("testAddChildToGroupIdOneTextChild", function(assert) {
 	};
 	assert.stringifyEqual(dataHolder.getData(), expected);
 });
+QUnit.test("testAddChildToGroupIdOneTextChildWithAttribute", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChildWithAttribute");
+	let path = {};
+	dataHolder.addChild(path, "textVariableIdWithAttribute");
+	let expected = {
+	  "name": "groupIdOneTextChildWithAttribute",
+	  "children": [
+	    	{
+	      		"name": "textVariableIdWithAttribute",
+	      		"attributes": {
+	       		"trueFalse": "true"
+	      	},
+	      	"value": ""
+	   		}
+	 	]
+	};
+	assert.stringifyEqual(dataHolder.getData(), expected);
+});
 
 QUnit.test("testAddChildToGroupIdOneTextChildWrongNameInData", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
@@ -131,6 +149,21 @@ QUnit.test("testSetValueGroupIdOneTextChild", function(assert) {
 		children: [{
 			name: "textVariableId",
 			value: "A Value"
+		}]
+	};
+	assert.stringifyEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testSetValueGroupIdOneNumberChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneNumberChild");
+	dataHolder.addChild({}, "numVariableId");
+	dataHolder.setValue(createLinkedPathWithNameInData("numVariableId"), '4');
+
+	let expected = {
+		name: "groupIdOneNumberChild",
+		children: [{
+			name: "numVariableId",
+			value: "4"
 		}]
 	};
 	assert.stringifyEqual(dataHolder.getData(), expected);
@@ -1366,14 +1399,6 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildNoActionL
 				name: "linkedRecordId",
 				value: "writtenText"
 			}],
-			// actionLinks: {
-			// read: {
-			// requestMethod: "GET",
-			// rel: "read",
-			// url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-			// accept: "application/vnd.uub.record+json"
-			// }
-			// },
 			name: "type"
 		},
 		path: {
@@ -1524,11 +1549,6 @@ QUnit.test("testHandleMessageAddWrongPath", function(assert) {
 	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]}";
 
 	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
-//	assert.throws(function() {
-//		dataHolder.handleMsg({}, "root/textVariableId/add");
-//	},
-//		new Error(expectedErrorMessageStartsWith)
-//	);
 });
 
 QUnit.test("testHandleMessageSetValue", function(assert) {

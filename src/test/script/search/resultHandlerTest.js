@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2018 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,193 +19,179 @@
  */
 "use strict";
 
-QUnit.module("search/resultHandlerTest.js", {
-	beforeEach : function() {
-		var addedManagedGuiItem = [];
-		this.getAddedManagedGuiItem = function(number) {
-			return addedManagedGuiItem[number];
-		};
-		var addedToShowView = [];
-		this.getAddedToShowView = function(number) {
-			return addedToShowView[number];
-		};
-		this.dependencies = {
-			"resultHandlerViewFactory" : CORATEST.standardFactorySpy("resultHandlerViewSpy"),
-			"textProvider" : CORATEST.textProviderSpy(),
-			"recordGuiFactory" : CORATEST.standardFactorySpy("recordGuiSpy"),
-			"jsClient" : CORATEST.jsClientSpy(),
-			"recordHandlerFactory" : CORATEST.standardFactorySpy("recordHandlerSpy"),
-			"indexListHandlerFactory" : CORATEST.standardFactorySpy("indexListHandlerSpy")
-		};
-		this.spec = {
-			"dataList" : CORATEST.searchRecordList.dataList
-		};
-	},
-	afterEach : function() {
-	}
-});
-
-QUnit.test("testInit", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	assert.strictEqual(resultHandler.type, "resultHandler");
-});
-
-QUnit.test("testGetDependencies", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	assert.strictEqual(resultHandler.getDependencies(), this.dependencies);
-});
-
-QUnit.test("testGetSpec", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	assert.strictEqual(resultHandler.getSpec(), this.spec);
-});
-
-QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.resultHandlerViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.type, "resultHandlerViewSpy");
-});
-
-QUnit.test("testInitViewSpec", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var factoredViewSpec = this.dependencies.resultHandlerViewFactory.getSpec(0);
-	assert.strictEqual(factoredViewSpec.ofText, this.dependencies.textProvider
-			.getTranslation("theClient_resultListOfText"));
-	assert.strictEqual(factoredViewSpec.fromNo, "1");
-	assert.strictEqual(factoredViewSpec.toNo, "11");
-	assert.strictEqual(factoredViewSpec.totalNo, "11");
-	assert.strictEqual(factoredViewSpec.resultHandler, resultHandler);
-});
-
-QUnit.test("testInitViewCreatesRecordHandlerForEachResultItem", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-
-	var recordHandlerSpec = this.dependencies.recordHandlerFactory.getSpec(0);
-	assert.strictEqual(recordHandlerSpec.fetchLatestDataFromServer, "false");
-	assert.strictEqual(recordHandlerSpec.partOfList, "true");
-	assert.strictEqual(recordHandlerSpec.createNewRecord, "false");
-	assert.strictEqual(recordHandlerSpec.record, this.spec.dataList.data[0].record);
-	assert.strictEqual(recordHandlerSpec.jsClient, this.dependencies.jsClient);
-
-	var recordHandlerLastSpec = this.dependencies.recordHandlerFactory.getSpec(10);
-	assert.strictEqual(recordHandlerLastSpec.fetchLatestDataFromServer, "false");
-	assert.strictEqual(recordHandlerSpec.partOfList, "true");
-	assert.strictEqual(recordHandlerLastSpec.createNewRecord, "false");
-	assert.strictEqual(recordHandlerLastSpec.record, this.spec.dataList.data[10].record);
-	assert.strictEqual(recordHandlerLastSpec.jsClient, this.dependencies.jsClient);
-
-	assert.strictEqual(this.dependencies.recordHandlerFactory.getSpec(11), undefined);
-});
-
-QUnit.test("testInitViewAddsRecordHandlersListViewForEachResultItem", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.resultHandlerViewFactory.getFactored(0);
-
-	var recordHandler = this.dependencies.recordHandlerFactory.getFactored(0);
-	assert.strictEqual(factoredView.getAddedPresentation(0).presentation, recordHandler
-			.getManagedGuiItem().getListView());
-	assert.strictEqual(factoredView.getAddedPresentation(0).record,
-			this.spec.dataList.data[0].record);
+QUnit.module("search/resultHandlerTest.js", hooks => {
+	const test = QUnit.test;
+	let dependencies;
+	let spec;
+	let resultHandler;
+	hooks.beforeEach(() => {
+		setupDependencies();
+		setupSpec();
+		startResultHandler();
+	});
+	hooks.afterEach(() => {
+		//no after
+	});
 	
-	var last = 10;
+	const setupDependencies = function() {
+		dependencies = {
+			resultHandlerViewFactory: CORATEST.standardFactorySpy("resultHandlerViewSpy"),
+			textProvider: CORATEST.textProviderSpy(),
+			recordGuiFactory: CORATEST.standardFactorySpy("recordGuiSpy"),
+			jsClient: CORATEST.jsClientSpy(),
+			recordHandlerFactory: CORATEST.standardFactorySpy("recordHandlerSpy"),
+			indexListHandlerFactory: CORATEST.standardFactorySpy("indexListHandlerSpy")
+		};
+	};
+	
+	const setupSpec = function() {
+		spec = {
+			dataList: CORATEST.searchRecordList.dataList
+		};
+	};
 
-	var recordHandlerLast = this.dependencies.recordHandlerFactory.getFactored(last);
-	assert.strictEqual(factoredView.getAddedPresentation(last).presentation, recordHandlerLast
+	const startResultHandler = function() {
+		resultHandler = CORA.resultHandler(dependencies, spec);
+	};
+
+	test("testInit", function(assert) {
+		assert.strictEqual(resultHandler.type, "resultHandler");
+	});
+
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(resultHandler.getDependencies(), dependencies);
+	});
+
+	test("testGetSpec", function(assert) {
+		assert.strictEqual(resultHandler.getSpec(), spec);
+	});
+
+	test("testInitViewCreatedUsingFactory", function(assert) {
+		let factoredView = dependencies.resultHandlerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.type, "resultHandlerViewSpy");
+	});
+
+	test("testInitViewSpec", function(assert) {
+		let factoredViewSpec = dependencies.resultHandlerViewFactory.getSpec(0);
+		assert.strictEqual(factoredViewSpec.ofText, dependencies.textProvider
+			.getTranslation("theClient_resultListOfText"));
+		assert.strictEqual(factoredViewSpec.fromNo, "1");
+		assert.strictEqual(factoredViewSpec.toNo, "11");
+		assert.strictEqual(factoredViewSpec.totalNo, "11");
+		assert.strictEqual(factoredViewSpec.resultHandler, resultHandler);
+	});
+
+	test("testInitViewCreatesRecordHandlerForEachResultItem", function(assert) {
+		assertCorrectRecordHandlerSpecForResultNo(assert, 0);
+		assertCorrectRecordHandlerSpecForResultNo(assert, 10);
+		assert.strictEqual(dependencies.recordHandlerFactory.getSpec(11), undefined);
+	});
+
+	const assertCorrectRecordHandlerSpecForResultNo = function(assert, resultNo) {
+		let recordHandlerSpec = dependencies.recordHandlerFactory.getSpec(resultNo);
+		assert.strictEqual(recordHandlerSpec.fetchLatestDataFromServer, "false");
+		assert.strictEqual(recordHandlerSpec.partOfList, "true");
+		assert.strictEqual(recordHandlerSpec.createNewRecord, "false");
+		assert.strictEqual(recordHandlerSpec.record, spec.dataList.data[resultNo].record);
+		assert.strictEqual(recordHandlerSpec.jsClient, dependencies.jsClient);
+	};
+
+	test("testInitViewAddsRecordHandlersListViewForEachResultItem", function(assert) {
+		assertCorrectRecordHandlersListViewForResultItem(assert, 0);
+		assertCorrectRecordHandlersListViewForResultItem(assert, 10);
+		assert.strictEqual(dependencies.recordHandlerFactory.getSpec(11), undefined);
+	});
+
+	const assertCorrectRecordHandlersListViewForResultItem = function(assert, resultNo) {
+		let factoredView = dependencies.resultHandlerViewFactory.getFactored(0);
+		let recordHandler = dependencies.recordHandlerFactory.getFactored(resultNo);
+		assert.strictEqual(factoredView.getAddedPresentation(resultNo).presentation, recordHandler
 			.getManagedGuiItem().getListView());
-	assert.strictEqual(factoredView.getAddedPresentation(last).record,
-			this.spec.dataList.data[last].record);
+		assert.strictEqual(factoredView.getAddedPresentation(resultNo).record,
+			spec.dataList.data[resultNo].record);
 
-	assert.strictEqual(this.dependencies.recordHandlerFactory.getSpec(38), undefined);
-});
+	};
 
-QUnit.test("testOpenRecord", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var record = {
-			"actionLinks" : {
-				"read" : "thisIsAFakedRecordLink"
+	test("testOpenRecord", function(assert) {
+		let record = {
+			actionLinks: {
+				read: "thisIsAFakedRecordLink"
 			}
 		};
-	var openInfo = {
-		"record" : record,
-		"loadInBackground" : "true"
-	};
-	resultHandler.openRecord(openInfo);
-	var jsClient = this.dependencies.jsClient;
-	var expectedOpenInfo = {
-		"readLink" : "thisIsAFakedRecordLink",
-		"loadInBackground" : "false"
-	};
-	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
-	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, openInfo.loadInBackground);
+		let openInfo = {
+			record: record,
+			loadInBackground: "true"
+		};
+		resultHandler.openRecord(openInfo);
+		let jsClient = dependencies.jsClient;
+		let expectedOpenInfo = {
+			readLink: "thisIsAFakedRecordLink",
+			loadInBackground: "false"
+		};
+		assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+		assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, openInfo.loadInBackground);
+	});
+
+	test("testOpenRecordTriggerWhenResultIsChoosen", function(assert) {
+		let choosenOpenInfo;
+		function choosen(openInfoIn) {
+			choosenOpenInfo = openInfoIn;
+		}
+		spec.triggerWhenResultIsChoosen = choosen;
+		let record = {};
+		let openInfo = {
+			record: record,
+			loadInBackground: "false"
+		};
+		resultHandler.openRecord(openInfo);
+		assert.strictEqual(dependencies.recordHandlerFactory.getSpec(38), undefined);
+		assert.strictEqual(choosenOpenInfo, openInfo);
+	});
+
+	test("testGetViewIsPassedOnToView", function(assert) {
+		let factoredView = dependencies.resultHandlerViewFactory.getFactored(0);
+
+		assert.strictEqual(resultHandler.getView(), factoredView.getView());
+	});
+
+	test("testIndexListHandlerSpec", function(assert) {
+		resultHandler.indexDataList();
+
+		let factoredIndexListHandler = dependencies.indexListHandlerFactory.getFactored(0);
+		assert.stringifyEqual(factoredIndexListHandler.getSpec().dataList, spec.dataList);
+	});
+
+	test("testIndexListHandlerIndexDataListWasCalled", function(assert) {
+		resultHandler.indexDataList();
+
+		let factoredIndexListHandler = dependencies.indexListHandlerFactory.getFactored(0);
+		assert.stringifyEqual(factoredIndexListHandler.getIndexDataListWasCalled(), true);
+	});
+
+
+	test("testResultListWasSentToIndexing", function(assert) {
+		resultHandler.indexDataList();
+		let factoredIndexListHandler = dependencies.indexListHandlerFactory.getFactored(0);
+
+		assert.stringifyEqual(factoredIndexListHandler.getRecordInIndexedList(0), spec.dataList.data[0]);
+		assert.stringifyEqual(factoredIndexListHandler.getRecordInIndexedList(37), spec.dataList.data[37]);
+	});
+
+	test("testIndexButtonIsAddedToViewWhenIndexLinkExists", function(assert) {
+		let factoredView = dependencies.resultHandlerViewFactory.getFactored(0);
+		let addedButton = factoredView.getAddedButton();
+
+		assert.strictEqual(addedButton.text, "INDEX");
+		assert.strictEqual(addedButton.onclickMethod, resultHandler.indexDataList);
+		assert.strictEqual(addedButton.className, "indexButton");
+	});
+
+	test("testIndexButtonNotAddedToViewWhenNoIndexLinkExists", function(assert) {
+		setupDependencies();
+		spec.dataList = CORATEST.searchRecordListOneRecordWithNoIndexAction.dataList;
+		startResultHandler();
+
+		let factoredView = dependencies.resultHandlerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.getAddedButton(), undefined);
+	});
 });
-
-QUnit.test("testOpenRecordTriggerWhenResultIsChoosen", function(assert) {
-	var choosenOpenInfo;
-	function choosen(openInfoIn) {
-		choosenOpenInfo = openInfoIn;
-	}
-	this.spec.triggerWhenResultIsChoosen = choosen;
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var record = {};
-	var openInfo = {
-		"record" : record,
-		"loadInBackground" : "false"
-	};
-	resultHandler.openRecord(openInfo);
-	assert.strictEqual(this.dependencies.recordHandlerFactory.getSpec(38), undefined);
-	assert.strictEqual(choosenOpenInfo, openInfo);
-});
-
-QUnit.test("testGetViewIsPassedOnToView", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.resultHandlerViewFactory.getFactored(0);
-
-	assert.strictEqual(resultHandler.getView(), factoredView.getView());
-});
-
-QUnit.test("testIndexListHandlerSpec", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	resultHandler.indexDataList();
-
-	var factoredIndexListHandler = this.dependencies.indexListHandlerFactory.getFactored(0);
-	assert.stringifyEqual(factoredIndexListHandler.getSpec().dataList, this.spec.dataList);
-});
-
-QUnit.test("testIndexListHandlerIndexDataListWasCalled", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	resultHandler.indexDataList();
-
-	var factoredIndexListHandler = this.dependencies.indexListHandlerFactory.getFactored(0);
-	assert.stringifyEqual(factoredIndexListHandler.getIndexDataListWasCalled(), true);
-});
-
-
-QUnit.test("tesResultListWasSentToIndexing", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-	resultHandler.indexDataList();
-	var factoredIndexListHandler = this.dependencies.indexListHandlerFactory.getFactored(0);
-
-	assert.stringifyEqual(factoredIndexListHandler.getRecordInIndexedList(0), this.spec.dataList.data[0]);
-	assert.stringifyEqual(factoredIndexListHandler.getRecordInIndexedList(37), this.spec.dataList.data[37]);
-
-});
-
-QUnit.test("testIndexButtonIsAddedToViewWhenIndexLinkExists", function(assert) {
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-
-	var factoredView = this.dependencies.resultHandlerViewFactory.getFactored(0);
-
-	assert.strictEqual(factoredView.getAddedButton().text, "INDEX");
-	assert.strictEqual(factoredView.getAddedButton().onclickMethod, resultHandler.indexDataList);
-	assert.strictEqual(factoredView.getAddedButton().className, "indexButton");
-});
-
-QUnit.test("testIndexButtonNotAddedToViewWhenNoIndexLinkExists", function(assert) {
-	this.spec.dataList = CORATEST.searchRecordListOneRecordWithNoIndexAction.dataList;
-	var resultHandler = CORA.resultHandler(this.dependencies, this.spec);
-
-	var factoredView = this.dependencies.resultHandlerViewFactory.getFactored(0);
-
-	assert.strictEqual(factoredView.getAddedButton(), undefined);
-});
-

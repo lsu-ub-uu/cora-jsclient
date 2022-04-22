@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2019, 2021 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,182 +19,185 @@
  */
 "use strict";
 
-QUnit.module("search/searchHandlerViewTest.js", {
-	beforeEach : function() {
-		this.dependencies = {
-			workItemViewFactory : CORATEST.standardFactorySpy("workItemViewSpy"),
-			messageHolderFactory : CORATEST.standardFactorySpy("messageHolderSpy"),
-			busyFactory : CORATEST.standardFactorySpy("busySpy"),
-			textProvider : CORATEST.textProviderSpy()
+QUnit.module("search/searchHandlerViewTest.js", hooks => {
+	const test = QUnit.test;
+	let dependencies;
+	let spec;
+	let searchHandlerView;
+	let searchResultHolder;
+	let searchFormHolder;
+	hooks.beforeEach(() => {
+		setupDependencies();
+		setupSpec();
+		startResultHandler();
+	});
+	hooks.afterEach(() => {
+		//no after
+	});
+
+	const setupDependencies = function() {
+		dependencies = {
+			workItemViewFactory: CORATEST.standardFactorySpy("workItemViewSpy"),
+			messageHolderFactory: CORATEST.standardFactorySpy("messageHolderSpy"),
+			busyFactory: CORATEST.standardFactorySpy("busySpy"),
+			textProvider: CORATEST.textProviderSpy()
 		};
-		this.spec = {
-			searchMethod : function() {
+	};
+
+	const setupSpec = function() {
+		spec = {
+			searchMethod: function() {
+				//nothing
 			}
 		}
-	},
-	afterEach : function() {
-	}
-});
+	};
 
-QUnit.test("testInit", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(searchHandlerView.type, "searchHandlerView");
-});
+	const startResultHandler = function() {
+		searchHandlerView = CORA.searchHandlerView(dependencies, spec);
+		let factoredWorkItemView = dependencies.workItemViewFactory.getFactored(0);
+		searchFormHolder = factoredWorkItemView.getViewsAddedToView(0);
+		searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
+	};
 
-QUnit.test("testGetDependencies", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(searchHandlerView.getDependencies(), this.dependencies);
-});
+	test("testInit", function(assert) {
+		assert.strictEqual(searchHandlerView.type, "searchHandlerView");
+	});
 
-QUnit.test("testGetSpec", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(searchHandlerView.getSpec(), this.spec);
-});
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(searchHandlerView.getDependencies(), dependencies);
+	});
 
-QUnit.test("testInitFactoredWorkItemViewSpec", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.workItemViewFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.extraClassName, "search");
-});
+	test("testGetSpec", function(assert) {
+		assert.strictEqual(searchHandlerView.getSpec(), spec);
+	});
 
-QUnit.test("testInitViewIsFactoredWorkItemView", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0).getView();
-	var view = searchHandlerView.getView();
+	test("testInitFactoredWorkItemViewSpec", function(assert) {
+		let factoredSpec = dependencies.workItemViewFactory.getSpec(0);
+		assert.strictEqual(factoredSpec.extraClassName, "search");
+	});
 
-	assert.strictEqual(view, factoredWorkItemView);
-});
+	test("testInitViewIsFactoredWorkItemView", function(assert) {
+		let factoredWorkItemView = dependencies.workItemViewFactory.getFactored(0).getView();
+		let view = searchHandlerView.getView();
 
-QUnit.test("testInitBusyIsFactoredAtInit", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredBusy = this.dependencies.busyFactory.getFactored(0);
-	assert.notStrictEqual(factoredBusy, undefined);
-	assert.strictEqual(factoredBusy.getShowIsCalledNoOfTimes(), 1);
-});
+		assert.strictEqual(view, factoredWorkItemView);
+	});
 
-QUnit.test("testSetSearchRunning", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	searchHandlerView.setSearchRunning();
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	var factoredBusy = this.dependencies.busyFactory.getFactored(0);
-	assert.strictEqual(factoredBusy.getShowIsCalledNoOfTimes(), 1);
-	assert.strictEqual(searchResultHolder.childNodes[0], factoredBusy.getView());
-});
+	test("testInitBusyIsFactoredAtInit", function(assert) {
+		let factoredBusy = dependencies.busyFactory.getFactored(0);
+		assert.notStrictEqual(factoredBusy, undefined);
+		assert.strictEqual(factoredBusy.getShowIsCalledNoOfTimes(), 1);
+	});
 
-QUnit.test("testSetSearchRunningWithPreviousResult", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	
-	var aResult = CORA.gui.createSpanWithClassName("aResult");
-	searchHandlerView.addSearchResultToSearchResultHolder(aResult);
-	
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	assert.strictEqual(searchResultHolder.childNodes.length, 1);
-	assert.strictEqual(searchResultHolder.firstChild, aResult);
-	
-	searchHandlerView.setSearchRunning();
-	var factoredBusy = this.dependencies.busyFactory.getFactored(0);
-	assert.strictEqual(searchResultHolder.childNodes[0], factoredBusy.getView());
-});
+	test("testSetSearchRunning", function(assert) {
+		searchHandlerView.setSearchRunning();
+		let factoredBusy = dependencies.busyFactory.getFactored(0);
+		assert.strictEqual(factoredBusy.getShowIsCalledNoOfTimes(), 1);
+		assert.strictEqual(searchResultHolder.childNodes[0], factoredBusy.getView());
+	});
 
-QUnit.test("testInitSearchFormHolderCreated", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchFormHolder = factoredWorkItemView.getViewsAddedToView(0);
-	assert.strictEqual(searchFormHolder.nodeName, "SPAN");
-	assert.strictEqual(searchFormHolder.className, "searchFormHolder");
-});
+	test("testSetSearchRunningWithPreviousResult", function(assert) {
+		let aResult = CORA.gui.createSpanWithClassName("aResult");
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
 
-QUnit.test("testInitButtonViewCreatedAndAddedToFormHolder", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchFormHolder = factoredWorkItemView.getViewsAddedToView(0);
-	var buttonView = searchFormHolder.lastChild;
-	assert.strictEqual(buttonView.nodeName, "SPAN");
-	assert.strictEqual(buttonView.className, "buttonView");
-});
+		assert.strictEqual(searchResultHolder.childNodes.length, 1);
+		assert.strictEqual(searchResultHolder.firstChild, aResult);
 
-QUnit.test("testInitSearchButtonCreatedAndAddedButtonView", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchFormHolder = factoredWorkItemView.getViewsAddedToView(0);
-	var buttonView = searchFormHolder.lastChild;
-	var searchButton = buttonView.lastChild;
-	assert.strictEqual(searchButton.nodeName, "INPUT");
-	assert.strictEqual(searchButton.type, "button");
-	assert.strictEqual(searchButton.value, this.dependencies.textProvider
+		searchHandlerView.setSearchRunning();
+		let factoredBusy = dependencies.busyFactory.getFactored(0);
+		assert.strictEqual(searchResultHolder.childNodes[0], factoredBusy.getView());
+	});
+
+	test("testInitSearchFormHolderCreated", function(assert) {
+		assert.strictEqual(searchFormHolder.nodeName, "SPAN");
+		assert.strictEqual(searchFormHolder.className, "searchFormHolder");
+	});
+
+	test("testInitButtonViewCreatedAndAddedToFormHolder", function(assert) {
+		let buttonView = searchFormHolder.lastChild;
+		assert.strictEqual(buttonView.nodeName, "SPAN");
+		assert.strictEqual(buttonView.className, "buttonView");
+	});
+
+	test("testInitSearchButtonCreatedAndAddedButtonView", function(assert) {
+		let buttonView = searchFormHolder.lastChild;
+		let searchButton = buttonView.lastChild;
+		assert.strictEqual(searchButton.nodeName, "INPUT");
+		assert.strictEqual(searchButton.type, "button");
+		assert.strictEqual(searchButton.value, dependencies.textProvider
 			.getTranslation("theClient_searchButtonText"));
-	assert.strictEqual(searchButton.className, "searchButton");
+		assert.strictEqual(searchButton.className, "searchButton");
+		assert.strictEqual(searchButton.modelObject.getSpec().action.method, spec.searchMethod);
+	});
 
-	assert.strictEqual(searchButton.modelObject.getSpec().action.method, this.spec.searchMethod);
+	test("testInitResultViewCreatedAndAddedToWorkItemView", function(assert) {
+		assert.strictEqual(searchResultHolder.nodeName, "SPAN");
+		assert.strictEqual(searchResultHolder.className, "searchResultHolder");
+		assert.strictEqual(searchResultHolder.children.length, 0);
+	});
 
-});
+	test("testAddPresentationToSearchFormHolder", function(assert) {
+		assertSearchFormHolderHasLength(assert, 1);
+		let aFormPresentation = CORA.gui.createSpanWithClassName("some");
 
-QUnit.test("testInitResultViewCreatedAndAddedToWorkItemView", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	assert.strictEqual(searchResultHolder.nodeName, "SPAN");
-	assert.strictEqual(searchResultHolder.className, "searchResultHolder");
-	assert.strictEqual(searchResultHolder.children.length, 0);
-});
+		searchHandlerView.addPresentationToSearchFormHolder(aFormPresentation);
 
-QUnit.test("testAddPresentationToSearchFormHolder", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchFormHolder = factoredWorkItemView.getViewsAddedToView(0);
-	assert.strictEqual(searchFormHolder.childNodes.length, 1);
+		assertSearchFormHolderHasLength(assert, 2);
+		assert.strictEqual(searchFormHolder.firstChild, aFormPresentation);
+	});
 
-	var aPresentation = CORA.gui.createSpanWithClassName("some");
-	searchHandlerView.addPresentationToSearchFormHolder(aPresentation);
-	assert.strictEqual(searchFormHolder.childNodes.length, 2);
-	assert.strictEqual(searchFormHolder.firstChild, aPresentation);
-});
+	const assertSearchFormHolderHasLength = function(assert, length) {
+		assert.strictEqual(searchFormHolder.childNodes.length, length);
+	};
 
-QUnit.test("testAddSearchResultToSearchResultHolder", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	assert.strictEqual(searchResultHolder.childNodes.length, 0);
+	test("testAddSearchResultToSearchResultHolder", function(assert) {
+		let aResult = CORA.gui.createSpanWithClassName("some");
+		assertSearchResultHolderHasLength(assert, 0);
 
-	var aResult = CORA.gui.createSpanWithClassName("some");
-	searchHandlerView.addSearchResultToSearchResultHolder(aResult);
-	assert.strictEqual(searchResultHolder.childNodes.length, 1);
-	assert.strictEqual(searchResultHolder.firstChild, aResult);
-});
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
 
-QUnit.test("testClearResultHolder", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	assert.strictEqual(searchResultHolder.childNodes.length, 0);
-	
-	var aResult = CORA.gui.createSpanWithClassName("some");
-	searchHandlerView.addSearchResultToSearchResultHolder(aResult);
-	assert.strictEqual(searchResultHolder.childNodes.length, 1);
-	assert.strictEqual(searchResultHolder.firstChild, aResult);
-	
-	searchHandlerView.clearResultHolder();
-	assert.strictEqual(searchResultHolder.childNodes.length, 0);
-});
+		assertSearchResultHolderHasLength(assert, 1);
+		assert.strictEqual(searchResultHolder.firstChild, aResult);
+	});
 
-QUnit.test("testClearResultHolderTwoResults", function(assert) {
-	var searchHandlerView = CORA.searchHandlerView(this.dependencies, this.spec);
-	var factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
-	var searchResultHolder = factoredWorkItemView.getViewsAddedToView(1);
-	assert.strictEqual(searchResultHolder.childNodes.length, 0);
-	
-	var aResult = CORA.gui.createSpanWithClassName("some");
-	searchHandlerView.addSearchResultToSearchResultHolder(aResult);
-	assert.strictEqual(searchResultHolder.childNodes.length, 1);
-	assert.strictEqual(searchResultHolder.firstChild, aResult);
-	
-	var aResult2 = CORA.gui.createSpanWithClassName("other");
-	searchHandlerView.addSearchResultToSearchResultHolder(aResult2);
-	assert.strictEqual(searchResultHolder.childNodes.length, 2);
-	assert.strictEqual(searchResultHolder.childNodes[1], aResult2);
-	
-	searchHandlerView.clearResultHolder();
-	assert.strictEqual(searchResultHolder.childNodes.length, 0);
+	test("testAddTwoSearchResultToSearchResultHolder", function(assert) {
+		let aResult = CORA.gui.createSpanWithClassName("some");
+		let aResult2 = CORA.gui.createSpanWithClassName("other");
+		assertSearchResultHolderHasLength(assert, 0);
+
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
+
+		assertSearchResultHolderHasLength(assert, 1);
+		assert.strictEqual(searchResultHolder.firstChild, aResult);
+
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult2);
+
+		assertSearchResultHolderHasLength(assert, 2);
+		assert.strictEqual(searchResultHolder.childNodes[1], aResult2);
+	});
+
+	const assertSearchResultHolderHasLength = function(assert, length) {
+		assert.strictEqual(searchResultHolder.childNodes.length, length);
+	};
+
+	test("testClearResultHolder", function(assert) {
+		let aResult = CORA.gui.createSpanWithClassName("some");
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
+
+		searchHandlerView.clearResultHolder();
+
+		assertSearchResultHolderHasLength(assert, 0);
+	});
+
+	test("testClearResultHolderTwoResults", function(assert) {
+		let aResult = CORA.gui.createSpanWithClassName("some");
+		let aResult2 = CORA.gui.createSpanWithClassName("other");
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
+		searchHandlerView.addSearchResultToSearchResultHolder(aResult2);
+		assertSearchResultHolderHasLength(assert, 2);
+
+		searchHandlerView.clearResultHolder();
+
+		assertSearchResultHolderHasLength(assert, 0);
+	});
 });

@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 		let data = CORA.coraData(spec.data);
 
 		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
-		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		let dataChildrenForMetadata;
 		let attributes;
 
@@ -36,8 +36,8 @@ var CORA = (function(cora) {
 		};
 
 		const initialize = function() {
-			let nameInData = getNameInDataForMetadataId(ref);
-			attributes = getAttributesForMetadataId(ref);
+			let nameInData = getNameInDataForMetadataId(metadataId);
+			attributes = getAttributesForMetadataId(metadataId);
 			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
 			initializeChild();
 		};
@@ -233,7 +233,7 @@ var CORA = (function(cora) {
 
 		const initializeForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
 			let initializerSpec = {
-				"metadataId": ref,
+				"metadataId": metadataId,
 				"path": spec.path,
 				"data": dataChild,
 				"repeatId": repeatId,
@@ -255,7 +255,7 @@ var CORA = (function(cora) {
 		const createNextLevelPath = function() {
 			let pathSpec = {
 				"metadataProvider": dependencies.metadataProvider,
-				"metadataIdToAdd": ref,
+				"metadataIdToAdd": metadataId,
 				"repeatId": spec.repeatId,
 				"parentPath": spec.path
 			};

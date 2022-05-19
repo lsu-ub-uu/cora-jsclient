@@ -188,15 +188,15 @@ var CORA = (function(cora) {
 			};
 		};
 
-		const findContainerByPathInCurrentLevel = function(dataContainers, path) {
-			let nameInData = path.getFirstAtomicValueByNameInData("nameInData");
+		const findContainerByPathInCurrentLevel = function(dataContainers, cPath) {
+			let nameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
 			let attributes;
 			let repeatId;
-			if (path.containsChildWithNameInData("attributes")) {
-				attributes = path.getFirstChildByNameInData("attributes");
+			if (cPath.containsChildWithNameInData("attributes")) {
+				attributes = cPath.getFirstChildByNameInData("attributes");
 			}
-			if (path.containsChildWithNameInData("repeatId")) {
-				repeatId = path.getFirstAtomicValueByNameInData("repeatId");
+			if (cPath.containsChildWithNameInData("repeatId")) {
+				repeatId = cPath.getFirstAtomicValueByNameInData("repeatId");
 			}
 			let cdataContainers = CORA.coraData(dataContainers);
 

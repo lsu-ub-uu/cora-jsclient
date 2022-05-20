@@ -49,17 +49,20 @@ var CORA = (function(cora) {
 		}
 
 		function convertAndAddPathToMsg(path, msgPart) {
-			var cPath = CORA.coraData(path);
 			var extendedMsgPart = msgPart + "/";
-			if (pathHasAtLeastOneLevel(cPath)) {
-				extendedMsgPart += recursivelyConvertPathToMsg(cPath);
+			//			if (pathHasAtLeastOneLevel(cPath)) {
+			//			if (path.length > 0) {
+			//				extendedMsgPart += recursivelyConvertPathToMsg(cPath);
+			//			}
+			for (let pathPart in path) {
+				extendedMsgPart += path[pathPart] + "/";
 			}
 			return extendedMsgPart;
 		}
 
 		function pathHasAtLeastOneLevel(cPath) {
 			return cPath.getData().children !== undefined
-					&& cPath.containsChildWithNameInData("nameInData");
+				&& cPath.containsChildWithNameInData("nameInData");
 		}
 
 		function recursivelyConvertPathToMsg(cPath) {
@@ -70,15 +73,15 @@ var CORA = (function(cora) {
 
 			if (pathHasMoreLevels(cPath)) {
 				return convertAndAddPathToMsg(cPath.getFirstChildByNameInData("linkedPath"),
-						msgPart);
+					msgPart);
 			}
 			msgPart += "/";
 			return msgPart;
 		}
 
-		function pathHasMoreLevels(cPath) {
-			return cPath.containsChildWithNameInData("linkedPath");
-		}
+//		function pathHasMoreLevels(cPath) {
+//			return cPath.containsChildWithNameInData("linkedPath");
+//		}
 
 		function convertPathAttributes(cPath) {
 			var msgAttribPart = "";
@@ -87,9 +90,9 @@ var CORA = (function(cora) {
 				attributes.forEach(function(attribute) {
 					var cAttribute = CORA.coraData(attribute);
 					msgAttribPart += '#'
-							+ cAttribute.getFirstAtomicValueByNameInData("attributeName");
+						+ cAttribute.getFirstAtomicValueByNameInData("attributeName");
 					msgAttribPart += ':'
-							+ cAttribute.getFirstAtomicValueByNameInData("attributeValue");
+						+ cAttribute.getFirstAtomicValueByNameInData("attributeValue");
 				});
 			}
 			return msgAttribPart;
@@ -107,12 +110,12 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "pubSub",
-			subscribe : subscribe,
-			unsubscribe : unsubscribe,
-			unsubscribePathBelow : unsubscribePathBelow,
-			publish : publish,
-			convertPathToMsg : convertPathToMsg
+			"type": "pubSub",
+			subscribe: subscribe,
+			unsubscribe: unsubscribe,
+			unsubscribePathBelow: unsubscribePathBelow,
+			publish: publish,
+			convertPathToMsg: convertPathToMsg
 		});
 	};
 	return cora;

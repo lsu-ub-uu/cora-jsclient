@@ -36,6 +36,7 @@ var CORA = (function(cora) {
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData('nameInData');
 			let dataContainerPart = {
 				name : nameInData
+//				id : id,
 			};
 
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
@@ -100,7 +101,7 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToAddAndSetValueAndRemoveAndMoveMessagesForAllPaths = function() {
-			pubSub.subscribe("*", {}, undefined, handleMsg);
+			pubSub.subscribe("*", [], undefined, handleMsg);
 		};
 
 		const handleMsg = function(dataFromMsg, msg) {

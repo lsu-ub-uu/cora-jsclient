@@ -263,7 +263,7 @@ QUnit.test("testShowData", function(assert) {
 	this.answerCall(0);
 	let data = {
 		data: "<span>A new value</span>",
-		path: {}
+		path: []
 	};
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 	factoredRecordGui.dataHolder.setData(data);
@@ -276,9 +276,9 @@ QUnit.test("testShowData", function(assert) {
 	let firstChild = messageHolder.childNodes[0];
 	assert.strictEqual(firstChild.className, "message info");
 	let message = firstChild.childNodes[1];
-	assert.strictEqual(message.innerHTML, '{\"data\":\"&lt;span&gt;A new value&lt;/span&gt;\",\"path\":{}}');
+	assert.strictEqual(message.innerHTML, '{\"data\":\"&lt;span&gt;A new value&lt;/span&gt;\",\"path\":[]}');
 	var messageText = message.childNodes[0];
-	assert.strictEqual(messageText.textContent, '{\"data\":\"<span>A new value</span>\",\"path\":{}}');
+	assert.strictEqual(messageText.textContent, '{\"data\":\"<span>A new value</span>\",\"path\":[]}');
 
 });
 
@@ -360,7 +360,7 @@ QUnit.test("testInitSubscriptions",
 
 		let firstSubscription = subscriptions[0];
 		assert.strictEqual(firstSubscription.type, "*");
-		assert.deepEqual(firstSubscription.path, {});
+		assert.deepEqual(firstSubscription.path, []);
 		assert.ok(firstSubscription.functionToCall === recordHandler.handleMsg);
 	});
 
@@ -370,7 +370,7 @@ QUnit.test("testHandleMessage", function(assert) {
 
 	let data = {
 		data: "A new value",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -378,7 +378,7 @@ QUnit.test("testHandleMessage", function(assert) {
 
 	let data1 = {
 		data: "",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -398,7 +398,7 @@ QUnit.test("testHandleMessageSetValueSetsDataChanged", function(assert) {
 
 	let data = {
 		data: "A new value",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -406,7 +406,7 @@ QUnit.test("testHandleMessageSetValueSetsDataChanged", function(assert) {
 
 	let data1 = {
 		data: "",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 
@@ -484,7 +484,7 @@ QUnit.test("testUpdateThroughPubSubCall", function(assert) {
 
 	let data = {
 		data: "",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data, "updateRecord");
 
@@ -509,12 +509,12 @@ QUnit.test("testUpdateDataIsChanged", function(assert) {
 
 	let data1 = {
 		data: "",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data1, "initComplete");
 	let data = {
 		data: "A new value",
-		path: {}
+		path: []
 	};
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
@@ -1345,7 +1345,7 @@ QUnit.test("testPublishMessageOnCallMethodAfterShowWorkView", function(assert) {
 	assert.deepEqual(messages.length, 1);
 	let firstMessage = messages[0];
 	assert.strictEqual(firstMessage.type, "viewJustMadeVisible");
-	assert.stringifyEqual(firstMessage.message.path, {});
+	assert.stringifyEqual(firstMessage.message.path, []);
 	assert.strictEqual(firstMessage.message.data, "");
 });
 

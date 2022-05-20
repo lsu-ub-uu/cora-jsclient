@@ -111,7 +111,7 @@ QUnit.test("testSetValue", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
 		"data" : "a Value",
-		"path" : {}
+		"path" : []
 	};
 	jsBookkeeper.setValue(data);
 	let messages = this.pubSub.getMessages();
@@ -120,7 +120,7 @@ QUnit.test("testSetValue", function(assert) {
 		"type" : "setValue",
 		"message" : {
 			"data" : "a Value",
-			"path" : {}
+			"path" : []
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -133,7 +133,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
-			"path" : {},
+			"path" : [],
 			"childReference" : childReferenceTextVariableId,
 			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
@@ -243,29 +243,7 @@ QUnit.test("testAddRepeating", function(assert) {
 	
 	let data = {
 		"metadataId" : "textVar",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			} ]
-		},
+		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
 		"childReference" : {
 			"name" : "childReference",
 			"repeatId" : "1",
@@ -369,29 +347,7 @@ QUnit.test("testAddBefore", function(assert) {
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 		"metadataId" : "textVar",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			} ]
-		},
+		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
 		"childReference" : {
 			"name" : "childReference",
 			"repeatId" : "1",
@@ -415,41 +371,11 @@ QUnit.test("testAddBefore", function(assert) {
 				"value" : "3"
 			} ]
 		},
-		addBeforePath : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "textVar"
-				}, {
-					"name" : "repeatId",
-					"value" : "one"
-				}
-				]
-			} ]
-		}
+		addBeforePath : ["textVarRepeat1to3InGroupOneAttribute.1", "textVar.one"]
 	};
+	
 	jsBookkeeper.addBefore(data);
+	
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "textVar");
 	assert.strictEqual(factoredSpec.path, data.path);

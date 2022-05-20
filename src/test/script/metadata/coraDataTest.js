@@ -211,7 +211,26 @@ QUnit.test("testContainsChildWithNameInDataAndAttribute", function(assert) {
 	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
 });
+function createAttributes() {
+	return {
+		name: "attributes",
+		children: []
+	};
+}
 
+function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValue, repeatId) {
+	return {
+		name: "attribute",
+		repeatId: repeatId || "1",
+		children: [{
+			name: "attributeName",
+			value: attributeName
+		}, {
+			name: "attributeValue",
+			value: attributeValue
+		}]
+	};
+}
 QUnit.test("testContainsChildWithNameInDataAndAttributeWrongAttributeName", function(assert) {
 	var attributes = createAttributes();
 	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",

@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataValidator = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
-		let topLevelPath = {};
+		let topLevelPath = [];
 		let topLevelData = spec.data;
 		let metadataProvider = dependencies.metadataProvider;
 		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;

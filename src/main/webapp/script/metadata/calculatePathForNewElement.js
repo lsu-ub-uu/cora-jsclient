@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 	cora.calculatePathForNewElement = function(spec) {
 		var metadataProvider = spec.metadataProvider;
 		var cMetadataElementToAdd = getMetadataById(spec.metadataIdToAdd);
+		var metadataId = spec.metadataIdToAdd;
 		var repeatId = spec.repeatId;
 		var nameInData = cMetadataElementToAdd.getFirstAtomicValueByNameInData("nameInData");
 
@@ -43,29 +44,32 @@ var CORA = (function(cora) {
 		}
 
 		function parentPathPointsToTopLevel() {
-			return spec.parentPath.children === undefined;
+//			return spec.parentPath.children === undefined;
+			return spec.parentPath.length == 0;
 		}
 
 		function createPathForThisLevel() {
 			var path = createLinkedPath();
 			possiblyAddRepeatId(path);
-			possiblyAddAttributes(path);
+//			possiblyAddAttributes(path);
 			return path;
 		}
 
 		function createLinkedPath() {
-			return {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : nameInData
-				} ]
-			};
+//			return {
+//				"name" : "linkedPath",
+//				"children" : [ {
+//					"name" : "nameInData",
+//					"value" : nameInData
+//				} ]
+//			};
+			return [metadataId];
 		}
 
 		function possiblyAddRepeatId(path) {
 			if (pathShouldHaveRepeatId()) {
-				addRepeatIdToPath(path);
+//				addRepeatIdToPath(path);
+				path.push(path.pop()+"."+repeatId);
 			}
 		}
 
@@ -75,8 +79,8 @@ var CORA = (function(cora) {
 
 		function addRepeatIdToPath(path) {
 			path.children.push({
-				"name" : "repeatId",
-				"value" : repeatId
+				name : "repeatId",
+				value : repeatId
 			});
 		}
 
@@ -97,7 +101,11 @@ var CORA = (function(cora) {
 		function addPathForThisLevelToParentPath() {
 			var parentPathCopy = copyPath(spec.parentPath);
 			var childPath = createPathForThisLevel();
-			return addChildPathToPath(parentPathCopy, childPath);
+//			var x = [];
+//			x.push
+//			return addChildPathToPath(parentPathCopy, childPath);
+			parentPathCopy.push(childPath[0]);
+			return parentPathCopy;
 		}
 
 		function addChildPathToPath(parentPath, childPath) {

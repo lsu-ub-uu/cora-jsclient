@@ -71,7 +71,7 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 	assert.stringifyEqual(spec.childReference, childReference);
 	assert.deepEqual(spec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 
-	assert.deepEqual(spec.path, {});
+	assert.deepEqual(spec.path, []);
 	assert.deepEqual(spec.data, this.spec.data);
 });
 
@@ -96,7 +96,7 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactorWhenTwoChildren", functio
 	let childReference = childReferences.children[0];
 	assert.stringifyEqual(spec.childReference, childReference);
 
-	assert.deepEqual(spec.path, {});
+	assert.deepEqual(spec.path, []);
 	assert.deepEqual(spec.data, this.spec.data);
 
 	let spec2 = this.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
@@ -104,7 +104,7 @@ QUnit.test("testCorrectSpecSentToChildIntitilizerFactorWhenTwoChildren", functio
 	let childReference2 = childReferences.children[1];
 	assert.stringifyEqual(spec2.childReference, childReference2);
 
-	assert.deepEqual(spec2.path, {});
+	assert.deepEqual(spec2.path, []);
 	assert.deepEqual(spec2.data, this.spec.data);
 });
 
@@ -115,9 +115,9 @@ QUnit.test("testPubSubMessages", function(assert) {
 
 	assert.equal(messages.length, 2);
 	assert.deepEqual(JSON.stringify(messages[0]),
-		'{"type":"newElementsAdded","message":{"data":"","path":{}}}');
+		'{"type":"newElementsAdded","message":{"data":"","path":[]}}');
 	assert.deepEqual(JSON.stringify(messages[1]),
-		'{"type":"initComplete","message":{"data":"","path":{}}}');
+		'{"type":"initComplete","message":{"data":"","path":[]}}');
 });
 
 QUnit.test("testRecordPartPermissionCalculatorCallsCorrectly", function(assert) {  
@@ -147,7 +147,7 @@ QUnit.test("testChildIntializerIsFactoredCorrectlyWhenPermissionMissingForOneChi
 	let childReference2 = childReferences.children[1];
 	assert.stringifyEqual(spec.childReference, childReference2);
 
-	assert.deepEqual(spec.path, {});
+	assert.deepEqual(spec.path, []);
 	assert.deepEqual(spec.data, this.spec.data);
 	
 	let spec2 = this.metadataChildAndRepeatInitializerFactory.getChildSpec(1);

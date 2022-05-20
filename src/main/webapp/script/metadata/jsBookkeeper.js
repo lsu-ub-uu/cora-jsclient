@@ -30,7 +30,7 @@ var CORA = (function(cora) {
 			let childReference = data.childReference;
 			let path = data.path;
 			let currentData = spec.dataHolder.getData();
-			if (path.children !== undefined) {
+			if (path.length > 0) {
 				currentData = spec.dataHolder.findContainer(currentData, path);
 			}
 			let cChildReference = CORA.coraData(childReference);

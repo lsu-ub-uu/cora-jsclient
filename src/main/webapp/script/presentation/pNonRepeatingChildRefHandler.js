@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 		const publishPresentationShown = function() {
 			dependencies.pubSub.publish("presentationShown", {
 				"data": "",
-				"path": {}
+				"path": []
 			});
 		};
 

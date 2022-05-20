@@ -142,7 +142,7 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToAllMessagesForAllPaths = function(pubSub) {
-			pubSub.subscribe("*", {}, undefined, handleMsg);
+			pubSub.subscribe("*", [], undefined, handleMsg);
 		};
 
 		const handleMsg = function(dataFromMsg, msg) {
@@ -556,7 +556,7 @@ var CORA = (function(cora) {
 			if (recordGui !== undefined) {
 				recordGui.pubSub.publish("viewJustMadeVisible", {
 					data: "",
-					path: {}
+					path: []
 				});
 			}
 		};

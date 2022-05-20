@@ -23,18 +23,18 @@ var CORA = (function(cora) {
 	cora.metadataController = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
-		let topLevelPath = {};
+		let topLevelPath = [];
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
 		const start = function() {
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {
 				data: "",
-				path: {}
+				path: []
 			});
 			dependencies.pubSub.publish("initComplete", {
 				data: "",
-				path: {}
+				path: []
 			});
 		};
 

@@ -77,7 +77,7 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpec", function(assert) {
 	metadataValidator.validate();
 	let childValidatorSpec = this.dependencies.metadataChildValidatorFactory.getSpec(0);
 
-	assert.stringifyEqual(childValidatorSpec.path, {});
+	assert.stringifyEqual(childValidatorSpec.path, []);
 	assert.stringifyEqual(childValidatorSpec.data, this.spec.data);
 
 	let m = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
@@ -181,7 +181,7 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpecForTwoChildren", funct
 	metadataValidator.validate();
 	let childValidatorSpec = this.dependencies.metadataChildValidatorFactory.getSpec(0);
 
-	assert.stringifyEqual(childValidatorSpec.path, {});
+	assert.stringifyEqual(childValidatorSpec.path, []);
 	assert.stringifyEqual(childValidatorSpec.data, this.spec.data);
 
 	let m = CORA.coraData(this.metadataProvider.getMetadataById("groupIdTwoTextChild"));
@@ -191,7 +191,7 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpecForTwoChildren", funct
 
 	let childValidatorSpec2 = this.dependencies.metadataChildValidatorFactory.getSpec(1);
 
-	assert.stringifyEqual(childValidatorSpec2.path, {});
+	assert.stringifyEqual(childValidatorSpec2.path, []);
 	assert.stringifyEqual(childValidatorSpec2.data, this.spec.data);
 	let childRef2 = childReferences.children[1];
 	assert.stringifyEqual(childValidatorSpec2.childReference, childRef2);

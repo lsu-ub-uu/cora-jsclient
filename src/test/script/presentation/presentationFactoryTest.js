@@ -47,7 +47,7 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
-			"path": {},
+			"path": [],
 			"metadataIdUsedInData": "textVariableId",
 			"cPresentation": CORA.coraData(this.metadataProvider
 				.getMetadataById("pVarTextVariableId")),
@@ -135,7 +135,7 @@ QUnit.test("testFactorPGroupAsMap", function(assert) {
 	this.dependencies.providers.metadataProvider = new MetadataCoordinatesProviderStub();
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 	this.spec = {
-		"path": {},
+		"path": [],
 		"metadataIdUsedInData": "coordinatesGroup",
 		"cPresentation": CORA.coraData(this.dependencies.providers.metadataProvider
 			.getMetadataById("coordinatesPGroup")),

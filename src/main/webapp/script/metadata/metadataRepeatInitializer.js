@@ -106,9 +106,12 @@ var CORA = (function(cora) {
 		};
 
 		const isGroup = function() {
-			let type = cMetadataElement.getData().attributes.type;
-			return type === "group";
+			return "group" === getType();
 		};
+		
+		const getType = function(){
+			return cMetadataElement.getData().attributes.type;
+		}
 
 		const initializeMetadataGroup = function(nextLevelPath) {
 			let nextLevelChildReferences = cMetadataElement
@@ -150,8 +153,7 @@ var CORA = (function(cora) {
 		}
 
 		const isRecordLink = function() {
-			let type = cMetadataElement.getData().attributes.type;
-			return type === "recordLink";
+			return "recordLink" === getType();
 		};
 
 		const initializeMetadataRecordLink = function(nextLevelPath) {
@@ -259,8 +261,7 @@ var CORA = (function(cora) {
 		};
 
 		const isResourceLink = function() {
-			let type = cMetadataElement.getData().attributes.type;
-			return type === "resourceLink";
+			return "resourceLink" === getType();
 		};
 
 		const initializeMetadataResourceLink = function(nextLevelPath) {

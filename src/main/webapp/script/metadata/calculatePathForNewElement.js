@@ -20,11 +20,11 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.calculatePathForNewElement = function(spec) {
-		var metadataProvider = spec.metadataProvider;
-		var cMetadataElementToAdd = getMetadataById(spec.metadataIdToAdd);
+//		var metadataProvider = spec.metadataProvider;
+//		var cMetadataElementToAdd = getMetadataById(spec.metadataIdToAdd);
 		var metadataId = spec.metadataIdToAdd;
 		var repeatId = spec.repeatId;
-		var nameInData = cMetadataElementToAdd.getFirstAtomicValueByNameInData("nameInData");
+//		var nameInData = cMetadataElementToAdd.getFirstAtomicValueByNameInData("nameInData");
 
 		var newPath = calculatePathForNewElement();
 
@@ -108,19 +108,19 @@ var CORA = (function(cora) {
 			return parentPathCopy;
 		}
 
-		function addChildPathToPath(parentPath, childPath) {
-			var lowestPath = getLowestPathPointer(parentPath);
-			lowestPath.children.push(childPath);
-			return parentPath;
-		}
-
-		function getLowestPathPointer(path) {
-			var cPath = CORA.coraData(path);
-			if (cPath.containsChildWithNameInData("linkedPath")) {
-				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
-			}
-			return path;
-		}
+//		function addChildPathToPath(parentPath, childPath) {
+//			var lowestPath = getLowestPathPointer(parentPath);
+//			lowestPath.children.push(childPath);
+//			return parentPath;
+//		}
+//
+//		function getLowestPathPointer(path) {
+//			var cPath = CORA.coraData(path);
+//			if (cPath.containsChildWithNameInData("linkedPath")) {
+//				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
+//			}
+//			return path;
+//		}
 
 		function getAttributesAsPathPartFromMetadataElement() {
 			var attributeList = createAttributeListFromMetadata();

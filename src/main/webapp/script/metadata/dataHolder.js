@@ -38,7 +38,7 @@ var CORA = (function(cora) {
 			let dataContainerPart = {
 				id: id,
 				name: nameInData,
-				//				repeatId: repeatIdIn,
+				//								repeatId: repeatIdIn,
 				path: path
 			};
 			if (undefined != repeatIdIn) {
@@ -56,11 +56,9 @@ var CORA = (function(cora) {
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
 			let type = cMetadataElement.getData().attributes.type;
 			if (isTypeThatHasChildren(type)) {
-				addGroupParts(dataContainerPart, cMetadataElement);
-				//				return dataContainerPart;
+				addGroupParts(dataContainerPart);
 			} else {
 				dataContainerPart.value = "";
-
 			}
 			if (cMetadataElement.containsChildWithNameInData("attributeReferences")) {
 				dataContainerPart.attributes = createAttributesContainer(cMetadataElement);
@@ -76,7 +74,7 @@ var CORA = (function(cora) {
 			return type === "group";
 		};
 
-		const addGroupParts = function(dataContainerPart, cMetadataElement) {
+		const addGroupParts = function(dataContainerPart) {
 			dataContainerPart.children = [];
 		};
 
@@ -88,12 +86,8 @@ var CORA = (function(cora) {
 				let ref = getRefValueFromAttributeRef(attributeReference);
 				let attribute = getMetadataById(ref);
 				let attributeNameInData = attribute.getFirstAtomicValueByNameInData('nameInData');
-				//				let attributeId = attribute.getFirstAtomicValueByNameInData('id');
-				let attributeId = ref;
 				let finalValue = attribute.getFirstAtomicValueByNameInData('finalValue');
 
-				//				attributeContainer[attributeNameInData] = finalValue;
-				//				attributeContainer[attributeId] = {
 				attributeContainer.push({
 					id: ref,
 					nameInData: attributeNameInData,
@@ -136,11 +130,14 @@ var CORA = (function(cora) {
 		};
 
 		const getData = function() {
-			let dataContainerCopy = JSON.parse(JSON.stringify(dataContainer));
+			let dataContainerCopy = makeIndependentCopy(dataContainer);
 			removeAllActionLinks(dataContainerCopy);
 			return dataContainerCopy;
 		};
 
+		const makeIndependentCopy = function(obj) {
+			return JSON.parse(JSON.stringify(obj));
+		}
 
 		const removeAllActionLinks = function(data) {
 			removePath(data);
@@ -189,7 +186,7 @@ var CORA = (function(cora) {
 		};
 
 		const setValueInContainerListUsingPath = function(path, value) {
-			let foundContainer = findContainer(dataContainer, path);
+			let foundContainer = findContainer(path);
 			foundContainer.value = value;
 		};
 
@@ -202,7 +199,7 @@ var CORA = (function(cora) {
 		};
 
 		const setActionLinksInContainerListUsingPath = function(path, data) {
-			let foundContainer = findContainer(dataContainer, path);
+			let foundContainer = findContainer(path);
 			//			if (messageContainsDataWithActionLinks(data)) {
 			//				foundContainer.actionLinks = data.actionLinks;
 			//			}
@@ -212,69 +209,27 @@ var CORA = (function(cora) {
 			return data !== undefined && undefined !== data.actionLinks;
 		};
 
-		const findContainer = function(dataContainers, path) {
-			//			return findContainerAndParent(dataContainers, path).container;
-			//console.log("findContainer", containerPath)
+		const findContainer = function(path) {
 			let pathToFind = JSON.stringify(path);
 			return containerPath[pathToFind];
 		};
 
-		const findContainerAndParent = function(dataContainers, path) {
-			//			let cpath = CORA.coraData(path);
-			//			let container = findContainerByPathInCurrentLevel(dataContainers, path);
-
-			//			if (pathSpecifiesMoreLevels(cpath)) {
-			//				let childPath = cpath.getFirstChildByNameInData("linkedPath");
-			//				return findContainerAndParent(container, childPath);
-			//			}
-			let foundContainer = findContainer({}, path);
-			console.log(foundContainer)
+		const findContainerAndParent = function(path) {
+			let foundContainer = findContainer(path);
 			if (undefined == foundContainer) {
-				throw new Error("Unable to find container with path: " 
+				throw new Error("Unable to find container with path: "
 					+ JSON.stringify(path) + " in dataHolder");
 			}
 
-			let parentPath = JSON.parse(JSON.stringify(path));
+			let parentPath = makeIndependentCopy(path);
 			parentPath.pop();
-			let containerParent = findContainer({}, parentPath);
+			let containerParent = findContainer(parentPath);
 			return {
 				parent: containerParent,
 				container: foundContainer
 			};
 		};
 
-		const findContainerByPathInCurrentLevel = function(dataContainers, path) {
-			//			let nameInData = cPath.getFirstAtomicValueByNameInData("nameInData");
-			//			let attributes;
-			//			let repeatId;
-			//			if (cPath.containsChildWithNameInData("attributes")) {
-			//				attributes = cPath.getFirstChildByNameInData("attributes");
-			//			}
-			//			if (cPath.containsChildWithNameInData("repeatId")) {
-			//				repeatId = cPath.getFirstAtomicValueByNameInData("repeatId");
-			//			}
-			//			
-			//			let cdataContainers = CORA.coraData(dataContainers);
-			//
-			//			return cdataContainers.getFirstChildByNameInDataAndAttributesAndRepeatId(nameInData,
-			//				attributes, repeatId);
-			//				
-
-			let foundContainer = undefined;
-			dataContainers.children.forEach(function(containerPart) {
-				//				console.log("findContainerByPathInCurrentLevel", containerPart.path[0])
-				//				console.log("findContainerByPathInCurrentLevel", path[0])
-				//				if (containerPart.path == path) {
-				if (containerPart.path[0] == path[0]) {
-					foundContainer = containerPart;
-				};
-			});
-			return foundContainer;
-		};
-
-		const pathSpecifiesMoreLevels = function(path) {
-			return path.containsChildWithNameInData("linkedPath");
-		};
 
 		const addChild = function(parentPath, metadataIdToAdd, repeatId) {
 			tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
@@ -286,37 +241,38 @@ var CORA = (function(cora) {
 				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
 				throw new Error("path(" + JSON.stringify(parentPath)
-					+ ") not found in dataContainers:" + JSON.stringify(dataContainer)
+					+ ") not found in dataHolder:" + JSON.stringify(dataContainer)
 					+ " Error:" + e);
 			}
 		};
 
 		const addChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
 			let containerSpecifiedByPath = dataContainer;
-			if (parentPath.length > 0) {
-				let foundContainer = findContainer(dataContainer, parentPath);
+			if (pathSpecifiesMoreLevels(parentPath)) {
+				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
 			}
 			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let newChild = createDataContainerForElementWithId(metadataIdToAdd, newPath, repeatId);
-			//			if (repeatId !== undefined) {
-			//				newChild.repeatId = repeatId;
-			//			}
 			containerSpecifiedByPath.children.push(newChild);
 
 			let pathString = JSON.stringify(newPath);
 			containerPath[pathString] = newChild;
-			//			console.log("containerPath", containerPath)
 		};
+
+		const pathSpecifiesMoreLevels = function(path) {
+			return path.length > 0;
+		};
+
 		const createNextLevelPath = function(parentPath, metadataIdToAdd, repeatId) {
 			let pathSpec = {
-				//				"metadataProvider": dependencies.metadataProvider,
 				"metadataIdToAdd": metadataIdToAdd,
 				"repeatId": repeatId,
 				"parentPath": parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
+
 		const remove = function(path) {
 			try {
 				removeContainerWithPath(path);
@@ -327,22 +283,7 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerWithPath = function(path) {
-						let containerAndParent = findContainerAndParent(dataContainer, path);
-			//			let parentContainer = containerAndParent.parent.children;
-			//			let containerIndexInParent = parentContainer.indexOf(containerAndParent.container);
-			//			parentContainer.splice(containerIndexInParent, 1);
-
-			//			containerPath.indexOf();
-
-//			let foundContainer = findContainer({}, path);
-//			let parentPath = JSON.parse(JSON.stringify(path));
-//			parentPath.pop();
-//			let containerParent = findContainer({}, parentPath);
-//			const index = containerParent.children.indexOf(foundContainer);
-//			if (index > -1) {
-//				containerParent.children.splice(index, 1);
-//			}
-//			delete containerPath[JSON.stringify(path)];
+			let containerAndParent = findContainerAndParent(path);
 
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
@@ -356,12 +297,12 @@ var CORA = (function(cora) {
 		const move = function(dataFromMessage) {
 			let basePositionOnChildPath = dataFromMessage.basePositionOnChild;
 			let moveChildPath = dataFromMessage.moveChild;
-			let containerAndParent = findContainerAndParent(dataContainer, moveChildPath);
+			let containerAndParent = findContainerAndParent(moveChildPath);
 			let parentContainer = containerAndParent.parent.children;
 			let moveChild = containerAndParent.container;
 			let moveChildIndex = parentContainer.indexOf(moveChild);
 			let movingChild = parentContainer.splice(moveChildIndex, 1)[0];
-			let basePositionChild = findContainer(dataContainer, basePositionOnChildPath);
+			let basePositionChild = findContainer(basePositionOnChildPath);
 			let basePositionOnIndex = parentContainer.indexOf(basePositionChild);
 
 			if (dataFromMessage.newPosition === "before") {

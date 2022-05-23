@@ -642,6 +642,7 @@ QUnit.test("testRemoveChildToGroupIdOneTextChildWrongNameInData", function(asser
 		dataHolder.remove(["groupIdOneTextChild", "textVariableIdNOT"]);
 	}, "Error");
 });
+
 QUnit.test("testHandleMessageRemove", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	dataHolder.addChild([], "groupIdOneTextChild");
@@ -662,37 +663,32 @@ QUnit.test("testHandleMessageRemove", function(assert) {
 	assert.stringifyEqual(dataHolder.getData(), expected);
 });
 
-//QUnit.test("testHandleMessageRemoveWrongPath", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let messageToHandle = "x/y/z/remove";
-//	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder when trying to remove";
-//
-//	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
-//});
-//
-//const assertThrownException = function(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith) {
-//	assert.throws(function() {
-//		dataHolder.handleMsg([], messageToHandle);
-//	},
-//		function(caughtError) {
-//			return checkCatchedErrorStartsWith(caughtError, expectedErrorMessageStartsWith)
-//		}
-//	);
-//};
-//
-//const checkCatchedErrorStartsWith = function(caughtError, expectedErrorMessageStartsWith) {
-//	return caughtError.toString().startsWith(expectedErrorMessageStartsWith);
-//};
-//
+QUnit.test("testHandleMessageRemoveWrongPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let messageToHandle = "x/y/z/remove";
+	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder when trying to remove";
+
+	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
+});
+
+const assertThrownException = function(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith) {
+	assert.throws(function() {
+		dataHolder.handleMsg([], messageToHandle);
+	},
+		function(caughtError) {
+			return checkCatchedErrorStartsWith(caughtError, expectedErrorMessageStartsWith)
+		}
+	);
+};
+
+const checkCatchedErrorStartsWith = function(caughtError, expectedErrorMessageStartsWith) {
+	return caughtError.toString().startsWith(expectedErrorMessageStartsWith);
+};
+
 //QUnit.test("testHandleMessageMoveAfter", function(assert) {
 //	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 //	let path = [];

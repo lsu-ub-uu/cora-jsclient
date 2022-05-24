@@ -720,6 +720,7 @@ var CORA = (function(cora) {
 		};
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
+			
 			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {
 				if (!maxLimitOfChildrenReached()) {

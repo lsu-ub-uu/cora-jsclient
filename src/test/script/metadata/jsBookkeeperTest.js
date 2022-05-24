@@ -268,12 +268,16 @@ QUnit.test("testAddRepeating", function(assert) {
 			} ]
 		}
 	};
-	jsBookkeeper.add(data);
+	
+	let startRepeatId = jsBookkeeper.add(data);
+	
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "textVar");
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, "3");
+	assert.deepEqual(dataHolder.getUsedPath(), ["textVarRepeat1to3InGroupOneAttribute.1"]);
+	assert.strictEqual(startRepeatId, "3");
 
 });
 QUnit.test("testAddBefore", function(assert) {

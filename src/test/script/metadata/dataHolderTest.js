@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("metadata/dataHolderTest.js", {
+QUnit.module("metadata/dataHolderTest.js", {
 	beforeEach: function() {
 		this.spec = {
 			metadataId: "recordTypeOnlyMetadataIdChild",
@@ -38,8 +38,6 @@ QUnit.module.only("metadata/dataHolderTest.js", {
 			return CORA.dataHolder(spec);
 		};
 	},
-	afterEach: function() {
-	}
 });
 
 QUnit.test("testInit", function(assert) {
@@ -65,9 +63,19 @@ QUnit.test("testInit2", function(assert) {
 	assert.ok(firstSubscription.functionToCall === dataHolder.handleMsg);
 });
 
+QUnit.test("testFindContainerTopLevelPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	let expected = {
+		name: "groupIdOneTextChild",
+		children: []
+	};
+	let foundContainer = dataHolder.findContainer([]);
+	assert.deepEqual(foundContainer, expected);
+});
 QUnit.test("testCreateNewDataHolder", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-	
+
 	let expected = {
 		name: "groupIdOneTextChild",
 		children: []
@@ -163,8 +171,8 @@ QUnit.test("testAddTwoChildrenWithSameNameInDataDifferentRepeatId", function(ass
 			repeatId: "two"
 		}]
 	};
+	
 	assert.deepEqual(dataHolder.getData(), expected);
-//	assert.stringifyEqual(dataHolder.getData(), expected);
 });
 
 QUnit.test("testSetValueTwoChildrenWithSameNameInDataDifferentRepeatId", function(assert) {
@@ -192,10 +200,10 @@ QUnit.test("testSetValueTwoChildrenWithSameNameInDataDifferentRepeatId", functio
 
 QUnit.test("testAddTwoDifferentChildrenToTopLevel", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-	
+
 	dataHolder.addChild([], "textVariableId");
 	dataHolder.addChild([], "textVariableId2");
-	
+
 	let expected = {
 		name: "groupIdOneTextChild",
 		children: [{
@@ -269,7 +277,7 @@ QUnit.test("testSetValueToSecondLevel", function(assert) {
 	dataHolder.addChild([], "groupIdOneTextChild");
 	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
 	dataHolder.setValue(["groupIdOneTextChild", "textVariableId"], 'Value 2');
-	
+
 	let expected = {
 		name: "groupIdOneTextChild",
 		children: [{
@@ -381,8 +389,8 @@ QUnit.test("testSetValueFourDifferentChildrenSomeWithAttributeAndChildrenToThem"
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	addFourDifferentChildrenSomeWithAttributeAndChildrenToThem(dataHolder);
 
-	dataHolder.setValue(["groupIdOneTextChildTwoAttributes","textVariableId"], "value 1");
-	dataHolder.setValue(["textVarRepeat1to3InGroupOtherAttribute","textVariableId"], "value 2");
+	dataHolder.setValue(["groupIdOneTextChildTwoAttributes", "textVariableId"], "value 1");
+	dataHolder.setValue(["textVarRepeat1to3InGroupOtherAttribute", "textVariableId"], "value 2");
 	dataHolder.setValue(["textVarRepeat1to3InGroupOneAttribute", "textVariableId"], "value 3");
 	dataHolder.setValue(["textVariableId"], "value 4");
 
@@ -528,7 +536,7 @@ QUnit.test("testAddEightDifferentChildrenWithRepeatIdSomeWithAttributeAndChildre
 QUnit.test("setValueEightDifferentChildrenWithRepeatIdSomeWithAttributeAndChildrenToThem",
 	function(assert) {
 		let dataHolder = this.newDataHolder("groupIdOneTextChild");
-		
+
 		addEightDifferentChildrenWithRepeatIdSomeWithAttributeAndChildrenToThem(dataHolder);
 		dataHolder.setValue(["groupIdOneTextChildTwoAttributes.1", "textVariableId"], "value 1");
 		dataHolder.setValue(["textVarRepeat1to3InGroupOtherAttribute.2", "textVariableId"], "value 2");
@@ -614,7 +622,7 @@ QUnit.test("setValueEightDifferentChildrenWithRepeatIdSomeWithAttributeAndChildr
 	});
 
 QUnit.test("testRemoveSecondLevel", function(assert) {
-	
+
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	dataHolder.addChild([], "groupIdOneTextChild");
 	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
@@ -650,7 +658,7 @@ QUnit.test("testHandleMessageRemove", function(assert) {
 	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
 
 	dataHolder.handleMsg({
-		path: ["groupIdOneTextChild","textVariableId"],
+		path: ["groupIdOneTextChild", "textVariableId"],
 		type: "remove"
 	}, "x/y/z/remove");
 	let expected = {
@@ -663,791 +671,469 @@ QUnit.test("testHandleMessageRemove", function(assert) {
 	assert.stringifyEqual(dataHolder.getData(), expected);
 });
 
-QUnit.test("testHandleMessageRemoveWrongPath", function(assert) {
+QUnit.test("testHandleMessageRemoveEmptyPath", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 
 	dataHolder.addChild([], "groupIdOneTextChild");
 	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
 
-	let messageToHandle = "x/y/z/remove";
-	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder when trying to remove";
+	let expectedErrorMessage = "Remove container failed with path: [\"somePathNotFound\"]. "
+		+ "Error: Unable to find container with path: [\"somePathNotFound\"] in dataHolder";
 
-	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
+	assert.throws(function() {
+		let emptyData = { path: ["somePathNotFound"] };
+		dataHolder.handleMsg(emptyData, "x/y/z/remove");
+	}, new Error(expectedErrorMessage));
+
 });
 
-const assertThrownException = function(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith) {
+QUnit.test("testHandleMessageMoveAfter", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "1");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "2");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "3");
+
+	dataHolder.handleMsg({
+		moveChild: ["groupIdOneTextChild", "textVariableId.1"],
+		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.2"],
+		newPosition: "after"
+	}, "x/y/z/move");
+
+	let expected = {
+		name: "groupIdOneTextChild",
+		children: [{
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textVariableId",
+				value: "",
+				repeatId: "2"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "1"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "3"
+			}]
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageMoveBefore", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "1");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "2");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "3");
+
+	dataHolder.handleMsg({
+		path: {}, 
+		moveChild: ["groupIdOneTextChild", "textVariableId.1"],
+		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.3"],
+		newPosition: "before"
+	}, "x/y/z/move");
+
+	let expected = {
+		name: "groupIdOneTextChild",
+		children: [{
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textVariableId",
+				value: "",
+				repeatId: "2"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "1"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "3"
+			}]
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageMoveBeforeFirst", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "1");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "2");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "3");
+
+	dataHolder.handleMsg({
+		moveChild: ["groupIdOneTextChild", "textVariableId.3"],
+		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.1"],
+		newPosition: "before"
+	}, "x/y/z/move");
+
+	let expected = {
+		name: "groupIdOneTextChild",
+		children: [{
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textVariableId",
+				value: "",
+				repeatId: "3"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "1"
+			}, {
+				name: "textVariableId",
+				value: "",
+				repeatId: "2"
+			}]
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageMoveWrongPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "1");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "2");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "3");
+
+	let dataFromMessage = {
+		moveChild: ["someWrongPath", "textVariableId.1"],
+		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.3"],
+		newPosition: "after"
+	}
+	
+	let expectedErrorMessage = "Move conatiner failed, with moveChild: "+
+	"[\"someWrongPath\",\"textVariableId.1\"], basePositionOnChild: [\"groupIdOneTextChild\","
+	+"\"textVariableId.3\"] and newPosition: after. "
+	+"Error: Unable to find container with path: [\"someWrongPath\",\"textVariableId.1\"] in dataHolder";
+	
 	assert.throws(function() {
-		dataHolder.handleMsg([], messageToHandle);
+		dataHolder.handleMsg(dataFromMessage, "x/y/z/move");
 	},
-		function(caughtError) {
-			return checkCatchedErrorStartsWith(caughtError, expectedErrorMessageStartsWith)
-		}
+		new Error(expectedErrorMessage)
 	);
-};
+});
 
-const checkCatchedErrorStartsWith = function(caughtError, expectedErrorMessageStartsWith) {
-	return caughtError.toString().startsWith(expectedErrorMessageStartsWith);
-};
+QUnit.test("testAddChildToGroupIdOneRecordLinkChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
 
-//QUnit.test("testHandleMessageMoveAfter", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId", "1");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path3, "textVariableId", "2");
-//
-//	let path4 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path4, "textVariableId", "3");
-//
-//	let basePath = ["groupIdOneTextChild"];
-//
-//	dataHolder.handleMsg({
-//		path: basePath,
-//		moveChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "1"
-//				}]
-//			}]
-//		},
-//		basePositionOnChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "2"
-//				}]
-//			}]
-//		},
-//		newPosition: "after"
-//	}, "x/y/z/move");
-//
-//	let expected = {
-//		name: "groupIdOneTextChild",
-//		children: [{
-//			name: "groupIdOneTextChild",
-//			children: [{
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "2"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "1"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "3"
-//			}]
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-//QUnit.test("testHandleMessageMoveBefore", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId", "1");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path3, "textVariableId", "2");
-//
-//	let path4 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path4, "textVariableId", "3");
-//
-//	let basePath = ["groupIdOneTextChild"];
-//
-//	dataHolder.handleMsg({
-//		path: basePath,
-//		moveChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "1"
-//				}]
-//			}]
-//		},
-//		basePositionOnChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "3"
-//				}]
-//			}]
-//		},
-//		newPosition: "before"
-//	}, "x/y/z/move");
-//
-//	let expected = {
-//		name: "groupIdOneTextChild",
-//		children: [{
-//			name: "groupIdOneTextChild",
-//			children: [{
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "2"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "1"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "3"
-//			}]
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//QUnit.test("testHandleMessageMoveBeforeFirst", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId", "1");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path3, "textVariableId", "2");
-//
-//	let path4 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path4, "textVariableId", "3");
-//
-//	let basePath = ["groupIdOneTextChild"];
-//
-//	dataHolder.handleMsg({
-//		path: basePath,
-//		moveChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "3"
-//				}]
-//			}]
-//		},
-//		basePositionOnChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "1"
-//				}]
-//			}]
-//		},
-//		newPosition: "before"
-//	}, "x/y/z/move");
-//
-//	let expected = {
-//		name: "groupIdOneTextChild",
-//		children: [{
-//			name: "groupIdOneTextChild",
-//			children: [{
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "3"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "1"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "2"
-//			}]
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-//QUnit.test("testHandleMessageMoveAfterLast", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId", "1");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path3, "textVariableId", "2");
-//
-//	let path4 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path4, "textVariableId", "3");
-//
-//	let basePath = ["groupIdOneTextChild"];
-//
-//	dataHolder.handleMsg({
-//		path: basePath,
-//		moveChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "3"
-//				}]
-//			}]
-//		},
-//		basePositionOnChild: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "groupIdOneTextChild"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "textVariableId"
-//				}, {
-//					name: "repeatId",
-//					value: "2"
-//				}]
-//			}]
-//		},
-//		newPosition: "after"
-//	}, "x/y/z/move");
-//
-//	let expected = {
-//		name: "groupIdOneTextChild",
-//		children: [{
-//			name: "groupIdOneTextChild",
-//			children: [{
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "1"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "2"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "3"
-//			}]
-//		}]
-//	};
-//	let x = {
-//		name: "groupIdOneTextChild",
-//		children: [{
-//			name: "groupIdOneTextChild",
-//			children: [{
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "1"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "3"
-//			}, {
-//				name: "textVariableId",
-//				value: "",
-//				repeatId: "2"
-//			}]
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-////function [nameInData) {
-////	return {
-////		name: "linkedPath",
-////		children: [{
-////			name: "nameInData",
-////			value: nameInData
-////		}]
-////	};
-////}
-//function createLinkedPathWithNameInDataAndRepeatId(nameInData, repeatId) {
-//	return {
-//		name: "linkedPath",
-//		children: [{
-//			name: "nameInData",
-//			value: nameInData
-//		}, {
-//			name: "repeatId",
-//			value: repeatId
-//		}]
-//	};
-//}
+	dataHolder.addChild([], "myLink");
+
+	let expected = {
+		name: "groupIdOneRecordLinkChild",
+		children: [{
+			name: "myLink",
+			children: []
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+
+	dataHolder.addChild(["myLink"], "linkedRecordTypeTextVar");
+	let expectedLinkedRecordType = {
+		name: "groupIdOneRecordLinkChild",
+		children: [{
+			name: "myLink",
+			children: [{
+				name: "linkedRecordType",
+				value: ""
+			}]
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expectedLinkedRecordType);
+});
+
+QUnit.test("testAddChildToGroupIdOneRecordLinkWithAttributeChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneRecordLinkWithAttributeChild");
+
+	dataHolder.addChild([], "myLinkWithAttribute");
+	let expected = {
+		name: "groupIdOneRecordLinkWithAttributeChild",
+		children: [{
+			name: "myLinkWithAttribute",
+			children: [],
+			"attributes": {
+				"type": "image"
+			}
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+
+	dataHolder.addChild(["myLinkWithAttribute"], "linkedRecordTypeTextVar");
+
+	let expectedLinkedRecordType = {
+		name: "groupIdOneRecordLinkWithAttributeChild",
+		children: [{
+			name: "myLinkWithAttribute",
+			children: [{
+				name: "linkedRecordType",
+				value: ""
+			}],
+			"attributes": {
+				"type": "image"
+			}
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expectedLinkedRecordType);
+});
 
 
-//
-//QUnit.test("testAddChildToGroupIdOneRecordLinkChild", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
-//	let path = [];
-//	dataHolder.addChild(path, "myLink");
-//	let expected = {
-//		name: "groupIdOneRecordLinkChild",
-//		children: [{
-//			name: "myLink",
-//			children: []
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//
-//	let pathLinkedRecordType = {
-//		name: "linkedPath",
-//		children: [{
-//			name: "nameInData",
-//			value: "myLink"
-//		}]
-//	};
-//
-//	dataHolder.addChild(pathLinkedRecordType, "linkedRecordTypeTextVar");
-//	let expectedLinkedRecordType = {
-//		name: "groupIdOneRecordLinkChild",
-//		children: [{
-//			name: "myLink",
-//			children: [{
-//				name: "linkedRecordType",
-//				value: ""
-//			}]
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expectedLinkedRecordType);
-//});
-//
-//QUnit.test("testAddChildToGroupIdOneRecordLinkWithAttributeChild", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneRecordLinkWithAttributeChild");
-//	let path = [];
-//	dataHolder.addChild(path, "myLinkWithAttribute");
-//	let expected = {
-//		name: "groupIdOneRecordLinkWithAttributeChild",
-//		children: [{
-//			name: "myLinkWithAttribute",
-//			children: [],
-//			"attributes": {
-//				"type": "image"
-//			}
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//
-//	let pathLinkedRecordType = {
-//		name: "linkedPath",
-//		children: [{
-//			name: "nameInData",
-//			value: "myLinkWithAttribute"
-//		},
-//		{
-//			"name": "attributes",
-//			"children": [
-//				{
-//					"name": "attribute",
-//					"repeatId": "1",
-//					"children": [
-//						{
-//							"name": "attributeName",
-//							"value": "type"
-//						},
-//						{
-//							"name": "attributeValue",
-//							"value": "image"
-//						}
-//					]
-//				}
-//			]
-//		}]
-//	};
-//
-//	dataHolder.addChild(pathLinkedRecordType, "linkedRecordTypeTextVar");
-//	let expectedLinkedRecordType = {
-//		name: "groupIdOneRecordLinkWithAttributeChild",
-//		children: [{
-//			name: "myLinkWithAttribute",
-//			children: [{
-//				name: "linkedRecordType",
-//				value: ""
-//			}],
-//			"attributes": {
-//				"type": "image"
-//			}
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expectedLinkedRecordType);
-//});
-//
-//
-//QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChild", function(assert) {
-//	let dataFromMsg = {
-//		data: {
-//			children: [{
-//				name: "linkedRecordType",
-//				value: "recordType"
-//			}, {
-//				name: "linkedRecordId",
-//				value: "writtenText"
-//			}],
-//			actionLinks: {
-//				read: {
-//					requestMethod: "GET",
-//					rel: "read",
-//					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-//					accept: "application/vnd.uub.record+json"
-//				}
-//			},
-//			name: "type"
-//		},
-//		path: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "recordInfo"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "type"
-//				}]
-//			}]
-//		}
-//	};
-//	let msg = "root/recordInfo/type/linkedData";
-//	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
-//	let path = [];
-//	dataHolder.addChild(path, "myLink");
-//
-//	let path2 = ["myLink"];
-//	dataFromMsg.path = path2;
-//
-//	dataHolder.handleMsg(dataFromMsg, msg);
-//	let expected = {
-//		name: "groupIdOneRecordLinkChild",
-//		children: [{
-//			name: "myLink",
-//			children: []
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//
-//	let expectedWithLinks = {
-//		name: "groupIdOneRecordLinkChild",
-//		children: [{
-//			name: "myLink",
-//			children: []
-//			, actionLinks: {
-//				read: {
-//					requestMethod: "GET",
-//					rel: "read",
-//					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-//					accept: "application/vnd.uub.record+json"
-//				}
-//			}
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getDataWithActionLinks(), expectedWithLinks);
-//
-//
-//});
-//QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildNoActionLink", function(assert) {
-//	let dataFromMsg = {
-//		data: {
-//			children: [{
-//				name: "linkedRecordType",
-//				value: "recordType"
-//			}, {
-//				name: "linkedRecordId",
-//				value: "writtenText"
-//			}],
-//			// actionLinks: {
-//			// read: {
-//			// requestMethod: "GET",
-//			// rel: "read",
-//			// url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-//			// accept: "application/vnd.uub.record+json"
-//			// }
-//			// },
-//			name: "type"
-//		},
-//		path: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "recordInfo"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "type"
-//				}]
-//			}]
-//		}
-//	};
-//	let msg = "root/recordInfo/type/linkedData";
-//	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
-//	let path = [];
-//	dataHolder.addChild(path, "myLink");
-//
-//	let path2 = ["myLink"];
-//	dataFromMsg.path = path2;
-//
-//	dataHolder.handleMsg(dataFromMsg, msg);
-//	let expected = {
-//		name: "groupIdOneRecordLinkChild",
-//		children: [{
-//			name: "myLink",
-//			children: []
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//	assert.stringifyEqual(dataHolder.getDataWithActionLinks(), expected);
-//});
-//
-//QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath", function(assert) {
-//	let dataFromMsg = {
-//		data: {
-//			children: [{
-//				name: "linkedRecordType",
-//				value: "recordType"
-//			}, {
-//				name: "linkedRecordId",
-//				value: "writtenText"
-//			}],
-//			actionLinks: {
-//				read: {
-//					requestMethod: "GET",
-//					rel: "read",
-//					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-//					accept: "application/vnd.uub.record+json"
-//				}
-//			},
-//			name: "type"
-//		},
-//		path: {
-//			name: "linkedPath",
-//			children: [{
-//				name: "nameInData",
-//				value: "recordInfo"
-//			}, {
-//				name: "linkedPath",
-//				children: [{
-//					name: "nameInData",
-//					value: "type"
-//				}]
-//			}]
-//		}
-//	};
-//	let msg = "root/recordInfo/type/linkedData";
-//	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
-//	let path = [];
-//	dataHolder.addChild(path, "myLink");
-//
-//	let path2 = ["myLinkNOT"];
-//	dataFromMsg.path = path2;
-//
-//	let expectedErrorMessageStartsWith = "path({\"name\":\"linkedPath\",\"children\":[{\"name\":\"nameInData\",\"value\":\"myLinkNOT\"}]}) not found in dataHolder:Error: name(myLinkNOT) with attributes (undefined) and repeatId (undefined) not found in children to coraData";
-//
-//	assert.throws(function() {
-//		dataHolder.handleMsg(dataFromMsg, msg);
-//	}, new Error(expectedErrorMessageStartsWith));
-//});
-//
-//
-//QUnit.test("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
-//	let path = [];
-//	dataHolder.addChild(path, "masterResLink");
-//	let expected = {
-//		name: "groupIdOneResourceLinkChild",
-//		children: [{
-//			name: "master",
-//			children: []
-//		}]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-//QUnit.test("testHandleMessageAdd", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let dataFromMessage = { "metadataId": "textVariableId", "path": [], "nameInData": "textVariableId" };
-//	dataHolder.handleMsg(dataFromMessage, "root/groupIdOneTextChild/groupIdOneTextChild/add");
-//
-//	let expected = {
-//		"name": "groupIdOneTextChild",
-//		"children": [
-//			{
-//				"name": "groupIdOneTextChild",
-//				"children": [
-//					{
-//						"name": "textVariableId",
-//						"value": ""
-//					}
-//				]
-//			},
-//			{
-//				"name": "textVariableId",
-//				"value": ""
-//			}
-//		]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-//QUnit.test("testHandleMessageAddWrongPath", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let messageToHandle = "root/textVariableId/add";
-//	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataContainers:{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"groupIdOneTextChild\",\"children\":[{\"name\":\"textVariableId\",\"value\":\"\"}]}]}";
-//
-//	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
-////	assert.throws(function() {
-////		dataHolder.handleMsg([], "root/textVariableId/add");
-////	},
-////		new Error(expectedErrorMessageStartsWith)
-////	);
-//});
-//
-//QUnit.test("testHandleMessageSetValue", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let dataFromMessage = { "data": "A value", "path": path3 };
-//	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");
-//
-//	let expected = {
-//		"name": "groupIdOneTextChild",
-//		"children": [
-//			{
-//				"name": "groupIdOneTextChild",
-//				"children": [
-//					{
-//						"name": "textVariableId",
-//						"value": "A value"
-//					}
-//				]
-//			}
-//		]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
-//
-//QUnit.test("testHandleMessageSetValueWrongPath", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let messageToHandle = "root/textVariableId/setValue";
-//	let expectedErrorMessageStartsWith = "Error: path(undefined) not found in dataHolder";
-//
-//	assertThrownException(assert, dataHolder, messageToHandle, expectedErrorMessageStartsWith);
-//});
-//
-//QUnit.test("testHandleMessageNoHandledType", function(assert) {
-//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
-//	let path = [];
-//	dataHolder.addChild(path, "groupIdOneTextChild");
-//
-//	let path2 = ["groupIdOneTextChild"];
-//	dataHolder.addChild(path2, "textVariableId");
-//
-//	let path3 = ["groupIdOneTextChild"];
-//	path3.children.push(["textVariableId"]);
-//
-//	let dataFromMessage = { "data": "A value", "path": path3 };
-//	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/notHandled");
-//
-//	let expected = {
-//		"name": "groupIdOneTextChild",
-//		"children": [
-//			{
-//				"name": "groupIdOneTextChild",
-//				"children": [
-//					{
-//						"name": "textVariableId",
-//						"value": ""
-//					}
-//				]
-//			}
-//		]
-//	};
-//	assert.stringifyEqual(dataHolder.getData(), expected);
-//});
+QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
+
+	dataHolder.addChild([], "myLink");
+
+	let dataFromMsg = {
+		data: {
+			children: [{
+				name: "linkedRecordType",
+				value: "recordType"
+			}, {
+				name: "linkedRecordId",
+				value: "writtenText"
+			}],
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
+					accept: "application/vnd.uub.record+json"
+				}
+			},
+			name: "type"
+		},
+		path: ["myLink"]
+	};
+	let msg = "root/recordInfo/type/linkedData";
+
+	dataHolder.handleMsg(dataFromMsg, msg);
+
+	let expected = {
+		name: "groupIdOneRecordLinkChild",
+		children: [{
+			name: "myLink",
+			children: []
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+
+	let expectedWithLinks = {
+		name: "groupIdOneRecordLinkChild",
+		children: [{
+			name: "myLink",
+			children: []
+			, actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
+					accept: "application/vnd.uub.record+json"
+				}
+			}
+		}]
+	};
+	assert.deepEqual(dataHolder.getDataWithActionLinks(), expectedWithLinks);
+});
+
+QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildNoActionLink", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
+	dataHolder.addChild([], "myLink");
+
+	let dataFromMsg = {
+		data: {
+			children: [{
+				name: "linkedRecordType",
+				value: "recordType"
+			}, {
+				name: "linkedRecordId",
+				value: "writtenText"
+			}],
+			name: "type"
+		},
+		path: ["myLink"]
+	};
+	let msg = "root/recordInfo/type/linkedData";
+
+	dataHolder.handleMsg(dataFromMsg, msg);
+
+	let expected = {
+		name: "groupIdOneRecordLinkChild",
+		children: [{
+			name: "myLink",
+			children: []
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+	assert.deepEqual(dataHolder.getDataWithActionLinks(), expected);
+});
+
+QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneRecordLinkChild");
+	dataHolder.addChild([], "myLink");
+
+	let dataFromMsg = {
+		data: {
+			children: [{
+				name: "linkedRecordType",
+				value: "recordType"
+			}, {
+				name: "linkedRecordId",
+				value: "writtenText"
+			}],
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
+					accept: "application/vnd.uub.record+json"
+				}
+			},
+			name: "type"
+		},
+		path: ["myLinkNOT"]
+	};
+	let msg = "root/recordInfo/type/linkedData";
+
+	let expectedErrorMessage = "Set actionLink failed. "
+		+ "Error: Unable to find container with path: [\"myLinkNOT\"] in dataHolder";
+
+	assert.throws(function() {
+		dataHolder.handleMsg(dataFromMsg, msg);
+	}, new Error(expectedErrorMessage));
+});
+
+
+QUnit.test("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+	dataHolder.addChild([], "masterResLink");
+
+	let expected = {
+		name: "groupIdOneResourceLinkChild",
+		children: [{
+			name: "master",
+			children: []
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageAdd", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let dataFromMessage = { "metadataId": "textVariableId", "path": [], "nameInData": "textVariableId" };
+	dataHolder.handleMsg(dataFromMessage, "root/groupIdOneTextChild/groupIdOneTextChild/add");
+
+	let expected = {
+		"name": "groupIdOneTextChild",
+		"children": [
+			{
+				"name": "groupIdOneTextChild",
+				"children": [
+					{
+						"name": "textVariableId",
+						"value": ""
+					}
+				]
+			},
+			{
+				"name": "textVariableId",
+				"value": ""
+			}
+		]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageAddWrongPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let expectedErrorMessage = "Add conatiner failed, with path: [\"somePathNotFound\"]"
+		+ ", metadataId: \"textVariableId\" and repeatId:1. Error: Unable to find container with "
+		+ "path: [\"somePathNotFound\"] in dataHolder";
+
+	let dataMsg = { metadataId: "textVariableId", path: ["somePathNotFound"], repeatId: 1 };
+	assert.throws(function() {
+		dataHolder.handleMsg(dataMsg, "root/textVariableId/add");
+	},
+		new Error(expectedErrorMessage)
+	);
+});
+
+QUnit.test("testHandleMessageSetValue", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+
+	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");
+
+	let expected = {
+		"name": "groupIdOneTextChild",
+		"children": [
+			{
+				"name": "groupIdOneTextChild",
+				"children": [
+					{
+						"name": "textVariableId",
+						"value": "A value"
+					}
+				]
+			}
+		]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testHandleMessageSetValueWrongPath", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let expectedErrorMessage = "Set value into conatiner failed, with path:"
+		+ " [\"groupIdOneTextChild\",\"someNotFoundPath\"] and value: A value. Error: Unable to "
+		+ "find container with path: [\"groupIdOneTextChild\",\"someNotFoundPath\"] in dataHolder";
+
+	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "someNotFoundPath"] };
+	assert.throws(function() {
+		dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");
+	},
+		new Error(expectedErrorMessage)
+	);
+});
+
+QUnit.test("testHandleMessageNoHandledType", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/notHandled");
+
+	let expected = {
+		"name": "groupIdOneTextChild",
+		"children": [
+			{
+				"name": "groupIdOneTextChild",
+				"children": [
+					{
+						"name": "textVariableId",
+						"value": ""
+					}
+				]
+			}
+		]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});

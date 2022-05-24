@@ -28,7 +28,8 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			dataContainer = createDataContainerForElementWithId(metadataId, []);
-
+			let pathString = JSON.stringify([]);
+			containerPath[pathString] = dataContainer;
 			subscribeToAddAndSetValueAndRemoveAndMoveMessagesForAllPaths();
 		};
 
@@ -36,16 +37,14 @@ var CORA = (function(cora) {
 			let cMetadataElement = getMetadataById(id);
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData('nameInData');
 			let dataContainerPart = {
-				id: id,
 				name: nameInData,
-				//								repeatId: repeatIdIn,
-				path: path
 			};
 			if (undefined != repeatIdIn) {
 				dataContainerPart.repeatId = repeatIdIn;
 			}
 
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
+
 			return dataContainerPart;
 		};
 
@@ -131,34 +130,29 @@ var CORA = (function(cora) {
 
 		const getData = function() {
 			let dataContainerCopy = makeIndependentCopy(dataContainer);
-			removeAllActionLinks(dataContainerCopy);
+			removeNonDataInfoFromContainerIncludingActionLinks(dataContainerCopy);
 			return dataContainerCopy;
 		};
 
 		const makeIndependentCopy = function(obj) {
 			return JSON.parse(JSON.stringify(obj));
-		}
+		};
 
-		const removeAllActionLinks = function(data) {
-			removePath(data);
-			removeId(data);
+		const removeNonDataInfoFromContainerIncludingActionLinks = function(data) {
+			removeNonDataInfoFromContainer(data, true);
+		};
+
+		const removeNonDataInfoFromContainer = function(data, removeLinks) {
 			changeAttributes(data);
-			//			if (data.actionLinks !== undefined) {
-			//				data.actionLinks = undefined;
-			//			}
+			if (removeLinks && data.actionLinks !== undefined) {
+				delete data.actionLinks;
+			}
 			if (data.children !== undefined) {
 				data.children.forEach(function(child) {
-					removeAllActionLinks(child);
+					removeNonDataInfoFromContainer(child, removeLinks);
 				});
 			}
 		};
-
-		const removePath = function(data) {
-			delete data.path;
-		}
-		const removeId = function(data) {
-			delete data.id;
-		}
 
 		const changeAttributes = function(data) {
 			let oldAttributes = data.attributes;
@@ -171,17 +165,24 @@ var CORA = (function(cora) {
 				});
 				data.attributes = newAttributes;
 			}
-		}
+		};
 
 		const getDataWithActionLinks = function() {
-			return dataContainer;
+			let dataContainerCopy = makeIndependentCopy(dataContainer);
+			removeNonDataInfoFromContainerLeavingActionLinks(dataContainerCopy);
+			return dataContainerCopy;
+		};
+
+		const removeNonDataInfoFromContainerLeavingActionLinks = function(data) {
+			removeNonDataInfoFromContainer(data, false);
 		};
 
 		const setValue = function(path, value) {
 			try {
 				setValueInContainerListUsingPath(path, value);
 			} catch (e) {
-				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder:" + e);
+				throw new Error("Set value into conatiner failed, with path: " + JSON.stringify(path)
+					+ " and value: " + value + ". " + e);
 			}
 		};
 
@@ -194,15 +195,15 @@ var CORA = (function(cora) {
 			try {
 				setActionLinksInContainerListUsingPath(path, data);
 			} catch (e) {
-				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder:" + e);
+				throw new Error("Set actionLink failed. " + e);
 			}
 		};
 
 		const setActionLinksInContainerListUsingPath = function(path, data) {
 			let foundContainer = findContainer(path);
-			//			if (messageContainsDataWithActionLinks(data)) {
-			//				foundContainer.actionLinks = data.actionLinks;
-			//			}
+			if (messageContainsDataWithActionLinks(data)) {
+				foundContainer.actionLinks = data.actionLinks;
+			}
 		};
 
 		const messageContainsDataWithActionLinks = function(data) {
@@ -211,15 +212,16 @@ var CORA = (function(cora) {
 
 		const findContainer = function(path) {
 			let pathToFind = JSON.stringify(path);
-			return containerPath[pathToFind];
-		};
-
-		const findContainerAndParent = function(path) {
-			let foundContainer = findContainer(path);
+			let foundContainer = containerPath[pathToFind];
 			if (undefined == foundContainer) {
 				throw new Error("Unable to find container with path: "
 					+ JSON.stringify(path) + " in dataHolder");
 			}
+			return foundContainer;
+		};
+
+		const findContainerAndParent = function(path) {
+			let foundContainer = findContainer(path);
 
 			let parentPath = makeIndependentCopy(path);
 			parentPath.pop();
@@ -240,9 +242,9 @@ var CORA = (function(cora) {
 			try {
 				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
-				throw new Error("path(" + JSON.stringify(parentPath)
-					+ ") not found in dataHolder:" + JSON.stringify(dataContainer)
-					+ " Error:" + e);
+				throw new Error("Add conatiner failed, with path: " + JSON.stringify(parentPath)
+					+ ", metadataId: " + JSON.stringify(metadataIdToAdd) + " and repeatId:" + repeatId
+					+ ". " + e);
 			}
 		};
 
@@ -277,8 +279,8 @@ var CORA = (function(cora) {
 			try {
 				removeContainerWithPath(path);
 			} catch (e) {
-				throw new Error("path(" + JSON.stringify(path) + ") not found in dataHolder"
-					+ " when trying to remove:" + e);
+				throw new Error("Remove container failed with path: " + JSON.stringify(path)
+					+ ". " + e);
 			}
 		};
 
@@ -293,22 +295,33 @@ var CORA = (function(cora) {
 			}
 			delete containerPath[JSON.stringify(path)];
 		};
-
 		const move = function(dataFromMessage) {
+			try {
+				tryToMove(dataFromMessage);
+			} catch (e) {
+				throw new Error("Move conatiner failed, with "
+					+ "moveChild: " + JSON.stringify(dataFromMessage.moveChild) + ", "
+					+ "basePositionOnChild: " + JSON.stringify(dataFromMessage.basePositionOnChild)
+					+ " and newPosition: " + dataFromMessage.newPosition
+					+ ". " + e);
+			}
+		}
+
+		const tryToMove = function(dataFromMessage) {
 			let basePositionOnChildPath = dataFromMessage.basePositionOnChild;
 			let moveChildPath = dataFromMessage.moveChild;
 			let containerAndParent = findContainerAndParent(moveChildPath);
-			let parentContainer = containerAndParent.parent.children;
+			let parentContainerChildren = containerAndParent.parent.children;
 			let moveChild = containerAndParent.container;
-			let moveChildIndex = parentContainer.indexOf(moveChild);
-			let movingChild = parentContainer.splice(moveChildIndex, 1)[0];
+			let moveChildIndex = parentContainerChildren.indexOf(moveChild);
+			let movingChild = parentContainerChildren.splice(moveChildIndex, 1)[0];
 			let basePositionChild = findContainer(basePositionOnChildPath);
-			let basePositionOnIndex = parentContainer.indexOf(basePositionChild);
+			let basePositionOnIndex = parentContainerChildren.indexOf(basePositionChild);
 
 			if (dataFromMessage.newPosition === "before") {
-				parentContainer.splice(basePositionOnIndex, 0, movingChild);
+				parentContainerChildren.splice(basePositionOnIndex, 0, movingChild);
 			} else {
-				parentContainer.splice(basePositionOnIndex + 1, 0, movingChild);
+				parentContainerChildren.splice(basePositionOnIndex + 1, 0, movingChild);
 			}
 		};
 

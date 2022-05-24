@@ -60,24 +60,24 @@ var CORA = (function(cora) {
 			return extendedMsgPart;
 		}
 
-		function pathHasAtLeastOneLevel(cPath) {
-			return cPath.getData().children !== undefined
-				&& cPath.containsChildWithNameInData("nameInData");
-		}
-
-		function recursivelyConvertPathToMsg(cPath) {
-			var msgPart = "";
-			msgPart += cPath.getFirstAtomicValueByNameInData("nameInData");
-			msgPart += convertPathAttributes(cPath);
-			msgPart += convertRepeatId(cPath);
-
-			if (pathHasMoreLevels(cPath)) {
-				return convertAndAddPathToMsg(cPath.getFirstChildByNameInData("linkedPath"),
-					msgPart);
-			}
-			msgPart += "/";
-			return msgPart;
-		}
+//		function pathHasAtLeastOneLevel(cPath) {
+//			return cPath.getData().children !== undefined
+//				&& cPath.containsChildWithNameInData("nameInData");
+//		}
+//
+//		function recursivelyConvertPathToMsg(cPath) {
+//			var msgPart = "";
+//			msgPart += cPath.getFirstAtomicValueByNameInData("nameInData");
+//			msgPart += convertPathAttributes(cPath);
+//			msgPart += convertRepeatId(cPath);
+//
+//			if (pathHasMoreLevels(cPath)) {
+//				return convertAndAddPathToMsg(cPath.getFirstChildByNameInData("linkedPath"),
+//					msgPart);
+//			}
+//			msgPart += "/";
+//			return msgPart;
+//		}
 
 //		function pathHasMoreLevels(cPath) {
 //			return cPath.containsChildWithNameInData("linkedPath");

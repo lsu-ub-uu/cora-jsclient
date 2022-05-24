@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 			let path = data.path;
 			let currentData = spec.dataHolder.getData();
 			if (path.length > 0) {
-				currentData = spec.dataHolder.findContainer(currentData, path);
+				currentData = spec.dataHolder.findContainer(path);
 			}
 			let cChildReference = CORA.coraData(childReference);
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));

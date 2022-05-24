@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadata/metadataChildValidatorTest.js", {
+QUnit.module.only("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -136,6 +136,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let pubSubMessages = this.pubSub.getMessages();
+	
 	assert.strictEqual(pubSubMessages.length, 1);
 	assert.stringifyEqual(pubSubMessages[0], CORATEST.createValidationErrorMessage("textVariableId"));
 });
@@ -146,13 +147,7 @@ CORATEST.createValidationErrorMessage =
 			"type": "validationError",
 			"message": {
 				"metadataId": metadataId,
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": metadataId
-					}]
-				}
+				"path": [metadataId] 
 			}
 		};
 	};

@@ -254,7 +254,6 @@ var CORA = (function(cora) {
 
 		const createNextLevelPath = function() {
 			let pathSpec = {
-				"metadataProvider": dependencies.metadataProvider,
 				"metadataIdToAdd": metadataId,
 				"repeatId": spec.repeatId,
 				"parentPath": spec.path

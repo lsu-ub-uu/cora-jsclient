@@ -36,7 +36,7 @@ var CORATEST = (function(coraTest) {
 				"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 			};
 			var spec = {
-				"path" : {},
+				"path" : [],
 				"cPresentation" : cPresentation,
 				"cParentPresentation" : undefined,
 				"dataDivider" : "systemX"
@@ -88,14 +88,12 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.presentationId = "masterPResLink";
 		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));
 		this.spec = {
-			"path" : {},
+			"path" : [],
 			"cPresentation" : this.cPresentation,
 			"cParentPresentation" : undefined,
 			"dataDivider" : "systemX"
 		};
 	},
-	afterEach : function() {
-	}
 });
 
 QUnit.test("testGetDependencies", function(assert) {
@@ -115,8 +113,6 @@ QUnit.test("testInit", function(assert) {
 	assert.visible(view, "pResourceLink view should be visible");
 	var expectedClassName = 'pResourceLink masterPResLink';
 	assert.deepEqual(view.className, expectedClassName);
-
-	var subscriptions = this.pubSub.getSubscriptions();
 });
 
 QUnit.test("testInitInfo", function(assert) {

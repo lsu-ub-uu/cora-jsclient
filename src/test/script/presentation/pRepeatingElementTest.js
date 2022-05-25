@@ -27,7 +27,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", {
 			"jsBookkeeper" : this.jsBookkeeper
 		};
 		this.spec = {
-			"path" : {},
+			"path" : [],
 			"pChildRefHandlerView" : CORATEST.pChildRefHandlerViewSpy(),
 			"pChildRefHandler":CORATEST.pChildRefHandlerSpy(),
 			"userCanRemove" : true,
@@ -35,8 +35,6 @@ QUnit.module("presentation/pRepeatingElementTest.js", {
 			"userCanAddBefore" : true
 		};
 	}, 
-	afterEach : function() {
-	}
 });
 
 QUnit.test("testInit", function(assert) {
@@ -211,8 +209,7 @@ QUnit.test("testRemoveButtonOnclick", function(assert) {
 
 	let firstRemove = removes[0];
 	assert.strictEqual(firstRemove.type, "remove");
-	let path = {};
-	assert.deepEqual(firstRemove.path, path);
+	assert.deepEqual(firstRemove.path, []);
 });
 
 QUnit.test("testRemoveButtonHover", function(assert) {
@@ -323,8 +320,7 @@ QUnit.test("testAddBeforeButtonOnclick", function(assert) {
 	 assert.deepEqual(addBefores.length, 1);
 	
 	 let firstAddBefore= addBefores[0];
-	 let path = {};
-	 assert.deepEqual(firstAddBefore.path, path);
+	 assert.deepEqual(firstAddBefore.path, []);
 });
 
 QUnit.test("testHideShowAddBeforeButton", function(assert) {
@@ -506,14 +502,12 @@ QUnit.test("testaddAlternativePresentationToggleNoStyle", function(assert) {
 	let presentation = CORATEST.presentationStub("maximized");
 	pRepeatingElement.addPresentation(presentation);
 
-	let presentationView = view.childNodes[0];
 	assert.deepEqual(view.className, "repeatingElement");
 
 	let alternativePresentation = CORATEST.presentationStub("minimized maximized");
 	pRepeatingElement.addAlternativePresentation(alternativePresentation, "bothEqual");
 	assert.deepEqual(view.className, "repeatingElement");
 
-	let alternativePresentationView = view.childNodes[1];
 	let alternativeButton = buttonView.childNodes[1];
 	let defaultButton = buttonView.childNodes[2];
 

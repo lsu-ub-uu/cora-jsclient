@@ -115,7 +115,6 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd,
 				repeatId, parentPath) {
 			let pathSpec = {
-				"metadataProvider" : spec.metadataProvider,
 				"metadataIdToAdd" : metadataIdToAdd,
 				"repeatId" : repeatId,
 				"parentPath" : parentPath

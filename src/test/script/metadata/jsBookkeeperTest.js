@@ -20,7 +20,7 @@
 "use strict";
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.jsBookkeeperFactory = function(metadataProvider, pubSub, textProvider) {
+	coraTest.jsBookkeeperFactory= function(metadataProvider, pubSub, textProvider) {
 		let factor = function(metadataId, dataHolder) {
 			let dependencies = {
 				"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
@@ -155,7 +155,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", f
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
-			"path" : {},
+			"path" : [],
 			"childReference" : childReferenceTextVariableId,
 			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
@@ -390,14 +390,14 @@ QUnit.test("testAddBefore", function(assert) {
 QUnit.test("testRemove", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
-		"path" : {}
+		"path" : []
 	};
 	jsBookkeeper.remove(data);
 	let messages = this.pubSub.getMessages();
 	let expectedMessage = {
 		"type" : "remove",
 		"message" : {
-			"path" : {}
+			"path" : []
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -406,13 +406,13 @@ QUnit.test("testRemove", function(assert) {
 
 	let unsubscriptionsPathBelow = this.pubSub.getUnsubscriptionsPathBelow();
 	assert.equal(unsubscriptionsPathBelow.length, 1);
-	assert.stringifyEqual(unsubscriptionsPathBelow[0], {});
+	assert.stringifyEqual(unsubscriptionsPathBelow[0], []);
 });
 
 QUnit.test("testMove", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
-		"path" : {},
+		"path" : [],
 		"moveChild" : {
 			"name" : "linkedPath",
 			"children" : [ {
@@ -440,7 +440,7 @@ QUnit.test("testMove", function(assert) {
 	let expectedMessage = {
 		"type" : "move",
 		"message" : {
-			"path" : {},
+			"path" : [],
 			"moveChild" : {
 				"name" : "linkedPath",
 				"children" : [ {

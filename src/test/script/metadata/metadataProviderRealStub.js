@@ -3108,42 +3108,6 @@ var CORATEST = (function(coraTest) {
 				"type" : "group"
 			}
 		};
-		// case "systemLanguagesCollectionVar":
-		// return {
-		// "children" : [ {
-		// "children" : [ {
-		// "name" : "id",
-		// "value" : "systemLanguagesCollectionVar"
-		// }, {
-		// "name" : "type",
-		// "value" : "metadataCollectionVariable"
-		// }, {
-		// "name" : "createdBy",
-		// "value" : "userId"
-		// }, {
-		// "name" : "updatedBy",
-		// "value" : "userId"
-		// } ],
-		// "name" : "recordInfo"
-		// }, {
-		// "name" : "nameInData",
-		// "value" : "lang"
-		// }, {
-		// "name" : "textId",
-		// "value" : "systemLanguagesCollectionVarTextId"
-		// }, {
-		// "name" : "defTextId",
-		// "value" : "systemLanguagesCollectionVarDefTextId"
-		// }, {
-		// "name" : "refCollectionId",
-		// "value" : "systemLanguagesCollection"
-		// } ],
-		// "name" : "metadata",
-		// "attributes" : {
-		// "type" : "collectionVariable"
-		// }
-		// };
-		// TODO: REMOVE
 		metadataArray["systemLanguageCollectionVar"] = {
 			"children" : [ {
 				"children" : [ {
@@ -5580,18 +5544,6 @@ var CORATEST = (function(coraTest) {
 			}, {
 				"name" : "childReferences",
 				"children" : [
-				// {
-				// "name" : "childReference",
-				// "repeatId" : "1",
-				// "children" : [ {
-				// "name" : "ref",
-				// "value" : "textSystemOneNewPGroupText"
-				// }, {
-				// "name" : "default",
-				// "value" : "ref"
-				// } ]
-				// }
-				// ,
 				{
 					"name" : "childReference",
 					"repeatId" : "0",
@@ -5672,18 +5624,6 @@ var CORATEST = (function(coraTest) {
 			}, {
 				"name" : "childReferences",
 				"children" : [
-				// {
-				// "name" : "childReference",
-				// "repeatId" : "1",
-				// "children" : [ {
-				// "name" : "ref",
-				// "value" : "textSystemOneNewPGroupText"
-				// }, {
-				// "name" : "default",
-				// "value" : "ref"
-				// } ]
-				// }
-				// ,
 				{
 					"name" : "childReference",
 					"repeatId" : "0",
@@ -5939,17 +5879,6 @@ var CORATEST = (function(coraTest) {
 			}, {
 				"name" : "childReferences",
 				"children" : [
-				// {
-				// "name" : "childReference",
-				// "repeatId" : "1",
-				// "children" : [ {
-				// "name" : "ref",
-				// "value" : "textDefaultPGroupText"
-				// }, {
-				// "name" : "default",
-				// "value" : "ref"
-				// } ]
-				// },
 				{
 					"name" : "childReference",
 					"repeatId" : "0",
@@ -6212,17 +6141,6 @@ var CORATEST = (function(coraTest) {
 			}, {
 				"name" : "childReferences",
 				"children" : [
-				// {
-				// "name" : "childReference",
-				// "repeatId" : "1",
-				// "children" : [ {
-				// "name" : "ref",
-				// "value" : "recordInfoNewTextPGroupText"
-				// }, {
-				// "name" : "default",
-				// "value" : "ref"
-				// } ]
-				// },
 				{
 					"name" : "childReference",
 					"repeatId" : "1",
@@ -6303,17 +6221,6 @@ var CORATEST = (function(coraTest) {
 			}, {
 				"name" : "childReferences",
 				"children" : [
-				// {
-				// "name" : "childReference",
-				// "repeatId" : "1",
-				// "children" : [ {
-				// "name" : "ref",
-				// "value" : "textPartDefaultPGroupText"
-				// }, {
-				// "name" : "default",
-				// "value" : "ref"
-				// } ]
-				// },
 				{
 					"name" : "childReference",
 					"repeatId" : "1",
@@ -6711,26 +6618,6 @@ var CORATEST = (function(coraTest) {
 				"value" : "input"
 			} ]
 		};
-		// case "idTextTextOutputPVar":
-		// return {
-		// "name" : "presentation",
-		// "attributes" : {
-		// "type" : "pVar"
-		// },
-		// "children" : [ {
-		// "name" : "recordInfo",
-		// "children" : [ {
-		// "name" : "id",
-		// "value" : "idTextTextPVar"
-		// } ]
-		// }, {
-		// "name" : "presentationOf",
-		// "value" : "idTextTextVar"
-		// }, {
-		// "name" : "mode",
-		// "value" : "output"
-		// } ]
-		// };
 		metadataArray["textTextPVar"] = {
 			"name" : "presentation",
 			"attributes" : {
@@ -7654,10 +7541,6 @@ var CORATEST = (function(coraTest) {
 				"name" : "mode",
 				"value" : "output"
 			}
-			// , {
-			// "name" : "emptyTextId",
-			// "value" : "initialEmptyValueText"
-			// }
 			]
 		};
 		metadataArray["presentationVarIdText"] = {
@@ -9313,10 +9196,6 @@ var CORATEST = (function(coraTest) {
 			if (metadataArray[metadataId] !== undefined) {
 				return metadataArray[metadataId];
 			} else {
-
-				// default:
-				// console.log("Id(" + metadataId + ") not found in
-				// metadataProviderRealStub");
 				throw new Error("Id(" + metadataId + ") not found in metadataProviderRealStub");
 			}
 		}

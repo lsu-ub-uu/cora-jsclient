@@ -83,13 +83,11 @@ QUnit.module("presentation/pRepeatingContainerTest.js", {
 		this.cPRepeatingContainer = CORA.coraData(this.metadataProvider
 					.getMetadataById(this.pRepeatingContainerId));
 		this.spec = {
-			"path" : {},
+			"path" : [],
 			"cPresentation" : this.cPRepeatingContainer,
 		};
 			
 	},
-	afterEach : function() {
-	}
 });
 
 QUnit.test("testGetDependencies", function(assert) {

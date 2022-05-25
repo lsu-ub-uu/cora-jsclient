@@ -41,10 +41,6 @@ var CORA = (function(cora) {
 			validateForMetadata();
 		};
 
-		const hasAttributes = function() {
-			return cMetadataElement.containsChildWithNameInData("attributeReferences");
-		};
-
 		const validateForMetadata = function() {
 			let nextLevelPath = createNextLevelPath();
 			if (isGroup()) {
@@ -57,102 +53,12 @@ var CORA = (function(cora) {
 		};
 
 		const createNextLevelPath = function() {
-			let nextLevelPathPart = createNextLevelPathPart();
-
-			if (incomingPathIsEmpty()) {
-				return nextLevelPathPart;
-			}
-
-			let pathCopy = JSON.parse(JSON.stringify(path));
-			let lowestPath = findLowestPath(pathCopy);
-			lowestPath.children.push(nextLevelPathPart);
-			return pathCopy;
-		};
-
-		const createNextLevelPathPart = function() {
-			let childPathPart = createLinkedPathWithNameInData();
-
-			if (hasRepeatId()) {
-				childPathPart.children.push(createRepeatId());
-			}
-
-			if (hasAttributes()) {
-				childPathPart.children.push(createAttributes());
-			}
-			return childPathPart;
-		};
-
-		const createLinkedPathWithNameInData = function() {
-			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-			return {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": nameInData
-				}]
+			let pathSpec = {
+				"metadataIdToAdd": metadataId,
+				"repeatId": repeatId,
+				"parentPath": path
 			};
-		};
-
-		const hasRepeatId = function() {
-			return repeatId !== undefined;
-		};
-
-		const createRepeatId = function() {
-			return {
-				"name": "repeatId",
-				"value": repeatId
-			};
-		};
-
-		const createAttributes = function() {
-			let attributes = {
-				"name": "attributes",
-				"children": []
-			};
-			let attributeReferences = cMetadataElement
-				.getFirstChildByNameInData('attributeReferences');
-			let attributeNo = 1;
-			attributeReferences.children.forEach(function(attributeReference) {
-				attributes.children.push(createAttributeWithAttributeAndRepeatId(
-					attributeReference, String(attributeNo)));
-				attributeNo++;
-			});
-			return attributes;
-		};
-
-		const createAttributeWithAttributeAndRepeatId = function(attributeReference, attributeRepeatId) {
-			let ref = getRefValueFromAttributeRef(attributeReference);
-			let attribute = getMetadataById(ref);
-			let attributeName = attribute.getFirstAtomicValueByNameInData('nameInData');
-			let attributeValue = attribute.getFirstAtomicValueByNameInData('finalValue');
-			return {
-				"name": "attribute",
-				"repeatId": attributeRepeatId,
-				"children": [{
-					"name": "attributeName",
-					"value": attributeName
-				}, {
-					"name": "attributeValue",
-					"value": attributeValue
-				}]
-			};
-		};
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const incomingPathIsEmpty = function() {
-			return path.name === undefined;
-		};
-
-		const findLowestPath = function(pathToSearch) {
-			let coraPath = CORA.coraData(pathToSearch);
-			if (coraPath.containsChildWithNameInData("linkedPath")) {
-				return findLowestPath(coraPath.getFirstChildByNameInData("linkedPath"));
-			}
-			return pathToSearch;
+			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const isGroup = function() {

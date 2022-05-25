@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/metadataChildValidatorTest.js", {
+QUnit.module("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -27,7 +27,7 @@ QUnit.module.only("metadata/metadataChildValidatorTest.js", {
 			"pubSub": this.pubSub
 		};
 		this.spec = {
-			"path": {},
+			"path": [],
 		};
 		this.spec.childReference = {
 			"name": "childReference",
@@ -136,7 +136,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let pubSubMessages = this.pubSub.getMessages();
-	
+
 	assert.strictEqual(pubSubMessages.length, 1);
 	assert.stringifyEqual(pubSubMessages[0], CORATEST.createValidationErrorMessage("textVariableId"));
 });
@@ -147,7 +147,7 @@ CORATEST.createValidationErrorMessage =
 			"type": "validationError",
 			"message": {
 				"metadataId": metadataId,
-				"path": [metadataId] 
+				"path": [metadataId]
 			}
 		};
 	};
@@ -262,19 +262,7 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 		"type": "validationError",
 		"message": {
 			"metadataId": "textVariableId",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "groupIdTwoTextChild"
-				}, {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVariableId"
-					}]
-				}]
-			}
+			"path": ["groupIdTwoTextChild", "textVariableId"]
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
@@ -324,13 +312,7 @@ CORATEST.createRemoveMessage =
 			"type": "remove",
 			"message": {
 				"type": "remove",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": metadataId
-					}]
-				}
+				"path": [metadataId]
 			}
 		};
 	};
@@ -399,16 +381,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		"type": "remove",
 		"message": {
 			"type": "remove",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVariableId"
-				}, {
-					"name": "repeatId",
-					"value": "two"
-				}]
-			}
+			"path": ["textVariableId.two"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
@@ -417,16 +390,7 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		"type": "validationError",
 		"message": {
 			"metadataId": "textVariableId",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVariableId"
-				}, {
-					"name": "repeatId",
-					"value": "one"
-				}]
-			}
+			"path": ["textVariableId.one"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[1], validationError);
@@ -466,21 +430,10 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 		"type": "validationError",
 		"message": {
 			"metadataId": "textVariableId",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVariableId"
-				},
-				{
-					"name": "repeatId",
-					"value": "two"
-				}]
-			}
+			"path": ["textVariableId.two"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], validationError);
-
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
@@ -551,16 +504,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 		"type": "remove",
 		"message": {
 			"type": "remove",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVariableId"
-				}, {
-					"name": "repeatId",
-					"value": "one"
-				}]
-			}
+			"path": ["textVariableId.one"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
@@ -637,32 +581,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 			"type": "validationError",
 			"message": {
 				"metadataId": "textVariableId",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "groupIdOneTextChildOneAttribute"
-					}, {
-						"name": "attributes",
-						"children": [{
-							"name": "attribute",
-							"repeatId": "1",
-							"children": [{
-								"name": "attributeName",
-								"value": "anAttribute"
-							}, {
-								"name": "attributeValue",
-								"value": "aFinalValue"
-							}]
-						}]
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVariableId"
-						}]
-					}]
-				}
+				"path": ["groupIdOneTextChildOneAttribute", "textVariableId"]
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -721,42 +640,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 			"type": "validationError",
 			"message": {
 				"metadataId": "textVariableId",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "groupIdOneTextChildTwoAttributes"
-					}, {
-						"name": "attributes",
-						"children": [{
-							"name": "attribute",
-							"repeatId": "1",
-							"children": [{
-								"name": "attributeName",
-								"value": "anAttribute"
-							}, {
-								"name": "attributeValue",
-								"value": "aFinalValue"
-							}]
-						}, {
-							"name": "attribute",
-							"repeatId": "2",
-							"children": [{
-								"name": "attributeName",
-								"value": "anOtherAttribute"
-							}, {
-								"name": "attributeValue",
-								"value": "aOtherFinalValue"
-							}]
-						}]
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVariableId"
-						}]
-					}]
-				}
+				"path": ["groupIdOneTextChildTwoAttributes", "textVariableId"]
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -828,47 +712,9 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			"type": "validationError",
 			"message": {
 				"metadataId": "textVar",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
-						}, {
-							"name": "repeatId",
-							"value": "one1"
-						}, {
-							"name": "attributes",
-							"children": [{
-								"name": "attribute",
-								"repeatId": "1",
-								"children": [{
-									"name": "attributeName",
-									"value": "anAttribute"
-								}, {
-									"name": "attributeValue",
-									"value": "aFinalValue"
-								}]
-							}]
-						}, {
-							"name": "linkedPath",
-							"children": [{
-								"name": "nameInData",
-								"value": "textVar"
-							}, {
-								"name": "repeatId",
-								"value": "one2"
-							}]
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
+
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -877,38 +723,8 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 			"type": "remove",
 			"message": {
 				"type": "remove",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
-						}, {
-							"name": "repeatId",
-							"value": "one1"
-						}, {
-							"name": "attributes",
-							"children": [{
-								"name": "attribute",
-								"repeatId": "1",
-								"children": [{
-									"name": "attributeName",
-									"value": "anAttribute"
-								}, {
-									"name": "attributeValue",
-									"value": "aFinalValue"
-								}]
-							}]
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[1], removeMessage);
@@ -1013,47 +829,8 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 			"type": "validationError",
 			"message": {
 				"metadataId": "textVar",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
-						}, {
-							"name": "repeatId",
-							"value": "one1"
-						}, {
-							"name": "attributes",
-							"children": [{
-								"name": "attribute",
-								"repeatId": "1",
-								"children": [{
-									"name": "attributeName",
-									"value": "anAttribute"
-								}, {
-									"name": "attributeValue",
-									"value": "aFinalValue"
-								}]
-							}]
-						}, {
-							"name": "linkedPath",
-							"children": [{
-								"name": "nameInData",
-								"value": "textVar"
-							}, {
-								"name": "repeatId",
-								"value": "one2"
-							}]
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
@@ -1062,105 +839,27 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 			"type": "remove",
 			"message": {
 				"type": "remove",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
-						}, {
-							"name": "repeatId",
-							"value": "one1"
-						}, {
-							"name": "attributes",
-							"children": [{
-								"name": "attribute",
-								"repeatId": "1",
-								"children": [{
-									"name": "attributeName",
-									"value": "anAttribute"
-								}, {
-									"name": "attributeValue",
-									"value": "aFinalValue"
-								}]
-							}]
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
 		assert.stringifyEqual(messages[1], removeMessage1);
-
+		//
 		let removeMessage2 = {
 			"type": "remove",
 			"message": {
 				"type": "remove",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0_2"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
-						}, {
-							"name": "repeatId",
-							"value": "one1"
-						}, {
-							"name": "attributes",
-							"children": [{
-								"name": "attribute",
-								"repeatId": "1",
-								"children": [{
-									"name": "attributeName",
-									"value": "anAttribute"
-								}, {
-									"name": "attributeValue",
-									"value": "aFinalValue"
-								}]
-							}]
-						}, {
-							"name": "linkedPath",
-							"children": [{
-								"name": "nameInData",
-								"value": "textVar"
-							}, {
-								"name": "repeatId",
-								"value": "one2"
-							}]
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0_2",
+					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[2], removeMessage2);
-
+		//
 		let removeMessage3 = {
 			"type": "remove",
 			"message": {
 				"type": "remove",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup"
-					}, {
-						"name": "repeatId",
-						"value": "one0"
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"]
 			}
 		};
 		assert.stringifyEqual(messages[3], removeMessage3);
@@ -1248,68 +947,16 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 		"type": "validationError",
 		"message": {
 			"metadataId": "textVar",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVarRepeat1to3InGroupOneAttribute"
-				}, {
-					"name": "repeatId",
-					"value": "one1"
-				}, {
-					"name": "attributes",
-					"children": [{
-						"name": "attribute",
-						"repeatId": "1",
-						"children": [{
-							"name": "attributeName",
-							"value": "anAttribute"
-						}, {
-							"name": "attributeValue",
-							"value": "aFinalValue"
-						}]
-					}]
-				}, {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVar"
-					}, {
-						"name": "repeatId",
-						"value": "one2"
-					}]
-				}]
-			}
+			"path": ["textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
+
 	let validationError2 = {
 		"type": "remove",
 		"message": {
 			"type": "remove",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVarRepeat1to3InGroupOneAttribute"
-				}, {
-					"name": "repeatId",
-					"value": "one1"
-				}, {
-					"name": "attributes",
-					"children": [{
-						"name": "attribute",
-						"repeatId": "1",
-						"children": [{
-							"name": "attributeName",
-							"value": "anAttribute"
-						}, {
-							"name": "attributeValue",
-							"value": "aFinalValue"
-						}]
-					}]
-				}]
-			}
+			"path": ["textVarRepeat1to3InGroupOneAttribute.one1"]
 		}
 	};
 	assert.stringifyEqual(messages[1], validationError2);
@@ -1393,35 +1040,8 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 			"type": "validationError",
 			"message": {
 				"metadataId": "textVar",
-				"path": {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "textVarRepeat1to3InGroupOneAttribute"
-					}, {
-						"name": "attributes",
-						"children": [{
-							"name": "attribute",
-							"repeatId": "1",
-							"children": [{
-								"name": "attributeName",
-								"value": "anAttribute"
-							}, {
-								"name": "attributeValue",
-								"value": "aFinalValue"
-							}]
-						}]
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "textVar"
-						}, {
-							"name": "repeatId",
-							"value": "one2"
-						}]
-					}]
-				}
+				"path": ["textVarRepeat1to3InGroupOneAttribute",
+					"textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
@@ -1480,21 +1100,8 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 		"type": "validationError",
 		"message": {
 			"metadataId": "linkedRecordIdTextVar",
-			"path": {
-				"name": "linkedPath",
-				"children": [
-
-					{
-						"name": "nameInData",
-						"value": "myLink"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "linkedRecordId"
-						}]
-					}]
-			}
+			"path": ["myLink",
+				"linkedRecordIdTextVar"]
 		}
 	};
 
@@ -1531,36 +1138,15 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 		"type": "validationError",
 		"message": {
 			"metadataId": "linkedRecordIdTextVar",
-			"path": {
-				"name": "linkedPath",
-				"children": [
-
-					{
-						"name": "nameInData",
-						"value": "myLink"
-					}, {
-						"name": "linkedPath",
-						"children": [{
-							"name": "nameInData",
-							"value": "linkedRecordId"
-						}]
-					}]
-			}
+			"path": ["myLink",
+				"linkedRecordIdTextVar"]
 		}
 	};
 	let expectedMessage2 = {
 		"type": "remove",
 		"message": {
 			"type": "remove",
-			"path": {
-				"name": "linkedPath",
-				"children": [
-
-					{
-						"name": "nameInData",
-						"value": "myLink"
-					}]
-			}
+			"path": ["myLink"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -1625,19 +1211,8 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 		"type": "validationError",
 		"message": {
 			"metadataId": "linkedRepeatIdTextVar",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "myPathLink"
-				}, {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "linkedRepeatId"
-					}]
-				}]
-			}
+			"path": ["myPathLink",
+				"linkedRepeatIdTextVar"]
 		}
 	};
 
@@ -1699,9 +1274,15 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"remove","message":{'
-		+ '"type":"remove",' + '"path":{\"name\":\"linkedPath\"'
-		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"numVariableId\"}]}}}');
+	let expectedResult = {
+		"type": "remove",
+		"message": {
+			"type": "remove",
+			"path": ["numVariableId"]
+		}
+	};
+
+	assert.deepEqual(messages[0], expectedResult);
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(assert) {
@@ -1721,10 +1302,16 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataNotANumber", function(a
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
-		+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
-		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"numVariableId\"}]}}}');
+
+	let expectedResult = {
+		type: "validationError",
+		message: {
+			metadataId: "numVariableId",
+			path: ["numVariableId"]
+		}
+	};
+
+	assert.deepEqual(messages[0], expectedResult);
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", function(assert) {
@@ -1745,9 +1332,16 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
-		+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
-		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"numVariableId\"}]}}}');
+
+	let expectedResult = {
+		type: "validationError",
+		message: {
+			metadataId: "numVariableId",
+			path: ["numVariableId"]
+		}
+	};
+
+	assert.deepEqual(messages[0], expectedResult);
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", function(assert) {
@@ -1768,9 +1362,16 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
-		+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
-		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"numVariableId\"}]}}}');
+
+	let expectedResult = {
+		type: "validationError",
+		message: {
+			metadataId: "numVariableId",
+			path: ["numVariableId"]
+		}
+	};
+
+	assert.deepEqual(messages[0], expectedResult);
 });
 
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed", function(assert) {
@@ -1791,9 +1392,16 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"validationError","message":{'
-		+ '"metadataId":"numVariableId",' + '"path":{\"name\":\"linkedPath\"'
-		+ ',\"children\":[{\"name\":\"nameInData\",\"value\":\"numVariableId\"}]}}}');
+
+	let expectedResult = {
+		type: "validationError",
+		message: {
+			metadataId: "numVariableId",
+			path: ["numVariableId"]
+		}
+	};
+
+	assert.deepEqual(messages[0], expectedResult);
 });
 
 QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
@@ -1843,14 +1451,7 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 		"type": "validationError",
 		"message": {
 			"metadataId": "trueFalseTrueIsFinalValueCollectionVar",
-			"path": {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "trueFalse"
-				}]
-
-			}
+			"path": ["trueFalseTrueIsFinalValueCollectionVar"]
 		}
 	};
 
@@ -1884,41 +1485,18 @@ QUnit.test("testValidateGroupInGroupIdOneTextChild0to1OneCollectionChildWithFina
 		"type": "validationError",
 		"message": {
 			"metadataId": "textVariableId",
-			"path": {
-				"name": "linkedPath",
-				"children": [
-					{
-						"name": "nameInData",
-						"value": "groupWithOneCollectionVarChildAndOneTextChildGroup"
-					},
-					{
-						"name": "linkedPath",
-						"children": [
-							{
-								"name": "nameInData",
-								"value": "textVariableId"
-							}]
-					}]
-			}
+			"path": ["groupWithOneCollectionVarChildAndOneTextChildGroup", "textVariableId"]
 		}
 	};
-	assert.stringifyEqual(messages[0], validationError);
+	assert.deepEqual(messages[0], validationError);
 	let removeMessage = {
 		"type": "remove",
 		"message": {
 			"type": "remove",
-			"path": {
-				"name": "linkedPath",
-				"children": [
-					{
-						"name": "nameInData",
-						"value": "groupWithOneCollectionVarChildAndOneTextChildGroup"
-					}
-				]
-			}
+			"path": ["groupWithOneCollectionVarChildAndOneTextChildGroup"]
 		}
 	};
-	assert.stringifyEqual(messages[1], removeMessage);
+	assert.deepEqual(messages[1], removeMessage);
 
 	assert.strictEqual(messages.length, 2);
 });

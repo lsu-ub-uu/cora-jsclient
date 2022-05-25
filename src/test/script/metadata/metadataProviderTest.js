@@ -228,7 +228,6 @@ QUnit.test("callWhenReadyNotCalledWhenReadyIfUnspecified", function(assert) {
 		providerStarted = true;
 	}
 
-	// this.spec.callWhenReady = providerReady;
 	var metadataProvider = CORA.metadataProvider(this.dependencies, this.spec);
 
 	metadataProvider.processFetchedMetadata(this.metadataAnswer);

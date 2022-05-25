@@ -305,7 +305,6 @@ var CORA = (function(cora) {
 
 		const calculateNewPath = function(metadataIdToAdd) {
 			let pathSpec = {
-				"metadataProvider": dependencies.metadataProvider,
 				"metadataIdToAdd": metadataIdToAdd,
 				"parentPath": spec.path
 			};

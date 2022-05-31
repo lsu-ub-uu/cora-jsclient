@@ -942,6 +942,19 @@ function MetadataProviderStub() {
 				}
 			};
 		}
+		if (idToGet === "anAttributeChoice") {
+			return {
+				"name": "metadata",
+				"children": [{
+					"name": "ref",
+					"value": "recordTypeTypeCollection"
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
+				"attributes": {
+					"type": "collectionVariable"
+				}
+			};
+		}
 		if (idToGet === "groupIdOneTextChildOneAttribute") {
 			return {
 				"name": "metadata",
@@ -958,6 +971,38 @@ function MetadataProviderStub() {
 							}, {
 								"name": "linkedRecordId",
 								"value": "anAttribute"
+							}],
+							"name": "ref"
+						}],
+						"name": "attributeReferences"
+					},
+					{
+						"name": "childReferences",
+						"children": [
+
+							createChildReferenceWithRefAndRepeatId1to1(
+								"metadataTextVariable", "textVariableId",
+								"1")]
+					}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+			};
+		}
+		if (idToGet === "groupIdOneTextChildOneAttributeChoice") {
+			return {
+				"name": "metadata",
+				"attributes": {
+					"type": "group"
+				},
+				"children": [
+					{
+						"children": [{
+							"repeatId": "1",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataCollectionVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "anAttributeChoice"
 							}],
 							"name": "ref"
 						}],

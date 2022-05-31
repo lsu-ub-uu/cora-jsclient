@@ -27,13 +27,13 @@ var CORA = (function(cora) {
 		let containerPath = {};
 
 		const start = function() {
-			dataContainer = createDataContainerForElementWithId(metadataId, []);
+			dataContainer = createDataContainerForElementWithId(metadataId);
 			let pathString = JSON.stringify([]);
 			containerPath[pathString] = dataContainer;
 			subscribeToAddAndSetValueAndRemoveAndMoveMessagesForAllPaths();
 		};
 
-		const createDataContainerForElementWithId = function(id, path, repeatIdIn) {
+		const createDataContainerForElementWithId = function(id, repeatIdIn) {
 			let cMetadataElement = getMetadataById(id);
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData('nameInData');
 			let dataContainerPart = {
@@ -53,19 +53,30 @@ var CORA = (function(cora) {
 		};
 
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
-			let type = cMetadataElement.getData().attributes.type;
-			if (isTypeThatHasChildren(type)) {
+			addChildrenOrValueOfAtomic(dataContainerPart, cMetadataElement);
+			possiblyAddAttributes(dataContainerPart, cMetadataElement);
+			return dataContainerPart;
+		};
+		
+		const addChildrenOrValueOfAtomic = function (dataContainerPart, cMetadataElement){
+			let type = getDataType(cMetadataElement);
+			if (isChild(type)) {
 				addGroupParts(dataContainerPart);
 			} else {
 				dataContainerPart.value = "";
 			}
+		}
+		const getDataType = function(cMetadataElement){
+			return cMetadataElement.getData().attributes.type;
+		}
+		
+		const possiblyAddAttributes = function (dataContainerPart, cMetadataElement){
 			if (cMetadataElement.containsChildWithNameInData("attributeReferences")) {
 				dataContainerPart.attributes = createAttributesContainer(cMetadataElement);
 			}
-			return dataContainerPart;
-		};
+		}
 
-		const isTypeThatHasChildren = function(type) {
+		const isChild = function(type) {
 			return isGroup(type) || isResourceLink(type) || isRecordLink(type);
 		};
 
@@ -255,7 +266,7 @@ var CORA = (function(cora) {
 				containerSpecifiedByPath = foundContainer;
 			}
 			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
-			let newChild = createDataContainerForElementWithId(metadataIdToAdd, newPath, repeatId);
+			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
 
 			let pathString = JSON.stringify(newPath);

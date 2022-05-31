@@ -51,29 +51,56 @@ var CORA = (function(cora) {
 				repeatId: spec.repeatId,
 				nameInData: cMetadataElement.getFirstAtomicValueByNameInData("nameInData")
 			};
-			if (hasAttributes()) {
-				addMessage.attributes = collectAttributes();
-			}
 			pubSub.publish("add", addMessage);
+			if (hasAttributes()) {
+				addAttributes();
+			}
 		};
 
 		const hasAttributes = function() {
 			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
-		const collectAttributes = function() {
-			let collectedAttributes = {};
+		const addAttributes = function() {
 			let attributeReferences = cMetadataElement.getFirstChildByNameInData("attributeReferences");
 			attributeReferences.children.forEach(function(attributeReference) {
-				let cAttributeReference = CORA.coraData(attributeReference);
-				let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-				let cCollectionVariable = getMetadataById(refLinkedId);
-				let attributeNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
-				let attributeValues = [];
-				collectedAttributes[attributeNameInData] = attributeValues;
-				attributeValues.push(cCollectionVariable.getFirstAtomicValueByNameInData("finalValue"));
+				addAttribute(attributeReference);
 			});
-			return collectedAttributes;
+		};
+
+		const addAttribute = function(attributeReference) {
+			let cAttributeReference = CORA.coraData(attributeReference);
+			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cCollectionVariable = getMetadataById(refLinkedId);
+			let nextLevelPath = createNextLevelPath();
+
+			let addAttributeMessage = {
+				metadataId: refLinkedId,
+				path: nextLevelPath,
+				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
+			}
+			pubSub.publish("addAttribute", addAttributeMessage);
+
+			possiblySetAttributeValue(refLinkedId, cCollectionVariable, nextLevelPath);
+		};
+
+
+		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable, nextLevelPath) {
+			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
+
+				let pathSpec = {
+					metadataIdToAdd: refLinkedId,
+					parentPath: nextLevelPath,
+					type: "attribute"
+				};
+
+				let setValueMessage = {
+					path: CORA.calculatePathForNewElement(pathSpec),
+					value: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
+				}
+
+				pubSub.publish("setValue", setValueMessage);
+			}
 		};
 
 		const initializeForMetadata = function() {
@@ -97,9 +124,9 @@ var CORA = (function(cora) {
 
 		const createNextLevelPath = function() {
 			let pathSpec = {
-				"metadataIdToAdd": metadataId,
-				"repeatId": spec.repeatId,
-				"parentPath": path
+				metadataIdToAdd: metadataId,
+				repeatId: spec.repeatId,
+				parentPath: path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -107,8 +134,8 @@ var CORA = (function(cora) {
 		const isGroup = function() {
 			return "group" === getType();
 		};
-		
-		const getType = function(){
+
+		const getType = function() {
 			return cMetadataElement.getData().attributes.type;
 		}
 

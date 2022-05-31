@@ -20,17 +20,10 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.calculatePathForNewElement = function(spec) {
-//		var metadataProvider = spec.metadataProvider;
-//		var cMetadataElementToAdd = getMetadataById(spec.metadataIdToAdd);
 		var metadataId = spec.metadataIdToAdd;
 		var repeatId = spec.repeatId;
-//		var nameInData = cMetadataElementToAdd.getFirstAtomicValueByNameInData("nameInData");
 
 		var newPath = calculatePathForNewElement();
-
-		function getMetadataById(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
 
 		function copyPath(pathToCopy) {
 			return JSON.parse(JSON.stringify(pathToCopy));
@@ -44,32 +37,25 @@ var CORA = (function(cora) {
 		}
 
 		function parentPathPointsToTopLevel() {
-//			return spec.parentPath.children === undefined;
 			return spec.parentPath.length == 0;
 		}
 
 		function createPathForThisLevel() {
 			var path = createLinkedPath();
 			possiblyAddRepeatId(path);
-//			possiblyAddAttributes(path);
 			return path;
 		}
 
 		function createLinkedPath() {
-//			return {
-//				"name" : "linkedPath",
-//				"children" : [ {
-//					"name" : "nameInData",
-//					"value" : nameInData
-//				} ]
-//			};
+			if (spec.type == "attribute") {
+				return ["@" + metadataId];
+			}
 			return [metadataId];
 		}
 
 		function possiblyAddRepeatId(path) {
 			if (pathShouldHaveRepeatId()) {
-//				addRepeatIdToPath(path);
-				path.push(path.pop()+"."+repeatId);
+				path.push(path.pop() + "." + repeatId);
 			}
 		}
 
@@ -77,99 +63,13 @@ var CORA = (function(cora) {
 			return repeatId !== undefined;
 		}
 
-		function addRepeatIdToPath(path) {
-			path.children.push({
-				name : "repeatId",
-				value : repeatId
-			});
-		}
-
-		function possiblyAddAttributes(path) {
-			if (pathShouldHaveAttributes()) {
-				addAttributesToPath(path);
-			}
-		}
-
-		function pathShouldHaveAttributes() {
-			return cMetadataElementToAdd.containsChildWithNameInData("attributeReferences");
-		}
-
-		function addAttributesToPath(path) {
-			path.children.push(getAttributesAsPathPartFromMetadataElement());
-		}
-
 		function addPathForThisLevelToParentPath() {
 			var parentPathCopy = copyPath(spec.parentPath);
 			var childPath = createPathForThisLevel();
-//			var x = [];
-//			x.push
-//			return addChildPathToPath(parentPathCopy, childPath);
 			parentPathCopy.push(childPath[0]);
 			return parentPathCopy;
 		}
 
-//		function addChildPathToPath(parentPath, childPath) {
-//			var lowestPath = getLowestPathPointer(parentPath);
-//			lowestPath.children.push(childPath);
-//			return parentPath;
-//		}
-//
-//		function getLowestPathPointer(path) {
-//			var cPath = CORA.coraData(path);
-//			if (cPath.containsChildWithNameInData("linkedPath")) {
-//				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
-//			}
-//			return path;
-//		}
-
-		function getAttributesAsPathPartFromMetadataElement() {
-			var attributeList = createAttributeListFromMetadata();
-			return createAttributesHolder(attributeList);
-		}
-
-		function createAttributeListFromMetadata() {
-			var attributesObject = getAttributeObjectFromMetadata();
-
-			var attributeList = [];
-			var repeatIdCounter = 0;
-			var attributeKeys = Object.keys(attributesObject);
-			attributeKeys.forEach(function(attributeKey) {
-				var attribute = createAttributeWithNameAndValueAndRepeatId(attributeKey,
-						attributesObject[attributeKey][0], repeatIdCounter);
-
-				attributeList.push(attribute);
-				repeatIdCounter++;
-			});
-			return attributeList;
-		}
-
-		function getAttributeObjectFromMetadata() {
-			var metadataHelper = CORA.metadataHelper({
-				"metadataProvider" : spec.metadataProvider
-			});
-			return metadataHelper.collectAttributesAsObjectForMetadataId(spec.metadataIdToAdd);
-		}
-
-		function createAttributesHolder(attributesOut) {
-			return {
-				"name" : "attributes",
-				"children" : attributesOut
-			};
-		}
-
-		function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValue, repeatIdIn) {
-			return {
-				"name" : "attribute",
-				"repeatId" : repeatIdIn || "1",
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : attributeName
-				}, {
-					"name" : "attributeValue",
-					"value" : attributeValue
-				} ]
-			};
-		}
 		return newPath;
 	};
 	return cora;

@@ -55,7 +55,7 @@ QUnit.test("testInit2", function(assert) {
 
 	// subscription
 	let subscriptions = this.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 1);
+	assert.strictEqual(subscriptions.length, 1);
 
 	let firstSubscription = subscriptions[0];
 	assert.strictEqual(firstSubscription.type, "*");
@@ -1137,3 +1137,16 @@ QUnit.test("testHandleMessageNoHandledType", function(assert) {
 	};
 	assert.deepEqual(dataHolder.getData(), expected);
 });
+
+//QUnit.test("testDataHolder", function(assert) {
+//	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+//
+////	dataHolder.addChild([], "groupIdOneTextChild");
+////	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+////
+////	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+////	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/notHandled");
+//
+//	let expected = "";
+//	assert.deepEqual(dataHolder.getData(), expected);
+//});

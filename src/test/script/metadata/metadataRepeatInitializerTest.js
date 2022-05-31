@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("metadata/metadataRepeatInitializerTest.js", {
+QUnit.module.only("metadata/metadataRepeatInitializerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -38,8 +38,6 @@ QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 			repeatId: undefined,
 			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
-	},
-	afterEach: function() {
 	}
 });
 
@@ -119,18 +117,105 @@ QUnit.test("testMessagesTextVariableWithAttributeNoData", function(assert) {
 	metadataRepeatInitializer.initialize();
 	let messages = this.pubSub.getMessages();
 
-	//	let message1 = messages[0];
-	//	assert.equal(message1.type, "add");
-	//	let m1 = message1.message;
-	//	assert.equal(m1.metadataId, "groupIdOneTextChildOneAttribute");
-	//	assert.deepEqual(m1.path, []);
-	//	assert.deepEqual(m1.path, this.spec.path);
-	//	assert.equal(m1.nameInData, "groupIdOneTextChildOneAttribute");
-	//	assert.deepEqual(m1.attributes, {anAttribute:["aFinalValue"]});
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"groupIdOneTextChildOneAttribute","path":[]' +
-		',"nameInData":"groupIdOneTextChildOneAttribute","attributes":{"anAttribute":["aFinalValue"]}}}');
-	assert.equal(messages.length, 1);
+		',"nameInData":"groupIdOneTextChildOneAttribute"}}');
+
+	let message1 = {
+		type: "addAttribute",
+		message: {
+			metadataId: "anAttribute",
+			path: ["groupIdOneTextChildOneAttribute"],
+			nameInData: "anAttribute"
+		}
+	};
+	assert.deepEqual(messages[1], message1);
+
+	let message2 = {
+		type: "setValue",
+		message: {
+			path: ["groupIdOneTextChildOneAttribute", "@anAttribute"],
+			value: "aFinalValue"
+		}
+	};
+	assert.deepEqual(messages[2], message2);
+
+	assert.equal(messages.length, 3);
+});
+QUnit.test("testMessagesTextVariableWithTwoAttributeNoData", function(assert) {
+	this.spec.metadataId = "groupIdOneTextChildTwoAttributes";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	let messages = this.pubSub.getMessages();
+
+	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+		+ '"metadataId":"groupIdOneTextChildTwoAttributes","path":[]' +
+		',"nameInData":"groupIdOneTextChildTwoAttributes"}}');
+
+	let addAttribute1 = {
+		type: "addAttribute",
+		message: {
+			metadataId: "anAttribute",
+			path: ["groupIdOneTextChildTwoAttributes"],
+			nameInData: "anAttribute"
+		}
+	};
+	assert.deepEqual(messages[1], addAttribute1);
+
+	let setValueAttribute1 = {
+		type: "setValue",
+		message: {
+			path: ["groupIdOneTextChildTwoAttributes", "@anAttribute"],
+			value: "aFinalValue"
+		}
+	};
+	assert.deepEqual(messages[2], setValueAttribute1);
+
+	let addAttribute2 = {
+		type: "addAttribute",
+		message: {
+			metadataId: "anOtherAttribute",
+			path: ["groupIdOneTextChildTwoAttributes"],
+			nameInData: "anOtherAttribute"
+		}
+	};
+	assert.deepEqual(messages[3], addAttribute2);
+
+	let setValueAttribute2 = {
+		type: "setValue",
+		message: {
+			path: ["groupIdOneTextChildTwoAttributes", "@anOtherAttribute"],
+			value: "aOtherFinalValue"
+		}
+	};
+	assert.deepEqual(messages[4], setValueAttribute2);
+
+	assert.equal(messages.length, 5);
+});
+
+QUnit.test("testMessagesTextVariableWithAttributeChoiceNoData", function(assert) {
+	this.spec.metadataId = "groupIdOneTextChildOneAttributeChoice";
+
+	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
+	metadataRepeatInitializer.initialize();
+	let messages = this.pubSub.getMessages();
+
+	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
+		+ '"metadataId":"groupIdOneTextChildOneAttributeChoice","path":[]' +
+		',"nameInData":"groupIdOneTextChildOneAttributeChoice"}}');
+
+	let message1 = {
+		type: "addAttribute",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["groupIdOneTextChildOneAttributeChoice"],
+			nameInData: "anAttributeChoice"
+		}
+	};
+	assert.deepEqual(messages[1], message1);
+
+	assert.equal(messages.length, 2);
 });
 
 QUnit.test("testMessagesTextVariableFinalValue", function(assert) {
@@ -218,9 +303,6 @@ QUnit.test("testGroupOneTextChildWithNODataChildAndRepeatInitializerCalledCorrec
 		.getFactoredChildIntitializers(0);
 	assert.ok(factoredChild.getInitializeTopLevelCalled());
 });
-
-//let expectedNextLevelPathForGroupIdOneTextChild = 	["groupIdOneTextChild"];
-
 
 QUnit.test("testGroupOneTextChildWithData", function(assert) {
 	this.spec.metadataId = "groupIdOneTextChild";
@@ -314,18 +396,18 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataNoRepeatId"
 
 	assert.stringifyEqual(linkedRecordTypeSpec.childReference, expectedRecordTypeReference);
 	assert.stringifyEqual(linkedRecordTypeSpec.data, { "name": "myLink", "children": [{ "name": "linkedRecordType", "value": "metadataTextVariable" }] });
-	assert.stringifyEqual(linkedRecordTypeSpec.path, ["myLink"] );
+	assert.stringifyEqual(linkedRecordTypeSpec.path, ["myLink"]);
 
 	let linkedRecordIdSpec = this.dependencies.metadataChildAndRepeatInitializerFactory.getChildSpec(1);
 	let expectedRecordIdReference = CORATEST.createRefForRepeatIntitalizer("metadataTextVariable", "linkedRecordIdTextVar", "1", "1");
 	assert.stringifyEqual(linkedRecordIdSpec.childReference, expectedRecordIdReference);
 	assert.stringifyEqual(linkedRecordIdSpec.data, this.spec.data);
-	assert.stringifyEqual(linkedRecordIdSpec.path, ["myLink"] );
+	assert.stringifyEqual(linkedRecordIdSpec.path, ["myLink"]);
 
 });
 
 QUnit.test("testRecordLinkWithMessagesNonEmptyPathInSpec", function(assert) {
-	this.spec.path = ["recordInfo","type"];
+	this.spec.path = ["recordInfo", "type"];
 	this.spec.metadataId = "myLink";
 
 	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
@@ -337,7 +419,7 @@ QUnit.test("testRecordLinkWithMessagesNonEmptyPathInSpec", function(assert) {
 		type: "add",
 		message: {
 			metadataId: "myLink",
-			path: ["recordInfo","type"],
+			path: ["recordInfo", "type"],
 			nameInData: "myLink"
 		}
 	};

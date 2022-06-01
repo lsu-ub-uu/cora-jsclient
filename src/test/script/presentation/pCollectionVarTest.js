@@ -387,15 +387,9 @@ QUnit.test("testHandleValidationErrorResetByChangingValue", function(assert) {
 });
 
 QUnit.test("testPubSubMessagesWithFirstLevelPath", function(assert) {
-	let firstLevelPath = CORATEST.firstLevelPath;
+	let firstLevelPath = ["textVariableId"];
+	let expectedPath = ["textVariableId"];
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}]
-	};
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {
@@ -416,15 +410,9 @@ QUnit.test("testPubSubMessagesWithFirstLevelPath", function(assert) {
 });
 
 QUnit.test("testDisablePubSubMessagesWithFirstLevelPathWithRepeatId", function(assert) {
-	let firstLevelPath = CORATEST.firstLevelPathWithRepeatId;
+	let firstLevelPath = ["textVariableId.0"];
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}]
-	};
+	let expectedPath = ["textVariableId"]
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {
@@ -445,21 +433,9 @@ QUnit.test("testDisablePubSubMessagesWithFirstLevelPathWithRepeatId", function(a
 });
 
 QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
-	let pathWithTwoLevels = CORATEST.pathWithTwoLevels;
+	let pathWithTwoLevels = ["recordInfo","dataDivider"];
+	let expectedPath = ["recordInfo","dataDivider"];
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "recordInfo"
-		}, {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "dataDivider"
-			}]
-		}]
-	};
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {
@@ -475,7 +451,7 @@ QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
 });
 
 QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
-	let pathWithAttribute = CORATEST.twoLevelPathWithAttribute;
+	let pathWithAttribute = ["textPart","numVariableId"];
 
 	let expectedPath = pathWithAttribute;
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
@@ -492,21 +468,9 @@ QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
 	assert.deepEqual(disableSubscription.path, expectedPath);
 });
 QUnit.test("testPubSubMessagesWithTwoLevelPathWithRepeatIdLowestLevel", function(assert) {
-	let pathWithAttribute = CORATEST.twoLevelPathWithRepeatIdAtLowestLevel;
+	let pathWithAttribute = ["userRole", "userRole.0"]; 
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "userRole"
-		}, {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "userRole"
-			}]
-		}]
-	};
+	let expectedPath = ["userRole","userRole"];
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {

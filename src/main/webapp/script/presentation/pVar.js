@@ -41,50 +41,7 @@ var CORA = (function(cora) {
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 		};
-
-		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
-
-		const getOutputFormat = function() {
-			if (cPresentation.containsChildWithNameInData("outputFormat")) {
-				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
-			}
-			return "text";
-		};
-
-		const getInputFormat = function() {
-			if (cPresentation.containsChildWithNameInData("inputFormat")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
-			}
-			return "text";
-		};
-
-		const getTextId = function(cMetadataElementIn, textNameInData) {
-			let cTextGroup = CORA.coraData(cMetadataElementIn
-				.getFirstChildByNameInData(textNameInData));
-			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const getInputType = function() {
-			if (cPresentation.containsChildWithNameInData("inputType")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputType");
-			}
-			return "input";
-		};
-
-		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
-			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
-			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-		};
-
-		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-			let pathUtils = CORA.pathUtils();
-			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-		};
-
+		
 		const intializePVarViewSpec = function(textProvider) {
 			let metadataId = spec.metadataIdUsedInData;
 			cMetadataElement = getMetadataById(metadataId);
@@ -139,6 +96,54 @@ var CORA = (function(cora) {
 				let emptyText = textProvider.getTranslation(emptyTextId);
 				pVarViewSpec.placeholderText = emptyText;
 			}
+		};
+
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+
+		const getOutputFormat = function() {
+			if (cPresentation.containsChildWithNameInData("outputFormat")) {
+				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
+			}
+			return "text";
+		};
+
+		const getInputFormat = function() {
+			if (cPresentation.containsChildWithNameInData("inputFormat")) {
+				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
+			}
+			return "text";
+		};
+
+		const getTextId = function(cMetadataElementIn, textNameInData) {
+			let cTextGroup = CORA.coraData(cMetadataElementIn
+				.getFirstChildByNameInData(textNameInData));
+			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const getInputType = function() {
+			if (cPresentation.containsChildWithNameInData("inputType")) {
+				return cPresentation.getFirstAtomicValueByNameInData("inputType");
+			}
+			return "input";
+		};
+
+		const subscribeToPubSub = function() {
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
+			pubSub.subscribe("disable", disablePath, undefined, disableVar);
+			pubSub.subscribe("addAttribute", path, undefined, addAttribute);
+		};
+		
+		const addAttribute = function(){
+			
+		};
+
+		const ensureNoRepeatIdInLowestLevelOfPath = function() {
+			let pathUtils = CORA.pathUtils();
+			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
 		};
 
 		const getView = function() {
@@ -262,6 +267,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,
+			addAttribute: addAttribute,
 			getText: getText,
 			getDefText: getDefText,
 			getRegEx: getRegEx,

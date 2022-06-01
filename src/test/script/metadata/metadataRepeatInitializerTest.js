@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("metadata/metadataRepeatInitializerTest.js", {
+QUnit.module("metadata/metadataRepeatInitializerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -125,7 +125,7 @@ QUnit.test("testMessagesTextVariableWithAttributeNoData", function(assert) {
 		type: "addAttribute",
 		message: {
 			metadataId: "anAttribute",
-			path: ["groupIdOneTextChildOneAttribute"],
+			path: [],
 			nameInData: "anAttribute"
 		}
 	};
@@ -134,13 +134,25 @@ QUnit.test("testMessagesTextVariableWithAttributeNoData", function(assert) {
 	let message2 = {
 		type: "setValue",
 		message: {
-			path: ["groupIdOneTextChildOneAttribute", "@anAttribute"],
-			value: "aFinalValue"
+			path: [ "@anAttribute"],
+			data: "aFinalValue"
 		}
 	};
 	assert.deepEqual(messages[2], message2);
-
-	assert.equal(messages.length, 3);
+	
+	
+	let message3 = {
+		type: "disable",
+		message: {
+			path: ["@anAttribute"]
+		}
+	};
+	assert.deepEqual(messages[3], message3);
+	
+	assert.equal(messages.length, 4);
+	
+	
+	
 });
 QUnit.test("testMessagesTextVariableWithTwoAttributeNoData", function(assert) {
 	this.spec.metadataId = "groupIdOneTextChildTwoAttributes";
@@ -157,7 +169,7 @@ QUnit.test("testMessagesTextVariableWithTwoAttributeNoData", function(assert) {
 		type: "addAttribute",
 		message: {
 			metadataId: "anAttribute",
-			path: ["groupIdOneTextChildTwoAttributes"],
+			path: [],
 			nameInData: "anAttribute"
 		}
 	};
@@ -166,32 +178,48 @@ QUnit.test("testMessagesTextVariableWithTwoAttributeNoData", function(assert) {
 	let setValueAttribute1 = {
 		type: "setValue",
 		message: {
-			path: ["groupIdOneTextChildTwoAttributes", "@anAttribute"],
-			value: "aFinalValue"
+			path: ["@anAttribute"],
+			data: "aFinalValue"
 		}
 	};
 	assert.deepEqual(messages[2], setValueAttribute1);
+	
+	let disable1 = {
+		type: "disable",
+		message: {
+			path: ["@anAttribute"]
+		}
+	};
+	assert.deepEqual(messages[3], disable1);
 
 	let addAttribute2 = {
 		type: "addAttribute",
 		message: {
 			metadataId: "anOtherAttribute",
-			path: ["groupIdOneTextChildTwoAttributes"],
+			path: [],
 			nameInData: "anOtherAttribute"
 		}
 	};
-	assert.deepEqual(messages[3], addAttribute2);
+	assert.deepEqual(messages[4], addAttribute2);
 
 	let setValueAttribute2 = {
 		type: "setValue",
 		message: {
-			path: ["groupIdOneTextChildTwoAttributes", "@anOtherAttribute"],
-			value: "aOtherFinalValue"
+			path: ["@anOtherAttribute"],
+			data: "aOtherFinalValue"
 		}
 	};
-	assert.deepEqual(messages[4], setValueAttribute2);
+	assert.deepEqual(messages[5], setValueAttribute2);
+	
+	let disable2 = {
+		type: "disable",
+		message: {
+			path: ["@anOtherAttribute"]
+		}
+	};
+	assert.deepEqual(messages[6], disable2);
 
-	assert.equal(messages.length, 5);
+	assert.equal(messages.length, 7);
 });
 
 QUnit.test("testMessagesTextVariableWithAttributeChoiceNoData", function(assert) {
@@ -209,7 +237,7 @@ QUnit.test("testMessagesTextVariableWithAttributeChoiceNoData", function(assert)
 		type: "addAttribute",
 		message: {
 			metadataId: "anAttributeChoice",
-			path: ["groupIdOneTextChildOneAttributeChoice"],
+			path: [],
 			nameInData: "anAttributeChoice"
 		}
 	};

@@ -72,34 +72,34 @@ var CORA = (function(cora) {
 			let cAttributeReference = CORA.coraData(attributeReference);
 			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cCollectionVariable = getMetadataById(refLinkedId);
-			let nextLevelPath = createNextLevelPath();
 
 			let addAttributeMessage = {
 				metadataId: refLinkedId,
-				path: nextLevelPath,
+				path: path,
 				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
 			}
 			pubSub.publish("addAttribute", addAttributeMessage);
 
-			possiblySetAttributeValue(refLinkedId, cCollectionVariable, nextLevelPath);
+			possiblySetAttributeValue(refLinkedId, cCollectionVariable);
 		};
 
 
-		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable, nextLevelPath) {
+		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable) {
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
 
 				let pathSpec = {
 					metadataIdToAdd: refLinkedId,
-					parentPath: nextLevelPath,
+					parentPath: path,
 					type: "attribute"
 				};
-
+				let attributePath = CORA.calculatePathForNewElement(pathSpec);
 				let setValueMessage = {
-					path: CORA.calculatePathForNewElement(pathSpec),
-					value: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
+					path: attributePath,
+					data: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
 				}
 
 				pubSub.publish("setValue", setValueMessage);
+				pubSub.publish("disable", {path: attributePath});
 			}
 		};
 

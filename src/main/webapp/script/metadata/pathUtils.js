@@ -29,32 +29,16 @@ var CORA = (function(cora) {
 		};
 
 		const removeRepeatIdFromLowestLevelOfPath = function(path) {
-			let lowestPath = getLowestPathPointer(path);
-			let cLowestPath = CORA.coraData(lowestPath);
-			if (cLowestPath.containsChildWithNameInData("repeatId")) {
-				removeRepeatIdFromPathPart(cLowestPath, lowestPath);
+			let lowestPath = path.pop();
+			if (lowestPath.indexOf(".")>0) {
+				lowestPath = lowestPath.substring(0, lowestPath.indexOf("."));
 			}
-		};
-
-		const getLowestPathPointer = function(path) {
-			var cPath = CORA.coraData(path);
-			if (cPath.containsChildWithNameInData("linkedPath")) {
-				return getLowestPathPointer(cPath.getFirstChildByNameInData("linkedPath"));
-			}
-			return path;
-		};
-
-		const removeRepeatIdFromPathPart = function(cLowestPath, lowestPath) {
-			let repeatIdObject = cLowestPath.getFirstChildByNameInData("repeatId");
-			let children = lowestPath.children;
-			lowestPath.children = children.filter((item) => item !== repeatIdObject);
+			path.push(lowestPath);
 		};
 
 		const pathHasChildren = function(path) {
-			return path.children !== undefined;
+			return path.length > 0;
 		};
-
-
 
 		return Object.freeze({
 			type: "pathUtils",

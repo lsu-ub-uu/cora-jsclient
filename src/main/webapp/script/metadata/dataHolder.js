@@ -54,27 +54,21 @@ var CORA = (function(cora) {
 
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
 			addChildrenOrValueOfAtomic(dataContainerPart, cMetadataElement);
-			possiblyAddAttributes(dataContainerPart, cMetadataElement);
 			return dataContainerPart;
 		};
-		
-		const addChildrenOrValueOfAtomic = function (dataContainerPart, cMetadataElement){
+
+		const addChildrenOrValueOfAtomic = function(dataContainerPart, cMetadataElement) {
 			let type = getDataType(cMetadataElement);
 			if (isChild(type)) {
 				addGroupParts(dataContainerPart);
 			} else {
 				dataContainerPart.value = "";
 			}
-		}
-		const getDataType = function(cMetadataElement){
-			return cMetadataElement.getData().attributes.type;
-		}
+		};
 		
-		const possiblyAddAttributes = function (dataContainerPart, cMetadataElement){
-			if (cMetadataElement.containsChildWithNameInData("attributeReferences")) {
-				dataContainerPart.attributes = createAttributesContainer(cMetadataElement);
-			}
-		}
+		const getDataType = function(cMetadataElement) {
+			return cMetadataElement.getData().attributes.type;
+		};
 
 		const isChild = function(type) {
 			return isGroup(type) || isResourceLink(type) || isRecordLink(type);
@@ -88,29 +82,30 @@ var CORA = (function(cora) {
 			dataContainerPart.children = [];
 		};
 
-		const createAttributesContainer = function(cMetadataElement) {
-			let attributeContainer = [];
-			let attributeReferences = cMetadataElement
-				.getFirstChildByNameInData('attributeReferences');
-			attributeReferences.children.forEach(function(attributeReference) {
-				let ref = getRefValueFromAttributeRef(attributeReference);
-				let attribute = getMetadataById(ref);
-				let attributeNameInData = attribute.getFirstAtomicValueByNameInData('nameInData');
-				let finalValue = attribute.getFirstAtomicValueByNameInData('finalValue');
+		const addAttribute = function(path, id, nameInData) {
+			let foundContainer = findContainer(path);
+			let attributeContainers = [];
+			if (foundContainer.attributes === undefined) {
+				foundContainer.attributes = attributeContainers;
+			} else {
+				attributeContainers = foundContainer.attributes;
+			}
 
-				attributeContainer.push({
-					id: ref,
-					nameInData: attributeNameInData,
-					value: finalValue
-				});
+			let attributeContainer = {
+				id: id,
+				nameInData: nameInData,
+				value: ""
+			};
+			
+			attributeContainers.push(attributeContainer);
 
-			});
-			return attributeContainer;
-		};
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+			let pathSpec = {
+				metadataIdToAdd: id,
+				parentPath: path,
+				type: "attribute"
+			};
+			let pathString = JSON.stringify(CORA.calculatePathForNewElement(pathSpec));
+			containerPath[pathString] = attributeContainer;
 		};
 
 		const isResourceLink = function(type) {
@@ -128,6 +123,8 @@ var CORA = (function(cora) {
 		const handleMsg = function(dataFromMsg, msg) {
 			if (msg.endsWith("add")) {
 				addChild(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.repeatId);
+			} else if (msg.endsWith("addAttribute")) {
+				addAttribute(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.nameInData)
 			} else if (msg.endsWith("setValue")) {
 				setValue(dataFromMsg.path, dataFromMsg.data);
 			} else if (msg.endsWith("linkedData")) {
@@ -306,6 +303,7 @@ var CORA = (function(cora) {
 			}
 			delete containerPath[JSON.stringify(path)];
 		};
+		
 		const move = function(dataFromMessage) {
 			try {
 				tryToMove(dataFromMessage);
@@ -316,7 +314,7 @@ var CORA = (function(cora) {
 					+ " and newPosition: " + dataFromMessage.newPosition
 					+ ". " + e);
 			}
-		}
+		};
 
 		const tryToMove = function(dataFromMessage) {
 			let basePositionOnChildPath = dataFromMessage.basePositionOnChild;

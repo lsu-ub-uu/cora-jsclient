@@ -26,7 +26,14 @@ var CORA = (function(cora) {
 		let topLevelPath = [];
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
+		let cMetadataElement;
+		let pubSub = dependencies.pubSub;
 		const start = function() {
+			//TODO:spike
+			cMetadataElement = getMetadataById(topLevelMetadataId);
+			if (hasAttributes()) {
+				addAttributes();
+			}
 			initializeFirstLevel();
 			dependencies.pubSub.publish("newElementsAdded", {
 				data: "",
@@ -36,6 +43,50 @@ var CORA = (function(cora) {
 				data: "",
 				path: []
 			});
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
+		};
+
+		const addAttributes = function() {
+			let attributeReferences = cMetadataElement.getFirstChildByNameInData("attributeReferences");
+			attributeReferences.children.forEach(function(attributeReference) {
+				addAttribute(attributeReference);
+			});
+		};
+
+		const addAttribute = function(attributeReference) {
+			let cAttributeReference = CORA.coraData(attributeReference);
+			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cCollectionVariable = getMetadataById(refLinkedId);
+
+			let addAttributeMessage = {
+				metadataId: refLinkedId,
+				path: [],
+				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
+			}
+			pubSub.publish("addAttribute", addAttributeMessage);
+
+			possiblySetAttributeValue(refLinkedId, cCollectionVariable);
+		};
+
+		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable) {
+			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
+				let pathSpec = {
+					metadataIdToAdd: refLinkedId,
+					parentPath: [],
+					type: "attribute"
+				};
+				let attributePath = CORA.calculatePathForNewElement(pathSpec);
+				let setValueMessage = {
+					path: attributePath,
+					data: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
+				}
+
+				pubSub.publish("setValue", setValueMessage);
+				pubSub.publish("disable", { path: attributePath });
+			}
 		};
 
 		const initializeFirstLevel = function() {

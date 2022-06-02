@@ -75,7 +75,8 @@ var CORA = (function(cora) {
 
 			let addAttributeMessage = {
 				metadataId: refLinkedId,
-				path: path,
+				//				path: path,
+				path: createNextLevelPath(),
 				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
 			}
 			pubSub.publish("addAttribute", addAttributeMessage);
@@ -89,7 +90,8 @@ var CORA = (function(cora) {
 
 				let pathSpec = {
 					metadataIdToAdd: refLinkedId,
-					parentPath: path,
+					//					parentPath: path,
+					parentPath: createNextLevelPath(),
 					type: "attribute"
 				};
 				let attributePath = CORA.calculatePathForNewElement(pathSpec);
@@ -99,7 +101,7 @@ var CORA = (function(cora) {
 				}
 
 				pubSub.publish("setValue", setValueMessage);
-				pubSub.publish("disable", {path: attributePath});
+				pubSub.publish("disable", { path: attributePath });
 			}
 		};
 

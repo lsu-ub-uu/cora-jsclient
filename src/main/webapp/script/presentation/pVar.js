@@ -38,10 +38,11 @@ var CORA = (function(cora) {
 			let textProvider = dependencies.textProvider;
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
+			//			console.log("pVarViewSpec: ", pVarViewSpec);11
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 		};
-		
+
 		const intializePVarViewSpec = function(textProvider) {
 			let metadataId = spec.metadataIdUsedInData;
 			cMetadataElement = getMetadataById(metadataId);
@@ -134,12 +135,161 @@ var CORA = (function(cora) {
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-			pubSub.subscribe("addAttribute", path, undefined, addAttribute);
+			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
 		};
-		
-		const addAttribute = function(){
-			
+
+		const addAttributePresentation = function(dataFromMsg) {
+			//TODO: spike
+			let colP = {
+				"name": "presentation",
+				"children": [
+					{
+						"name": "recordInfo",
+						"children": [
+							{
+								"name": "id",
+								"value": "workOrderTypePCollVar"
+							},
+							{
+								"name": "type",
+								"children": [
+									{
+										"name": "linkedRecordType",
+										"value": "recordType"
+									},
+									{
+										"name": "linkedRecordId",
+										"value": "presentationCollectionVar"
+									}
+								]
+							},
+							//							{
+							//								"name": "createdBy",
+							//								"children": [
+							//									{
+							//										"name": "linkedRecordType",
+							//										"value": "systemOneUser"
+							//									},
+							//									{
+							//										"name": "linkedRecordId",
+							//										"value": "141414"
+							//									}
+							//								]
+							//							},
+							//							{
+							//								"name": "dataDivider",
+							//								"children": [
+							//									{
+							//										"name": "linkedRecordType",
+							//										"value": "system"
+							//									},
+							//									{
+							//										"name": "linkedRecordId",
+							//										"value": "cora"
+							//									}
+							//								]
+							//							},
+							//							{
+							//								"name": "tsCreated",
+							//								"value": "2017-10-01T00:00:00.000000Z"
+							//							},
+							//							{
+							//								"name": "updated",
+							//								"children": [
+							//									{
+							//										"name": "updatedBy",
+							//										"children": [
+							//											{
+							//												"name": "linkedRecordType",
+							//												"value": "systemOneUser"
+							//											},
+							//											{
+							//												"name": "linkedRecordId",
+							//												"value": "141414"
+							//											}
+							//										]
+							//									},
+							//									{
+							//										"name": "tsUpdated",
+							//										"value": "2017-11-01T17:50:41.000000Z"
+							//									}
+							//								],
+							//								"repeatId": "0"
+							//							}
+						]
+					},
+					{
+						"name": "presentationOf",
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "metadataCollectionVariable"
+							},
+							{
+								"name": "linkedRecordId",
+								"value": "workOrderTypeCollectionVar"
+							}
+						]
+					},
+					{
+						"name": "mode",
+						"value": "input"
+					},
+					{
+						"name": "emptyTextId",
+						"children": [
+							{
+								"name": "linkedRecordType",
+								"value": "coraText"
+							},
+							{
+								"name": "linkedRecordId",
+								"value": "initialEmptyValueText"
+							}
+						]
+					}
+				],
+				"attributes": {
+					"type": "pCollVar"
+				}
+			};
+
+			//			let cPresentationChild = getMetadataById(dataFromMsg.metadataId);
+			let cPresentationChild = CORA.coraData(colP);
+			let attributePath = createAttributePath(dataFromMsg.metadataId);
+			let presentationSpec = {
+				"path": attributePath,
+				"metadataIdUsedInData": dataFromMsg.metadataId,
+				"cPresentation": cPresentationChild
+			};
+			let presentation = dependencies.presentationFactory.factor(presentationSpec);
+			pVarView.addAttributePresentation(presentation.getView());
 		};
+		const createAttributePath = function(metadataId) {
+			let pathSpec = {
+				metadataIdToAdd: metadataId,
+				//				"repeatId": spec.repeatId,
+				parentPath: path,
+				type: "attribute"
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
+		};
+		//		const createViewForChild = function(presentationChildRef) {
+		//			let refId = getRefId(presentationChildRef);
+		//			let cPresentationChild = getMetadataById(refId);
+		//			//			if (cPresentationChild.getData().name === "text") {
+		//			//				let text = CORA.gui.createSpanWithClassName("text");
+		//			//				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
+		//			//				return text;
+		//			//			}
+		//			let presentationSpec = {
+		//				"path": path,
+		//				"metadataIdUsedInData": spec.metadataIdUsedInData,
+		//				"cPresentation": cPresentationChild
+		//			};
+		//			let presentation = presentationFactory.factor(presentationSpec);
+		//			return presentation.getView();
+		//		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
@@ -267,7 +417,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,
-			addAttribute: addAttribute,
+			addAttributePresentation: addAttributePresentation,
 			getText: getText,
 			getDefText: getDefText,
 			getRegEx: getRegEx,

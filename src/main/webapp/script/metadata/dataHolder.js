@@ -65,7 +65,7 @@ var CORA = (function(cora) {
 				dataContainerPart.value = "";
 			}
 		};
-		
+
 		const getDataType = function(cMetadataElement) {
 			return cMetadataElement.getData().attributes.type;
 		};
@@ -96,7 +96,7 @@ var CORA = (function(cora) {
 				nameInData: nameInData,
 				value: ""
 			};
-			
+
 			attributeContainers.push(attributeContainer);
 
 			let pathSpec = {
@@ -298,12 +298,10 @@ var CORA = (function(cora) {
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
-			if (index > -1) {
-				containerParent.children.splice(index, 1);
-			}
+			containerParent.children.splice(index, 1);
 			delete containerPath[JSON.stringify(path)];
 		};
-		
+
 		const move = function(dataFromMessage) {
 			try {
 				tryToMove(dataFromMessage);

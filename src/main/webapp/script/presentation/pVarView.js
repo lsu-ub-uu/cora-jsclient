@@ -222,7 +222,11 @@ var CORA = (function(cora) {
 		const disable = function() {
 			valueView.disabled = true;
 		};
-
+		
+		const addAttributePresentation = function(attributeView) {
+			view.appendChild(attributeView);
+		};
+		
 		out = Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,
@@ -231,7 +235,8 @@ var CORA = (function(cora) {
 			setValue: setValue,
 			updateClassName: updateClassName,
 			setState: setState,
-			disable: disable
+			disable: disable,
+			addAttributePresentation: addAttributePresentation
 		});
 		start();
 		return out;

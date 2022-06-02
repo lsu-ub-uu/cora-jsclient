@@ -28,10 +28,11 @@ var CORATEST = (function(coraTest) {
 			let dependencies = {
 				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
 				"metadataProvider": metadataProvider,
+				"presentationFactory": CORATEST.standardFactorySpy("presentationSpy"),
 				"pubSub": pubSub,
 				"textProvider": textProvider,
 				"jsBookkeeper": jsBookkeeper,
-				"pVarViewFactory": pVarViewFactory
+				pVarViewFactory: pVarViewFactory
 			};
 			let spec = {
 				"path": path,
@@ -83,7 +84,7 @@ var CORATEST = (function(coraTest) {
 		let attributeSubsription = subscriptions[3];
 		assert.strictEqual(attributeSubsription.type, "addAttribute");
 		assert.stringifyEqual(attributeSubsription.path, path);
-		assert.ok(attributeSubsription.functionToCall === pVar.addAttribute);
+		assert.ok(attributeSubsription.functionToCall === pVar.addAttributePresentation);
 		assert.ok(attributeSubsription.functionToCall != undefined);
 
 		assert.deepEqual(subscriptions.length, 4);
@@ -235,7 +236,7 @@ QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 });
 
 QUnit.test("testTextAreaWithTwoLevelPath", function(assert) {
-	let pathWithTwoLevels = ["recordInfo","dataDivider"];
+	let pathWithTwoLevels = ["recordInfo", "dataDivider"];
 	let topLevelPath = pathWithTwoLevels;
 	let attachedPVar = this.pVarFactory.factor(pathWithTwoLevels, "textVariableId",
 		"textVariableIdTextAreaPVar");
@@ -248,7 +249,7 @@ QUnit.test("testTextAreaWithTwoLevelPath", function(assert) {
 });
 
 QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
-	let pathWithThreeLevels =["recordInfo", "dataDivider", "linkedRecordType"];
+	let pathWithThreeLevels = ["recordInfo", "dataDivider", "linkedRecordType"];
 
 	let expectedPath = pathWithThreeLevels;
 	let attachedPVar = this.pVarFactory.factor(pathWithThreeLevels, "textVariableId",
@@ -262,7 +263,7 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 });
 
 QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
-	let pathWithRepeatId = ["userRole.0","userRole"];
+	let pathWithRepeatId = ["userRole.0", "userRole"];
 	let topLevelPath = pathWithRepeatId;
 	let attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId",
 		"textVariableIdTextAreaPVar");
@@ -277,7 +278,7 @@ QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
 	let pathWithRepeatId = ["userRole", "userRole.0"];
 	let disablePath = ["userRole", "userRole"];
-	
+
 	let attachedPVar = this.pVarFactory.factor(pathWithRepeatId, "textVariableId",
 		"textVariableIdTextAreaPVar");
 	CORATEST.testVariableSubscription(attachedPVar, assert, pathWithRepeatId, disablePath);
@@ -289,7 +290,7 @@ QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
 });
 
 QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
-	let twoLevelPathWithAttribute = ["textPart","numVariableId"];
+	let twoLevelPathWithAttribute = ["textPart", "numVariableId"];
 	let expectedPath = twoLevelPathWithAttribute;
 	let attachedPVar = this.pVarFactory.factor(twoLevelPathWithAttribute, "textVariableId",
 		"textVariableIdTextAreaPVar");
@@ -732,9 +733,16 @@ QUnit.test("testDisable", function(assert) {
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });
 
-QUnit.test("testAddAttribute", function(assert) {
+QUnit.test("testAddAttributePresentation", function(assert) {
 	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
-//	attachedPVar.pVar.disableVar();
+	//	dataHolder, "anAttribute", ["groupIdOneTextChildTwoAttributes"], "anAttribute"
+	let addAttributeMsg = {
+		metadataId: "anAttribute",
+		path: [],
+		nameInData: "anAttribute"
+	};
+	//	dataHolder.handleMsg(addAttributeMsg, "x/y/z/addAttribute");
+	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 //	assert.equal(pVarViewSpy.getDisabledCalled(), true);

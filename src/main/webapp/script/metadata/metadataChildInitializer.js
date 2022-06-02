@@ -80,7 +80,13 @@ var CORA = (function(cora) {
 			let attributeMetadata = getMetadataById(attributeRef);
 			let attributeNameInData = attributeMetadata
 				.getFirstAtomicValueByNameInData("nameInData");
+			//TODO:Spike, we need to loop attribute choices to find matching data
+			//if(finalValue){
+
 			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+			//			}else{
+			//	loop possible attribute values to try to find data
+			//}
 
 			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
 				index);

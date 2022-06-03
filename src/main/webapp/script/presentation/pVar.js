@@ -38,7 +38,6 @@ var CORA = (function(cora) {
 			let textProvider = dependencies.textProvider;
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
-			//			console.log("pVarViewSpec: ", pVarViewSpec);11
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 		};
@@ -139,6 +138,12 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributePresentation = function(dataFromMsg) {
+			let cmetadata =getMetadataById(dataFromMsg.metadataId); 
+			console.log("AddAttribute: ", JSON.stringify(cmetadata.getData()));
+			let refCollection = cmetadata.getFirstChildByNameInData("refCollection");
+			let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
+			console.log("collectionId: ", collectionId);
+			
 			//TODO: spike
 			let colP = {
 				"name": "presentation",
@@ -163,59 +168,6 @@ var CORA = (function(cora) {
 									}
 								]
 							},
-							//							{
-							//								"name": "createdBy",
-							//								"children": [
-							//									{
-							//										"name": "linkedRecordType",
-							//										"value": "systemOneUser"
-							//									},
-							//									{
-							//										"name": "linkedRecordId",
-							//										"value": "141414"
-							//									}
-							//								]
-							//							},
-							//							{
-							//								"name": "dataDivider",
-							//								"children": [
-							//									{
-							//										"name": "linkedRecordType",
-							//										"value": "system"
-							//									},
-							//									{
-							//										"name": "linkedRecordId",
-							//										"value": "cora"
-							//									}
-							//								]
-							//							},
-							//							{
-							//								"name": "tsCreated",
-							//								"value": "2017-10-01T00:00:00.000000Z"
-							//							},
-							//							{
-							//								"name": "updated",
-							//								"children": [
-							//									{
-							//										"name": "updatedBy",
-							//										"children": [
-							//											{
-							//												"name": "linkedRecordType",
-							//												"value": "systemOneUser"
-							//											},
-							//											{
-							//												"name": "linkedRecordId",
-							//												"value": "141414"
-							//											}
-							//										]
-							//									},
-							//									{
-							//										"name": "tsUpdated",
-							//										"value": "2017-11-01T17:50:41.000000Z"
-							//									}
-							//								],
-							//								"repeatId": "0"
-							//							}
 						]
 					},
 					{
@@ -227,7 +179,7 @@ var CORA = (function(cora) {
 							},
 							{
 								"name": "linkedRecordId",
-								"value": "workOrderTypeCollectionVar"
+								"value": collectionId
 							}
 						]
 					},
@@ -253,6 +205,8 @@ var CORA = (function(cora) {
 					"type": "pCollVar"
 				}
 			};
+			
+			console.log("colP: ", JSON.stringify(colP));
 
 			//			let cPresentationChild = getMetadataById(dataFromMsg.metadataId);
 			let cPresentationChild = CORA.coraData(colP);

@@ -80,13 +80,41 @@ var CORA = (function(cora) {
 			let attributeMetadata = getMetadataById(attributeRef);
 			let attributeNameInData = attributeMetadata
 				.getFirstAtomicValueByNameInData("nameInData");
-			//TODO:Spike, we need to loop attribute choices to find matching data
-			//if(finalValue){
 
-			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-			//			}else{
-			//	loop possible attribute values to try to find data
-			//}
+
+
+			let finalValue = [];
+			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
+				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+			} else {
+
+				//TODO:Spike, we need to loop attribute choices to find matching data
+				let possibleAttributeValues = [];
+							console.log("attributeMetadata",attributeMetadata.getData());
+				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
+				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
+				//			console.log("collectionId",collectionId);
+				let cCollection = getMetadataById(collectionId);
+				//			console.log("cCollection",cCollection.getData());
+				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
+				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
+				//			console.log("allRefs", allRefs);
+				allRefs.forEach(function(colItemRef) {
+					//				console.log("colItemRef", colItemRef);
+					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
+					//				console.log("linkedId", linkedId);
+					let cItem = getMetadataById(linkedId);
+					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
+					//				console.log("value", value);
+					possibleAttributeValues.push(value);
+				});
+//					console.log("possibleAttributeValues", possibleAttributeValues);
+				finalValue = possibleAttributeValues;
+			}
+//					console.log("finalValue", finalValue);
+
+			//			}
+
 
 			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
 				index);

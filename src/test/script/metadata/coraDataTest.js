@@ -144,8 +144,6 @@ QUnit.module("metadata/coraDataTest.js", {
 		};
 		this.coraDataWithAllTypes = CORA.coraData(this.groupInGroupOneTextChildAllTypes);
 
-	},
-	afterEach : function() {
 	}
 });
 
@@ -231,6 +229,39 @@ function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValu
 		}]
 	};
 }
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueList", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["aFinalValue"]));
+
+	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesCorrect", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue","aFinalValue"]));
+
+	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesWrong", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue","aFinalValueNOT"]));
+
+	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListEmpty", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			[]));
+
+	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+
 QUnit.test("testContainsChildWithNameInDataAndAttributeWrongAttributeName", function(assert) {
 	var attributes = createAttributes();
 	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",

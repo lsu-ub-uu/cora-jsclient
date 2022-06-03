@@ -169,7 +169,7 @@ QUnit.test("testHasPermissionIsFalseWhenChildIsMissingWritePermission", function
 QUnit.test("testAddAttributes", function(assert) {
 	this.spec.metadataId = "groupIdOneTextChildTwoAttributes";
 
-	let metadataController = CORA.metadataController(this.dependencies, this.spec);
+	CORA.metadataController(this.dependencies, this.spec);
 
 	let messages = this.pubSub.getMessages();
 
@@ -222,7 +222,7 @@ QUnit.test("testAddAttributes", function(assert) {
 QUnit.test("testAddAttributes", function(assert) {
 	this.spec.metadataId = "groupIdOneTextChildOneAttributeChoice";
 
-	let metadataController = CORA.metadataController(this.dependencies, this.spec);
+	CORA.metadataController(this.dependencies, this.spec);
 
 	let messages = this.pubSub.getMessages();
 

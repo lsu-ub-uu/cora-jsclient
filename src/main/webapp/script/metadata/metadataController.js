@@ -29,7 +29,6 @@ var CORA = (function(cora) {
 		let cMetadataElement;
 		let pubSub = dependencies.pubSub;
 		const start = function() {
-			//TODO:spike
 			cMetadataElement = getMetadataById(topLevelMetadataId);
 			if (hasAttributes()) {
 				addAttributes();

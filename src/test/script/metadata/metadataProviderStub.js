@@ -929,9 +929,22 @@ function MetadataProviderStub() {
 		if (idToGet === "anAttribute") {
 			return {
 				"name": "metadata",
+//				"children": [{
+//					"name": "ref",
+//					"value": "recordTypeTypeCollection"
+//				}, {
+//					"name": "finalValue",
+//					"value": "aFinalValue"
+//				}]
 				"children": [{
-					"name": "ref",
-					"value": "recordTypeTypeCollection"
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadataItemCollection"
+					}, {
+						"name": "linkedRecordId",
+						"value": "recordTypeTypeCollection"
+					}],
+					"name": "refCollection"
 				}, {
 					"name": "finalValue",
 					"value": "aFinalValue"
@@ -945,9 +958,19 @@ function MetadataProviderStub() {
 		if (idToGet === "anAttributeChoice") {
 			return {
 				"name": "metadata",
+//				"children": [{
+//					"name": "ref",
+//					"value": "recordTypeTypeCollection"
+//				}]
 				"children": [{
-					"name": "ref",
-					"value": "recordTypeTypeCollection"
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "metadataItemCollection"
+					}, {
+						"name": "linkedRecordId",
+						"value": "recordTypeTypeCollection"
+					}],
+					"name": "refCollection"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
 				"attributes": {

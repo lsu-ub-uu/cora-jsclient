@@ -179,7 +179,8 @@ var CORA = (function(cora) {
 							},
 							{
 								"name": "linkedRecordId",
-								"value": collectionId
+//								"value": collectionId
+								"value": dataFromMsg.metadataId
 							}
 						]
 					},
@@ -261,6 +262,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleMsg = function(dataFromMsg) {
+			console.log("PVar SetValue: ", dataFromMsg)
 			setValue(dataFromMsg.data);
 			updateView();
 		};

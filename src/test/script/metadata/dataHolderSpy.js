@@ -22,16 +22,18 @@ var CORATEST = (function(coraTest) {
 	coraTest.dataHolderSpy = function(spec) {
 		var data = {};
 		var dataWithActionLinks = {
-			"actionLinks" : {
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					"accept" : "application/vnd.uub.record+json"
+			"actionLinks": {
+				"read": {
+					"requestMethod": "GET",
+					"rel": "read",
+					"url": "http://localhost:8080/therest/rest/record/recordType/writtenText",
+					"accept": "application/vnd.uub.record+json"
 				}
 			}
 		};
-		
+
+		let containerPath = {};
+		let paths = [];
 		function getData() {
 			return data;
 		}
@@ -39,15 +41,35 @@ var CORATEST = (function(coraTest) {
 		function getDataWithActionLinks() {
 			return dataWithActionLinks;
 		}
-		
-		function setData(dataIn){
+
+		function setData(dataIn) {
 			data = dataIn;
 		}
+
+		const findContainer = function(path) {
+			paths.push(path);
+			let pathToFind = JSON.stringify(path);
+			return containerPath[pathToFind];
+		};
+
+		const setContainer = function(path, dataContainer) {
+			let pathString = JSON.stringify(path);
+			containerPath[pathString] = dataContainer;
+		};
+		const getRequestedPath = function(callNo) {
+			return paths[callNo];
+		};
+
+
+
 		return Object.freeze({
-			"type" : "dataHolderSpy",
-			getData : getData,
-			getDataWithActionLinks : getDataWithActionLinks,
-			setData : setData
+			"type": "dataHolderSpy",
+			getData: getData,
+			getDataWithActionLinks: getDataWithActionLinks,
+			setData: setData,
+			findContainer: findContainer,
+			setContainer: setContainer,
+			getRequestedPath: getRequestedPath
 		});
 	};
 	return coraTest;

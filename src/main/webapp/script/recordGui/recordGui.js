@@ -53,7 +53,7 @@ var CORA = (function(cora) {
 		const validateData = function() {
 			let validateSpec = {
 				metadataId: spec.metadataId,
-				data: dependencies.dataHolder.getData(),
+				dataHolder: dependencies.dataHolder,
 				metadataProvider: dependencies.metadataProvider,
 				pubSub: dependencies.pubSub,
 				recordPartPermissionCalculator: spec.recordPartPermissionCalculator

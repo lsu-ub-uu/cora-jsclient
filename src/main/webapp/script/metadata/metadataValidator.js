@@ -23,7 +23,6 @@ var CORA = (function(cora) {
 	cora.metadataValidator = function(dependencies, spec) {
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelPath = [];
-		let topLevelData = spec.data;
 		let metadataProvider = dependencies.metadataProvider;
 		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
 		let childrenResult = true;
@@ -71,7 +70,7 @@ var CORA = (function(cora) {
 		const validateDataChildForChildRefInvalid = function(childReference) {
 			let childValidatorSpec = {
 				path: topLevelPath,
-				data: topLevelData,
+				dataHolder: spec.dataHolder,
 				childReference: childReference
 			};
 			let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);

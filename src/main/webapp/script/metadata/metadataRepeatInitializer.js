@@ -75,34 +75,49 @@ var CORA = (function(cora) {
 
 			let addAttributeMessage = {
 				metadataId: refLinkedId,
-				//				path: path,
 				path: createNextLevelPath(),
 				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
 			}
 			pubSub.publish("addAttribute", addAttributeMessage);
 
 			possiblySetAttributeValue(refLinkedId, cCollectionVariable);
+
 		};
 
-
 		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable) {
+			let pathSpec = {
+				metadataIdToAdd: refLinkedId,
+				parentPath: createNextLevelPath(),
+				type: "attribute"
+			};
+			let attributePath = CORA.calculatePathForNewElement(pathSpec);
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
-
-				let pathSpec = {
-					metadataIdToAdd: refLinkedId,
-					//					parentPath: path,
-					parentPath: createNextLevelPath(),
-					type: "attribute"
-				};
-				let attributePath = CORA.calculatePathForNewElement(pathSpec);
-				let setValueMessage = {
-					path: attributePath,
-					data: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
-				}
-
-				pubSub.publish("setValue", setValueMessage);
-				pubSub.publish("disable", { path: attributePath });
+				setValueForForAttributeWithFinalValue(attributePath, cCollectionVariable);
+			} else {
+				possiblySetValueForAttributeWithChoice(attributePath, cCollectionVariable);
 			}
+		};
+
+		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
+			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
+			setValueForAttributeWithPathAndValue(attributePath, value);
+			pubSub.publish("disable", { path: attributePath });
+		};
+
+		const possiblySetValueForAttributeWithChoice = function(attributePath, cCollectionVariable) {
+			if (spec.data !== undefined) {
+				let collectionVariableNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
+				let value = spec.data.attributes[collectionVariableNameInData];
+				setValueForAttributeWithPathAndValue(attributePath, value);
+			}
+		};
+
+		const setValueForAttributeWithPathAndValue = function(attributePath, value) {
+			let setValueMessage = {
+				path: attributePath,
+				data: value
+			}
+			pubSub.publish("setValue", setValueMessage);
 		};
 
 		const initializeForMetadata = function() {
@@ -160,8 +175,7 @@ var CORA = (function(cora) {
 		const getCRef = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-
-		}
+		};
 
 		const createSpecAndInitalizeMetadataChildInitializer = function(childReference, nextLevelPath, data) {
 			let initializerSpec = {
@@ -178,7 +192,7 @@ var CORA = (function(cora) {
 		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
 			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
-		}
+		};
 
 		const isRecordLink = function() {
 			return "recordLink" === getType();

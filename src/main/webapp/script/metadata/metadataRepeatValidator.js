@@ -29,6 +29,7 @@ var CORA = (function(cora) {
 		let cMetadataElement;
 
 		const start = function() {
+//			console.log("repeatValidator, path:", path + ' metadataId:'+metadataId)
 			cMetadataElement = getMetadataById(metadataId);
 			validateRepeat();
 		}

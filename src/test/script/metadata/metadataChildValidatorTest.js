@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadata/metadataChildValidatorTest.js", {
+QUnit.module.only("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -27,31 +27,30 @@ QUnit.module("metadata/metadataChildValidatorTest.js", {
 			"pubSub": this.pubSub
 		};
 		this.spec = {
-			"path": [],
-		};
-		this.spec.childReference = {
-			"name": "childReference",
-			"repeatId": "0",
-			"children": [
-				{
-					"name": "ref",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadata"
+			path: [],
+			dataHolder: CORATEST.dataHolderSpy(),
+			childReference: {
+				"name": "childReference",
+				"repeatId": "0",
+				"children": [
+					{
+						"name": "ref",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadata"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textVariableId"
+						}]
 					}, {
-						"name": "linkedRecordId",
-						"value": "textVariableId"
+						"name": "repeatMin",
+						"value": "1"
+					}, {
+						"name": "repeatMax",
+						"value": "1"
 					}]
-				}, {
-					"name": "repeatMin",
-					"value": "1"
-				}, {
-					"name": "repeatMax",
-					"value": "1"
-				}]
+			}
 		};
-	},
-	afterEach: function() {
 	}
 });
 
@@ -71,18 +70,32 @@ QUnit.test("testGetSpec", function(assert) {
 	assert.strictEqual(metadataChildValidator.getSpec(), this.spec);
 });
 
-QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
+QUnit.only("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
+	//	this.spec.data = 
+	let dataHolder = this.spec.dataHolder;
+//	dataHolder.setData(
+//		{
+//			"name": "groupIdOneTextChild",
+//			"children": [{
+//				"name": "textVariableId",
+//				"value": "A Value"
+//			}]
+//		}
+//	);
+	let conatainer = {
+		name: "textVariableId",
+		value: "A Value"
+	}
+	
+	dataHolder.setContainer([], conatainer);
+	
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
+	
+	assert.strictEquals(dataHolder.getRequestedPath[0], []);
+	
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 

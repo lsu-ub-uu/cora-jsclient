@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let pubSub = spec.pubSub;
 		let dataContainer;
 		let containerPath = {};
+		let containerPathNoRepeatId = {};
 
 		const start = function() {
 			dataContainer = createDataContainerForElementWithId(metadataId);
@@ -228,6 +229,16 @@ var CORA = (function(cora) {
 			return foundContainer;
 		};
 
+		const findContainersUsingPathAndMetadataId = function(path, metadataId) {
+			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataId);
+			let pathToFind = JSON.stringify(nextLevelPathNoRepeatId);
+			let foundContainer = containerPathNoRepeatId[pathToFind];
+			if (undefined == foundContainer) {
+				return [];
+			}
+			return foundContainer;
+		};
+
 		const findContainerAndParent = function(path) {
 			let foundContainer = findContainer(path);
 
@@ -262,12 +273,19 @@ var CORA = (function(cora) {
 				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
 			}
-			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
 
+			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let pathString = JSON.stringify(newPath);
 			containerPath[pathString] = newChild;
+
+			let newPathNoRepeatId = createNextLevelPath(parentPath, metadataIdToAdd);
+			let pathStringNoRepeatId = JSON.stringify(newPathNoRepeatId);
+			if (undefined == containerPathNoRepeatId[pathStringNoRepeatId]) {
+				containerPathNoRepeatId[pathStringNoRepeatId] = [];
+			}
+			containerPathNoRepeatId[pathStringNoRepeatId].push(newChild);
 		};
 
 		const pathSpecifiesMoreLevels = function(path) {
@@ -347,7 +365,8 @@ var CORA = (function(cora) {
 			setValue: setValue,
 			addChild: addChild,
 			remove: remove,
-			findContainer: findContainer
+			findContainer: findContainer,
+			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId
 		});
 	};
 	return cora;

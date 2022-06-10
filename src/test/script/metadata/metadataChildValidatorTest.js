@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/metadataChildValidatorTest.js", {
+QUnit.module("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -73,29 +73,31 @@ QUnit.test("testGetSpec", function(assert) {
 QUnit.only("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 	//	this.spec.data = 
 	let dataHolder = this.spec.dataHolder;
-//	dataHolder.setData(
-//		{
-//			"name": "groupIdOneTextChild",
-//			"children": [{
-//				"name": "textVariableId",
-//				"value": "A Value"
-//			}]
-//		}
-//	);
-	let conatainer = {
+	//	dataHolder.setData(
+	//		{
+	//			"name": "groupIdOneTextChild",
+	//			"children": [{
+	//				"name": "textVariableId",
+	//				"value": "A Value"
+	//			}]
+	//		}
+	//	);
+	let container = [{
 		name: "textVariableId",
 		value: "A Value"
-	}
-	
-	dataHolder.setContainer([], conatainer);
-	
+	}];
+
+	//	dataHolder.setContainer([], container);
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(container);
+
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
-	
-	assert.strictEquals(dataHolder.getRequestedPath[0], []);
-	
+
+	//	assert.strictEqual(dataHolder.getRequestedPath[0], []);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
+
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 });
 

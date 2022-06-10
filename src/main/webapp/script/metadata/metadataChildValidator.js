@@ -29,6 +29,7 @@ var CORA = (function(cora) {
 			containsValuableData: false
 		};
 //		let cData = CORA.coraData(spec.dataHolder.getData());
+		let dataHolder = spec.dataHolder;
 		let dataChildrenForMetadata;
 		let noOfRepeatsForThisChild;
 		let childInstancesCanNotBeRemoved = [];
@@ -39,103 +40,113 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
-			let nameInData = getNameInDataForMetadataId(ref);
-			let attributes = getAttributesForMetadataId(ref);
-			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
+//			let nameInData = getNameInDataForMetadataId(ref);
+//			let attributes = getAttributesForMetadataId(ref);
+//			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
+			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
 			noOfRepeatsForThisChild = calculateMinRepeat();
 
 			validateAndCategorizeChildInstances();
 			return result;
 		};
 
-		const getNameInDataForMetadataId = function(refIn) {
-			let metadataElement = getMetadataById(refIn);
-			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
-		};
+//		const getNameInDataForMetadataId = function(refIn) {
+//			let metadataElement = getMetadataById(refIn);
+//			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
+//		};
+//
+//		const getAttributesForMetadataId = function(refIn) {
+//			let metadataElement = getMetadataById(refIn);
+//			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
+//				return getAttributesForMetadataElement(metadataElement);
+//			}
+//			return undefined;
+//		};
 
-		const getAttributesForMetadataId = function(refIn) {
-			let metadataElement = getMetadataById(refIn);
-			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
-				return getAttributesForMetadataElement(metadataElement);
-			}
-			return undefined;
-		};
+//		const getAttributesForMetadataElement = function(metadataElement) {
+//			let attributesOut = createAttributes();
+//			let attributeReferences = metadataElement
+//				.getFirstChildByNameInData("attributeReferences");
+//			let attributeReference;
+//			for (let i = 0; i < attributeReferences.children.length; i++) {
+//				attributeReference = attributeReferences.children[i];
+//				let attribute = getAttributeForAttributeReference(attributeReference, i);
+//				attributesOut.children.push(attribute);
+//			}
+//			return attributesOut;
+//		};
 
-		const getAttributesForMetadataElement = function(metadataElement) {
-			let attributesOut = createAttributes();
-			let attributeReferences = metadataElement
-				.getFirstChildByNameInData("attributeReferences");
-			let attributeReference;
-			for (let i = 0; i < attributeReferences.children.length; i++) {
-				attributeReference = attributeReferences.children[i];
-				let attribute = getAttributeForAttributeReference(attributeReference, i);
-				attributesOut.children.push(attribute);
-			}
-			return attributesOut;
-		};
+//		const createAttributes = function() {
+//			return {
+//				"name": "attributes",
+//				"children": []
+//			};
+//		};
+//
+//		const getAttributeForAttributeReference = function(attributeReference, index) {
+//			let attributeRef = getRefValueFromAttributeRef(attributeReference);
+//			let attributeMetadata = getMetadataById(attributeRef);
+//			let attributeNameInData = attributeMetadata
+//				.getFirstAtomicValueByNameInData("nameInData");
+//			//			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+//
+//			let finalValue = [];
+//			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
+//				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+//			} else {
+//
+//				//TODO:Spike, we need to loop attribute choices to find matching data
+//				let possibleAttributeValues = [];
+//				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
+//				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
+//				let cCollection = getMetadataById(collectionId);
+//				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
+//				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
+//				allRefs.forEach(function(colItemRef) {
+//					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
+//					let cItem = getMetadataById(linkedId);
+//					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
+//					possibleAttributeValues.push(value);
+//				});
+//				finalValue = possibleAttributeValues;
+//			}
+//			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
+//				index);
+//		};
 
-		const createAttributes = function() {
-			return {
-				"name": "attributes",
-				"children": []
-			};
-		};
+//		const getRefValueFromAttributeRef = function(attributeReference) {
+//			let cAttributeReference = CORA.coraData(attributeReference);
+//			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+//		};
+//
+//		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+//			return {
+//				"name": "attribute",
+//				"repeatId": repeatId || "1",
+//				"children": [{
+//					"name": "attributeName",
+//					"value": attributeName
+//				}, {
+//					"name": "attributeValue",
+//					"value": attributeValue
+//				}]
+//			};
+//		};
 
-		const getAttributeForAttributeReference = function(attributeReference, index) {
-			let attributeRef = getRefValueFromAttributeRef(attributeReference);
-			let attributeMetadata = getMetadataById(attributeRef);
-			let attributeNameInData = attributeMetadata
-				.getFirstAtomicValueByNameInData("nameInData");
-			//			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-
-			let finalValue = [];
-			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
-				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-			} else {
-
-				//TODO:Spike, we need to loop attribute choices to find matching data
-				let possibleAttributeValues = [];
-				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
-				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
-				let cCollection = getMetadataById(collectionId);
-				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
-				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
-				allRefs.forEach(function(colItemRef) {
-					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
-					let cItem = getMetadataById(linkedId);
-					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
-					possibleAttributeValues.push(value);
-				});
-				finalValue = possibleAttributeValues;
-			}
-			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
-				index);
-		};
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-			return {
-				"name": "attribute",
-				"repeatId": repeatId || "1",
-				"children": [{
-					"name": "attributeName",
-					"value": attributeName
-				}, {
-					"name": "attributeValue",
-					"value": attributeValue
-				}]
-			};
-		};
-
-		const getDataChildrenForMetadata = function(nameInDataIn, attributesIn) {
-			if (!cData.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
-				return [];
-			}
-			return cData.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
+//		const getDataChildrenForMetadata = function(nameInDataIn, attributesIn) {
+//			if (!cData.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
+//				return [];
+//			}
+//			return cData.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
+//		};
+		
+		const getDataChildrenForMetadata = function(metadataId) {
+			//TODO: new method get all with from path with metadataId 
+			//dataHolder.getContainersUsingPathAndMetadataIdIgnoringLastRepeatId
+//			let foundContainer = dataHolder.findContainer(metadataId)
+			let foundContainers = dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
+			console.log("foundConatiners", foundContainers);
+			return foundContainers;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -146,7 +157,7 @@ var CORA = (function(cora) {
 			setEverythingOkBelowInResult();
 			sendValidationErrors();
 		};
-
+ 
 		const validateAndCategorizeChildInstance = function(index) {
 			let childInstanceValidationResult = validateRepeatingChildInstanceWithData(index);
 			setValuableDataInResult(childInstanceValidationResult);
@@ -259,6 +270,7 @@ var CORA = (function(cora) {
 		};
 
 		const validateRepeatingChildInstanceWithData = function(index) {
+		console.log("dataChildrenForMetadata", dataChildrenForMetadata)
 			let dataChild = dataChildrenForMetadata[index];
 			let repeatId = dataChild.repeatId;
 			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);

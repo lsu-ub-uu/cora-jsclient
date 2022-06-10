@@ -34,6 +34,9 @@ var CORATEST = (function(coraTest) {
 
 		let containerPath = {};
 		let paths = [];
+		let pathsAndMetadataId = [];
+		let containerPathNoRepeatId = [];
+		let returnNo = 0;
 		function getData() {
 			return data;
 		}
@@ -60,8 +63,21 @@ var CORATEST = (function(coraTest) {
 			return paths[callNo];
 		};
 
-
-
+		const findContainersUsingPathAndMetadataId = function(path, metadataId) {
+			pathsAndMetadataId.push({ path: path, metadataId: metadataId });
+//			console.log("pathsAndMetadataId",pathsAndMetadataId);
+			//			let pathToFind = JSON.stringify(path);
+			let toReturn = containerPathNoRepeatId[returnNo];
+			returnNo++;
+			return toReturn;
+		};
+		const addToReturnForFindContainersUsingPathAndMetadataId = function(toAdd) {
+			containerPathNoRepeatId.push(toAdd);
+		};
+		const getRequestedPathAndMetadataId = function(callNo) {
+//			console.log("pathsAndMetadataId2",pathsAndMetadataId);
+			return pathsAndMetadataId[callNo];
+		};
 		return Object.freeze({
 			"type": "dataHolderSpy",
 			getData: getData,
@@ -69,7 +85,10 @@ var CORATEST = (function(coraTest) {
 			setData: setData,
 			findContainer: findContainer,
 			setContainer: setContainer,
-			getRequestedPath: getRequestedPath
+			getRequestedPath: getRequestedPath,
+			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId,
+			addToReturnForFindContainersUsingPathAndMetadataId: addToReturnForFindContainersUsingPathAndMetadataId,
+			getRequestedPathAndMetadataId: getRequestedPathAndMetadataId
 		});
 	};
 	return coraTest;

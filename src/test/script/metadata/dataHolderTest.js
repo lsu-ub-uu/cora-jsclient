@@ -73,6 +73,83 @@ QUnit.test("testFindContainerTopLevelPath", function(assert) {
 	let foundContainer = dataHolder.findContainer([]);
 	assert.deepEqual(foundContainer, expected);
 });
+QUnit.test("testFindContainerTwoChildrenWithSameMetadataIdDifferentRepeatId", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	let path = [];
+	dataHolder.addChild(path, "textVariableId", "one");
+	dataHolder.addChild(path, "textVariableId", "two");
+
+	let expected =
+		[{
+			name: "textVariableId",
+			value: "",
+			repeatId: "one"
+		}, {
+			name: "textVariableId",
+			value: "",
+			repeatId: "two"
+		}]
+		;
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+});
+QUnit.test("testFindContainerTwoChildrenWithDifferentMetadataIdDifferentRepeatId", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	let path = [];
+	dataHolder.addChild(path, "textVariableId", "one");
+	dataHolder.addChild(path, "groupIdOneTextChild", "two");
+
+	let expected =
+		[{
+			name: "textVariableId",
+			value: "",
+			repeatId: "one"
+		}]
+		;
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+});
+QUnit.test("testFindContainerDeeperChild", function(assert) {
+	let path = ["groupIdOneTextChild"];
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+	dataHolder.setValue(["groupIdOneTextChild", "textVariableId"], 'Value 2');
+
+	let expected = [{
+		name: "textVariableId",
+		value: "Value 2"
+	}];
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+});
+
+QUnit.test("testFindContainerDeeperChildRepeatId", function(assert) {
+	let path = ["groupIdOneTextChild"];
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "one");
+	dataHolder.setValue(["groupIdOneTextChild", "textVariableId.one"], 'Value 2');
+
+	let expected = [{
+		name: "textVariableId",
+		repeatId: "one",
+		value: "Value 2"
+	}];
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+});
+QUnit.test("testFindContainerNotFound", function(assert) {
+	let path = ["groupIdOneTextChild"];
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+
+	dataHolder.addChild([], "groupIdOneTextChild");
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "one");
+
+	let expected = [];
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableIdNOT"), expected);
+});
+
+
+
 QUnit.test("testCreateNewDataHolder", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 
@@ -111,8 +188,6 @@ QUnit.test("testCreateGroupIdOneTextChildOneAttribute", function(assert) {
 	};
 	assert.deepEqual(dataHolder.getData(), expectedAddedAttributeValue);
 });
-
-
 
 QUnit.test("testCreateGroupIdOneTextChildTwoAttributes", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChildTwoAttributes");
@@ -197,7 +272,7 @@ QUnit.test("testAddChildToGroupIdOneTextChild", function(assert) {
 	assert.stringifyEqual(dataHolder.getData(), expected);
 });
 
-QUnit.test("testAddChildToGroupIdOneTextChildWrongNameInData", function(assert) {
+QUnit.test("testAddChildToGroupIdOneTextChildWrongMetadataId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	let path = [];
 	assert.throws(function() {
@@ -220,7 +295,7 @@ QUnit.test("testSetValueGroupIdOneTextChild", function(assert) {
 	assert.stringifyEqual(dataHolder.getData(), expected);
 });
 
-QUnit.test("testSetValueGroupIdOneTextChildWrongNameInData", function(assert) {
+QUnit.test("testSetValueGroupIdOneTextChildWrongMetadataId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	dataHolder.addChild([], "textVariableId");
 	assert.throws(function() {
@@ -228,7 +303,7 @@ QUnit.test("testSetValueGroupIdOneTextChildWrongNameInData", function(assert) {
 	}, "Error");
 });
 
-QUnit.test("testAddTwoChildrenWithSameNameInDataDifferentRepeatId", function(assert) {
+QUnit.test("testAddTwoChildrenWithSameMetadataIdDifferentRepeatId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	let path = [];
 	dataHolder.addChild(path, "textVariableId", "one");
@@ -250,7 +325,7 @@ QUnit.test("testAddTwoChildrenWithSameNameInDataDifferentRepeatId", function(ass
 	assert.deepEqual(dataHolder.getData(), expected);
 });
 
-QUnit.test("testSetValueTwoChildrenWithSameNameInDataDifferentRepeatId", function(assert) {
+QUnit.test("testSetValueTwoChildrenWithSameMetadataIdDifferentRepeatId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 
 	dataHolder.addChild([], "textVariableId", "one");
@@ -465,7 +540,7 @@ function addFourDifferentChildrenSomeWithAttributeAndChildrenToThem(dataHolder) 
 	callWithMessageToSetValue(dataHolder, ["groupIdOneTextChildTwoAttributes", "@anAttribute"], "aFinalValue");
 	callWithMessageToAddAttribute(dataHolder, "anAttribute", ["groupIdOneTextChildTwoAttributes"], "anOtherAttribute");
 	callWithMessageToSetValue(dataHolder, ["groupIdOneTextChildTwoAttributes", "@anAttribute"], "aOtherFinalValue");
-	
+
 	dataHolder.addChild([], "textVarRepeat1to3InGroupOtherAttribute");
 	callWithMessageToAddAttribute(dataHolder, "anOtherAttribute", ["textVarRepeat1to3InGroupOtherAttribute"], "anOtherAttribute");
 	callWithMessageToSetValue(dataHolder, ["textVarRepeat1to3InGroupOtherAttribute", "@anOtherAttribute"], "aOtherFinalValue");
@@ -546,20 +621,20 @@ function addEightDifferentChildrenWithRepeatIdSomeWithAttributeAndChildrenToThem
 	dataHolder.addChild(path, "textVarRepeat1to3InGroupOtherAttribute", "2");
 	callWithMessageToAddAttribute(dataHolder, "anOtherAttribute", ["textVarRepeat1to3InGroupOtherAttribute.2"], "anOtherAttribute");
 	callWithMessageToSetValue(dataHolder, ["textVarRepeat1to3InGroupOtherAttribute.2", "@anOtherAttribute"], "aOtherFinalValue");
-	
+
 	dataHolder.addChild(path, "textVarRepeat1to3InGroupOtherAttribute", "two");
-		callWithMessageToAddAttribute(dataHolder, "anOtherAttribute", ["textVarRepeat1to3InGroupOtherAttribute.two"], "anOtherAttribute");
+	callWithMessageToAddAttribute(dataHolder, "anOtherAttribute", ["textVarRepeat1to3InGroupOtherAttribute.two"], "anOtherAttribute");
 	callWithMessageToSetValue(dataHolder, ["textVarRepeat1to3InGroupOtherAttribute.two", "@anOtherAttribute"], "aOtherFinalValue");
-	
+
 	dataHolder.addChild(path, "textVarRepeat1to3InGroupOneAttribute", "three");
 	callWithMessageToAddAttribute(dataHolder, "anAttribute", ["textVarRepeat1to3InGroupOneAttribute.three"], "anAttribute");
 	callWithMessageToSetValue(dataHolder, ["textVarRepeat1to3InGroupOneAttribute.three", "@anAttribute"], "aFinalValue");
-	
+
 	dataHolder.addChild(path, "textVarRepeat1to3InGroupOneAttribute", "3");
 	callWithMessageToAddAttribute(dataHolder, "anAttribute", ["textVarRepeat1to3InGroupOneAttribute.3"], "anAttribute");
 	callWithMessageToSetValue(dataHolder, ["textVarRepeat1to3InGroupOneAttribute.3", "@anAttribute"], "aFinalValue");
 
-	
+
 	dataHolder.addChild(path, "textVariableId", "four");
 	dataHolder.addChild(path, "textVariableId", "4");
 	dataHolder.addChild(["groupIdOneTextChildTwoAttributes.1"], "textVariableId");
@@ -758,7 +833,7 @@ QUnit.test("testRemoveSecondLevel", function(assert) {
 	assert.deepEqual(dataHolder.getData(), expected);
 });
 
-QUnit.test("testRemoveChildToGroupIdOneTextChildWrongNameInData", function(assert) {
+QUnit.test("testRemoveChildToGroupIdOneTextChildWrongMetadataId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 	let path = [];
 	dataHolder.addChild(path, "groupIdOneTextChild");
@@ -851,7 +926,7 @@ QUnit.test("testHandleMessageMoveBefore", function(assert) {
 	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId", "3");
 
 	dataHolder.handleMsg({
-		path: {}, 
+		path: {},
 		moveChild: ["groupIdOneTextChild", "textVariableId.1"],
 		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.3"],
 		newPosition: "before"
@@ -926,12 +1001,12 @@ QUnit.test("testHandleMessageMoveWrongPath", function(assert) {
 		basePositionOnChild: ["groupIdOneTextChild", "textVariableId.3"],
 		newPosition: "after"
 	}
-	
-	let expectedErrorMessage = "Move conatiner failed, with moveChild: "+
-	"[\"someWrongPath\",\"textVariableId.1\"], basePositionOnChild: [\"groupIdOneTextChild\","
-	+"\"textVariableId.3\"] and newPosition: after. "
-	+"Error: Unable to find container with path: [\"someWrongPath\",\"textVariableId.1\"] in dataHolder";
-	
+
+	let expectedErrorMessage = "Move conatiner failed, with moveChild: " +
+		"[\"someWrongPath\",\"textVariableId.1\"], basePositionOnChild: [\"groupIdOneTextChild\","
+		+ "\"textVariableId.3\"] and newPosition: after. "
+		+ "Error: Unable to find container with path: [\"someWrongPath\",\"textVariableId.1\"] in dataHolder";
+
 	assert.throws(function() {
 		dataHolder.handleMsg(dataFromMessage, "x/y/z/move");
 	},
@@ -974,7 +1049,7 @@ QUnit.test("testAddChildToGroupIdOneRecordLinkWithAttributeChild", function(asse
 	callWithMessageToAddAttribute(dataHolder, "type", ["myLinkWithAttribute"], "type");
 	callWithMessageToSetValue(dataHolder, ["myLinkWithAttribute", "@type"], "image");
 
-	
+
 	let expected = {
 		name: "groupIdOneRecordLinkWithAttributeChild",
 		children: [{

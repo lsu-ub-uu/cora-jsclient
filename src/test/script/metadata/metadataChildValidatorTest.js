@@ -70,24 +70,12 @@ QUnit.test("testGetSpec", function(assert) {
 	assert.strictEqual(metadataChildValidator.getSpec(), this.spec);
 });
 
-QUnit.only("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
-	//	this.spec.data = 
+QUnit.test("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 	let dataHolder = this.spec.dataHolder;
-	//	dataHolder.setData(
-	//		{
-	//			"name": "groupIdOneTextChild",
-	//			"children": [{
-	//				"name": "textVariableId",
-	//				"value": "A Value"
-	//			}]
-	//		}
-	//	);
 	let container = [{
 		name: "textVariableId",
 		value: "A Value"
 	}];
-
-	//	dataHolder.setContainer([], container);
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(container);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
@@ -95,7 +83,6 @@ QUnit.only("testValidateGroupIdOneTextChild1to1WithData", function(assert) {
 
 	let validationResult = metadataChildValidator.validate();
 
-	//	assert.strictEqual(dataHolder.getRequestedPath[0], []);
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
@@ -135,13 +122,15 @@ CORATEST.createChildReference =
 	};
 
 QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": ""
-		}]
-	};
+
+	let dataHolder = this.spec.dataHolder;
+	let container = [{
+		name: "textVariableId",
+		value: ""
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(container);
+
+
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -151,9 +140,10 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let pubSubMessages = this.pubSub.getMessages();
-
 	assert.strictEqual(pubSubMessages.length, 1);
 	assert.stringifyEqual(pubSubMessages[0], CORATEST.createValidationErrorMessage("textVariableId"));
+
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 CORATEST.createValidationErrorMessage =
@@ -168,13 +158,14 @@ CORATEST.createValidationErrorMessage =
 	};
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert) {
-	this.spec.data = {
-		"name": "groupId1toXCollectionChild",
-		"children": [{
-			"name": "yesNoUnknownVar",
-			"value": "no"
-		}]
-	};
+
+	let dataHolder = this.spec.dataHolder;
+	let container = [{
+		name: "yesNoUnknownVar",
+		value: "no"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(container);
+
 	this.spec.childReference = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -182,16 +173,16 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithData", function(assert)
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "yesNoUnknownVar", path: [] });
 });
 
 QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", function(assert) {
-	this.spec.data = {
-		"name": "groupId1toXCollectionChild",
-		"children": [{
-			"name": "yesNoUnknownVar",
-			"value": ""
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let container = [{
+		name: "yesNoUnknownVar",
+		value: ""
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(container);
 
 	this.spec.childReference = CORATEST.createChildReference("yesNoUnknownVar", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -204,10 +195,12 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 	let pubSubMessages = this.pubSub.getMessages();
 	assert.strictEqual(pubSubMessages.length, 1);
 	assert.stringifyEqual(pubSubMessages[0], CORATEST.createValidationErrorMessage("yesNoUnknownVar"));
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "yesNoUnknownVar", path: [] });
 });
 
-QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
-	this.spec.data = {
+QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
+	let dataHolder = this.spec.dataHolder;
+	let containerGroup = [{
 		"name": "groupIdTwoTextChild",
 		"children": [{
 			"name": "textVariableId",
@@ -216,52 +209,58 @@ QUnit.test("testValidateGroupIdTwoTextChildWithData", function(assert) {
 			"name": "textVariableId2",
 			"value": "AValue2"
 		}]
-	};
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerGroup);
 
-	this.spec.childReference = CORATEST.createChildReference("textVariableId2", "0", "1", "1");
+	let containerChild1 = [{
+		"name": "textVariableId",
+		"value": "A Value"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 
-	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-	let validationResult = metadataChildValidator.validate();
+	let containerChild2 = [{
+		"name": "textVariableId2",
+		"value": "AValue2"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
-	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
-});
 
-QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild1to1InGroup",
-		"children": [{
-			"name": "groupIdTwoTextChild",
-			"children": [{
-				"name": "textVariableId",
-				"value": "A Value"
-			}, {
-				"name": "textVariableId2",
-				"value": "AValue2"
-			}]
-		}]
-	};
 	this.spec.childReference = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
 
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdTwoTextChild", path: [] });
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableId", path: ["groupIdTwoTextChild"] });
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVariableId2", path: ["groupIdTwoTextChild"] });
 });
 
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild1to1InGroup",
+	let dataHolder = this.spec.dataHolder;
+	let containerGroup = [{
+		"name": "groupIdTwoTextChild",
 		"children": [{
-			"name": "groupIdTwoTextChild",
-			"children": [{
-				"name": "textVariableId",
-				"value": ""
-			}, {
-				"name": "textVariableId2",
-				"value": "AValue2"
-			}]
+			"name": "textVariableId",
+			"value": ""
+		}, {
+			"name": "textVariableId2",
+			"value": "AValue2"
 		}]
-	};
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerGroup);
+
+	let containerChild1 = [{
+		"name": "textVariableId",
+		"value": ""
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
+
+	let containerChild2 = [{
+		"name": "textVariableId2",
+		"value": "AValue2"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
 	this.spec.childReference = CORATEST.createChildReference("groupIdTwoTextChild", "0", "1", "1");
 
@@ -281,45 +280,49 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
+
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdTwoTextChild", path: [] });
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableId", path: ["groupIdTwoTextChild"] });
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVariableId2", path: ["groupIdTwoTextChild"] });
 });
 
-QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat0to1",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
-
-	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
-	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-
-	let validationResult = metadataChildValidator.validate();
-
-	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
-});
-
-QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat0to1",
-		"children": [{
-			"name": "textVariableId",
-			"value": ""
-		}]
-	};
-	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
-	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-
-	let validationResult = metadataChildValidator.validate();
-
-	assert.strictEqual(validationResult.everythingOkBelow, true);
-	assert.strictEqual(validationResult.containsValuableData, false);
-
-	let pubSubMessages = this.pubSub.getMessages();
-	assert.strictEqual(pubSubMessages.length, 1);
-	assert.stringifyEqual(pubSubMessages[0], CORATEST.createRemoveMessage("textVariableId"));
-});
+//QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
+//	this.spec.data = {
+//		"name": "groupIdOneTextChildRepeat0to1",
+//		"children": [{
+//			"name": "textVariableId",
+//			"value": "A Value"
+//		}]
+//	};
+//
+//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+//
+//	let validationResult = metadataChildValidator.validate();
+//
+//	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+//});
+//
+//QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
+//	this.spec.data = {
+//		"name": "groupIdOneTextChildRepeat0to1",
+//		"children": [{
+//			"name": "textVariableId",
+//			"value": ""
+//		}]
+//	};
+//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
+//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+//
+//	let validationResult = metadataChildValidator.validate();
+//
+//	assert.strictEqual(validationResult.everythingOkBelow, true);
+//	assert.strictEqual(validationResult.containsValuableData, false);
+//
+//	let pubSubMessages = this.pubSub.getMessages();
+//	assert.strictEqual(pubSubMessages.length, 1);
+//	assert.stringifyEqual(pubSubMessages[0], CORATEST.createRemoveMessage("textVariableId"));
+//});
 
 CORATEST.createRemoveMessage =
 	function(metadataId) {
@@ -333,10 +336,9 @@ CORATEST.createRemoveMessage =
 	};
 
 QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat0to1",
-		"children": []
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -347,39 +349,39 @@ QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
 	assert.strictEqual(validationResult.containsValuableData, false);
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 0);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
-// textVarRepeat1to3InGroup
 QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
-	this.spec.data = {
-		"name": "textVariableIdRepeat1to3InGroup",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value",
-			"repeatId": "one"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "A Value",
+		"repeatId": "one"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
+
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
-	this.spec.data = {
-		"name": "textVariableIdRepeat1to3InGroup",
-		"children": [{
-			"name": "textVariableId",
-			"value": "",
-			"repeatId": "one"
-		}, {
-			"name": "textVariableId",
-			"value": "",
-			"repeatId": "two"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "",
+		"repeatId": "one"
+	}, {
+		"name": "textVariableId",
+		"value": "",
+		"repeatId": "two"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -409,25 +411,25 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[1], validationError);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat3to3",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value",
-			"repeatId": "one"
-		}, {
-			"name": "textVariableId",
-			"value": "",
-			"repeatId": "two"
-		}, {
-			"name": "textVariableId",
-			"value": "A Value3",
-			"repeatId": "three"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "A Value",
+		"repeatId": "one"
+	}, {
+		"name": "textVariableId",
+		"value": "",
+		"repeatId": "two"
+	}, {
+		"name": "textVariableId",
+		"value": "A Value3",
+		"repeatId": "three"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "3", "3");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -449,17 +451,17 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], validationError);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat1toX",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value",
-			"repeatId": "one"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "A Value",
+		"repeatId": "one"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -467,21 +469,21 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat1tox",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value",
-			"repeatId": "one"
-		}, {
-			"name": "textVariableId",
-			"value": "A Value2",
-			"repeatId": "two"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "A Value",
+		"repeatId": "one"
+	}, {
+		"name": "textVariableId",
+		"value": "A Value2",
+		"repeatId": "two"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
@@ -489,21 +491,22 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
 QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildRepeat1toX",
-		"children": [{
-			"name": "textVariableId",
-			"value": "",
-			"repeatId": "one"
-		}, {
-			"name": "textVariableId",
-			"value": "A Value2",
-			"repeatId": "two"
-		}]
-	};
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		"name": "textVariableId",
+		"value": "",
+		"repeatId": "one"
+	}, {
+		"name": "textVariableId",
+		"value": "A Value2",
+		"repeatId": "two"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
+
 	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "X");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
@@ -523,48 +526,76 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
-QUnit.test("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildOneAttribute",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}],
-		"attributes": {
-			"anAttribute": "aFinalValue"
-		}
-	};
+//QUnit.only("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
+////	this.spec.data = {
+////		"name": "groupIdOneTextChildOneAttribute",
+////		"children": [{
+////			"name": "textVariableId",
+////			"value": "A Value"
+////		}],
+////		"attributes": {
+////			"anAttribute": "aFinalValue"
+////		}
+////	};
+//	
+//	let dataHolder = this.spec.dataHolder;
+//	let containerChild = [{
+//			name: "textVariableId",
+//			value: "A Value"
+//		}];
+//	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
+//
+//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
+//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+//
+//	let validationResult = metadataChildValidator.validate();
+//
+//	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+//});
 
-	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
-	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-
-	let validationResult = metadataChildValidator.validate();
-
-	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
-});
-
-QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
-	this.spec.data = {
-		"name": "groupInGroupOneTextChildOneAttribute",
-		"children": [{
-			"name": "groupIdOneTextChildOneAttribute",
-			"children": [{
-				"name": "textVariableId",
-				"value": "A Value2"
-			}],
-			"attributes": {
-				"anAttribute": "aFinalValue"
-			}
+QUnit.only("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
+	let dataHolder = this.spec.dataHolder;
+	let containerChild = [{
+		name: "groupIdOneTextChildOneAttribute",
+		children: [{
+			name: "textVariableId",
+			value: "A Value2"
 		}]
-	};
+		,
+		attributes: [{
+			id: "anAttribute",
+			nameInData: "anAttribute",
+			value: "aFinalValue"
+		}]
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
+	let containerChild2 = [{
+		"name": "textVariableId",
+		"value": "A Value2"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
+
+	let containerAttribute = [{
+		id: "anAttribute",
+		nameInData: "anAttribute",
+		value: "aFinalValue"
+	}];
+	let pathToAttribute = ["groupIdOneTextChildOneAttribute", "@anAttribute"];
+	dataHolder.setContainer(pathToAttribute, containerAttribute);
+
 	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildOneAttribute", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
 
 	let validationResult = metadataChildValidator.validate();
 
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
+	
+	assert.strictEqual(this.pubSub.getMessages(),"");
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildOneAttribute", path: [] });
+	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableId", path: ["groupIdOneTextChildOneAttribute"] });
 });
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValue",

@@ -20,7 +20,7 @@
 
 var CORA = (function(cora) {
 	"use strict";
-	cora.metadataRepeatValidator = function(metadataId, path, data, repeatId, metadataProvider,
+	cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
 		pubSub) {
 		let result = {
 			"everythingOkBelow": true,
@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 		let cMetadataElement;
 
 		const start = function() {
-//			console.log("repeatValidator, path:", path + ' metadataId:'+metadataId)
+			//			console.log("repeatValidator, path:", path + ' metadataId:'+metadataId)
 			cMetadataElement = getMetadataById(metadataId);
 			validateRepeat();
 		}
@@ -43,7 +43,8 @@ var CORA = (function(cora) {
 		};
 
 		const validateForMetadata = function() {
-			let nextLevelPath = createNextLevelPath();
+//			let nextLevelPath = createNextLevelPath();
+			let nextLevelPath = path;
 			if (isGroup()) {
 				validateMetadataGroup(nextLevelPath);
 			} else if (isRecordLink()) {
@@ -53,14 +54,15 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createNextLevelPath = function() {
-			let pathSpec = {
-				"metadataIdToAdd": metadataId,
-				"repeatId": repeatId,
-				"parentPath": path
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
+//		const createNextLevelPath = function() {
+//			let pathSpec = {
+//				metadataIdToAdd: metadataId,
+//				repeatId: repeatId,
+//				parentPath: path,
+//				type: "attribute"
+//			};
+//			return CORA.calculatePathForNewElement(pathSpec);
+//		};
 
 		const isGroup = function() {
 			let type = cMetadataElement.getData().attributes.type;
@@ -80,9 +82,9 @@ var CORA = (function(cora) {
 		};
 
 		const validateGroupChild = function(childReference, nextLevelPath) {
-			validateChild(childReference, nextLevelPath, data);
+			validateChild(childReference, nextLevelPath);
 		};
-		const validateChild = function(childReference, nextLevelPath, childData) {
+		const validateChild = function(childReference, nextLevelPath) {
 			let dependencies = {
 				metadataProvider: metadataProvider,
 				pubSub: pubSub
@@ -90,7 +92,8 @@ var CORA = (function(cora) {
 			let spec = {
 				path: nextLevelPath,
 				childReference: childReference,
-				data: childData
+				//				data: childData
+				dataHolder: dataHolder
 			};
 			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
 			let childResult = metadataChildValidator.validate();
@@ -120,7 +123,7 @@ var CORA = (function(cora) {
 
 		const validateLinkedRecordId = function(nextLevelPath) {
 			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
-			validateChild(recordIdStaticChildReference, nextLevelPath, data);
+			validateChild(recordIdStaticChildReference, nextLevelPath);
 		};
 
 		const createRefWithRef = function(ref) {
@@ -149,7 +152,7 @@ var CORA = (function(cora) {
 		const possiblyValidateLinkedRepeatId = function(nextLevelPath) {
 			if (isLinkToRepeatingPartOfRecord()) {
 				let recordTypeStaticChildReference = createRefWithRef("linkedRepeatIdTextVar");
-				validateChild(recordTypeStaticChildReference, nextLevelPath, data);
+				validateChild(recordTypeStaticChildReference, nextLevelPath);
 			}
 		};
 
@@ -192,6 +195,7 @@ var CORA = (function(cora) {
 			let collectionItemReferences = getCollectionItemReferences();
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
+			console.log("validateCollectionVariable", data.value);
 				return finalValue === data.value;
 			}
 
@@ -225,14 +229,14 @@ var CORA = (function(cora) {
 
 		const handleInvalidData = function(nextLevelPath) {
 			let message = {
-				"metadataId": metadataId,
-				"path": nextLevelPath
+				metadataId: metadataId,
+				path: nextLevelPath
 			};
 			result = {
-				"everythingOkBelow": false,
-				"containsValuableData": false,
-				"validationMessage": message,
-				"sendValidationMessages": true
+				everythingOkBelow: false,
+				containsValuableData: false,
+				validationMessage: message,
+				sendValidationMessages: true
 			};
 		};
 		start();

@@ -51,166 +51,27 @@ var CORA = (function(cora) {
 			return result;
 		};
 
-		const possiblyValidateAttributes = function() {
-			let metadataElement = getMetadataById(ref);
-			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
-				//we have attributes
-				//				return getAttributesForMetadataElement(metadataElement);
-				let attributeReferences = metadataElement
-					.getFirstChildByNameInData("attributeReferences");
-				let attributeReference;
-				for (let i = 0; i < attributeReferences.children.length; i++) {
-					attributeReference = attributeReferences.children[i];
-					//					let attribute = getAttributeForAttributeReference(attributeReference, i);
-					//					attributesOut.children.push(attribute);
-					let attributeRef = getRefValueFromAttributeRef(attributeReference);
-					console.log("attributeRef", attributeRef);
-
-
-					//					let pathSpec = {
-					//						metadataIdToAdd: attributeRef,
-					//						parentPath: createNextLevelPath(),
-					//						type: "attribute"
-					//					};
-					let attributePath = createNextLevelPathAttribute(attributeRef);
-					console.log("attributePath: ", attributePath);
-
-					let dataChild = dataHolder.findContainer(attributePath);
-					let childInstanceValidationResult = CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder, dataChild, undefined,
-						metadataProvider, pubSub);
-
-					return childInstanceValidationResult;
-					//					setValuableDataInResult(childInstanceValidationResult);
-					//					categorizeChildInstance(childInstanceValidationResult);
-				}
-			}
-			return [];
-		}
-
-		const createNextLevelPathAttribute = function(attributeRef) {
-			let pathSpec = {
-				metadataIdToAdd: attributeRef,
-				//				repeatId: repeatId,
-				parentPath: createNextLevelPath(),
-				type: "attribute"
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
-
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const createNextLevelPath = function() {
+		const createNextLevelPath = function(repeatId) {
 			let pathSpec = {
 				//				metadataIdToAdd: metadataId,
 				metadataIdToAdd: ref,
-				repeatId: spec.repeatId,
+				repeatId: repeatId,
 				parentPath: path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
-		//		const getNameInDataForMetadataId = function(refIn) {
-		//			let metadataElement = getMetadataById(refIn);
-		//			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
-		//		};
-		//
-		//		const getAttributesForMetadataId = function(refIn) {
-		//			let metadataElement = getMetadataById(refIn);
-		//			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
-		//				return getAttributesForMetadataElement(metadataElement);
-		//			}
-		//			return undefined;
-		//		};
-
-		//		const getAttributesForMetadataElement = function(metadataElement) {
-		//			let attributesOut = createAttributes();
-		//			let attributeReferences = metadataElement
-		//				.getFirstChildByNameInData("attributeReferences");
-		//			let attributeReference;
-		//			for (let i = 0; i < attributeReferences.children.length; i++) {
-		//				attributeReference = attributeReferences.children[i];
-		//				let attribute = getAttributeForAttributeReference(attributeReference, i);
-		//				attributesOut.children.push(attribute);
-		//			}
-		//			return attributesOut;
-		//		};
-
-		//		const createAttributes = function() {
-		//			return {
-		//				"name": "attributes",
-		//				"children": []
-		//			};
-		//		};
-		//
-		//		const getAttributeForAttributeReference = function(attributeReference, index) {
-		//			let attributeRef = getRefValueFromAttributeRef(attributeReference);
-		//			let attributeMetadata = getMetadataById(attributeRef);
-		//			let attributeNameInData = attributeMetadata
-		//				.getFirstAtomicValueByNameInData("nameInData");
-		//			//			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-		//
-		//			let finalValue = [];
-		//			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
-		//				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-		//			} else {
-		//
-		//				//TODO:Spike, we need to loop attribute choices to find matching data
-		//				let possibleAttributeValues = [];
-		//				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
-		//				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
-		//				let cCollection = getMetadataById(collectionId);
-		//				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
-		//				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
-		//				allRefs.forEach(function(colItemRef) {
-		//					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
-		//					let cItem = getMetadataById(linkedId);
-		//					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
-		//					possibleAttributeValues.push(value);
-		//				});
-		//				finalValue = possibleAttributeValues;
-		//			}
-		//			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
-		//				index);
-		//		};
-
-		//		const getRefValueFromAttributeRef = function(attributeReference) {
-		//			let cAttributeReference = CORA.coraData(attributeReference);
-		//			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		//		};
-		//
-		//		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-		//			return {
-		//				"name": "attribute",
-		//				"repeatId": repeatId || "1",
-		//				"children": [{
-		//					"name": "attributeName",
-		//					"value": attributeName
-		//				}, {
-		//					"name": "attributeValue",
-		//					"value": attributeValue
-		//				}]
-		//			};
-		//		};
-
-		//		const getDataChildrenForMetadata = function(nameInDataIn, attributesIn) {
-		//			if (!cData.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
-		//				return [];
-		//			}
-		//			return cData.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
-		//		};
 
 		const getDataChildrenForMetadata = function(metadataId) {
 			//TODO: new method get all with from path with metadataId 
 			let foundContainers = dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
-			console.log("foundConatiners", foundContainers);
+			console.log("***foundConatiners", foundContainers + ", path: "+path+" metadataId: "+metadataId);
 			return foundContainers;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
+			console.log("!!!XXX!!! noOfRepeatsForThisChild: ", noOfRepeatsForThisChild);
 			for (let index = 0; index < noOfRepeatsForThisChild; index++) {
+			console.log("!!!XXX!!!---- noOfRepeatsForThisChild: ", index);
 				validateAndCategorizeChildInstance(index);
 			}
 			removeEmptyChildren();
@@ -333,19 +194,19 @@ var CORA = (function(cora) {
 			console.log("dataChildrenForMetadata", dataChildrenForMetadata)
 			let dataChild = dataChildrenForMetadata[index];
 			let repeatId = dataChild.repeatId;
-			let attributeValidationResult = possiblyValidateAttributes();
-			setValuableDataInResult(attributeValidationResult);
-			categorizeChildInstance(attributeValidationResult);
-			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-			//			return attributeValidationResult.concat(dataValidationResult);
+			
+			let validateResult = validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
+			console.log("validateResult object", validateResult);
+			
+			return validateResult;
 		};
 
-		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
+//		const getMetadataById = function(id) {
+//			return CORA.coraData(metadataProvider.getMetadataById(id));
+//		};
 
 		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
-			let nextPath = createNextLevelPath();
+			let nextPath = createNextLevelPath(repeatId);
 			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
 				pubSub);
 		};

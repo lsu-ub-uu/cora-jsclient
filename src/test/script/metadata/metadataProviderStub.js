@@ -182,6 +182,11 @@ function MetadataProviderStub() {
 		return [createRecordInfoJson(idToGet)]
 			.concat(createNameInDataLinkedTextIdDefTextId2(idToGet));
 	}
+	function createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData(
+		idToGet, nameInData) {
+		return [createRecordInfoJson(idToGet)]
+			.concat(createNameInDataLinkedTextIdDefTextId2(nameInData));
+	}
 
 	this.getMetadataById = function(idToGet) {
 		if (idToGet === "textVariableId") {
@@ -625,12 +630,12 @@ function MetadataProviderStub() {
 								"name": "repeatMax",
 								"value": "1"
 							}, {
-					              "name": "recordPartConstraint",
-					              "value": "write"
-					            }]
+								"name": "recordPartConstraint",
+								"value": "write"
+							}]
 					}]
 				}]
-				.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
 		if (idToGet === "groupIdOneTextChildWithReadWriteConstraints") {
@@ -661,12 +666,12 @@ function MetadataProviderStub() {
 								"name": "repeatMax",
 								"value": "1"
 							}, {
-					              "name": "recordPartConstraint",
-					              "value": "readWrite"
-					            }]
+								"name": "recordPartConstraint",
+								"value": "readWrite"
+							}]
 					}]
 				}]
-				.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
 		if (idToGet === "groupIdOneTextChild2") {
@@ -929,13 +934,13 @@ function MetadataProviderStub() {
 		if (idToGet === "anAttribute") {
 			return {
 				"name": "metadata",
-//				"children": [{
-//					"name": "ref",
-//					"value": "recordTypeTypeCollection"
-//				}, {
-//					"name": "finalValue",
-//					"value": "aFinalValue"
-//				}]
+				//				"children": [{
+				//					"name": "ref",
+				//					"value": "recordTypeTypeCollection"
+				//				}, {
+				//					"name": "finalValue",
+				//					"value": "aFinalValue"
+				//				}]
 				"children": [{
 					"children": [{
 						"name": "linkedRecordType",
@@ -958,10 +963,10 @@ function MetadataProviderStub() {
 		if (idToGet === "anAttributeChoice") {
 			return {
 				"name": "metadata",
-//				"children": [{
-//					"name": "ref",
-//					"value": "recordTypeTypeCollection"
-//				}]
+				//				"children": [{
+				//					"name": "ref",
+				//					"value": "recordTypeTypeCollection"
+				//				}]
 				"children": [{
 					"children": [{
 						"name": "linkedRecordType",
@@ -1062,13 +1067,21 @@ function MetadataProviderStub() {
 		if (idToGet === "anOtherAttribute") {
 			return {
 				"name": "metadata",
-				"children": [{
-					"name": "ref",
-					"value": "recordTypeTypeCollection"
-				}, {
-					"name": "finalValue",
-					"value": "aOtherFinalValue"
-				}]
+				"children": [
+					{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataItemCollection"
+						}, {
+							"name": "linkedRecordId",
+							"value": "recordTypeTypeCollection"
+						}],
+						"name": "refCollection"
+					}, {
+						"name": "finalValue",
+						"value": "aOtherFinalValue"
+					}
+				]
 					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
 				"attributes": {
 					"type": "collectionVariable"
@@ -1343,7 +1356,7 @@ function MetadataProviderStub() {
 								"metadataTextVariable", "textVar",
 								"textVariable", "1", "1", "3")]
 					}]
-					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("textVarRepeat1to3InGroupOneAttribute"))
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData("textVarRepeat1to3InGroupOtherAttribute","textVarRepeat1to3InGroupOneAttribute"))
 			};
 		}
 		if (idToGet === "textVar") {
@@ -7393,7 +7406,7 @@ function MetadataProviderStub() {
 									"attributes": {
 										"type": "text"
 									}
-								}] 
+								}]
 							}, {
 								"name": "textStyle",
 								"value": "h2TextStyle"
@@ -8985,7 +8998,7 @@ function MetadataProviderStub() {
 											},
 											{
 												"name": "linkedRecordId",
-//												"value": "metadata"
+												//												"value": "metadata"
 												"value": "metadataTextVariable"
 											}]
 									},
@@ -9046,7 +9059,7 @@ function MetadataProviderStub() {
 											{
 												"name": "linkedRecordId",
 												"value": "metadata"
-//												"value": "metadataTextVariable"
+												//												"value": "metadataTextVariable"
 											}]
 									},
 									{
@@ -9066,7 +9079,7 @@ function MetadataProviderStub() {
 						],
 						"name": "linkedRecordPresentations"
 					}]
-				};	
+				};
 			case "myLinkPresentationOfLinkedRecordInputPLink":
 				return {
 					"name": "presentation",

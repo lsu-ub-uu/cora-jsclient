@@ -229,8 +229,8 @@ var CORA = (function(cora) {
 			return foundContainer;
 		};
 
-		const findContainersUsingPathAndMetadataId = function(path, metadataId) {
-			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataId);
+		const findContainersUsingPathAndMetadataId = function(path, metadataIdIn) {
+			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataIdIn);
 			let pathToFind = JSON.stringify(nextLevelPathNoRepeatId);
 			let foundContainer = containerPathNoRepeatId[pathToFind];
 			if (undefined == foundContainer) {
@@ -311,12 +311,15 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerWithPath = function(path) {
+console.log("containerAndParent: ",path);
 			let containerAndParent = findContainerAndParent(path);
-
+console.log("containerAndParent: ",containerAndParent);
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
+console.log("containerAndParent: index",index);
 			containerParent.children.splice(index, 1);
+console.log("containerAndParent: path to delete",index);
 			delete containerPath[JSON.stringify(path)];
 		};
 

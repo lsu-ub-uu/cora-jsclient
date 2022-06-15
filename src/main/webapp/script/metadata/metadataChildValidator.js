@@ -46,8 +46,8 @@ var CORA = (function(cora) {
 			//			possiblyCheckAttributes(ref);
 			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
 			noOfRepeatsForThisChild = calculateMinRepeat();
-
 			validateAndCategorizeChildInstances();
+//			console.log("Final result", result);
 			return result;
 		};
 
@@ -64,14 +64,14 @@ var CORA = (function(cora) {
 		const getDataChildrenForMetadata = function(metadataId) {
 			//TODO: new method get all with from path with metadataId 
 			let foundContainers = dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
-			console.log("***foundConatiners", foundContainers + ", path: "+path+" metadataId: "+metadataId);
+//			console.log("***foundConatiners", foundContainers + ", path: "+path+" metadataId: "+metadataId);
 			return foundContainers;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
-			console.log("!!!XXX!!! noOfRepeatsForThisChild: ", noOfRepeatsForThisChild);
+//			console.log("!!!XXX!!! noOfRepeatsForThisChild: ", noOfRepeatsForThisChild);
 			for (let index = 0; index < noOfRepeatsForThisChild; index++) {
-			console.log("!!!XXX!!!---- noOfRepeatsForThisChild: ", index);
+//			console.log("!!!XXX!!!---- noOfRepeatsForThisChild: ", index);
 				validateAndCategorizeChildInstance(index);
 			}
 			removeEmptyChildren();
@@ -178,6 +178,7 @@ var CORA = (function(cora) {
 		};
 
 		const sendValidationErrorToEmptyChild = function(errorMessage) {
+//			console.log("validationError", errorMessage);
 			pubSub.publish("validationError", errorMessage);
 		};
 
@@ -191,12 +192,12 @@ var CORA = (function(cora) {
 		};
 
 		const validateRepeatingChildInstanceWithData = function(index) {
-			console.log("dataChildrenForMetadata", dataChildrenForMetadata)
+//			console.log("dataChildrenForMetadata", dataChildrenForMetadata)
 			let dataChild = dataChildrenForMetadata[index];
 			let repeatId = dataChild.repeatId;
 			
 			let validateResult = validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-			console.log("validateResult object", validateResult);
+//			console.log("validateResult object", validateResult);
 			
 			return validateResult;
 		};

@@ -733,17 +733,17 @@ QUnit.test("testDisable", function(assert) {
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });
 
-QUnit.test("testAddAttributePresentation", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
-	//	dataHolder, "anAttribute", ["groupIdOneTextChildTwoAttributes"], "anAttribute"
-	let addAttributeMsg = {
-		metadataId: "anAttribute",
-		path: [],
-		nameInData: "anAttribute"
-	};
-	//	dataHolder.handleMsg(addAttributeMsg, "x/y/z/addAttribute");
-	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
-
-	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-//	assert.equal(pVarViewSpy.getDisabledCalled(), true);
-});
+//QUnit.test("testAddAttributePresentation", function(assert) {
+//	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
+//	//	dataHolder, "anAttribute", ["groupIdOneTextChildTwoAttributes"], "anAttribute"
+//	let addAttributeMsg = {
+//		metadataId: "anAttribute",
+//		path: [],
+//		nameInData: "anAttribute"
+//	};
+//	//	dataHolder.handleMsg(addAttributeMsg, "x/y/z/addAttribute");
+//	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
+//
+//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+////	assert.equal(pVarViewSpy.getDisabledCalled(), true);
+//});

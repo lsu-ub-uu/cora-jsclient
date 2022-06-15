@@ -215,7 +215,8 @@ function MetadataProviderStub() {
 				}
 
 			};
-		} if (idToGet === "textVariableWithFinalValueId") {
+		}
+		if (idToGet === "textVariableWithFinalValueId") {
 			return {
 				"name": "metadata",
 				"children": [{
@@ -224,6 +225,94 @@ function MetadataProviderStub() {
 				}, {
 					"name": "finalValue",
 					"value": "someFinalValue"
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
+				"attributes": {
+					"type": "textVariable"
+				}
+			};
+		}
+		if (idToGet === "textVariableWithAnAttribute") {
+			return {
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				}, {
+					name: "attributeReferences",
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
+						}, {
+							name: "linkedRecordId",
+							value: "anAttribute"
+						}],
+						name: "ref"
+					}]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
+				"attributes": {
+					"type": "textVariable"
+				}
+			};
+		}
+		if (idToGet === "textVariableWithAnAttributeChoice") {
+			return {
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				}, {
+					name: "attributeReferences",
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
+						}, {
+							name: "linkedRecordId",
+							value: "anAttributeChoice"
+						}],
+						name: "ref"
+					}]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
+				"attributes": {
+					"type": "textVariable"
+				}
+			};
+		}
+		if (idToGet === "textVariableWithAnAttributeAndAnAttributeChoice") {
+			return {
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				}, {
+					name: "attributeReferences",
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
+						}, {
+							name: "linkedRecordId",
+							value: "anAttribute"
+						}],
+						name: "ref"
+					},{
+						repeatId: "2",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
+						}, {
+							name: "linkedRecordId",
+							value: "anAttributeChoice"
+						}],
+						name: "ref"
+					}]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
 				"attributes": {
@@ -602,6 +691,20 @@ function MetadataProviderStub() {
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
+		if (idToGet === "groupIdOneTextChildWithChoice") {
+			return {
+				"name": "metadata",
+				"attributes": {
+					"type": "group"
+				},
+				"children": [{
+					"name": "childReferences",
+					"children": [createChildReferenceWithRefAndRepeatId1to1(
+						"metadataTextVariable", "textVariableWithAnAttributeAndAnAttributeChoice", "1")]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+			};
+		}
 		if (idToGet === "groupIdOneTextChildWithWriteConstraints") {
 			return {
 				"name": "metadata",
@@ -963,10 +1066,6 @@ function MetadataProviderStub() {
 		if (idToGet === "anAttributeChoice") {
 			return {
 				"name": "metadata",
-				//				"children": [{
-				//					"name": "ref",
-				//					"value": "recordTypeTypeCollection"
-				//				}]
 				"children": [{
 					"children": [{
 						"name": "linkedRecordType",
@@ -1356,7 +1455,7 @@ function MetadataProviderStub() {
 								"metadataTextVariable", "textVar",
 								"textVariable", "1", "1", "3")]
 					}]
-					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData("textVarRepeat1to3InGroupOtherAttribute","textVarRepeat1to3InGroupOneAttribute"))
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData("textVarRepeat1to3InGroupOtherAttribute", "textVarRepeat1to3InGroupOneAttribute"))
 			};
 		}
 		if (idToGet === "textVar") {

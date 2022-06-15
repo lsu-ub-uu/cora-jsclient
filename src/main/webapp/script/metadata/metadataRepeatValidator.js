@@ -27,11 +27,14 @@ var CORA = (function(cora) {
 			containsValuableData: false
 		};
 		let cMetadataElement;
+		let attributeValidationResults = [];
 
 		const start = function() {
-			console.log("metadataRepeatValidator: metadataId", metadataId + " repeatId:"+repeatId);
+//			console.log("metadataRepeatValidator| metadataId: "+ metadataId + " repeatId:"+repeatId);
+//			console.log("metadata: ", JSON.stringify( metadataProvider.getMetadataById(metadataId)));
 			cMetadataElement = getMetadataById(metadataId);
 			validateRepeat();
+			return result;
 		}
 
 		const getMetadataById = function(id) {
@@ -39,22 +42,88 @@ var CORA = (function(cora) {
 		};
 
 		const validateRepeat = function() {
+			possiblyValidateAttributes();
 			validateForMetadata();
+//			if (result.everythingOkBelow) {
+//pubSub.publish("validationError", "****************************************");
+				for (let attributeValidationResult of attributeValidationResults) {
+					if (!attributeValidationResult.everythingOkBelow) {
+//			if (result.containsValuableData) {
+						result.everythingOkBelow = false;
+//			}
+						//result.validationMessage = attributeValidationResult.validationMessage;
+						//result.sendValidationMessages = true;
+//						console.log("AAARRRCHHHKLJ", pubSub);
+//						console.log("attributeValidationResult2", attributeValidationResult.validationMessage);
+						pubSub.publish("validationError", attributeValidationResult.validationMessage);
+					}
+				}
+//			}
 		};
 
-		const validateForMetadata = function() {
-			//			let nextLevelPath = createNextLevelPath();
-			let nextLevelPath = path;
-			possiblyValidateAttributes();
-			if (isGroup()) {
-				validateMetadataGroup(nextLevelPath);
-			} else if (isRecordLink()) {
-				validateMetadataRecordLink(nextLevelPath);
-			} else {
-				validateVariableValue(nextLevelPath);
+		const possiblyValidateAttributes = function() {
+			if (hasAttributes()) {
+				validateAttributes();
 			}
 		};
 
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
+		};
+
+		const validateAttributes = function() {
+			//we have attributes
+			let attributeReferences = cMetadataElement.getFirstChildByNameInData("attributeReferences");
+			for (let attributeReference of attributeReferences.children) {
+				let attributeRef = getRefValueFromAttributeRef(attributeReference);
+//				console.log("attributeRef",attributeRef);
+				validateAttribute(attributeRef);
+			}
+		};
+
+		const getRefValueFromAttributeRef = function(attributeReference) {
+			let cAttributeReference = CORA.coraData(attributeReference);
+			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const validateAttribute = function(attributeRef) {
+			let attributePath = createNextLevelPathAttribute(attributeRef);
+//				console.log("attributePath",attributePath);
+			let attributeData = dataHolder.findContainer(attributePath);
+//				console.log("attributeData",attributeData);
+			let attributeValidationResult =
+				CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder,
+					attributeData, undefined, metadataProvider, pubSub);
+			attributeValidationResults.push(attributeValidationResult);
+			//			console.log("attributeRef", attributeRef);
+			//			console.log("attributePath: ", attributePath);
+			//
+			//			let dependencies = {
+			//				metadataProvider: metadataProvider,
+			//				pubSub: pubSub
+			//			};
+			//			let spec = {
+			//				path: attributePath,
+			//				childReference: attributeRef,
+			//				dataHolder: dataHolder
+			//			};
+			//
+			//
+			//			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
+			//			let attributeValidationResult = metadataChildValidator.validate();
+			//			attributeValidationResults.push(attributeValidationResult);
+//			console.log("attributeValidationResult", attributeValidationResult);
+
+		};
+
+		const createNextLevelPathAttribute = function(attributeRef) {
+			let pathSpec = {
+				metadataIdToAdd: attributeRef,
+				parentPath: path,
+				type: "attribute"
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
+		};
 		//		const createNextLevelPath = function() {
 		//			let pathSpec = {
 		//				metadataIdToAdd: metadataId,
@@ -64,6 +133,16 @@ var CORA = (function(cora) {
 		//			};
 		//			return CORA.calculatePathForNewElement(pathSpec);
 		//		};
+
+		const validateForMetadata = function() {
+			if (isGroup()) {
+				validateMetadataGroup(path);
+			} else if (isRecordLink()) {
+				validateMetadataRecordLink(path);
+			} else {
+				validateVariableValue(path);
+			}
+		};
 
 		const isGroup = function() {
 			let type = cMetadataElement.getData().attributes.type;
@@ -82,64 +161,16 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const possiblyValidateAttributes = function() {
-			let metadataElement = getMetadataById(metadataId);
-			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
-				//we have attributes
-				//				return getAttributesForMetadataElement(metadataElement);
-				let attributeReferences = metadataElement
-					.getFirstChildByNameInData("attributeReferences");
-				let attributeReference;
-				//				for (let i = 0; i < attributeReferences.children.length; i++) {
-				for (const attributeReference2 of attributeReferences.children) {
-//					attributeReference = attributeReferences.children[i];
 
-
-					//					let attribute = getAttributeForAttributeReference(attributeReference, i);
-					//					attributesOut.children.push(attribute);
-					let attributeRef = getRefValueFromAttributeRef(attributeReference2);
-					console.log("attributeRef", attributeRef);
-
-
-					let attributePath = createNextLevelPathAttribute(attributeRef);
-					console.log("attributePath: ", attributePath);
-
-					let attributeData = dataHolder.findContainer(attributePath);
-					console.log("attributeData: ", attributeData);
-					let childInstanceValidationResult =
-						CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder, attributeData, undefined,
-							metadataProvider, pubSub);
-
-//					return childInstanceValidationResult;
-				}
-			}
-//			return {};
-		}
-
-		const createNextLevelPathAttribute = function(attributeRef) {
-			let pathSpec = {
-				metadataIdToAdd: attributeRef,
-				parentPath: path,
-				type: "attribute"
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
-
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-//		const createNextLevelPath = function() {
-//			let pathSpec = {
-//				metadataIdToAdd: metadataId,
-//				//				metadataIdToAdd: meta,
-//				repeatId: repeatId,
-//				parentPath: path
-//			};
-//			return CORA.calculatePathForNewElement(pathSpec);
-//		};
+		//		const createNextLevelPath = function() {
+		//			let pathSpec = {
+		//				metadataIdToAdd: metadataId,
+		//				//				metadataIdToAdd: meta,
+		//				repeatId: repeatId,
+		//				parentPath: path
+		//			};
+		//			return CORA.calculatePathForNewElement(pathSpec);
+		//		};
 
 		const validateGroupChild = function(childReference, nextLevelPath) {
 			validateChild(childReference, nextLevelPath);
@@ -183,7 +214,7 @@ var CORA = (function(cora) {
 
 		const validateLinkedRecordId = function(nextLevelPath) {
 			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
-			console.log("createRefWithRef", JSON.stringify(recordIdStaticChildReference));
+			//			console.log("createRefWithRef", JSON.stringify(recordIdStaticChildReference));
 			validateChild(recordIdStaticChildReference, nextLevelPath);
 		};
 
@@ -242,7 +273,7 @@ var CORA = (function(cora) {
 
 		const validateTextVariable = function() {
 			let regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-			console.log("HERE", data.value);
+			//			console.log("HERE", data.value);
 			return new RegExp(regEx).test(data.value);
 		};
 
@@ -257,7 +288,7 @@ var CORA = (function(cora) {
 			let collectionItemReferences = getCollectionItemReferences();
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
-				console.log("validateCollectionVariable data", data.value);
+				//				console.log("validateCollectionVariable data", data.value);
 				return finalValue === data.value;
 			}
 
@@ -265,7 +296,7 @@ var CORA = (function(cora) {
 		};
 
 		const getCollectionItemReferences = function() {
-			console.log("cMetadataElement: ",cMetadataElement.getData());
+			//			console.log("cMetadataElement: ",cMetadataElement.getData());
 			let cRefCollection = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("refCollection"));
 
@@ -302,8 +333,8 @@ var CORA = (function(cora) {
 				sendValidationMessages: true
 			};
 		};
-		start();
-		return result;
+		return start();
+		//		return result;
 
 	}
 	return cora;

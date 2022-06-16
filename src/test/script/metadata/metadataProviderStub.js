@@ -4915,6 +4915,35 @@ function MetadataProviderStub() {
 						}]
 					}]
 				};
+			case "userSuppliedIdCollectionVarPCollVarWithoutRecordInfo":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pCollVar"
+					},
+					"children": [{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataCollectionVariable"
+						}, {
+							"name": "linkedRecordId",
+							"value": "userSuppliedIdCollectionVar"
+						}],
+						"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					}, {
+						"name": "emptyTextId",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "text"
+						}, {
+							"name": "linkedRecordId",
+							"value": "initialEmptyValueText"
+						}]
+					}]
+				};
 			case "pNumVarNumVariableId":
 				return {
 					"name": "presentation",

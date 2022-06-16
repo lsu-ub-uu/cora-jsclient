@@ -26,6 +26,7 @@ var CORATEST = (function(coraTest) {
 		let state;
 		let value;
 		let disabledCalled = false;
+		let presentationAttributeView = [];
 		
 		const getView = function() {
 			return view;
@@ -65,8 +66,12 @@ var CORATEST = (function(coraTest) {
 			return disabledCalled;
 		};
 		const addAttributePresentation = function(attributeView) {
-//			view.appendChild(attributeView);
+			presentationAttributeView.push(attributeView);
 		};
+		const getAttributePresentation = function(index) {
+			return presentationAttributeView[index];
+		};
+		
 		return Object.freeze({
 			"type" : "pVarViewSpy",
 			getDependencies : getDependencies,
@@ -80,7 +85,8 @@ var CORATEST = (function(coraTest) {
 			callOnkeyupWithValue:callOnkeyupWithValue,
 			disable : disable,
 			getDisabledCalled : getDisabledCalled,
-			addAttributePresentation: addAttributePresentation
+			addAttributePresentation : addAttributePresentation,
+			getAttributePresentation : getAttributePresentation
 		});
 	};
 	return coraTest;

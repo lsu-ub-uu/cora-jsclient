@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 		let text;
 		let defText;
 		let regEx;
+		let mode;
 
 		const start = function() {
 			let textProvider = dependencies.textProvider;
@@ -47,7 +48,7 @@ var CORA = (function(cora) {
 			cMetadataElement = getMetadataById(metadataId);
 			let outputFormat = getOutputFormat();
 			let inputFormat = getInputFormat();
-			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
@@ -58,32 +59,32 @@ var CORA = (function(cora) {
 			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 
 			return {
-				"mode": mode,
-				"inputType": getInputType(),
-				"outputFormat": outputFormat,
-				"inputFormat": inputFormat,
-				"presentationId": presentationId,
-				"info": {
-					"text": text,
-					"defText": defText,
-					"technicalInfo": [{
-						"text": "textId: " + textId,
+				mode: mode,
+				inputType: getInputType(),
+				outputFormat: outputFormat,
+				inputFormat: inputFormat,
+				presentationId: presentationId,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [{
+						text: "textId: " + textId,
 						onclickMethod: openTextIdRecord
 					}, {
-						"text": "defTextId: " + defTextId,
+						text: "defTextId: " + defTextId,
 						onclickMethod: openDefTextIdRecord
 					}, {
-						"text": "metadataId: " + metadataId,
+						text: "metadataId: " + metadataId,
 						onclickMethod: openMetadataIdRecord
 					}, {
-						"text": "nameInData: " + nameInData
+						text: "nameInData: " + nameInData
 					}, {
-						"text": "regEx: " + regEx
+						text: "regEx: " + regEx
 					}, {
-						"text": "presentationId: " + presentationId
+						text: "presentationId: " + presentationId
 					}]
 				},
-				"onblurFunction": onBlur,
+				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
 		};
@@ -138,88 +139,56 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributePresentation = function(dataFromMsg) {
-			let cmetadata =getMetadataById(dataFromMsg.metadataId); 
-			console.log("AddAttribute: ", JSON.stringify(cmetadata.getData()));
-			let refCollection = cmetadata.getFirstChildByNameInData("refCollection");
-			let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
-			console.log("collectionId: ", collectionId);
-			
 			//TODO: spike
-			let colP = {
-				"name": "presentation",
-				"children": [
-					{
-						"name": "recordInfo",
-						"children": [
-							{
-								"name": "id",
-								"value": "workOrderTypePCollVar"
-							},
-							{
-								"name": "type",
-								"children": [
-									{
-										"name": "linkedRecordType",
-										"value": "recordType"
-									},
-									{
-										"name": "linkedRecordId",
-										"value": "presentationCollectionVar"
-									}
-								]
-							},
-						]
-					},
-					{
-						"name": "presentationOf",
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
-							},
-							{
-								"name": "linkedRecordId",
-//								"value": collectionId
-								"value": dataFromMsg.metadataId
-							}
-						]
-					},
-					{
-						"name": "mode",
-						"value": "input"
-					},
-					{
-						"name": "emptyTextId",
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "coraText"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "initialEmptyValueText"
-							}
-						]
-					}
-				],
-				"attributes": {
-					"type": "pCollVar"
-				}
-			};
-			
-			console.log("colP: ", JSON.stringify(colP));
+			let presentationChildForAttribute = buildAttributePresentationMetadata(
+				dataFromMsg.metadataId, mode);
 
-			//			let cPresentationChild = getMetadataById(dataFromMsg.metadataId);
-			let cPresentationChild = CORA.coraData(colP);
+			let cPresentationChild = CORA.coraData(presentationChildForAttribute);
+
 			let attributePath = createAttributePath(dataFromMsg.metadataId);
 			let presentationSpec = {
-				"path": attributePath,
-				"metadataIdUsedInData": dataFromMsg.metadataId,
-				"cPresentation": cPresentationChild
+				path: attributePath,
+				metadataIdUsedInData: dataFromMsg.metadataId,
+				cPresentation: cPresentationChild
 			};
 			let presentation = dependencies.presentationFactory.factor(presentationSpec);
+			console.log(presentation.getView());
 			pVarView.addAttributePresentation(presentation.getView());
+
+			//TODO: little list of stuff to do (might be moooooore... :)
+			//disable for attributes on disable (handled by view?) (more than one)
+			//attribute text
+			// layout, 
+			// layout more than one attribute
+			//attributes with final value, what to do?
 		};
+
+		const buildAttributePresentationMetadata = function(metadataId, attributeMode) {
+			return {
+				name: "presentation",
+				children: [{
+					name: "presentationOf",
+					children: [{
+						name: "linkedRecordId",
+						value: metadataId
+					}]
+				}, {
+					name: "mode",
+					value: attributeMode
+				}, {
+					name: "emptyTextId",
+					children: [
+						{
+							name: "linkedRecordId",
+							value: "initialEmptyValueText"
+						}]
+				}],
+				attributes: {
+					type: "pCollVar"
+				}
+			};
+		};
+
 		const createAttributePath = function(metadataId) {
 			let pathSpec = {
 				metadataIdToAdd: metadataId,
@@ -262,7 +231,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleMsg = function(dataFromMsg) {
-			console.log("PVar SetValue: ", dataFromMsg)
+			//			console.log("PVar SetValue: ", dataFromMsg)
 			setValue(dataFromMsg.data);
 			updateView();
 		};
@@ -293,8 +262,8 @@ var CORA = (function(cora) {
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
-					"data": valueFromView,
-					"path": path
+					data: valueFromView,
+					path: path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
@@ -336,8 +305,8 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
+				readLink: link,
+				loadInBackground: loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};

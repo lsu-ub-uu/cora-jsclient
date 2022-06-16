@@ -28,7 +28,6 @@ var CORA = (function(cora) {
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
-		//		let cData = CORA.coraData(spec.dataHolder.getData());
 		let dataHolder = spec.dataHolder;
 		let dataChildrenForMetadata;
 		let noOfRepeatsForThisChild;
@@ -40,20 +39,14 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
-			//			let nameInData = getNameInDataForMetadataId(ref);
-			//			let attributes = getAttributesForMetadataId(ref);
-			//			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
-			//			possiblyCheckAttributes(ref);
 			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
 			noOfRepeatsForThisChild = calculateMinRepeat();
 			validateAndCategorizeChildInstances();
-//			console.log("Final result", result);
 			return result;
 		};
 
 		const createNextLevelPath = function(repeatId) {
 			let pathSpec = {
-				//				metadataIdToAdd: metadataId,
 				metadataIdToAdd: ref,
 				repeatId: repeatId,
 				parentPath: path
@@ -62,16 +55,11 @@ var CORA = (function(cora) {
 		};
 
 		const getDataChildrenForMetadata = function(metadataId) {
-			//TODO: new method get all with from path with metadataId 
-			let foundContainers = dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
-//			console.log("***foundConatiners", foundContainers + ", path: "+path+" metadataId: "+metadataId);
-			return foundContainers;
+			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
 		};
 
 		const validateAndCategorizeChildInstances = function() {
-//			console.log("!!!XXX!!! noOfRepeatsForThisChild: ", noOfRepeatsForThisChild);
 			for (let index = 0; index < noOfRepeatsForThisChild; index++) {
-//			console.log("!!!XXX!!!---- noOfRepeatsForThisChild: ", index);
 				validateAndCategorizeChildInstance(index);
 			}
 			removeEmptyChildren();
@@ -178,7 +166,6 @@ var CORA = (function(cora) {
 		};
 
 		const sendValidationErrorToEmptyChild = function(errorMessage) {
-//			console.log("validationError", errorMessage);
 			pubSub.publish("validationError", errorMessage);
 		};
 
@@ -192,19 +179,10 @@ var CORA = (function(cora) {
 		};
 
 		const validateRepeatingChildInstanceWithData = function(index) {
-//			console.log("dataChildrenForMetadata", dataChildrenForMetadata)
 			let dataChild = dataChildrenForMetadata[index];
 			let repeatId = dataChild.repeatId;
-			
-			let validateResult = validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-//			console.log("validateResult object", validateResult);
-			
-			return validateResult;
+			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
 		};
-
-//		const getMetadataById = function(id) {
-//			return CORA.coraData(metadataProvider.getMetadataById(id));
-//		};
 
 		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
 			let nextPath = createNextLevelPath(repeatId);

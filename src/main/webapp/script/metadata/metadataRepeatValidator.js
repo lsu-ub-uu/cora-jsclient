@@ -30,8 +30,6 @@ var CORA = (function(cora) {
 		let attributeValidationResults = [];
 
 		const start = function() {
-//			console.log("metadataRepeatValidator| metadataId: "+ metadataId + " repeatId:"+repeatId);
-//			console.log("metadata: ", JSON.stringify( metadataProvider.getMetadataById(metadataId)));
 			cMetadataElement = getMetadataById(metadataId);
 			validateRepeat();
 			return result;
@@ -44,21 +42,12 @@ var CORA = (function(cora) {
 		const validateRepeat = function() {
 			possiblyValidateAttributes();
 			validateForMetadata();
-//			if (result.everythingOkBelow) {
-//pubSub.publish("validationError", "****************************************");
-				for (let attributeValidationResult of attributeValidationResults) {
-					if (!attributeValidationResult.everythingOkBelow) {
-//			if (result.containsValuableData) {
-						result.everythingOkBelow = false;
-//			}
-						//result.validationMessage = attributeValidationResult.validationMessage;
-						//result.sendValidationMessages = true;
-//						console.log("AAARRRCHHHKLJ", pubSub);
-//						console.log("attributeValidationResult2", attributeValidationResult.validationMessage);
-						pubSub.publish("validationError", attributeValidationResult.validationMessage);
-					}
+			for (let attributeValidationResult of attributeValidationResults) {
+				if (!attributeValidationResult.everythingOkBelow) {
+					result.everythingOkBelow = false;
+					pubSub.publish("validationError", attributeValidationResult.validationMessage);
 				}
-//			}
+			}
 		};
 
 		const possiblyValidateAttributes = function() {
@@ -72,11 +61,9 @@ var CORA = (function(cora) {
 		};
 
 		const validateAttributes = function() {
-			//we have attributes
 			let attributeReferences = cMetadataElement.getFirstChildByNameInData("attributeReferences");
 			for (let attributeReference of attributeReferences.children) {
 				let attributeRef = getRefValueFromAttributeRef(attributeReference);
-//				console.log("attributeRef",attributeRef);
 				validateAttribute(attributeRef);
 			}
 		};
@@ -88,32 +75,11 @@ var CORA = (function(cora) {
 
 		const validateAttribute = function(attributeRef) {
 			let attributePath = createNextLevelPathAttribute(attributeRef);
-//				console.log("attributePath",attributePath);
 			let attributeData = dataHolder.findContainer(attributePath);
-//				console.log("attributeData",attributeData);
 			let attributeValidationResult =
 				CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder,
 					attributeData, undefined, metadataProvider, pubSub);
 			attributeValidationResults.push(attributeValidationResult);
-			//			console.log("attributeRef", attributeRef);
-			//			console.log("attributePath: ", attributePath);
-			//
-			//			let dependencies = {
-			//				metadataProvider: metadataProvider,
-			//				pubSub: pubSub
-			//			};
-			//			let spec = {
-			//				path: attributePath,
-			//				childReference: attributeRef,
-			//				dataHolder: dataHolder
-			//			};
-			//
-			//
-			//			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
-			//			let attributeValidationResult = metadataChildValidator.validate();
-			//			attributeValidationResults.push(attributeValidationResult);
-//			console.log("attributeValidationResult", attributeValidationResult);
-
 		};
 
 		const createNextLevelPathAttribute = function(attributeRef) {
@@ -124,15 +90,6 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
-		//		const createNextLevelPath = function() {
-		//			let pathSpec = {
-		//				metadataIdToAdd: metadataId,
-		//				repeatId: repeatId,
-		//				parentPath: path,
-		//				type: "attribute"
-		//			};
-		//			return CORA.calculatePathForNewElement(pathSpec);
-		//		};
 
 		const validateForMetadata = function() {
 			if (isGroup()) {
@@ -161,20 +118,10 @@ var CORA = (function(cora) {
 			}
 		};
 
-
-		//		const createNextLevelPath = function() {
-		//			let pathSpec = {
-		//				metadataIdToAdd: metadataId,
-		//				//				metadataIdToAdd: meta,
-		//				repeatId: repeatId,
-		//				parentPath: path
-		//			};
-		//			return CORA.calculatePathForNewElement(pathSpec);
-		//		};
-
 		const validateGroupChild = function(childReference, nextLevelPath) {
 			validateChild(childReference, nextLevelPath);
 		};
+
 		const validateChild = function(childReference, nextLevelPath) {
 			let dependencies = {
 				metadataProvider: metadataProvider,
@@ -209,12 +156,10 @@ var CORA = (function(cora) {
 		const validateMetadataRecordLink = function(nextLevelPath) {
 			validateLinkedRecordId(nextLevelPath);
 			possiblyValidateLinkedRepeatId(nextLevelPath);
-
 		};
 
 		const validateLinkedRecordId = function(nextLevelPath) {
 			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
-			//			console.log("createRefWithRef", JSON.stringify(recordIdStaticChildReference));
 			validateChild(recordIdStaticChildReference, nextLevelPath);
 		};
 
@@ -260,6 +205,7 @@ var CORA = (function(cora) {
 				handleInvalidData(nextLevelPath);
 			}
 		};
+
 		const dataIsValid = function() {
 			let type = cMetadataElement.getData().attributes.type;
 			if (type === "textVariable") {
@@ -273,7 +219,6 @@ var CORA = (function(cora) {
 
 		const validateTextVariable = function() {
 			let regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-			//			console.log("HERE", data.value);
 			return new RegExp(regEx).test(data.value);
 		};
 
@@ -288,15 +233,12 @@ var CORA = (function(cora) {
 			let collectionItemReferences = getCollectionItemReferences();
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
-				//				console.log("validateCollectionVariable data", data.value);
 				return finalValue === data.value;
 			}
-
 			return collectionItemReferences.children.some(isItemDataValue);
 		};
 
 		const getCollectionItemReferences = function() {
-			//			console.log("cMetadataElement: ",cMetadataElement.getData());
 			let cRefCollection = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("refCollection"));
 
@@ -334,8 +276,6 @@ var CORA = (function(cora) {
 			};
 		};
 		return start();
-		//		return result;
-
 	}
 	return cora;
 }(CORA));

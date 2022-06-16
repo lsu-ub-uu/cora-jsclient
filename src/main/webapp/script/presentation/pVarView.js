@@ -38,14 +38,14 @@ var CORA = (function(cora) {
 
 		const createInfo = function() {
 			let infoSpec = {
-				"appendTo": view,
-				"afterLevelChange": updateClassName,
-				"level1": [{
-					"className": "textView",
-					"text": spec.info.text
+				appendTo: view,
+				afterLevelChange: updateClassName,
+				level1: [{
+					className: "textView",
+					text: spec.info.text
 				}, {
-					"className": "defTextView",
-					"text": spec.info.defText
+					className: "defTextView",
+					text: spec.info.defText
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
@@ -71,8 +71,8 @@ var CORA = (function(cora) {
 
 		const createTechInfoPart = function(techInfo) {
 			let techInfoPart = {
-				"className": "technicalView",
-				"text": techInfo.text
+				className: "technicalView",
+				text: techInfo.text
 			};
 
 			if (techInfo.onclickMethod !== undefined) {
@@ -179,7 +179,7 @@ var CORA = (function(cora) {
 				outputNew.src = value;
 			};
 			return outputNew;
-		}
+		};
 
 		const createOutputLink = function() {
 			let outputNew = document.createElement("a");

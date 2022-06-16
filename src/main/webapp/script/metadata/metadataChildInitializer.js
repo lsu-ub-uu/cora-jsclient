@@ -88,33 +88,20 @@ var CORA = (function(cora) {
 				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
 			} else {
 
-				//TODO:Spike, we need to loop attribute choices to find matching data
 				let possibleAttributeValues = [];
-							console.log("attributeMetadata",attributeMetadata.getData());
 				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
 				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
-				//			console.log("collectionId",collectionId);
 				let cCollection = getMetadataById(collectionId);
-				//			console.log("cCollection",cCollection.getData());
 				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
 				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
-				//			console.log("allRefs", allRefs);
 				allRefs.forEach(function(colItemRef) {
-					//				console.log("colItemRef", colItemRef);
 					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
-					//				console.log("linkedId", linkedId);
 					let cItem = getMetadataById(linkedId);
 					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
-					//				console.log("value", value);
 					possibleAttributeValues.push(value);
 				});
-//					console.log("possibleAttributeValues", possibleAttributeValues);
 				finalValue = possibleAttributeValues;
 			}
-//					console.log("finalValue", finalValue);
-
-			//			}
-
 
 			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
 				index);

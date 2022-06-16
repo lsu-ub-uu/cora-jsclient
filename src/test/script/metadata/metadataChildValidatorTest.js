@@ -1214,7 +1214,6 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild3_1);
 
 		let containerAttribute_1 = containerChild1_1[0].attributes[0];
-		console.log("containerAttribute_1", containerAttribute_1);
 		let pathToAttribute_1 = ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 			"textVarRepeat1to3InGroupOtherAttribute.one1",
 			"@anOtherAttribute"];
@@ -1294,7 +1293,6 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild3_1);
 
 	let containerAttribute_1 = containerChild1_1[0].attributes[0];
-	console.log("containerAttribute_1", containerAttribute_1);
 	let pathToAttribute_1 = ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 		"textVarRepeat1to3InGroupOtherAttribute.one1",
 		"@anOtherAttribute"];
@@ -1424,7 +1422,6 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild3_1);
 
 		let containerAttribute_1 = containerChild1_1[0].attributes[0];
-		console.log("containerAttribute_1", containerAttribute_1);
 		let pathToAttribute_1 = ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
 			"textVarRepeat1to3InGroupOtherAttribute",
 			"@anOtherAttribute"];
@@ -1505,7 +1502,6 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild3_1);
 
 		let containerAttribute_1 = containerChild1_1[0].attributes[0];
-		console.log("containerAttribute_1", containerAttribute_1);
 		let pathToAttribute_1 = ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup",
 			"textVarRepeat1to3InGroupOtherAttribute",
 			"@anOtherAttribute"];

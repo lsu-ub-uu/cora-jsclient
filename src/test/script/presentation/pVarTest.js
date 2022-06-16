@@ -21,23 +21,23 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
-		fixture, pVarViewFactory) {
+		fixture, presentationFactory, pVarViewFactory) {
 		let factor = function(path, metadataIdUsedInData, pVarPresentationId) {
 			let cPVarPresentation = CORA.coraData(metadataProvider
 				.getMetadataById(pVarPresentationId));
 			let dependencies = {
-				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
-				"metadataProvider": metadataProvider,
-				"presentationFactory": CORATEST.standardFactorySpy("presentationSpy"),
-				"pubSub": pubSub,
-				"textProvider": textProvider,
-				"jsBookkeeper": jsBookkeeper,
+				clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
+				metadataProvider: metadataProvider,
+				presentationFactory: presentationFactory,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				jsBookkeeper: jsBookkeeper,
 				pVarViewFactory: pVarViewFactory
 			};
 			let spec = {
-				"path": path,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPVarPresentation
+				path: path,
+				metadataIdUsedInData: metadataIdUsedInData,
+				cPresentation: cPVarPresentation
 			};
 			let pVar = CORA.pVar(dependencies, spec);
 			return {
@@ -117,9 +117,11 @@ QUnit.module("presentation/pVarTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
+		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
 		this.pVarFactory = CORATEST.attachedPVarFactory(this.metadataProvider, this.pubSub,
-			this.textProvider, this.jsBookkeeper, this.fixture, this.pVarViewFactory);
+			this.textProvider, this.jsBookkeeper, this.fixture, this.presentationFactory,
+			this.pVarViewFactory);
 	}
 });
 
@@ -152,35 +154,35 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		"info": {
-			"defText": "Detta är en exempeldefinition för en textvariabel.",
-			"technicalInfo": [],
-			"text": "Exempel textvariabel"
+		info: {
+			defText: "Detta är en exempeldefinition för en textvariabel.",
+			technicalInfo: [],
+			text: "Exempel textvariabel"
 		},
-		"onblurFunction": attachedPVar.pVar.onBlur,
-		"onkeyupFunction": attachedPVar.pVar.onkeyup,
-		"inputType": "input",
-		"mode": "input",
-		"outputFormat": "text",
-		"inputFormat": "text",
-		"placeholderText": "Skriv din text här",
-		"presentationId": "pVarTextVariableId"
+		onblurFunction: attachedPVar.pVar.onBlur,
+		onkeyupFunction: attachedPVar.pVar.onkeyup,
+		inputType: "input",
+		mode: "input",
+		outputFormat: "text",
+		inputFormat: "text",
+		placeholderText: "Skriv din text här",
+		presentationId: "pVarTextVariableId"
 	};
 	expectedPVarViewSpec.info.technicalInfo.push({
-		"text": "textId: textVariableIdText",
-		"onclickMethod": attachedPVar.pVar.openTextIdRecord
+		text: "textId: textVariableIdText",
+		onclickMethod: attachedPVar.pVar.openTextIdRecord
 	}, {
-		"text": "defTextId: textVariableIdDefText",
-		"onclickMethod": attachedPVar.pVar.openDefTextIdRecord
+		text: "defTextId: textVariableIdDefText",
+		onclickMethod: attachedPVar.pVar.openDefTextIdRecord
 	}, {
-		"text": "metadataId: textVariableId",
-		"onclickMethod": attachedPVar.pVar.openMetadataIdRecord
+		text: "metadataId: textVariableId",
+		onclickMethod: attachedPVar.pVar.openMetadataIdRecord
 	}, {
-		"text": "nameInData: textVariableId"
+		text: "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
+		text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: pVarTextVariableId"
+		text: "presentationId: pVarTextVariableId"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -733,17 +735,77 @@ QUnit.test("testDisable", function(assert) {
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });
 
-//QUnit.test("testAddAttributePresentation", function(assert) {
-//	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
-//	//	dataHolder, "anAttribute", ["groupIdOneTextChildTwoAttributes"], "anAttribute"
-//	let addAttributeMsg = {
-//		metadataId: "anAttribute",
-//		path: [],
-//		nameInData: "anAttribute"
-//	};
-//	//	dataHolder.handleMsg(addAttributeMsg, "x/y/z/addAttribute");
-//	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
-//
-//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-////	assert.equal(pVarViewSpy.getDisabledCalled(), true);
-//});
+QUnit.test("testAddAttributePresentation", function(assert) {
+	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
+	let metadataId = "anAttribute";
+	let addAttributeMsg = {
+		metadataId: metadataId,
+		path: [],
+		nameInData: "anAttribute"
+	};
+
+	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
+
+	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, "input");
+
+	let presentationSpec = this.presentationFactory.getSpec(0);
+	assert.deepEqual(presentationSpec.path, ["@anAttribute"]);
+	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+
+
+	let attributePresentation = this.pVarViewFactory.getFactored(0);
+	assert.deepEqual(attributePresentation.getAttributePresentation(0),
+		this.presentationFactory.getFactored(0).getView());
+});
+
+QUnit.test("testAddAttributeOutputPresentation", function(assert) {
+	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableIdOutput");
+	let metadataId = "anAttribute";
+	let addAttributeMsg = {
+		metadataId: metadataId,
+		path: [],
+		nameInData: "anAttribute"
+	};
+
+	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
+
+	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, "output");
+
+	let presentationSpec = this.presentationFactory.getSpec(0);
+	assert.deepEqual(presentationSpec.path, ["@anAttribute"]);
+	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+
+
+	let attributePresentation = this.pVarViewFactory.getFactored(0);
+	assert.deepEqual(attributePresentation.getAttributePresentation(0),
+		this.presentationFactory.getFactored(0).getView());
+});
+
+const buildExpectedPresentationForAttribute = function(metadataId, mode) {
+	return {
+		name: "presentation",
+		children: [{
+			name: "presentationOf",
+			children: [
+				{
+					name: "linkedRecordId",
+					value: metadataId
+				}]
+		}, {
+			name: "mode",
+			value: mode
+		}, {
+			name: "emptyTextId",
+			children: [
+				{
+					name: "linkedRecordId",
+					value: "initialEmptyValueText"
+				}]
+		}],
+		attributes: {
+			type: "pCollVar"
+		}
+	}
+};

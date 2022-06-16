@@ -80,13 +80,12 @@ QUnit.module("presentation/pCollectionVarTest.js", {
 		let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 			.getMetadataById(this.pCollectionVarPresentationId));
 		this.spec = {
-			"path": {},
+			"path": [],
 			"cPresentation": cPCollectionVarPresentation
 		};
-	},
-	afterEach: function() {
 	}
 });
+
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.testCollectionVariableSubscription = function(attachedPCollectionVar, assert) {
@@ -95,13 +94,13 @@ var CORATEST = (function(coraTest) {
 
 		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "setValue");
-		assert.deepEqual(firstSubsription.path, {});
+		assert.deepEqual(firstSubsription.path, []);
 		let pCollectionVar = attachedPCollectionVar.pCollectionVar;
 		assert.ok(firstSubsription.functionToCall === pCollectionVar.handleMsg);
 
 		let secondSubsription = subscriptions[1];
 		assert.strictEqual(secondSubsription.type, "validationError");
-		assert.deepEqual(secondSubsription.path, {});
+		assert.deepEqual(secondSubsription.path, []);
 		pCollectionVar = attachedPCollectionVar.pCollectionVar;
 		assert.ok(secondSubsription.functionToCall === pCollectionVar.handleValidationError);
 
@@ -141,7 +140,7 @@ QUnit.test("testGetSpec", function(assert) {
 
 
 QUnit.test("testInitInfoButtonCollectionVariable", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarPCollVar");
 	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
 	assert.deepEqual(attachedPCollectionVar.view.className,
@@ -195,8 +194,22 @@ QUnit.test("testInitInfoButtonCollectionVariable", function(assert) {
 	assert.equal(view.childNodes.length, 3);
 });
 
+QUnit.test("testInitInfoButtonCollectionVariableNoRecordInfo", function(assert) {
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
+		"userSuppliedIdCollectionVarPCollVarWithoutRecordInfo");
+
+	assert.deepEqual(attachedPCollectionVar.view.className, "pCollVar");
+
+	let view = attachedPCollectionVar.view;
+	let infoButton = view.childNodes[1];
+	CORATESTHELPER.simulateOnclick(infoButton);
+	let infoView = view.childNodes[2];
+	CORATESTHELPER.simulateOnclick(infoButton);
+	assert.equal(infoView.childNodes.length, 6);
+});
+
 QUnit.test("testInitCollection", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarPCollVar");
 	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
 	assert.deepEqual(attachedPCollectionVar.view.className,
@@ -232,7 +245,7 @@ QUnit.test("testInitCollection", function(assert) {
 });
 
 QUnit.test("testInitCollectionNoEmptyTextId", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdNoEmptyTextIdCollectionVarPCollVar");
 	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
 	assert.deepEqual(attachedPCollectionVar.view.className,
@@ -262,14 +275,14 @@ QUnit.test("testInitCollectionNoEmptyTextId", function(assert) {
 });
 
 QUnit.test("testSetValueCollectionInput", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarPCollVar");
 	attachedPCollectionVar.pCollectionVar.setValue("true");
 	assert.equal(attachedPCollectionVar.valueView.value, "true");
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarPCollVar");
 	attachedPCollectionVar.valueView.value = "true";
 	attachedPCollectionVar.valueView.onblur();
@@ -283,7 +296,7 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testInitCollectionOutput", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarOutputPCollVar");
 	assert.deepEqual(attachedPCollectionVar.view.className,
 		"pCollVar userSuppliedIdCollectionVarOutputPCollVar");
@@ -300,7 +313,7 @@ QUnit.test("testInitCollectionOutput", function(assert) {
 });
 
 QUnit.test("testSetValueCollectionInputEmptyTextId", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"yesNoUnknownPCollVar");
 
 	let view = attachedPCollectionVar.view;
@@ -322,7 +335,7 @@ QUnit.test("testSetValueCollectionInputEmptyTextId", function(assert) {
 });
 
 QUnit.test("testSetValueCollectionOutputEmptyTextId", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarOutputPCollVar");
 	let valueView = attachedPCollectionVar.valueView;
 
@@ -333,11 +346,11 @@ QUnit.test("testSetValueCollectionOutputEmptyTextId", function(assert) {
 });
 
 QUnit.test("testHandleMessage", function(assert) {
-	let attachedPCollectionVar = this.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarOutputPCollVar");
 	let data = {
 		"data": "false",
-		"path": {}
+		"path": []
 	};
 	attachedPCollectionVar.pCollectionVar.handleMsg(data);
 	assert.equal(attachedPCollectionVar.valueView.innerHTML, "false");
@@ -350,11 +363,11 @@ QUnit.test("testHandleValidationError", function(assert) {
 });
 
 CORATEST.createAttachedPCollectionVarWithError = function(testScope) {
-	let attachedPCollectionVar = testScope.pCollectionVarFactory.factor({},
+	let attachedPCollectionVar = testScope.pCollectionVarFactory.factor([],
 		"userSuppliedIdCollectionVarPCollVar");
 	let message = {
 		"metadataId": "userSuppliedIdCollectionVar",
-		"path": {}
+		"path": []
 	};
 	attachedPCollectionVar.pCollectionVar.handleValidationError(message);
 	return attachedPCollectionVar;
@@ -367,7 +380,7 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 
 	let data = {
 		"data": "false",
-		"path": {}
+		"path": []
 	};
 	attachedPCollectionVar.pCollectionVar.handleMsg(data);
 
@@ -433,8 +446,8 @@ QUnit.test("testDisablePubSubMessagesWithFirstLevelPathWithRepeatId", function(a
 });
 
 QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
-	let pathWithTwoLevels = ["recordInfo","dataDivider"];
-	let expectedPath = ["recordInfo","dataDivider"];
+	let pathWithTwoLevels = ["recordInfo", "dataDivider"];
+	let expectedPath = ["recordInfo", "dataDivider"];
 
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
@@ -451,7 +464,7 @@ QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
 });
 
 QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
-	let pathWithAttribute = ["textPart","numVariableId"];
+	let pathWithAttribute = ["textPart", "numVariableId"];
 
 	let expectedPath = pathWithAttribute;
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
@@ -468,9 +481,9 @@ QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
 	assert.deepEqual(disableSubscription.path, expectedPath);
 });
 QUnit.test("testPubSubMessagesWithTwoLevelPathWithRepeatIdLowestLevel", function(assert) {
-	let pathWithAttribute = ["userRole", "userRole.0"]; 
+	let pathWithAttribute = ["userRole", "userRole.0"];
 
-	let expectedPath = ["userRole","userRole"];
+	let expectedPath = ["userRole", "userRole"];
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {
@@ -488,7 +501,7 @@ QUnit.test("testDisable", function(assert) {
 	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
 	let spec = {
-		path: {},
+		path: [],
 		cPresentation: cPCollectionVarPresentation
 	};
 	let collectionVar = CORA.pCollectionVar(this.dependencies, spec);

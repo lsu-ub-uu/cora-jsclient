@@ -79,9 +79,7 @@ var CORA = (function(cora) {
 				nameInData: cCollectionVariable.getFirstAtomicValueByNameInData("nameInData")
 			}
 			pubSub.publish("addAttribute", addAttributeMessage);
-
 			possiblySetAttributeValue(refLinkedId, cCollectionVariable);
-
 		};
 
 		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable) {
@@ -154,7 +152,7 @@ var CORA = (function(cora) {
 
 		const getType = function() {
 			return cMetadataElement.getData().attributes.type;
-		}
+		};
 
 		const initializeMetadataGroup = function(nextLevelPath) {
 			let nextLevelChildReferences = cMetadataElement
@@ -283,18 +281,14 @@ var CORA = (function(cora) {
 					}]
 				};
 			}
-
 			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
-
 			createSpecAndInitalizeMetadataChildInitializer(recordIdStaticChildReference, nextLevelPath, recordIdData);
-
 		};
 
 		const possiblyInitializeLinkedRepeatId = function(nextLevelPath) {
 			if (isLinkToRepeatingPartOfRecord()) {
 				let recordTypeStaticChildReference = createRefWithRef("linkedRepeatIdTextVar");
 				createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference, nextLevelPath, spec.data);
-
 			}
 		};
 

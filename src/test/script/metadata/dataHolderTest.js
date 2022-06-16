@@ -883,7 +883,7 @@ QUnit.test("testHandleMessageRemoveEmptyPath", function(assert) {
 
 });
 
-QUnit.only("testRemoveThenFindContainerDeeperChildRepeatId", function(assert) {
+QUnit.test("testRemoveThenFindContainerDeeperChildRepeatId", function(assert) {
 	let path = ["groupIdOneTextChild"];
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
 
@@ -906,16 +906,30 @@ QUnit.only("testRemoveThenFindContainerDeeperChildRepeatId", function(assert) {
 		dataHolder.findContainer(pathToVariable);
 		dataHolder.handleMsg(emptyData, "x/y/z/remove");
 	}, new Error(expectedErrorMessage));
-	
-	
+
 	let expected = [{
 		name: "textVariableId",
 		repeatId: "two",
 		value: "Value 2"
 	}];
-	
-	
+
 	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+});
+
+QUnit.test("testHandleMessageRemoveThenFindContainer", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	dataHolder.addChild([], "groupIdOneTextChild");
+
+	dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+	dataHolder.handleMsg({
+		path: ["groupIdOneTextChild", "textVariableId"],
+		type: "remove"
+	}, "x/y/z/remove");
+
+	let expected = [];
+	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(["groupIdOneTextChild"]
+		, "textVariableId"), expected);
 });
 
 QUnit.test("testHandleMessageMoveAfter", function(assert) {

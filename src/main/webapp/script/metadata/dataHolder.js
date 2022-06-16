@@ -311,44 +311,40 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerWithPath = function(path) {
-//			console.log("containerAndParent: ", path);
+			removeContainerPath(path);
+			removeContainerPathNoRepeatId(path);
+		};
+
+		const removeContainerPath = function(path) {
 			let containerAndParent = findContainerAndParent(path);
-//			console.log("containerAndParent: ", containerAndParent);
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
-//			console.log("containerAndParent: index", index);
 			containerParent.children.splice(index, 1);
-//			console.log("containerAndParent: path to delete", index);
-			let pathString = JSON.stringify(path);
-			delete containerPath[pathString];
+			let pathAsString = JSON.stringify(path);
+			delete containerPath[pathAsString];
+		};
 
-			let lastPathPart = path[path.length - 1];
-//			console.log("lastPathPart: ", lastPathPart);
-
-			if (lastPathPart.includes(".")) {
-				let lastPathPartNoRepeatId = pathString.substring(0, pathString.lastIndexOf(".")) + "\"]";
-				let lastPathPartRepeatId = pathString.substring(pathString.lastIndexOf(".") + 1, pathString.length - 2);
-//				console.log("lastPathPart No repeatId: ", lastPathPartNoRepeatId);
-//				console.log("lastPathPart  repeatId: ", lastPathPartRepeatId);
-
-				//				console.log("containerAndParent: ", pathString.substring(0,pathString.lastIndexOf("."))+"]");
-				let noRepeatIdContainers = containerPathNoRepeatId[lastPathPartNoRepeatId];
-//				console.log("noRepeatIdContainers ", noRepeatIdContainers);
-				//				for(let container in noRepeatIdContainers){
-//				noRepeatIdContainers.forEach(function(container) {
-//					console.log("checking container to remove: ", container);
-//
-//					if (container.repeatId === lastPathPartRepeatId) {
-//						console.log("found container to remove: ", container);
-//						//						delete noRepeatIdContainers
-//					}
-//				});
-				let result2 = noRepeatIdContainers.filter(container => container.repeatId != lastPathPartRepeatId);
-//				console.log("found filtered: ", result2);
-				containerPathNoRepeatId[lastPathPartNoRepeatId] = result2;
+		const removeContainerPathNoRepeatId = function(path) {
+			let pathAsString = JSON.stringify(path);
+			if (lastElementOfPathHasRepeatId(path)) {
+				removeContainerWithRepeatId(pathAsString);
+			} else {
+				containerPathNoRepeatId[pathAsString] = [];
 			}
-			//			containerPathNoRepeatId
+		};
+
+		const lastElementOfPathHasRepeatId = function(path) {
+			let lastPathPart = path[path.length - 1];
+			return lastPathPart.includes(".");
+		};
+
+		const removeContainerWithRepeatId = function(pathAsString) {
+			let pathWithoutRepeatIdOnLastPart = pathAsString.substring(0, pathAsString.lastIndexOf(".")) + "\"]";
+			let lastPartRepeatId = pathAsString.substring(pathAsString.lastIndexOf(".") + 1, pathAsString.length - 2);
+			let noRepeatIdContainers = containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart];
+			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId != lastPartRepeatId);
+			containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart] = containersToKeep;
 		};
 
 		const move = function(dataFromMessage) {

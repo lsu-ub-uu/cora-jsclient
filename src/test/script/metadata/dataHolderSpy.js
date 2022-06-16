@@ -65,8 +65,6 @@ var CORATEST = (function(coraTest) {
 
 		const findContainersUsingPathAndMetadataId = function(path, metadataId) {
 			pathsAndMetadataId.push({ path: path, metadataId: metadataId });
-//			console.log("pathsAndMetadataId",pathsAndMetadataId);
-			//			let pathToFind = JSON.stringify(path);
 			let toReturn = containerPathNoRepeatId[returnNo];
 			returnNo++;
 			return toReturn;
@@ -75,7 +73,6 @@ var CORATEST = (function(coraTest) {
 			containerPathNoRepeatId.push(toAdd);
 		};
 		const getRequestedPathAndMetadataId = function(callNo) {
-//			console.log("pathsAndMetadataId2",pathsAndMetadataId);
 			return pathsAndMetadataId[callNo];
 		};
 		return Object.freeze({

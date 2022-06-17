@@ -1057,7 +1057,7 @@ function MetadataProviderStub() {
 					"name": "finalValue",
 					"value": "aFinalValue"
 				}]
-					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
 				"attributes": {
 					"type": "collectionVariable"
 				}
@@ -1076,7 +1076,7 @@ function MetadataProviderStub() {
 					}],
 					"name": "refCollection"
 				}]
-					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
 				"attributes": {
 					"type": "collectionVariable"
 				}

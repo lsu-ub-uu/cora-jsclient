@@ -18,16 +18,19 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.presentationSpy = function(spec) {
+	coraTest.presentationSpy = function(dependencies, spec) {
 		var view = CORA.gui.createSpanWithClassName("presentationSpyView");
 
 		function getView() {
 			return view;
 		}
-
+		const getText = function(){
+			return "fake text from presentationSpy, "+spec.metadataIdUsedInData;
+		}
 		return Object.freeze({
-			"type" : "presentationSpy",
-			"getView" : getView
+			type : "presentationSpy",
+			getView : getView,
+			getText: getText
 		});
 	};
 	return coraTest;

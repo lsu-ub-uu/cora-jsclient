@@ -34,9 +34,10 @@ var CORA = (function(cora) {
 		let defText;
 		let regEx;
 		let mode;
+		let textProvider;
 
 		const start = function() {
-			let textProvider = dependencies.textProvider;
+			textProvider = dependencies.textProvider;
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
@@ -139,21 +140,12 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributePresentation = function(dataFromMsg) {
-			//TODO: spike
-			let presentationChildForAttribute = buildAttributePresentationMetadata(
-				dataFromMsg.metadataId, mode);
-
-			let cPresentationChild = CORA.coraData(presentationChildForAttribute);
-
-			let attributePath = createAttributePath(dataFromMsg.metadataId);
-			let presentationSpec = {
-				path: attributePath,
-				metadataIdUsedInData: dataFromMsg.metadataId,
-				cPresentation: cPresentationChild
+			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
+			let attributePresentation = {
+				view: attributePVar.getView(),
+				text: attributePVar.getText()
 			};
-			let presentation = dependencies.presentationFactory.factor(presentationSpec);
-			console.log(presentation.getView());
-			pVarView.addAttributePresentation(presentation.getView());
+			pVarView.addAttributePresentation(attributePresentation);
 
 			//TODO: little list of stuff to do (might be moooooore... :)
 			//disable for attributes on disable (handled by view?) (more than one)
@@ -163,14 +155,26 @@ var CORA = (function(cora) {
 			//attributes with final value, what to do?
 		};
 
-		const buildAttributePresentationMetadata = function(metadataId, attributeMode) {
-			return {
+		const createAttributePresentation = function(attributeMetadataId) {
+			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
+				attributeMetadataId, mode);
+			let attributePath = createAttributePath(attributeMetadataId);
+			let presentationSpec = {
+				path: attributePath,
+				metadataIdUsedInData: attributeMetadataId,
+				cPresentation: cAttributePresentationMetadata
+			};
+			return dependencies.presentationFactory.factor(presentationSpec);
+		};
+
+		const buildAttributePresentationMetadata = function(attributeMetadataId, attributeMode) {
+			let presentationChildForAttribute = {
 				name: "presentation",
 				children: [{
 					name: "presentationOf",
 					children: [{
 						name: "linkedRecordId",
-						value: metadataId
+						value: attributeMetadataId
 					}]
 				}, {
 					name: "mode",
@@ -187,6 +191,7 @@ var CORA = (function(cora) {
 					type: "pCollVar"
 				}
 			};
+			return CORA.coraData(presentationChildForAttribute);
 		};
 
 		const createAttributePath = function(metadataId) {
@@ -198,6 +203,7 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
+
 		//		const createViewForChild = function(presentationChildRef) {
 		//			let refId = getRefId(presentationChildRef);
 		//			let cPresentationChild = getMetadataById(refId);

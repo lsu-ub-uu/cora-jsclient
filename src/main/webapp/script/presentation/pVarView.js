@@ -26,6 +26,7 @@ var CORA = (function(cora) {
 		let baseClassName = "pVar " + spec.presentationId;
 		let info;
 		let state = "ok";
+		let attributesContainer;
 
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
@@ -222,11 +223,22 @@ var CORA = (function(cora) {
 		const disable = function() {
 			valueView.disabled = true;
 		};
-		
-		const addAttributePresentation = function(attributeView) {
-			view.appendChild(attributeView);
+
+		const addAttributePresentation = function(attributePresentation) {
+			//TODO: spike
+
+			if (attributesContainer === undefined) {
+				attributesContainer = CORA.gui.createSpanWithClassName("attributes");
+				view.insertBefore(attributesContainer, view.firstChild);
+			}
+
+			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
+			attributesContainer.appendChild(attributeContainer);
+
+			attributeContainer.appendChild(document.createTextNode(attributePresentation.text));
+			attributeContainer.appendChild(attributePresentation.view);
 		};
-		
+
 		out = Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,

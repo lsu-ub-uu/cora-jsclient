@@ -753,10 +753,13 @@ QUnit.test("testAddAttributePresentation", function(assert) {
 	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
 	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
 
-
-	let attributePresentation = this.pVarViewFactory.getFactored(0);
-	assert.deepEqual(attributePresentation.getAttributePresentation(0),
-		this.presentationFactory.getFactored(0).getView());
+	
+	let expectedAttributePresentation = {
+		view: this.presentationFactory.getFactored(0).getView(),
+		text: "fake text from presentationSpy, anAttribute"
+	};
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.deepEqual(expectedAttributePresentation, pVarViewSpy.getAttributePresentation(0));
 });
 
 QUnit.test("testAddAttributeOutputPresentation", function(assert) {
@@ -777,10 +780,12 @@ QUnit.test("testAddAttributeOutputPresentation", function(assert) {
 	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
 	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
 
-
-	let attributePresentation = this.pVarViewFactory.getFactored(0);
-	assert.deepEqual(attributePresentation.getAttributePresentation(0),
-		this.presentationFactory.getFactored(0).getView());
+	let expectedAttributePresentation = {
+		view: this.presentationFactory.getFactored(0).getView(),
+		text: "fake text from presentationSpy, anAttribute"
+	};
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.deepEqual(expectedAttributePresentation, pVarViewSpy.getAttributePresentation(0));
 });
 
 const buildExpectedPresentationForAttribute = function(metadataId, mode) {

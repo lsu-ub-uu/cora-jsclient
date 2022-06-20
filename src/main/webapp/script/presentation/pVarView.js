@@ -232,7 +232,7 @@ var CORA = (function(cora) {
 
 			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
 			attributesContainer.appendChild(attributeContainer);
-			
+
 			let attributeNameContainer = CORA.gui.createSpanWithClassName("attributeName");
 			attributeContainer.appendChild(attributeNameContainer);
 
@@ -240,7 +240,7 @@ var CORA = (function(cora) {
 
 			attributeContainer.appendChild(attributePresentation.view);
 		};
-		
+
 		out = Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,

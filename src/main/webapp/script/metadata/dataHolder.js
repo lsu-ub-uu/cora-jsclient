@@ -40,7 +40,7 @@ var CORA = (function(cora) {
 			let dataContainerPart = {
 				name: nameInData,
 			};
-			if (undefined != repeatIdIn) {
+			if (undefined !== repeatIdIn) {
 				dataContainerPart.repeatId = repeatIdIn;
 			}
 
@@ -165,7 +165,7 @@ var CORA = (function(cora) {
 
 		const changeAttributes = function(data) {
 			let oldAttributes = data.attributes;
-			if (data.attributes != undefined) {
+			if (data.attributes !== undefined) {
 				let newAttributes = {};
 				oldAttributes.forEach(function(attribute) {
 					let nameInData = attribute.nameInData;
@@ -343,7 +343,7 @@ var CORA = (function(cora) {
 			let pathWithoutRepeatIdOnLastPart = pathAsString.substring(0, pathAsString.lastIndexOf(".")) + "\"]";
 			let lastPartRepeatId = pathAsString.substring(pathAsString.lastIndexOf(".") + 1, pathAsString.length - 2);
 			let noRepeatIdContainers = containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart];
-			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId != lastPartRepeatId);
+			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId !== lastPartRepeatId);
 			containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart] = containersToKeep;
 		};
 

@@ -106,7 +106,7 @@ var CORA = (function(cora) {
 					text: "nameInData: " + nameInData
 				}]
 			};
-			if (undefined != presentationId) {
+			if (undefined !== presentationId) {
 				let presentationInfo = {
 					className: "technicalView",
 					text: "presentationId: " + presentationId
@@ -118,7 +118,7 @@ var CORA = (function(cora) {
 
 		const createBaseView = function() {
 			let presentationIdClassName = "pCollVar";
-			if (undefined != presentationId) {
+			if (undefined !== presentationId) {
 				presentationIdClassName += " " + presentationId;
 			}
 			return CORA.gui.createSpanWithClassName(presentationIdClassName);
@@ -296,10 +296,7 @@ var CORA = (function(cora) {
 		};
 
 		const valueHasChanged = function() {
-			if (valueView.value !== previousValue) {
-				return true;
-			}
-			return false;
+			return (valueView.value !== previousValue);
 		};
 
 		const getState = function() {

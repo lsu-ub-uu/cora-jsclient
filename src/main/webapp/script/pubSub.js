@@ -50,60 +50,11 @@ var CORA = (function(cora) {
 
 		function convertAndAddPathToMsg(path, msgPart) {
 			var extendedMsgPart = msgPart + "/";
-			//			if (pathHasAtLeastOneLevel(cPath)) {
-			//			if (path.length > 0) {
-			//				extendedMsgPart += recursivelyConvertPathToMsg(cPath);
-			//			}
 			for (let pathPart in path) {
 				extendedMsgPart += path[pathPart] + "/";
 			}
 			return extendedMsgPart;
 		}
-
-//		function pathHasAtLeastOneLevel(cPath) {
-//			return cPath.getData().children !== undefined
-//				&& cPath.containsChildWithNameInData("nameInData");
-//		}
-//
-//		function recursivelyConvertPathToMsg(cPath) {
-//			var msgPart = "";
-//			msgPart += cPath.getFirstAtomicValueByNameInData("nameInData");
-//			msgPart += convertPathAttributes(cPath);
-//			msgPart += convertRepeatId(cPath);
-//
-//			if (pathHasMoreLevels(cPath)) {
-//				return convertAndAddPathToMsg(cPath.getFirstChildByNameInData("linkedPath"),
-//					msgPart);
-//			}
-//			msgPart += "/";
-//			return msgPart;
-//		}
-
-//		function pathHasMoreLevels(cPath) {
-//			return cPath.containsChildWithNameInData("linkedPath");
-//		}
-
-//		function convertPathAttributes(cPath) {
-//			var msgAttribPart = "";
-//			if (cPath.containsChildWithNameInData("attributes")) {
-//				var attributes = cPath.getFirstChildByNameInData("attributes").children;
-//				attributes.forEach(function(attribute) {
-//					var cAttribute = CORA.coraData(attribute);
-//					msgAttribPart += '#'
-//						+ cAttribute.getFirstAtomicValueByNameInData("attributeName");
-//					msgAttribPart += ':'
-//						+ cAttribute.getFirstAtomicValueByNameInData("attributeValue");
-//				});
-//			}
-//			return msgAttribPart;
-//		}
-//
-//		function convertRepeatId(cPath) {
-//			if (cPath.containsChildWithNameInData("repeatId")) {
-//				return '.' + cPath.getFirstAtomicValueByNameInData("repeatId");
-//			}
-//			return "";
-//		}
 
 		function unsubscribePathBelow(startOfPath) {
 			arbiter.unsubscribePathBelow(convertPathToMsg(startOfPath));

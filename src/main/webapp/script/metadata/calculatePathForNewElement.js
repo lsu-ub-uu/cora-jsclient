@@ -37,7 +37,7 @@ var CORA = (function(cora) {
 		}
 
 		function parentPathPointsToTopLevel() {
-			return spec.parentPath.length == 0;
+			return spec.parentPath.length === 0;
 		}
 
 		function createPathForThisLevel() {
@@ -47,7 +47,7 @@ var CORA = (function(cora) {
 		}
 
 		function createLinkedPath() {
-			if (spec.type == "attribute") {
+			if (spec.type === "attribute") {
 				return ["@" + metadataId];
 			}
 			return [metadataId];

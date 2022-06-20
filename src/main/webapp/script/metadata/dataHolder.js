@@ -222,7 +222,7 @@ var CORA = (function(cora) {
 		const findContainer = function(path) {
 			let pathToFind = JSON.stringify(path);
 			let foundContainer = containerPath[pathToFind];
-			if (undefined == foundContainer) {
+			if (undefined === foundContainer) {
 				throw new Error("Unable to find container with path: "
 					+ JSON.stringify(path) + " in dataHolder");
 			}
@@ -233,7 +233,7 @@ var CORA = (function(cora) {
 			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataIdIn);
 			let pathToFind = JSON.stringify(nextLevelPathNoRepeatId);
 			let foundContainer = containerPathNoRepeatId[pathToFind];
-			if (undefined == foundContainer) {
+			if (undefined === foundContainer) {
 				return [];
 			}
 			return foundContainer;
@@ -282,7 +282,7 @@ var CORA = (function(cora) {
 
 			let newPathNoRepeatId = createNextLevelPath(parentPath, metadataIdToAdd);
 			let pathStringNoRepeatId = JSON.stringify(newPathNoRepeatId);
-			if (undefined == containerPathNoRepeatId[pathStringNoRepeatId]) {
+			if (undefined === containerPathNoRepeatId[pathStringNoRepeatId]) {
 				containerPathNoRepeatId[pathStringNoRepeatId] = [];
 			}
 			containerPathNoRepeatId[pathStringNoRepeatId].push(newChild);

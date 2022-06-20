@@ -43,6 +43,7 @@ var CORA = (function(cora) {
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
+			initPAttributes();
 		};
 
 		const intializePVarViewSpec = function(textProvider) {
@@ -137,8 +138,13 @@ var CORA = (function(cora) {
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
+			//			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
 		};
+
+		const initPAttributes = function() {
+			let attributesSpec = { path: path, mode: mode };
+			let pAttributes = CORA.pAttributes(dependencies, attributesSpec);
+		}
 
 		const addAttributePresentation = function(dataFromMsg) {
 			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);

@@ -18,16 +18,27 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.presentationSpy = function(spec) {
+	coraTest.presentationSpy = function(dependencies, spec) {
 		var view = CORA.gui.createSpanWithClassName("presentationSpyView");
-
+		let disableIsCalled = false;
 		function getView() {
 			return view;
 		}
-
+		const getText = function() {
+			return "fake text from presentationSpy, " + spec.metadataIdUsedInData;
+		};
+		const disableVar = function() {
+			disableIsCalled = true;
+		};
+		const getDisableVarStatus = function() {
+			return disableIsCalled;
+		};
 		return Object.freeze({
-			"type" : "presentationSpy",
-			"getView" : getView
+			type: "presentationSpy",
+			getView: getView,
+			getText: getText,
+			disableVar: disableVar,
+			getDisableVarStatus: getDisableVarStatus
 		});
 	};
 	return coraTest;

@@ -144,8 +144,6 @@ QUnit.module("metadata/coraDataTest.js", {
 		};
 		this.coraDataWithAllTypes = CORA.coraData(this.groupInGroupOneTextChildAllTypes);
 
-	},
-	afterEach : function() {
 	}
 });
 
@@ -209,6 +207,58 @@ QUnit.test("testContainsChildWithNameInDataAndAttribute", function(assert) {
 			"aFinalValue"));
 
 	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+function createAttributes() {
+	return {
+		name: "attributes",
+		children: []
+	};
+}
+
+function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValue, repeatId) {
+	return {
+		name: "attribute",
+		repeatId: repeatId || "1",
+		children: [{
+			name: "attributeName",
+			value: attributeName
+		}, {
+			name: "attributeValue",
+			value: attributeValue
+		}]
+	};
+}
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueList", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["aFinalValue"]));
+
+	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesCorrect", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue","aFinalValue"]));
+
+	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesWrong", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue","aFinalValueNOT"]));
+
+	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+});
+QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListEmpty", function(assert) {
+	var attributes = createAttributes();
+	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			[]));
+
+	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
 });
 

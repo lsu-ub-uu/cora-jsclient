@@ -20,7 +20,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.dataHolderStub = function(dataIn, foundContainer) {
-
+		let usedPath = undefined;
 		function getData() {
 			if (dataIn !== undefined) {
 				return dataIn;
@@ -39,7 +39,8 @@ var CORATEST = (function(coraTest) {
 			};
 		}
 		
-		function findContainer(dataContainers, path){
+		function findContainer(path){
+			usedPath = path;
 			if (foundContainer !== undefined) {
 				return foundContainer;
 			}
@@ -50,10 +51,14 @@ var CORATEST = (function(coraTest) {
 				};
 			
 		}
+		const getUsedPath = function (){
+			return usedPath;
+		}
 		
 		return Object.freeze({
 			getData : getData,
-			findContainer:findContainer
+			findContainer:findContainer,
+			getUsedPath : getUsedPath
 		});
 	};
 	return coraTest;

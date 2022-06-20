@@ -35,7 +35,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 
 		this.spec = {
-			"parentPath" : {},
+			"parentPath" : [],
 			"parentMetadataId" : "someParentMetadataId",
 			mode : "input",
 			"recordPartPermissionCalculator": this.recordPartPermissionCalculator,
@@ -311,7 +311,7 @@ QUnit.test("testSubscribesWhenAdd", function(assert) {
 	var msg = "root/add";
 	var dataFromMsg = {
 		"metadataId" : "groupWithOneCollectionVarChildGroup",
-		"path" : {},
+		"path" : [],
 		"repeatId" : "1",
 		"nameInData" : "groupWithOneCollectionVarChildGroup"
 	};
@@ -319,16 +319,9 @@ QUnit.test("testSubscribesWhenAdd", function(assert) {
 	assert.strictEqual(subscriptions.length, 1)
 
 	pNonRepeatingChildRefHandler.subscribeMsg(dataFromMsg, msg);
-	var path = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "groupWithOneCollectionVarChildGroup"
-		}, {
-			"name" : "repeatId",
-			"value" : "1"
-		} ]
-	};
+	
+	var path = ["groupWithOneCollectionVarChildGroup.1"];
+	
 	assert.strictEqual(subscriptions.length, 2)
 	assert.strictEqual(subscriptions[1].type, "*");
 	assert.stringifyEqual(subscriptions[1].path, path);
@@ -345,7 +338,7 @@ QUnit.test("testSubscribesWhenAddNoSubscriptionForNonHandledMetdataId", function
 	var msg = "root/add";
 	var dataFromMsg = {
 		"metadataId" : "groupWithOneCollectionVarChildGroupNotHandled",
-		"path" : {},
+		"path" : [],
 		"repeatId" : "1",
 		"nameInData" : "groupWithOneCollectionVarChildGroup"
 	};
@@ -367,22 +360,7 @@ QUnit.test("testChangeViewOnMessage", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : []
 	};
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
 
@@ -395,7 +373,7 @@ QUnit.test("testChangeViewOnMessage", function(assert) {
 	assert.strictEqual(firstMessage.type, "presentationShown");
 	var expectedMessage = {
 		"data" : "",
-		"path" : {}
+		"path" : []
 	};
 	assert.stringifyEqual(firstMessage.message, expectedMessage);
 });
@@ -411,22 +389,7 @@ QUnit.test("testChangeViewOnMessageNotShownForSetValueWithBlankValue", function(
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : []
 	};
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
 
@@ -449,22 +412,7 @@ QUnit.test("testChangeViewOnMessageRemovedOnNewBlank", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : []
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -487,22 +435,7 @@ QUnit.test("testChangeViewOnMessageRemovedOnNewBlankForInput", function(assert) 
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : []
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -526,22 +459,7 @@ QUnit.test("testChangeViewOnMessageRemovBlock", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -551,16 +469,7 @@ QUnit.test("testChangeViewOnMessageRemovBlock", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/remove";
 	var dataFromMsg = {
 		"type" : "remove",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			} ]
-		}
+		"path" : ["groupWithOneCollectionVarChildGroup.1"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -579,22 +488,7 @@ QUnit.test("testChangeViewOnMessageRemovBlockInput", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
 		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"path" : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -604,16 +498,7 @@ QUnit.test("testChangeViewOnMessageRemovBlockInput", function(assert) {
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/remove";
 	var dataFromMsg = {
 		"type" : "remove",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			} ]
-		}
+		"path" : ["groupWithOneCollectionVarChildGroup.1"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -631,23 +516,7 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 
 	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 	var dataFromMsg = {
-		"data" : "someValue",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupWithOneCollectionVarChildGroup"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"data" : "someValue"
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -656,20 +525,7 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 
 	var msg2 = "root/groupIdOneTextChild/someNameInData/setValue";
 	var dataFromMsg2 = {
-		"data" : "someValue2",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupIdOneTextChild"
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "someNameInData"
-				} ]
-			} ]
-		}
+		"data" : "someValue2"
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg2, msg2);
@@ -683,14 +539,7 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 
 	var msg3 = "root/groupIdOneTextChild/remove";
 	var dataFromMsg3 = {
-		"type" : "remove",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "groupIdOneTextChild"
-			} ]
-		}
+		"type" : "remove"
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg3, msg3);
@@ -701,15 +550,16 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 QUnit.test("testpublishPresentationShownPublishMessage", function(assert) {
 	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
+	
 	pNonRepeatingChildRefHandler.publishPresentationShown();
+	
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 1);
 	var firstMessage = this.dependencies.pubSub.getMessages()[0];
 	assert.strictEqual(firstMessage.type, "presentationShown");
 	var expectedMessage = {
 		"data" : "",
-		"path" : {}
+		"path" : []
 	};
 	assert.stringifyEqual(firstMessage.message, expectedMessage);
 });

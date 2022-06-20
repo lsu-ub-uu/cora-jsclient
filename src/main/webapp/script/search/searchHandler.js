@@ -67,7 +67,7 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToChangesInForm = function() {
-			let path = {};
+			let path = [];
 			let context = undefined;
 			let functionToCall = handleMsg;
 			recordGui.pubSub.subscribe("*", path, context, functionToCall);
@@ -122,7 +122,7 @@ var CORA = (function(cora) {
 			window.clearTimeout(delaySearchTimer);
 			recordGui.pubSub.publish("addUpToMinNumberOfRepeating", {
 				data: "",
-				path: {}
+				path: []
 			});
 		};
 

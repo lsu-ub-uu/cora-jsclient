@@ -33,7 +33,7 @@ QUnit.module("metadata/metadataValidatorTest.js", {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
 			metadataId: "groupIdOneTextChild",
-			data: undefined,
+			dataHolder: CORATEST.dataHolderSpy(),
 			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 		this.spySpec = {
@@ -42,8 +42,6 @@ QUnit.module("metadata/metadataValidatorTest.js", {
 				containsValuableData: true
 			}
 		};
-	},
-	afterEach: function() {
 	}
 });
 
@@ -63,22 +61,14 @@ QUnit.test("testGetSpec", function(assert) {
 });
 
 QUnit.test("testChildValidatorFactoryCalledWithCorrectSpec", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
-
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
 
 	metadataValidator.validate();
 	let childValidatorSpec = this.dependencies.metadataChildValidatorFactory.getSpec(0);
 
-	assert.stringifyEqual(childValidatorSpec.path, {});
-	assert.stringifyEqual(childValidatorSpec.data, this.spec.data);
+	assert.stringifyEqual(childValidatorSpec.path, []);
+	assert.stringifyEqual(childValidatorSpec.dataHolder, this.spec.dataHolder);
 
 	let m = CORA.coraData(this.metadataProvider.getMetadataById("groupIdOneTextChild"));
 	let childReferences = m.getFirstChildByNameInData("childReferences");
@@ -87,13 +77,6 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpec", function(assert) {
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionCalled", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
 
@@ -104,13 +87,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionCalled", function(assert) 
 });
 
 QUnit.test("testFactoredChildValidatorChildResultHandledTrueReturnedFromChild", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
 
@@ -120,13 +96,6 @@ QUnit.test("testFactoredChildValidatorChildResultHandledTrueReturnedFromChild", 
 });
 
 QUnit.test("testFactoredChildValidatorChildResultHandledFalseReturnedFromChild", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spySpec.resultToReturn.everythingOkBelow = false;
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
@@ -137,16 +106,6 @@ QUnit.test("testFactoredChildValidatorChildResultHandledFalseReturnedFromChild",
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionCalledTwiceWhenTwoChildren", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
-		}]
-	};
 	this.spec.metadataId = "groupIdTwoTextChild";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
@@ -163,17 +122,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionCalledTwiceWhenTwoChildren
 });
 
 QUnit.test("testChildValidatorFactoryCalledWithCorrectSpecForTwoChildren", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
-		}]
-	};
-
 	this.spec.metadataId = "groupIdTwoTextChild";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
@@ -181,8 +129,8 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpecForTwoChildren", funct
 	metadataValidator.validate();
 	let childValidatorSpec = this.dependencies.metadataChildValidatorFactory.getSpec(0);
 
-	assert.stringifyEqual(childValidatorSpec.path, {});
-	assert.stringifyEqual(childValidatorSpec.data, this.spec.data);
+	assert.stringifyEqual(childValidatorSpec.path, []);
+	assert.stringifyEqual(childValidatorSpec.dataHolder, this.spec.dataHolder);
 
 	let m = CORA.coraData(this.metadataProvider.getMetadataById("groupIdTwoTextChild"));
 	let childReferences = m.getFirstChildByNameInData("childReferences");
@@ -191,24 +139,13 @@ QUnit.test("testChildValidatorFactoryCalledWithCorrectSpecForTwoChildren", funct
 
 	let childValidatorSpec2 = this.dependencies.metadataChildValidatorFactory.getSpec(1);
 
-	assert.stringifyEqual(childValidatorSpec2.path, {});
+	assert.stringifyEqual(childValidatorSpec2.path, []);
 	assert.stringifyEqual(childValidatorSpec2.data, this.spec.data);
 	let childRef2 = childReferences.children[1];
 	assert.stringifyEqual(childValidatorSpec2.childReference, childRef2);
 });
 
 QUnit.test("testFactoredChildValidatorChildResultHandledFalseReturnedFromChildWhenTwoChildren", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
-		}]
-	};
-
 	this.spec.metadataId = "groupIdTwoTextChild";
 	this.spySpec.resultToReturn.everythingOkBelow = false;
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
@@ -220,17 +157,6 @@ QUnit.test("testFactoredChildValidatorChildResultHandledFalseReturnedFromChildWh
 });
 
 QUnit.test("testChildResultHandledFalseReturnedFromChildWhenOneChildFalseOneTrue", function(assert) {
-	this.spec.data = {
-		"name": "groupIdTwoTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
-		}]
-	};
-
 	this.spec.metadataId = "groupIdTwoTextChild";
 	this.spySpec.resultToReturn.everythingOkBelow = false;
 	this.metadataChildValidatorFactory.addSpySpec(this.spySpec);
@@ -250,13 +176,6 @@ QUnit.test("testChildResultHandledFalseReturnedFromChildWhenOneChildFalseOneTrue
 });
 
 QUnit.test("testRecordPartPermissionCalculatorCalledCorrectly", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithWriteConstraints";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);
@@ -268,13 +187,6 @@ QUnit.test("testRecordPartPermissionCalculatorCalledCorrectly", function(assert)
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenWriteConstraintsNoPermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithWriteConstraints";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
@@ -289,13 +201,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenWriteConstrai
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithPermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithWriteConstraints";
 
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
@@ -308,13 +213,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithP
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithMultiplePermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithWriteConstraints";
 
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
@@ -327,13 +225,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithM
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithWrongPermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithWriteConstraints";
 	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
 
@@ -348,13 +239,6 @@ QUnit.test("testFactoredChildValidatorValidateFunctionCalledWhenConstraintsWithW
 });
 
 QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenReadWriteConstraintsNoPermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithReadWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithReadWriteConstraints";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	this.recordPartPermissionCalculator.addIdToReturnFalseForWrite("metadataTextVariable_textVariableId");
@@ -366,14 +250,8 @@ QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenReadWriteCons
 	let childValidator = this.dependencies.metadataChildValidatorFactory.getFactored(0);
 	assert.strictEqual(childValidator, undefined);
 });
+
 QUnit.test("testFactoredChildValidatorValidateFunctionNotCalledWhenReadWriteConstraintsWithPermissions", function(assert) {
-	this.spec.data = {
-		"name": "groupIdOneTextChildWithReadWriteConstraints",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
-		}]
-	};
 	this.spec.metadataId = "groupIdOneTextChildWithReadWriteConstraints";
 	this.metadataChildValidatorFactory.setSpySpec(this.spySpec);
 	let metadataValidator = CORA.metadataValidator(this.dependencies, this.spec);

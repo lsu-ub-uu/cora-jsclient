@@ -80,7 +80,28 @@ var CORA = (function(cora) {
 			let attributeMetadata = getMetadataById(attributeRef);
 			let attributeNameInData = attributeMetadata
 				.getFirstAtomicValueByNameInData("nameInData");
-			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+
+
+
+			let finalValue = [];
+			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
+				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
+			} else {
+
+				let possibleAttributeValues = [];
+				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
+				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
+				let cCollection = getMetadataById(collectionId);
+				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
+				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
+				allRefs.forEach(function(colItemRef) {
+					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
+					let cItem = getMetadataById(linkedId);
+					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
+					possibleAttributeValues.push(value);
+				});
+				finalValue = possibleAttributeValues;
+			}
 
 			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
 				index);
@@ -254,7 +275,6 @@ var CORA = (function(cora) {
 
 		const createNextLevelPath = function() {
 			let pathSpec = {
-				"metadataProvider": dependencies.metadataProvider,
 				"metadataIdToAdd": metadataId,
 				"repeatId": spec.repeatId,
 				"parentPath": spec.path

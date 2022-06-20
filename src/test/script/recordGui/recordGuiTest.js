@@ -36,8 +36,6 @@ QUnit.module("recordGui/recordGuiTest.js", {
 			"dataDivider": "someDataDivider",
 			recordPartPermissionCalculator : CORATEST.recordPartPermissionCalculatorSpy()
 		};
-	},
-	afterEach: function() {
 	}
 });
 
@@ -125,7 +123,7 @@ QUnit.test("testValidateDataHasCorrectSpec", function(assert) {
 	
 	let factoredValidatorSpec = this.dependencies.metadataValidatorFactory.getSpec(0);
 	assert.strictEqual(factoredValidatorSpec.metadataId, this.spec.metadataId);
-	assert.strictEqual(factoredValidatorSpec.data, this.dependencies.dataHolder.getData());
+	assert.strictEqual(factoredValidatorSpec.dataHolder, this.dependencies.dataHolder);
 	assert.strictEqual(factoredValidatorSpec.metadataProvider, this.dependencies.metadataProvider);
 	assert.strictEqual(factoredValidatorSpec.pubSub, this.dependencies.pubSub);
 	assert.strictEqual(factoredValidatorSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);

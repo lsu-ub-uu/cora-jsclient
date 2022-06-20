@@ -40,7 +40,7 @@ QUnit.test("testInit", function(assert) {
 
 QUnit.test("testSubscribe", function(assert) {
 	var type = "add";
-	var path = {};
+	var path = [];
 	var functionToCall = function() {
 	};
 	var context = this;
@@ -50,7 +50,7 @@ QUnit.test("testSubscribe", function(assert) {
 });
 QUnit.test("testPublish", function(assert) {
 	var type = "add";
-	var path = {};
+	var path = [];
 	var data = {
 		"metadataId" : "someId",
 		"path" : path,
@@ -61,7 +61,7 @@ QUnit.test("testPublish", function(assert) {
 });
 QUnit.test("testProblemWhenCallingFunctionToCall", function(assert) {
 	var type = "add";
-	var path = {};
+	var path = [];
 	var functionToCall = function() {
 		// generate error
 		x + y === z;
@@ -82,7 +82,7 @@ QUnit.test("testProblemWhenCallingFunctionToCall", function(assert) {
 
 QUnit.test("testMore", function(assert) {
 	var type = "add";
-	var path = {};
+	var path = [];
 	var context = this;
 	var functionToCall = this.toCall;
 	this.pubSub.subscribe(type, path, context, functionToCall);
@@ -100,7 +100,7 @@ QUnit.test("testMore", function(assert) {
 
 QUnit.test("testUnsubscribe", function(assert) {
 	var type = "add";
-	var path = {};
+	var path = [];
 	var context = this;
 	var functionToCall = this.toCall;
 	var subscribeId = this.pubSub.subscribe(type, path, context, functionToCall);
@@ -120,61 +120,8 @@ QUnit.test("testUnsubscribe", function(assert) {
 
 QUnit.test("testUnsubscribePathBelow", function(assert) {
 	var type = "add";
-	var path = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textVarRepeat1to3InGroupOneAttribute"
-		}, {
-			"name" : "repeatId",
-			"value" : "3"
-		}, {
-			"name" : "attributes",
-			"children" : [ {
-				"name" : "attribute",
-				"repeatId" : "1",
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : "anOtherAttribute"
-				}, {
-					"name" : "attributeValue",
-					"value" : "aOtherFinalValue"
-				} ]
-			} ]
-		}, {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVar"
-			}, {
-				"name" : "repeatId",
-				"value" : "5"
-			} ]
-		} ]
-	};
-	var removePath = {
-		"name" : "linkedPath",
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textVarRepeat1to3InGroupOneAttribute"
-		}, {
-			"name" : "repeatId",
-			"value" : "3"
-		}, {
-			"name" : "attributes",
-			"children" : [ {
-				"name" : "attribute",
-				"repeatId" : "1",
-				"children" : [ {
-					"name" : "attributeName",
-					"value" : "anOtherAttribute"
-				}, {
-					"name" : "attributeValue",
-					"value" : "aOtherFinalValue"
-				} ]
-			} ]
-		} ]
-	};
+	var path = ["textVarRepeat1to3InGroupOneAttribute.3", "textVar.5"];
+	var removePath = ["textVarRepeat1to3InGroupOneAttribute.3"];
 	var context = this;
 	var functionToCall = this.toCall;
 	this.pubSub.subscribe(type, path, context, functionToCall);
@@ -191,68 +138,24 @@ QUnit.test("testUnsubscribePathBelow", function(assert) {
 });
 
 QUnit.test("testConvertPathNameInData", function(assert) {
-	var path = createLinkedPathWithNameInData("someNameInData");
+	var path = ["someNameInData"];
 	var convertedPath = this.pubSub.convertPathToMsg(path);
 	assert.deepEqual(convertedPath, "root/someNameInData/");
 });
 
-QUnit.test("testConvertPathNameInDataAndAttributes", function(assert) {
-	var path = createLinkedPathWithNameInData("someNameInData");
-
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
-			"aFinalValue", "1"));
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anOtherAttribute",
-			"aOtherFinalValue", "2"));
-	path.children.push(attributes);
-
-	var convertedPath = this.pubSub.convertPathToMsg(path);
-	assert.deepEqual(convertedPath,
-			"root/someNameInData#anAttribute:aFinalValue#anOtherAttribute:aOtherFinalValue/");
-});
 
 QUnit.test("testConvertPathNameInDataAndRepeatId", function(assert) {
-	var path = createLinkedPathWithNameInDataAndRepeatId("someNameInData", "one");
+	var path = ["someNameInData.one"];
 	var convertedPath = this.pubSub.convertPathToMsg(path);
 	assert.deepEqual(convertedPath, "root/someNameInData.one/");
 });
 
-QUnit.test("testConvertPathNameInDataAndAttributesAndRepeatId", function(assert) {
-	var path = createLinkedPathWithNameInDataAndRepeatId("someNameInData", "1");
-
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
-			"aFinalValue", "1"));
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anOtherAttribute",
-			"aOtherFinalValue", "2"));
-	path.children.push(attributes);
-
-	var convertedPath = this.pubSub.convertPathToMsg(path);
-	assert.deepEqual(convertedPath, "root/"
-			+ "someNameInData#anAttribute:aFinalValue#anOtherAttribute:aOtherFinalValue.1/");
-});
 
 QUnit.test("testConvertPathNameInDataAndAttributesAndRepeatIdTwoLevels", function(assert) {
-	var path = createLinkedPathWithNameInDataAndRepeatId("someNameInData", "1");
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
-			"aFinalValue", "1"));
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anOtherAttribute",
-			"aOtherFinalValue", "2"));
-	path.children.push(attributes);
-
-	var path2 = createLinkedPathWithNameInDataAndRepeatId("someNameInData2", "2");
-	var attributes2 = createAttributes();
-	attributes2.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute2",
-			"aFinalValue2", "1"));
-	attributes2.children.push(createAttributeWithNameAndValueAndRepeatId("anOtherAttribute2",
-			"aOtherFinalValue2", "2"));
-	path2.children.push(attributes2);
-
-	path.children.push(path2);
+	var path = ["someNameInData.1", "someNameInData2.2"];
 
 	var convertedPath = this.pubSub.convertPathToMsg(path);
 	assert.deepEqual(convertedPath, "root/"
-			+ "someNameInData#anAttribute:aFinalValue#anOtherAttribute:aOtherFinalValue.1/"
-			+ "someNameInData2#anAttribute2:aFinalValue2#anOtherAttribute2:aOtherFinalValue2.2/");
+			+ "someNameInData.1/"
+			+ "someNameInData2.2/");
 });

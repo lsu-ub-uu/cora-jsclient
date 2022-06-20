@@ -41,13 +41,11 @@ QUnit.module("presentation/pGroupTest.js", {
 		
 		this.spec = {
 			"metadataIdUsedInData" : "groupIdOneTextChild",
-			"path" : {},
+			"path" : [],
 			"cPresentation" : CORA.coraData(this.dependencies.metadataProvider
 					.getMetadataById("pgGroupIdOneTextChild")),
 			"cParentPresentation" : undefined,
 			recordPartPermissionCalculator : this.recordPartPermissionCalculator,
-//			"dataDivider" : "systemX",
-			
 		};
 	},
 	afterEach : function() {

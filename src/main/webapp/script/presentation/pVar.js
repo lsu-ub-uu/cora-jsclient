@@ -33,13 +33,72 @@ var CORA = (function(cora) {
 		let text;
 		let defText;
 		let regEx;
+		let mode;
+		let textProvider;
+		let attributes = [];
 
 		const start = function() {
-			let textProvider = dependencies.textProvider;
+			textProvider = dependencies.textProvider;
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
+		};
+
+		const intializePVarViewSpec = function(textProvider) {
+			let metadataId = spec.metadataIdUsedInData;
+			cMetadataElement = getMetadataById(metadataId);
+			let outputFormat = getOutputFormat();
+			let inputFormat = getInputFormat();
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
+			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+
+			return {
+				mode: mode,
+				inputType: getInputType(),
+				outputFormat: outputFormat,
+				inputFormat: inputFormat,
+				presentationId: presentationId,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [{
+						text: "textId: " + textId,
+						onclickMethod: openTextIdRecord
+					}, {
+						text: "defTextId: " + defTextId,
+						onclickMethod: openDefTextIdRecord
+					}, {
+						text: "metadataId: " + metadataId,
+						onclickMethod: openMetadataIdRecord
+					}, {
+						text: "nameInData: " + nameInData
+					}, {
+						text: "regEx: " + regEx
+					}, {
+						text: "presentationId: " + presentationId
+					}]
+				},
+				onblurFunction: onBlur,
+				onkeyupFunction: onkeyup
+			};
+		};
+
+		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+				let cEmptyTextId = CORA.coraData(cPresentation
+					.getFirstChildByNameInData("emptyTextId"));
+				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+				let emptyText = textProvider.getTranslation(emptyTextId);
+				pVarViewSpec.placeholderText = emptyText;
+			}
 		};
 
 		const getMetadataById = function(id) {
@@ -78,67 +137,72 @@ var CORA = (function(cora) {
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
+			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
+		};
+
+		const addAttributePresentation = function(dataFromMsg) {
+			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
+			attributes.push(attributePVar);
+
+			let attributePresentation = {
+				view: attributePVar.getView(),
+				text: attributePVar.getText()
+			};
+			pVarView.addAttributePresentation(attributePresentation);
+		};
+
+		const createAttributePresentation = function(attributeMetadataId) {
+			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
+				attributeMetadataId, mode);
+			let attributePath = createAttributePath(attributeMetadataId);
+			let presentationSpec = {
+				path: attributePath,
+				metadataIdUsedInData: attributeMetadataId,
+				cPresentation: cAttributePresentationMetadata
+			};
+			return dependencies.presentationFactory.factor(presentationSpec);
+		};
+
+		const buildAttributePresentationMetadata = function(attributeMetadataId, attributeMode) {
+			let presentationChildForAttribute = {
+				name: "presentation",
+				children: [{
+					name: "presentationOf",
+					children: [{
+						name: "linkedRecordId",
+						value: attributeMetadataId
+					}]
+				}, {
+					name: "mode",
+					value: attributeMode
+				}, {
+					name: "emptyTextId",
+					children: [
+						{
+							name: "linkedRecordId",
+							value: "initialEmptyValueText"
+						}]
+				}],
+				attributes: {
+					type: "pCollVar"
+				}
+			};
+			return CORA.coraData(presentationChildForAttribute);
+		};
+
+		const createAttributePath = function(metadataId) {
+			let pathSpec = {
+				metadataIdToAdd: metadataId,
+				//				"repeatId": spec.repeatId,
+				parentPath: path,
+				type: "attribute"
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
 			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-		};
-
-		const intializePVarViewSpec = function(textProvider) {
-			let metadataId = spec.metadataIdUsedInData;
-			cMetadataElement = getMetadataById(metadataId);
-			let outputFormat = getOutputFormat();
-			let inputFormat = getInputFormat();
-			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-			let textId = getTextId(cMetadataElement, "textId");
-			text = textProvider.getTranslation(textId);
-			let defTextId = getTextId(cMetadataElement, "defTextId");
-			defText = textProvider.getTranslation(defTextId);
-			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-
-			return {
-				"mode": mode,
-				"inputType": getInputType(),
-				"outputFormat": outputFormat,
-				"inputFormat": inputFormat,
-				"presentationId": presentationId,
-				"info": {
-					"text": text,
-					"defText": defText,
-					"technicalInfo": [{
-						"text": "textId: " + textId,
-						onclickMethod: openTextIdRecord
-					}, {
-						"text": "defTextId: " + defTextId,
-						onclickMethod: openDefTextIdRecord
-					}, {
-						"text": "metadataId: " + metadataId,
-						onclickMethod: openMetadataIdRecord
-					}, {
-						"text": "nameInData: " + nameInData
-					}, {
-						"text": "regEx: " + regEx
-					}, {
-						"text": "presentationId: " + presentationId
-					}]
-				},
-				"onblurFunction": onBlur,
-				onkeyupFunction: onkeyup
-			};
-		};
-
-		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
-			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-				let cEmptyTextId = CORA.coraData(cPresentation
-					.getFirstChildByNameInData("emptyTextId"));
-				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
-				let emptyText = textProvider.getTranslation(emptyTextId);
-				pVarViewSpec.placeholderText = emptyText;
-			}
 		};
 
 		const getView = function() {
@@ -152,6 +216,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleMsg = function(dataFromMsg) {
+			//			console.log("PVar SetValue: ", dataFromMsg)
 			setValue(dataFromMsg.data);
 			updateView();
 		};
@@ -182,8 +247,8 @@ var CORA = (function(cora) {
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
-					"data": valueFromView,
-					"path": path
+					data: valueFromView,
+					path: path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
@@ -225,8 +290,8 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
+				readLink: link,
+				loadInBackground: loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};
@@ -251,7 +316,16 @@ var CORA = (function(cora) {
 		};
 
 		const disableVar = function() {
+			disableExistingAttributes();
 			pVarView.disable();
+		};
+
+		const disableExistingAttributes = function() {
+			attributes.forEach(
+				function(attributePVar) {
+					attributePVar.disableVar()
+				}
+			);
 		};
 
 		start();
@@ -262,6 +336,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,
+			addAttributePresentation: addAttributePresentation,
 			getText: getText,
 			getDefText: getDefText,
 			getRegEx: getRegEx,

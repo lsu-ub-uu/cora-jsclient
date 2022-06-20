@@ -28,7 +28,7 @@ QUnit.module("metadata/metadataChildAndRepeatInitializerFactoryTest.js", {
 		};
 		this.childSpec = {
 				data: undefined,
-				path: {}
+				path: []
 			};
 
 			this.childSpec.childReference = {
@@ -54,7 +54,7 @@ QUnit.module("metadata/metadataChildAndRepeatInitializerFactoryTest.js", {
 			
 			this.repeatSpec = {
 					"metadataId" : "textVariableId",
-					"path" : {},
+					"path" : [],
 					"data" : {
 						"name": "textVariableId",
 						"value": "A Value"

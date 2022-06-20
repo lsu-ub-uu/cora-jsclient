@@ -41,8 +41,10 @@ var CORA = (function(cora) {
 		let info;
 
 		const start = function() {
-			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			if (cPresentation.containsChildWithNameInData("recordInfo")) {
+				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			}
 			extractMetadataId();
 			cMetadataElement = getMetadataById(metadataId);
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
@@ -102,16 +104,24 @@ var CORA = (function(cora) {
 				}, {
 					className: "technicalView",
 					text: "nameInData: " + nameInData
-				}, {
-					className: "technicalView",
-					text: "presentationId: " + presentationId
 				}]
 			};
+			if (undefined != presentationId) {
+				let presentationInfo = {
+					className: "technicalView",
+					text: "presentationId: " + presentationId
+				};
+				infoSpec.level2.push(presentationInfo);
+			}
 			return CORA.info(infoSpec);
 		};
 
 		const createBaseView = function() {
-			return CORA.gui.createSpanWithClassName("pCollVar " + presentationId);
+			let presentationIdClassName = "pCollVar";
+			if (undefined != presentationId) {
+				presentationIdClassName += " " + presentationId;
+			}
+			return CORA.gui.createSpanWithClassName(presentationIdClassName);
 		};
 
 		const createValueView = function() {

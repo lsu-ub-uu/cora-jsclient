@@ -134,7 +134,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		assert.strictEqual(subscribtions.length, 1);
 
 		assert.strictEqual(subscribtions[0].type, "*");
-		assert.stringifyEqual(subscribtions[0].path, {});
+		assert.stringifyEqual(subscribtions[0].path, []);
 		assert.strictEqual(subscribtions[0].context, undefined);
 		assert.strictEqual(subscribtions[0].functionToCall, searchHandler.handleMsg);
 	});
@@ -184,7 +184,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		assert.strictEqual(messages.length, 1);
 		let addUpToMinNumberOfRepeatingMessage = messages[0].message;
 		assert.strictEqual(addUpToMinNumberOfRepeatingMessage.data, "");
-		assert.stringifyEqual(addUpToMinNumberOfRepeatingMessage.path, {});
+		assert.stringifyEqual(addUpToMinNumberOfRepeatingMessage.path, []);
 
 		let addUpToMinNumberOfRepeatingType = messages[0].type;
 		assert.strictEqual(addUpToMinNumberOfRepeatingType, "addUpToMinNumberOfRepeating");

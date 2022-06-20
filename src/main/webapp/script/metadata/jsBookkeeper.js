@@ -30,8 +30,8 @@ var CORA = (function(cora) {
 			let childReference = data.childReference;
 			let path = data.path;
 			let currentData = spec.dataHolder.getData();
-			if (path.children !== undefined) {
-				currentData = spec.dataHolder.findContainer(currentData, path);
+			if (path.length > 0) {
+				currentData = spec.dataHolder.findContainer(path);
 			}
 			let cChildReference = CORA.coraData(childReference);
 			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
@@ -115,7 +115,6 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd,
 				repeatId, parentPath) {
 			let pathSpec = {
-				"metadataProvider" : spec.metadataProvider,
 				"metadataIdToAdd" : metadataIdToAdd,
 				"repeatId" : repeatId,
 				"parentPath" : parentPath

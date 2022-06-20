@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 		const publishPresentationShown = function() {
 			dependencies.pubSub.publish("presentationShown", {
 				"data": "",
-				"path": {}
+				"path": []
 			});
 		};
 
@@ -103,7 +103,6 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
 			parentPath) {
 			let pathSpec = {
-				"metadataProvider": dependencies.providers.metadataProvider,
 				"metadataIdToAdd": metadataIdToAdd,
 				"repeatId": repeatId,
 				"parentPath": parentPath

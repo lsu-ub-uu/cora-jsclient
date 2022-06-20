@@ -88,12 +88,12 @@ var CORA = (function(cora) {
 
 		function getChildrenByNameInDataAndAttributes(nameInData, attributes) {
 			var foundContainers = findContainersSpecifiedByNameInDataAndAttributes(nameInData,
-					attributes);
+				attributes);
 			if (foundContainers.length > 0) {
 				return foundContainers;
 			}
 			throw new Error("nameInData(" + nameInData + ") and attributes ("
-					+ JSON.stringify(attributes) + ") not found in coraData");
+				+ JSON.stringify(attributes) + ") not found in coraData");
 		}
 
 		function getFirstChildByNameInDataAndAttributes(nameInData, attributes) {
@@ -103,7 +103,7 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 			throw new Error("nameInData(" + nameInData + ") and attributes ("
-					+ JSON.stringify(attributes) + ") not found in coraData");
+				+ JSON.stringify(attributes) + ") not found in coraData");
 		}
 
 		function findContainersSpecifiedByNameInDataAndAttributes(nameInData, attributes) {
@@ -127,23 +127,29 @@ var CORA = (function(cora) {
 
 		function containerAndPathDoesNotHaveAttributes(container, attributes) {
 			return attributesConatainsNoAttributes(attributes)
-					&& containerDoesNotHaveAttributes(container);
+				&& containerDoesNotHaveAttributes(container);
 		}
 
 		function containerHasSameAttributesAsPath(container, attributes) {
 			var containerAttributes = container.attributes;
 			var pathAttributes = attributes.children;
 			return containerHasAllPathAttributes(containerAttributes, pathAttributes)
-					&& pathHasAllContainerAttributes(containerAttributes, pathAttributes);
+				&& pathHasAllContainerAttributes(containerAttributes, pathAttributes);
 		}
 
 		function containerHasAllPathAttributes(containerAttributes, pathAttributes) {
 			return pathAttributes.every(function(pathAttribute) {
 				var pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-						"attributeName");
+					"attributeName");
 				var pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-						"attributeValue");
-				return containerAttributes[pathAttributeKey] === pathAttributeValue;
+					"attributeValue");
+				if (!Array.isArray(pathAttributeValue)) {
+					return containerAttributes[pathAttributeKey] === pathAttributeValue;
+				} else {
+					return pathAttributeValue.some(function(value) {
+						return containerAttributes[pathAttributeKey] === value;
+					});
+				}
 			});
 		}
 		function getFirstAtomicValueFromDataByNameInData(dataStructure, name) {
@@ -165,19 +171,29 @@ var CORA = (function(cora) {
 			return containerAttributeKeys.every(function(containerAttributeKey) {
 				var containerAttributeValue = containerAttributes[containerAttributeKey];
 				return pathAttributesHasNameAndValue(pathAttributes, containerAttributeKey,
-						containerAttributeValue);
+					containerAttributeValue);
 			});
 		}
 
 		function pathAttributesHasNameAndValue(pathAttributes, name, value) {
 			return pathAttributes.some(function(pathAttribute) {
 				var pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-						"attributeName");
+					"attributeName");
 				var pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-						"attributeValue");
-				return pathAttributeKey === name && pathAttributeValue === value;
+					"attributeValue");
+				return pathAttributeKey === name && evaluateAttributeValues(pathAttributeValue, value);
 			});
 		}
+
+		const evaluateAttributeValues = function(pathAttributeValue, value) {
+			if (!Array.isArray(pathAttributeValue)) {
+				return pathAttributeValue === value;
+			} else {
+				return pathAttributeValue.some(function(attributeValue) {
+					return value === attributeValue;
+				});
+			}
+		};
 
 		function attributesConatainsNoAttributes(attributes) {
 			return !attributesContainsAttributes(attributes);
@@ -227,7 +243,7 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with index (" + index
-					+ NOT_FOUND_IN_CHILDREN);
+				+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		function getAtomicValueByNameInDataAndIndex(name, index) {
@@ -263,13 +279,13 @@ var CORA = (function(cora) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with repeatId (" + repeatId
-					+ NOT_FOUND_IN_CHILDREN);
+				+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		function containsChildWithNameInDataAndAttributesAndRepeatId(nameInData, attributes,
-				repeatId) {
+			repeatId) {
 			var filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
-					repeatId);
+				repeatId);
 			return children.some(filter);
 		}
 
@@ -287,35 +303,35 @@ var CORA = (function(cora) {
 
 		function getFirstChildByNameInDataAndAttributesAndRepeatId(nameInData, attributes, repeatId) {
 			var filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
-					repeatId);
+				repeatId);
 			var foundChild = children.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with attributes ("
-					+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
-					+ NOT_FOUND_IN_CHILDREN);
+				+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
+				+ NOT_FOUND_IN_CHILDREN);
 		}
 
 		return Object
-				.freeze({
-					getData : getData,
-					containsChildWithNameInData : containsChildWithNameInData,
-					getFirstChildByNameInData : getFirstChildByNameInData,
-					getFirstAtomicValueByNameInData : getFirstAtomicValueByNameInData,
-					getNoOfChildrenWithNameInData : getNoOfChildrenWithNameInData,
-					containsChildWithNameInDataAndAttributes : containsChildWithNameInDataAndAttributes,
-					getChildrenByNameInData : getChildrenByNameInData,
-					getChildrenByNameInDataAndAttributes : getChildrenByNameInDataAndAttributes,
-					getFirstChildByNameInDataAndAttributes : getFirstChildByNameInDataAndAttributes,
-					containsChildWithNameInDataAndIndex : containsChildWithNameInDataAndIndex,
-					getChildByNameInDataAndIndex : getChildByNameInDataAndIndex,
-					getAtomicValueByNameInDataAndIndex : getAtomicValueByNameInDataAndIndex,
-					containsChildWithNameInDataAndRepeatId : containsChildWithNameInDataAndRepeatId,
-					getFirstChildByNameInDataAndRepeatId : getFirstChildByNameInDataAndRepeatId,
-					containsChildWithNameInDataAndAttributesAndRepeatId : containsChildWithNameInDataAndAttributesAndRepeatId,
-					getFirstChildByNameInDataAndAttributesAndRepeatId : getFirstChildByNameInDataAndAttributesAndRepeatId
-				});
+			.freeze({
+				getData: getData,
+				containsChildWithNameInData: containsChildWithNameInData,
+				getFirstChildByNameInData: getFirstChildByNameInData,
+				getFirstAtomicValueByNameInData: getFirstAtomicValueByNameInData,
+				getNoOfChildrenWithNameInData: getNoOfChildrenWithNameInData,
+				containsChildWithNameInDataAndAttributes: containsChildWithNameInDataAndAttributes,
+				getChildrenByNameInData: getChildrenByNameInData,
+				getChildrenByNameInDataAndAttributes: getChildrenByNameInDataAndAttributes,
+				getFirstChildByNameInDataAndAttributes: getFirstChildByNameInDataAndAttributes,
+				containsChildWithNameInDataAndIndex: containsChildWithNameInDataAndIndex,
+				getChildByNameInDataAndIndex: getChildByNameInDataAndIndex,
+				getAtomicValueByNameInDataAndIndex: getAtomicValueByNameInDataAndIndex,
+				containsChildWithNameInDataAndRepeatId: containsChildWithNameInDataAndRepeatId,
+				getFirstChildByNameInDataAndRepeatId: getFirstChildByNameInDataAndRepeatId,
+				containsChildWithNameInDataAndAttributesAndRepeatId: containsChildWithNameInDataAndAttributesAndRepeatId,
+				getFirstChildByNameInDataAndAttributesAndRepeatId: getFirstChildByNameInDataAndAttributesAndRepeatId
+			});
 	};
 
 	return cora;

@@ -44,7 +44,7 @@ var CORA = (function(cora) {
 			let cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
 			let metadataIdUsedInData = spec.metadataIdUsedInData;
 			let presentationSpec = {
-				"path" : {},
+				"path" : [],
 				"metadataIdUsedInData" : metadataIdUsedInData,
 				"cPresentation" : cPresentation,
 				recordPartPermissionCalculator : spec.recordPartPermissionCalculator

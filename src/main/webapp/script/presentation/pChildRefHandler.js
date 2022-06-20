@@ -101,9 +101,9 @@ var CORA = (function(cora) {
 			dependencies.pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
 			if (spec.minNumberOfRepeatingToShow !== undefined) {
 				newElementsAddedSubscriptionId = dependencies.pubSub.subscribe("newElementsAdded",
-					{}, undefined, newElementsAdded);
+					[], undefined, newElementsAdded);
 			}
-			dependencies.pubSub.subscribe("addUpToMinNumberOfRepeating", {}, undefined,
+			dependencies.pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined,
 				newElementsAdded);
 		};
 
@@ -367,7 +367,6 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
 			parentPath) {
 			let pathSpec = {
-				"metadataProvider": dependencies.metadataProvider,
 				"metadataIdToAdd": metadataIdToAdd,
 				"repeatId": repeatId,
 				"parentPath": parentPath
@@ -519,7 +518,7 @@ var CORA = (function(cora) {
 		const sendNewElementsAdded = function() {
 			dependencies.pubSub.publish("newElementsAdded", {
 				"data": "",
-				"path": {}
+				"path": []
 			});
 		};
 
@@ -694,7 +693,7 @@ var CORA = (function(cora) {
 			if (numberOfFilesToUpload === numberOfRecordsForFilesCreated) {
 				dependencies.pubSub.publish("updateRecord", {
 					"data": "",
-					"path": {}
+					"path": []
 				});
 				numberOfRecordsForFilesCreated = 0;
 			}
@@ -720,6 +719,7 @@ var CORA = (function(cora) {
 		};
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
+			
 			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {
 				if (!maxLimitOfChildrenReached()) {

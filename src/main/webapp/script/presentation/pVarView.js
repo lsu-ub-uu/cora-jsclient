@@ -26,6 +26,7 @@ var CORA = (function(cora) {
 		let baseClassName = "pVar " + spec.presentationId;
 		let info;
 		let state = "ok";
+		let attributesContainer;
 
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
@@ -38,14 +39,14 @@ var CORA = (function(cora) {
 
 		const createInfo = function() {
 			let infoSpec = {
-				"appendTo": view,
-				"afterLevelChange": updateClassName,
-				"level1": [{
-					"className": "textView",
-					"text": spec.info.text
+				appendTo: view,
+				afterLevelChange: updateClassName,
+				level1: [{
+					className: "textView",
+					text: spec.info.text
 				}, {
-					"className": "defTextView",
-					"text": spec.info.defText
+					className: "defTextView",
+					text: spec.info.defText
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
@@ -71,8 +72,8 @@ var CORA = (function(cora) {
 
 		const createTechInfoPart = function(techInfo) {
 			let techInfoPart = {
-				"className": "technicalView",
-				"text": techInfo.text
+				className: "technicalView",
+				text: techInfo.text
 			};
 
 			if (techInfo.onclickMethod !== undefined) {
@@ -179,7 +180,7 @@ var CORA = (function(cora) {
 				outputNew.src = value;
 			};
 			return outputNew;
-		}
+		};
 
 		const createOutputLink = function() {
 			let outputNew = document.createElement("a");
@@ -223,6 +224,23 @@ var CORA = (function(cora) {
 			valueView.disabled = true;
 		};
 
+		const addAttributePresentation = function(attributePresentation) {
+			if (attributesContainer === undefined) {
+				attributesContainer = CORA.gui.createSpanWithClassName("attributes");
+				view.insertBefore(attributesContainer, view.firstChild);
+			}
+
+			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
+			attributesContainer.appendChild(attributeContainer);
+			
+			let attributeNameContainer = CORA.gui.createSpanWithClassName("attributeName");
+			attributeContainer.appendChild(attributeNameContainer);
+
+			attributeNameContainer.appendChild(document.createTextNode(attributePresentation.text));
+
+			attributeContainer.appendChild(attributePresentation.view);
+		};
+		
 		out = Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,
@@ -231,7 +249,8 @@ var CORA = (function(cora) {
 			setValue: setValue,
 			updateClassName: updateClassName,
 			setState: setState,
-			disable: disable
+			disable: disable,
+			addAttributePresentation: addAttributePresentation
 		});
 		start();
 		return out;

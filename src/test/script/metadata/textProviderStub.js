@@ -190,6 +190,10 @@ var CORATEST = (function(coraTest) {
 				return "numVariableIdDefText";
 			case "someTextToPresentAsLinkText":
 				return "text for: someTextToPresentAsLinkText";
+			case "anAttributeText":
+				return "Attribute";
+			case "anOtherAttributeText":
+				return "OtherA";
 			default:
 				console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");

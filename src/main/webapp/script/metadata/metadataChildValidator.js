@@ -28,7 +28,7 @@ var CORA = (function(cora) {
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
-		let cData = CORA.coraData(spec.data);
+		let dataHolder = spec.dataHolder;
 		let dataChildrenForMetadata;
 		let noOfRepeatsForThisChild;
 		let childInstancesCanNotBeRemoved = [];
@@ -39,82 +39,23 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
-			let nameInData = getNameInDataForMetadataId(ref);
-			let attributes = getAttributesForMetadataId(ref);
-			dataChildrenForMetadata = getDataChildrenForMetadata(nameInData, attributes);
+			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
 			noOfRepeatsForThisChild = calculateMinRepeat();
-
 			validateAndCategorizeChildInstances();
 			return result;
 		};
 
-		const getNameInDataForMetadataId = function(refIn) {
-			let metadataElement = getMetadataById(refIn);
-			return metadataElement.getFirstAtomicValueByNameInData("nameInData");
-		};
-
-		const getAttributesForMetadataId = function(refIn) {
-			let metadataElement = getMetadataById(refIn);
-			if (metadataElement.containsChildWithNameInData("attributeReferences")) {
-				return getAttributesForMetadataElement(metadataElement);
-			}
-			return undefined;
-		};
-
-		const getAttributesForMetadataElement = function(metadataElement) {
-			let attributesOut = createAttributes();
-			let attributeReferences = metadataElement
-				.getFirstChildByNameInData("attributeReferences");
-			let attributeReference;
-			for (let i = 0; i < attributeReferences.children.length; i++) {
-				attributeReference = attributeReferences.children[i];
-				let attribute = getAttributeForAttributeReference(attributeReference, i);
-				attributesOut.children.push(attribute);
-			}
-			return attributesOut;
-		};
-
-		const createAttributes = function() {
-			return {
-				"name": "attributes",
-				"children": []
+		const createNextLevelPath = function(repeatId) {
+			let pathSpec = {
+				metadataIdToAdd: ref,
+				repeatId: repeatId,
+				parentPath: path
 			};
+			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
-		const getAttributeForAttributeReference = function(attributeReference, index) {
-			let attributeRef = getRefValueFromAttributeRef(attributeReference);
-			let attributeMetadata = getMetadataById(attributeRef);
-			let attributeNameInData = attributeMetadata
-				.getFirstAtomicValueByNameInData("nameInData");
-			let finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
-			return createAttributeWithNameAndValueAndRepeatId(attributeNameInData, finalValue,
-				index);
-		};
-
-		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
-			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-			return {
-				"name": "attribute",
-				"repeatId": repeatId || "1",
-				"children": [{
-					"name": "attributeName",
-					"value": attributeName
-				}, {
-					"name": "attributeValue",
-					"value": attributeValue
-				}]
-			};
-		};
-
-		const getDataChildrenForMetadata = function(nameInDataIn, attributesIn) {
-			if (!cData.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
-				return [];
-			}
-			return cData.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
+		const getDataChildrenForMetadata = function(metadataId) {
+			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -210,8 +151,8 @@ var CORA = (function(cora) {
 
 		const sendRemoveForEmptyChild = function(errorMessage) {
 			let removeMessage = {
-				"type": "remove",
-				"path": errorMessage.validationMessage.path
+				type: "remove",
+				path: errorMessage.validationMessage.path
 			};
 			pubSub.publish("remove", removeMessage);
 		};
@@ -243,12 +184,9 @@ var CORA = (function(cora) {
 			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
 		};
 
-		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
-
 		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
-			return CORA.metadataRepeatValidator(ref, path, dataChild, repeatId, metadataProvider,
+			let nextPath = createNextLevelPath(repeatId);
+			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
 				pubSub);
 		};
 

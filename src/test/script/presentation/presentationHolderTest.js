@@ -18,22 +18,22 @@
  */
 "use strict";
 QUnit.module("presentation/presentationHolderTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 
 		this.dependencies = {
-			"metadataProvider" : new MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy(),
-			"textProvider" : CORATEST.textProviderStub(),
-			"presentationFactory" : this.presentationFactory,
-			"jsBookkeeper" : CORATEST.jsBookkeeperSpy(),
+			"metadataProvider": new MetadataProviderStub(),
+			"pubSub": CORATEST.pubSubSpy(),
+			"textProvider": CORATEST.textProviderStub(),
+			"presentationFactory": this.presentationFactory,
+			"jsBookkeeper": CORATEST.jsBookkeeperSpy(),
 
 		};
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
-			"presentationId" : "pgGroupIdOneTextChild",
-			metadataIdUsedInData : "groupIdOneTextChild",
-			recordPartPermissionCalculator : this.recordPartPermissionCalculator
+			"presentationId": "pgGroupIdOneTextChild",
+			metadataIdUsedInData: "groupIdOneTextChild",
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 
 		this.fixture = document.getElementById("qunit-fixture");
@@ -42,7 +42,7 @@ QUnit.module("presentation/presentationHolderTest.js", {
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -66,7 +66,7 @@ QUnit.test("testFactorPresentationCheckSpec", function(assert) {
 	let factoredSpec = this.presentationFactory.getSpec(0);
 
 	assert.strictEqual(factoredSpec.metadataIdUsedInData, this.spec.metadataIdUsedInData);
-	assert.deepEqual(factoredSpec.path, {});
+	assert.deepEqual(factoredSpec.path, []);
 
 	let requestedCPresentation = factoredSpec.cPresentation;
 	let recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
@@ -75,7 +75,7 @@ QUnit.test("testFactorPresentationCheckSpec", function(assert) {
 	assert.strictEqual(presentationId, "pgGroupIdOneTextChild");
 
 	assert.strictEqual(factoredSpec.recordPartPermissionCalculator,
-			this.recordPartPermissionCalculator);
+		this.recordPartPermissionCalculator);
 
 });
 

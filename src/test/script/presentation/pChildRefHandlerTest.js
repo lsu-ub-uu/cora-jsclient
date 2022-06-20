@@ -39,7 +39,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 
 		this.spec = {
-			"parentPath": {},
+			"parentPath": [],
 			"cParentMetadata": CORA.coraData(this.metadataProvider
 				.getMetadataById("groupIdOneTextChild")),
 			"cPresentation": CORA.coraData(this.metadataProvider
@@ -260,17 +260,17 @@ QUnit.test("testInit", function(assert) {
 
 	let firstSubsription = subscriptions[0];
 	assert.strictEqual(firstSubsription.type, "add");
-	assert.deepEqual(firstSubsription.path, {});
+	assert.deepEqual(firstSubsription.path, []);
 	assert.ok(firstSubsription.functionToCall === pChildRefHandler.handleMsg);
 
 	let secondSubscription = subscriptions[1];
 	assert.strictEqual(secondSubscription.type, "move");
-	assert.deepEqual(secondSubscription.path, {});
+	assert.deepEqual(secondSubscription.path, []);
 	assert.ok(secondSubscription.functionToCall === pChildRefHandler.handleMsg);
 
 	let thirdSubscription = subscriptions[2];
 	assert.strictEqual(thirdSubscription.type, "addUpToMinNumberOfRepeating");
-	assert.deepEqual(thirdSubscription.path, {});
+	assert.deepEqual(thirdSubscription.path, []);
 	assert.ok(thirdSubscription.functionToCall === pChildRefHandler.newElementsAdded);
 });
 
@@ -328,52 +328,16 @@ QUnit.test("testChildMoved", function(assert) {
 	this.fixture.appendChild(view);
 
 	let moveDataFromPChildRefHandlerView = {
-		"moveChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "one"
-			}]
-		},
-		"basePositionOnChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "two"
-			}]
-		},
+		"moveChild": ["textVariableId.1"],
+		"basePositionOnChild": ["textVariableId.two"],
 		"newPosition": "after"
 	};
 
 	let moveData = {
-		"path": {},
+		"path": [],
 		"metadataId": "textVariableId",
-		"moveChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "one"
-			}]
-		},
-		"basePositionOnChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "two"
-			}]
-		},
+		"moveChild": ["textVariableId.1"],
+		"basePositionOnChild": ["textVariableId.two"],
 		"newPosition": "after"
 	};
 	pChildRefHandler.childMoved(moveDataFromPChildRefHandlerView);
@@ -386,28 +350,10 @@ QUnit.test("testChildMovedUsingMessage", function(assert) {
 	this.fixture.appendChild(view);
 
 	let moveMessageData = {
-		"path": {},
+		"path": [],
 		"metadataId": "textVariableId",
-		"moveChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "one"
-			}]
-		},
-		"basePositionOnChild": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}, {
-				"name": "repeatId",
-				"value": "two"
-			}]
-		},
+		"moveChild": ["textVariableId.one"],
+		"basePositionOnChild": ["textVariableId.two"],
 		"newPosition": "after"
 	};
 	pChildRefHandler.handleMsg(moveMessageData, "root/move");
@@ -516,7 +462,7 @@ QUnit.test("testSendAdd", function(assert) {
 		},
 		"metadataId": "textVariableId",
 		"nameInData": "textVariableId",
-		"path": {},
+		"path": [],
 		"recordPartPermissionCalculator": this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], expectedAddData);
@@ -555,7 +501,7 @@ QUnit.test("testSendAddBefore", function(assert) {
 		},
 		"metadataId": "textVariableId",
 		"nameInData": "textVariableId",
-		"path": {},
+		"path": [],
 		"addBeforePath": "someFakePath",
 		"recordPartPermissionCalculator": this.recordPartPermissionCalculator
 	};
@@ -589,7 +535,7 @@ QUnit.test("testAddButtonWithAttributes", function(assert) {
 
 	let addData = {
 		"metadataId": "textVarRepeat1to3InGroupOneAttribute",
-		"path": {},
+		"path": [],
 		"childReference": {
 			"name": "childReference",
 			"repeatId": "1",
@@ -759,29 +705,14 @@ QUnit.test("testHandleFilesReceiveAnswerForOneFile", function(assert) {
 		},
 		"metadataId": "myChildOfBinaryLink",
 		"nameInData": "myChildOfBinaryLink",
-		"path": {},
+		"path": [],
 		"recordPartPermissionCalculator": this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
 
 	let setValueData = {
 		"data": "image:333759270435575",
-		"path": {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "myChildOfBinaryLink"
-			}, {
-				"name": "repeatId",
-				"value": "dummyRepeatId"
-			}, {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "linkedRecordId"
-				}]
-			}]
-		}
+		"path": ["myChildOfBinaryLink.dummyRepeatId","linkedRecordIdTextVar"]
 	}
 	assert.deepEqual(this.dependencies.jsBookkeeper.getDataArray()[0], setValueData);
 
@@ -1002,15 +933,8 @@ QUnit.test("testAddOneChild", function(assert) {
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 	let factored = pRepeatingElementFactory.getFactored(0);
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let path2 = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}]
-	};
 	let expectedSpec = {
-		"path": path2,
+		"path": ["textVariableId"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1019,17 +943,10 @@ QUnit.test("testAddOneChild", function(assert) {
 	};
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
-	let expectedPath = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}],
-		"name": "linkedPath"
-	};
-	assert.deepEqual(factoredSpec.path, expectedPath);
+	assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
 	let factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(0);
-	assert.deepEqual(factoredPresentationSpec.path, expectedPath);
+	assert.deepEqual(factoredPresentationSpec.path, ["textVariableId"]);
 	assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	assert.strictEqual(factoredPresentationSpec.cPresentation,
 		this.spec.cPresentation);
@@ -1053,15 +970,8 @@ QUnit.test("testAddOneChildModeOutput", function(assert) {
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 	let factored = pRepeatingElementFactory.getFactored(0);
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let path2 = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}]
-	};
 	let expectedSpec = {
-		"path": path2,
+		"path": ["textVariableId"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1070,15 +980,8 @@ QUnit.test("testAddOneChildModeOutput", function(assert) {
 	};
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
-	let expectedPath = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}],
-		"name": "linkedPath"
-	};
 
-	assert.deepEqual(factoredSpec.path, expectedPath);
+	assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
 	let factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(0);
 	assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
@@ -1101,15 +1004,9 @@ QUnit.test("testAddOneChildBinary", function(assert) {
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 	let factored = pRepeatingElementFactory.getFactored(0);
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let path2 = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}]
-	};
+
 	let expectedSpec = {
-		"path": path2,
+		"path": ["textVariableId"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": true,
@@ -1118,15 +1015,8 @@ QUnit.test("testAddOneChildBinary", function(assert) {
 	};
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
-	let expectedPath = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}],
-		"name": "linkedPath"
-	};
 
-	assert.deepEqual(factoredSpec.path, expectedPath);
+	assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
 	let factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(0);
 	assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
@@ -1146,19 +1036,9 @@ QUnit.test("testAddOneChildWithRepeatId", function(assert) {
 	let factored = pRepeatingElementFactory.getFactored(0);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1172,13 +1052,8 @@ QUnit.test("testAddOneChildWithRepeatId", function(assert) {
 });
 
 QUnit.test("testAddOneChildWithOneLevelPath", function(assert) {
-	this.spec.parentPath = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}],
-		"name": "linkedPath"
-	};
+	this.spec.parentPath = ["textVariableId"];
+
 	let pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
 	let view = pChildRefHandler.getView();
 	this.fixture.appendChild(view);
@@ -1192,23 +1067,10 @@ QUnit.test("testAddOneChildWithOneLevelPath", function(assert) {
 	let factored = pRepeatingElementFactory.getFactored(0);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-	let expectedPath = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "linkedPath",
-			"children": [{
-				"name": "nameInData",
-				"value": "textVariableId"
-			}]
-		}],
-		"name": "linkedPath"
-	};
 
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId","textVariableId"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1222,19 +1084,8 @@ QUnit.test("testAddOneChildWithOneLevelPath", function(assert) {
 });
 
 QUnit.test("testAddOneChildWithTwoLevelPath", function(assert) {
-	this.spec.parentPath = {
-		"children": [{
-			"name": "nameInData1",
-			"value": "textVariableId"
-		}, {
-			"children": [{
-				"name": "nameInData2",
-				"value": "textVariableId"
-			}],
-			"name": "linkedPath"
-		}],
-		"name": "linkedPath"
-	};
+	
+	this.spec.parentPath =["textVariableId","textVariableId"];
 	let pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
 	let view = pChildRefHandler.getView();
 	this.fixture.appendChild(view);
@@ -1248,28 +1099,9 @@ QUnit.test("testAddOneChildWithTwoLevelPath", function(assert) {
 	let factored = pRepeatingElementFactory.getFactored(0);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-	let expectedPath = {
-		"children": [{
-			"name": "nameInData1",
-			"value": "textVariableId"
-		}, {
-			"children": [{
-				"name": "nameInData2",
-				"value": "textVariableId"
-			}, {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVariableId"
-				}]
-			}],
-			"name": "linkedPath"
-		}],
-		"name": "linkedPath"
-	};
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId","textVariableId","textVariableId"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1282,53 +1114,30 @@ QUnit.test("testAddOneChildWithTwoLevelPath", function(assert) {
 	assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 });
 
-QUnit
-	.test(
-		"testAddChildWithAttributesInPath",
-		function(assert) {
+QUnit.test("testAddChildWithAttributesInPath",	function(assert) {
 			this.spec.cParentMetadata = CORA
 				.coraData(this.metadataProvider
 					.getMetadataById("textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"));
 			this.spec.cPresentation = CORA.coraData(this.metadataProvider
 				.getMetadataById("pgTextVarRepeat1to3InGroupOtherAttribute"));
+			
 			let pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
 			let view = pChildRefHandler.getView();
+			
 			this.fixture.appendChild(view);
 
 			let factoredView = this.dependencies.pChildRefHandlerViewFactory.getFactored(0);
 			assert.strictEqual(factoredView.getAddedChild(0), undefined);
-			pChildRefHandler.add("textVarRepeat1to3InGroupOtherAttribute", "one");
+			
+			pChildRefHandler.add("textVarRepeat1to3InGroupOtherAttribute", "one2");
+			
 			let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 			let factored = pRepeatingElementFactory.getFactored(0);
 			assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-			//					let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 			let factoredSpec = this.dependencies.pRepeatingElementFactory.getSpec(0);
-			let expectedPath = {
-				"name": "linkedPath",
-				"children": [{
-					"name": "nameInData",
-					"value": "textVarRepeat1to3InGroupOneAttribute"
-				}, {
-					"name": "repeatId",
-					"value": "one"
-				}, {
-					"name": "attributes",
-					"children": [{
-						"name": "attribute",
-						"repeatId": "1",
-						"children": [{
-							"name": "attributeName",
-							"value": "anOtherAttribute"
-						}, {
-							"name": "attributeValue",
-							"value": "aOtherFinalValue"
-						}]
-					}]
-				}]
-			};
 			let expectedSpec = {
-				"path": expectedPath,
+				"path": ["textVarRepeat1to3InGroupOtherAttribute.one2"],
 				"pChildRefHandlerView": factoredView,
 				"pChildRefHandler": pChildRefHandler,
 				"userCanRemove": true,
@@ -1360,18 +1169,9 @@ QUnit.test("testRepeatingElement", function(assert) {
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
+
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": true,
@@ -1385,18 +1185,10 @@ QUnit.test("testRepeatingElement", function(assert) {
 	assert.deepEqual(subscriptions.length, 4);
 
 	let firstSubsription = subscriptions[3];
+
 	assert.strictEqual(firstSubsription.type, "remove");
-	let path = {
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}],
-		"name": "linkedPath"
-	};
-	assert.deepEqual(firstSubsription.path, path);
+	assert.deepEqual(firstSubsription.path, ["textVariableId.one"]);
+
 	firstSubsription.functionToCall();
 
 	assert.deepEqual(factoredView.getRemovedChild(0), factored.getView());
@@ -1419,18 +1211,9 @@ QUnit.test("testRepeatingElementOutputMode", function(assert) {
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
+	
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -1454,18 +1237,9 @@ QUnit.test("testRepeatingElement0to1", function(assert) {
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
+	
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": true,
@@ -1505,18 +1279,8 @@ QUnit.test("testRepeatingElementStaticNoOfChildrenNoAddButton", function(assert)
 	//	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 	let factoredRepeatingSpec = pRepeatingElementFactory.getSpec(0);
 
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
 	let expectedRepeatingSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,
@@ -2029,7 +1793,7 @@ QUnit.test("testSubscibeToNewElementsAddedWhenMinNumberOfRepeatingToShowIsSet", 
 
 	let thirdSubscription = subscriptions[2];
 	assert.strictEqual(thirdSubscription.type, "newElementsAdded");
-	assert.deepEqual(thirdSubscription.path, {});
+	assert.deepEqual(thirdSubscription.path, []);
 	assert.strictEqual(thirdSubscription.functionToCall, pChildRefHandler.newElementsAdded);
 });
 
@@ -2066,7 +1830,7 @@ QUnit.test("testNewElementsAddedNotEnough", function(assert) {
 		},
 		"metadataId": "textVariableId",
 		"nameInData": "textVariableId",
-		"path": {},
+		"path": [],
 		"recordPartPermissionCalculator": this.recordPartPermissionCalculator
 	};
 	assert.deepEqual(this.dependencies.jsBookkeeper.getAddDataArray()[0], addData);
@@ -2147,18 +1911,9 @@ QUnit.test("testRepeatingElementSpecWhenRepeatingButNoWritePermission", function
 	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 
 	let factoredSpec = pRepeatingElementFactory.getSpec(0);
-	let expectedPath = {
-		"name": "linkedPath",
-		"children": [{
-			"name": "nameInData",
-			"value": "textVariableId"
-		}, {
-			"name": "repeatId",
-			"value": "one"
-		}]
-	};
+	
 	let expectedSpec = {
-		"path": expectedPath,
+		"path": ["textVariableId.one"],
 		"pChildRefHandlerView": factoredView,
 		"pChildRefHandler": pChildRefHandler,
 		"userCanRemove": false,

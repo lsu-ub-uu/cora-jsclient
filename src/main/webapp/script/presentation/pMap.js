@@ -78,7 +78,7 @@ var CORA = (function(cora) {
 		}
 
 		const subscribeTonewElementsAddedMessageForStartup = function() {
-			newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded", {}, undefined,
+			newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded", [], undefined,
 				newElementsAdded);
 		}
 
@@ -90,11 +90,11 @@ var CORA = (function(cora) {
 		}
 
 		const subscribeToViewJustMadeVisibleForStartup = function() {
-			pubSub.subscribe("viewJustMadeVisible", {}, undefined, viewJustMadeVisible);
+			pubSub.subscribe("viewJustMadeVisible", [], undefined, viewJustMadeVisible);
 		}
 
 		const subscribeTopresentationShownForStartup = function() {
-			pubSub.subscribe("presentationShown", {}, undefined, viewJustMadeVisible);
+			pubSub.subscribe("presentationShown", [], undefined, viewJustMadeVisible);
 		}
 
 		const getIdFromChildReference = function(childReference) {
@@ -134,9 +134,8 @@ var CORA = (function(cora) {
 
 		const calculateNewPathForMetadataIdUsingParentPath = function(metadataIdToAdd, parentPath) {
 			let pathSpec = {
-				"metadataProvider": dependencies.metadataProvider,
-				"metadataIdToAdd": metadataIdToAdd,
-				"parentPath": parentPath
+				metadataIdToAdd: metadataIdToAdd,
+				parentPath: parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		}
@@ -216,20 +215,20 @@ var CORA = (function(cora) {
 		const createView = function() {
 			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let pMapViewSpec = {
-				"mode": mode,
-				"info": {
-					"text": text,
-					"defText": defText,
-					"technicalInfo": [{
-						"text": "textId: " + textId
+				mode: mode,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [{
+						text: "textId: " + textId
 					}, {
-						"text": "defTextId: " + defTextId
+						text: "defTextId: " + defTextId
 					}, {
-						"text": "metadataId: " + metadataId
+						text: "metadataId: " + metadataId
 					}, {
-						"text": "nameInData: " + nameInData
+						text: "nameInData: " + nameInData
 					}, {
-						"text": "presentationId: " + presentationId
+						text: "presentationId: " + presentationId
 					}]
 				},
 				setLatLngMethod: publishLatLngValues
@@ -240,14 +239,14 @@ var CORA = (function(cora) {
 
 		const publishLatLngValues = function(lat, lng) {
 			let latitudeData = {
-				"data": lat,
-				"path": latitudePath
+				data: lat,
+				path: latitudePath
 			};
 			pubSub.publish("setValue", latitudeData);
 
 			let longitudeData = {
-				"data": lng,
-				"path": longitudePath
+				data: lng,
+				path: longitudePath
 			};
 			pubSub.publish("setValue", longitudeData);
 		}
@@ -274,7 +273,7 @@ var CORA = (function(cora) {
 		}
 
 		let out = Object.freeze({
-			"type": "pMap",
+			type: "pMap",
 			getView: getView,
 			getDependencies: getDependencies,
 			getSpec: getSpec,

@@ -19,65 +19,49 @@
 "use strict";
 
 QUnit.module("lib/arbiterTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.arbiter = Arbiter.create();
 		this.fixture = document.getElementById("qunit-fixture");
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
 	var publishCounter = 0;
-	this.arbiter.subscribe('someName#attribName:attribValue.one/*', function(data, msg) {
-		// console.log("path/setValue: " + msg + ' : ' + JSON.stringify(data));
+	this.arbiter.subscribe('someName.one/*', function(data, msg) {
 		publishCounter++;
 	});
-	this.arbiter.publish('someName#attribName:attribValue.one/setValue',
-			createLinkedPathWithNameInData("someName"));
-	this.arbiter.publish('someName#attribName:attribValue.one/add',
-			createLinkedPathWithNameInData("someName"));
+	this.arbiter.publish('someName.one/setValue', ["someName"]);
+	this.arbiter.publish('someName.one/add', ["someName"]);
 	assert.strictEqual(publishCounter, 2);
 });
 
 QUnit.test("testUnsubscribe", function(assert) {
 	var publishCounter = 0;
 	var functionToCall = function(data, msg) {
-		// console.log("path/setValue: " + msg + ' : ' + JSON.stringify(data));
 		publishCounter++;
 	};
-	var subscribeId = this.arbiter.subscribe('someName#attribName:attribValue.one/*',
-			functionToCall);
-	this.arbiter.publish('someName#attribName:attribValue.one/setValue',
-			createLinkedPathWithNameInData("someName"));
+	var subscribeId = this.arbiter.subscribe('someName.one/*',
+		functionToCall);
+	this.arbiter.publish('someName.one/setValue', ["someName"]);
 	this.arbiter.unsubscribe(subscribeId);
-	this.arbiter.publish('someName#attribName:attribValue.one/add',
-			createLinkedPathWithNameInData("someName"));
+	this.arbiter.publish('someName.one/add', ["someName"]);
 	assert.strictEqual(publishCounter, 1);
 });
 
 QUnit.test("testUnsubscribePathAndBelow", function(assert) {
 	var publishCounter = 0;
 	var functionToCall = function(data, msg) {
-		// console.log("path/setValue: " + msg + ' : ' +
-		// JSON.stringify(data));
 		publishCounter++;
 	};
-	// root/textVarRepeat1to3InGroupOneAttribute#anOtherAttribute:aOtherFinalValue.3/textVar.5/
-	// root/textVarRepeat1to3InGroupOneAttribute#anOtherAttribute:aOtherFinalValue.3/
-	this.arbiter.subscribe("root/textVarRepeat1to3InGroupOneAttribute#"
-			+ "anOtherAttribute:aOtherFinalValue.3/textVar.5/", functionToCall);
-	
-	this.arbiter.publish("root/textVarRepeat1to3InGroupOneAttribute#"
-			+ "anOtherAttribute:aOtherFinalValue.3/textVar.5/",
-			createLinkedPathWithNameInData("someName"));
-	
-	this.arbiter.unsubscribePathBelow("root/textVarRepeat1to3InGroupOneAttribute#"
-			+ "anOtherAttribute:aOtherFinalValue.3/");
-	
-	this.arbiter.publish("root/textVarRepeat1to3InGroupOneAttribute#"
-			+ "anOtherAttribute:aOtherFinalValue.3/textVar.5/",
-			createLinkedPathWithNameInData("someName"));
-	
+	this.arbiter.subscribe("root/textVarRepeat1to3InGroupOneAttribute.3/textVar.5/", functionToCall);
+
+	this.arbiter.publish("root/textVarRepeat1to3InGroupOneAttribute.3/textVar.5/", ["someName"]);
+
+	this.arbiter.unsubscribePathBelow("root/textVarRepeat1to3InGroupOneAttribute.3/");
+
+	this.arbiter.publish("root/textVarRepeat1to3InGroupOneAttribute.3/textVar.5/", ["someName"]);
+
 	assert.strictEqual(publishCounter, 1);
 });

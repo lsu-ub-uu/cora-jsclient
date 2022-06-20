@@ -60,7 +60,6 @@ var CORATEST = (function(coraTest) {
 			return preventDefaultIsCalled;
 		}
 
-		// return Object.freeze({
 		return ({
 			stopPropagation : stopPropagation,
 			stopPropagationWasCalled : stopPropagationWasCalled,

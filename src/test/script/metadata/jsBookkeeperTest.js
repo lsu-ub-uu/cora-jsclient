@@ -20,7 +20,7 @@
 "use strict";
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.jsBookkeeperFactory = function(metadataProvider, pubSub, textProvider) {
+	coraTest.jsBookkeeperFactory= function(metadataProvider, pubSub, textProvider) {
 		let factor = function(metadataId, dataHolder) {
 			let dependencies = {
 				"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
@@ -111,7 +111,7 @@ QUnit.test("testSetValue", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
 		"data" : "a Value",
-		"path" : {}
+		"path" : []
 	};
 	jsBookkeeper.setValue(data);
 	let messages = this.pubSub.getMessages();
@@ -120,7 +120,7 @@ QUnit.test("testSetValue", function(assert) {
 		"type" : "setValue",
 		"message" : {
 			"data" : "a Value",
-			"path" : {}
+			"path" : []
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -133,7 +133,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable"
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
-			"path" : {},
+			"path" : [],
 			"childReference" : childReferenceTextVariableId,
 			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
@@ -155,7 +155,7 @@ QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", f
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 			"metadataId" : "textVariableId",
-			"path" : {},
+			"path" : [],
 			"childReference" : childReferenceTextVariableId,
 			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
@@ -243,29 +243,7 @@ QUnit.test("testAddRepeating", function(assert) {
 	
 	let data = {
 		"metadataId" : "textVar",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			} ]
-		},
+		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
 		"childReference" : {
 			"name" : "childReference",
 			"repeatId" : "1",
@@ -290,12 +268,16 @@ QUnit.test("testAddRepeating", function(assert) {
 			} ]
 		}
 	};
-	jsBookkeeper.add(data);
+	
+	let startRepeatId = jsBookkeeper.add(data);
+	
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "textVar");
 	assert.strictEqual(factoredSpec.path, data.path);
 	assert.strictEqual(factoredSpec.data, undefined);
 	assert.strictEqual(factoredSpec.repeatId, "3");
+	assert.deepEqual(dataHolder.getUsedPath(), ["textVarRepeat1to3InGroupOneAttribute.1"]);
+	assert.strictEqual(startRepeatId, "3");
 
 });
 QUnit.test("testAddBefore", function(assert) {
@@ -369,29 +351,7 @@ QUnit.test("testAddBefore", function(assert) {
 	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
 	let data = {
 		"metadataId" : "textVar",
-		"path" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			} ]
-		},
+		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
 		"childReference" : {
 			"name" : "childReference",
 			"repeatId" : "1",
@@ -415,41 +375,11 @@ QUnit.test("testAddBefore", function(assert) {
 				"value" : "3"
 			} ]
 		},
-		addBeforePath : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVarRepeat1to3InGroupOneAttribute"
-			}, {
-				"name" : "repeatId",
-				"value" : "1"
-			}, {
-				"name" : "attributes",
-				"children" : [ {
-					"name" : "attribute",
-					"repeatId" : "1",
-					"children" : [ {
-						"name" : "attributeName",
-						"value" : "anAttribute"
-					}, {
-						"name" : "attributeValue",
-						"value" : "aFinalValue"
-					} ]
-				} ]
-			}, {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "textVar"
-				}, {
-					"name" : "repeatId",
-					"value" : "one"
-				}
-				]
-			} ]
-		}
+		addBeforePath : ["textVarRepeat1to3InGroupOneAttribute.1", "textVar.one"]
 	};
+	
 	jsBookkeeper.addBefore(data);
+	
 	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "textVar");
 	assert.strictEqual(factoredSpec.path, data.path);
@@ -460,14 +390,14 @@ QUnit.test("testAddBefore", function(assert) {
 QUnit.test("testRemove", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
-		"path" : {}
+		"path" : []
 	};
 	jsBookkeeper.remove(data);
 	let messages = this.pubSub.getMessages();
 	let expectedMessage = {
 		"type" : "remove",
 		"message" : {
-			"path" : {}
+			"path" : []
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -476,13 +406,13 @@ QUnit.test("testRemove", function(assert) {
 
 	let unsubscriptionsPathBelow = this.pubSub.getUnsubscriptionsPathBelow();
 	assert.equal(unsubscriptionsPathBelow.length, 1);
-	assert.stringifyEqual(unsubscriptionsPathBelow[0], {});
+	assert.stringifyEqual(unsubscriptionsPathBelow[0], []);
 });
 
 QUnit.test("testMove", function(assert) {
 	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
 	let data = {
-		"path" : {},
+		"path" : [],
 		"moveChild" : {
 			"name" : "linkedPath",
 			"children" : [ {
@@ -510,7 +440,7 @@ QUnit.test("testMove", function(assert) {
 	let expectedMessage = {
 		"type" : "move",
 		"message" : {
-			"path" : {},
+			"path" : [],
 			"moveChild" : {
 				"name" : "linkedPath",
 				"children" : [ {

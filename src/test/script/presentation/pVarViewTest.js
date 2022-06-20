@@ -20,31 +20,31 @@
 "use strict";
 
 QUnit.module("presentation/pVarViewTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.dependencies = {
-			"infoFactory" : CORATEST.infoFactorySpy()
+			"infoFactory": CORATEST.infoFactorySpy()
 		};
 		this.textIdOnclickMethod = {};
 		this.defTextIdOnclickMethod = {
-			"tramas" : "trams"
+			tramas: "trams"
 		};
 		this.spec = {
-			"mode" : "input",
-			"inputType" : "input",
-			"outputFormat" : "text",
-			"presentationId" : "somePresentationId",
-			"info" : {
-				"text" : "someText",
-				"defText" : "someDefText",
-				"technicalInfo" : [ {
-					"text" : "textId: " + "textId",
-					"onclickMethod" : this.textIdOnclickMethod
+			mode: "input",
+			inputType: "input",
+			outputFormat: "text",
+			presentationId: "somePresentationId",
+			info: {
+				text: "someText",
+				defText: "someDefText",
+				technicalInfo: [{
+					text: "textId: " + "textId",
+					onclickMethod: this.textIdOnclickMethod
 				}, {
-					"text" : "defTextId: " + "defTextId",
-					"onclickMethod" : this.defTextIdOnclickMethod
+					text: "defTextId: " + "defTextId",
+					onclickMethod: this.defTextIdOnclickMethod
 				}, {
-					"text" : "metadataId: " + "metadataId"
-				} ]
+					text: "metadataId: " + "metadataId"
+				}]
 			}
 		};
 
@@ -68,7 +68,7 @@ QUnit.module("presentation/pVarViewTest.js", {
 			return this.pVarView.getView().childNodes[0];
 		};
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -100,26 +100,26 @@ QUnit.test("testClassName", function(assert) {
 
 QUnit.test("testInfoSpec", function(assert) {
 	let expectedSpec = {
-		"appendTo" : {},
-		"level1" : [ {
-			"className" : "textView",
-			"text" : "someText"
+		appendTo: {},
+		level1: [{
+			className: "textView",
+			text: "someText"
 		}, {
-			"className" : "defTextView",
-			"text" : "someDefText"
-		} ],
-		"level2" : [ {
-			"className" : "technicalView",
-			"text" : "textId: textId",
-			"onclickMethod" : this.textIdOnclickMethod
+			className: "defTextView",
+			text: "someDefText"
+		}],
+		level2: [{
+			className: "technicalView",
+			text: "textId: textId",
+			onclickMethod: this.textIdOnclickMethod
 		}, {
-			"className" : "technicalView",
-			"text" : "defTextId: defTextId",
-			"onclickMethod" : this.defTextIdOnclickMethod
+			className: "technicalView",
+			text: "defTextId: defTextId",
+			onclickMethod: this.defTextIdOnclickMethod
 		}, {
-			"className" : "technicalView",
-			"text" : "metadataId: metadataId"
-		} ]
+			className: "technicalView",
+			text: "metadataId: metadataId"
+		}]
 	};
 	let pVarView = this.getPVarView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
@@ -141,14 +141,14 @@ QUnit.test("testInfoButtonAddedToView", function(assert) {
 QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 	this.spec.info.technicalInfo = null;
 	let expectedSpec = {
-		"appendTo" : {},
-		"level1" : [ {
-			"className" : "textView",
-			"text" : "someText"
+		appendTo: {},
+		level1: [{
+			className: "textView",
+			text: "someText"
 		}, {
-			"className" : "defTextView",
-			"text" : "someDefText"
-		} ]
+			className: "defTextView",
+			text: "someDefText"
+		}]
 	};
 	let pVarView = this.getPVarView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
@@ -213,7 +213,7 @@ QUnit.test("testInputTypeTextArea", function(assert) {
 QUnit.test("testInputFormatPassword", function(assert) {
 	this.spec.inputType = "input";
 	this.spec.inputFormat = "password";
-	
+
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "password");
@@ -278,7 +278,7 @@ QUnit.test("testOutputText", function(assert) {
 	this.spec.mode = "output";
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "SPAN");
-	assert.strictEqual(valueView.className,"value");
+	assert.strictEqual(valueView.className, "value");
 });
 
 QUnit.test("testOutputImage", function(assert) {
@@ -344,4 +344,72 @@ QUnit.test("testDisableInput", function(assert) {
 	assert.strictEqual(valueView.disabled, false);
 	pVarView.disable();
 	assert.strictEqual(valueView.disabled, true);
+});
+
+QUnit.test("testNoAttributesHolderBeforeFirstAttributeIsAdded", function(assert) {
+	let pVarView = this.getPVarView();
+	assert.equal(pVarView.getView().children.length, 2);
+
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+	let attributePresentation = {
+		view: fakeView,
+		text: "clearTextAttribute"
+	};
+	pVarView.addAttributePresentation(attributePresentation);
+
+	assert.equal(pVarView.getView().children.length, 3);
+	let attributesContainer = pVarView.getView().children[0];
+	assert.strictEqual(attributesContainer.className, "attributes");
+});
+
+QUnit.test("testAddAttributes", function(assert) {
+	let pVarView = this.getPVarView();
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+	let attributePresentation = {
+		view: fakeView,
+		text: "clearTextAttribute"
+	};
+	pVarView.addAttributePresentation(attributePresentation);
+
+	let addedAttributesContainer = pVarView.getView().firstChild;
+	assert.strictEqual(addedAttributesContainer.children.length, 1);
+	
+	let addedAttributeContainer = addedAttributesContainer.firstChild;
+	assert.strictEqual(addedAttributeContainer.className, "attribute");
+
+	let attributeName = addedAttributeContainer.firstChild;
+	assert.strictEqual(attributeName.className, "attributeName");
+	
+	let textNode = attributeName.firstChild;
+	assert.strictEqual(textNode.textContent, "clearTextAttribute");
+	assert.strictEqual(textNode.nodeValue, "clearTextAttribute");
+
+	assert.strictEqual(addedAttributeContainer.lastChild, fakeView);
+});
+
+QUnit.test("testAddTwoAttributes", function(assert) {
+	let pVarView = this.getPVarView();
+
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+	let attributePresentation = {
+		view: fakeView,
+		text: "clearTextAttribute"
+	};
+	pVarView.addAttributePresentation(attributePresentation);
+
+	let fakeView2 = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view2"));
+	let attributePresentation2 = {
+		view: fakeView2,
+		text: "clearTextAttribute2"
+	};
+	pVarView.addAttributePresentation(attributePresentation2);
+
+	assert.equal(pVarView.getView().children.length, 3);
+
+	let addedAttributesContainer = pVarView.getView().firstChild;
+	assert.strictEqual(addedAttributesContainer.children.length, 2);
 });

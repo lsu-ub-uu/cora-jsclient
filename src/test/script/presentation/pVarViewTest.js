@@ -379,12 +379,16 @@ QUnit.test("testAddAttributes", function(assert) {
 	let addedAttributeContainer = addedAttributesContainer.firstChild;
 	assert.strictEqual(addedAttributeContainer.className, "attribute");
 
-	let textNode = addedAttributeContainer.firstChild;
+	let attributeName = addedAttributeContainer.firstChild;
+	assert.strictEqual(attributeName.className, "attributeName");
+	
+	let textNode = attributeName.firstChild;
 	assert.strictEqual(textNode.textContent, "clearTextAttribute");
 	assert.strictEqual(textNode.nodeValue, "clearTextAttribute");
 
 	assert.strictEqual(addedAttributeContainer.lastChild, fakeView);
 });
+
 QUnit.test("testAddTwoAttributes", function(assert) {
 	let pVarView = this.getPVarView();
 

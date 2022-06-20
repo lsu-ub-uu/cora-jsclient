@@ -110,7 +110,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pVarTest.js", {
+QUnit.module.only("presentation/pVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -753,7 +753,7 @@ QUnit.test("testAddAttributePresentation", function(assert) {
 	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
 	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
 
-	
+
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
 		text: "fake text from presentationSpy, anAttribute"
@@ -814,3 +814,22 @@ const buildExpectedPresentationForAttribute = function(metadataId, mode) {
 		}
 	}
 };
+
+QUnit.only("testAddAttributePresentation", function(assert) {
+	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
+	let metadataId = "anAttribute";
+	let addAttributeMsg = {
+		metadataId: metadataId,
+		path: [],
+		nameInData: "anAttribute"
+	};
+
+	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
+
+	let attributePVar = this.presentationFactory.getFactored(0);
+	assert.false(attributePVar.getDisableVarStatus());
+	
+	attachedPVar.pVar.disableVar();
+	
+	assert.true(attributePVar.getDisableVarStatus());
+});

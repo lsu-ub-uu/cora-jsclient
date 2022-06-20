@@ -225,8 +225,6 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributePresentation = function(attributePresentation) {
-			//TODO: spike
-
 			if (attributesContainer === undefined) {
 				attributesContainer = CORA.gui.createSpanWithClassName("attributes");
 				view.insertBefore(attributesContainer, view.firstChild);
@@ -234,11 +232,15 @@ var CORA = (function(cora) {
 
 			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
 			attributesContainer.appendChild(attributeContainer);
+			
+			let attributeNameContainer = CORA.gui.createSpanWithClassName("attributeName");
+			attributeContainer.appendChild(attributeNameContainer);
 
-			attributeContainer.appendChild(document.createTextNode(attributePresentation.text));
+			attributeNameContainer.appendChild(document.createTextNode(attributePresentation.text));
+
 			attributeContainer.appendChild(attributePresentation.view);
 		};
-
+		
 		out = Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,

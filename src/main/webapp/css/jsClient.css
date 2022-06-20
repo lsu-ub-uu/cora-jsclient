@@ -539,6 +539,14 @@ body {
 	content: "";
 }
 
+.jsClient .attributes {
+	font-size: 0.8rem;
+}
+
+.jsClient .attributeName {
+	font-style: italic;
+}
+
 .jsClient .listItem .textPartAlternativePGroup .text {
 	font-weight: bold;
 	margin: 0;

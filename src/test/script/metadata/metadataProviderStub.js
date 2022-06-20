@@ -5213,6 +5213,32 @@ function MetadataProviderStub() {
 						"value": "output"
 					}]
 				};
+			case "pVarTextVariableWithAnAttributeChoice":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pVar"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "pVarTextVariableWithAnAttributeChoice"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataTextVariable"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textVariableWithAnAttributeChoice"
+						}],
+						"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					}]
+				};
 			case "pVarTextVariableIdOutputImage":
 				return {
 					"name": "presentation",

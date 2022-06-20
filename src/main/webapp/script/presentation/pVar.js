@@ -35,6 +35,7 @@ var CORA = (function(cora) {
 		let regEx;
 		let mode;
 		let textProvider;
+		let attributes = [];
 
 		const start = function() {
 			textProvider = dependencies.textProvider;
@@ -141,18 +142,13 @@ var CORA = (function(cora) {
 
 		const addAttributePresentation = function(dataFromMsg) {
 			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
+			attributes.push(attributePVar);
+
 			let attributePresentation = {
 				view: attributePVar.getView(),
 				text: attributePVar.getText()
 			};
 			pVarView.addAttributePresentation(attributePresentation);
-
-			//TODO: little list of stuff to do (might be moooooore... :)
-			//disable for attributes on disable (handled by view?) (more than one)
-			//attribute text
-			// layout, 
-			// layout more than one attribute
-			//attributes with final value, what to do?
 		};
 
 		const createAttributePresentation = function(attributeMetadataId) {
@@ -203,23 +199,6 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
-
-		//		const createViewForChild = function(presentationChildRef) {
-		//			let refId = getRefId(presentationChildRef);
-		//			let cPresentationChild = getMetadataById(refId);
-		//			//			if (cPresentationChild.getData().name === "text") {
-		//			//				let text = CORA.gui.createSpanWithClassName("text");
-		//			//				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
-		//			//				return text;
-		//			//			}
-		//			let presentationSpec = {
-		//				"path": path,
-		//				"metadataIdUsedInData": spec.metadataIdUsedInData,
-		//				"cPresentation": cPresentationChild
-		//			};
-		//			let presentation = presentationFactory.factor(presentationSpec);
-		//			return presentation.getView();
-		//		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
@@ -337,7 +316,16 @@ var CORA = (function(cora) {
 		};
 
 		const disableVar = function() {
+			disableExistingAttributes();
 			pVarView.disable();
+		};
+
+		const disableExistingAttributes = function() {
+			attributes.forEach(
+				function(attributePVar) {
+					attributePVar.disableVar()
+				}
+			);
 		};
 
 		start();

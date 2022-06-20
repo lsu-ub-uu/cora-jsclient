@@ -622,6 +622,14 @@ position: relative;
 	padding:4px;
 }
 
+.pChildRefHandler {
+    margin-bottom: 1em;
+}
+
+.frameChildStyle {
+	border: dotted 1px red;
+}
+
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;

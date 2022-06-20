@@ -110,7 +110,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module.only("presentation/pVarTest.js", {
+QUnit.module("presentation/pVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -815,7 +815,7 @@ const buildExpectedPresentationForAttribute = function(metadataId, mode) {
 	}
 };
 
-QUnit.only("testAddAttributePresentation", function(assert) {
+QUnit.test("testAddAttributePresentation", function(assert) {
 	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
 	let metadataId = "anAttribute";
 	let addAttributeMsg = {

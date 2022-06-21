@@ -63,8 +63,6 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 		this.setCPresentation = function(metadataId) {
 			this.spec.cPresentation = this.getMetadataAsCoraData(metadataId);
 		};
-	},
-	afterEach: function() {
 	}
 });
 
@@ -84,7 +82,7 @@ QUnit.test("testFactorPVar", function(assert) {
 
 	let dependencies = pVar.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pVar.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
@@ -97,7 +95,7 @@ QUnit.test("testFactorPCollVar", function(assert) {
 
 	let dependencies = pCollVar.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pCollVar.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
@@ -111,7 +109,7 @@ QUnit.test("testFactorPNumVar", function(assert) {
 
 	let dependencies = pNumVar.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pNumVar.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
@@ -125,10 +123,10 @@ QUnit.test("testFactorPGroup", function(assert) {
 
 	let dependencies = pGroup.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pGroup.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
-	assert.strictEqual(spec.recordPartPermissionCalculator,	this.spec.recordPartPermissionCalculator);
+	assert.strictEqual(spec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });
 
 QUnit.test("testFactorPGroupAsMap", function(assert) {
@@ -147,7 +145,7 @@ QUnit.test("testFactorPGroupAsMap", function(assert) {
 
 	let dependencies = pMap.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pMap.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
@@ -155,13 +153,13 @@ QUnit.test("testFactorPGroupAsMap", function(assert) {
 QUnit.test("testFactorPRecordLink", function(assert) {
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
 	this.spec.cPresentation = this.getMetadataAsCoraData("myLinkNoPresentationOfLinkedRecordPLink");
-	
+
 	let pRecordLink = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pRecordLink.type, "pRecordLink");
-	
+
 	let dependencies = pRecordLink.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pRecordLink.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 	assert.strictEqual(spec.recordPartPermissionCalculatorFactory,
@@ -192,7 +190,7 @@ QUnit.test("testFactorPRepeatingContainer", function(assert) {
 
 	let dependencies = pRContainer.getDependencies();
 	CORATEST.assertCorrectCommonDependencies(assert, this, dependencies);
-	
+
 	let spec = pRContainer.getSpec();
 	CORATEST.assertCorrectCommonSpec(assert, this, spec);
 });
@@ -214,13 +212,13 @@ QUnit.test("testFactorPSurroundingContainer", function(assert) {
 		this.spec.recordPartPermissionCalculator);
 });
 
-CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencies){
+CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);
-	assert.strictEqual(dependencies.clientInstanceProvider,	context.dependencies.providers.clientInstanceProvider);
+	assert.strictEqual(dependencies.clientInstanceProvider, context.dependencies.providers.clientInstanceProvider);
 	assert.strictEqual(dependencies.metadataProvider, context.dependencies.providers.metadataProvider);
 	assert.strictEqual(dependencies.textProvider, context.dependencies.providers.textProvider);
-	assert.strictEqual(dependencies.recordTypeProvider,	context.dependencies.providers.recordTypeProvider);
-	
+	assert.strictEqual(dependencies.recordTypeProvider, context.dependencies.providers.recordTypeProvider);
+
 	assert.strictEqual(dependencies.globalFactories, context.dependencies.globalFactories);
 	assert.strictEqual(dependencies.xmlHttpRequestFactory, context.dependencies.xmlHttpRequestFactory);
 	assert.strictEqual(dependencies.recordGuiFactory, context.dependencies.recordGuiFactory);
@@ -234,7 +232,15 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(dependencies.uploadManager, context.dependencies.uploadManager);
 	assert.strictEqual(dependencies.authTokenHolder, context.dependencies.authTokenHolder);
 
-	
+
+
+	assert.strictEqual(dependencies.pAttributesFactory.type, "genericFactory");
+	assert.strictEqual(dependencies.pAttributesFactory.getTypeToFactor(), "pAttributes");
+	let pAttributesDependencies = dependencies.pAttributesFactory.getDependencies();
+	assert.strictEqual(pAttributesDependencies.presentationFactory, context.newPresentationFactory);
+	assert.strictEqual(pAttributesDependencies.pubSub, context.dependencies.pubSub);
+	assert.deepEqual(pAttributesDependencies.view.type, CORA.pAttributesView().type);
+
 	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
 	assert.strictEqual(dependencies.pNumVarViewFactory.type, "genericFactory");
@@ -252,15 +258,15 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerFactory.getTypeToFactor(),
 		"pNonRepeatingChildRefHandler");
-	
-	CORATEST.assertCorrectPChildRefHandlerFactoryDependencies(assert, context, 
+
+	CORATEST.assertCorrectPChildRefHandlerFactoryDependencies(assert, context,
 		dependencies.pChildRefHandlerFactory.getDependencies());
-		
-	CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies(assert, context, 
+
+	CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies(assert, context,
 		dependencies.pNonRepeatingChildRefHandlerFactory.getDependencies());
 }
 
-CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, context, dependencies){
+CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.metadataProvider, context.dependencies.providers.metadataProvider);
 	assert.strictEqual(dependencies.recordTypeProvider, context.dependencies.providers.recordTypeProvider);
 	assert.strictEqual(dependencies.textProvider, context.dependencies.providers.textProvider);
@@ -280,17 +286,17 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
 		"pChildRefHandlerView");
-	
-	CORATEST.assertCorrectPRepeatingElementFactoryDependencies(assert, context, 
+
+	CORATEST.assertCorrectPRepeatingElementFactoryDependencies(assert, context,
 		dependencies.pRepeatingElementFactory.getDependencies());
 }
 
-CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, context, dependencies){
+CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
 }
 
-CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies){
+CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
 	assert.strictEqual(dependencies.presentationFactory, context.newPresentationFactory);
 
@@ -302,7 +308,7 @@ CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function
 	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);
 }
-CORATEST.assertCorrectCommonSpec = function(assert, context, spec){
+CORATEST.assertCorrectCommonSpec = function(assert, context, spec) {
 	assert.strictEqual(spec.path, context.spec.path);
 	assert.strictEqual(spec.metadataIdUsedInData, context.spec.metadataIdUsedInData);
 	assert.strictEqual(spec.cPresentation, context.spec.cPresentation);

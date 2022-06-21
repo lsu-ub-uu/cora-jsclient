@@ -37,11 +37,14 @@ var CORA = (function(cora) {
 		let warningMin;
 		let warningMax;
 		let numberOfDecimals;
-
+		let mode;
+		let pAttributes;
+		
 		const start = function() {
 			initializeGlobalVariables();
 			factorPNumVarView();
 			subscribeToPubSub();
+			initPAttributes();
 		};
 
 		const initializeGlobalVariables = function() {
@@ -62,7 +65,7 @@ var CORA = (function(cora) {
 			let textProvider = dependencies.textProvider;
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
 			text = textProvider.getTranslation(textId);
@@ -110,7 +113,17 @@ var CORA = (function(cora) {
 			pubSub.subscribe("disable", disablePath, undefined, disableNumVar);
 		};
 
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: pNumVarView.addAttributesView,
+				path: path,
+				mode: mode
+			};
+			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		};
+
 		const disableNumVar = function() {
+			pAttributes.disableExistingAttributes();
 			pNumVarView.disable();
 		};
 

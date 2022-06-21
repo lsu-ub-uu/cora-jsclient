@@ -21,7 +21,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
-		fixture, presentationFactory, pVarViewFactory) {
+		fixture, presentationFactory, pVarViewFactory, pAttributesFactory) {
 		let factor = function(path, metadataIdUsedInData, pVarPresentationId) {
 			let cPVarPresentation = CORA.coraData(metadataProvider
 				.getMetadataById(pVarPresentationId));
@@ -32,7 +32,8 @@ var CORATEST = (function(coraTest) {
 				pubSub: pubSub,
 				textProvider: textProvider,
 				jsBookkeeper: jsBookkeeper,
-				pVarViewFactory: pVarViewFactory
+				pVarViewFactory: pVarViewFactory,
+				pAttributesFactory: pAttributesFactory
 			};
 			let spec = {
 				path: path,
@@ -81,13 +82,7 @@ var CORATEST = (function(coraTest) {
 		assert.stringifyEqual(disableSubsription.path, disablePath);
 		assert.ok(disableSubsription.functionToCall === pVar.disableVar);
 
-		let attributeSubsription = subscriptions[3];
-		assert.strictEqual(attributeSubsription.type, "addAttribute");
-		assert.stringifyEqual(attributeSubsription.path, path);
-		assert.ok(attributeSubsription.functionToCall === pVar.addAttributePresentation);
-		assert.ok(attributeSubsription.functionToCall != undefined);
-
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 3);
 	};
 
 	coraTest.testVariableMetadata = function(attachedPVar, assert) {
@@ -119,9 +114,10 @@ QUnit.module("presentation/pVarTest.js", {
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.pVarFactory = CORATEST.attachedPVarFactory(this.metadataProvider, this.pubSub,
 			this.textProvider, this.jsBookkeeper, this.fixture, this.presentationFactory,
-			this.pVarViewFactory);
+			this.pVarViewFactory, this.pAttributesFactory);
 	}
 });
 
@@ -185,6 +181,18 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		text: "presentationId: pVarTextVariableId"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
+});
+
+QUnit.test("testFactoredPAttributes", function(assert) {
+	let path = [];
+	this.pVarFactory.factor(path, "textVariableId", "pVarTextVariableId");
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+
+	assert.strictEqual(attributesSpec.addViewToParent, pVarViewSpy.addAttributesView);
+	assert.strictEqual(attributesSpec.path, path);
+	assert.strictEqual(attributesSpec.mode, "input");
 });
 
 QUnit.test("testGetRegexpShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", function(assert) {
@@ -735,101 +743,16 @@ QUnit.test("testDisable", function(assert) {
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });
 
-QUnit.test("testAddAttributePresentation", function(assert) {
+
+QUnit.test("testDisableAttributes", function(assert) {
 	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
-	let metadataId = "anAttribute";
-	let addAttributeMsg = {
-		metadataId: metadataId,
-		path: [],
-		nameInData: "anAttribute"
-	};
-
-	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
-
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, "input");
-
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	assert.deepEqual(presentationSpec.path, ["@anAttribute"]);
-	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
-	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+	this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
 
 
-	let expectedAttributePresentation = {
-		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
-	};
-	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	assert.deepEqual(expectedAttributePresentation, pVarViewSpy.getAttributePresentation(0));
-});
+	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
 
-QUnit.test("testAddAttributeOutputPresentation", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableIdOutput");
-	let metadataId = "anAttribute";
-	let addAttributeMsg = {
-		metadataId: metadataId,
-		path: [],
-		nameInData: "anAttribute"
-	};
-
-	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
-
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, "output");
-
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	assert.deepEqual(presentationSpec.path, ["@anAttribute"]);
-	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
-	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
-
-	let expectedAttributePresentation = {
-		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
-	};
-	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	assert.deepEqual(expectedAttributePresentation, pVarViewSpy.getAttributePresentation(0));
-});
-
-const buildExpectedPresentationForAttribute = function(metadataId, mode) {
-	return {
-		name: "presentation",
-		children: [{
-			name: "presentationOf",
-			children: [
-				{
-					name: "linkedRecordId",
-					value: metadataId
-				}]
-		}, {
-			name: "mode",
-			value: mode
-		}, {
-			name: "emptyTextId",
-			children: [
-				{
-					name: "linkedRecordId",
-					value: "initialEmptyValueText"
-				}]
-		}],
-		attributes: {
-			type: "pCollVar"
-		}
-	}
-};
-
-QUnit.test("testAddAttributePresentation", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
-	let metadataId = "anAttribute";
-	let addAttributeMsg = {
-		metadataId: metadataId,
-		path: [],
-		nameInData: "anAttribute"
-	};
-
-	attachedPVar.pVar.addAttributePresentation(addAttributeMsg);
-
-	let attributePVar = this.presentationFactory.getFactored(0);
-	assert.false(attributePVar.getDisableVarStatus());
-	
 	attachedPVar.pVar.disableVar();
-	
-	assert.true(attributePVar.getDisableVarStatus());
+
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
 });

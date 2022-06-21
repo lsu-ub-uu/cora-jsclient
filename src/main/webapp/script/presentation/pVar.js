@@ -35,7 +35,7 @@ var CORA = (function(cora) {
 		let regEx;
 		let mode;
 		let textProvider;
-		let attributes = [];
+		let pAttributes;
 
 		const start = function() {
 			textProvider = dependencies.textProvider;
@@ -43,6 +43,7 @@ var CORA = (function(cora) {
 			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
+			initPAttributes();
 		};
 
 		const intializePVarViewSpec = function(textProvider) {
@@ -137,68 +138,17 @@ var CORA = (function(cora) {
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
 		};
 
-		const addAttributePresentation = function(dataFromMsg) {
-			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
-			attributes.push(attributePVar);
-
-			let attributePresentation = {
-				view: attributePVar.getView(),
-				text: attributePVar.getText()
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: pVarView.addAttributesView,
+				path: path,
+				mode: mode
 			};
-			pVarView.addAttributePresentation(attributePresentation);
+			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};
 
-		const createAttributePresentation = function(attributeMetadataId) {
-			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
-				attributeMetadataId, mode);
-			let attributePath = createAttributePath(attributeMetadataId);
-			let presentationSpec = {
-				path: attributePath,
-				metadataIdUsedInData: attributeMetadataId,
-				cPresentation: cAttributePresentationMetadata
-			};
-			return dependencies.presentationFactory.factor(presentationSpec);
-		};
-
-		const buildAttributePresentationMetadata = function(attributeMetadataId, attributeMode) {
-			let presentationChildForAttribute = {
-				name: "presentation",
-				children: [{
-					name: "presentationOf",
-					children: [{
-						name: "linkedRecordId",
-						value: attributeMetadataId
-					}]
-				}, {
-					name: "mode",
-					value: attributeMode
-				}, {
-					name: "emptyTextId",
-					children: [
-						{
-							name: "linkedRecordId",
-							value: "initialEmptyValueText"
-						}]
-				}],
-				attributes: {
-					type: "pCollVar"
-				}
-			};
-			return CORA.coraData(presentationChildForAttribute);
-		};
-
-		const createAttributePath = function(metadataId) {
-			let pathSpec = {
-				metadataIdToAdd: metadataId,
-				//				"repeatId": spec.repeatId,
-				parentPath: path,
-				type: "attribute"
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
@@ -216,7 +166,6 @@ var CORA = (function(cora) {
 		};
 
 		const handleMsg = function(dataFromMsg) {
-			//			console.log("PVar SetValue: ", dataFromMsg)
 			setValue(dataFromMsg.data);
 			updateView();
 		};
@@ -316,16 +265,8 @@ var CORA = (function(cora) {
 		};
 
 		const disableVar = function() {
-			disableExistingAttributes();
+			pAttributes.disableExistingAttributes();
 			pVarView.disable();
-		};
-
-		const disableExistingAttributes = function() {
-			attributes.forEach(
-				function(attributePVar) {
-					attributePVar.disableVar()
-				}
-			);
 		};
 
 		start();
@@ -336,7 +277,6 @@ var CORA = (function(cora) {
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,
-			addAttributePresentation: addAttributePresentation,
 			getText: getText,
 			getDefText: getDefText,
 			getRegEx: getRegEx,

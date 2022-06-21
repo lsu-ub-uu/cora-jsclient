@@ -21,17 +21,18 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPNumVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
-		fixture, pNumVarViewFactory) {
+		fixture, pNumVarViewFactory, pAttributesFactory) {
 		let factor = function(path, metadataIdUsedInData, pNumVarPresentationId) {
 			let cPNumVarPresentation = CORA.coraData(metadataProvider
 				.getMetadataById(pNumVarPresentationId));
 			let dependencies = {
-				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
-				"metadataProvider": metadataProvider,
-				"pubSub": pubSub,
-				"textProvider": textProvider,
-				"jsBookkeeper": jsBookkeeper,
-				"pNumVarViewFactory": pNumVarViewFactory
+				clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				jsBookkeeper: jsBookkeeper,
+				pNumVarViewFactory: pNumVarViewFactory,
+				pAttributesFactory: pAttributesFactory
 			};
 			let spec = {
 				"path": path,
@@ -106,7 +107,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pNumVarTest.js", {
+QUnit.module.only("presentation/pNumVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -114,10 +115,9 @@ QUnit.module("presentation/pNumVarTest.js", {
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.pNumVarViewFactory = CORATEST.standardFactorySpy("pNumVarViewSpy");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.pNumVarFactory = CORATEST.attachedPNumVarFactory(this.metadataProvider, this.pubSub,
-			this.textProvider, this.jsBookkeeper, this.fixture, this.pNumVarViewFactory);
-	},
-	afterEach: function() {
+			this.textProvider, this.jsBookkeeper, this.fixture, this.pNumVarViewFactory, this.pAttributesFactory);
 	}
 });
 
@@ -192,6 +192,32 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
 });
 
+QUnit.test("testFactoredPAttributes", function(assert) {
+	let path = [];
+	this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
+	let pNumViewSpy = this.pNumVarViewFactory.getFactored(0);
+
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+
+	assert.strictEqual(attributesSpec.addViewToParent, pNumViewSpy.addAttributesView);
+	assert.strictEqual(attributesSpec.path, path);
+	assert.strictEqual(attributesSpec.mode, "input");
+});
+
+QUnit.test("testDisableAttributes", function(assert) {
+	let path = [];
+
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
+
+	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
+
+	attachedPNumVar.pNumVar.disableNumVar();
+
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
+});
+
 QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 	let firstLevelNumPath = ["textVariableId"];
 	let topLevelPath = ["textVariableId"];
@@ -211,7 +237,7 @@ QUnit.test("testNumWithFirstLevelPathWithRepeatId", function(assert) {
 });
 
 QUnit.test("testNumWithTwoLevelPath", function(assert) {
-	let numPathWithTwoLevels = ["recordInfo","dataDivider"];
+	let numPathWithTwoLevels = ["recordInfo", "dataDivider"];
 	let expectedPath = numPathWithTwoLevels;
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
 		"pNumVarNumVariableId");
@@ -220,7 +246,7 @@ QUnit.test("testNumWithTwoLevelPath", function(assert) {
 });
 
 QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
-	let numPathWithTwoLevels = ["userRole", "userRole.0"]; 
+	let numPathWithTwoLevels = ["userRole", "userRole.0"];
 	let expectedPath = ["userRole", "userRole"];
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
 		"pNumVarNumVariableId");
@@ -229,7 +255,7 @@ QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
 });
 
 QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
-	let numPathWithThreeLevels = ["recordInfo","dataDivider","numVariableId"];
+	let numPathWithThreeLevels = ["recordInfo", "dataDivider", "numVariableId"];
 	let expectedPath = numPathWithThreeLevels;
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithThreeLevels, "numVariableId",
 		"pNumVarNumVariableId");
@@ -238,7 +264,7 @@ QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
 });
 
 QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
-	let numPathWithAttribute = ["textPart","numVariableId"];
+	let numPathWithAttribute = ["textPart", "numVariableId"];
 	let expectedPath = numPathWithAttribute;
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithAttribute, "numVariableId",
 		"pNumVarNumVariableId");
@@ -417,7 +443,6 @@ QUnit.test("testInitNumberOutput", function(assert) {
 
 QUnit.test("testSetValueTextOutput", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
-	let valueView = attachedPNumVar.valueView;
 
 	attachedPNumVar.pNumVar.setValue("7");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);

@@ -45,7 +45,6 @@ QUnit.module("presentation/pNumVarViewTest.js", {
 			}
 		};
 
-		this.pNumVarView;
 		this.getPNumVarView = function() {
 			if (this.pNumVarView === undefined) {
 				this.pNumVarView = CORA.pNumVarView(this.dependencies, this.spec);
@@ -64,8 +63,6 @@ QUnit.module("presentation/pNumVarViewTest.js", {
 			}
 			return this.pNumVarView.getView().childNodes[0];
 		};
-	},
-	afterEach : function() {
 	}
 });
 
@@ -201,7 +198,6 @@ QUnit.test("testInputOnblur", function(assert) {
 
 	let pNumVarView = this.getPNumVarView();
 	pNumVarView.setValue("a Value");
-	let valueView = this.getValueView();
 	CORATESTHELPER.simulateBlur(this.getValueView());
 	assert.strictEqual(valueFromView, "a Value");
 });
@@ -210,7 +206,6 @@ QUnit.test("testInputOnblurNotSet", function(assert) {
 
 	let pNumVarView = this.getPNumVarView();
 	pNumVarView.setValue("a Value");
-	let valueView = this.getValueView();
 	CORATESTHELPER.simulateBlur(this.getValueView());
 	assert.strictEqual(valueFromView, "");
 });
@@ -223,7 +218,6 @@ QUnit.test("testInputOnkeyup", function(assert) {
 
 	let pNumVarView = this.getPNumVarView();
 	pNumVarView.setValue("a Value");
-	let valueView = this.getValueView();
 
 	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
 
@@ -235,7 +229,6 @@ QUnit.test("testInputOnkeyupNotSet", function(assert) {
 
 	let pNumVarView = this.getPNumVarView();
 	pNumVarView.setValue("a Value");
-	let valueView = this.getValueView();
 
 	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
 
@@ -277,3 +270,11 @@ QUnit.test("testDisableInput", function(assert) {
 	assert.strictEqual(valueView.disabled, true);
 });
 
+QUnit.test("testAddAttributesView", function(assert) {
+	let pNumVarView = this.getPNumVarView();
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+
+	pNumVarView.addAttributesView(fakeView);
+	assert.strictEqual(pNumVarView.getView().firstChild, fakeView);
+});

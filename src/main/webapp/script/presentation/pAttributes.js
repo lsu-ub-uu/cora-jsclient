@@ -21,9 +21,13 @@ var CORA = (function(cora) {
 	cora.pAttributes = function(dependencies, spec) {
 
 		let pubSub = dependencies.pubSub;
+		let view = dependencies.view;
+		let presentationFactory = dependencies.presentationFactory;
 		let path = spec.path;
 		let mode = spec.mode;
 		let attributes = [];
+		let addedToParent = false;
+		let addViewToParent = spec.addViewToParent;
 
 		const start = function() {
 			subscribeToPubSub();
@@ -34,6 +38,18 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributePresentation = function(dataFromMsg) {
+			addViewToParentOnFirstCall();
+			createAndAddAttributePresentation(dataFromMsg);
+		};
+		
+		const addViewToParentOnFirstCall = function() {
+			if (!addedToParent) {
+				addViewToParent(view.getView());
+				addedToParent = true;
+			}
+		};
+		
+		const createAndAddAttributePresentation = function(dataFromMsg) {
 			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
 			attributes.push(attributePVar);
 
@@ -41,9 +57,10 @@ var CORA = (function(cora) {
 				view: attributePVar.getView(),
 				text: attributePVar.getText()
 			};
-			pVarView.addAttributePresentation(attributePresentation);
+			
+			view.addAttributePresentation(attributePresentation);
 		};
-
+		
 		const createAttributePresentation = function(attributeMetadataId) {
 			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
 				attributeMetadataId, mode);
@@ -53,7 +70,7 @@ var CORA = (function(cora) {
 				metadataIdUsedInData: attributeMetadataId,
 				cPresentation: cAttributePresentationMetadata
 			};
-			return dependencies.presentationFactory.factor(presentationSpec);
+			return presentationFactory.factor(presentationSpec);
 		};
 
 		const buildAttributePresentationMetadata = function(attributeMetadataId, attributeMode) {
@@ -92,10 +109,6 @@ var CORA = (function(cora) {
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
-		const getView = function() {
-			return pVarView.getView();
-		};
-
 		const getSpec = function() {
 			return spec;
 		};
@@ -107,7 +120,7 @@ var CORA = (function(cora) {
 		const disableExistingAttributes = function() {
 			attributes.forEach(
 				function(attributePVar) {
-					attributePVar.disableVar()
+					attributePVar.disableVar();
 				}
 			);
 		};
@@ -117,7 +130,7 @@ var CORA = (function(cora) {
 			type: "pAttributes",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView,
+			addAttributePresentation: addAttributePresentation,
 			disableExistingAttributes: disableExistingAttributes
 		});
 

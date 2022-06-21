@@ -24,79 +24,79 @@ var CORATEST = (function(coraTest) {
 	coraTest.dependenciesFactory = function(metadataProvider, pubSub, textProvider) {
 		var factor = function(metadataId, presentationId, metadataIdUsedInData) {
 			let specDataHolder = {
-				"metadataId" : metadataId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub
+				"metadataId": metadataId,
+				"metadataProvider": metadataProvider,
+				"pubSub": pubSub
 			};
 			let dataHolder = CORA.dataHolder(specDataHolder);
 			let depJSBookkeeper = {
-				"recordTypeProvider" : CORATEST.recordTypeProviderSpy()
+				"recordTypeProvider": CORATEST.recordTypeProviderSpy()
 			};
 			let specJSBookkeeper = {
-				"metadataId" : metadataId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"dataHolder" : dataHolder
+				"metadataId": metadataId,
+				"metadataProvider": metadataProvider,
+				"pubSub": pubSub,
+				"textProvider": textProvider,
+				"dataHolder": dataHolder
 			};
 			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
 			let specPresentationFactory = {
-				"providers" : {
-					"metadataProvider" : metadataProvider,
-					"textProvider" : textProvider,
+				"providers": {
+					"metadataProvider": metadataProvider,
+					"textProvider": textProvider,
 				},
-				"pubSub" : pubSub,
-				"jsBookkeeper" : jsBookkeeper
+				"pubSub": pubSub,
+				"jsBookkeeper": jsBookkeeper
 			};
 			let presentationFactory = CORA.presentationFactory(specPresentationFactory);
 
 			let holderDependencies = {
-					"metadataProvider" : metadataProvider,
-					"pubSub" : pubSub,
-					"textProvider" : textProvider,
-					"jsBookkeeper" : jsBookkeeper,
-					"presentationFactory" : presentationFactory
+				"metadataProvider": metadataProvider,
+				"pubSub": pubSub,
+				"textProvider": textProvider,
+				"jsBookkeeper": jsBookkeeper,
+				"presentationFactory": presentationFactory
 			};
 			let spec = {
-				"presentationId" : presentationId,
-				"metadataIdUsedInData" : metadataIdUsedInData,
-				
+				"presentationId": presentationId,
+				"metadataIdUsedInData": metadataIdUsedInData,
+
 			};
 			let presentation = CORA.presentationHolder(holderDependencies, spec);
 
 			let metadataChildAndRepeatInitializerDep = {
-					recordTypeProvider : CORATEST.recordTypeProviderSpy(),
-					metadataProvider : metadataProvider,
-					pubSub : pubSub
+				recordTypeProvider: CORATEST.recordTypeProviderSpy(),
+				metadataProvider: metadataProvider,
+				pubSub: pubSub
 			};
-			
+
 			let metadataChildAndRepeatInitializerFactory = CORA.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
-			
+
 			let specMetadataController = {
-				"metadataId" : metadataId,
-				"data" : undefined,
-				recordPartPermissionCalculator : CORATEST.recordPartPermissionCalculatorSpy(),
-				"metadataProvider" : metadataProvider
+				"metadataId": metadataId,
+				"data": undefined,
+				recordPartPermissionCalculator: CORATEST.recordPartPermissionCalculatorSpy(),
+				"metadataProvider": metadataProvider
 			};
 			let depMetadataController = {
-				"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub
+				"recordTypeProvider": CORATEST.recordTypeProviderSpy(),
+				metadataChildAndRepeatInitializerFactory: metadataChildAndRepeatInitializerFactory,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub
 			};
 			let metadataController = CORA.metadataController(depMetadataController, specMetadataController);
 
 			return Object.freeze({
-				jsBookkeeper : jsBookkeeper,
-				presentationFactory : presentationFactory,
-				presentation : presentation,
-				dataHolder : dataHolder,
-				metadataController : metadataController
+				jsBookkeeper: jsBookkeeper,
+				presentationFactory: presentationFactory,
+				presentation: presentation,
+				dataHolder: dataHolder,
+				metadataController: metadataController
 			});
 		};
 		return Object.freeze({
-			factor : factor
+			factor: factor
 		});
 	};
 
@@ -104,17 +104,18 @@ var CORATEST = (function(coraTest) {
 }(CORATEST || {}));
 
 QUnit.module("jsClient/jsClientIntegrationTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORA.pubSub();
 		this.textProvider = CORATEST.textProviderStub();
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 
 		this.dependenciesFactory = CORATEST.dependenciesFactory(this.metadataProvider, this.pubSub,
-				this.textProvider);
+			this.textProvider);
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -122,17 +123,18 @@ QUnit.test("testIntegrateCoraPubSubPVar", function(assert) {
 	let path = ["testVar"];
 
 	let cPVarPresentation = CORA.coraData(this.metadataProvider
-			.getMetadataById("pVarTextVariableIdOutput"));
+		.getMetadataById("pVarTextVariableIdOutput"));
 	let dependencies = {
-		"metadataProvider" : this.metadataProvider,
-		"pubSub" : this.pubSub,
-		"textProvider" : this.textProvider,
-		"pVarViewFactory" : this.pVarViewFactory
+		"metadataProvider": this.metadataProvider,
+		"pubSub": this.pubSub,
+		"textProvider": this.textProvider,
+		"pVarViewFactory": this.pVarViewFactory,
+		pAttributesFactory: this.pAttributesFactory
 	};
 	let spec = {
-		"path" : path,
-		"metadataIdUsedInData" : "textVariableId",
-		"cPresentation" : cPVarPresentation
+		"path": path,
+		"metadataIdUsedInData": "textVariableId",
+		"cPresentation": cPVarPresentation
 	};
 	let pVar = CORA.pVar(dependencies, spec);
 
@@ -142,8 +144,8 @@ QUnit.test("testIntegrateCoraPubSubPVar", function(assert) {
 
 	let type = "setValue";
 	let data = {
-		"data" : "A new value",
-		"path" : path
+		"data": "A new value",
+		"path": path
 	};
 	this.pubSub.publish(type, data);
 
@@ -156,7 +158,7 @@ QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", fu
 	let metadataIdUsedInData = "groupIdOneTextChild";
 
 	let dependencies = this.dependenciesFactory.factor(metadataId, presentationId,
-			metadataIdUsedInData);
+		metadataIdUsedInData);
 	let presentation = dependencies.presentation;
 	let dataHolder = dependencies.dataHolder;
 
@@ -173,18 +175,18 @@ QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", fu
 
 	let path2 = ["textVariableId"];
 	let data2 = {
-		"path" : path2,
-		"data" : "a Value"
+		"path": path2,
+		"data": "a Value"
 	};
 	this.pubSub.publish("setValue", data2);
-//	assert.deepEqual(input.value, "a Value");
+	//	assert.deepEqual(input.value, "a Value");
 
 	assert.deepEqual(dataHolder.getData(), {
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "a Value"
-		} ],
-		"name" : "groupIdOneTextChild"
+		"children": [{
+			"name": "textVariableId",
+			"value": "a Value"
+		}],
+		"name": "groupIdOneTextChild"
 	});
 });
 

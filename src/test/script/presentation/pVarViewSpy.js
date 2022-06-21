@@ -27,7 +27,7 @@ var CORATEST = (function(coraTest) {
 		let value;
 		let disabledCalled = false;
 		let presentationAttributeView = [];
-		
+
 		const getView = function() {
 			return view;
 		};
@@ -35,15 +35,15 @@ var CORATEST = (function(coraTest) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
-		
+
 		const setValue = function(valueIn) {
 			value = valueIn;
 		};
-		
+
 		const getValue = function() {
 			return value;
 		};
@@ -53,16 +53,16 @@ var CORATEST = (function(coraTest) {
 		const getState = function() {
 			return state;
 		};
-		const callOnblurWithValue = function(valueToSet){
+		const callOnblurWithValue = function(valueToSet) {
 			spec.onblurFunction(valueToSet);
 		};
-		const callOnkeyupWithValue = function(valueToSet){
+		const callOnkeyupWithValue = function(valueToSet) {
 			spec.onkeyupFunction(valueToSet);
 		};
-		const disable = function(){
+		const disable = function() {
 			disabledCalled = true;
 		};
-		const getDisabledCalled = function(){
+		const getDisabledCalled = function() {
 			return disabledCalled;
 		};
 		const addAttributePresentation = function(attributeView) {
@@ -71,22 +71,27 @@ var CORATEST = (function(coraTest) {
 		const getAttributePresentation = function(index) {
 			return presentationAttributeView[index];
 		};
-		
+
+		const addAttributesView = function(attributesView) {
+
+		};
+
 		return Object.freeze({
-			"type" : "pVarViewSpy",
-			getDependencies : getDependencies,
-			getView : getView,
-			getSpec : getSpec,
-			setValue : setValue,
-			getValue : getValue,
-			setState : setState,
-			getState : getState,
-			callOnblurWithValue:callOnblurWithValue,
-			callOnkeyupWithValue:callOnkeyupWithValue,
-			disable : disable,
-			getDisabledCalled : getDisabledCalled,
-			addAttributePresentation : addAttributePresentation,
-			getAttributePresentation : getAttributePresentation
+			"type": "pVarViewSpy",
+			getDependencies: getDependencies,
+			getView: getView,
+			getSpec: getSpec,
+			setValue: setValue,
+			getValue: getValue,
+			setState: setState,
+			getState: getState,
+			callOnblurWithValue: callOnblurWithValue,
+			callOnkeyupWithValue: callOnkeyupWithValue,
+			disable: disable,
+			getDisabledCalled: getDisabledCalled,
+			addAttributePresentation: addAttributePresentation,
+			getAttributePresentation: getAttributePresentation,
+			addAttributesView: addAttributesView
 		});
 	};
 	return coraTest;

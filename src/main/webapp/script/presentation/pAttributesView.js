@@ -1,6 +1,5 @@
 /*
- * Copyright 2019, 2020 Uppsala University Library
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,7 +18,6 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-//	cora.pVarView = function(dependencies, spec) {
 	cora.pAttributesView = function() {
 		let out;
 		let view;
@@ -31,14 +29,6 @@ var CORA = (function(cora) {
 		const getView = function() {
 			return view;
 		};
-
-//		const getDependencies = function() {
-//			return dependencies;
-//		};
-//
-//		const getSpec = function() {
-//			return spec;
-//		};
 
 		const addAttributePresentation = function(attributePresentation) {
 			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
@@ -54,8 +44,6 @@ var CORA = (function(cora) {
 
 		out = Object.freeze({
 			type: "pAttributesView",
-//			getDependencies: getDependencies,
-//			getSpec: getSpec,
 			getView: getView,
 			addAttributePresentation: addAttributePresentation
 		});

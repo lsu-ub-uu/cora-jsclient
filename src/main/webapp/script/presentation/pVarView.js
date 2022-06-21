@@ -26,7 +26,6 @@ var CORA = (function(cora) {
 		let baseClassName = "pVar " + spec.presentationId;
 		let info;
 		let state = "ok";
-		let attributesContainer;
 
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
@@ -224,21 +223,8 @@ var CORA = (function(cora) {
 			valueView.disabled = true;
 		};
 
-		const addAttributePresentation = function(attributePresentation) {
-			if (attributesContainer === undefined) {
-				attributesContainer = CORA.gui.createSpanWithClassName("attributes");
-				view.insertBefore(attributesContainer, view.firstChild);
-			}
-
-			let attributeContainer = CORA.gui.createSpanWithClassName("attribute");
-			attributesContainer.appendChild(attributeContainer);
-
-			let attributeNameContainer = CORA.gui.createSpanWithClassName("attributeName");
-			attributeContainer.appendChild(attributeNameContainer);
-
-			attributeNameContainer.appendChild(document.createTextNode(attributePresentation.text));
-
-			attributeContainer.appendChild(attributePresentation.view);
+		const addAttributesView = function(attributesView) {
+			view.insertBefore(attributesView, view.firstChild);
 		};
 
 		out = Object.freeze({
@@ -250,7 +236,7 @@ var CORA = (function(cora) {
 			updateClassName: updateClassName,
 			setState: setState,
 			disable: disable,
-			addAttributePresentation: addAttributePresentation
+			addAttributesView: addAttributesView
 		});
 		start();
 		return out;

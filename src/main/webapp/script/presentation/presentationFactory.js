@@ -84,6 +84,12 @@ var CORA = (function(cora) {
 			};
 			let pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
 
+			let pAttributesDependencies = {
+				presentationFactory: self,
+				pubSub: dependencies.pubSub,
+				view: CORA.pAttributesView()
+			};
+			let pAttributesFactory = CORA.genericFactory("pAttributes", pAttributesDependencies);
 			let childDependencies = {
 				"providers": dependencies.providers,
 				"clientInstanceProvider": dependencies.providers.clientInstanceProvider,
@@ -108,7 +114,8 @@ var CORA = (function(cora) {
 				"pRecordLinkViewFactory": pRecordLinkViewFactory,
 				"pMapViewFactory": pMapViewFactory,
 				"pChildRefHandlerFactory": pChildRefHandlerFactory,
-				"pNonRepeatingChildRefHandlerFactory": pNonRepeatingChildRefHandlerFactory
+				"pNonRepeatingChildRefHandlerFactory": pNonRepeatingChildRefHandlerFactory,
+				pAttributesFactory: pAttributesFactory
 			};
 			let specNew = {
 				"path": path,

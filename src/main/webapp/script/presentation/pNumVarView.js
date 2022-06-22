@@ -182,7 +182,7 @@ var CORA = (function(cora) {
 		const disable = function() {
 			valueView.disabled = true;
 		};
-		
+
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, view.firstChild);
 		};

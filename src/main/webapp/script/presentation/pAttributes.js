@@ -41,14 +41,14 @@ var CORA = (function(cora) {
 			addViewToParentOnFirstCall();
 			createAndAddAttributePresentation(dataFromMsg);
 		};
-		
+
 		const addViewToParentOnFirstCall = function() {
 			if (!addedToParent) {
 				addViewToParent(view.getView());
 				addedToParent = true;
 			}
 		};
-		
+
 		const createAndAddAttributePresentation = function(dataFromMsg) {
 			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
 			attributes.push(attributePVar);
@@ -57,10 +57,10 @@ var CORA = (function(cora) {
 				view: attributePVar.getView(),
 				text: attributePVar.getText()
 			};
-			
+
 			view.addAttributePresentation(attributePresentation);
 		};
-		
+
 		const createAttributePresentation = function(attributeMetadataId) {
 			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
 				attributeMetadataId, mode);

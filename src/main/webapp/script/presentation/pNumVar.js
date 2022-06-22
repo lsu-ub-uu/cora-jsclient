@@ -39,7 +39,7 @@ var CORA = (function(cora) {
 		let numberOfDecimals;
 		let mode;
 		let pAttributes;
-		
+
 		const start = function() {
 			initializeGlobalVariables();
 			factorPNumVarView();

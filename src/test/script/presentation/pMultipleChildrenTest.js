@@ -18,36 +18,44 @@
  */
 "use strict";
 
-QUnit.module("presentation/pMultipleChildrenTest.js", {
+QUnit.module.only("presentation/pMultipleChildrenTest.js", {
 	beforeEach: function() {
+		this.fixture = document.getElementById("qunit-fixture");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
+		this.standardNoOfChildren = 1;
+		this.pMultipleChildren = null;
+		this.path = [];
+		
+		this.dependencies = {
+			metadataProvider: new MetadataProviderStub(),
+			pubSub: CORATEST.pubSubSpy(),
+			textProvider: CORATEST.textProviderStub(),
+			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),
+			pAttributesFactory: this.pAttributesFactory,
+			jsBookkeeper: CORATEST.jsBookkeeperSpy(),
+			recordTypeProvider: CORATEST.recordTypeProviderStub(),
+			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+			pNonRepeatingChildRefHandlerFactory: CORATEST
+				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
+		};
+
+		this.spec = {
+			metadataIdUsedInData: "groupIdOneTextChildRepeat1to3",
+			path: this.path,
+			recordPartPermissionCalculator: this.recordPartPermissionCalculator
+		};
+		
 		this.getId = function(cData) {
 			let recordInfo = cData.getFirstChildByNameInData("recordInfo");
 			let id = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			return id;
 		}
-
-		this.fixture = document.getElementById("qunit-fixture");
-		this.dependencies = {
-			"metadataProvider": new MetadataProviderStub(),
-			"pubSub": CORATEST.pubSubSpy(),
-			"textProvider": CORATEST.textProviderStub(),
-			"presentationFactory": CORATEST.standardFactorySpy("presentationSpy"),
-			"jsBookkeeper": CORATEST.jsBookkeeperSpy(),
-			"recordTypeProvider": CORATEST.recordTypeProviderStub(),
-			"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			"pNonRepeatingChildRefHandlerFactory": CORATEST
-				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
-		};
-		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
-
-		this.spec = {
-			"metadataIdUsedInData": "groupIdOneTextChildRepeat1to3",
-			"path": {},
-			recordPartPermissionCalculator: this.recordPartPermissionCalculator
-		};
+		
 		let createBaseViewHolder = function() {
 			return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
 		}
+		
 		this.my = {
 			"metadataId": this.spec.metadataIdUsedInData,
 			"cPresentation": CORA.coraData(this.dependencies.metadataProvider
@@ -69,20 +77,16 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 		this.setMyCParentPresentation = function(metadataId) {
 			this.my.cParentPresentation = this.getMetadataAsCoraData(metadataId);
 		};
-		this.pMultipleChildren = null;
 		this.createAndInitPMultipleChildren = function() {
 			this.pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
 			this.pMultipleChildren.init();
 			return this.pMultipleChildren;
 		}
-		this.standardNoOfChildren = 1;
 		this.assertNoOfChildrenAddedToView = function(assert, no) {
 			let view = this.pMultipleChildren.getView();
 			assert.strictEqual(view.childNodes.length - this.standardNoOfChildren, no);
 		};
 
-	},
-	afterEach: function() {
 	}
 });
 
@@ -460,5 +464,26 @@ QUnit.test("testFirstPChildRefHandlerSpecWhenNoConstraints", function(assert) {
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.hasWritePermissionsForRecordPart, true);
+});
+
+QUnit.test("testFactoredPAttributes", function(assert) {
+	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+
+	assert.strictEqual(attributesSpec.addViewToParent, pMultipleChildren.addAttributesView);
+	assert.strictEqual(attributesSpec.path, this.path);
+	assert.strictEqual(attributesSpec.mode, "input");
+	
+});
+
+QUnit.test("testAddAttributesView", function(assert) {
+	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+	pMultipleChildren.addAttributesView(fakeView);
+	assert.strictEqual(pMultipleChildren.getView().firstChild, fakeView);
+	
 });
 

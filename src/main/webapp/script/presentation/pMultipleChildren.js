@@ -34,6 +34,7 @@ var CORA = (function(cora) {
 		let infoButton;
 		let nameInData;
 		let mode = "input";
+		let pAttributes;
 
 		const init = function() {
 			cMetadataElement = getMetadataById(my.metadataId);
@@ -64,6 +65,7 @@ var CORA = (function(cora) {
 				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
 			originalClassName = view.className;
+			initPAttributes();
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
@@ -364,15 +366,14 @@ var CORA = (function(cora) {
 
 			possiblyAddRepatingToShow(childRefHandlerSpec, cPresentationChildRef);
 			return childRefHandlerSpec;
-		}
+		};
 
 		const possiblyAddRepatingToShow = function(childRefHandlerSpec, cPresentationChildRef) {
-
 			if (cPresentationChildRef.containsChildWithNameInData("minNumberOfRepeatingToShow")) {
 				childRefHandlerSpec.minNumberOfRepeatingToShow = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("minNumberOfRepeatingToShow");
 			}
-		}
+		};
 
 		const getAlternativePresentation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef
@@ -385,6 +386,19 @@ var CORA = (function(cora) {
 			return getMetadataById(alternativePresRefId);
 		};
 
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: addAttributesView,
+				path: path,
+				mode: mode
+			};
+			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		};
+
+		const addAttributesView = function(attributesView) {
+			view.insertBefore(attributesView, view.firstChild);
+		};
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
 		};
@@ -394,6 +408,7 @@ var CORA = (function(cora) {
 			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		};
 
+
 		const getView = function() {
 			return view;
 		};
@@ -402,7 +417,8 @@ var CORA = (function(cora) {
 			"type": "pMultipleChildren",
 			getPresentationId: getPresentationId,
 			init: init,
-			getView: getView
+			getView: getView,
+			addAttributesView: addAttributesView
 		});
 	};
 	return cora;

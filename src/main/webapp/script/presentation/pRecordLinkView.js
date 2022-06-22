@@ -45,14 +45,14 @@ var CORA = (function(cora) {
 
 		function createOpenLinkedRecordButton() {
 			return createButtonWithClassNameAndOnclickMethod("openLinkedRecordButton",
-					openLinkedRecord);
+				openLinkedRecord);
 		}
 
 		function createButtonWithClassNameAndOnclickMethod(className, onclickMethod) {
 			var buttonSpec = {
-				"className" : "iconButton " + className,
-				action : {
-					method : onclickMethod
+				"className": "iconButton " + className,
+				action: {
+					method: onclickMethod
 				}
 			};
 			return CORA.gui.button(buttonSpec);
@@ -60,7 +60,7 @@ var CORA = (function(cora) {
 
 		function createShowSearchButton() {
 			return createButtonWithClassNameAndOnclickMethod("showSearchButton",
-					toggleSearchHandlerView);
+				toggleSearchHandlerView);
 		}
 
 		function openLinkedRecord(event) {
@@ -69,7 +69,7 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			spec.pRecordLink.openLinkedRecord({
-				"loadInBackground" : loadInBackground
+				"loadInBackground": loadInBackground
 			});
 		}
 
@@ -80,14 +80,14 @@ var CORA = (function(cora) {
 
 		function createInfo() {
 			var infoSpec = {
-				"afterLevelChange" : updateClassName,
-				"level1" : [ {
-					"className" : "textView",
-					"text" : spec.info.text
+				"afterLevelChange": updateClassName,
+				"level1": [{
+					"className": "textView",
+					"text": spec.info.text
 				}, {
-					"className" : "defTextView",
-					"text" : spec.info.defText
-				} ]
+					"className": "defTextView",
+					"text": spec.info.defText
+				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
 
@@ -110,8 +110,8 @@ var CORA = (function(cora) {
 			infoSpec.level2 = [];
 			spec.info.technicalInfo.forEach(function(text) {
 				infoSpec.level2.push({
-					"className" : "technicalView",
-					"text" : text
+					"className": "technicalView",
+					"text": text
 				});
 			});
 		}
@@ -131,7 +131,7 @@ var CORA = (function(cora) {
 		function infoIsShown() {
 			return info.getInfoLevel() !== 0;
 		}
-
+		
 		function getView() {
 			return view;
 		}
@@ -227,7 +227,7 @@ var CORA = (function(cora) {
 		function showClearLinkedRecordIdButton(onclickMethod) {
 			hideClearLinkedRecordIdButton();
 			clearLinkedRecordIdButton = createButtonWithClassNameAndOnclickMethod(
-					"clearLinkedRecordIdButton", onclickMethod);
+				"clearLinkedRecordIdButton", onclickMethod);
 			info.getButton().insertAdjacentElement("afterend", clearLinkedRecordIdButton);
 		}
 
@@ -238,26 +238,31 @@ var CORA = (function(cora) {
 			}
 		}
 
+		const addAttributesView = function(attributesView) {
+			view.insertBefore(attributesView, view.firstChild);
+		};
+
 		out = Object.freeze({
-			"type" : "pRecordLinkView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			updateClassName : updateClassName,
-			addChild : addChild,
-			hideChildren : hideChildren,
-			showChildren : showChildren,
-			addLinkedPresentation : addLinkedPresentation,
-			removeLinkedPresentation : removeLinkedPresentation,
-			showOpenLinkedRecordButton : showOpenLinkedRecordButton,
-			hideOpenLinkedRecordButton : hideOpenLinkedRecordButton,
+			"type": "pRecordLinkView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			updateClassName: updateClassName,
+			addChild: addChild,
+			hideChildren: hideChildren,
+			showChildren: showChildren,
+			addLinkedPresentation: addLinkedPresentation,
+			removeLinkedPresentation: removeLinkedPresentation,
+			showOpenLinkedRecordButton: showOpenLinkedRecordButton,
+			hideOpenLinkedRecordButton: hideOpenLinkedRecordButton,
+			addAttributesView: addAttributesView,
 
-			showClearLinkedRecordIdButton : showClearLinkedRecordIdButton,
-			hideClearLinkedRecordIdButton : hideClearLinkedRecordIdButton,
+			showClearLinkedRecordIdButton: showClearLinkedRecordIdButton,
+			hideClearLinkedRecordIdButton: hideClearLinkedRecordIdButton,
 
-			addSearchHandlerView : addSearchHandlerView,
-			hideSearchHandlerView : hideSearchHandlerView,
-			showSearchHandlerView : showSearchHandlerView
+			addSearchHandlerView: addSearchHandlerView,
+			hideSearchHandlerView: hideSearchHandlerView,
+			showSearchHandlerView: showSearchHandlerView
 		});
 		start();
 		return out;

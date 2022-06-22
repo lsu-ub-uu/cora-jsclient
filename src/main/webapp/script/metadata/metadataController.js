@@ -98,7 +98,7 @@ var CORA = (function(cora) {
 		const extractTopLevelChildReferences = function() {
 			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
 			return topLevelMetadataElement.getFirstChildByNameInData('childReferences');
-		}
+		};
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
@@ -119,8 +119,7 @@ var CORA = (function(cora) {
 		const getCRef = function(childReference) {
 			let cChildReference = CORA.coraData(childReference);
 			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-
-		}
+		};
 
 		const intitalizeChild = function(childReference) {
 			let initializerSpec = {

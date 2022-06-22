@@ -21,6 +21,8 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pRecordLink = function(dependencies, spec) {
 
+		let path = spec.path;
+
 		let out;
 		let readLink;
 		let openLinkShowing = false;
@@ -47,11 +49,12 @@ var CORA = (function(cora) {
 		let view;
 
 		const start = function() {
-			dependencies.pubSub.subscribe("linkedData", spec.path, undefined, handleMsg);
+			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
 			view = createBaseView();
 			createValueView();
 			possiblyCreateSearchHandler();
 			subscribeToSetValueIfLinkedPresentationExists();
+			initPAttributes();
 		};
 
 		const createBaseView = function() {
@@ -290,8 +293,7 @@ var CORA = (function(cora) {
 				"metadataIdUsedInData": metadataIdUsedInData,
 				"cPresentation": cPresentationChild
 			};
-			let pVar = dependencies.presentationFactory
-				.factor(presentationSpec);
+			let pVar = dependencies.presentationFactory.factor(presentationSpec);
 			childViewNew.appendChild(pVar.getView());
 			view.addChild(childViewNew);
 		};
@@ -306,7 +308,7 @@ var CORA = (function(cora) {
 		const calculateNewPath = function(metadataIdToAdd) {
 			let pathSpec = {
 				"metadataIdToAdd": metadataIdToAdd,
-				"parentPath": spec.path
+				"parentPath": path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -387,6 +389,16 @@ var CORA = (function(cora) {
 			view.hideClearLinkedRecordIdButton();
 		};
 
+
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: view.addAttributesView,
+				path: path,
+				mode: mode
+			};
+			dependencies.pAttributesFactory.factor(pAttributesSpec);
+		};
+
 		const getView = function() {
 			return view.getView();
 		};
@@ -456,7 +468,7 @@ var CORA = (function(cora) {
 			};
 			let message = {
 				"data": linkedData,
-				"path": spec.path
+				"path": path
 			};
 			dependencies.pubSub.publish("linkedData", message);
 		};

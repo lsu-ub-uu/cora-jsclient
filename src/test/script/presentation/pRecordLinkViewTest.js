@@ -19,23 +19,25 @@
 "use strict";
 
 QUnit.module("presentation/pRecordLinkViewTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
+
+
 		this.fixture = document.getElementById("qunit-fixture");
 
 		this.dependencies = {
-			"infoFactory" : CORATEST.infoFactorySpy(),
-			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy")
+			"infoFactory": CORATEST.infoFactorySpy(),
+			"presentationFactory": CORATEST.standardFactorySpy("presentationSpy")
 		};
 		this.spec = {
-			"presentationId" : "somePresentationId",
-			"mode" : "input",
-			"info" : {
-				"text" : "someText",
-				"defText" : "someDefText",
-				"technicalInfo" : [ "textId: " + "textId", "defTextId: " + "defTextId",
-						"metadataId: " + "metadataId" ]
+			"presentationId": "somePresentationId",
+			"mode": "input",
+			"info": {
+				"text": "someText",
+				"defText": "someDefText",
+				"technicalInfo": ["textId: " + "textId", "defTextId: " + "defTextId",
+				"metadataId: " + "metadataId"]
 			},
-			"pRecordLink" : CORATEST.pRecordLinkSpy()
+			"pRecordLink": CORATEST.pRecordLinkSpy()
 		};
 
 		this.getChildrenViewFromView = function(view) {
@@ -50,12 +52,24 @@ QUnit.module("presentation/pRecordLinkViewTest.js", {
 		this.createFakeSearchHandlerView = function() {
 			var fakeSearchHandlerView = document.createElement("SPAN");
 			var content = document.createTextNode(JSON
-					.stringify("content needed for span to be visible in chrome"));
+				.stringify("content needed for span to be visible in chrome"));
 			fakeSearchHandlerView.appendChild(content);
 			return fakeSearchHandlerView;
 		}
-	},
-	afterEach : function() {
+
+		this.getPRecordLinkView = function() {
+			if (this.pRecordLinkView === undefined) {
+				this.pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+			}
+			return this.pRecordLinkView;
+		};
+		
+//		this.getValueView = function() {
+//			if (this.pRecordLinkView === undefined) {
+//				this.pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+//			}
+//			return this.pRecordLinkView.getView().childNodes[0];
+//		};
 	}
 });
 
@@ -102,7 +116,7 @@ QUnit.test("testHideAndShowChildrenView", function(assert) {
 	this.fixture.appendChild(view);
 	var child = document.createElement("SPAN");
 	var content = document.createTextNode(JSON
-			.stringify("content needed for span to be visible in chrome"));
+		.stringify("content needed for span to be visible in chrome"));
 	child.appendChild(content);
 	pRecordLinkView.addChild(child);
 	var childrenView = this.getChildrenViewFromView(view);
@@ -157,24 +171,24 @@ QUnit.test("testRemoveNonExistingLinkedPresentationRemovesFirst", function(asser
 QUnit.test("testInfoSpec", function(assert) {
 	var expectedSpec = {
 		// "appendTo" : {},
-		"level1" : [ {
-			"className" : "textView",
-			"text" : "someText"
+		"level1": [{
+			"className": "textView",
+			"text": "someText"
 		}, {
-			"className" : "defTextView",
-			"text" : "someDefText"
-		} ],
-		"level2" : [ {
-			"className" : "technicalView",
-			"text" : "textId: textId"
+			"className": "defTextView",
+			"text": "someDefText"
+		}],
+		"level2": [{
+			"className": "technicalView",
+			"text": "textId: textId"
 		}, {
-			"className" : "technicalView",
-			"text" : "defTextId: defTextId"
+			"className": "technicalView",
+			"text": "defTextId: defTextId"
 		}, {
-			"className" : "technicalView",
-			"text" : "metadataId: metadataId"
-		} ],
-		"insertBefore" : {}
+			"className": "technicalView",
+			"text": "metadataId: metadataId"
+		}],
+		"insertBefore": {}
 	};
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
 	var view = pRecordLinkView.getView();
@@ -190,8 +204,8 @@ QUnit.test("testInfoButtonAddedToView", function(assert) {
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
 	var view = pRecordLinkView.getView();
 	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition - 1].className,
-			"infoButtonSpy");
-}); 
+		"infoButtonSpy");
+});
 
 QUnit.test("testOpenLinkedRecordAddedToView", function(assert) {
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
@@ -199,14 +213,14 @@ QUnit.test("testOpenLinkedRecordAddedToView", function(assert) {
 
 	assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
 	pRecordLinkView.showOpenLinkedRecordButton();
-	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  2);
+	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 2);
 	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes[1].className,
-			"iconButton openLinkedRecordButton");
+		"iconButton openLinkedRecordButton");
 
 	pRecordLinkView.showOpenLinkedRecordButton();
-	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  2);
+	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 2);
 	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes[1].className,
-	"iconButton openLinkedRecordButton");
+		"iconButton openLinkedRecordButton");
 });
 
 QUnit.test("testOpenLinkedRecordRemovedFromView", function(assert) {
@@ -215,11 +229,11 @@ QUnit.test("testOpenLinkedRecordRemovedFromView", function(assert) {
 
 	assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
 	pRecordLinkView.showOpenLinkedRecordButton();
-	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  2);
+	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 2);
 	var openButton = this.getButtonViewViewFromView(view).childNodes[1];
 	assert.strictEqual(openButton.className, "iconButton openLinkedRecordButton");
 	pRecordLinkView.hideOpenLinkedRecordButton();
-	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  1);
+	assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 1);
 });
 
 QUnit.test("testOpenLinkedRecordRemovedFromViewWhenNotPresent", function(assert) {
@@ -232,28 +246,28 @@ QUnit.test("testOpenLinkedRecordRemovedFromViewWhenNotPresent", function(assert)
 });
 
 QUnit.test("testClearLinkedRecordIdAddedToView",
-		function(assert) {
-			var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
-			var view = pRecordLinkView.getView();
+	function(assert) {
+		var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+		var view = pRecordLinkView.getView();
 
-			var onclickMethod = {
-				"dummy" : "trams"
-			};
+		var onclickMethod = {
+			"dummy": "trams"
+		};
 
-			assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
-			pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
+		assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
+		pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
 
-			var clearLinkedRecordIdButton = this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition];
+		var clearLinkedRecordIdButton = this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition];
 
-			assert.strictEqual(view.childNodes.length,  2);
-			assert.strictEqual(clearLinkedRecordIdButton.className,
-					"iconButton clearLinkedRecordIdButton");
+		assert.strictEqual(view.childNodes.length, 2);
+		assert.strictEqual(clearLinkedRecordIdButton.className,
+			"iconButton clearLinkedRecordIdButton");
 
-			pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
-			assert.strictEqual(view.childNodes.length,  2);
-			assert.strictEqual(clearLinkedRecordIdButton.className,
-					"iconButton clearLinkedRecordIdButton");
-		});
+		pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
+		assert.strictEqual(view.childNodes.length, 2);
+		assert.strictEqual(clearLinkedRecordIdButton.className,
+			"iconButton clearLinkedRecordIdButton");
+	});
 
 QUnit.test("testClearLinkedRecordIdButtonCall", function(assert) {
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
@@ -271,29 +285,29 @@ QUnit.test("testClearLinkedRecordIdButtonCall", function(assert) {
 });
 
 QUnit.test("testClearLinkedRecordIdRemovedFromView",
-		function(assert) {
-			var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
-			var view = pRecordLinkView.getView();
+	function(assert) {
+		var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+		var view = pRecordLinkView.getView();
 
-			var onclickMethod = {
-				"dummy" : "trams"
-			};
+		var onclickMethod = {
+			"dummy": "trams"
+		};
 
-			assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
-			pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
+		assert.strictEqual(view.childNodes.length, this.defaultLastChildPosition + 1);
+		pRecordLinkView.showClearLinkedRecordIdButton(onclickMethod);
 
-			var clearLinkedRecordIdButton = this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition];
+		var clearLinkedRecordIdButton = this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition];
 
-			assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  2);
-			assert.strictEqual(clearLinkedRecordIdButton.className,
-					"iconButton clearLinkedRecordIdButton");
+		assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 2);
+		assert.strictEqual(clearLinkedRecordIdButton.className,
+			"iconButton clearLinkedRecordIdButton");
 
-			pRecordLinkView.hideClearLinkedRecordIdButton();
-			assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 1);
+		pRecordLinkView.hideClearLinkedRecordIdButton();
+		assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 1);
 
-			pRecordLinkView.hideClearLinkedRecordIdButton();
-			assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length,  1);
-		});
+		pRecordLinkView.hideClearLinkedRecordIdButton();
+		assert.strictEqual(this.getButtonViewViewFromView(view).childNodes.length, 1);
+	});
 
 QUnit.test("testAddChildPresentationClickableLoadInBackground", function(assert) {
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
@@ -302,7 +316,7 @@ QUnit.test("testAddChildPresentationClickableLoadInBackground", function(assert)
 	var openButton = this.getButtonViewViewFromView(view).childNodes[this.defaultLastChildPosition];
 	assert.strictEqual(openButton.className, "iconButton openLinkedRecordButton");
 
-	CORATESTHELPER.simulateOnclick(openButton,{ctrlKey:true});
+	CORATESTHELPER.simulateOnclick(openButton, { ctrlKey: true });
 
 	assert.strictEqual(this.spec.pRecordLink.getOpenLinkedRecord(0).loadInBackground, "true");
 });
@@ -323,14 +337,14 @@ QUnit.test("testAddChildPresentationClickableLoadInForground", function(assert) 
 QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 	this.spec.info.technicalInfo = null;
 	var expectedSpec = {
-		"level1" : [ {
-			"className" : "textView",
-			"text" : "someText"
+		"level1": [{
+			"className": "textView",
+			"text": "someText"
 		}, {
-			"className" : "defTextView",
-			"text" : "someDefText"
-		} ],
-		"insertBefore" : {}
+			"className": "defTextView",
+			"text": "someDefText"
+		}],
+		"insertBefore": {}
 	};
 	var pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
 	var infoSpy = this.dependencies.infoFactory.getFactored(0);
@@ -375,7 +389,7 @@ QUnit.test("testHideSearchHandlerView", function(assert) {
 	pRecordLinkView.addSearchHandlerView(fakeSearchHandlerView);
 	assert.strictEqual(view.contains(fakeSearchHandlerView), true);
 	assert.strictEqual(view.className, "pRecordLink searchActive");
-	
+
 	pRecordLinkView.hideSearchHandlerView();
 
 	assert.strictEqual(view.className, "pRecordLink");
@@ -435,4 +449,13 @@ QUnit.test("testShowSearchButtonAddedToView", function(assert) {
 
 	CORATESTHELPER.simulateOnclick(showSearchButton);
 	assert.strictEqual(view.contains(fakeSearchHandlerView), true);
+});
+
+QUnit.test("testAddAttributesView", function(assert) {
+	let pRecordLinkView = this.getPRecordLinkView();
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+
+	pRecordLinkView.addAttributesView(fakeView);
+	assert.strictEqual(pRecordLinkView.getView().firstChild, fakeView);
 });

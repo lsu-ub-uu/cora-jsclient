@@ -19,7 +19,6 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordPartPermissionCalculator = function(dependencies, spec) {
-
 		let metadataProvider = dependencies.metadataProvider;
 		let fulfilledWriteRecordParts = [];
 		let fulfilledReadRecordParts = [];
@@ -38,7 +37,6 @@ var CORA = (function(cora) {
 			let metadataGroup = metadataProvider.getMetadataById(childId);
 			let cMetadataGroup = CORA.coraData(metadataGroup);
 			return cMetadataGroup.getFirstChildByNameInData('childReferences');
-
 		};
 
 		const calculateRecordPartPermissions = function(childReferences, unfulfilledWritePermissionInParentHierarchy) {
@@ -64,7 +62,6 @@ var CORA = (function(cora) {
 		};
 
 		const handleReadRecordPartPermissions = function(cChildReference, nameInData) {
-
 			if (childHasReadWriteRecordPartConstraints(cChildReference)) {
 				let combinedChildId = createCombinedChildId(cChildReference);
 				recordPartsHasReadConstraints.push(combinedChildId);
@@ -85,10 +82,11 @@ var CORA = (function(cora) {
 			return repeatMaxIsOne(cChildReference) && referencePointsToGroup(cChildReference)
 				&& fulfilledReadPermissionOnGroupParent && isTheFirstVisitToChildReference(cChildReference);
 		};
+		
 		const isTheFirstVisitToChildReference = function(cChildReference) {
 			let combinedId = createCombinedChildId(cChildReference);
 			return !visitedChildReferences.includes(combinedId);
-		}
+		};
 
 		const repeatMaxIsOne = function(cChildReference) {
 			return cChildReference.getFirstChildByNameInData("repeatMax").value === "1";
@@ -114,7 +112,7 @@ var CORA = (function(cora) {
 			let constraint = cChildReference
 				.getFirstAtomicValueByNameInData("recordPartConstraint");
 			return constraint !== undefined && "readWrite" === constraint;
-		}
+		};
 
 		const possiblyAddfulfilledReadRecordParts = function(nameInData, combinedChildId) {
 			if (userHasReadWritePermissionsForRecordPartContraint(nameInData)) {
@@ -193,7 +191,6 @@ var CORA = (function(cora) {
 		};
 
 		const hasFulfilledWritePermissionsForRecordPart = function(cRef) {
-
 			let recordType = cRef.getFirstAtomicValueByNameInData("linkedRecordType");
 			let recordId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 

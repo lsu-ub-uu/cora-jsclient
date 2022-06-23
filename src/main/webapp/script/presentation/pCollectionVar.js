@@ -221,6 +221,7 @@ var CORA = (function(cora) {
 
 		const findItemReferenceForValue = function(value) {
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+			console.log("collectionItemReferencesChildren",collectionItemReferencesChildren)
 			return collectionItemReferencesChildren.find(function(ref) {
 				let cItemRef = CORA.coraData(ref);
 				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
@@ -233,7 +234,11 @@ var CORA = (function(cora) {
 		const setOutputValueFromItemReference = function(value) {
 			let itemReference = findItemReferenceForValue(value);
 			let cItemRef = CORA.coraData(itemReference);
+			console.log("itemReference, metadataId",metadataId)
+			console.log("itemReference, VALUE",value)
+			console.log("itemReference",itemReference)
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+			console.log("cItemRef","AFTER!!!!!")
 			let item = getMetadataById(itemRefId);
 			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
 			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");

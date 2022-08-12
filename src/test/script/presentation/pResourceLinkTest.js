@@ -24,16 +24,18 @@ var CORATEST = (function(coraTest) {
 			presentationFactory, jsBookkeeper, recordTypeProvider, fixture) {
 		var factor = function(presentationId) {
 			var cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
-
+			var pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+		
 			var dependencies = {
-				"authTokenHolder" : CORATEST.authTokenHolderSpy(),
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"presentationFactory" : presentationFactory,
-				"jsBookkeeper" : jsBookkeeper,
-				"recordTypeProvider" : recordTypeProvider,
-				"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+				authTokenHolder : CORATEST.authTokenHolderSpy(),
+				metadataProvider : metadataProvider,
+				pubSub : pubSub,
+				textProvider : textProvider,
+				presentationFactory : presentationFactory,
+				pAttributesFactory: pAttributesFactory,
+				jsBookkeeper : jsBookkeeper,
+				recordTypeProvider : recordTypeProvider,
+				pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 			};
 			var spec = {
 				"path" : [],
@@ -70,20 +72,22 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.newAttachedPResourceLink = CORATEST.attachedPResourceLinkFactory(
 				this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
 				this.jsBookkeeper, this.recordTypeProvider, this.fixture);
 				
 		this.dependencies = {
-			"authTokenHolder" : CORATEST.authTokenHolderSpy(),
-			"metadataProvider" : this.metadataProvider,
-			"pubSub" : this.pubSub,
-			"textProvider" : this.textProvider,
-			"presentationFactory" : this.presentationFactory,
-			"jsBookkeeper" : this.jsBookkeeper,
-			"recordTypeProvider" : this.recordTypeProvider,
-			"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			authTokenHolder : CORATEST.authTokenHolderSpy(),
+			metadataProvider : this.metadataProvider,
+			pubSub : this.pubSub,
+			textProvider : this.textProvider,
+			presentationFactory : this.presentationFactory,
+			pAttributesFactory: this.pAttributesFactory,
+			jsBookkeeper : this.jsBookkeeper,
+			recordTypeProvider : this.recordTypeProvider,
+			pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 		};
 		this.presentationId = "masterPResLink";
 		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));

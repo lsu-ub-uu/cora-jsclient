@@ -23,19 +23,20 @@ QUnit.module("presentation/pGroupTest.js", {
 	beforeEach : function() {
 		this.getId = function(cData) {
 			let recordInfo = cData.getFirstChildByNameInData("recordInfo");
-			let id = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			return id;
+			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		}
 
 		this.fixture = document.getElementById("qunit-fixture");
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.dependencies = {
-			"metadataProvider" : new MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy(),
-			"textProvider" : CORATEST.textProviderStub(),
-			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
-			"jsBookkeeper" : CORATEST.jsBookkeeperSpy(),
-			"recordTypeProvider" : CORATEST.recordTypeProviderStub(),
-			"pChildRefHandlerFactory" : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			metadataProvider : new MetadataProviderStub(),
+			pubSub : CORATEST.pubSubSpy(),
+			textProvider : CORATEST.textProviderStub(),
+			presentationFactory : CORATEST.standardFactorySpy("presentationSpy"),
+			pAttributesFactory: this.pAttributesFactory,
+			jsBookkeeper : CORATEST.jsBookkeeperSpy(),
+			recordTypeProvider : CORATEST.recordTypeProviderStub(),
+			pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 		};
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		
@@ -47,8 +48,6 @@ QUnit.module("presentation/pGroupTest.js", {
 			"cParentPresentation" : undefined,
 			recordPartPermissionCalculator : this.recordPartPermissionCalculator,
 		};
-	},
-	afterEach : function() {
 	}
 });
 

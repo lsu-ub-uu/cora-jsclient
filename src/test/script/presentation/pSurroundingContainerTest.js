@@ -75,18 +75,20 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");
 			var id = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			return id;
-		}
-
+		};
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+		
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {
-			"metadataProvider": new MetadataProviderStub(),
-			"pubSub": CORATEST.pubSubSpy(),
-			"textProvider": CORATEST.textProviderStub(),
-			"presentationFactory": CORATEST.standardFactorySpy("presentationSpy"),
-			"jsBookkeeper": CORATEST.jsBookkeeperSpy(),
-			"recordTypeProvider": CORATEST.recordTypeProviderStub(),
-			"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			"pNonRepeatingChildRefHandlerFactory": CORATEST
+			metadataProvider: new MetadataProviderStub(),
+			pubSub: CORATEST.pubSubSpy(),
+			textProvider: CORATEST.textProviderStub(),
+			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),
+			pAttributesFactory: this.pAttributesFactory,
+			jsBookkeeper: CORATEST.jsBookkeeperSpy(),
+			recordTypeProvider: CORATEST.recordTypeProviderStub(),
+			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+			pNonRepeatingChildRefHandlerFactory: CORATEST
 				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
 		};
 		this.spec = {

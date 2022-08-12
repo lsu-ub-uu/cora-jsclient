@@ -22,7 +22,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPCollectionVarFactory = function(metadataProvider, pubSub, textProvider,
-		jsBookkeeper, fixture) {
+		jsBookkeeper, fixture, pAttributesFactory) {
 		let factor = function(path, pCollectionVarPresentationId) {
 			let cPCollectionVarPresentation = CORA.coraData(metadataProvider
 				.getMetadataById(pCollectionVarPresentationId));
@@ -30,7 +30,8 @@ var CORATEST = (function(coraTest) {
 				"metadataProvider": metadataProvider,
 				"pubSub": pubSub,
 				"textProvider": textProvider,
-				"jsBookkeeper": jsBookkeeper
+				"jsBookkeeper": jsBookkeeper,
+				pAttributesFactory: pAttributesFactory
 			};
 			let spec = {
 				"path": path,
@@ -48,7 +49,8 @@ var CORATEST = (function(coraTest) {
 				pubSub: pubSub,
 				textProvider: textProvider,
 				jsBookkeeper: jsBookkeeper,
-				view: view
+				view: view,
+				pAttributesFactory: pAttributesFactory
 			};
 
 		};
@@ -60,28 +62,30 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pCollectionVarTest.js", {
+QUnit.module.only("presentation/pCollectionVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
+		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.pCollectionVarFactory = CORATEST.attachedPCollectionVarFactory(this.metadataProvider,
-			this.pubSub, this.textProvider, this.jsBookkeeper, this.fixture);
-
+			this.pubSub, this.textProvider, this.jsBookkeeper, this.fixture, this.pAttributesFactory);
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			pubSub: this.pubSub,
 			textProvider: this.textProvider,
-			jsBookkeeper: this.jsBookkeeper
+			jsBookkeeper: this.jsBookkeeper,
+			pAttributesFactory: this.pAttributesFactory,
 		};
 		this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
 		let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
 			.getMetadataById(this.pCollectionVarPresentationId));
+		this.path = [];
 		this.spec = {
-			"path": [],
-			"cPresentation": cPCollectionVarPresentation
+			path: this.path,
+			cPresentation: cPCollectionVarPresentation
 		};
 	}
 });
@@ -511,4 +515,33 @@ QUnit.test("testDisable", function(assert) {
 	collectionVar.disableCollectionVar();
 
 	assert.ok(valueView.disabled)
+});
+
+QUnit.test("testFactoredPAttributes", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+	assert.strictEqual(attributesSpec.addViewToParent, pCollectionVar.addAttributesView);
+	assert.strictEqual(attributesSpec.path, this.path);
+	assert.strictEqual(attributesSpec.mode, "input");
+	
+});
+
+QUnit.test("testAddAttributesView", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+	pCollectionVar.addAttributesView(fakeView);
+	assert.strictEqual(pCollectionVar.getView().firstChild, fakeView);
+	
+});
+
+QUnit.test("testDisableAttributes", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+
+	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
+
+	pCollectionVar.disableCollectionVar();
+
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
 });

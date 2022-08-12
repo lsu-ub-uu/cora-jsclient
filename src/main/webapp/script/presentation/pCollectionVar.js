@@ -39,6 +39,7 @@ var CORA = (function(cora) {
 		let metadataId;
 		let valueView;
 		let info;
+		let pAttributes;
 
 		const start = function() {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
@@ -60,8 +61,22 @@ var CORA = (function(cora) {
 				valueView.onblur = onBlur;
 			}
 			subscribeToPubSub();
+			initPAttributes();
 		};
-
+		
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: addAttributesView,
+				path: path,
+				mode: mode
+			};
+			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		};
+		
+		const addAttributesView = function(attributesView) {
+			view.insertBefore(attributesView, view.firstChild);
+		};
+		
 		const extractMetadataId = function() {
 			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
 			let cPresentationGroup = CORA.coraData(presentationGroup);
@@ -261,6 +276,7 @@ var CORA = (function(cora) {
 		};
 
 		const disableCollectionVar = function() {
+			pAttributes.disableExistingAttributes();
 			valueView.disabled = true;
 		};
 
@@ -329,7 +345,8 @@ var CORA = (function(cora) {
 			getState: getState,
 			onBlur: onBlur,
 			handleValidationError: handleValidationError,
-			disableCollectionVar: disableCollectionVar
+			disableCollectionVar: disableCollectionVar,
+			addAttributesView: addAttributesView
 		});
 
 		initializeViewModelObject();

@@ -598,6 +598,6 @@ body {
 	position: absolute;
 }
 
-.containsData .text.h2TextStyle {
+.presentation .containsData .text.h2TextStyle {
   color: orange;
 }

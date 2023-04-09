@@ -562,3 +562,22 @@ QUnit.test("testGetFirstChildByNameInDataAndAttributesAndRepeatIdWrongSomething"
 				"groupIdOneTextChild", attributes, "oneNOT");
 	}, "Error");
 });
+
+QUnit.test("testGetLinkedRecordIdFromFirstChildLinkWithNameInData", function(assert) {
+	var data = {
+		name : "groupIdOneTextChild",
+		children : [ {
+				name:"someLink",
+				children:[ {
+					name:"linkedRecordType",
+					value:"someLinkedType"
+					},{
+					name:"linkedRecordId",
+					value:"someLinkedId"}
+				]
+		} ]
+	};
+	var coraData = CORA.coraData(data);
+	var linkedRecordId = coraData.getLinkedRecordIdFromFirstChildLinkWithNameInData("someLink");
+	assert.strictEqual(linkedRecordId, "someLinkedId");
+});

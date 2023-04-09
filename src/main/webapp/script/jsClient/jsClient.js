@@ -54,8 +54,40 @@ var CORA = (function(cora) {
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
+			
+		//spike	
+			tryDefinitionViewer();
+		//end spike	
+			
+		};
+		//spike	
+		const tryDefinitionViewer = function() {
+			let definitionViewerFactory = CORA.definitionViewerFactory(dependencies.providers,{});
+			let definitionViewer = definitionViewerFactory.factor({});
+			let definitionView = definitionViewer.getView();
+			
+			let definitionManagedGuiItem = createManagedGuiItem();
+			definitionManagedGuiItem.addWorkPresentation(definitionView);
+			addGuiItem(definitionManagedGuiItem);
+			showView(definitionManagedGuiItem);
+			
+		};
+		const createManagedGuiItem = function() {
+			let managedGuiItemSpec = assembleManagedGuiItemSpec();
+			return dependencies.globalFactories.managedGuiItemFactory.factor(managedGuiItemSpec);
 		};
 
+		const assembleManagedGuiItemSpec = function() {
+			return {
+				activateMethod: showView,
+				removeMethod: viewRemoved,
+//				callOnMetadataReloadMethod: reloadForMetadataChanges,
+//				callMethodAfterShowWorkView: callMethodAfterShowWorkView
+			};
+		};
+		//end spike	
+		
+		
 		const createLoginManager = function() {
 			let loginManagerSpec = {
 				afterLoginMethod: afterLogin,

@@ -22,8 +22,74 @@ var CORA = (function(cora) {
 		let out;
 
 		const start = function() {
+//			let metadataProvider = providers.metadataProvider;
 		};
+		
+		const getView = function(){
+//			let metadataProvider = providers.metadataProvider;
+//			let dataRecordGroup = metadataProvider.getMetadataById("validationTypeGroup");
+			let dataRecordGroup = metadataProvider.getMetadataById("metadataGroupGroup");
+			let cDataRecordGroup = CORA.coraData(dataRecordGroup); 
+			
+			let view = CORA.gui.createSpanWithClassName("definitionViewer");
+			let header = CORA.gui.createDivWithClassName("header");
+			view.appendChild(header);
+			header.innerHTML= "definition viewer!!!";
+			
+			let oneDef = CORA.gui.createDivWithClassName("stuff");
+			view.appendChild(oneDef);
 
+			let type = dataRecordGroup.attributes["type"];
+
+			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
+
+			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
+			let cRecordInfo = CORA.coraData(recordInfo);
+			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
+			oneDef.innerHTML = nameInData +":"+type+" (" +id+")";
+
+
+			let texts = CORA.gui.createDivWithClassName("texts");
+			view.appendChild(texts);
+			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
+			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
+			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
+			
+			
+			let children = CORA.gui.createDivWithClassName("children");
+			view.appendChild(children);
+			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
+			let listOfChildReferences = childReferences.children;
+			
+			for (let childReference of listOfChildReferences){
+//				console.log(childReference);
+				let cChildReference = CORA.coraData(childReference);
+				let child = CORA.gui.createDivWithClassName("child");
+				children.appendChild(child);
+				let ref = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
+				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
+				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
+				let recordPartConstraint = "noConstraint";
+				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
+					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
+				}
+				
+				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
+				
+			}
+			
+			
+
+
+			let raw = CORA.gui.createDivWithClassName("stuff");
+			view.appendChild(raw);
+			raw.innerHTML = JSON.stringify(dataRecordGroup);
+
+						
+						
+			return view;
+		};
+		
 		const onlyForTestGetProviders = function() {
 			return providers;
 		};
@@ -41,7 +107,7 @@ var CORA = (function(cora) {
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,
-//			getView: getView,
+			getView: getView,
 //			showView: showView
 		});
 		start();

@@ -153,6 +153,8 @@ var CORA = (function(cora) {
 			globalFactories.recordHandlerFactory = recordHandlerFactory;
 			globalFactories.recordListHandlerFactory = recordListHandlerFactory;
 			globalFactories.recordTypeHandlerViewFactory = recordTypeHandlerViewFactory;
+			
+			//globalFactories.definitionViewerFactory = CORA.definitionViewerFactory(providers);
 
 			var genericDependencies = {
 				"providers" : providers,
@@ -173,7 +175,8 @@ var CORA = (function(cora) {
 				baseUrl : jsClientSpec.baseUrl
 			};
 			var recordTypeMenu = CORA.recordTypeMenu(providers, menuDependencies, menuSpec);
-
+			
+			
 			var dep = {
 				"providers" : providers,
 				"globalInstances" : {

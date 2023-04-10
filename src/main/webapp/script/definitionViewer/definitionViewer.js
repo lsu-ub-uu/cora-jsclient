@@ -48,6 +48,18 @@ var CORA = (function(cora) {
 			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
 			oneDef.innerHTML = nameInData +":"+type+" (" +id+")";
 
+			if(cDataRecordGroup.containsChildWithNameInData("attributeReferences")){
+				let attributes = CORA.gui.createDivWithClassName("attributes");
+				view.appendChild(attributes);
+				let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
+				for (let attributeReference of attributeReferences.children){
+					let cAttributeReference = CORA.coraData(attributeReference);
+					let attribute = CORA.gui.createDivWithClassName("attribute");
+					attributes.appendChild(attribute);
+					let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+					attribute.innerHTML = attributeId;
+				}
+			}
 
 			let texts = CORA.gui.createDivWithClassName("texts");
 			view.appendChild(texts);
@@ -59,10 +71,7 @@ var CORA = (function(cora) {
 			let children = CORA.gui.createDivWithClassName("children");
 			view.appendChild(children);
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
-			let listOfChildReferences = childReferences.children;
-			
-			for (let childReference of listOfChildReferences){
-//				console.log(childReference);
+			for (let childReference of childReferences.children){
 				let cChildReference = CORA.coraData(childReference);
 				let child = CORA.gui.createDivWithClassName("child");
 				children.appendChild(child);
@@ -73,17 +82,13 @@ var CORA = (function(cora) {
 				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
 					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
 				}
-				
 				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
 				
 			}
 			
-			
-
-
-			let raw = CORA.gui.createDivWithClassName("stuff");
-			view.appendChild(raw);
-			raw.innerHTML = JSON.stringify(dataRecordGroup);
+//			let raw = CORA.gui.createDivWithClassName("stuff");
+//			view.appendChild(raw);
+//			raw.innerHTML = JSON.stringify(dataRecordGroup);
 
 						
 						

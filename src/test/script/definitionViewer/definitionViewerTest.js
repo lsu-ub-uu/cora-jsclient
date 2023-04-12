@@ -20,12 +20,13 @@
 
 QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = CORATEST.metadataProviderRealStub();
+		this.metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
 		this.textProvider = CORATEST.textProviderSpy();
 		this.searchProvider = CORATEST.searchProviderSpy();
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 
+		this.view = CORATEST.definitionViewerViewSpy()
 		
 		this.providers = {
 			metadataProvider: this.metadataProvider,
@@ -35,13 +36,19 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 		};
 
 		this.dependencies = {
-			someDep : "someDep"
+			view : this.view
 		}
 		this.spec = {
 			someKey : "someValue"
 		};
 		this.definitionViewer = CORA.definitionViewer(this.providers, this.dependencies, this.spec);
-
+		this.dataGroup = {
+			children:[
+				{name : "nameInData",
+				value : "someNameInData"}
+			]
+		};
+		this.metadataProvider.addMetadataById("someMetadataGroupId",this.dataGroup);
 	},
 	afterEach: function() {
 	}
@@ -61,5 +68,28 @@ QUnit.test("testOnlyForTestGetDependencies", function(assert) {
 
 QUnit.test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(this.definitionViewer.onlyForTestGetSpec(), this.spec);
+});
+
+QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
+	this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "someMetadataGroupId");
+});
+
+QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
+	let generatedView = this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	
+	assert.true(this.view.getViewModelForCallNo(0)!=undefined);
+	assert.deepEqual(this.view.getCreatedViewForCallNo(0), generatedView);
+});
+
+QUnit.test("testViewModel", function(assert) {
+	let generatedView = this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		nameInData: "someNameInData"
+	};
+	assert.deepEqual(viewModel, expected);
 });
 

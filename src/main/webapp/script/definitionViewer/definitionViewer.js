@@ -20,13 +20,14 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.definitionViewer = function(providers, dependencies, spec) {
 		let out;
+		let metadataProvider = providers.metadataProvider;
+		let view = dependencies.view;
 
 		const start = function() {
 //			let metadataProvider = providers.metadataProvider;
 		};
 		
 		const getView = function(){
-//			let metadataProvider = providers.metadataProvider;
 //			let dataRecordGroup = metadataProvider.getMetadataById("validationTypeGroup");
 			let dataRecordGroup = metadataProvider.getMetadataById("metadataGroupGroup");
 			let cDataRecordGroup = CORA.coraData(dataRecordGroup); 
@@ -87,13 +88,29 @@ var CORA = (function(cora) {
 			}
 			
 //			let raw = CORA.gui.createDivWithClassName("stuff");
-//			view.appendChild(raw);
+//			view.appendChild(raw); 
 //			raw.innerHTML = JSON.stringify(dataRecordGroup);
 
 						
-						
 			return view;
 		};
+		
+		const getViewForMetadataGroupId = function(metadataGroupId){
+			let cDataRecordGroup = getMetadataById(metadataGroupId);
+			
+			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
+			
+			let model = {
+				nameInData : nameInData
+			};
+			
+			let generatedView = view.createViewForViewModel(model);
+			return generatedView;
+		};
+		
+		const getMetadataById = function(metadataId){
+			return CORA.coraData(metadataProvider.getMetadataById(metadataId));
+		}
 		
 		const onlyForTestGetProviders = function() {
 			return providers;
@@ -113,6 +130,7 @@ var CORA = (function(cora) {
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,
 			getView: getView,
+			getViewForMetadataGroupId: getViewForMetadataGroupId,
 //			showView: showView
 		});
 		start();

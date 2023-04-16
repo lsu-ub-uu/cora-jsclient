@@ -42,38 +42,37 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 			someKey : "someValue"
 		};
 		this.definitionViewer = CORA.definitionViewer(this.providers, this.dependencies, this.spec);
-		this.dataGroup = {
-			attributes: {type: "group"},
+		this.minimalGroup = {
+		attributes: {type: "group"},
+			textId: {linkedRecordType: "text"},
 			children:[
 				{name: "recordInfo",
 					children: [
 						{name: "id",
-						value: "someMetadataGroupId"}
-					]},
+						value: "minimalGroupId"}
+					]
+				},
 				{name : "nameInData",
-				value : "someNameInData"}
-				,
-			{name : "nameInData",
-			value : "minimalGroup"},
-			{name: "textId",
-		    	children: [
-					{name: "linkedRecordType",
-		          	value: "text"},
-		        {name: "linkedRecordId",
-		        value: "minimalGroupIdText"}
-		      ]
-		    },
-		    {name: "defTextId",
-		    	children: [
-		        	{name: "linkedRecordType",
-		          	value: "text"},
-		        	{name: "linkedRecordId",
-		          	value: "minimalGroupIdDefText"}
-		      ]
-		    }
+				value : "minimalGroup"},
+				{name: "textId",
+			    	children: [
+						{name: "linkedRecordType",
+			          	value: "text"},
+			        {name: "linkedRecordId",
+			        value: "minimalGroupIdText"}
+			      ]
+			    },
+			    {name: "defTextId",
+			    	children: [
+			        	{name: "linkedRecordType",
+			          	value: "text"},
+			        	{name: "linkedRecordId",
+			          	value: "minimalGroupIdDefText"}
+			      ]
+			    }
 			]
 		};
-		this.metadataProvider.addMetadataById("someMetadataGroupId",this.dataGroup);
+		this.metadataProvider.addMetadataById("minimalGroupId",this.minimalGroup);
 	},
 	afterEach: function() {
 	}
@@ -96,50 +95,20 @@ QUnit.test("testOnlyForTestGetSpec", function(assert) {
 });
 
 QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
-	this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
-	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "someMetadataGroupId");
+	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
 });
 
 QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
-	let generatedView = this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
 	assert.true(this.view.getViewModelForCallNo(0)!=undefined);
 	assert.deepEqual(this.view.getCreatedViewForCallNo(0), generatedView);
 });
 
 QUnit.test("testViewModel", function(assert) {
-	this.minimalGroup = {
-		attributes: {type: "group"},
-		textId: {linkedRecordType: "text"},
-		children:[
-			{name: "recordInfo",
-				children: [
-					{name: "id",
-					value: "minimalGroupId"}
-				]
-			},
-			{name : "nameInData",
-			value : "minimalGroup"},
-			{name: "textId",
-		    	children: [
-					{name: "linkedRecordType",
-		          	value: "text"},
-		        {name: "linkedRecordId",
-		        value: "minimalGroupIdText"}
-		      ]
-		    },
-		    {name: "defTextId",
-		    	children: [
-		        	{name: "linkedRecordType",
-		          	value: "text"},
-		        	{name: "linkedRecordId",
-		          	value: "minimalGroupIdDefText"}
-		      ]
-		    }
-		]
-	};
-	this.metadataProvider.addMetadataById("minimalGroupId",this.minimalGroup);
+	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
 		
 	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
@@ -148,7 +117,106 @@ QUnit.test("testViewModel", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroup",
-		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"}
+		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
+		defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"}
+	};
+	assert.deepEqual(viewModel, expected);
+});
+
+//QUnit.test("testViewModelAttributeReferences", function(assert) {
+//	let attributeReferences = {
+//      name: "attributeReferences",
+//      children: [
+//        {
+//          name: "ref",
+//          repeatId: "0",
+//          children: [
+//            {
+//              name: "linkedRecordType",
+//              value: "metadataCollectionVariable"
+//            },
+//            {
+//              name: "linkedRecordId",
+//              value: "someCollectionVar"
+//            }
+//          ]
+//        },{
+//          name: "ref",
+//          repeatId: "1",
+//          children: [
+//            {
+//              name: "linkedRecordType",
+//              value: "metadataCollectionVariable"
+//            },
+//            {
+//              name: "linkedRecordId",
+//              value: "otherCollectionVar"
+//            }
+//          ]
+//        }
+//      ]
+//    };
+//	this.minimalGroup.children.push(attributeReferences);
+//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
+//		
+//	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+//	
+//	let viewModel = this.view.getViewModelForCallNo(0);
+//	let expected = {
+//		id: "minimalGroupId",
+//		type: "group",
+//		nameInData: "minimalGroup",
+//		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"}
+//	};
+//	assert.deepEqual(viewModel, expected);
+//});
+
+QUnit.test("testViewModelOneChild", function(assert) {
+	let childReferences = {
+      name: "childReferences",
+      children: [
+        {
+          name: "childReference",
+          repeatId: "1",
+          children: [
+            {
+              name: "repeatMin",
+              value: "1"
+            },
+            {
+              name: "repeatMax",
+              value: "10"
+            },
+            {
+              name: "ref",
+              children: [
+                {
+                  name: "linkedRecordType",
+                  value: "metadataGroup"
+                },
+                {
+                  name: "linkedRecordId",
+                  value: "recordInfoGroup"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+	this.minimalGroup.children.push(childReferences);
+	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
+		
+	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+	
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroup",
+		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
+		defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
+		children : [{repeatMin: "1", repeatMax: "10", child : {}}] 
 	};
 	assert.deepEqual(viewModel, expected);
 });

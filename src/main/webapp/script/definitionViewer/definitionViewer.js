@@ -102,15 +102,38 @@ var CORA = (function(cora) {
 			let type = cDataRecordGroup.getData().attributes["type"]; 
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 			let text = getTranslations(cDataRecordGroup, "textId");
-			
+			let defText = getTranslations(cDataRecordGroup, "defTextId");
 			
 			let model = {
 				id: id,
 				type:type,
 				nameInData : nameInData,
-				text : text
+				text : text,
+				defText : defText
 			};
-			
+			if(cDataRecordGroup.containsChildWithNameInData("childReferences")){
+				
+				let children = [];
+				model.children = children;
+				let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
+				for (let childReference of childReferences.children){
+					let cChildReference = CORA.coraData(childReference);
+					let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
+					let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
+					let recordPartConstraint = "noConstraint";
+	//				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
+	//					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
+	//				}
+	//				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
+					
+					let childRef = {
+						repeatMin: repeatMin,
+						repeatMax: repeatMax,
+						child: {}
+					};
+					children.push(childRef);
+				}	
+			}
 			return view.createViewForViewModel(model);
 		};
 		

@@ -43,9 +43,34 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 		};
 		this.definitionViewer = CORA.definitionViewer(this.providers, this.dependencies, this.spec);
 		this.dataGroup = {
+			attributes: {type: "group"},
 			children:[
+				{name: "recordInfo",
+					children: [
+						{name: "id",
+						value: "someMetadataGroupId"}
+					]},
 				{name : "nameInData",
 				value : "someNameInData"}
+				,
+			{name : "nameInData",
+			value : "minimalGroup"},
+			{name: "textId",
+		    	children: [
+					{name: "linkedRecordType",
+		          	value: "text"},
+		        {name: "linkedRecordId",
+		        value: "minimalGroupIdText"}
+		      ]
+		    },
+		    {name: "defTextId",
+		    	children: [
+		        	{name: "linkedRecordType",
+		          	value: "text"},
+		        	{name: "linkedRecordId",
+		          	value: "minimalGroupIdDefText"}
+		      ]
+		    }
 			]
 		};
 		this.metadataProvider.addMetadataById("someMetadataGroupId",this.dataGroup);
@@ -84,11 +109,46 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 });
 
 QUnit.test("testViewModel", function(assert) {
-	let generatedView = this.definitionViewer.getViewForMetadataGroupId("someMetadataGroupId");
+	this.minimalGroup = {
+		attributes: {type: "group"},
+		textId: {linkedRecordType: "text"},
+		children:[
+			{name: "recordInfo",
+				children: [
+					{name: "id",
+					value: "minimalGroupId"}
+				]
+			},
+			{name : "nameInData",
+			value : "minimalGroup"},
+			{name: "textId",
+		    	children: [
+					{name: "linkedRecordType",
+		          	value: "text"},
+		        {name: "linkedRecordId",
+		        value: "minimalGroupIdText"}
+		      ]
+		    },
+		    {name: "defTextId",
+		    	children: [
+		        	{name: "linkedRecordType",
+		          	value: "text"},
+		        	{name: "linkedRecordId",
+		          	value: "minimalGroupIdDefText"}
+		      ]
+		    }
+		]
+	};
+	this.metadataProvider.addMetadataById("minimalGroupId",this.minimalGroup);
+		
+	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
-		nameInData: "someNameInData"
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroup",
+		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"}
 	};
 	assert.deepEqual(viewModel, expected);
 });

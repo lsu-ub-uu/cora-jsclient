@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	cora.definitionViewer = function(providers, dependencies, spec) {
 		let out;
 		let metadataProvider = providers.metadataProvider;
+		let textProvider = providers.textProvider;
 		let view = dependencies.view;
 
 		const start = function() {
@@ -96,20 +97,37 @@ var CORA = (function(cora) {
 		};
 		
 		const getViewForMetadataGroupId = function(metadataGroupId){
-			let cDataRecordGroup = getMetadataById(metadataGroupId);
-			
+			let cDataRecordGroup = getCMetadataById(metadataGroupId);
+			let id = getIdFromCDataGroup(cDataRecordGroup);
+			let type = cDataRecordGroup.getData().attributes["type"]; 
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
+			let text = getTranslations(cDataRecordGroup, "textId");
+			
 			
 			let model = {
-				nameInData : nameInData
+				id: id,
+				type:type,
+				nameInData : nameInData,
+				text : text
 			};
 			
-			let generatedView = view.createViewForViewModel(model);
-			return generatedView;
+			return view.createViewForViewModel(model);
 		};
 		
-		const getMetadataById = function(metadataId){
-			return CORA.coraData(metadataProvider.getMetadataById(metadataId));
+		const getCMetadataById = function(metadataId){
+			let metadata = metadataProvider.getMetadataById(metadataId);
+			return CORA.coraData(metadata);
+		};
+		
+		const getIdFromCDataGroup = function (cDataRecordGroup){
+			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
+			let cRecordInfo = CORA.coraData(recordInfo);
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
+		};
+		
+		const getTranslations = function(cDataRecordGroup, name){
+			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
+			return textProvider.getAllTranslations(textId);
 		}
 		
 		const onlyForTestGetProviders = function() {

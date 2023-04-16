@@ -26,7 +26,7 @@ var CORATEST = (function(coraTest) {
 		var callWhenReloadedMethod;
 		var noOfReloads = 0;
 		var setCurrentLangs = [];
-
+		
 		function getTranslation(textId) {
 			fetchedTextIds.push(textId);
 			return "translated_" + textId;
@@ -103,6 +103,14 @@ var CORATEST = (function(coraTest) {
 		function getFetchedMetadataIdNo(no) {
 			return fetchedMetadataIds[no];
 		}
+		
+		const getLanguages = function(){
+			return ["sv", "en"];
+		};
+
+		const getAllTranslations = function(textId){
+			return {sv : "translated_sv_" + textId, en : "translated_en_" + textId};
+		};
 
 		return Object.freeze({
 			getTranslation : getTranslation,
@@ -115,7 +123,9 @@ var CORATEST = (function(coraTest) {
 			getSetCurrentLang : getSetCurrentLang,
 			getCurrentLang : getCurrentLang,
 			getMetadataById : getMetadataById,
-			getFetchedMetadataIdNo : getFetchedMetadataIdNo
+			getFetchedMetadataIdNo : getFetchedMetadataIdNo,
+			getLanguages : getLanguages,
+			getAllTranslations : getAllTranslations
 		});
 	};
 	return coraTest;

@@ -69,7 +69,7 @@ QUnit.test("testBasicView", function(assert) {
 	let header = view.childNodes[0];
 	assert.strictEqual(header.tagName, "DIV");
 	assert.strictEqual(header.className, "header");
-	assert.strictEqual(header.innerHTML, "Definition viewer!");
+	assert.strictEqual(header.innerHTML, "Definition of minimalGroupId!");
 });
 
 QUnit.test("testFirstChild", function(assert) {

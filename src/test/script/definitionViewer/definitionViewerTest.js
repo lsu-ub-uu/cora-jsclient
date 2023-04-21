@@ -262,3 +262,36 @@ QUnit.test("testViewModelOneChild", function(assert) {
 	assert.deepEqual(viewModel, expected);
 });
 
+QUnit.test("testViewModelAttributes", function(assert) {
+	let toAdd = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroup",
+		attributes : ["attributeColVarId" ],
+//		children : [{repeatMin: "1", repeatMax: "10", refId : "textVarId"}] 
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd); 
+		
+	let generatedView = this.definitionViewer.getView();
+	
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroup",
+		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
+		defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
+//		attributes : [] 
+	};
+	let attribute = {
+		id: "attributeColVarId",
+		type: "colVar",
+		nameInData: "attributeColVar",
+		text : {sv : "translated_sv_attributeColVarIdText", en : "translated_en_attributeColVarIdText"},
+		defText : {sv : "translated_sv_attributeColVarIdDefText", en : "translated_en_attributeColVarIdDefText"},
+	};
+//	expected.attributes.push(attribute);
+	
+	assert.deepEqual(viewModel, expected);
+});
+

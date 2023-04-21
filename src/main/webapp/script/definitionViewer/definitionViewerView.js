@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 			let view = CORA.gui.createSpanWithClassName("definitionViewer");
 			let header = CORA.gui.createDivWithClassName("header");
 			view.appendChild(header);
-			header.innerHTML= "Definition viewer!";
+			header.innerHTML= `Definition of ${viewModel.id}!`;
 			
 			let metadata = document.createElement("ul");
 			metadata.className = "metadata";
@@ -41,7 +41,6 @@ var CORA = (function(cora) {
 		
 		const createViewForOneLevel = function(childReference) {
 			let metadataHeader = document.createElement("li");
-//			metadataHeader.innerHTML= `${viewModel.nameInData} (${viewModel.type})`;
 			let child = childReference.child;
 			metadataHeader.innerHTML= `${child.nameInData} (${createDetails(childReference)})`;
 			

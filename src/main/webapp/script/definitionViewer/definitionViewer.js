@@ -100,33 +100,65 @@ var CORA = (function(cora) {
 //			let view = getViewForMetadataId("validationTypeGroup");
 			return getViewForMetadataId(id);
 		};
-		
+		 
 		const getViewForMetadataId = function(metadataGroupId){
 			let model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
 		const getViewModelForMetadataId = function(metadataGroupId){
 			let cDataRecordGroup = getCMetadataById(metadataGroupId);
-			let id = getIdFromCDataGroup(cDataRecordGroup);
-			let type = cDataRecordGroup.getData().attributes["type"]; 
-			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
-			let text = getTranslations(cDataRecordGroup, "textId");
-			let defText = getTranslations(cDataRecordGroup, "defTextId");
+//			let id = getIdFromCDataGroup(cDataRecordGroup);
+//			let type = cDataRecordGroup.getData().attributes["type"]; 
+//			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
+//			let text = getTranslations(cDataRecordGroup, "textId");
+//			let defText = getTranslations(cDataRecordGroup, "defTextId");
+//			
+//			let model = {
+//				id: id,
+//				type:type,
+//				nameInData : nameInData,
+//				text : text,
+//				defText : defText
+//			};
+			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
 			
-			let model = {
-				id: id,
-				type:type,
-				nameInData : nameInData,
-				text : text,
-				defText : defText
-			};
-			
+			if(cDataRecordGroup.containsChildWithNameInData("attributedReferences")){
+//				model.attributes = collectAttributes(cDataRecordGroup);
+			}
 			if(cDataRecordGroup.containsChildWithNameInData("childReferences")){
 				model.children = collectChildren(cDataRecordGroup);
 			}
 			return model;
 		};
 		
+		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup){
+			let id = getIdFromCDataGroup(cDataRecordGroup);
+			let type = cDataRecordGroup.getData().attributes["type"]; 
+			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
+			let text = getTranslations(cDataRecordGroup, "textId");
+			let defText = getTranslations(cDataRecordGroup, "defTextId");
+			
+			return {
+				id: id,
+				type:type,
+				nameInData : nameInData,
+				text : text,
+				defText : defText
+			};
+		}
+		
+		const collectAttributes = function(cDataRecordGroup){
+			let attributes = [];
+			let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
+			for (let attributeReference of attributeReferences.children){
+				let cAttributeReference = CORA.coraData(attributeReference);
+				let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+				let cAttribute = getCMetadataById(attributeId);
+				let attribute = getBasicModelFromCDataRecordGroup(cAttribute);
+				attributes.push(attribute);
+			}
+			return attributes;
+		};
 		const collectChildren = function(cDataRecordGroup){
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");

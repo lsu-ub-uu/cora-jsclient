@@ -76,21 +76,22 @@ QUnit.test("testFirstChild", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 	
 	let firstLevelMetadata = view.childNodes[1];
-	assert.strictEqual(firstLevelMetadata.tagName, "DIV");
+	assert.strictEqual(firstLevelMetadata.tagName, "UL");
 	assert.strictEqual(firstLevelMetadata.className, "metadata");
 	
 	let metadataHeader = firstLevelMetadata.childNodes[0];
-	assert.strictEqual(metadataHeader.tagName, "DIV");
-	assert.strictEqual(metadataHeader.className, "metadataHeader");
+	assert.strictEqual(metadataHeader.tagName, "LI");
+	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup (group)");
 	
-	let nameInData = metadataHeader.childNodes[0]; 
-	assert.strictEqual(nameInData.tagName, "SPAN");
-	assert.strictEqual(nameInData.className, "nameInData");
+
+	let children = metadataHeader.childNodes[1];
+	assert.strictEqual(children.tagName, "UL");
+
+	let childReference = children.childNodes[0];
+	assert.strictEqual(childReference.tagName, "LI");
+	assert.strictEqual(childReference.childNodes[0].nodeValue, "textVar (textVar, 1-10)");
 	
 	
-	assert.strictEqual(nameInData.innerHTML, "minimalGroup");
-	
-//	assert.strictEqual(header.innerHTML, "Definition viewer!");
 	
 });
 

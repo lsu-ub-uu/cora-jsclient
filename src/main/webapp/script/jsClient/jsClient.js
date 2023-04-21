@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 201, 2019 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -54,39 +54,7 @@ var CORA = (function(cora) {
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
-			
-		//spike	
-			tryDefinitionViewer();
-		//end spike	
-			
 		};
-		//spike	
-		const tryDefinitionViewer = function() {
-			let definitionViewerFactory = CORA.definitionViewerFactory(dependencies.providers,{});
-			let definitionViewer = definitionViewerFactory.factor({});
-			let definitionView = definitionViewer.getView();
-			
-			let definitionManagedGuiItem = createManagedGuiItem();
-			definitionManagedGuiItem.addWorkPresentation(definitionView);
-			addGuiItem(definitionManagedGuiItem);
-			showView(definitionManagedGuiItem);
-			
-		};
-		const createManagedGuiItem = function() {
-			let managedGuiItemSpec = assembleManagedGuiItemSpec();
-			return dependencies.globalFactories.managedGuiItemFactory.factor(managedGuiItemSpec);
-		};
-
-		const assembleManagedGuiItemSpec = function() {
-			return {
-				activateMethod: showView,
-				removeMethod: viewRemoved,
-//				callOnMetadataReloadMethod: reloadForMetadataChanges,
-//				callMethodAfterShowWorkView: callMethodAfterShowWorkView
-			};
-		};
-		//end spike	
-		
 		
 		const createLoginManager = function() {
 			let loginManagerSpec = {
@@ -253,6 +221,35 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const openDefinitionViewerForId = function(id) {
+			let definitionViewer = dependencies.definitionViewerFactory.factor({id:id});
+			let definitionView = definitionViewer.getView();
+			
+			let definitionManagedGuiItem = createManagedGuiItem(definitionViewer.reloadForMetadataChanges);
+			definitionManagedGuiItem.addWorkPresentation(definitionView);
+			
+			let definitionMenuView = CORA.gui.createSpanWithClassName("definitionViewer");
+			definitionMenuView.innerHTML = "Definition viewer: " + id;
+			definitionManagedGuiItem.addMenuPresentation(definitionMenuView);
+			
+			addGuiItem(definitionManagedGuiItem);
+			showView(definitionManagedGuiItem);
+			
+		};
+		const createManagedGuiItem = function(reloadForMetadataChanges) {
+			let managedGuiItemSpec = assembleManagedGuiItemSpec(reloadForMetadataChanges);
+			return dependencies.globalFactories.managedGuiItemFactory.factor(managedGuiItemSpec);
+		};
+
+		const assembleManagedGuiItemSpec = function(reloadForMetadataChanges) {
+			return {
+				activateMethod: showView,
+				removeMethod: viewRemoved,
+				callOnMetadataReloadMethod: reloadForMetadataChanges
+//				callMethodAfterShowWorkView: callMethodAfterShowWorkView
+			};
+		};
+		
 		const reloadProviders = function() {
 			if (reloadingProvidersInProgress === false) {
 				startReloadOfProviders();
@@ -318,7 +315,8 @@ var CORA = (function(cora) {
 			addGuiItem: addGuiItem,
 			openRecordUsingReadLink: openRecordUsingReadLink,
 			reloadProviders: reloadProviders,
-			setCurrentLang: setCurrentLang
+			setCurrentLang: setCurrentLang,
+			openDefinitionViewerForId : openDefinitionViewerForId
 		});
 		start();
 

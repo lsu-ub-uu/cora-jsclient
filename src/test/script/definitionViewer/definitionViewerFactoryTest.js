@@ -28,9 +28,11 @@ QUnit.module("definitionViewer/definitionViewerFactoryTest.js", {
 			"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy()
 		};
 		this.dependencies = {
+			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy"),
 			someDep : "someDep"
 		};
 		this.spec = {
+			jsClient : CORATEST.jsClientSpy(),
 			someKey : "someValue"
 		};
 		this.definitionViewerFactory = CORA.definitionViewerFactory(this.providers, this.dependencies);
@@ -39,10 +41,6 @@ QUnit.module("definitionViewer/definitionViewerFactoryTest.js", {
 	}
 });
 
-//changing dependencies to have subcategories
-//
-//providers, globalFactories, globalInstances, localFactories,
-//localInstances,  a start is done in jsClient
 
 QUnit.test("init", function(assert) {
 	assert.strictEqual(this.definitionViewerFactory.type, "definitionViewerFactory");
@@ -57,25 +55,26 @@ QUnit.test("testOnlyForTestGetDependencies", function(assert) {
 });
 
 QUnit.test("factorTestType", function(assert) {
-	var definitionViewer = this.definitionViewerFactory.factor(this.spec);
+	let definitionViewer = this.definitionViewerFactory.factor(this.spec);
 
 	assert.strictEqual(definitionViewer.type, "definitionViewer");
 });
 
 QUnit.test("factorTestProviders", function(assert) {
-	var definitionViewer = this.definitionViewerFactory.factor(this.spec);
+	let definitionViewer = this.definitionViewerFactory.factor(this.spec);
 	
 	assert.strictEqual(definitionViewer.onlyForTestGetProviders(), this.providers);
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var definitionViewer = this.definitionViewerFactory.factor(this.spec);
+	let definitionViewer = this.definitionViewerFactory.factor(this.spec);
 	
-	assert.deepEqual(definitionViewer.onlyForTestGetDependencies().view.type, CORA.definitionViewerView().type);
+	assert.deepEqual(definitionViewer.onlyForTestGetDependencies().view.type, 
+		CORA.definitionViewerView().type);
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var definitionViewer = this.definitionViewerFactory.factor(this.spec);
+	let definitionViewer = this.definitionViewerFactory.factor(this.spec);
 	
 	assert.deepEqual(definitionViewer.onlyForTestGetSpec(), this.spec);
 });

@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2019 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -36,7 +36,8 @@ QUnit.module("jsClient/jsClientTest.js", {
 		this.globalFactories = {
 			ajaxCallFactory: this.ajaxCallFactorySpy,
 			loginManagerFactory: this.loginManagerFactory,
-			recordHandlerFactory: this.recordHandlerFactory
+			recordHandlerFactory: this.recordHandlerFactory,
+			managedGuiItemFactory : CORATEST.standardFactorySpy("managedGuiItemSpy")
 		};
 
 		this.metadataProvider = CORATEST.metadataProviderRealStub();
@@ -76,7 +77,9 @@ QUnit.module("jsClient/jsClientTest.js", {
 			openGuiItemHandlerFactory: CORATEST.standardFactorySpy("openGuiItemHandlerSpy"),
 			recordTypeHandlerFactory: recordTypeHandlerFactory,
 			uploadManager: CORATEST.uploadManagerSpy(),
-			recordTypeMenu: this.recordTypeMenu
+			recordTypeMenu: this.recordTypeMenu,
+			definitionViewerFactory: CORATEST.standardFactorySpy("definitionViewerSpy"),
+			
 		}
 		this.spec = {
 			name: "The Client",
@@ -602,6 +605,37 @@ QUnit.test("testOpenRecordUsingReadLinkInBackground", function(assert) {
 
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
+});
+
+QUnit.test("testOpenDefinitionViewerForId", function(assert) {
+	let jsClient = CORA.jsClient(this.dependencies, this.spec);
+
+	jsClient.openDefinitionViewerForId("someId");
+
+	let definitionViewer = this.dependencies.definitionViewerFactory.getFactored(0);
+	let id = this.dependencies.definitionViewerFactory.getSpec(0);
+	
+	assert.deepEqual(id, {id:"someId"});
+	
+	let managedGui = this.dependencies.globalFactories.managedGuiItemFactory.getFactored(0);
+	let managedGuiSpec = managedGui.getSpec();
+	
+	assert.strictEqual(managedGuiSpec.activateMethod, jsClient.showView);
+	assert.strictEqual(managedGuiSpec.removeMethod, jsClient.viewRemoved);
+	assert.strictEqual(managedGuiSpec.callOnMetadataReloadMethod, definitionViewer.reloadForMetadataChanges);
+	
+	assert.deepEqual(managedGui.getAddedWorkPresentation(0), definitionViewer.getView());
+	
+	let menuPresentation = managedGui.getAddedMenuPresentation(0);
+	assert.deepEqual(menuPresentation.tagName, "SPAN");
+	assert.deepEqual(menuPresentation.className, "definitionViewer");
+	assert.deepEqual(menuPresentation.innerHTML, "Definition viewer: someId");
+	
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
+
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
 });
 
 QUnit.test("testReloadProviders", function(assert) {

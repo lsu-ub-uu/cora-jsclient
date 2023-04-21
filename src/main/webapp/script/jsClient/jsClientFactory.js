@@ -1,6 +1,6 @@
 /*
  * Copyright 2019, 2020 Uppsala University Library
- *  Copyright 2017 Olov McKie
+ *  Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -21,39 +21,39 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.jsClientFactory = function(providers, dependencies) {
 
-		var jsClient;
+		let jsClient;
 		function factor(jsClientSpec) {
 
-			var globalFactories = {};
+			let globalFactories = {};
 
-			var authTokenHolder = dependencies.authTokenHolder;
-			var xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
-			var ajaxCallFactoryDependencies = {
+			let authTokenHolder = dependencies.authTokenHolder;
+			let xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
+			let ajaxCallFactoryDependencies = {
 				"xmlHttpRequestFactory" : xmlHttpRequestFactory,
 				"authTokenHolder" : authTokenHolder
 			};
-			var ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
+			let ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
 
-			var appTokenLoginFactoryDependencies = {
+			let appTokenLoginFactoryDependencies = {
 				"ajaxCallFactory" : ajaxCallFactory
 			};
-			var appTokenLoginFactory = CORA.appTokenLoginFactory(appTokenLoginFactoryDependencies);
-			var webRedirectLoginFactory = CORA.webRedirectLoginFactory();
+			let appTokenLoginFactory = CORA.appTokenLoginFactory(appTokenLoginFactoryDependencies);
+			let webRedirectLoginFactory = CORA.webRedirectLoginFactory();
 
-			var dependenciesLdap = {
+			let dependenciesLdap = {
 				"providers" : providers,
 				"globalFactories" : globalFactories
 			};
 			globalFactories.ldapLoginFactory = CORA.ldapLoginFactory(dependenciesLdap);
 
-			var ldapLoginJsClientIntegratorDep = {
+			let ldapLoginJsClientIntegratorDep = {
 				"ldapLoginFactory" : globalFactories.ldapLoginFactory,
 				"managedGuiItemFactory" : CORA.managedGuiItemFactory()
 			};
-			var ldapLoginJsClientIntegratorFactory = CORA.genericFactory(
+			let ldapLoginJsClientIntegratorFactory = CORA.genericFactory(
 					"ldapLoginJsClientIntegrator", ldapLoginJsClientIntegratorDep);
 
-			var loginManagerFactoryDependencies = {
+			let loginManagerFactoryDependencies = {
 				"authTokenHolder" : authTokenHolder,
 				"textProvider" : providers.textProvider,
 				"appTokenLoginFactory" : appTokenLoginFactory,
@@ -61,79 +61,80 @@ var CORA = (function(cora) {
 				"ajaxCallFactory" : ajaxCallFactory,
 				"ldapLoginJsClientIntegratorFactory" : ldapLoginJsClientIntegratorFactory
 			};
-			var loginManagerFactory = CORA.loginManagerFactory(loginManagerFactoryDependencies);
+			let loginManagerFactory = CORA.loginManagerFactory(loginManagerFactoryDependencies);
 
-			var openGuiItemHandlerFactoryDep = {
+			let openGuiItemHandlerFactoryDep = {
 				"textProvider" : providers.textProvider
 			};
-			var openGuiItemHandlerFactory = CORA
+			let openGuiItemHandlerFactory = CORA
 					.openGuiItemHandlerFactory(openGuiItemHandlerFactoryDep);
 
-			var managedGuiItemFactory = CORA.managedGuiItemFactory();
-			var uploadManagerDep = {
+			let managedGuiItemFactory = CORA.managedGuiItemFactory();
+			let uploadManagerDep = {
 				"clientInstanceProvider" : providers.clientInstanceProvider,
 				"textProvider" : providers.textProvider,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"managedGuiItemFactory" : managedGuiItemFactory
 			};
-			var uploadManagerFactory = CORA.uploadManagerFactory(uploadManagerDep);
+			let uploadManagerFactory = CORA.uploadManagerFactory(uploadManagerDep);
 
-			var uploadManagerSpec = {};
-			var uploadManager = uploadManagerFactory.factor(uploadManagerSpec);
+			let uploadManagerSpec = {};
+			let uploadManager = uploadManagerFactory.factor(uploadManagerSpec);
 
-			var recordGuiFactoryDep = {
+			let recordGuiFactoryDep = {
 				"providers" : providers,
 				"globalFactories" : globalFactories,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"authTokenHolder" : authTokenHolder,
 				"uploadManager" : uploadManager
 			};
-			var recordGuiFactory = CORA.recordGuiFactory(recordGuiFactoryDep);
+			let recordGuiFactory = CORA.recordGuiFactory(recordGuiFactoryDep);
 
-			var depRecordHandler = {
+			let depRecordHandler = {
 				"globalFactories" : globalFactories,
 				"clientInstanceProvider" : providers.clientInstanceProvider,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"recordGuiFactory" : recordGuiFactory,
 				"managedGuiItemFactory" : managedGuiItemFactory,
-				metadataProvider : providers.metadataProvider
+				metadataProvider : providers.metadataProvider,
+				textProvider : providers.textProvider
 			};
-			var recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandler);
+			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandler);
 
-			var depResultHandler = {
+			let depResultHandler = {
 				"textProvider" : providers.textProvider,
 				"recordHandlerFactory" : recordHandlerFactory,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"recordGuiFactory" : recordGuiFactory
 			};
-			var resultHandlerFactory = CORA.resultHandlerFactory(depResultHandler);
+			let resultHandlerFactory = CORA.resultHandlerFactory(depResultHandler);
 
-			var searchRecordHandlerViewFactory = CORA.searchRecordHandlerViewFactory({});
-			var searchRecordHandlerFactoryDep = {
+			let searchRecordHandlerViewFactory = CORA.searchRecordHandlerViewFactory({});
+			let searchRecordHandlerFactoryDep = {
 				"globalFactories" : globalFactories,
 				"searchRecordHandlerViewFactory" : searchRecordHandlerViewFactory,
 				"textProvider" : providers.textProvider,
 				"ajaxCallFactory" : ajaxCallFactory,
 				"recordGuiFactory" : recordGuiFactory
 			};
-			var searchRecordHandlerFactory = CORA
+			let searchRecordHandlerFactory = CORA
 					.searchRecordHandlerFactory(searchRecordHandlerFactoryDep);
 
-			var depRecordListHandler = {
+			let depRecordListHandler = {
 				"factories" : globalFactories
 			};
-			var recordListHandlerFactory = CORA.recordListHandlerFactory(depRecordListHandler);
+			let recordListHandlerFactory = CORA.recordListHandlerFactory(depRecordListHandler);
 
-			var recordTypeHandlerViewFactory = CORA.recordTypeHandlerViewFactory();
+			let recordTypeHandlerViewFactory = CORA.recordTypeHandlerViewFactory();
 
-			var dependenciesRTH = {
+			let dependenciesRTH = {
 				"clientInstanceProvider" : providers.clientInstanceProvider,
 				"textProvider" : providers.textProvider,
 				"factories" : globalFactories
 			};
-			var recordTypeHandlerFactory = CORA.recordTypeHandlerFactory(dependenciesRTH);
+			let recordTypeHandlerFactory = CORA.recordTypeHandlerFactory(dependenciesRTH);
 
-			var dependenciesSH = {
+			let dependenciesSH = {
 				"providers" : providers,
 				"globalFactories" : globalFactories
 			};
@@ -156,7 +157,7 @@ var CORA = (function(cora) {
 			
 			//globalFactories.definitionViewerFactory = CORA.definitionViewerFactory(providers);
 
-			var genericDependencies = {
+			let genericDependencies = {
 				"providers" : providers,
 				"globalInstances" : {
 					"clientInstanceProvider" : providers.clientInstanceProvider
@@ -168,16 +169,16 @@ var CORA = (function(cora) {
 			globalFactories.incomingLinksListHandlerViewFactory = CORA.genericFactory(
 					"incomingLinksListHandlerView", genericDependencies);
 
-			var menuDependencies = {
+			let menuDependencies = {
 				recordTypeHandlerFactory : recordTypeHandlerFactory
 			};
-			var menuSpec = {
+			let menuSpec = {
 				baseUrl : jsClientSpec.baseUrl
 			};
-			var recordTypeMenu = CORA.recordTypeMenu(providers, menuDependencies, menuSpec);
+			let recordTypeMenu = CORA.recordTypeMenu(providers, menuDependencies, menuSpec);
 			
 			
-			var dep = {
+			let dep = {
 				"providers" : providers,
 				"globalInstances" : {
 					"clientInstanceProvider" : providers.clientInstanceProvider
@@ -191,6 +192,7 @@ var CORA = (function(cora) {
 				"uploadManager" : uploadManager,
 				"searchRecordHandlerFactory" : searchRecordHandlerFactory,
 				"recordTypeHandlerFactory" : recordTypeHandlerFactory,
+				definitionViewerFactory : CORA.definitionViewerFactory(providers),
 				recordTypeMenu : recordTypeMenu
 			};
 

@@ -23,9 +23,14 @@ var CORA = (function(cora) {
 		let metadataProvider = providers.metadataProvider;
 		let textProvider = providers.textProvider;
 		let view = dependencies.view;
-
+		let id;
+		
 		const start = function() {
-//			let metadataProvider = providers.metadataProvider;
+			id = spec.id;
+		};
+
+		const reloadForMetadataChanges = function(){
+			//TODO: fix reload :)
 		};
 		
 		const getView = function(){
@@ -92,11 +97,11 @@ var CORA = (function(cora) {
 //			view.appendChild(raw); 
 //			raw.innerHTML = JSON.stringify(dataRecordGroup);
 
-			let view = getViewForMetadataGroupId("validationTypeGroup");
-			return view;
+//			let view = getViewForMetadataId("validationTypeGroup");
+			return getViewForMetadataId(id);
 		};
 		
-		const getViewForMetadataGroupId = function(metadataGroupId){
+		const getViewForMetadataId = function(metadataGroupId){
 			let model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
@@ -163,7 +168,7 @@ var CORA = (function(cora) {
 		const getTranslations = function(cDataRecordGroup, name){
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
 			return textProvider.getAllTranslations(textId);
-		}
+		};
 		
 		const onlyForTestGetProviders = function() {
 			return providers;
@@ -179,12 +184,11 @@ var CORA = (function(cora) {
 
 		out = Object.freeze({
 			type: "definitionViewer",
+			getView: getView,
+			reloadForMetadataChanges : reloadForMetadataChanges,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec,
-			getView: getView,
-			getViewForMetadataGroupId: getViewForMetadataGroupId,
-//			showView: showView
+			onlyForTestGetSpec: onlyForTestGetSpec
 		});
 		start();
 

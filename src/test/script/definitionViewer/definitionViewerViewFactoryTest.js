@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerFactoryTest.js", {
+QUnit.module("definitionViewer/definitionViewerFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			someDep : "someDep"
@@ -32,11 +32,6 @@ QUnit.module.only("definitionViewer/definitionViewerFactoryTest.js", {
 	}
 });
 
-//changing dependencies to have subcategories
-//
-//providers, globalFactories, globalInstances, localFactories,
-//localInstances,  a start is done in jsClient
-
 QUnit.test("init", function(assert) {
 	assert.strictEqual(this.definitionViewerViewFactory.type, "definitionViewerViewFactory");
 });
@@ -46,19 +41,19 @@ QUnit.test("testOnlyForTestGetDependencies", function(assert) {
 });
 
 QUnit.test("factorTestType", function(assert) {
-	var definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
+	let definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
 
 	assert.strictEqual(definitionViewerView.type, "definitionViewerView");
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
+	let definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
 	
 	assert.deepEqual(definitionViewerView.onlyForTestGetDependencies(), {});
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
+	let definitionViewerView = this.definitionViewerViewFactory.factor(this.spec);
 	
 	assert.deepEqual(definitionViewerView.onlyForTestGetSpec(), this.spec);
 });

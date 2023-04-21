@@ -39,7 +39,7 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 			view : this.view
 		}
 		this.spec = {
-			someKey : "someValue"
+			id : "minimalGroupId"
 		};
 		this.definitionViewer = CORA.definitionViewer(this.providers, this.dependencies, this.spec);
 		let toAdd = {
@@ -71,14 +71,34 @@ QUnit.test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(this.definitionViewer.onlyForTestGetSpec(), this.spec);
 });
 
+//QUnit.test("initTestManagedGuiItemFactoryCalled", function(assert) {
+//	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+//	let managedGuiItemSpec = managedGuiItemSpy.getSpec(0);
+//	assert.strictEqual(managedGuiItemSpec.activateMethod, this.dependencies.jsClient.showView);
+//	assert.strictEqual(managedGuiItemSpec.removeMethod, this.dependencies.jsClient.viewRemoved);
+//	assert.strictEqual(managedGuiItemSpec.callOnMetadataReloadMethod,
+//		this.definitionViewer.reloadForMetadataChanges);
+////
+////	assert.notStrictEqual(managedGuiItemSpec.callMethodAfterShowWorkView, undefined);
+////	assert.strictEqual(managedGuiItemSpec.callMethodAfterShowWorkView,
+////		recordHandler.callMethodAfterShowWorkView);
+////
+////	assert.ok(managedGuiItemSpy != undefined);
+//});
+
+//QUnit.test("testGetManagedGuiItem", function(assert) {
+//	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+//	assert.strictEqual(this.definitionViewer.getManagedGuiItem(), managedGuiItem);
+//});
+
 QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
-	this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+	this.definitionViewer.getView();
 	
 	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
 });
 
 QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
-	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+	let generatedView = this.definitionViewer.getView();
 	
 	assert.true(this.view.getViewModelForCallNo(0)!=undefined);
 	assert.deepEqual(this.view.getCreatedViewForCallNo(0), generatedView);
@@ -87,7 +107,7 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 QUnit.test("testViewModel", function(assert) {
 //	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
 		
-	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+	let generatedView = this.definitionViewer.getView();
 	
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -136,7 +156,7 @@ QUnit.test("testViewModel", function(assert) {
 //	this.minimalGroup.children.push(attributeReferences);
 //	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
 //		
-//	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+//	let generatedView = this.definitionViewer.getViewForMetadataId("minimalGroupId");
 //	
 //	let viewModel = this.view.getViewModelForCallNo(0);
 //	let expected = {
@@ -219,7 +239,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar); 
 		
-	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
+	let generatedView = this.definitionViewer.getView();
 	
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -230,14 +250,14 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
 		children : [] 
 	};
-	let child = {repeatMin: "1", repeatMax: "10", child : {
+	let childReference = {repeatMin: "1", repeatMax: "10", child : {
 		id: "textVarId",
 		type: "textVar",
 		nameInData: "textVar",
 		text : {sv : "translated_sv_textVarIdText", en : "translated_en_textVarIdText"},
 		defText : {sv : "translated_sv_textVarIdDefText", en : "translated_en_textVarIdDefText"},
 	}};
-	expected.children.push(child);
+	expected.children.push(childReference);
 	
 	assert.deepEqual(viewModel, expected);
 });

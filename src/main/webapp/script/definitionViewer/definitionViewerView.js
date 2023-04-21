@@ -25,21 +25,54 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel){
+			console.log(viewModel)
 			let view = CORA.gui.createSpanWithClassName("definitionViewer");
 			let header = CORA.gui.createDivWithClassName("header");
 			view.appendChild(header);
 			header.innerHTML= "Definition viewer!";
 			
-			let metadata = CORA.gui.createDivWithClassName("metadata");
+			let metadata = document.createElement("ul");
+			metadata.className = "metadata";
 			view.appendChild(metadata);
-
+			let item = createViewForOneLevel({child:viewModel});
+			metadata.appendChild(item);
+			return view;
+		};
+		
+		const createViewForOneLevel = function(childReference) {
+			let metadataHeader = document.createElement("li");
+//			metadataHeader.innerHTML= `${viewModel.nameInData} (${viewModel.type})`;
+			let child = childReference.child;
+			metadataHeader.innerHTML= `${child.nameInData} (${createDetails(childReference)})`;
 			
-			let metadataHeader = CORA.gui.createDivWithClassName("metadataHeader");
-			metadata.appendChild(metadataHeader);
+			if(child.children){
+				let children = document.createElement("ul");
+				metadataHeader.appendChild(children);
+				child.children.forEach(function(mChild){
+					let nextLevel = createViewForOneLevel(mChild);
+					children.appendChild(nextLevel);
+				});
+			}
+			return metadataHeader;
+		};
+		
+		const createDetails = function(childReference){
+			if(childReference.repeatMin){
+				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}`;
+			}
+			return `${childReference.child.type}`;
+		};
+//			let nameInData = CORA.gui.createSpanWithClassName("nameInData");
+//			metadataHeader.appendChild(nameInData);
+//			nameInData.innerHTML= viewModel.nameInData;
+//
+//			let details = CORA.gui.createSpanWithClassName("details");
+//			metadataHeader.appendChild(details);
+//			
+//			let type = CORA.gui.createSpanWithClassName("type");
+//			details.appendChild(type);
+//			type.innerHTML= viewModel.type;
 			
-			let nameInData = CORA.gui.createSpanWithClassName("nameInData");
-			metadataHeader.appendChild(nameInData);
-			nameInData.innerHTML= viewModel.nameInData;
 //
 //			let type = dataRecordGroup.attributes["type"];
 //
@@ -86,8 +119,7 @@ var CORA = (function(cora) {
 //				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
 //				
 //			}
-			return view;
-		};
+		
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;

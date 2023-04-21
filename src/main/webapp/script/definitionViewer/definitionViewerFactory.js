@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 
 		let factor = function (spec) {
 			let dep = {
+				view : CORA.definitionViewerView()
 			};
 
 			let definitionViewer = CORA.definitionViewer(providers, dep, spec);

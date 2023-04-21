@@ -27,7 +27,23 @@ QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 			someKey : "someValue"
 		};
 		this.definitionViewerView = CORA.definitionViewerView(this.dependencies, this.spec);
-
+		let viewModel = {
+			id: "minimalGroupId",
+			type: "group",
+			nameInData: "minimalGroup",
+			text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
+			defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
+			children : [] 
+		};
+		this.viewModel = viewModel;
+		let child = {repeatMin: "1", repeatMax: "10", child : {
+			id: "textVarId",
+			type: "textVar",
+			nameInData: "textVar",
+			text : {sv : "translated_sv_textVarIdText", en : "translated_en_textVarIdText"},
+			defText : {sv : "translated_sv_textVarIdDefText", en : "translated_en_textVarIdDefText"},
+		}};
+		viewModel.children.push(child);
 	},
 	afterEach: function() {
 	}
@@ -43,5 +59,38 @@ QUnit.test("testOnlyForTestGetDependencies", function(assert) {
 
 QUnit.test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(this.definitionViewerView.onlyForTestGetSpec(), this.spec);
+});
+
+QUnit.test("testBasicView", function(assert) {
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	assert.strictEqual(view.tagName, "SPAN");
+	assert.strictEqual(view.className, "definitionViewer");
+	
+	let header = view.childNodes[0];
+	assert.strictEqual(header.tagName, "DIV");
+	assert.strictEqual(header.className, "header");
+	assert.strictEqual(header.innerHTML, "Definition viewer!");
+});
+
+QUnit.test("testFirstChild", function(assert) {
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	
+	let firstLevelMetadata = view.childNodes[1];
+	assert.strictEqual(firstLevelMetadata.tagName, "DIV");
+	assert.strictEqual(firstLevelMetadata.className, "metadata");
+	
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	assert.strictEqual(metadataHeader.tagName, "DIV");
+	assert.strictEqual(metadataHeader.className, "metadataHeader");
+	
+	let nameInData = metadataHeader.childNodes[0]; 
+	assert.strictEqual(nameInData.tagName, "SPAN");
+	assert.strictEqual(nameInData.className, "nameInData");
+	
+	
+	assert.strictEqual(nameInData.innerHTML, "minimalGroup");
+	
+//	assert.strictEqual(header.innerHTML, "Definition viewer!");
+	
 });
 

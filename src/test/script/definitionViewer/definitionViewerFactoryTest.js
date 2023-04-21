@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerFactoryTest.js", {
+QUnit.module("definitionViewer/definitionViewerFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
@@ -71,7 +71,7 @@ QUnit.test("factorTestProviders", function(assert) {
 QUnit.test("factorTestDependencies", function(assert) {
 	var definitionViewer = this.definitionViewerFactory.factor(this.spec);
 	
-	assert.deepEqual(definitionViewer.onlyForTestGetDependencies(), {});
+	assert.deepEqual(definitionViewer.onlyForTestGetDependencies().view.type, CORA.definitionViewerView().type);
 });
 
 QUnit.test("factorTestSpec", function(assert) {

@@ -42,37 +42,14 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 			someKey : "someValue"
 		};
 		this.definitionViewer = CORA.definitionViewer(this.providers, this.dependencies, this.spec);
-		this.minimalGroup = {
-		attributes: {type: "group"},
-			textId: {linkedRecordType: "text"},
-			children:[
-				{name: "recordInfo",
-					children: [
-						{name: "id",
-						value: "minimalGroupId"}
-					]
-				},
-				{name : "nameInData",
-				value : "minimalGroup"},
-				{name: "textId",
-			    	children: [
-						{name: "linkedRecordType",
-			          	value: "text"},
-			        {name: "linkedRecordId",
-			        value: "minimalGroupIdText"}
-			      ]
-			    },
-			    {name: "defTextId",
-			    	children: [
-			        	{name: "linkedRecordType",
-			          	value: "text"},
-			        	{name: "linkedRecordId",
-			          	value: "minimalGroupIdDefText"}
-			      ]
-			    }
-			]
+		let toAdd = {
+			id: "minimalGroupId",
+			type: "group",
+			nameInData: "minimalGroup"
+//			children : [{repeatMin: "1", repeatMax: "10", refId : "textVar"}] 
 		};
-		this.metadataProvider.addMetadataById("minimalGroupId",this.minimalGroup);
+		this.metadataProvider.addMetadataByCompactDefinition(toAdd); 
+	
 	},
 	afterEach: function() {
 	}
@@ -108,7 +85,7 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 });
 
 QUnit.test("testViewModel", function(assert) {
-	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
+//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
 		
 	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
@@ -171,41 +148,76 @@ QUnit.test("testViewModel", function(assert) {
 //	assert.deepEqual(viewModel, expected);
 //});
 
+
+
+//{
+//              "name": "recordPartConstraint",
+//              "value": ""
+//            },
+//            {
+//              "name": "childRefCollectTerm",
+//              "children": [
+//                {
+//                  "name": "linkedRecordType",
+//                  "value": "collectStorageTerm"
+//                },
+//                {
+//                  "name": "linkedRecordId",
+//                  "value": ""
+//                }
+//              ],
+//              "attributes": {
+//                "type": "storage"
+//              }
+//            },
+//            {
+//              "name": "childRefCollectTerm",
+//              "children": [
+//                {
+//                  "name": "linkedRecordType",
+//                  "value": "collectPermissionTerm"
+//                },
+//                {
+//                  "name": "linkedRecordId",
+//                  "value": ""
+//                }
+//              ],
+//              "attributes": {
+//                "type": "permission"
+//              }
+//            },
+//            {
+//              "name": "childRefCollectTerm",
+//              "repeatId": "0",
+//              "children": [
+//                {
+//                  "name": "linkedRecordType",
+//                  "value": "collectIndexTerm"
+//                },
+//                {
+//                  "name": "linkedRecordId",
+//                  "value": ""
+//                }
+//              ],
+//              "attributes": {
+//                "type": "index"
+//              }
+//            }
+
 QUnit.test("testViewModelOneChild", function(assert) {
-	let childReferences = {
-      name: "childReferences",
-      children: [
-        {
-          name: "childReference",
-          repeatId: "1",
-          children: [
-            {
-              name: "repeatMin",
-              value: "1"
-            },
-            {
-              name: "repeatMax",
-              value: "10"
-            },
-            {
-              name: "ref",
-              children: [
-                {
-                  name: "linkedRecordType",
-                  value: "metadataGroup"
-                },
-                {
-                  name: "linkedRecordId",
-                  value: "recordInfoGroup"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    };
-	this.minimalGroup.children.push(childReferences);
-	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
+	let toAdd = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroup",
+		children : [{repeatMin: "1", repeatMax: "10", refId : "textVarId"}] 
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd); 
+	let toAddTextVar = {
+		id: "textVarId",
+		type: "textVar",
+		nameInData: "textVar" 
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar); 
 		
 	let generatedView = this.definitionViewer.getViewForMetadataGroupId("minimalGroupId");
 	
@@ -216,8 +228,17 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		nameInData: "minimalGroup",
 		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
 		defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
-		children : [{repeatMin: "1", repeatMax: "10", child : {}}] 
+		children : [] 
 	};
+	let child = {repeatMin: "1", repeatMax: "10", child : {
+		id: "textVarId",
+		type: "textVar",
+		nameInData: "textVar",
+		text : {sv : "translated_sv_textVarIdText", en : "translated_en_textVarIdText"},
+		defText : {sv : "translated_sv_textVarIdDefText", en : "translated_en_textVarIdDefText"},
+	}};
+	expected.children.push(child);
+	
 	assert.deepEqual(viewModel, expected);
 });
 

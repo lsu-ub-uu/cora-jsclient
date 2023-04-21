@@ -63,6 +63,10 @@ var CORA = (function(cora) {
 		function getMetadataById(metadataId) {
 			return currentTextProvider.getMetadataById(metadataId);
 		}
+		
+		const getAllTranslations = function(textId){
+			return currentTextProvider.getAllTranslations(textId);
+		};
 
 		var out = Object.freeze({
 			"type" : "reloadableTextProvider",
@@ -72,7 +76,8 @@ var CORA = (function(cora) {
 			reload : reload,
 			switchProvider : switchProvider,
 			setCurrentLang : setCurrentLang,
-			getMetadataById : getMetadataById
+			getMetadataById : getMetadataById,
+			getAllTranslations : getAllTranslations
 		});
 		start();
 		return out;

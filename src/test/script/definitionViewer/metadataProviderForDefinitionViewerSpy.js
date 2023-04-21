@@ -132,6 +132,94 @@ var CORATEST = (function(coraTest) {
 		
 		const addMetadataById = function(id, metadata){
 			metadataKeeper[id] = metadata;
+		};
+		
+		const addMetadataByCompactDefinition = function(def){
+//    let toAdd = {
+//		id: "minimalGroupId",
+//		type: "group",
+//		nameInData: "minimalGroup",
+//		children : [{repeatMin: "1", repeatMax: "10", refId : "textVar"}] 
+//	};
+			let basic = createBasicMetadataByTypeIdAndNameInData(def.type, def.id, def.nameInData);
+//			console.log(def.children.length)
+//			if(def.children.length > 0){
+			if(def.children){
+				let childReferences = {
+			      name: "childReferences",
+			      children: []};
+				basic.children.push(childReferences); 
+				def.children.forEach(function(child){
+					childReferences.children.push(createChildReferenceByMinMaxRefId(child.repeatMin, 
+						child.repeatMax, child.refId));
+				});
+			}
+			
+			addMetadataById(def.id, basic);
+	
+    
+		};
+		
+		const createChildReferenceByMinMaxRefId = function(min, max, refId){
+	        return {
+	          name: "childReference",
+	          repeatId: "0",
+	          children: [
+	            {
+	              name: "repeatMin",
+	              value: min
+	            },
+	            {
+	              name: "repeatMax",
+	              value: max
+	            },
+	            {
+	              name: "ref",
+	              children: [
+	                {
+	                  name: "linkedRecordType",
+	                  value: "metadata"
+	                },
+	                {
+	                  name: "linkedRecordId",
+	                  value: refId
+	                }
+	              ]
+	            }
+	          ]
+	        };
+		};
+		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData){
+			return {
+				attributes: {type: type},
+					children:[
+						{name: "recordInfo",
+							children: [
+								{name: "id",
+								value: id}
+							]
+						},
+						{name : "nameInData",
+						value : nameInData},
+						{name: "textId",
+					    	children: [
+								{name: "linkedRecordType",
+					          	value: "text"},
+					        {name: "linkedRecordId",
+					        value: id + "Text"}
+					      ]
+					    },
+					    {name: "defTextId",
+					    	children: [
+					        	{name: "linkedRecordType",
+					          	value: "text"},
+					        	{name: "linkedRecordId",
+					          	value: id+"DefText"}
+					      ]
+					    }
+					]
+				};
+				
 		}
 		
 		function getFetchedMetadataId(no) {
@@ -154,6 +242,7 @@ var CORATEST = (function(coraTest) {
 			reload : reload,
 
 			addMetadataById : addMetadataById,
+			addMetadataByCompactDefinition:addMetadataByCompactDefinition,
 			
 			getFetchedMetadataId : getFetchedMetadataId,
 			getFetchedMetadata : getFetchedMetadata,

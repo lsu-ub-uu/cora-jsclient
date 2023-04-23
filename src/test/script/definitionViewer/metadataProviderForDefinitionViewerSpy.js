@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -30,100 +30,9 @@ var CORATEST = (function(coraTest) {
 
 		function getMetadataById(metadataId) {
 			fetchedMetadataIds.push(metadataId);
-//			var metadata = {
-//				"name" : "metadata",
-//				"attributes" : {
-//					"type" : "group"
-//				},
-//				"children" : [ {
-//					"name" : "childReferences",
-//					"children" : [ createChildReferenceWithRefAndRepeatId1to1(
-//							"metadataCollectionVariable", "userSuppliedIdCollectionVar", "1") ]
-//				} ].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(metadataId))
-//			};
 			let metadata = metadataKeeper[metadataId];
 			fetchedMetadata.push(metadata);
 			return metadata;
-		}
-		function createChildReferenceWithRefAndRepeatId1to1(refRecordType, ref, repeatId) {
-			var attribute = "metadataGroup";
-			if (refRecordType === "metadataCollectionVariable") {
-				attribute = "collectionVariable";
-			} else if (refRecordType === "metadataRecordLink") {
-				attribute = "recordLink";
-			} else if (refRecordType === "metadataResourceLink") {
-				attribute = "resourceLink";
-			} else if (refRecordType === "metadataTextVariable") {
-				attribute = "textVariable";
-			}
-
-			return createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(refRecordType,
-					ref, attribute, repeatId, "1", "1");
-		}
-		function createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet) {
-			return [ createRecordInfoJson(idToGet) ]
-					.concat(createNameInDataTextIdDefTextId2(idToGet));
-		}
-		function createRecordInfoJson(id) {
-			return {
-				"name" : "recordInfo",
-				"children" : [ {
-					"name" : "id",
-					"value" : id
-				}, {
-					"name" : "type",
-					"value" : "metadataGroup"
-				}, {
-					"name" : "createdBy",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "user"
-					}, {
-						"name" : "linkedRecordId",
-						"value" : "userId"
-					} ]
-				}, {
-					"name" : "updatedBy",
-					"value" : "userId"
-				} ]
-			};
-		}
-
-		function createNameInDataTextIdDefTextId2(id) {
-			return [ {
-				"name" : "nameInData",
-				"value" : id
-			}, {
-				"name" : "textId",
-				"value" : id + "Text"
-			}, {
-				"name" : "defTextId",
-				"value" : id + "DefText"
-			} ];
-		}
-
-		function createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(refRecordType, ref,
-				attribute, repeatId, repeatMin, repeatMax) {
-			return {
-				"name" : "childReference",
-				"repeatId" : repeatId,
-				"children" : [ {
-					"name" : "ref",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "metadata"
-					}, {
-						"name" : "linkedRecordId",
-						"value" : ref
-					} ]
-				}, {
-					"name" : "repeatMin",
-					"value" : repeatMin
-				}, {
-					"name" : "repeatMax",
-					"value" : repeatMax
-				} ]
-			};
 		}
 		function reload(callWhenReloadedMethodIn) {
 			noOfReloads++;
@@ -135,15 +44,17 @@ var CORATEST = (function(coraTest) {
 		};
 		
 		const addMetadataByCompactDefinition = function(def){
-//    let toAdd = {
-//		id: "minimalGroupId",
-//		type: "group",
-//		nameInData: "minimalGroup",
-//		children : [{repeatMin: "1", repeatMax: "10", refId : "textVar"}] 
-//	};
 			let basic = createBasicMetadataByTypeIdAndNameInData(def.type, def.id, def.nameInData);
-//			console.log(def.children.length)
-//			if(def.children.length > 0){
+			if(def.attributes){
+				let attributeReferences = {
+			      name: "attributeReferences",
+			      children: []};
+				basic.children.push(attributeReferences); 
+				def.attributes.forEach(function(attributeId){
+					let ref = createLinkByNameInDataTypeId("ref", "metadata", attributeId);
+					attributeReferences.children.push(ref);
+				});
+			}
 			if(def.children){
 				let childReferences = {
 			      name: "childReferences",
@@ -156,12 +67,25 @@ var CORATEST = (function(coraTest) {
 			}
 			
 			addMetadataById(def.id, basic);
-	
-    
+		};
+		const createLinkByNameInDataTypeId = function(nameInData, type, id){
+			return	{
+	              name: nameInData,
+	              children: [
+	                {
+	                  name: "linkedRecordType",
+	                  value: type
+	                },
+	                {
+	                  name: "linkedRecordId",
+	                  value: id
+	                }
+	              ]
+	            }
 		};
 		
 		const createChildReferenceByMinMaxRefId = function(min, max, refId){
-	        return {
+	        let x= {
 	          name: "childReference",
 	          repeatId: "0",
 	          children: [
@@ -172,25 +96,15 @@ var CORATEST = (function(coraTest) {
 	            {
 	              name: "repeatMax",
 	              value: max
-	            },
-	            {
-	              name: "ref",
-	              children: [
-	                {
-	                  name: "linkedRecordType",
-	                  value: "metadata"
-	                },
-	                {
-	                  name: "linkedRecordId",
-	                  value: refId
-	                }
-	              ]
 	            }
 	          ]
 	        };
+	        let ref = createLinkByNameInDataTypeId("ref", "metadata", refId);
+			x.children.push(ref);
+			return x;
 		};
 		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData){
-			return {
+			let x= {
 				attributes: {type: type},
 					children:[
 						{name: "recordInfo",
@@ -200,26 +114,14 @@ var CORATEST = (function(coraTest) {
 							]
 						},
 						{name : "nameInData",
-						value : nameInData},
-						{name: "textId",
-					    	children: [
-								{name: "linkedRecordType",
-					          	value: "text"},
-					        {name: "linkedRecordId",
-					        value: id + "Text"}
-					      ]
-					    },
-					    {name: "defTextId",
-					    	children: [
-					        	{name: "linkedRecordType",
-					          	value: "text"},
-					        	{name: "linkedRecordId",
-					          	value: id+"DefText"}
-					      ]
-					    }
+						value : nameInData}
 					]
 				};
-				
+			let textId = createLinkByNameInDataTypeId("textId", "text", id + "Text");
+			x.children.push(textId);
+			let defTextId = createLinkByNameInDataTypeId("defTextId", "text", id + "DefText");
+			x.children.push(defTextId);
+			return x;
 		}
 		
 		function getFetchedMetadataId(no) {
@@ -242,7 +144,7 @@ var CORATEST = (function(coraTest) {
 			reload : reload,
 
 			addMetadataById : addMetadataById,
-			addMetadataByCompactDefinition:addMetadataByCompactDefinition,
+			addMetadataByCompactDefinition : addMetadataByCompactDefinition,
 			
 			getFetchedMetadataId : getFetchedMetadataId,
 			getFetchedMetadata : getFetchedMetadata,

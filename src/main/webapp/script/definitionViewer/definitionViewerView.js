@@ -24,30 +24,32 @@ var CORA = (function(cora) {
 		const start = function() {
 		};
 
-		const createViewForViewModel = function(viewModel){
+		const createViewForViewModel = function(viewModel) {
 			console.log(viewModel)
 			let view = CORA.gui.createSpanWithClassName("definitionViewer");
 			let header = CORA.gui.createDivWithClassName("header");
 			view.appendChild(header);
-			header.innerHTML= `Definition of ${viewModel.id}!`;
-			
+			header.innerHTML = `Definition of ${viewModel.id}!`;
+
 			let metadata = document.createElement("ul");
 			metadata.className = "metadata";
 			view.appendChild(metadata);
-			let item = createViewForOneLevel({child:viewModel});
+			let item = createViewForOneLevel({ child: viewModel });
 			metadata.appendChild(item);
 			return view;
 		};
-		
+
 		const createViewForOneLevel = function(childReference) {
 			let metadataHeader = document.createElement("li");
 			let child = childReference.child;
-			metadataHeader.innerHTML= `${child.nameInData} (${createDetails(childReference)})`;
-			
-			if(child.children){
+			const attributeDetails =createAttributeDetails(child);
+			const childReferenceDetails = createDetails(childReference);
+			metadataHeader.innerHTML = `${child.nameInData}${attributeDetails} (${childReferenceDetails})`;
+
+			if (child.children) {
 				let children = document.createElement("ul");
 				metadataHeader.appendChild(children);
-				child.children.forEach(function(mChild){
+				child.children.forEach(function(mChild) {
 					let nextLevel = createViewForOneLevel(mChild);
 					children.appendChild(nextLevel);
 				});
@@ -55,70 +57,82 @@ var CORA = (function(cora) {
 			return metadataHeader;
 		};
 		
-		const createDetails = function(childReference){
-			if(childReference.repeatMin){
+		const createAttributeDetails = function(child){
+			let details = "";
+			if(child.attributes){
+				child.attributes.forEach(function(mAttribute) {
+//					let nextLevel = createViewForOneLevel(mChild);
+//					children.appendChild(nextLevel);
+				details+= `, ${mAttribute.nameInData}:{}`;	
+				});
+			}
+			return details;
+		};
+
+		const createDetails = function(childReference) {
+			if (childReference.repeatMin) {
 				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}`;
 			}
 			return `${childReference.child.type}`;
 		};
-//			let nameInData = CORA.gui.createSpanWithClassName("nameInData");
-//			metadataHeader.appendChild(nameInData);
-//			nameInData.innerHTML= viewModel.nameInData;
-//
-//			let details = CORA.gui.createSpanWithClassName("details");
-//			metadataHeader.appendChild(details);
-//			
-//			let type = CORA.gui.createSpanWithClassName("type");
-//			details.appendChild(type);
-//			type.innerHTML= viewModel.type;
-			
-//
-//			let type = dataRecordGroup.attributes["type"];
-//
-//
-//			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-//			let cRecordInfo = CORA.coraData(recordInfo);
-//			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-//			oneDef.innerHTML = nameInData +":"+type+" (" +id+")";
-//
-//			if(cDataRecordGroup.containsChildWithNameInData("attributeReferences")){
-//				let attributes = CORA.gui.createDivWithClassName("attributes");
-//				view.appendChild(attributes);
-//				let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
-//				for (let attributeReference of attributeReferences.children){
-//					let cAttributeReference = CORA.coraData(attributeReference);
-//					let attribute = CORA.gui.createDivWithClassName("attribute");
-//					attributes.appendChild(attribute);
-//					let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-//					attribute.innerHTML = attributeId;
-//				}
-//			}
-//
-//			let texts = CORA.gui.createDivWithClassName("texts");
-//			view.appendChild(texts);
-//			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
-//			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
-//			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
-//			
-//			
-//			let children = CORA.gui.createDivWithClassName("children");
-//			view.appendChild(children);
-//			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
-//			for (let childReference of childReferences.children){
-//				let cChildReference = CORA.coraData(childReference);
-//				let child = CORA.gui.createDivWithClassName("child");
-//				children.appendChild(child);
-//				let ref = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
-//				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
-//				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
-//				let recordPartConstraint = "noConstraint";
-//				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
-//					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
-//				}
-//				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
-//				
-//			}
-		
+		//			let nameInData = CORA.gui.createSpanWithClassName("nameInData");
+		//			metadataHeader.appendChild(nameInData);
+		//			nameInData.innerHTML= viewModel.nameInData;
+		//
+		//			let details = CORA.gui.createSpanWithClassName("details");
+		//			metadataHeader.appendChild(details);
+		//			
+		//			let type = CORA.gui.createSpanWithClassName("type");
+		//			details.appendChild(type);
+		//			type.innerHTML= viewModel.type;
+
+		//
+		//			let type = dataRecordGroup.attributes["type"];
+		//
+		//
+		//			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
+		//			let cRecordInfo = CORA.coraData(recordInfo);
+		//			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
+		//			oneDef.innerHTML = nameInData +":"+type+" (" +id+")";
+		//
+		//			if(cDataRecordGroup.containsChildWithNameInData("attributeReferences")){
+		//				let attributes = CORA.gui.createDivWithClassName("attributes");
+		//				view.appendChild(attributes);
+		//				let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
+		//				for (let attributeReference of attributeReferences.children){
+		//					let cAttributeReference = CORA.coraData(attributeReference);
+		//					let attribute = CORA.gui.createDivWithClassName("attribute");
+		//					attributes.appendChild(attribute);
+		//					let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
+		//					attribute.innerHTML = attributeId;
+		//				}
+		//			}
+		//
+		//			let texts = CORA.gui.createDivWithClassName("texts");
+		//			view.appendChild(texts);
+		//			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
+		//			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
+		//			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
+		//			
+		//			
+		//			let children = CORA.gui.createDivWithClassName("children");
+		//			view.appendChild(children);
+		//			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
+		//			for (let childReference of childReferences.children){
+		//				let cChildReference = CORA.coraData(childReference);
+		//				let child = CORA.gui.createDivWithClassName("child");
+		//				children.appendChild(child);
+		//				let ref = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
+		//				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
+		//				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
+		//				let recordPartConstraint = "noConstraint";
+		//				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
+		//					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
+		//				}
+		//				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
+		//				
+		//			}
+
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
@@ -132,9 +146,9 @@ var CORA = (function(cora) {
 			type: "definitionViewerView",
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,
-			createViewForViewModel : createViewForViewModel
-//			getView: getView,
-//			showView: showView
+			createViewForViewModel: createViewForViewModel
+			//			getView: getView,
+			//			showView: showView
 		});
 		start();
 

@@ -21,28 +21,30 @@
 QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
-			someDep : "someDep"
+			someDep: "someDep"
 		}
 		this.spec = {
-			someKey : "someValue"
+			someKey: "someValue"
 		};
 		this.definitionViewerView = CORA.definitionViewerView(this.dependencies, this.spec);
 		let viewModel = {
 			id: "minimalGroupId",
 			type: "group",
 			nameInData: "minimalGroup",
-			text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"},
-			defText : {sv : "translated_sv_minimalGroupIdDefText", en : "translated_en_minimalGroupIdDefText"},
-			children : [] 
+			text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+			defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+			children: []
 		};
 		this.viewModel = viewModel;
-		let child = {repeatMin: "1", repeatMax: "10", child : {
-			id: "textVarId",
-			type: "textVar",
-			nameInData: "textVar",
-			text : {sv : "translated_sv_textVarIdText", en : "translated_en_textVarIdText"},
-			defText : {sv : "translated_sv_textVarIdDefText", en : "translated_en_textVarIdDefText"},
-		}};
+		let child = {
+			repeatMin: "1", repeatMax: "10", child: {
+				id: "textVarId",
+				type: "textVar",
+				nameInData: "textVar",
+				text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+				defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+			}
+		};
 		viewModel.children.push(child);
 	},
 	afterEach: function() {
@@ -65,33 +67,53 @@ QUnit.test("testBasicView", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 	assert.strictEqual(view.tagName, "SPAN");
 	assert.strictEqual(view.className, "definitionViewer");
-	
+
 	let header = view.childNodes[0];
 	assert.strictEqual(header.tagName, "DIV");
 	assert.strictEqual(header.className, "header");
 	assert.strictEqual(header.innerHTML, "Definition of minimalGroupId!");
 });
 
-QUnit.test("testFirstChild", function(assert) {
+QUnit.test("testBasicMetadata", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
-	
+
 	let firstLevelMetadata = view.childNodes[1];
 	assert.strictEqual(firstLevelMetadata.tagName, "UL");
 	assert.strictEqual(firstLevelMetadata.className, "metadata");
-	
+
 	let metadataHeader = firstLevelMetadata.childNodes[0];
 	assert.strictEqual(metadataHeader.tagName, "LI");
 	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup (group)");
-	
+});
 
+QUnit.test("testBasicWithAttribute", function(assert) {
+	let attribute = {
+		id: "attributeCollectionVarId",
+		type: "collectionVariable",
+		nameInData: "collectionVarName",
+		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
+		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+	};
+	this.viewModel.attributes = [];
+	this.viewModel.attributes.push(attribute);
+
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup, collectionVarName:{} (group)");
+});
+
+QUnit.test("testFirstChild", function(assert) {
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
 	let children = metadataHeader.childNodes[1];
 	assert.strictEqual(children.tagName, "UL");
 
 	let childReference = children.childNodes[0];
 	assert.strictEqual(childReference.tagName, "LI");
 	assert.strictEqual(childReference.childNodes[0].nodeValue, "textVar (textVar, 1-10)");
-	
-	
-	
 });
 

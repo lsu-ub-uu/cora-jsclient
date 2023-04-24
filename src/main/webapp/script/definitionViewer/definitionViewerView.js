@@ -63,7 +63,11 @@ var CORA = (function(cora) {
 				child.attributes.forEach(function(mAttribute) {
 //					let nextLevel = createViewForOneLevel(mChild);
 //					children.appendChild(nextLevel);
-				details+= `, ${mAttribute.nameInData}:{}`;	
+					if(mAttribute.finalValue){
+						details+= `, ${mAttribute.nameInData}:{${mAttribute.finalValue}}`;	
+					}else{
+						details+= `, ${mAttribute.nameInData}:{}`;	
+					}
 				});
 			}
 			return details;

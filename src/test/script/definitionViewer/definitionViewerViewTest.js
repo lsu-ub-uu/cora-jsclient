@@ -91,6 +91,7 @@ QUnit.test("testBasicWithAttribute", function(assert) {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
 		nameInData: "collectionVarName",
+		finalValue: "someFinalValue",
 		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
 		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
 	};
@@ -101,7 +102,7 @@ QUnit.test("testBasicWithAttribute", function(assert) {
 
 	let firstLevelMetadata = view.childNodes[1];
 	let metadataHeader = firstLevelMetadata.childNodes[0];
-	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup, collectionVarName:{} (group)");
+	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup, collectionVarName:{someFinalValue} (group)");
 });
 
 QUnit.test("testFirstChild", function(assert) {

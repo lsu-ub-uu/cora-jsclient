@@ -137,14 +137,19 @@ var CORA = (function(cora) {
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 			let text = getTranslations(cDataRecordGroup, "textId");
 			let defText = getTranslations(cDataRecordGroup, "defTextId");
-
-			return {
+			
+			let basic = {
 				id: id,
 				type: type,
 				nameInData: nameInData,
 				text: text,
 				defText: defText
 			};
+			
+			if (cDataRecordGroup.containsChildWithNameInData("finalValue")) {
+				basic.finalValue = cDataRecordGroup.getFirstAtomicValueByNameInData("finalValue");
+			}				
+			return basic;
 		};
 
 		const collectAttributes = function(cDataRecordGroup) {

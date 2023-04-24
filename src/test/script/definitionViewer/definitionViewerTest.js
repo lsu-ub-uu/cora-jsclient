@@ -277,7 +277,8 @@ QUnit.test("testViewModelAttributes", function(assert) {
 	let toAddCollectionVar = {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
-		nameInData: "collectionVarName"
+		nameInData: "collectionVarName",
+		finalValue: "someFinalValue"
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
 
@@ -296,6 +297,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
 		nameInData: "collectionVarName",
+		finalValue: "someFinalValue",
 		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
 		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
 	};

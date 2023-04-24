@@ -65,8 +65,13 @@ var CORATEST = (function(coraTest) {
 						child.repeatMax, child.refId));
 				});
 			}
-			
+			if(def.finalValue){
+				basic.children.push(createAtomicByNameInDataAndValue("finalValue", def.finalValue));
+			}
 			addMetadataById(def.id, basic);
+		};
+		const createAtomicByNameInDataAndValue = function(nameInData, value){
+			return {name: nameInData, value: value};
 		};
 		const createLinkByNameInDataTypeId = function(nameInData, type, id){
 			return	{

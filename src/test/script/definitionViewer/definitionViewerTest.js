@@ -278,9 +278,24 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
 		nameInData: "collectionVarName",
-		finalValue: "someFinalValue"
+		finalValue: "someFinalValue",
+		itemCollection : "itemCollectionId"
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
+
+	let addToItemCollection = {
+		id: "itemCollectionId",
+		type: "itemCollection",
+		nameInData: "itemCollectionName"
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(addToItemCollection);
+	
+	let addToCollectionItem = {
+		id: "collectionItemVarId",
+		type: "collectionItem",
+		nameInData: "collectionItemName"
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
 	let generatedView = this.definitionViewer.getView();
 
@@ -300,9 +315,18 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		finalValue: "someFinalValue",
 		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
 		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+		collectionItems : []
 	};
 	expected.attributes.push(attribute);
-
+	let collectionItem = {
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
+	};
+	attribute.collectionItems.push(collectionItem);
+	
 	assert.deepEqual(viewModel, expected);
 });
 

@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
-			console.log(viewModel)
+console.log(viewModel)
 			let view = CORA.gui.createSpanWithClassName("definitionViewer");
 			let header = CORA.gui.createDivWithClassName("header");
 			view.appendChild(header);
@@ -43,7 +43,7 @@ var CORA = (function(cora) {
 			let metadataHeader = document.createElement("li");
 			let child = childReference.child;
 			const attributeDetails =createAttributeDetails(child);
-			const childReferenceDetails = createDetails(childReference);
+			const childReferenceDetails = createChildReferenceDetails(childReference);
 			metadataHeader.innerHTML = `${child.nameInData}${attributeDetails} (${childReferenceDetails})`;
 
 			if (child.children) {
@@ -61,19 +61,21 @@ var CORA = (function(cora) {
 			let details = "";
 			if(child.attributes){
 				child.attributes.forEach(function(mAttribute) {
-//					let nextLevel = createViewForOneLevel(mChild);
-//					children.appendChild(nextLevel);
 					if(mAttribute.finalValue){
 						details+= `, ${mAttribute.nameInData}:{${mAttribute.finalValue}}`;	
 					}else{
-						details+= `, ${mAttribute.nameInData}:{}`;	
+						let items = [];
+						mAttribute.collectionItems.forEach(function(collectionItem){
+							items.push(collectionItem.nameInData);
+						});
+						details+= `, ${mAttribute.nameInData}:{${items.join(", ")}}`;	
 					}
 				});
 			}
 			return details;
 		};
 
-		const createDetails = function(childReference) {
+		const createChildReferenceDetails = function(childReference) {
 			if (childReference.repeatMin) {
 				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}`;
 			}

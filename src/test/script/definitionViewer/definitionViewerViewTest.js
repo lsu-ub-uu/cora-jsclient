@@ -86,7 +86,7 @@ QUnit.test("testBasicMetadata", function(assert) {
 	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup (group)");
 });
 
-QUnit.test("testBasicWithAttribute", function(assert) {
+QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
 	let attribute = {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
@@ -94,15 +94,60 @@ QUnit.test("testBasicWithAttribute", function(assert) {
 		finalValue: "someFinalValue",
 		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
 		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+		collectionItems : []
 	};
 	this.viewModel.attributes = [];
 	this.viewModel.attributes.push(attribute);
+	let collectionItem = {
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" }
+	};
+	attribute.collectionItems.push(collectionItem);
 
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 
 	let firstLevelMetadata = view.childNodes[1];
 	let metadataHeader = firstLevelMetadata.childNodes[0];
 	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup, collectionVarName:{someFinalValue} (group)");
+});
+
+QUnit.test("testBasicWithAttributeChoice", function(assert) {
+	let attribute = {
+		id: "attributeCollectionVarId",
+		type: "collectionVariable",
+		nameInData: "collectionVarName",
+		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
+		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+		collectionItems : []
+	};
+	this.viewModel.attributes = [];
+	this.viewModel.attributes.push(attribute);
+	let collectionItem = {
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" }
+	};
+	attribute.collectionItems.push(collectionItem);
+	let collectionItem2 = {
+		id: "collectionItemId2",
+		type: "collectionItem2",
+		nameInData: "collectionItemName2",
+		text: { sv: "translated_sv_collectionItemId2Text", en: "translated_en_collectionItem2IdText" },
+		defText: { sv: "translated_sv_collectionItemId2DefText", en: "translated_en_collectionItemId2DefText" }
+	};
+	attribute.collectionItems.push(collectionItem2);
+
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	assert.strictEqual(metadataHeader.childNodes[0].nodeValue,
+	 "minimalGroup, collectionVarName:{collectionItemName, collectionItemName2} (group)");
 });
 
 QUnit.test("testFirstChild", function(assert) {

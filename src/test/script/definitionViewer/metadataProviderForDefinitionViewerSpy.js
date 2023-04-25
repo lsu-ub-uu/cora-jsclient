@@ -68,6 +68,20 @@ var CORATEST = (function(coraTest) {
 			if(def.finalValue){
 				basic.children.push(createAtomicByNameInDataAndValue("finalValue", def.finalValue));
 			}
+			if(def.itemCollectionId){
+				let refCollection = createLinkByNameInDataTypeId("refCollection", "metadata", def.itemCollectionId);
+				basic.children.push(refCollection);
+			}
+			if(def.refIds){
+				let collectionItemReferences = {
+			      name: "collectionItemReferences",
+			      children: []};
+				basic.children.push(collectionItemReferences); 
+				def.refIds.forEach(function(refId){
+					let ref = createLinkByNameInDataTypeId("ref", "metadata", refId);
+					collectionItemReferences.children.push(ref);
+				});
+			}
 			addMetadataById(def.id, basic);
 		};
 		const createAtomicByNameInDataAndValue = function(nameInData, value){

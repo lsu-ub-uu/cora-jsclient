@@ -279,19 +279,20 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		type: "collectionVariable",
 		nameInData: "collectionVarName",
 		finalValue: "someFinalValue",
-		itemCollection : "itemCollectionId"
+		itemCollectionId : "itemCollectionId"
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
 
 	let addToItemCollection = {
 		id: "itemCollectionId",
 		type: "itemCollection",
-		nameInData: "itemCollectionName"
+		nameInData: "itemCollectionName",
+		refIds: ["collectionItemId"]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(addToItemCollection);
 	
 	let addToCollectionItem = {
-		id: "collectionItemVarId",
+		id: "collectionItemId",
 		type: "collectionItem",
 		nameInData: "collectionItemName"
 	};
@@ -323,7 +324,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		type: "collectionItem",
 		nameInData: "collectionItemName",
 		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
-		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
+		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" }
 	};
 	attribute.collectionItems.push(collectionItem);
 	

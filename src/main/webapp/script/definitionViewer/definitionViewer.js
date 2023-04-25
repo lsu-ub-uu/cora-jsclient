@@ -161,10 +161,35 @@ var CORA = (function(cora) {
 				let cAttribute = getCMetadataById(attributeId);
 				let attribute = getBasicModelFromCDataRecordGroup(cAttribute);
 				attributes.push(attribute);
+				
+				attribute.collectionItems = collectCollectionItems(cAttribute);
+				
 			}
 			return attributes;
 		};
-
+		
+		const collectCollectionItems = function(cAttribute){
+//console.log("cAttribute: ",cAttribute.getData())
+			let collectionLink = cAttribute.getFirstChildByNameInData("refCollection");
+			let cCollectionLink = CORA.coraData(collectionLink);
+			let collectionId = cCollectionLink.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cCollection = getCMetadataById(collectionId);
+//console.log("cCollection: ",cCollection.getData())
+//			collectionItemReferences
+			let collectionItemReferences = cCollection.getFirstChildByNameInData("collectionItemReferences");
+//			let itemLinks = cCollection.getChildrenByNameInData("ref");
+			let collectionItems = [];
+//			for (let itemLink of itemLinks) {
+			for (let itemLink of collectionItemReferences.children) {
+				let cItemLink = CORA.coraData(itemLink);
+				let collectionItemId = cItemLink.getFirstAtomicValueByNameInData("linkedRecordId");
+				let cCollectionItem = getCMetadataById(collectionItemId);
+				let collectionItem = getBasicModelFromCDataRecordGroup(cCollectionItem);
+				collectionItems.push(collectionItem);
+			}
+			return collectionItems;
+		};
+		
 		const collectChildren = function(cDataRecordGroup) {
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");

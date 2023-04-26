@@ -208,9 +208,12 @@ var CORA = (function(cora) {
 				let childRef = {
 					repeatMin: repeatMin,
 					repeatMax: repeatMax,
+					recordPartConstraint: "noConstraint",
 					child: getViewModelForMetadataId(refId)
-					//					child:{} 
 				};
+				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
+					childRef.recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
+				}
 
 				children.push(childRef);
 			}

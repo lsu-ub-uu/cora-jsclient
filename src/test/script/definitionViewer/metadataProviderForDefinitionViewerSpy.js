@@ -61,8 +61,7 @@ var CORATEST = (function(coraTest) {
 			      children: []};
 				basic.children.push(childReferences); 
 				def.children.forEach(function(child){
-					childReferences.children.push(createChildReferenceByMinMaxRefId(child.repeatMin, 
-						child.repeatMax, child.refId));
+					childReferences.children.push(createChildReferenceByChild(child));
 				});
 			}
 			if(def.finalValue){
@@ -103,24 +102,28 @@ var CORATEST = (function(coraTest) {
 	            }
 		};
 		
-		const createChildReferenceByMinMaxRefId = function(min, max, refId){
-	        let x= {
+		const createChildReferenceByChild = function(child){
+	        let childReference= {
 	          name: "childReference",
 	          repeatId: "0",
 	          children: [
 	            {
 	              name: "repeatMin",
-	              value: min
+	              value: child.repeatMin
 	            },
 	            {
 	              name: "repeatMax",
-	              value: max
+	              value: child.repeatMax
 	            }
 	          ]
 	        };
-	        let ref = createLinkByNameInDataTypeId("ref", "metadata", refId);
-			x.children.push(ref);
-			return x;
+	        let ref = createLinkByNameInDataTypeId("ref", "metadata", child.refId);
+			childReference.children.push(ref);
+			if(child.recordPartConstraint){
+				childReference.children.push(createAtomicByNameInDataAndValue("recordPartConstraint", 
+					child.recordPartConstraint));
+			}
+			return childReference;
 		};
 		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData){
 			let x= {

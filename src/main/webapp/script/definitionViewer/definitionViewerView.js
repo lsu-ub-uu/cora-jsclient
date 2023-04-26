@@ -77,7 +77,7 @@ console.log(viewModel)
 
 		const createChildReferenceDetails = function(childReference) {
 			if (childReference.repeatMin) {
-				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}`;
+				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}, ${childReference.recordPartConstraint}`;
 			}
 			return `${childReference.child.type}`;
 		};

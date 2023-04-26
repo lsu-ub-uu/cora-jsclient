@@ -229,7 +229,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId" }]
+		children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId"}]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
 	let toAddTextVar = {
@@ -251,7 +251,46 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		children: []
 	};
 	let childReference = {
-		repeatMin: "1", repeatMax: "10", child: {
+		repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
+			id: "textVarId",
+			type: "textVariable",
+			nameInData: "textVarName",
+			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+		}
+	};
+	expected.children.push(childReference);
+
+	assert.deepEqual(viewModel, expected);
+});
+QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
+	let toAdd = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", refId: "textVarId"}]
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
+	let toAddTextVar = {
+		id: "textVarId",
+		type: "textVariable",
+		nameInData: "textVarName"
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
+
+	let generatedView = this.definitionViewer.getView();
+
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		children: []
+	};
+	let childReference = {
+		repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", child: {
 			id: "textVarId",
 			type: "textVariable",
 			nameInData: "textVarName",

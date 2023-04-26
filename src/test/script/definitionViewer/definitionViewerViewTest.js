@@ -37,7 +37,7 @@ QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 		};
 		this.viewModel = viewModel;
 		let child = {
-			repeatMin: "1", repeatMax: "10", child: {
+			repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
 				id: "textVarId",
 				type: "textVar",
 				nameInData: "textVar",
@@ -160,6 +160,6 @@ QUnit.test("testFirstChild", function(assert) {
 
 	let childReference = children.childNodes[0];
 	assert.strictEqual(childReference.tagName, "LI");
-	assert.strictEqual(childReference.childNodes[0].nodeValue, "textVar (textVar, 1-10)");
+	assert.strictEqual(childReference.childNodes[0].nodeValue, "textVar (textVar, 1-10, noConstraint)");
 });
 

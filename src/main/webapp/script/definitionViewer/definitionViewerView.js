@@ -26,26 +26,43 @@ var CORA = (function(cora) {
 
 		const createViewForViewModel = function(viewModel) {
 console.log(viewModel)
-			let view = CORA.gui.createSpanWithClassName("definitionViewer");
-			let header = CORA.gui.createDivWithClassName("header");
+			let view = createElementWithTypeClassText("span", "definitionViewer");
+			let header = createElementWithTypeClassText("div", "header",
+				 `Definition of ${viewModel.id}!`);
 			view.appendChild(header);
-			header.innerHTML = `Definition of ${viewModel.id}!`;
 
-			let metadata = document.createElement("ul");
-			metadata.className = "metadata";
+			let metadata = createElementWithTypeClassText("ul", "metadata");
 			view.appendChild(metadata);
 			let item = createViewForOneLevel({ child: viewModel });
 			metadata.appendChild(item);
 			return view;
 		};
+		
+		const createElementWithTypeClassText = function(type, className, textContent){
+			let span = document.createElement(type);
+			if(className){
+				span.className = className;
+			}
+			if(textContent){
+				span.textContent = textContent;
+			}
+			return span;
+		};
 
 		const createViewForOneLevel = function(childReference) {
-			let metadataHeader = document.createElement("li");
 			let child = childReference.child;
-			const attributeDetails =createAttributeDetails(child);
-			const childReferenceDetails = createChildReferenceDetails(childReference);
-			metadataHeader.innerHTML = `${child.nameInData}${attributeDetails} (${childReferenceDetails})`;
+			let metadataHeader = createElementWithTypeClassText("li");
 
+			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
+			metadataHeader.append(nameInData);
+			
+			if(child.attributes){
+				const attributeDetails =createAttributeDetails(child);
+				metadataHeader.append(attributeDetails);
+			}
+
+			const details = createChildReferenceDetails(childReference);
+			metadataHeader.append(details);
 			if (child.children) {
 				let children = document.createElement("ul");
 				metadataHeader.appendChild(children);
@@ -58,87 +75,47 @@ console.log(viewModel)
 		};
 		
 		const createAttributeDetails = function(child){
-			let details = "";
-			if(child.attributes){
-				child.attributes.forEach(function(mAttribute) {
-					if(mAttribute.finalValue){
-						details+= `, ${mAttribute.nameInData}:{${mAttribute.finalValue}}`;	
-					}else{
-						let items = [];
-						mAttribute.collectionItems.forEach(function(collectionItem){
-							items.push(collectionItem.nameInData);
-						});
-						details+= `, ${mAttribute.nameInData}:{${items.join(", ")}}`;	
-					}
-				});
-			}
-			return details;
+			let details = [];
+			child.attributes.forEach(function(mAttribute) {
+				if(mAttribute.finalValue){
+					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);	
+				}else{
+					let items = [];
+					mAttribute.collectionItems.forEach(function(collectionItem){
+						items.push(collectionItem.nameInData);
+					});
+					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);	
+				}
+			});
+			return createElementWithTypeClassText("span", "attributes", details.join(", "));
 		};
 
 		const createChildReferenceDetails = function(childReference) {
+			let details = createElementWithTypeClassText("span", "details");
+			let type = createElementWithTypeClassText("span", "type", `${childReference.child.type}`);
+			details.append("(", type);
+			
 			if (childReference.repeatMin) {
-				return `${childReference.child.type}, ${childReference.repeatMin}-${childReference.repeatMax}, ${childReference.recordPartConstraint}`;
+				details.append(", ");
+				let cardinality = createElementWithTypeClassText("span", "cardinality", 
+					`${childReference.repeatMin}-${childReference.repeatMax}`);
+				details.append(cardinality);
 			}
-			return `${childReference.child.type}`;
+			if (childReference.recordPartConstraint) {
+				details.append(", ");
+				let constraint = createElementWithTypeClassText("span", "constraint",
+					`${childReference.recordPartConstraint}`);
+				details.append(constraint);
+			}
+			details.append(")");
+			return details;
 		};
-		//			let nameInData = CORA.gui.createSpanWithClassName("nameInData");
-		//			metadataHeader.appendChild(nameInData);
-		//			nameInData.innerHTML= viewModel.nameInData;
-		//
-		//			let details = CORA.gui.createSpanWithClassName("details");
-		//			metadataHeader.appendChild(details);
-		//			
-		//			let type = CORA.gui.createSpanWithClassName("type");
-		//			details.appendChild(type);
-		//			type.innerHTML= viewModel.type;
-
-		//
-		//			let type = dataRecordGroup.attributes["type"];
-		//
-		//
-		//			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-		//			let cRecordInfo = CORA.coraData(recordInfo);
-		//			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-		//			oneDef.innerHTML = nameInData +":"+type+" (" +id+")";
-		//
-		//			if(cDataRecordGroup.containsChildWithNameInData("attributeReferences")){
-		//				let attributes = CORA.gui.createDivWithClassName("attributes");
-		//				view.appendChild(attributes);
-		//				let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
-		//				for (let attributeReference of attributeReferences.children){
-		//					let cAttributeReference = CORA.coraData(attributeReference);
-		//					let attribute = CORA.gui.createDivWithClassName("attribute");
-		//					attributes.appendChild(attribute);
-		//					let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		//					attribute.innerHTML = attributeId;
-		//				}
-		//			}
-		//
+		
 		//			let texts = CORA.gui.createDivWithClassName("texts");
 		//			view.appendChild(texts);
 		//			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
 		//			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
 		//			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
-		//			
-		//			
-		//			let children = CORA.gui.createDivWithClassName("children");
-		//			view.appendChild(children);
-		//			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
-		//			for (let childReference of childReferences.children){
-		//				let cChildReference = CORA.coraData(childReference);
-		//				let child = CORA.gui.createDivWithClassName("child");
-		//				children.appendChild(child);
-		//				let ref = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
-		//				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
-		//				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
-		//				let recordPartConstraint = "noConstraint";
-		//				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
-		//					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
-		//				}
-		//				child.innerHTML = ref + " ("+repeatMin+" - "+repeatMax+") "+recordPartConstraint;
-		//				
-		//			}
-
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
@@ -153,8 +130,6 @@ console.log(viewModel)
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,
 			createViewForViewModel: createViewForViewModel
-			//			getView: getView,
-			//			showView: showView
 		});
 		start();
 

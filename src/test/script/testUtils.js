@@ -31,5 +31,15 @@ var CORATEST = (function(coraTest) {
 		assert.equal(span.className, className);
 	};
 
+	coraTest.assertElementHasTypeClassText = function(element, type, className, textContent, assert) {
+		assert.equal(element.nodeName, type);
+		if(className){
+			assert.equal(element.className, className);
+		}
+		if(textContent){
+			assert.equal(element.textContent, textContent);
+		}			
+	};
+
 	return coraTest;
 }(CORATEST || {}));

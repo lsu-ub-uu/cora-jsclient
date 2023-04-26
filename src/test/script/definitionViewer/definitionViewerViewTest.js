@@ -65,25 +65,23 @@ QUnit.test("testOnlyForTestGetSpec", function(assert) {
 
 QUnit.test("testBasicView", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
-	assert.strictEqual(view.tagName, "SPAN");
-	assert.strictEqual(view.className, "definitionViewer");
+	CORATEST.assertElementHasTypeClassText(view, "SPAN", "definitionViewer", "", assert);
 
 	let header = view.childNodes[0];
-	assert.strictEqual(header.tagName, "DIV");
-	assert.strictEqual(header.className, "header");
-	assert.strictEqual(header.innerHTML, "Definition of minimalGroupId!");
+	CORATEST.assertElementHasTypeClassText(header, "DIV", "header", "Definition of minimalGroupId!", assert);
 });
 
 QUnit.test("testBasicMetadata", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 
 	let firstLevelMetadata = view.childNodes[1];
-	assert.strictEqual(firstLevelMetadata.tagName, "UL");
-	assert.strictEqual(firstLevelMetadata.className, "metadata");
+	CORATEST.assertElementHasTypeClassText(firstLevelMetadata, "UL", "metadata", "", assert);
 
 	let metadataHeader = firstLevelMetadata.childNodes[0];
 	assert.strictEqual(metadataHeader.tagName, "LI");
-	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup (group)");
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "details",  "", assert);
 });
 
 QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
@@ -111,7 +109,11 @@ QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
 
 	let firstLevelMetadata = view.childNodes[1];
 	let metadataHeader = firstLevelMetadata.childNodes[0];
-	assert.strictEqual(metadataHeader.childNodes[0].nodeValue, "minimalGroup, collectionVarName:{someFinalValue} (group)");
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
+		"collectionVarName:{someFinalValue}", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
 });
 
 QUnit.test("testBasicWithAttributeChoice", function(assert) {
@@ -146,8 +148,50 @@ QUnit.test("testBasicWithAttributeChoice", function(assert) {
 
 	let firstLevelMetadata = view.childNodes[1];
 	let metadataHeader = firstLevelMetadata.childNodes[0];
-	assert.strictEqual(metadataHeader.childNodes[0].nodeValue,
-	 "minimalGroup, collectionVarName:{collectionItemName, collectionItemName2} (group)");
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
+		"collectionVarName:{collectionItemName, collectionItemName2}", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
+});
+QUnit.test("testBasicWithTwoAttributeChoice", function(assert) {
+	let attribute = {
+		id: "attributeCollectionVarId",
+		type: "collectionVariable",
+		nameInData: "collectionVarName",
+		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
+		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+		collectionItems : []
+	};
+	this.viewModel.attributes = [];
+	this.viewModel.attributes.push(attribute);
+	this.viewModel.attributes.push(attribute);
+	let collectionItem = {
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" }
+	};
+	attribute.collectionItems.push(collectionItem);
+	let collectionItem2 = {
+		id: "collectionItemId2",
+		type: "collectionItem2",
+		nameInData: "collectionItemName2",
+		text: { sv: "translated_sv_collectionItemId2Text", en: "translated_en_collectionItem2IdText" },
+		defText: { sv: "translated_sv_collectionItemId2DefText", en: "translated_en_collectionItemId2DefText" }
+	};
+	attribute.collectionItems.push(collectionItem2);
+
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
+		"collectionVarName:{collectionItemName, collectionItemName2}, collectionVarName:{collectionItemName, collectionItemName2}", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
 });
 
 QUnit.test("testFirstChild", function(assert) {
@@ -155,11 +199,22 @@ QUnit.test("testFirstChild", function(assert) {
 
 	let firstLevelMetadata = view.childNodes[1];
 	let metadataHeader = firstLevelMetadata.childNodes[0];
-	let children = metadataHeader.childNodes[1];
+	let children = metadataHeader.childNodes[2];
 	assert.strictEqual(children.tagName, "UL");
 
 	let childReference = children.childNodes[0];
 	assert.strictEqual(childReference.tagName, "LI");
-	assert.strictEqual(childReference.childNodes[0].nodeValue, "textVar (textVar, 1-10, noConstraint)");
+	assert.strictEqual(childReference.className, "");
+	let childNodes = childReference.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "textVar", assert);
+	let details = childNodes[1].childNodes;
+	CORATEST.assertElementHasTypeClassText(details[0], "#text", "", "(", assert);
+	CORATEST.assertElementHasTypeClassText(details[1], "SPAN", "type", "textVar", assert);
+	CORATEST.assertElementHasTypeClassText(details[2], "#text", "", ", ", assert);
+	CORATEST.assertElementHasTypeClassText(details[3], "SPAN", "cardinality", "1-10", assert);
+	CORATEST.assertElementHasTypeClassText(details[4], "#text", "", ", ", assert);
+	CORATEST.assertElementHasTypeClassText(details[5], "SPAN", "constraint", "noConstraint", assert);
+	CORATEST.assertElementHasTypeClassText(details[6], "#text", "", ")", assert);
+	
 });
 

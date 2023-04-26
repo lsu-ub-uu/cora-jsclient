@@ -602,13 +602,45 @@ body {
   color: orange;
 }
 
-
-
 .definitionViewer .header {
 	font-size: 2rem;
-	color: #575757;
+	color: #243bb7;
 }
 
+.definitionViewer .nameInData {
+	font-size: .9rem;
+	color: orange;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.definitionViewer .attributes {
+	font-size: 0.8rem;
+	color: #2e7af0;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.definitionViewer .details {
+	font-size: 0.8rem;
+	color: #188014;
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .details .type {
+/* 	color: red; */
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .details .cardinality {
+/* 	color: gren; */
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .details .constraint {
+/* 	color: blue; */
+/* 	padding-right: 0.2rem; */
+}
 
 
 

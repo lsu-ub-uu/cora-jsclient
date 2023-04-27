@@ -135,12 +135,56 @@ var CORA = (function(cora) {
 				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
 					childRef.recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
 				}
+				let indexAttributes=createAttributesWithNameAndValueAndRepeatId("type", "index");
+				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",indexAttributes)){
+					let indexs = cChildReference.getChildrenByNameInDataAndAttributes("childRefCollectTerm",indexAttributes);
+					let indexTerms = [];
+					for (let index of indexs) {
+						let cIndex = CORA.coraData(index);
+						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
+						indexTerms.push(collectTermId);
+					}
+					childRef.collectIndexTerms = indexTerms;
+				}
+				let storageAttributes=createAttributesWithNameAndValueAndRepeatId("type", "storage");
+				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",storageAttributes)){
+					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",storageAttributes);
+						let cIndex = CORA.coraData(index);
+						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
+					childRef.collectStorageTerm = collectTermId;
+				}
+				let permissionAttributes=createAttributesWithNameAndValueAndRepeatId("type", "permission");
+				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",permissionAttributes)){
+					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",permissionAttributes);
+						let cIndex = CORA.coraData(index);
+						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
+					childRef.collectPermissionTerm = collectTermId;
+				}
 
 				children.push(childRef);
 			}
 			return children;
 		};
-
+const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+				let attributes = {
+					name: "attributes",
+					children: []
+				};
+	let attribute =  {
+		name: "attribute",
+		repeatId: repeatId || "1",
+		children: [{
+			name: "attributeName",
+			value: attributeName
+		}, {
+			name: "attributeValue",
+			value: attributeValue
+		}]
+	};
+				 attributes.children.push(attribute);
+				return attributes;
+		
+}
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
 			return CORA.coraData(metadata);

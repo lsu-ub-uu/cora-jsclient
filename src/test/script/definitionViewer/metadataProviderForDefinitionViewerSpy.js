@@ -123,6 +123,27 @@ var CORATEST = (function(coraTest) {
 				childReference.children.push(createAtomicByNameInDataAndValue("recordPartConstraint", 
 					child.recordPartConstraint));
 			}
+			if(child.collectIndexTerms){
+				for (let indexTerm of child.collectIndexTerms) {
+			        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectIndexTerm",
+			        indexTerm);
+			        collectTerm.attributes = {type: "index"};
+					childReference.children.push(collectTerm);
+				}
+			}
+			if(child.collectStorageTerm){
+		        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectStorageTerm",
+		        child.collectStorageTerm);
+		        collectTerm.attributes = {type: "storage"};
+				childReference.children.push(collectTerm);
+			}
+			if(child.collectPermissionTerm){
+		        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectPermissionTerm",
+		        child.collectPermissionTerm);
+		        collectTerm.attributes = {type: "permission"};
+				childReference.children.push(collectTerm);
+			}
+			
 			return childReference;
 		};
 		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData){

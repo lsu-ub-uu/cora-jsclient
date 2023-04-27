@@ -302,6 +302,53 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 
 	assert.deepEqual(viewModel, expected);
 });
+QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
+	let toAdd = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", 
+			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
+			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
+			refId: "textVarId"}]
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
+	
+	let toAddTextVar = {
+		id: "textVarId",
+		type: "textVariable",
+		nameInData: "textVarName"
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
+
+
+	let generatedView = this.definitionViewer.getView();
+
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		children: []
+	};
+	let childReference = {
+		repeatMin: "1", repeatMax: "10", recordPartConstraint: "read",
+			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
+			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
+			child: {
+			id: "textVarId",
+			type: "textVariable",
+			nameInData: "textVarName",
+			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" }
+		}
+	};
+	expected.children.push(childReference);
+
+	assert.deepEqual(viewModel, expected);
+});
 
 QUnit.test("testViewModelAttributes", function(assert) {
 	let toAdd = {

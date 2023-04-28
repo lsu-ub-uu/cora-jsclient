@@ -218,3 +218,25 @@ QUnit.test("testFirstChild", function(assert) {
 	
 });
 
+QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
+	this.viewModel.children[0].collectIndexTerms=["collectIndexTerm1", "collectIndexTerm2"];
+	this.viewModel.children[0].collectStorageTerm="collectStorageTerm";
+	this.viewModel.children[0].collectPermissionTerm="collectPermissionTerm";
+		
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let children = metadataHeader.childNodes[2];
+	let childReference = children.childNodes[0];
+	let childNodes = childReference.childNodes;
+	let details = childNodes[1].childNodes;
+	CORATEST.assertElementHasTypeClassText(details[5], "SPAN", "constraint", "noConstraint", assert);
+	CORATEST.assertElementHasTypeClassText(details[6], "#text", "", ", ", assert);
+	CORATEST.assertElementHasTypeClassText(details[7], "SPAN", "storage", "S", assert);
+	CORATEST.assertElementHasTypeClassText(details[8], "#text", "", ", ", assert);
+	CORATEST.assertElementHasTypeClassText(details[9], "SPAN", "permission", "P", assert);
+	CORATEST.assertElementHasTypeClassText(details[10], "#text", "", ", ", assert);
+	CORATEST.assertElementHasTypeClassText(details[11], "SPAN", "index", "I", assert);
+	CORATEST.assertElementHasTypeClassText(details[12], "#text", "", ")", assert);
+});

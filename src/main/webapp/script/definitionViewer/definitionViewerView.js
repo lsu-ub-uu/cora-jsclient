@@ -107,6 +107,21 @@ console.log(viewModel)
 					`${childReference.recordPartConstraint}`);
 				details.append(constraint);
 			}
+			if (childReference.collectStorageTerm) {
+				details.append(", ");
+				let constraint = createElementWithTypeClassText("span", "storage","S");
+				details.append(constraint);
+			}
+			if (childReference.collectPermissionTerm) {
+				details.append(", ");
+				let constraint = createElementWithTypeClassText("span", "permission","P");
+				details.append(constraint);
+			}
+			if (childReference.collectIndexTerms) {
+				details.append(", ");
+				let constraint = createElementWithTypeClassText("span", "index","I");
+				details.append(constraint);
+			}
 			details.append(")");
 			return details;
 		};

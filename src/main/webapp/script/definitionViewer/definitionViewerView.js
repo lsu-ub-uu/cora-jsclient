@@ -44,12 +44,28 @@ var CORA = (function(cora) {
 		
 		const createLegend = function(){
 			let legend = createElementWithTypeClassText("div", "legend", "Legend");
-				let storage = createElementWithTypeClassText("div", "");
-				legend.append(storage);
-				let s = createElementWithTypeClassText("span", "storage","S");
-				storage.append(s);
-				let sText = createElementWithTypeClassText("span", "","Storage");
-				storage.append(sText);
+				
+			let storage = createElementWithTypeClassText("div", "");
+			legend.append(storage);
+			let s = createElementWithTypeClassText("span", "storage","S");
+			storage.append(s);
+			let sText = createElementWithTypeClassText("span", "","Storage");
+			storage.append(sText);
+			
+			let permission = createElementWithTypeClassText("div", "");
+			legend.append(permission);
+			let p = createElementWithTypeClassText("span", "permission","P");
+			permission.append(p);
+			let pText = createElementWithTypeClassText("span", "","Permission");
+			permission.append(pText);
+			
+			let index = createElementWithTypeClassText("div", "");
+			legend.append(index);
+			let i = createElementWithTypeClassText("span", "index","I");
+			index.append(i);
+			let iText = createElementWithTypeClassText("span", "","Index");
+			index.append(iText);
+			
 //				let constraint = createElementWithTypeClassText("span", "permission","P");
 //				details.append(constraint);
 //				let constraint = createElementWithTypeClassText("span", "index","I");

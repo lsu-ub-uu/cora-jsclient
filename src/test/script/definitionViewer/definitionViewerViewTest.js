@@ -75,13 +75,23 @@ QUnit.test("testLegend", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 
 	let legend = view.childNodes[2];
-	CORATEST.assertElementHasTypeClassText(legend, "DIV", "legend", "LegendSStorage", assert);
+	CORATEST.assertElementHasTypeClassText(legend, "DIV", "legend", "LegendSStoragePPermissionIIndex", assert);
 	assert.strictEqual(legend.childNodes[0].textContent, "Legend", assert);
 	
 	let storage = legend.childNodes[1];
 	CORATEST.assertElementHasTypeClassText(storage, "DIV", "", "", assert);
 	CORATEST.assertElementHasTypeClassText(storage.childNodes[0], "SPAN", "storage", "S", assert);
 	CORATEST.assertElementHasTypeClassText(storage.childNodes[1], "SPAN", "", "Storage", assert);
+	
+	let permission = legend.childNodes[2];
+	CORATEST.assertElementHasTypeClassText(permission, "DIV", "", "", assert);
+	CORATEST.assertElementHasTypeClassText(permission.childNodes[0], "SPAN", "permission", "P", assert);
+	CORATEST.assertElementHasTypeClassText(permission.childNodes[1], "SPAN", "", "Permission", assert);
+	
+	let index = legend.childNodes[3];
+	CORATEST.assertElementHasTypeClassText(index, "DIV", "", "", assert);
+	CORATEST.assertElementHasTypeClassText(index.childNodes[0], "SPAN", "index", "I", assert);
+	CORATEST.assertElementHasTypeClassText(index.childNodes[1], "SPAN", "", "Index", assert);
 	
 });
 

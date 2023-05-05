@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
-console.log(viewModel)
+//console.log(viewModel)
 			let view = createElementWithTypeClassText("span", "definitionViewer");
 			let header = createElementWithTypeClassText("div", "header",
 				 `Definition of ${viewModel.id}!`);
@@ -35,18 +35,37 @@ console.log(viewModel)
 			view.appendChild(metadata);
 			let item = createViewForOneLevel({ child: viewModel });
 			metadata.appendChild(item);
+			
+			let legend = createLegend();
+			view.appendChild(legend);
+			
 			return view;
 		};
 		
+		const createLegend = function(){
+			let legend = createElementWithTypeClassText("div", "legend", "Legend");
+				let storage = createElementWithTypeClassText("div", "");
+				legend.append(storage);
+				let s = createElementWithTypeClassText("span", "storage","S");
+				storage.append(s);
+				let sText = createElementWithTypeClassText("span", "","Storage");
+				storage.append(sText);
+//				let constraint = createElementWithTypeClassText("span", "permission","P");
+//				details.append(constraint);
+//				let constraint = createElementWithTypeClassText("span", "index","I");
+//				details.append(constraint);
+			return legend;
+		};
+		
 		const createElementWithTypeClassText = function(type, className, textContent){
-			let span = document.createElement(type);
+			let element = document.createElement(type);
 			if(className){
-				span.className = className;
+				element.className = className;
 			}
 			if(textContent){
-				span.textContent = textContent;
+				element.textContent = textContent;
 			}
-			return span;
+			return element;
 		};
 
 		const createViewForOneLevel = function(childReference) {

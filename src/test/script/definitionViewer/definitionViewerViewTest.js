@@ -71,6 +71,20 @@ QUnit.test("testBasicView", function(assert) {
 	CORATEST.assertElementHasTypeClassText(header, "DIV", "header", "Definition of minimalGroupId!", assert);
 });
 
+QUnit.test("testLegend", function(assert) {
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let legend = view.childNodes[2];
+	CORATEST.assertElementHasTypeClassText(legend, "DIV", "legend", "LegendSStorage", assert);
+	assert.strictEqual(legend.childNodes[0].textContent, "Legend", assert);
+	
+	let storage = legend.childNodes[1];
+	CORATEST.assertElementHasTypeClassText(storage, "DIV", "", "", assert);
+	CORATEST.assertElementHasTypeClassText(storage.childNodes[0], "SPAN", "storage", "S", assert);
+	CORATEST.assertElementHasTypeClassText(storage.childNodes[1], "SPAN", "", "Storage", assert);
+	
+});
+
 QUnit.test("testBasicMetadata", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 

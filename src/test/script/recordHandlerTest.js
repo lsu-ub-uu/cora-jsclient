@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -28,6 +28,7 @@ QUnit.module("recordHandlerTest.js", {
 		this.recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
 		this.recordWithIndexLink = CORATEST.recordWithIndexLink;
 		this.recordWithoutIndexLink = CORATEST.recordWithoutIndexLink;
+		this.recordWithMetadata = CORATEST.recordWithMetadata;
 
 		this.pubSub = CORATEST.pubSubSpy();
 
@@ -157,7 +158,7 @@ QUnit.test("initTestManagedGuiItemFactoryCalled", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let managedGuiItemSpec = managedGuiItemSpy.getSpec(0);
 	assert.strictEqual(managedGuiItemSpec.activateMethod, this.spec.jsClient.showView);
-	assert.strictEqual(managedGuiItemSpec.removeMethod, this.spec.jsClient.removeView);
+	assert.strictEqual(managedGuiItemSpec.removeMethod, this.spec.jsClient.viewRemoved);
 	assert.strictEqual(managedGuiItemSpec.callOnMetadataReloadMethod,
 		recordHandler.reloadForMetadataChanges);
 
@@ -277,7 +278,7 @@ QUnit.test("testShowData", function(assert) {
 	assert.strictEqual(firstChild.className, "message info");
 	let message = firstChild.childNodes[1];
 	assert.strictEqual(message.innerHTML, '{\"data\":\"&lt;span&gt;A new value&lt;/span&gt;\",\"path\":[]}');
-	var messageText = message.childNodes[0];
+	let messageText = message.childNodes[0];
 	assert.strictEqual(messageText.textContent, '{\"data\":\"<span>A new value</span>\",\"path\":[]}');
 
 });
@@ -388,7 +389,6 @@ QUnit.test("testHandleMessage", function(assert) {
 	recordHandler.handleMsg(data, "setValue");
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), true);
-	// let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(managedGuiItemSpy.getChanged(), true);
 });
 
@@ -866,6 +866,7 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	assert.notOk(recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 	this.answerCall(0);
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -890,6 +891,71 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	assert.strictEqual(item.nodeName, "SPAN");
 
 	assert.ok(recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+});
+
+QUnit.test("initCheckAddOpenFunctionNotCalledInViewForMetadataInList", function(assert) {
+	this.spec.partOfList = "true";
+	CORA.recordHandler(this.dependencies, this.spec);
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	
+	this.answerCall(0);
+
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+});
+
+QUnit.test("initCheckAddOpenFunctionNotCalledInViewForNonMetadata", function(assert) {
+	CORA.recordHandler(this.dependencies, this.spec);
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	
+	this.answerCall(0);
+
+	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+});
+
+QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadataNotReloaded", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+	this.spec.fetchLatestDataFromServer ="false";
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0), 
+		recordHandler.showDefinitionViewer);
+});
+
+QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+
+	this.answerCall(0);
+
+	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0), 
+		recordHandler.showDefinitionViewer);
+	
+
+	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+});
+
+QUnit.test("testShowDefinitionViewer", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	recordHandler.showDefinitionViewer();
+	
+	assert.ok(this.spec.jsClient.getOpenDefinitionIds(0));
+	assert.equal(this.spec.jsClient.getOpenDefinitionIds(0), "textPartEnGroup");
 });
 
 QUnit.test("initRecordGuiCreatedCorrectlyBasePartOfSpec", function(assert) {

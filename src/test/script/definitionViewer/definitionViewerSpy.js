@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,30 +16,32 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
+
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.testSpanWithClassNameOnlyContainsText = function(span, className, text, assert) {
-		assert.strictEqual(span.childNodes.length, 1);
-		assert.equal(span.nodeName, "SPAN");
-		assert.equal(span.className, className);
-		assert.equal(span.textContent, text);
-	};
+	coraTest.definitionViewerSpy = function() {
 
-	coraTest.assertSpanHasClassName = function(span, className, assert) {
-		assert.equal(span.nodeName, "SPAN");
-		assert.equal(span.className, className);
-	};
+		let numberOfCalls = 0;
 
-	coraTest.assertElementHasTypeClassText = function(element, type, className, textContent, assert) {
-		assert.equal(element.nodeName, type);
-		if(className){
-			assert.equal(element.className, className);
-		}
-		if(textContent){
-			assert.equal(element.textContent, textContent);
-		}			
+		
+		const getView = function(){
+			numberOfCalls++;
+			return CORA.gui.createSpanWithClassName("definitionViewerSpy");	
+		};
+		
+		const getNumberOfCallsToGetView = function(){
+			return numberOfCalls;
+		};
+		
+		const reloadForMetadataChanges = function(){
+			return "reloadForMetadataChanges";
+		};
+		
+		return Object.freeze({
+			getView: getView,
+			getNumberOfCallsToGetView : getNumberOfCallsToGetView,
+			reloadForMetadataChanges : reloadForMetadataChanges
+		});
 	};
-
 	return coraTest;
 }(CORATEST || {}));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  * Copyright 2017 Uppsala University Library
  *
  * This file is part of Cora.
@@ -22,19 +22,18 @@ var CORA = (function(cora) {
 	cora.recordHandlerFactory = function(dependencies) {
 		let out;
 		let indexHandlerDep = {
-			"ajaxCallFactory": dependencies.ajaxCallFactory
+			ajaxCallFactory: dependencies.ajaxCallFactory
 		};
 		let calculatorFactoryDep = {
 			metadataProvider : dependencies.metadataProvider
 		}
-
 		let dep = {
-			"globalFactories": dependencies.globalFactories,
-			"recordHandlerViewFactory": CORA.recordHandlerViewFactory(),
-			"ajaxCallFactory": dependencies.ajaxCallFactory,
-			"recordGuiFactory": dependencies.recordGuiFactory,
-			"managedGuiItemFactory": dependencies.managedGuiItemFactory,
-			"indexHandlerFactory": CORA.genericFactory("indexHandler", indexHandlerDep),
+			globalFactories: dependencies.globalFactories,
+			recordHandlerViewFactory: CORA.recordHandlerViewFactory(),
+			ajaxCallFactory: dependencies.ajaxCallFactory,
+			recordGuiFactory: dependencies.recordGuiFactory,
+			managedGuiItemFactory: dependencies.managedGuiItemFactory,
+			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
 			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
 		};
 		const factor = function(recordHandlerSpec) {

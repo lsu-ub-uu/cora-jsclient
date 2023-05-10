@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,22 +19,24 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordHandlerViewSpy = function(spec) {
-		var addedEditViews = [];
-		var addedShowViews = [];
-		var addedButtons = [];
-		var clearViewsWasCalled = false;
-		var clearDataViewsWasCalled = false;
-		var showDataFunction = null;
-		var copyAsNewFunction = null;
-		var objectsAddedToEditView = [];
+		let addedEditViews = [];
+		let addedShowViews = [];
+		let addedButtons = [];
+		let clearViewsWasCalled = false;
+		let clearDataViewsWasCalled = false;
+		let showDataFunction = null;
+		let copyAsNewFunction = null;
+		let objectsAddedToEditView = [];
 
-		var showShowIncomingLinks = false;
-		var showIndexButton = false;
-		var objectsAddedToIncomingLinksView = [];
+		let showShowIncomingLinks = false;
+		let showIndexButton = false;
+		let objectsAddedToIncomingLinksView = [];
 		
-		var functionsAddedAsReloadRecord = [];
+		let functionsAddedAsReloadRecord = [];
+		
+		let functionsAddedAsOpenDefinitionViewer = [];
 
-		var spyView = document.createElement("span");
+		let spyView = document.createElement("span");
 		function getView() {
 			return spyView;
 		}
@@ -45,7 +47,7 @@ var CORATEST = (function(coraTest) {
 			addedShowViews.push(viewToAdd);
 		}
 		function addButton(text, onclickMethod, className) {
-			var buttonSpec = {
+			let buttonSpec = {
 				"text" : text,
 				"onclickMethod" : onclickMethod,
 				"className" : className
@@ -122,8 +124,16 @@ var CORATEST = (function(coraTest) {
 		function getReloadRecordFunction(no){
 			return functionsAddedAsReloadRecord[no];
 		}
+		
+		const addDefinitionViewerOpenFunction = function(functionToAdd){
+			functionsAddedAsOpenDefinitionViewer.push(functionToAdd);
+		};
+		
+		const getAddDefinitionViewerOpenFunction = function(no){
+			return functionsAddedAsOpenDefinitionViewer[no];
+		};
 
-		var out = Object.freeze({
+		const out = Object.freeze({
 			getView : getView,
 			addToShowView : addToShowView,
 			addToEditView : addToEditView,
@@ -150,7 +160,10 @@ var CORATEST = (function(coraTest) {
 			showShowIncomingLinksButton : showShowIncomingLinksButton,
 			getShowShowIncomingLinksButton : getShowShowIncomingLinksButton,
 			addReloadRecordUsingFunction : addReloadRecordFunction,
-			getReloadRecordUsingFunction : getReloadRecordFunction
+			getReloadRecordUsingFunction : getReloadRecordFunction,
+			
+			addDefinitionViewerOpenFunction : addDefinitionViewerOpenFunction,
+			getAddDefinitionViewerOpenFunction : getAddDefinitionViewerOpenFunction
 		});
 		return out;
 	};

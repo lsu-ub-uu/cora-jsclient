@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -333,6 +333,7 @@ var CORA = (function(cora) {
 
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
+			possiblyShowShowDefinitionButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
 		};
@@ -403,7 +404,24 @@ var CORA = (function(cora) {
 			let readIncomingLinks = fetchedRecord.actionLinks.read_incoming_links;
 			return readIncomingLinks !== undefined;
 		};
+		const possiblyShowShowDefinitionButton = function() {
+			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
+				recordHandlerView.addDefinitionViewerOpenFunction(showDefinitionViewer);
+			}
+		};
 
+		const recordHandlesMetadata = function() {
+			const name = fetchedRecord.data.name;
+			return "metadata" === name;
+		};
+		
+		const showDefinitionViewer = function(){
+			let cData = CORA.coraData(fetchedRecord.data);
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
+			spec.jsClient.openDefinitionViewerForId(id);
+		};
+		
 		const showData = function() {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
@@ -601,7 +619,8 @@ var CORA = (function(cora) {
 			showIncomingLinks: showIncomingLinks,
 			showIndexMessage: showIndexMessage,
 			showTimeoutMessage: showTimeoutMessage,
-			callMethodAfterShowWorkView: callMethodAfterShowWorkView
+			callMethodAfterShowWorkView: callMethodAfterShowWorkView,
+			showDefinitionViewer : showDefinitionViewer
 		});
 	};
 	return cora;

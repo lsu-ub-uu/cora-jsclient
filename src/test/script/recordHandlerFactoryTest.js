@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recordHandlerFactoryTest.js", {
+QUnit.module.only("recordHandlerFactoryTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 
@@ -45,7 +45,8 @@ QUnit.module("recordHandlerFactoryTest.js", {
 			"ajaxCallFactory": CORATEST.ajaxCallFactorySpy(),
 			"recordGuiFactory": this.recordGuiFactorySpy,
 			"managedGuiItemFactory": CORATEST.standardFactorySpy("managedGuiItemSpy"),
-			metadataProvider: CORATEST.metadataProviderSpy()
+			metadataProvider: CORATEST.metadataProviderSpy(),
+			textProvider: CORATEST.textProviderSpy()
 		};
 
 		this.spec = {
@@ -100,8 +101,7 @@ QUnit.test("factorTestSpec", function(assert) {
 	assert.strictEqual(recordHandler.getSpec(), this.spec);
 });
 
-QUnit.test("testIndexHandlerFactoryDependencies",
-	function(assert) {
+QUnit.test("testIndexHandlerFactoryDependencies", function(assert) {
 		let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
 		let recordHandler = recordHandlerFactory.factor(this.spec);
 		let factoredDependencies = recordHandler.getDependencies();
@@ -127,3 +127,4 @@ QUnit.test("testRecordPartPermissionCalculatorFactoryDependencies",
 		assert.strictEqual(calculatorDependencies.metadataProvider,
 			this.dependencies.metadataProvider);
 	});
+

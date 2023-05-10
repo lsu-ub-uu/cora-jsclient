@@ -20,13 +20,15 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.jsClientSpy = function(dependencies, spec) {
-		var viewsShowingInWorkView = [];
-		var createdManagedGuiItem = [];
-		var fetchedMetadataByRecordTypeId = [];
-		var returnedRecordTypeMetadata = [];
-		var addedGuiItem = [];
-		var openInfos = [];
-		var setCurrentLangs = [];
+		let viewsShowingInWorkView = [];
+		let viewsRemoved = [];
+		let createdManagedGuiItem = [];
+		let fetchedMetadataByRecordTypeId = [];
+		let returnedRecordTypeMetadata = [];
+		let addedGuiItem = [];
+		let openInfos = [];
+		let setCurrentLangs = [];
+		let openDefinitionIds = [];
 
 		function getRecordTypesClearedNoOfTimes() {
 			return recordTypesClearedNoOfTimes;
@@ -38,10 +40,17 @@ var CORATEST = (function(coraTest) {
 		function getViewShowingInWorkView(number) {
 			return viewsShowingInWorkView[number];
 		}
+		function viewRemoved(managedGuiItem) {
+			viewsRemoved.push(managedGuiItem);
+		}
+
+		function getViewRemoved(number) {
+			return viewsRemoved[number];
+		}
 
 		function createManagedGuiItem(handledBy) {
 			createdManagedGuiItemHandledBy.push(handledBy);
-			var managedGuiItem = {
+			let managedGuiItem = {
 				"handledBy" : handledBy,
 				"workView" : CORA.gui.createSpanWithClassName("workView"),
 				"menuView" : CORA.gui.createSpanWithClassName("menuView")
@@ -55,7 +64,7 @@ var CORATEST = (function(coraTest) {
 		function getMetadataForRecordTypeId(recordTypeId) {
 			// return recordTypeId + "Group";
 			fetchedMetadataByRecordTypeId.push(recordTypeId);
-			var metadata = {
+			let metadata = {
 				"metadataId" : recordTypeId + "Group",
 				"presentationViewId" : recordTypeId + "ViewPGroup",
 				"presentationFormId" : recordTypeId + "FormPGroup",
@@ -137,9 +146,19 @@ var CORATEST = (function(coraTest) {
 			return setCurrentLangs[no];
 		}
 
-		var out = Object.freeze({
+		function openDefinitionViewerForId(id) {
+			openDefinitionIds.push(id);
+		}
+		function getOpenDefinitionIds(number) {
+			return openDefinitionIds[number];
+		}
+		
+		let out = Object.freeze({
 			"type" : "jsClientSpy",
 			showView : showView,
+			viewRemoved : viewRemoved,
+			getViewRemoved : getViewRemoved,
+			
 			getViewShowingInWorkView : getViewShowingInWorkView,
 			createManagedGuiItem : createManagedGuiItem,
 			getCreatedManagedGuiItem : getCreatedManagedGuiItem,
@@ -151,7 +170,10 @@ var CORATEST = (function(coraTest) {
 			openRecordUsingReadLink : openRecordUsingReadLink,
 			getOpenInfo : getOpenInfo,
 			setCurrentLang : setCurrentLang,
-			getSetCurrentLang : getSetCurrentLang
+			getSetCurrentLang : getSetCurrentLang,
+			
+			openDefinitionViewerForId : openDefinitionViewerForId,
+			getOpenDefinitionIds : getOpenDefinitionIds
 		});
 
 		return out;

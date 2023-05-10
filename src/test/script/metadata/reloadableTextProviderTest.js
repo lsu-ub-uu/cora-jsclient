@@ -156,3 +156,10 @@ QUnit.test("testGetMetadataByIdForwardedToSecondFactoredProviderAfterSwitchProvi
 			assert.strictEqual(this.secondFactoredTextProvider.getFetchedMetadataIdNo(0),
 					"someMetadataId");
 		});
+		
+QUnit.test("testGetAllTranslations", function(assert) {
+	var firstFactoredTextProvider = this.dependencies.textProviderFactory.getFactored(0);
+	var translation = this.reloadableTextProvider.getAllTranslations("someTextId");
+
+	assert.deepEqual(firstFactoredTextProvider.getAllTranslations("someTextId"), translation);
+});

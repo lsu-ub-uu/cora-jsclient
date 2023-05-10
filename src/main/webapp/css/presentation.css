@@ -318,6 +318,16 @@ textarea {
 	position: relative;
 }
 
+.workView .pRecordLink .linkedRecordTypeView {
+	display: inline-block;
+	width: auto;
+}
+
+.workView .pRecordLink .linkedRecordIdView {
+	display: inline-block;
+	width: auto;
+}
+
 .workView .pRecordLink.searchActive {
 	border: 1px dashed #c5c5c5;	
 }

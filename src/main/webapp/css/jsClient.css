@@ -601,3 +601,74 @@ body {
 .presentation .containsData .text.h2TextStyle {
   color: orange;
 }
+
+.definitionViewer .header {
+	font-size: 2rem;
+	color: #243bb7;
+}
+
+.definitionViewer .nameInData {
+	font-size: .9rem;
+	color: orange;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.definitionViewer .attributes {
+	font-size: 0.8rem;
+	color: #2e7af0;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.definitionViewer .details {
+	font-size: 0.8rem;
+	color: #188014;
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .legend {
+	color: #243bb7;
+/* 	font-weight: bold; */
+/* 	margin-right: auto; */
+	position: fixed;
+	top: 6rem;
+	right: 3rem;
+	border: 1px solid gray;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	box-shadow: 10px 5px 5px #b9b9b9;
+}
+.definitionViewer .storage {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.definitionViewer .permission {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.definitionViewer .index {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.definitionViewer .details .type {
+/* 	color: red; */
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .details .cardinality {
+/* 	color: gren; */
+/* 	padding-right: 0.2rem; */
+}
+
+.definitionViewer .details .constraint {
+/* 	color: blue; */
+/* 	padding-right: 0.2rem; */
+}
+
+
+
+

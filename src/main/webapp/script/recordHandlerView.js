@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2020 Olov McKie
+ * Copyright 2016, 2017, 2020, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,6 +29,7 @@ var CORA = (function(cora) {
 		let workItemView;
 		let incomingLinksHolder;
 		let reloadButton;
+		let definitionViewerButton;
 
 		const start = function() {
 			let workItemViewSpec = {
@@ -55,7 +56,6 @@ var CORA = (function(cora) {
 		const showIncomingLinks = function(event) {
 			incomingLinksHolder.toggleHolder(event);
 			spec.showIncomingLinksMethod();
-
 		};
 
 		const createIncomingLinksView = function() {
@@ -127,6 +127,20 @@ var CORA = (function(cora) {
 			workItemView.addToolViewToToolHolder(reloadButton);
 		};
 
+		const addDefinitionViewerOpenFunction = function(functionToCall) {
+			if (undefined === definitionViewerButton) {
+				createNewDefinitionViewerButton(functionToCall);
+			} else {
+				definitionViewerButton.onclick = functionToCall;
+			}
+		};
+
+		const createNewDefinitionViewerButton = function(functionToCall) {
+			definitionViewerButton = createButton("Show definition viewer", functionToCall,
+				"definitionViewer");
+			workItemView.addToolViewToToolHolder(definitionViewerButton);
+		};
+
 		const addObjectToEditView = function(objectToAdd) {
 			editView.appendChild(document.createTextNode(JSON.stringify(objectToAdd)));
 		};
@@ -169,7 +183,8 @@ var CORA = (function(cora) {
 			addToIncomingLinksView: addToIncomingLinksView,
 			showShowIncomingLinksButton: showShowIncomingLinksButton,
 			hideShowIncomingLinksButton: hideShowIncomingLinksButton,
-			addReloadRecordUsingFunction: addReloadRecordFunction
+			addReloadRecordUsingFunction: addReloadRecordFunction,
+			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction
 		});
 	};
 	return cora;

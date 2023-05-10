@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  * Copyright 2016, 2018 Uppsala University Library
  *
  * This file is part of Cora.
@@ -200,3 +200,25 @@ QUnit.test("getMetadataByIdNotFound", function(assert) {
 	assert.strictEqual(errorMessage, "Id(someNonExistingMetadataId) not found in textProvider");
 	assert.ok(error);
 });
+
+
+QUnit.test("testGetLanguages", function(assert) {
+	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	textProvider.processFetchedTextdata(this.textAnswer);
+	
+	let languages = textProvider.getLanguages();
+	
+	assert.deepEqual(languages, ["sv", "en"]);
+});
+//1Text
+
+QUnit.test("testGetAllTranslations", function(assert) {
+	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	textProvider.processFetchedTextdata(this.textAnswer);
+	
+	let all = textProvider.getAllTranslations("1Text");
+	
+	assert.deepEqual(all, {sv: "Nästan kortaste möjliga id", en: "Almost shortest possible id"});
+});
+
+

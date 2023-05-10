@@ -1,6 +1,6 @@
 /*
  * Copyright 2019, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -40,32 +40,32 @@ QUnit.module("jsClient/jsClientFactoryTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
 	assert.strictEqual(jsClientFactory.type, "jsClientFactory");
 });
 
 QUnit.test("factorTestType", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClient = jsClientFactory.factor(this.spec);
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
 	assert.strictEqual(jsClient.type, "jsClient");
 });
 
 QUnit.test("factorTestDependenciesProviders", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClient = jsClientFactory.factor(this.spec);
-	var factoredDep = jsClient.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
+	let factoredDep = jsClient.getDependencies();
 	assert.strictEqual(factoredDep.providers, this.providers);
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClient = jsClientFactory.factor(this.spec);
-	var factoredDep = jsClient.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
+	let factoredDep = jsClient.getDependencies();
 
-	var providers = factoredDep.providers;
+	let providers = factoredDep.providers;
 	assert.strictEqual(providers, this.providers);
 
-	var globalFactories = factoredDep.globalFactories;
+	let globalFactories = factoredDep.globalFactories;
 	assert.strictEqual(globalFactories.ajaxCallFactory.type, "ajaxCallFactory");
 	assert.strictEqual(globalFactories.loginManagerFactory.type, "loginManagerFactory");
 	assert.strictEqual(globalFactories.searchHandlerFactory.type, "searchHandlerFactory");
@@ -81,14 +81,22 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDep.uploadManager.type, "uploadManager");
 	assert.strictEqual(factoredDep.searchRecordHandlerFactory.type, "searchRecordHandlerFactory");
 	assert.strictEqual(factoredDep.recordTypeHandlerFactory.type, "recordTypeHandlerFactory");
+	assert.strictEqual(factoredDep.definitionViewerFactory.type, "definitionViewerFactory");
 
 	assert.strictEqual(factoredDep.recordTypeMenu.type, "recordTypeMenu");
 });
 
+QUnit.test("testDefinitionViewerFactoryDependencies", function(assert) {
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
+	let factoredDep = jsClient.getDependencies();
+	assert.equal(factoredDep.definitionViewerFactory.onlyForTestGetProviders(), this.providers);
+});
+
 QUnit.test("testSearchHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.globalFactories.searchHandlerFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.globalFactories.searchHandlerFactory.getDependencies();
 
 	assert.strictEqual(factoredDep.providers, jsClientFactoredDep.providers);
 	assert.strictEqual(factoredDep.globalFactories, jsClientFactoredDep.globalFactories);
@@ -98,8 +106,8 @@ QUnit
 		.test(
 				"testAjaxCallFactoryDependencies",
 				function(assert) {
-					var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-					var factoredDep = jsClientFactory.factor(this.spec).getDependencies().globalFactories.ajaxCallFactory
+					let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+					let factoredDep = jsClientFactory.factor(this.spec).getDependencies().globalFactories.ajaxCallFactory
 							.getDependencies();
 					assert.strictEqual(factoredDep.xmlHttpRequestFactory.type,
 							"xmlHttpRequestFactory");
@@ -108,17 +116,17 @@ QUnit
 				});
 
 QUnit.test("testAppTokenLoginFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.appTokenLoginFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.appTokenLoginFactory.getDependencies();
 	assert.strictEqual(factoredDep.ajaxCallFactory,
 			jsClientFactoredDep.globalFactories.ajaxCallFactory);
 });
 
 QUnit.test("testloginManagerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.globalFactories.loginManagerFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.globalFactories.loginManagerFactory.getDependencies();
 	assert.strictEqual(factoredDep.authTokenHolder, this.dependencies.authTokenHolder);
 	assert.strictEqual(factoredDep.appTokenLoginFactory,
 			jsClientFactoredDep.globalFactories.appTokenLoginFactory);
@@ -132,24 +140,24 @@ QUnit.test("testloginManagerFactoryDependencies", function(assert) {
 	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
 	assert.strictEqual(factoredDep.ldapLoginJsClientIntegratorFactory.type, "genericFactory");
 
-	var ldapLoginJsClientIntegratorFactory = factoredDep.ldapLoginJsClientIntegratorFactory;
-	var jsCIFDependencies  = ldapLoginJsClientIntegratorFactory.getDependencies();
+	let ldapLoginJsClientIntegratorFactory = factoredDep.ldapLoginJsClientIntegratorFactory;
+	let jsCIFDependencies  = ldapLoginJsClientIntegratorFactory.getDependencies();
 	
 	assert.strictEqual(jsCIFDependencies.ldapLoginFactory.type,	"ldapLoginFactory");
 
 });
 
 QUnit.test("testOpenGuiItemHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.openGuiItemHandlerFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.openGuiItemHandlerFactory.getDependencies();
 	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
 });
 
 QUnit.test("testUploadManagerDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.uploadManager.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.uploadManager.getDependencies();
 	assert.strictEqual(factoredDep.clientInstanceProvider, this.providers.clientInstanceProvider);
 	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
 	assert.strictEqual(factoredDep.ajaxCallFactory,
@@ -159,9 +167,9 @@ QUnit.test("testUploadManagerDependencies", function(assert) {
 });
 
 QUnit.test("testRecordGuiFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.globalFactories.recordGuiFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.globalFactories.recordGuiFactory.getDependencies();
 
 	assert.strictEqual(factoredDep.providers, this.providers);
 
@@ -174,9 +182,9 @@ QUnit.test("testRecordGuiFactoryDependencies", function(assert) {
 });
 
 QUnit.test("testsearchRecordHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.searchRecordHandlerFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.searchRecordHandlerFactory.getDependencies();
 	assert.strictEqual(factoredDep.searchRecordHandlerViewFactory.type,
 			"searchRecordHandlerViewFactory");
 	assert.strictEqual(factoredDep.globalFactories.searchRecordHandlerFactory,
@@ -192,9 +200,9 @@ QUnit.test("testsearchRecordHandlerFactoryDependencies", function(assert) {
 });
 
 QUnit.test("testRecordTypeHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.recordTypeHandlerFactory.getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.recordTypeHandlerFactory.getDependencies();
 
 	assert.strictEqual(factoredDep.clientInstanceProvider, this.providers.clientInstanceProvider);
 	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
@@ -205,14 +213,14 @@ QUnit.test("testRecordTypeHandlerFactoryDependencies", function(assert) {
 });
 
 QUnit.test("testResultHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
 
-	var factories = jsClientFactoredDep.globalFactories;
-	var resultHandlerFactory = factories.resultHandlerFactory;
+	let factories = jsClientFactoredDep.globalFactories;
+	let resultHandlerFactory = factories.resultHandlerFactory;
 	assert.strictEqual(resultHandlerFactory.type, "resultHandlerFactory");
 
-	var dependencies = resultHandlerFactory.getDependencies();
+	let dependencies = resultHandlerFactory.getDependencies();
 	assert.strictEqual(dependencies.textProvider, this.providers.textProvider);
 	assert.strictEqual(dependencies.recordHandlerFactory, factories.recordHandlerFactory);
 	assert.strictEqual(dependencies.ajaxCallFactory.type, "ajaxCallFactory");
@@ -221,28 +229,29 @@ QUnit.test("testResultHandlerFactoryDependencies", function(assert) {
 });
 
 QUnit.test("testRecordTypeHandlerViewFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
 
-	var factories = jsClientFactoredDep.globalFactories;
-	var recordTypeHandlerViewFactory = factories.recordTypeHandlerViewFactory;
+	let factories = jsClientFactoredDep.globalFactories;
+	let recordTypeHandlerViewFactory = factories.recordTypeHandlerViewFactory;
 	assert.strictEqual(recordTypeHandlerViewFactory.type, "recordTypeHandlerViewFactory");
 });
 
 QUnit.test("testRecordHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
 
-	var factories = jsClientFactoredDep.globalFactories;
-	var recordHandlerFactory = factories.recordHandlerFactory;
+	let factories = jsClientFactoredDep.globalFactories;
+	let recordHandlerFactory = factories.recordHandlerFactory;
 	assert.strictEqual(recordHandlerFactory.type, "recordHandlerFactory");
 
-	var factoredDep = recordHandlerFactory.getDependencies();
+	let factoredDep = recordHandlerFactory.getDependencies();
 	assert.strictEqual(factoredDep.clientInstanceProvider, this.providers.clientInstanceProvider);
 	assert.strictEqual(factoredDep.ajaxCallFactory, factories.ajaxCallFactory);
 	assert.strictEqual(factoredDep.recordGuiFactory, factories.recordGuiFactory);
 	assert.strictEqual(factoredDep.managedGuiItemFactory, factories.managedGuiItemFactory);
 	assert.strictEqual(factoredDep.metadataProvider, this.providers.metadataProvider);
+	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
 
 	assert.strictEqual(factoredDep.globalFactories, jsClientFactoredDep.globalFactories);
 });
@@ -250,14 +259,14 @@ QUnit.test("testRecordHandlerFactoryDependencies", function(assert) {
 QUnit
 		.test("testRecordListHandlerFactoryDependencies",
 				function(assert) {
-					var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-					var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+					let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+					let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
 
-					var factories = jsClientFactoredDep.globalFactories;
-					var recordListHandlerFactory = factories.recordListHandlerFactory;
+					let factories = jsClientFactoredDep.globalFactories;
+					let recordListHandlerFactory = factories.recordListHandlerFactory;
 					assert.strictEqual(recordListHandlerFactory.type, "recordListHandlerFactory");
 
-					var dependencies = recordListHandlerFactory.getDependencies();
+					let dependencies = recordListHandlerFactory.getDependencies();
 					assert.strictEqual(dependencies.factories.ajaxCallFactory,
 							factories.ajaxCallFactory);
 					assert.strictEqual(dependencies.factories.recordGuiFactory,
@@ -271,15 +280,15 @@ QUnit
 				});
 
 QUnit.test("testSpecSentToJSClient", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClient = jsClientFactory.factor(this.spec);
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
 	assert.strictEqual(jsClient.getSpec(), this.spec);
 });
 
 QUnit.test("testIncomingLinksListHandlerFactory", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
 
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
 
 	assert.strictEqual(jsClientFactoredDep.globalFactories.incomingLinksListHandlerFactory.type,
 			"genericFactory");
@@ -288,9 +297,9 @@ QUnit.test("testIncomingLinksListHandlerFactory", function(assert) {
 });
 
 QUnit.test("testIncomingLinksListHandlerFactoryDependencies", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.globalFactories.incomingLinksListHandlerFactory
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.globalFactories.incomingLinksListHandlerFactory
 			.getDependencies();
 
 	assert.strictEqual(factoredDep.providers, this.providers);
@@ -300,9 +309,9 @@ QUnit.test("testIncomingLinksListHandlerFactoryDependencies", function(assert) {
 });
 
 QUnit.test("testIncomingLinksListHandlerViewFactory", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var factoredDep = jsClientFactoredDep.globalFactories.incomingLinksListHandlerViewFactory
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let factoredDep = jsClientFactoredDep.globalFactories.incomingLinksListHandlerViewFactory
 			.getDependencies();
 
 	assert.strictEqual(
@@ -318,12 +327,12 @@ QUnit.test("testIncomingLinksListHandlerViewFactory", function(assert) {
 });
 
 QUnit.test("testRecordTypeMenuDependenciesAndSpec", function(assert) {
-	var jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
-	var jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
-	var recordTypeMenu = jsClientFactoredDep.recordTypeMenu;
-	var factoredProviders = recordTypeMenu.getProviders();
-	var factoredDep = recordTypeMenu.getDependencies();
-	var factoredSpec = recordTypeMenu.getSpec();
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClientFactoredDep = jsClientFactory.factor(this.spec).getDependencies();
+	let recordTypeMenu = jsClientFactoredDep.recordTypeMenu;
+	let factoredProviders = recordTypeMenu.getProviders();
+	let factoredDep = recordTypeMenu.getDependencies();
+	let factoredSpec = recordTypeMenu.getSpec();
 
 	assert.strictEqual(factoredProviders, jsClientFactoredDep.providers);
 	assert.strictEqual(factoredDep.recordTypeHandlerFactory,

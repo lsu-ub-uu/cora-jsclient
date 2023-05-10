@@ -78,13 +78,18 @@ var CORA = (function(cora) {
 		}
 
 		function getChildrenByNameInData(nameInData) {
-			var filter = createNameInDataFilter(nameInData);
-			var foundChildren = children.filter(filter);
+			return getChildrenToContainerByNameInData(children, nameInData);
+		}
+		
+		let getChildrenToContainerByNameInData = function(container, nameInData) {
+			let filter = createNameInDataFilter(nameInData);
+			let foundChildren = container.filter(filter);
 			if (foundChildren.length > 0) {
 				return foundChildren;
 			}
 			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
 		}
+		
 
 		function getChildrenByNameInDataAndAttributes(nameInData, attributes) {
 			var foundContainers = findContainersSpecifiedByNameInDataAndAttributes(nameInData,
@@ -312,6 +317,12 @@ var CORA = (function(cora) {
 				+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
 				+ NOT_FOUND_IN_CHILDREN);
 		}
+		
+		const getLinkedRecordIdFromFirstChildLinkWithNameInData = function (nameInData){
+			let child = getFirstChildByNameInData(nameInData);
+			let linkedRecordId = getChildrenToContainerByNameInData(child.children, "linkedRecordId");
+			return linkedRecordId[0].value;
+		}
 
 		return Object
 			.freeze({
@@ -330,7 +341,8 @@ var CORA = (function(cora) {
 				containsChildWithNameInDataAndRepeatId: containsChildWithNameInDataAndRepeatId,
 				getFirstChildByNameInDataAndRepeatId: getFirstChildByNameInDataAndRepeatId,
 				containsChildWithNameInDataAndAttributesAndRepeatId: containsChildWithNameInDataAndAttributesAndRepeatId,
-				getFirstChildByNameInDataAndAttributesAndRepeatId: getFirstChildByNameInDataAndAttributesAndRepeatId
+				getFirstChildByNameInDataAndAttributesAndRepeatId: getFirstChildByNameInDataAndAttributesAndRepeatId,
+				getLinkedRecordIdFromFirstChildLinkWithNameInData: getLinkedRecordIdFromFirstChildLinkWithNameInData
 			});
 	};
 

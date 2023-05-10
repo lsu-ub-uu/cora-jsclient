@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  * Copyright 2016, 2018 Uppsala University Library
  *
  * This file is part of Cora.
@@ -24,6 +24,7 @@ var CORA = (function(cora) {
 		var texts = {};
 		var currentLang = "sv";
 		var metadata = {};
+		let languages = [];
 		fetchTextListAndThen(processFetchedTextdata);
 
 		function fetchTextListAndThen(callAfterAnswer) {
@@ -78,6 +79,7 @@ var CORA = (function(cora) {
 			var text = textPart.children[0].value;
 			if (texts[lang] === undefined) {
 				texts[lang] = [];
+				languages.push(lang);
 			}
 			texts[lang][recordId] = text;
 		}
@@ -104,6 +106,22 @@ var CORA = (function(cora) {
 			throw new Error("Id(" + metadataId + ") not found in textProvider");
 		}
 
+		const getLanguages = function(){
+			return languages;
+		};
+
+		const getAllTranslations = function(textId){
+			let answer = {};
+			languages.forEach(function(lang) {
+				if (texts[lang][textId] !== undefined) {
+					answer[lang] = texts[lang][textId];
+				} else {
+					answer[lang] = "MISSING TRANSLATION FOR TEXTID:" + textId;
+				}
+			});
+			return answer;
+		};
+
 		function getDependencies() {
 			return dependencies;
 		}
@@ -120,7 +138,9 @@ var CORA = (function(cora) {
 			processFetchedTextdata : processFetchedTextdata,
 			setCurrentLang : setCurrentLang,
 			getCurrentLang : getCurrentLang,
-			getMetadataById : getMetadataById
+			getMetadataById : getMetadataById,
+			getLanguages : getLanguages,
+			getAllTranslations : getAllTranslations
 		});
 	};
 	return cora;

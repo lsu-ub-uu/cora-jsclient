@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,30 +16,37 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
+
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.testSpanWithClassNameOnlyContainsText = function(span, className, text, assert) {
-		assert.strictEqual(span.childNodes.length, 1);
-		assert.equal(span.nodeName, "SPAN");
-		assert.equal(span.className, className);
-		assert.equal(span.textContent, text);
-	};
+	coraTest.definitionViewerViewSpy = function() {
 
-	coraTest.assertSpanHasClassName = function(span, className, assert) {
-		assert.equal(span.nodeName, "SPAN");
-		assert.equal(span.className, className);
-	};
+		var viewModels = [];
+		var createdViews = [];
 
-	coraTest.assertElementHasTypeClassText = function(element, type, className, textContent, assert) {
-		assert.equal(element.nodeName, type);
-		if(className){
-			assert.equal(element.className, className);
+		function createViewForViewModel(viewModel) {
+			viewModels.push(viewModel);
+			
+			let createdView = CORA.gui.createDivWithClassName("fakeFromDefinitionViewerViewSpy");
+			createdViews.push(createdView);
+			return createdView;
 		}
-		if(textContent){
-			assert.equal(element.textContent, textContent);
-		}			
+		
+		const getViewModelForCallNo = function(no){
+			return viewModels[no];
+		};
+		
+		const getCreatedViewForCallNo = function(no){
+			return createdViews[no];
+		};
+		
+		
+		
+		return Object.freeze({
+			createViewForViewModel : createViewForViewModel,
+			getViewModelForCallNo : getViewModelForCallNo,
+			getCreatedViewForCallNo : getCreatedViewForCallNo
+		});
 	};
-
 	return coraTest;
 }(CORATEST || {}));

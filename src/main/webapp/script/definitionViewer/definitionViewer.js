@@ -47,8 +47,8 @@ var CORA = (function(cora) {
 			let model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
-		const getViewModelForMetadataId = function(metadataGroupId) {
-			let cDataRecordGroup = getCMetadataById(metadataGroupId);
+		const getViewModelForMetadataId = function(metadataId) {
+			let cDataRecordGroup = getCMetadataById(metadataId);
 			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
 
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
@@ -59,7 +59,7 @@ var CORA = (function(cora) {
 			}
 			return model;
 		};
-
+		
 		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup) {
 			let id = getIdFromCDataGroup(cDataRecordGroup);
 			let type = cDataRecordGroup.getData().attributes["type"];
@@ -72,7 +72,8 @@ var CORA = (function(cora) {
 				type: type,
 				nameInData: nameInData,
 				text: text,
-				defText: defText
+				defText: defText,
+				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
 			
 			if (cDataRecordGroup.containsChildWithNameInData("finalValue")) {
@@ -200,7 +201,24 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
 			return textProvider.getAllTranslations(textId);
 		};
-
+		
+		const openDefiningRecordUsingEventAndId = function(event, id) {
+			//getMetadataRecordById 
+			
+		};		
+		//TODO: tets
+		const openLinkedRecordForLink = function(event, link) {
+		let loadInBackground = "false";
+			if (event.ctrlKey) {
+				loadInBackground = "true";
+			}
+			let openInfo = {
+				readLink: link,
+				loadInBackground: loadInBackground
+			};
+			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+		};
+		
 		const onlyForTestGetProviders = function() {
 			return providers;
 		};
@@ -217,6 +235,7 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 			type: "definitionViewer",
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
+			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

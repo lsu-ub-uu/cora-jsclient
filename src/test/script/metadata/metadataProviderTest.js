@@ -333,6 +333,94 @@ QUnit.test("getMetadataById", function(assert) {
 	var x = metadataProvider.getMetadataById("textPartEnGroup");
 	assert.stringifyEqual(x, expected);
 });
+QUnit.test("getMetadataRecordById", function(assert) {
+	var metadataProvider = CORA.metadataProvider(this.dependencies, this.spec);
+	metadataProvider.processFetchedMetadata(this.metadataAnswer);
+	var expected = 
+	{data:{
+		"children" : [ {
+			"name" : "nameInData",
+			"value" : "textPart"
+		}, {
+			"children" : [ {
+				"name" : "id",
+				"value" : "textPartEnGroup"
+			}, {
+				"name" : "type",
+				"value" : "metadataGroup"
+			}, {
+				"name" : "createdBy",
+				"children" : [ {
+					"name" : "linkedRecordType",
+					"value" : "user"
+				}, {
+					"name" : "linkedRecordId",
+					"value" : "userId"
+				} ]
+			}, {
+				"name" : "updatedBy",
+				"value" : "userId"
+			} ],
+			"name" : "recordInfo"
+		}, {
+			"name" : "textId",
+			"value" : "textPartEnGroupText"
+		}, {
+			"name" : "defTextId",
+			"value" : "textPartEnGroupDefText"
+		}, {
+			"children" : [ {
+				"repeatId" : "1",
+				"children" : [ {
+					"name" : "ref",
+					"children" : [ {
+						"name" : "linkedRecordType",
+						"value" : "metadataTextVariable"
+					}, {
+						"name" : "linkedRecordId",
+						"value" : "textTextVar"
+					} ],
+					"attributes" : {
+						"type" : "textVariable"
+					}
+				}, {
+					"name" : "repeatMin",
+					"value" : "1"
+				}, {
+					"name" : "repeatMax",
+					"value" : "1"
+				} ],
+				"name" : "childReference"
+			} ],
+			"name" : "childReferences"
+		}, {
+			"name" : "refParentId",
+			"value" : "textPartAlternativeGroup"
+		}, {
+			"children" : [ {
+				"name" : "ref",
+				"value" : "textPartTypeAlternativeCollectionVar"
+			}, {
+				"name" : "ref",
+				"value" : "systemLanguageEnCollectionVar"
+			} ],
+			"name" : "attributeReferences"
+		} ],
+		"name" : "metadata",
+		"attributes" : {
+			"type" : "group"
+		}
+	},"actionLinks":{"read":{"requestMethod":"GET","rel":"read",
+	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
+	"accept":"application/vnd.uub.record+json"},"update":{"requestMethod":"POST","rel":"update",
+	"contentType":"application/vnd.uub.record+json",
+	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
+	"accept":"application/vnd.uub.record+json"},"delete":{"requestMethod":"DELETE","rel":"delete",
+	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup"}}
+	};
+	var x = metadataProvider.getMetadataRecordById("textPartEnGroup");
+	assert.stringifyEqual(x, expected);
+});
 
 QUnit.test("getMetadataByIdNotFound", function(assert) {
 	var metadataProvider = CORA.metadataProvider(this.dependencies, this.spec);

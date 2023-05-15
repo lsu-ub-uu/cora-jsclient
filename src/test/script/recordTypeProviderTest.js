@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Olov McKie
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,94 +20,151 @@
 "use strict";
 
 QUnit.module("recordTypeProviderTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.ajaxCallFactorySpy = CORATEST.standardFactorySpy("ajaxCallSpy");
-		var dependencies = {
-			"ajaxCallFactory" : this.ajaxCallFactorySpy
+		let dependencies = {
+			ajaxCallFactory: this.ajaxCallFactorySpy
 		};
 		this.dependencies = dependencies;
 
-		var recordTypeListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-			"accept" : "application/vnd.uub.recordList+json"
+		let recordTypeListLink = {
+			requestMethod: "GET",
+			rel: "list",
+			url: "http://epc.ub.uu.se/cora/rest/record/recordType/",
+			accept: "application/vnd.uub.recordList+json"
 		};
 		this.recordTypeListLink = recordTypeListLink;
 
-		var spec = {
-			"recordTypeListLink" : recordTypeListLink
+		let validationTypeListLink = {
+			requestMethod: "GET",
+			rel: "list",
+			url: "http://epc.ub.uu.se/cora/rest/record/validationType/",
+			accept: "application/vnd.uub.recordList+json"
+		};
+		this.validationTypeListLink = recordTypeListLink;
+
+		let spec = {
+			recordTypeListLink: recordTypeListLink,
+			validationTypeListLink: validationTypeListLink
 		};
 
 		this.spec = spec;
+		
 		this.recordTypeListLink = recordTypeListLink;
 		this.recordTypeListLinkJson = JSON.stringify(this.recordTypeListLink);
 
 		this.answerListCall = function(no) {
-			var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
-			var jsonRecordList = JSON.stringify(CORATEST.recordTypeList);
-			var answer = {
-				"spec" : ajaxCallSpy0.getSpec(),
-				"responseText" : jsonRecordList
+			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
+			let jsonRecordList = JSON.stringify(CORATEST.recordTypeList);
+			let answer = {
+				"spec": ajaxCallSpy0.getSpec(),
+				"responseText": jsonRecordList
+			};
+			ajaxCallSpy0.getSpec().loadMethod(answer);
+		}
+		this.validationTypeListLink = validationTypeListLink;
+		this.validationTypeListLinkJson = JSON.stringify(this.validationTypeListLink);
+
+		this.answerValiationListCall = function(no) {
+			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
+			let jsonRecordList = JSON.stringify(CORATEST.validationTypeList);
+			let answer = {
+				"spec": ajaxCallSpy0.getSpec(),
+				"responseText": jsonRecordList
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		}
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("initCorrectType", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	assert.strictEqual(provider.type, "recordTypeProvider");
 });
 
 QUnit.test("initGetDependencies", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	assert.strictEqual(provider.getDependencies(), this.dependencies);
 });
 
 QUnit.test("initGetSpec", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	assert.strictEqual(provider.getSpec(), this.spec);
 });
 
 QUnit.test("initCorrectRequestMade", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 
-	var ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
-	var ajaxCallSpec = ajaxCallSpy.getSpec();
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/recordType/");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
-	assert.strictEqual(ajaxCallSpec.loadMethod, provider.processFetchedData);
+	assert.strictEqual(ajaxCallSpec.loadMethod, provider.onlyForTestHandleAnswerForRecordTypes);
+	assert.false(ajaxCallSpec.loadMethod == undefined);
 });
 
-QUnit.test("initCallWhenReadyCalledWhenReady", function(assert) {
-	var providerStarted = false;
+QUnit.test("initCorrectRequestMadeForValidationType", function(assert) {
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
+	let ajaxCallSpec = ajaxCallSpy.getSpec();
+	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/validationType/");
+	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+	assert.strictEqual(ajaxCallSpec.contentType, undefined);
+	assert.strictEqual(ajaxCallSpec.data, undefined);
+	assert.strictEqual(ajaxCallSpec.loadMethod, provider.onlyForTestHandleAnswerForValidationTypes);
+	assert.false(ajaxCallSpec.loadMethod == undefined);
+});
+
+QUnit.test("callWhenReadyCalledAfterAnswersFromBothAjaxCallsAndProviderIsReady", function(assert) {
+	let providerStarted = false;
 	function providerReady() {
 		providerStarted = true;
 	}
 
 	this.spec.callWhenReady = providerReady;
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	CORA.recordTypeProvider(this.dependencies, this.spec);
 
 	assert.notOk(providerStarted);
 
 	this.answerListCall(0);
+	assert.notOk(providerStarted);
 
+	this.answerValiationListCall(1);
 	assert.ok(providerStarted);
 });
 
-QUnit.test("initCallWhenReadyNotCalledWhenReadyIfUnspecified", function(assert) {
-	var providerStarted = false;
+QUnit.test("callWhenReadyCalledAfterAnswersFromBothAjaxCallsAndProviderIsReadyDifferntOrder", function(assert) {
+	let providerStarted = false;
 	function providerReady() {
 		providerStarted = true;
 	}
 
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	this.spec.callWhenReady = providerReady;
+	CORA.recordTypeProvider(this.dependencies, this.spec);
+
+	assert.notOk(providerStarted);
+
+	this.answerValiationListCall(1);
+	assert.notOk(providerStarted);
+
+	this.answerListCall(0);
+	assert.ok(providerStarted);
+});
+
+QUnit.test("initCallWhenReadyNotCalledWhenReadyIfUnspecified", function(assert) {
+	let providerStarted = false;
+	function providerReady() {
+		providerStarted = true;
+	}
+
+	CORA.recordTypeProvider(this.dependencies, this.spec);
 
 	assert.notOk(providerStarted);
 
@@ -117,218 +174,220 @@ QUnit.test("initCallWhenReadyNotCalledWhenReadyIfUnspecified", function(assert) 
 });
 
 QUnit.test("testInitEnteredLinkIsNotChanged", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
-	var recordTypeListLinkJson = this.recordTypeListLinkJson;
-	var recordTypeListLinkJsonAfter = JSON.stringify(this.recordTypeListLink);
+	CORA.recordTypeProvider(this.dependencies, this.spec);
+	let recordTypeListLinkJson = this.recordTypeListLinkJson;
+	let recordTypeListLinkJsonAfter = JSON.stringify(this.recordTypeListLink);
 	assert.deepEqual(recordTypeListLinkJsonAfter, recordTypeListLinkJson);
 });
 
 QUnit.test("getRecordTypeById", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
-
-	var expected = {
-		"data" : {
-			"children" : [ {
-				"children" : [ {
-					"name" : "id",
-					"value" : "textSystemOne"
+ 	this.answerValiationListCall(1);
+	
+	let expected = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "textSystemOne"
 				}, {
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "recordType"
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "recordType"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "recordType"
-					} ],
-					"name" : "type"
+						"name": "linkedRecordId",
+						"value": "recordType"
+					}],
+					"name": "type"
 				}, {
-					"name" : "createdBy",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "user"
+					"name": "createdBy",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "user"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "userid"
-					} ]
+						"name": "linkedRecordId",
+						"value": "userid"
+					}]
 				}, {
-					"name" : "updatedBy",
-					"value" : "userId"
+					"name": "updatedBy",
+					"value": "userId"
 				}, {
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "system"
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "system"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "cora"
-					} ],
-					"actionLinks" : {
-						"read" : {
-							"requestMethod" : "GET",
-							"rel" : "read",
-							"url" : "http://localhost:8080/therest/rest/record/system/cora",
-							"accept" : "application/vnd.uub.record+json"
+						"name": "linkedRecordId",
+						"value": "cora"
+					}],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.uub.record+json"
 						}
 					},
-					"name" : "dataDivider"
-				} ],
-				"name" : "recordInfo"
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
 			}, {
-				"name" : "metadataId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "metadataGroup"
+				"name": "metadataId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "metadataGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneGroup"
+				}]
 			}, {
-				"name" : "presentationViewId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "presentationGroup"
+				"name": "presentationViewId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "presentationGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneViewPGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneViewPGroup"
+				}]
 			}, {
-				"name" : "presentationFormId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "presentationGroup"
+				"name": "presentationFormId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "presentationGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneFormPGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneFormPGroup"
+				}]
 			}, {
-				"name" : "newMetadataId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "metadataGroup"
+				"name": "newMetadataId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "metadataGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneNewGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneNewGroup"
+				}]
 			}, {
-				"name" : "newPresentationFormId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "presentationGroup"
+				"name": "newPresentationFormId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "presentationGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneFormNewPGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneFormNewPGroup"
+				}]
 			}, {
-				"name" : "menuPresentationViewId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "presentationGroup"
+				"name": "menuPresentationViewId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "presentationGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneMenuPGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneMenuPGroup"
+				}]
 			}, {
-				"name" : "listPresentationViewId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "presentationGroup"
+				"name": "listPresentationViewId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "presentationGroup"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textSystemOneListPGroup"
-				} ]
+					"name": "linkedRecordId",
+					"value": "textSystemOneListPGroup"
+				}]
 			}, {
-				"name" : "search",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "search"
+				"name": "search",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "search"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "presentationVarSearch"
-				} ]
+					"name": "linkedRecordId",
+					"value": "presentationVarSearch"
+				}]
 			}, {
-				"name" : "userSuppliedId",
-				"value" : "true"
+				"name": "userSuppliedId",
+				"value": "true"
 			}, {
-				"name" : "selfPresentationViewId",
-				"value" : "textSystemOneViewSelfPGroup"
+				"name": "selfPresentationViewId",
+				"value": "textSystemOneViewSelfPGroup"
 			}, {
-				"name" : "abstract",
-				"value" : "false"
+				"name": "abstract",
+				"value": "false"
 			}, {
-				"name" : "parentId",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "recordType"
+				"name": "parentId",
+				"children": [{
+					"name": "linkedRecordType",
+					"value": "recordType"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "text"
-				} ]
-			},{
-                "name": "groupOfRecordType",
-                "value": "metadata",
-                "repeatId": "0"
-              },{
-                  "name": "groupOfRecordType",
-                  "value": "presentation",
-                  "repeatId": "1"
-                },{
-                    "name": "groupOfRecordType",
-                    "value": "systemConfiguration",
-                    "repeatId": "2"
-            } ],
-			"name" : "recordType"
+					"name": "linkedRecordId",
+					"value": "text"
+				}]
+			}, {
+				"name": "groupOfRecordType",
+				"value": "metadata",
+				"repeatId": "0"
+			}, {
+				"name": "groupOfRecordType",
+				"value": "presentation",
+				"repeatId": "1"
+			}, {
+				"name": "groupOfRecordType",
+				"value": "systemConfiguration",
+				"repeatId": "2"
+			}],
+			"name": "recordType"
 		},
-		"actionLinks" : {
-			"search" : {
-				"requestMethod" : "GET",
-				"rel" : "search",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+		"actionLinks": {
+			"search": {
+				"requestMethod": "GET",
+				"rel": "search",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-				"accept" : "application/vnd.uub.record+json"
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-				"accept" : "application/vnd.uub.record+json"
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"create" : {
-				"requestMethod" : "POST",
-				"rel" : "create",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.record+json"
+			"create": {
+				"requestMethod": "POST",
+				"rel": "create",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"list" : {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+			"list": {
+				"requestMethod": "GET",
+				"rel": "list",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"delete" : {
-				"requestMethod" : "DELETE",
-				"rel" : "delete",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne"
+			"delete": {
+				"requestMethod": "DELETE",
+				"rel": "delete",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne"
 			}
 		}
 	};
-	var x = provider.getRecordTypeById("textSystemOne");
-	assert.stringifyEqual(x, expected);
+	let metadataForRecordType = provider.getRecordTypeById("textSystemOne");
+	assert.stringifyEqual(metadataForRecordType, expected);
 });
 
 QUnit.test("getRecordTypeByIdNotFound", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var error = false;
+	let error = false;
 	try {
-		var x = provider.getRecordTypeById("someNonExistingRecordTypeId");
+		let x = provider.getRecordTypeById("someNonExistingRecordTypeId");
 	} catch (e) {
 		error = true;
 	}
@@ -336,139 +395,143 @@ QUnit.test("getRecordTypeByIdNotFound", function(assert) {
 });
 
 QUnit.test("getAllRecordTypes", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var recordTypeList = provider.getAllRecordTypes();
+	let recordTypeList = provider.getAllRecordTypes();
 	assert.stringifyEqual(recordTypeList.length, 15);
 
 });
 
 QUnit.test("getMetadataByRecordTypeId", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var expected = {
-		"metadataId" : "textSystemOneGroup",
-		"presentationViewId" : "textSystemOneViewPGroup",
-		"presentationFormId" : "textSystemOneFormPGroup",
-		"newMetadataId" : "textSystemOneNewGroup",
-		"newPresentationFormId" : "textSystemOneFormNewPGroup",
-		"menuPresentationViewId" : "textSystemOneMenuPGroup",
-		"listPresentationViewId" : "textSystemOneListPGroup",
-		"search" : "presentationVarSearch",
-		"userSuppliedId" : "true",
-		"abstract" : "false",
-		"parentId" : "text",
-		"actionLinks" : {
-			"search" : {
-				"requestMethod" : "GET",
-				"rel" : "search",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+	let expected = {
+		"metadataId": "textSystemOneGroup",
+		"presentationViewId": "textSystemOneViewPGroup",
+		"presentationFormId": "textSystemOneFormPGroup",
+		"newMetadataId": "textSystemOneNewGroup",
+		"newPresentationFormId": "textSystemOneFormNewPGroup",
+		"menuPresentationViewId": "textSystemOneMenuPGroup",
+		"listPresentationViewId": "textSystemOneListPGroup",
+		"search": "presentationVarSearch",
+		"userSuppliedId": "true",
+		"abstract": "false",
+		"parentId": "text",
+		"actionLinks": {
+			"search": {
+				"requestMethod": "GET",
+				"rel": "search",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-				"accept" : "application/vnd.uub.record+json"
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-				"accept" : "application/vnd.uub.record+json"
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"create" : {
-				"requestMethod" : "POST",
-				"rel" : "create",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.record+json"
+			"create": {
+				"requestMethod": "POST",
+				"rel": "create",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"list" : {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+			"list": {
+				"requestMethod": "GET",
+				"rel": "list",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"delete" : {
-				"requestMethod" : "DELETE",
-				"rel" : "delete",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne"
+			"delete": {
+				"requestMethod": "DELETE",
+				"rel": "delete",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne"
 			}
 		}
 	};
-	var x = provider.getMetadataByRecordTypeId("textSystemOne");
+	let x = provider.getMetadataByRecordTypeId("textSystemOne");
 	assert.stringifyEqual(x, expected);
 });
 QUnit.test("getMetadataByRecordTypeIdNoParentId", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var expected = {
-		"metadataId" : "metadataGroup",
-		"presentationViewId" : "metadataViewPGroup",
-		"presentationFormId" : "metadataFormPGroup",
-		"newMetadataId" : "metadataNewGroup",
-		"newPresentationFormId" : "metadataFormNewPGroup",
-		"menuPresentationViewId" : "metadataMenuPGroup",
-		"listPresentationViewId" : "metadataListPGroup",
-		"search" : "presentationVarSearch",
-		"userSuppliedId" : "true",
-		"abstract" : "true",
-		"actionLinks" : {
-			"search" : {
-				"requestMethod" : "GET",
-				"rel" : "search",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+	let expected = {
+		"metadataId": "metadataGroup",
+		"presentationViewId": "metadataViewPGroup",
+		"presentationFormId": "metadataFormPGroup",
+		"newMetadataId": "metadataNewGroup",
+		"newPresentationFormId": "metadataFormNewPGroup",
+		"menuPresentationViewId": "metadataMenuPGroup",
+		"listPresentationViewId": "metadataListPGroup",
+		"search": "presentationVarSearch",
+		"userSuppliedId": "true",
+		"abstract": "true",
+		"actionLinks": {
+			"search": {
+				"requestMethod": "GET",
+				"rel": "search",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/metadata",
-				"accept" : "application/vnd.uub.record+json"
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/metadata",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/metadata",
-				"accept" : "application/vnd.uub.record+json"
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/metadata",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"create" : {
-				"requestMethod" : "POST",
-				"rel" : "create",
-				"contentType" : "application/vnd.uub.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.record+json"
+			"create": {
+				"requestMethod": "POST",
+				"rel": "create",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.record+json"
 			},
-			"list" : {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+			"list": {
+				"requestMethod": "GET",
+				"rel": "list",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
 			},
-			"delete" : {
-				"requestMethod" : "DELETE",
-				"rel" : "delete",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/metadata"
+			"delete": {
+				"requestMethod": "DELETE",
+				"rel": "delete",
+				"url": "http://epc.ub.uu.se/cora/rest/record/recordType/metadata"
 			}
 		}
 	};
-	var x = provider.getMetadataByRecordTypeId("metadata");
+	let x = provider.getMetadataByRecordTypeId("metadata");
 	assert.stringifyEqual(x, expected);
 });
 
 QUnit.test("getMetadataByRecordTypeIdNotFound", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var error = false;
+	let error = false;
 	try {
-		var x = provider.getMetadataByRecordTypeId("someNonExistingRecordTypeId");
+		let x = provider.getMetadataByRecordTypeId("someNonExistingRecordTypeId");
 	} catch (e) {
 		error = true;
 	}
@@ -476,47 +539,49 @@ QUnit.test("getMetadataByRecordTypeIdNotFound", function(assert) {
 });
 
 QUnit.test("getRecordTypesByGroupIdNoMatchReturnsEmptyList", function(assert) {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var recordTypeList = provider.getRecordTypesByGroupId("");
+	let recordTypeList = provider.getRecordTypesByGroupId("");
 	assert.stringifyEqual(recordTypeList.length, 0);
 });
 
-QUnit.test("getRecordTypesByGroupId", function(assert)  {
-	var provider = CORA.recordTypeProvider(this.dependencies, this.spec);
+QUnit.test("getRecordTypesByGroupId", function(assert) {
+	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
+ 	this.answerValiationListCall(1);
 
-	var presentationRecordTypeList = provider.getRecordTypesByGroupId("presentation");
-	var id = getIdFromRecord(presentationRecordTypeList[0]);
-	assert.strictEqual(id, "presentation");
-	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[1]), "presentationVar");
-	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[2]), "presentationSurroundingContainer");
-	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[5]), "text");
-	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[6]), "textSystemOne");
-	assert.strictEqual(presentationRecordTypeList.length, 7);
-	
-	var metadataRecordTypeList = provider.getRecordTypesByGroupId("metadata");
-	var idFirstInMetadata = getIdFromRecord(metadataRecordTypeList[0]);
-	assert.strictEqual(idFirstInMetadata, "metadata");
-	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[1]), "metadataGroup");
-	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[2]), "metadataCollectionItem");
+	let presentationRecordTypeList = provider.getRecordTypesByGroupId("presentation");
+	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[0]), "guiElement");
+	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[1]), "presentation");
+	assert.strictEqual(getIdFromRecord(presentationRecordTypeList[2]), "text");
+	assert.strictEqual(presentationRecordTypeList.length, 3);
 
-	assert.strictEqual(metadataRecordTypeList.length, 9);
+	let metadataRecordTypeList = provider.getRecordTypesByGroupId("metadata");
+	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[0]), "collectTerm");
+	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[1]), "metadata");
+	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[2]), "recordType");
+	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[3]), "validationType");
+	assert.strictEqual(getIdFromRecord(metadataRecordTypeList[4]), "text");
 
-	var systemConfRecordTypeList = provider.getRecordTypesByGroupId("systemConfiguration");
-	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[0]), "text");
-	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[1]), "textSystemOne");
-	assert.strictEqual(systemConfRecordTypeList.length, 2);
+	assert.strictEqual(metadataRecordTypeList.length, 5);
 
-	var otherTypeList = provider.getRecordTypesByGroupId("other");
-	assert.strictEqual(getIdFromRecord(otherTypeList[0]), "metadataItemCollection");
-	assert.strictEqual(otherTypeList.length, 1);
+	let systemConfRecordTypeList = provider.getRecordTypesByGroupId("systemConfiguration");
+	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[0]), "loginUnit");
+	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[1]), "login");
+	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[2]), "system");
+	assert.strictEqual(getIdFromRecord(systemConfRecordTypeList[3]), "text");
+	assert.strictEqual(systemConfRecordTypeList.length, 4);
+
+	let otherTypeList = provider.getRecordTypesByGroupId("other");
+	assert.strictEqual(getIdFromRecord(otherTypeList[0]), "indexBatchJob");
+	assert.strictEqual(otherTypeList.length, 6);
 });
 
-function getIdFromRecord(record){
-	var cRecord = CORA.coraData(record.data);
-	var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+function getIdFromRecord(record) {
+	let cRecord = CORA.coraData(record.data);
+	let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 	return cRecordInfo.getFirstAtomicValueByNameInData("id");
 
 }

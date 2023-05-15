@@ -103,6 +103,27 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 			let metadataId = metadataForRecordType.newMetadataId;
 
+			/*
+			let validationTypes = recordTypeProvider.getValiationTypes()
+			if more than one pop gui to choose, else continue...
+			
+			retun id
+			 */
+
+			/*
+			things to do:
+			1. in theClient.html add url to get valiationTypes, send it to (reloadable)RecordTypeProvider
+			2. In recordTypeProvider also load validationTypes, and add possiblility to get the list
+			based on recordType
+			3. update recordHandler to work with validationTypes
+			3a. create copy as new, read validation type from data
+			3b. create new button
+			3c. create validation choice gui in recordHandlerView
+			4a. update loading data from server
+			4b. update provided data
+			 */
+
+
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
 				permissions);
@@ -414,19 +435,19 @@ var CORA = (function(cora) {
 			const name = fetchedRecord.data.name;
 			return "metadata" === name;
 		};
-		
-		const showDefinitionViewer = function(){
+
+		const showDefinitionViewer = function() {
 			let cData = CORA.coraData(fetchedRecord.data);
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
 			spec.jsClient.openDefinitionViewerForId(id);
 		};
-		
+
 		const showData = function() {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
 				type: CORA.message.INFO,
-				renderHtml : false,
+				renderHtml: false,
 				timeout: 0
 			};
 			messageHolder.createMessage(messageSpec);
@@ -537,7 +558,7 @@ var CORA = (function(cora) {
 		const callError = function(answer) {
 			busy.hideWithEffect();
 			let messageSpec = {
-				message: answer.status + " "+answer.response,
+				message: answer.status + " " + answer.response,
 				type: CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
@@ -620,7 +641,7 @@ var CORA = (function(cora) {
 			showIndexMessage: showIndexMessage,
 			showTimeoutMessage: showTimeoutMessage,
 			callMethodAfterShowWorkView: callMethodAfterShowWorkView,
-			showDefinitionViewer : showDefinitionViewer
+			showDefinitionViewer: showDefinitionViewer
 		});
 	};
 	return cora;

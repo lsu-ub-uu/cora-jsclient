@@ -70,7 +70,8 @@ var CORA = (function(cora) {
 			data.forEach(function(recordContainer) {
 				let recordData = recordContainer.record.data;
 				let recordId = getIdFromRecordData(recordData);
-				metadata[recordId] = recordData;
+//				metadata[recordId] = recordData;
+				metadata[recordId] = recordContainer.record;
 			});
 		};
 
@@ -90,7 +91,7 @@ var CORA = (function(cora) {
 
 		const getMetadataById = function(metadataId) {
 			if (metadata[metadataId] !== undefined) {
-				return metadata[metadataId];
+				return metadata[metadataId].data;
 			}
 			return tryToGetMetadataFromTextProvider(metadataId);
 		};
@@ -103,6 +104,13 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const getMetadataRecordById = function(metadataId) {
+			if (metadata[metadataId] !== undefined) {
+				return metadata[metadataId];
+			}
+			return tryToGetMetadataFromTextProvider(metadataId);
+		};
+		
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -116,6 +124,7 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getMetadataById: getMetadataById,
+			getMetadataRecordById: getMetadataRecordById,
 			processFetchedMetadata: processFetchedMetadata
 		});
 		start();

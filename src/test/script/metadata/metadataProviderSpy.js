@@ -22,6 +22,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.metadataProviderSpy = function() {
 
 		var fetchedMetadataIds = [];
+		var fetchedMetadataRecordIds = [];
 		var fetchedMetadata = [];
 		var callWhenReloadedMethod;
 		var noOfReloads = 0;
@@ -142,10 +143,26 @@ var CORATEST = (function(coraTest) {
 		function getNoOfReloads() {
 			return noOfReloads;
 		}
+		const getMetadataRecordById = function(id){
+			fetchedMetadataRecordIds.push(id);
+			
+			return {
+				actionLinks:{
+					read:{
+						fakeLinkFetchedByIdFromMetadataProviderSpyUsingId:id
+					}
+				}
+			}
+		};
+		const getFetchedMetadataRecordId = function(no) {
+			return fetchedMetadataRecordIds[no];
+		};
 		return Object.freeze({
 			getMetadataById : getMetadataById,
 			getFetchedMetadataId : getFetchedMetadataId,
 			getFetchedMetadata : getFetchedMetadata,
+			getMetadataRecordById: getMetadataRecordById,
+			getFetchedMetadataRecordId : getFetchedMetadataRecordId,
 			reload : reload,
 			getCallWhenReloadedMethod : getCallWhenReloadedMethod,
 			getNoOfReloads : getNoOfReloads,

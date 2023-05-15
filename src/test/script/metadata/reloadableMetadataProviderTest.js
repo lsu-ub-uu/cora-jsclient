@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -145,4 +145,28 @@ QUnit.test("testGetMetadataByIdForwardedToSecondFactoredProviderAfterSwitchProvi
 	var metadata = this.reloadableMetadataProvider.getMetadataById("someMetadataId");
 
 	assert.strictEqual(secondFactoredMetadataProvider.getFetchedMetadataId(0), "someMetadataId");
+});
+
+//{
+//				actionLinks:{
+//					read:{
+//						fakeLinkFetchedByIdFromMetadataProviderSpyUsingId:id
+//					}
+//				}
+QUnit.test("testGetMetadataRecordByIdForwardedToFactoredProvider", function(assert) {
+	let firstFactoredMetadataProvider = this.dependencies.metadataProviderFactory.getFactored(0);
+	this.reloadableMetadataProvider.getMetadataRecordById("someId");
+
+	assert.strictEqual(firstFactoredMetadataProvider.getFetchedMetadataRecordId(0), "someId");
+});
+
+QUnit.test("testGetMetadataRecordByIdForwardedToSecondFactoredProviderAfterSwitchProvider", function(
+		assert) {
+	this.reloadableMetadataProvider.reload(function() {
+	});
+	this.reloadableMetadataProvider.switchProvider();
+	var secondFactoredMetadataProvider = this.dependencies.metadataProviderFactory.getFactored(1);
+	var metadata = this.reloadableMetadataProvider.getMetadataRecordById("otherId");
+
+	assert.strictEqual(secondFactoredMetadataProvider.getFetchedMetadataRecordId(0), "otherId");
 });

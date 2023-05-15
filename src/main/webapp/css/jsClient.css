@@ -543,8 +543,16 @@ body {
 	font-size: 0.8rem;
 }
 
+.jsClient .attributes .pCollVar {
+	display: inline;
+}
+
 .jsClient .attributeName {
 	font-style: italic;
+}
+
+.jsClient .attributeName::after {
+	content: ": ";
 }
 
 .jsClient .listItem .textPartAlternativePGroup .text {
@@ -612,6 +620,7 @@ body {
 	color: orange;
 	font-weight: bold;
 	padding-right: 0.2rem;
+	cursor: pointer;
 }
 
 .definitionViewer .attributes {

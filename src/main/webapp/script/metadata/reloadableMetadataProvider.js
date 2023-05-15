@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -40,6 +40,10 @@ var CORA = (function(cora) {
 			return currentMetadataProvider.getMetadataById(id);
 		}
 
+		const getMetadataRecordById = function(id) {
+			return currentMetadataProvider.getMetadataRecordById(id);
+		};
+
 		function reload(callAfterSwitch) {
 			callWhenSwitched = callAfterSwitch;
 			var reloadingSpec = {
@@ -62,6 +66,7 @@ var CORA = (function(cora) {
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getMetadataById : getMetadataById,
+			getMetadataRecordById: getMetadataRecordById,
 			reload : reload,
 			switchProvider : switchProvider
 		});

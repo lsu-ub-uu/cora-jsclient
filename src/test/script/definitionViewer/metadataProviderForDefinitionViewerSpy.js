@@ -182,8 +182,18 @@ var CORATEST = (function(coraTest) {
 		function getNoOfReloads() {
 			return noOfReloads;
 		}
+		const getMetadataRecordById = function(id){
+			return {
+				actionLinks:{
+					read:{
+						fakeLinkFetchedById:id
+					}
+				}
+			}
+		};
 		return Object.freeze({
 			getMetadataById : getMetadataById,
+			getMetadataRecordById: getMetadataRecordById,
 			reload : reload,
 
 			addMetadataById : addMetadataById,

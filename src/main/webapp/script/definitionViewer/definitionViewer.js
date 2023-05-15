@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 		let out;
 		let metadataProvider = providers.metadataProvider;
 		let textProvider = providers.textProvider;
+		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let view = dependencies.view;
 		let id;
 
@@ -47,8 +48,8 @@ var CORA = (function(cora) {
 			let model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
-		const getViewModelForMetadataId = function(metadataGroupId) {
-			let cDataRecordGroup = getCMetadataById(metadataGroupId);
+		const getViewModelForMetadataId = function(metadataId) {
+			let cDataRecordGroup = getCMetadataById(metadataId);
 			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
 
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
@@ -59,7 +60,7 @@ var CORA = (function(cora) {
 			}
 			return model;
 		};
-
+		
 		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup) {
 			let id = getIdFromCDataGroup(cDataRecordGroup);
 			let type = cDataRecordGroup.getData().attributes["type"];
@@ -72,7 +73,8 @@ var CORA = (function(cora) {
 				type: type,
 				nameInData: nameInData,
 				text: text,
-				defText: defText
+				defText: defText,
+				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
 			
 			if (cDataRecordGroup.containsChildWithNameInData("finalValue")) {
@@ -165,26 +167,27 @@ var CORA = (function(cora) {
 			}
 			return children;
 		};
-const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-				let attributes = {
-					name: "attributes",
-					children: []
-				};
-	let attribute =  {
-		name: "attribute",
-		repeatId: repeatId || "1",
-		children: [{
-			name: "attributeName",
-			value: attributeName
-		}, {
-			name: "attributeValue",
-			value: attributeValue
-		}]
-	};
-				 attributes.children.push(attribute);
-				return attributes;
 		
-}
+		const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+			let attributes = {
+				name: "attributes",
+				children: []
+			};
+			let attribute =  {
+				name: "attribute",
+				repeatId: repeatId || "1",
+				children: [{
+					name: "attributeName",
+					value: attributeName
+				}, {
+					name: "attributeValue",
+					value: attributeValue
+				}]
+			};
+			attributes.children.push(attribute);
+			return attributes;
+		};
+
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
 			return CORA.coraData(metadata);
@@ -200,7 +203,25 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
 			return textProvider.getAllTranslations(textId);
 		};
-
+		
+		const openDefiningRecordUsingEventAndId = function(event, id) {
+			let metadataRecord = metadataProvider.getMetadataRecordById(id); 
+			let readLink = metadataRecord.actionLinks.read;
+			openLinkedRecordForLink(event, readLink);
+		};		
+		
+		const openLinkedRecordForLink = function(event, link) {
+			let loadInBackground = "false";
+			if (event.ctrlKey) {
+				loadInBackground = "true";
+			}
+			let openInfo = {
+				readLink: link,
+				loadInBackground: loadInBackground
+			};
+			jsClient.openRecordUsingReadLink(openInfo);
+		};
+		
 		const onlyForTestGetProviders = function() {
 			return providers;
 		};
@@ -217,6 +238,7 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 			type: "definitionViewer",
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
+			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

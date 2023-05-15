@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recordHandlerFactoryTest.js", {
+QUnit.module("recordHandlerFactoryTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 

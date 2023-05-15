@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
+QUnit.module("definitionViewer/definitionViewerViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"
@@ -26,6 +26,7 @@ QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 		this.spec = {
 			someKey: "someValue"
 		};
+		
 		this.definitionViewerView = CORA.definitionViewerView(this.dependencies, this.spec);
 		let viewModel = {
 			id: "minimalGroupId",
@@ -33,6 +34,7 @@ QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 			nameInData: "minimalGroup",
 			text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 			defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+			methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
 			children: []
 		};
 		this.viewModel = viewModel;
@@ -43,6 +45,7 @@ QUnit.module.only("definitionViewer/definitionViewerViewTest.js", {
 				nameInData: "textVar",
 				text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
 				defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+				methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId
 			}
 		};
 		viewModel.children.push(child);
@@ -100,12 +103,29 @@ QUnit.test("testBasicMetadata", function(assert) {
 
 	let firstLevelMetadata = view.childNodes[1];
 	CORATEST.assertElementHasTypeClassText(firstLevelMetadata, "UL", "metadata", "", assert);
-
+	
 	let metadataHeader = firstLevelMetadata.childNodes[0];
 	assert.strictEqual(metadataHeader.tagName, "LI");
 	let childNodes = metadataHeader.childNodes;
 	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "details",  "", assert);
+});
+
+QUnit.test("testBasicMetadataOnClickOpensDefiningRecord", function(assert) {
+	let callsToOpenDefiningRecord = [];
+	const openDefiningRecordUsingEventAndId = function(event, id){
+		callsToOpenDefiningRecord.push({event:event,id:id});
+	}
+	this.viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let childNodes = metadataHeader.childNodes;
+	CORATESTHELPER.simulateOnclick(childNodes[0], { ctrlKey: true });
+
+	assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
+	assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
 });
 
 QUnit.test("testBasicWithAttributeFinalValue", function(assert) {

@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerTest.js", {
+QUnit.module("definitionViewer/definitionViewerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
 		this.textProvider = CORATEST.textProviderSpy();
@@ -33,6 +33,7 @@ QUnit.module.only("definitionViewer/definitionViewerTest.js", {
 			textProvider: this.textProvider,
 			searchProvider: this.searchProvider,
 			recordTypeProvider: this.recordTypeProvider,
+			clientInstanceProvider: this.clientInstanceProvider
 		};
 
 		this.dependencies = {
@@ -105,8 +106,6 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 });
 
 QUnit.test("testViewModel", function(assert) {
-	//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
-
 	let generatedView = this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
@@ -122,13 +121,39 @@ QUnit.test("testViewModel", function(assert) {
 });
 
 QUnit.test("testOpenDefiningRecordUsingEventAndId", function(assert) {
-	//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	let id = "someMetadataId";
 	
-	let generatedView = this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
+	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
+	
+	let jsClient = this.clientInstanceProvider.getJsClient();
+	let openInfo = jsClient.getOpenInfo(0);
+	let expected = {
+		readLink : {
+			fakeLinkFetchedById:"someMetadataId"
+		},
+		loadInBackground : "true"
+	};
+	assert.deepEqual(openInfo, expected);
+});
 
+QUnit.test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
+	let event = document.createEvent('Event');
+	event.ctrlKey = false;
+	let id = "someMetadataId";
+	
+	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
+	
+	let jsClient = this.clientInstanceProvider.getJsClient();
+	let openInfo = jsClient.getOpenInfo(0);
+	let expected = {
+		readLink : {
+			fakeLinkFetchedById:"someMetadataId"
+		},
+		loadInBackground : "false"
+	};
+	assert.deepEqual(openInfo, expected);
 });
 
 

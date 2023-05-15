@@ -90,6 +90,9 @@ var CORA = (function(cora) {
 
 			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
 			metadataHeader.append(nameInData);
+			nameInData.onclick = function(event){
+				child.methodOpenDefiningRecord(event, child.id);
+			};
 			
 			if(child.attributes){
 				const attributeDetails =createAttributeDetails(child);

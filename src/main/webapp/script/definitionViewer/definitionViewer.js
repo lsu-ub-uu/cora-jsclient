@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 		let out;
 		let metadataProvider = providers.metadataProvider;
 		let textProvider = providers.textProvider;
+		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let view = dependencies.view;
 		let id;
 
@@ -166,26 +167,27 @@ var CORA = (function(cora) {
 			}
 			return children;
 		};
-const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-				let attributes = {
-					name: "attributes",
-					children: []
-				};
-	let attribute =  {
-		name: "attribute",
-		repeatId: repeatId || "1",
-		children: [{
-			name: "attributeName",
-			value: attributeName
-		}, {
-			name: "attributeValue",
-			value: attributeValue
-		}]
-	};
-				 attributes.children.push(attribute);
-				return attributes;
 		
-}
+		const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+			let attributes = {
+				name: "attributes",
+				children: []
+			};
+			let attribute =  {
+				name: "attribute",
+				repeatId: repeatId || "1",
+				children: [{
+					name: "attributeName",
+					value: attributeName
+				}, {
+					name: "attributeValue",
+					value: attributeValue
+				}]
+			};
+			attributes.children.push(attribute);
+			return attributes;
+		};
+
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
 			return CORA.coraData(metadata);
@@ -203,12 +205,13 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 		};
 		
 		const openDefiningRecordUsingEventAndId = function(event, id) {
-			//getMetadataRecordById 
-			
+			let metadataRecord = metadataProvider.getMetadataRecordById(id); 
+			let readLink = metadataRecord.actionLinks.read;
+			openLinkedRecordForLink(event, readLink);
 		};		
-		//TODO: tets
+		
 		const openLinkedRecordForLink = function(event, link) {
-		let loadInBackground = "false";
+			let loadInBackground = "false";
 			if (event.ctrlKey) {
 				loadInBackground = "true";
 			}
@@ -216,7 +219,7 @@ const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attr
 				readLink: link,
 				loadInBackground: loadInBackground
 			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+			jsClient.openRecordUsingReadLink(openInfo);
 		};
 		
 		const onlyForTestGetProviders = function() {

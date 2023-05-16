@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recordHandlerTest.js", {
+QUnit.module.only("recordHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.record = CORATEST.recordWithAllLinks;

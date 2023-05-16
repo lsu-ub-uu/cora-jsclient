@@ -114,7 +114,7 @@ var CORA = (function(cora) {
 			things to do:
 			1. in theClient.html add url to get valiationTypes, send it to (reloadable)RecordTypeProvider
 			2. In recordTypeProvider also load validationTypes, and add possiblility to get the list
-			based on recordType
+			based on recordType FIXED, sent along with getMetadataByRecordTypeId
 			3. update recordHandler to work with validationTypes
 			3a. create copy as new, read validation type from data
 			3b. create new button
@@ -122,7 +122,26 @@ var CORA = (function(cora) {
 			4a. update loading data from server
 			4b. update provided data
 			 */
-
+//let expected = [
+//		{
+//			id: "coraText",
+//			textId: "coraTextText",
+//			defTextId: "coraTextValidationDefText",
+//			createDefinitionId: "coraTextNewGroup",
+//			updateDefinitionId: "coraTextGroup",
+//			createFormId: "coraTextNewPGroup",
+//			updateFormId: "coraTextPGroup"
+//		}, 
+//		{
+//			id: "textSystemOne",
+//			textId: "textSystemOneText",
+//			defTextId: "textSystemOneValidationDefText",
+//			createDefinitionId: "textSystemOneNewGroup",
+//			updateDefinitionId: "textSystemOneGroup",
+//			createFormId: "textSystemOneNewPGroup",
+//			updateFormId: "textSystemOnePGroup"
+//		}
+//	];
 
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recordTypeProviderTest.js", {
+QUnit.module("recordTypeProviderTest.js", {
 	beforeEach: function() {
 		this.ajaxCallFactorySpy = CORATEST.standardFactorySpy("ajaxCallSpy");
 		let dependencies = {

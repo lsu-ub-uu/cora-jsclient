@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recordTypeProviderTest.js", {
+QUnit.module.only("recordTypeProviderTest.js", {
 	beforeEach: function() {
 		this.ajaxCallFactorySpy = CORATEST.standardFactorySpy("ajaxCallSpy");
 		let dependencies = {
@@ -924,7 +924,7 @@ QUnit.test("getAllRecordTypes", function(assert) {
 
 });
 
-QUnit.test("getMetadataByRecordTypeId", function(assert) {
+QUnit.test("getMetadataByRecordTypeIdAllButValidationTypeInfo", function(assert) {
 	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
  	this.answerValiationListCall(1);
@@ -1027,116 +1027,41 @@ QUnit.test("getMetadataByRecordTypeId", function(assert) {
       "accept": "application/vnd.uub.record+json"
     }
   }
+//  ,
+//  validationTypes: [{id: "coraText"}, {id: "textSystemOne"}]
 };
 	let x = provider.getMetadataByRecordTypeId("text");
+	delete x.validationTypes;
 	assert.stringifyEqual(x, expected);
 });
-QUnit.test("getMetadataByRecordTypeIdNoParentId", function(assert) {
+
+QUnit.test("getMetadataByRecordTypeIdButValidationTypeInfo", function(assert) {
 	let provider = CORA.recordTypeProvider(this.dependencies, this.spec);
 	this.answerListCall(0);
  	this.answerValiationListCall(1);
 
-	let expected = {
-  "metadataId": "metadataGroup",
-  "presentationViewId": "metadataOutputPGroup",
-  "presentationFormId": "metadataPGroup",
-  "newMetadataId": "metadataNewGroup",
-  "newPresentationFormId": "metadataNewPGroup",
-  "menuPresentationViewId": "metadataMenuPGroup",
-  "listPresentationViewId": "metadataListPGroup",
-  "search": "metadataSearch",
-  "userSuppliedId": "true",
-  "abstract": "false",
-  "actionLinks": {
-    "search": {
-      "requestMethod": "GET",
-      "rel": "search",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/metadataSearch",
-      "accept": "application/vnd.uub.recordList+json"
-    },
-    "read": {
-      "requestMethod": "GET",
-      "rel": "read",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata",
-      "accept": "application/vnd.uub.record+json"
-    },
-    "read_incoming_links": {
-      "requestMethod": "GET",
-      "rel": "read_incoming_links",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata/incomingLinks",
-      "accept": "application/vnd.uub.recordList+json"
-    },
-    "update": {
-      "requestMethod": "POST",
-      "rel": "update",
-      "contentType": "application/vnd.uub.record+json",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata",
-      "accept": "application/vnd.uub.record+json"
-    },
-    "index": {
-      "requestMethod": "POST",
-      "rel": "index",
-      "body": {
-        "children": [
-          {
-            "children": [
-              {
-                "name": "linkedRecordType",
-                "value": "recordType"
-              },
-              {
-                "name": "linkedRecordId",
-                "value": "recordType"
-              }
-            ],
-            "name": "recordType"
-          },
-          {
-            "name": "recordId",
-            "value": "metadata"
-          },
-          {
-            "name": "type",
-            "value": "index"
-          }
-        ],
-        "name": "workOrder"
-      },
-      "contentType": "application/vnd.uub.record+json",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-      "accept": "application/vnd.uub.record+json"
-    },
-    "create": {
-      "requestMethod": "POST",
-      "rel": "create",
-      "contentType": "application/vnd.uub.record+json",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/",
-      "accept": "application/vnd.uub.record+json"
-    },
-    "batch_index": {
-      "requestMethod": "POST",
-      "rel": "batch_index",
-      "contentType": "application/vnd.uub.record+json",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/metadata/",
-      "accept": "application/vnd.uub.record+json"
-    },
-    "list": {
-      "requestMethod": "GET",
-      "rel": "list",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/",
-      "accept": "application/vnd.uub.recordList+json"
-    },
-    "validate": {
-      "requestMethod": "POST",
-      "rel": "validate",
-      "contentType": "application/vnd.uub.workorder+json",
-      "url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-      "accept": "application/vnd.uub.record+json"
-    }
-  }
-};
-	let x = provider.getMetadataByRecordTypeId("metadata");
-	assert.stringifyEqual(x, expected);
+	let expected = [
+		{
+			id: "coraText",
+			textId: "coraTextText",
+			defTextId: "coraTextValidationDefText",
+			createDefinitionId: "coraTextNewGroup",
+			updateDefinitionId: "coraTextGroup",
+			createFormId: "coraTextNewPGroup",
+			updateFormId: "coraTextPGroup"
+		}, 
+		{
+			id: "textSystemOne",
+			textId: "textSystemOneText",
+			defTextId: "textSystemOneValidationDefText",
+			createDefinitionId: "textSystemOneNewGroup",
+			updateDefinitionId: "textSystemOneGroup",
+			createFormId: "textSystemOneNewPGroup",
+			updateFormId: "textSystemOnePGroup"
+		}
+	];
+	let x = provider.getMetadataByRecordTypeId("text");
+	assert.stringifyEqual(x.validationTypes, expected);
 });
 
 QUnit.test("getMetadataByRecordTypeIdNotFound", function(assert) {

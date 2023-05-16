@@ -121,19 +121,35 @@ var CORA = (function(cora) {
 				"parentId": getLinkValueFromRecord("parentId", cRecord),
 				"actionLinks": record.actionLinks
 			};
-//			for(validationType : validationTypeList ){
-//				if(recordId == validationType.validatesRecord){
-//					
-//				"updateDefinitionId": getLinkValueFromRecord("metadataId", cRecord),
-//				"presentationFormId": getLinkValueFromRecord("presentationFormId", cRecord),
-//				"createDefinitionId": getLinkValueFromRecord("newMetadataId", cRecord),
-//				"newPresentationFormId": getLinkValueFromRecord("newPresentationFormId", cRecord),
-//				}
-//			}
-			
+			metadata.validationTypes = getValidationTypesForRecordTypeId(recordId);
 			metadataByRecordTypeId[recordId] = metadata;
 		};
-
+		
+		const getValidationTypesForRecordTypeId = function(recordId){
+			let validationTypes = [];
+			let listOfAllValidationTypesAsRecords = JSON.parse(validationTypesAnswer.responseText).dataList.data;
+			listOfAllValidationTypesAsRecords.forEach(function(recordContainer) {
+				let validationType = recordContainer.record;
+				let cValidationType = CORA.coraData(validationType.data);
+				if(recordId==getLinkValueFromRecord("validatesRecordType", cValidationType)){
+					validationTypes.push(convertValidationRecordToCompactForm(recordId, cValidationType));
+				}
+			});
+			return validationTypes
+		};
+		
+		const convertValidationRecordToCompactForm = function(recordId, cValidationType){
+			let validation = {};
+			validation.id = getIdFromRecordData(cValidationType.getData());
+			validation.textId = getLinkValueFromRecord("textId", cValidationType);
+			validation.defTextId = getLinkValueFromRecord("defTextId", cValidationType);
+			validation.createDefinitionId = getLinkValueFromRecord("newMetadataId", cValidationType);
+			validation.updateDefinitionId = getLinkValueFromRecord("metadataId", cValidationType);
+			validation.createFormId = getLinkValueFromRecord("newPresentationFormId", cValidationType);
+			validation.updateFormId = getLinkValueFromRecord("presentationFormId", cValidationType);
+			return validation;
+		};
+		
 		const getLinkValueFromRecord = function(id, cRecord) {
 			if (cRecord.containsChildWithNameInData(id)) {
 

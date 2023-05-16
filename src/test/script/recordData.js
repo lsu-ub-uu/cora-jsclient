@@ -18,6 +18,496 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
+	coraTest.recordWithAllLinks = {
+		"data": {
+			"children": [
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "metadata"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/recordTypeGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "metadataId"
+				},
+				{
+					"name": "abstract",
+					"value": "false"
+				},
+				{
+					"children": [
+						{
+							"name": "id",
+							"value": "recordType"
+						},
+						{
+							"children": [
+								{
+									"name": "linkedRecordType",
+									"value": "recordType"
+								},
+								{
+									"name": "linkedRecordId",
+									"value": "recordType"
+								}
+							],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "type"
+						},
+						{
+							"children": [
+								{
+									"name": "linkedRecordType",
+									"value": "system"
+								},
+								{
+									"name": "linkedRecordId",
+									"value": "cora"
+								}
+							],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "dataDivider"
+						},
+						{
+							"children": [
+								{
+									"name": "linkedRecordType",
+									"value": "validationType"
+								},
+								{
+									"name": "linkedRecordId",
+									"value": "recordType"
+								}
+							],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "validationType"
+						},
+						{
+							"repeatId": "0",
+							"children": [
+								{
+									"children": [
+										{
+											"name": "linkedRecordType",
+											"value": "user"
+										},
+										{
+											"name": "linkedRecordId",
+											"value": "141414"
+										}
+									],
+									"actionLinks": {
+										"read": {
+											"requestMethod": "GET",
+											"rel": "read",
+											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
+											"accept": "application/vnd.uub.record+json"
+										}
+									},
+									"name": "updatedBy"
+								},
+								{
+									"name": "tsUpdated",
+									"value": "2018-03-26T15:15:34.261000Z"
+								}
+							],
+							"name": "updated"
+						},
+						{
+							"repeatId": "1",
+							"children": [
+								{
+									"children": [
+										{
+											"name": "linkedRecordType",
+											"value": "user"
+										},
+										{
+											"name": "linkedRecordId",
+											"value": "12345"
+										}
+									],
+									"actionLinks": {
+										"read": {
+											"requestMethod": "GET",
+											"rel": "read",
+											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
+											"accept": "application/vnd.uub.record+json"
+										}
+									},
+									"name": "updatedBy"
+								},
+								{
+									"name": "tsUpdated",
+									"value": "2018-09-10T19:51:24.370000Z"
+								}
+							],
+							"name": "updated"
+						},
+						{
+							"children": [
+								{
+									"name": "linkedRecordType",
+									"value": "user"
+								},
+								{
+									"name": "linkedRecordId",
+									"value": "12345"
+								}
+							],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "createdBy"
+						},
+						{
+							"name": "tsCreated",
+							"value": "2017-10-01T00:00:00.000000Z"
+						}
+					],
+					"name": "recordInfo"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "presentation"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeOutputPGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeOutputPGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "presentationViewId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "presentation"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypePGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypePGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "presentationFormId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "metadata"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeNewGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/recordTypeNewGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "newMetadataId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "presentation"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeNewPGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeNewPGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "newPresentationFormId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "presentation"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeMenuPGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeMenuPGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "menuPresentationViewId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "presentation"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeListPGroup"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeListPGroup",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "listPresentationViewId"
+				},
+				{
+					"name": "userSuppliedId",
+					"value": "true"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "text"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeText"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/recordTypeText",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "textId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "text"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeDefText"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/recordTypeDefText",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "defTextId"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "search"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "recordTypeSearch"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/recordTypeSearch",
+							"accept": "application/vnd.uub.record+json"
+						}
+					},
+					"name": "search"
+				},
+				{
+					"repeatId": "0",
+					"name": "groupOfRecordType",
+					"value": "metadata"
+				},
+				{
+					"name": "public",
+					"value": "false"
+				},
+				{
+					"name": "storeInArchive",
+					"value": "false"
+				}
+			],
+			"name": "recordType"
+		},
+		"actionLinks": {
+			"search": {
+				"requestMethod": "GET",
+				"rel": "search",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/recordTypeSearch",
+				"accept": "application/vnd.uub.recordList+json"
+			},
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"read_incoming_links": {
+				"requestMethod": "GET",
+				"rel": "read_incoming_links",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType/incomingLinks",
+				"accept": "application/vnd.uub.recordList+json"
+			},
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"index": {
+				"requestMethod": "POST",
+				"rel": "index",
+				"body": {
+					"children": [
+						{
+							"children": [
+								{
+									"name": "linkedRecordType",
+									"value": "recordType"
+								},
+								{
+									"name": "linkedRecordId",
+									"value": "recordType"
+								}
+							],
+							"name": "recordType"
+						},
+						{
+							"name": "recordId",
+							"value": "recordType"
+						},
+						{
+							"name": "type",
+							"value": "index"
+						}
+					],
+					"name": "workOrder"
+				},
+				"contentType": "application/vnd.uub.record+json",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"create": {
+				"requestMethod": "POST",
+				"rel": "create",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"batch_index": {
+				"requestMethod": "POST",
+				"rel": "batch_index",
+				"contentType": "application/vnd.uub.record+json",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/recordType/",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"list": {
+				"requestMethod": "GET",
+				"rel": "list",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/",
+				"accept": "application/vnd.uub.recordList+json"
+			},
+			"validate": {
+				"requestMethod": "POST",
+				"rel": "validate",
+				"contentType": "application/vnd.uub.workorder+json",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
+				"accept": "application/vnd.uub.record+json"
+			},
+			"delete": {
+				"requestMethod": "DELETE",
+				"rel": "delete",
+				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType"
+			}
+			
+		}
+	};
 	coraTest.recordWithoutUpdateOrDeleteLink = {
 		"data" : {
 			"children" : [ {

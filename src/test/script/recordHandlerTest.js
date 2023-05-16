@@ -22,7 +22,7 @@
 QUnit.module("recordHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
-		this.record = CORATEST.recordTypeList.dataList.data[4].record;
+		this.record = CORATEST.recordWithAllLinks;
 		this.recordWithoutUpdateOrDeleteLink = CORATEST.recordWithoutUpdateOrDeleteLink;
 		this.recordWithoutDeleteLink = CORATEST.recordWithoutDeleteLink;
 		this.recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
@@ -336,7 +336,7 @@ QUnit.test("initTestDataFetchedFromServer", function(assert) {
 
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 	assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.processFetchedRecord);
@@ -467,7 +467,7 @@ QUnit.test("testUpdateCall", function(assert) {
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 	assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
@@ -493,7 +493,7 @@ QUnit.test("testUpdateThroughPubSubCall", function(assert) {
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 	assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
@@ -646,7 +646,7 @@ QUnit.test("testDeleteCall", function(assert) {
 	let ajaxCallSpy4 = this.ajaxCallFactorySpy.getFactored(1);
 	let ajaxCallSpec = ajaxCallSpy4.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
 	assert.strictEqual(ajaxCallSpec.accept, undefined);
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
@@ -1074,7 +1074,7 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 
@@ -1196,6 +1196,11 @@ QUnit.test("testCreateNewCall", function(assert) {
 	assert.strictEqual(deleteButtonSpec.className, "delete");
 	let updateButtonSpec = recordHandlerViewSpy.getAddedButton(2);
 	assert.strictEqual(updateButtonSpec.className, "update");
+
+	let deleteButtonSpe2c = recordHandlerViewSpy.getAddedButton(0);
+	assert.strictEqual(deleteButtonSpec.className, "delete");
+	let updateButtonS2pec = recordHandlerViewSpy.getAddedButton(3);
+	assert.strictEqual(updateButtonSpec.className, "update");
 });
 
 QUnit.test("testCreateNewCall", function(assert) {
@@ -1217,7 +1222,7 @@ QUnit.test("testCreateNewCall", function(assert) {
 
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url,
-		"http://epc.ub.uu.se/cora/rest/record/recordType/recordType");
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 

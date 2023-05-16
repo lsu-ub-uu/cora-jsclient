@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.assertCorrectFactoredSpec = function(assert, factoredSpec, context) {
 		assert.strictEqual(factoredSpec.jsClient, context.dependencies.jsClient);
-		assert.strictEqual(factoredSpec.recordTypeRecordIdForNew, "metadataCollectionItem");
+		assert.strictEqual(factoredSpec.recordTypeRecordIdForNew, "collectTerm");
 	};
 
 	return coraTest;
@@ -30,7 +30,7 @@ var CORATEST = (function(coraTest) {
 
 QUnit.module("recordTypeHandlerTest.js", {
 	beforeEach : function() {
-		this.record = CORATEST.recordTypeList.dataList.data[6].record;
+		this.record = CORATEST.recordTypeList.dataList.data[0].record;
 		
 		this.recordWithoutListLink = JSON.parse(JSON.stringify(this.record));
 		this.recordWithoutListLink.actionLinks.list = undefined;
@@ -86,7 +86,7 @@ QUnit.test("initViewClassName", function(assert) {
 QUnit.test("initViewHeaderText", function(assert) {
 	CORA.recordTypeHandler(this.dependencies, this.spec);
 	let factoredViewSpec = this.dependencies.recordTypeHandlerViewFactory.getSpec(0);
-	assert.strictEqual(factoredViewSpec.headerText, "translated_metadataCollectionItemText");
+	assert.strictEqual(factoredViewSpec.headerText, "translated_collectTermText");
 });
 
 QUnit.test("initViewWithListMethod", function(assert) {
@@ -146,11 +146,11 @@ QUnit.test("fetchListCheckSpec", function(assert) {
 
 	assert.strictEqual(factoredSpec.baseUrl, this.spec.baseUrl);
 
-	assert.strictEqual(factoredSpec.recordTypeRecordId, "metadataCollectionItem");
+	assert.strictEqual(factoredSpec.recordTypeRecordId, "collectTerm");
 	let expectedListLink = {
 		"requestMethod" : "GET",
 		"rel" : "list",
-		"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
+		"url" : "https://cora.epc.ub.uu.se/systemone/rest/record/collectTerm/",
 		"accept" : "application/vnd.uub.recordList+json"
 	};
 	assert.stringifyEqual(factoredSpec.listLink, expectedListLink);

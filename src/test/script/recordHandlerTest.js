@@ -577,10 +577,10 @@ QUnit.test("testNoUpdateButtonAndEditFormWhenNoUpdateLink", function(assert) {
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textSystemOneViewPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textViewPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textSystemOneGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textSystemOneMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textMenuPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textSystemOneGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), undefined);
@@ -691,13 +691,13 @@ QUnit.test("testNoDeleteButtonWhenNoDeleteLink", function(assert) {
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textSystemOneFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textFormPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textSystemOneGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textSystemOneViewPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textSystemOneGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textSystemOneMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textSystemOneGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
@@ -877,7 +877,7 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypePGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
@@ -1092,7 +1092,7 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 	assert.strictEqual(factoredRecordGuiSpec1.dataDivider, factoredRecordGuiSpec0.dataDivider);
 
 	let presentationFormIdUsed = factoredRecordGui1.getPresentationIdUsed(0);
-	assert.strictEqual(presentationFormIdUsed, "recordTypeFormPGroup");
+	assert.strictEqual(presentationFormIdUsed, "recordTypePGroup");
 
 	let factoredForm = factoredRecordGui1.getReturnedPresentations(0);
 	assert.strictEqual(factoredForm.getView(), recordHandlerViewSpy.getAddedEditView(1));
@@ -1331,7 +1331,7 @@ QUnit.test("testReloadRecordHandlerViewFormFactoredAndAdded", function(assert) {
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(1);
 
 	let presentationFormIdUsed = factoredRecordGui.getPresentationIdUsed(0);
-	assert.strictEqual(presentationFormIdUsed, "recordTypeFormPGroup");
+	assert.strictEqual(presentationFormIdUsed, "recordTypePGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	let factoredForm = factoredRecordGui.getReturnedPresentations(0);

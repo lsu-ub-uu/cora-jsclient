@@ -32,6 +32,7 @@ var CORA = (function(cora) {
 		let dataIsChanged = false;
 		let metadataForRecordType;
 		let recordTypeId;
+		let validationTypeId;
 		let actionLinks;
 
 		const start = function() {
@@ -101,7 +102,7 @@ var CORA = (function(cora) {
 		const tryToCreateGuiForNew = function(copiedData) {
 			recordTypeId = spec.recordTypeRecordIdForNew;
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
-			let metadataId = metadataForRecordType.newMetadataId;
+			let definitionId = metadataForRecordType.newMetadataId;
 
 			/*
 			let validationTypes = recordTypeProvider.getValiationTypes()
@@ -144,11 +145,11 @@ var CORA = (function(cora) {
 //	];
 
 			let permissions = createEmptyPermissions();
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-			recordGui = createRecordGui(metadataId, copiedData, undefined, recordPartPermissionCalculator);
+			recordGui = createRecordGui(definitionId, copiedData, undefined, recordPartPermissionCalculator);
 
-			createAndAddViewsForNew(recordGui, metadataId);
+			createAndAddViewsForNew(recordGui, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
 			managedGuiItem.setChanged(dataIsChanged);
@@ -363,12 +364,19 @@ var CORA = (function(cora) {
 			let dataDivider = getDataDividerFromData(cData);
 			recordTypeId = getRecordTypeIdFromData(cData);
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
+//TODO: test			
+			validationTypeId = getValidationTypeIdFromData(cData);
+			let validationType = metadataForRecordType.validationTypes[validationTypeId];
+//console.log("ValidationTypeId: ", validationTypeId);
+			let updateDefinitionId = validationType.updateDefinitionId;
 
-			let metadataId = metadataForRecordType.metadataId;
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+			let definitionId = metadataForRecordType.metadataId;
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-			recordGui = createRecordGui(metadataId, data, dataDivider, recordPartPermissionCalculator);
-			createAndAddViewsForExisting(recordGui, metadataId);
+//			recordGui = createRecordGui(definitionId, data, dataDivider, recordPartPermissionCalculator);
+//			createAndAddViewsForExisting(recordGui, definitionId);
+			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
+			createAndAddViewsForExisting(recordGui, updateDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
 
 			addEditButtonsToView();
@@ -414,8 +422,14 @@ var CORA = (function(cora) {
 			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
+		const getValidationTypeIdFromData = function(cData) {
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cTypeGroup = CORA.coraData(cRecordInfo.getFirstChildByNameInData("validationType"));
+			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
 		const addEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let editViewId = metadataForRecordType.presentationFormId;
+			let editViewId = metadataForRecordType.validationTypes[validationTypeId].updateFormId;
 
 			let editView = currentRecordGui.getPresentationHolder(editViewId, metadataIdUsedInData)
 				.getView();

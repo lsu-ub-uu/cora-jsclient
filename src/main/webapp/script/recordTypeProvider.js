@@ -126,13 +126,14 @@ var CORA = (function(cora) {
 		};
 		
 		const getValidationTypesForRecordTypeId = function(recordId){
-			let validationTypes = [];
+			let validationTypes = {};
 			let listOfAllValidationTypesAsRecords = JSON.parse(validationTypesAnswer.responseText).dataList.data;
 			listOfAllValidationTypesAsRecords.forEach(function(recordContainer) {
 				let validationType = recordContainer.record;
 				let cValidationType = CORA.coraData(validationType.data);
 				if(recordId==getLinkValueFromRecord("validatesRecordType", cValidationType)){
-					validationTypes.push(convertValidationRecordToCompactForm(recordId, cValidationType));
+					let validationTypeCompact = convertValidationRecordToCompactForm(recordId, cValidationType);
+					validationTypes[validationTypeCompact.id]= validationTypeCompact;
 				}
 			});
 			return validationTypes

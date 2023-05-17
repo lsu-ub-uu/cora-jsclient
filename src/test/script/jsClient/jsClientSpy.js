@@ -116,6 +116,38 @@ var CORATEST = (function(coraTest) {
 					}
 				}
 			};
+			let validationTypes = {};
+			if("text" == recordTypeId){
+				validationTypes["coraText"] = {
+					id: "coraText",
+					textId: "coraTextText",
+					defTextId: "coraTextValidationDefText",
+					createDefinitionId: "coraTextNewGroup",
+					updateDefinitionId: "coraTextGroup",
+					createFormId: "coraTextNewPGroup",
+					updateFormId: "coraTextPGroup"
+				};
+				validationTypes["textSystemOne"] = {
+					id: "textSystemOne",
+					textId: "textSystemOneText",
+					defTextId: "textSystemOneValidationDefText",
+					createDefinitionId: "textSystemOneNewGroup",
+					updateDefinitionId: "textSystemOneGroup",
+					createFormId: "textSystemOneNewPGroup",
+					updateFormId: "textSystemOnePGroup"
+				};
+				
+			}
+			validationTypes[recordTypeId] = {
+					id: recordTypeId,
+					textId: recordTypeId +"Text",
+					defTextId: recordTypeId +"DefText",
+					createDefinitionId: recordTypeId +"NewGroup",
+					updateDefinitionId: recordTypeId +"Group",
+					createFormId: recordTypeId +"NewPGroup",
+					updateFormId: recordTypeId +"PGroup"
+				};
+			metadata.validationTypes = validationTypes;
 			returnedRecordTypeMetadata.push(metadata);
 			return metadata;
 		}

@@ -1040,8 +1040,8 @@ QUnit.test("getMetadataByRecordTypeIdButValidationTypeInfo", function(assert) {
 	this.answerListCall(0);
  	this.answerValiationListCall(1);
 
-	let expected = [
-		{
+	let expected = {
+		coraText : {
 			id: "coraText",
 			textId: "coraTextText",
 			defTextId: "coraTextValidationDefText",
@@ -1050,7 +1050,7 @@ QUnit.test("getMetadataByRecordTypeIdButValidationTypeInfo", function(assert) {
 			createFormId: "coraTextNewPGroup",
 			updateFormId: "coraTextPGroup"
 		}, 
-		{
+		textSystemOne: {
 			id: "textSystemOne",
 			textId: "textSystemOneText",
 			defTextId: "textSystemOneValidationDefText",
@@ -1059,7 +1059,7 @@ QUnit.test("getMetadataByRecordTypeIdButValidationTypeInfo", function(assert) {
 			createFormId: "textSystemOneNewPGroup",
 			updateFormId: "textSystemOnePGroup"
 		}
-	];
+	};
 	let x = provider.getMetadataByRecordTypeId("text");
 	assert.stringifyEqual(x.validationTypes, expected);
 });

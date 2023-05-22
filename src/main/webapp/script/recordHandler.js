@@ -100,10 +100,7 @@ var CORA = (function(cora) {
 		};
 
 		const tryToCreateGuiForNew = function(copiedData) {
-			recordTypeId = spec.recordTypeRecordIdForNew;
-			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
-			let definitionId = metadataForRecordType.newMetadataId;
-
+			
 			/*
 			let validationTypes = recordTypeProvider.getValiationTypes()
 			if more than one pop gui to choose, else continue...
@@ -143,20 +140,83 @@ var CORA = (function(cora) {
 //			updateFormId: "textSystemOnePGroup"
 //		}
 //	];
+			recordTypeId = spec.recordTypeRecordIdForNew;
+			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
+//			let definitionId = metadataForRecordType.newMetadataId;
+//console.log("metadataForRecordType.validationTypes.keys(): ",Object.keys(metadataForRecordType.validationTypes));
+
+			if(undefined != copiedData){
+//console.log("valiation type from copied data");
+//console.log("copied data", JSON.stringify(copiedData.data, undefined, " "));
+				let cCopiedData = CORA.coraData(copiedData.data);
+				validationTypeId = getValidationTypeIdFromData(cCopiedData);
+				tryToCreateGuiForNewWithKnownValidationType(copiedData);
+			}else if(1 == Object.keys(metadataForRecordType.validationTypes).length) {
+//console.log("ONLY ONE validation type");				
+				validationTypeId = Object.keys(metadataForRecordType.validationTypes)[0];
+				tryToCreateGuiForNewWithKnownValidationType(copiedData);
+			} else {
+//SPIKE  
+console.log("CHOOSE validation type");
+//				validationTypeId = "choosenValidationTypeId";
+console.log("validationTypeId: ", validationTypeId);
+				//tryToCreateGuiForNewWithKnownValidationType(copiedData);
+				chooseValidationType();
+//SPIKE 
+			}
+		};
+//SPIKE
+		const chooseValidationType = function() {
+			let questionSpec = assembleValidationQuestionSpec();
+			let question = CORA.question(questionSpec);
+			let questionView = question.getView();
+			managedGuiItem.addWorkPresentation(questionView);
+		};
+
+		const assembleValidationQuestionSpec = function() {
+			let spec = {
+				text: "Välj validation type för posten!",
+				buttons: []
+			};
+			for(const x of Object.keys(metadataForRecordType.validationTypes)){
+				spec.buttons.push({text: x, onclickFunction: function(){
+					chosenValidationType(x);
+				}});
+			}
+			return spec;
+		};
+		const chosenValidationType = function(z) {
+			console.log("user pick:", z)
+			validationTypeId = z; 
+			tryToCreateGuiForNewWithKnownValidationType();
+		};
+//SPIKE
+		const tryToCreateGuiForNewWithKnownValidationType = function(copiedData) {
+			let validationType = metadataForRecordType.validationTypes[validationTypeId];
+//console.log("validationType: ", validationType)
+			
+			let createDefinitionId = validationType.createDefinitionId;
+ 
+			let definitionId = metadataForRecordType.metadataId;
+//			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
+//				permissions);
+//			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
 
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-			recordGui = createRecordGui(definitionId, copiedData, undefined, recordPartPermissionCalculator);
+//			recordGui = createRecordGui(definitionId, copiedData, undefined, recordPartPermissionCalculator);
+			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, recordPartPermissionCalculator);
 
-			createAndAddViewsForNew(recordGui, definitionId);
+//			createAndAddViewsForNew(recordGui, definitionId);
+			createAndAddViewsForNew(recordGui, createDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
 			managedGuiItem.setChanged(dataIsChanged);
 
 			recordHandlerView.addButton("CREATE", sendNewDataToServer, "create");
 		};
-
+		
 		const createAndAddViewsForNew = function(recordGuiIn, metadataId) {
 			if ("true" !== spec.partOfList) {
 				addNewEditPresentationToView(recordGuiIn, metadataId);
@@ -212,7 +272,8 @@ var CORA = (function(cora) {
 		};
 
 		const addNewEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let newPresentationFormId = metadataForRecordType.newPresentationFormId;
+			let newPresentationFormId = metadataForRecordType.validationTypes[validationTypeId].createFormId;
+
 			let presentationView = currentRecordGui.getPresentationHolder(newPresentationFormId,
 				metadataIdUsedInData).getView();
 			recordHandlerView.addToEditView(presentationView);

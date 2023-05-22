@@ -74,6 +74,13 @@ QUnit.module.only("recordHandlerTest.js", {
 			record: this.record,
 			jsClient: CORATEST.jsClientSpy()
 		};
+		this.specForNewWithChoiceValidationType = {
+			fetchLatestDataFromServer: "false",
+			partOfList: "false",
+			createNewRecord: "true",
+			recordTypeRecordIdForNew: "text",
+			jsClient: CORATEST.jsClientSpy()
+		};
 		this.specForNewList = {
 			fetchLatestDataFromServer: "false",
 			partOfList: "true",
@@ -194,7 +201,7 @@ QUnit.test("testInitRecordHandlerViewFormFactoredAndAdded", function(assert) {
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	let presentationFormIdUsed = factoredRecordGui.getPresentationIdUsed(0);
-	assert.strictEqual(presentationFormIdUsed, "recordTypeFormPGroup");
+	assert.strictEqual(presentationFormIdUsed, "recordTypePGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	let factoredForm = factoredRecordGui.getReturnedPresentations(0);
@@ -207,7 +214,7 @@ QUnit.test("testInitRecordHandlerViewNewFormFactoredAndAdded", function(assert) 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	let presentationFormIdUsed = factoredRecordGui.getPresentationIdUsed(0);
-	assert.strictEqual(presentationFormIdUsed, "recordTypeFormNewPGroup");
+	assert.strictEqual(presentationFormIdUsed, "recordTypeNewPGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	let factoredForm = factoredRecordGui.getReturnedPresentations(0);
@@ -449,7 +456,7 @@ QUnit.test("testUpdateCall", function(assert) {
 	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "recordTypeGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypePGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
@@ -546,7 +553,7 @@ QUnit.test("testUpdateCallValidationError", function(assert) {
 	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "recordTypeGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypePGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
@@ -608,7 +615,7 @@ QUnit.test("testDeleteCall", function(assert) {
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypePGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
@@ -691,7 +698,7 @@ QUnit.test("testNoDeleteButtonWhenNoDeleteLink", function(assert) {
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textFormPGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textSystemOnePGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textSystemOneGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
@@ -720,7 +727,7 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpec", function(assert) {
 	assert.strictEqual(factoredSpec.dataDivider, undefined);
 
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
+	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
 	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
 	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
 	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
@@ -729,6 +736,84 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpec", function(assert) {
 
 QUnit.test("initCheckRightGuiCreatedNew", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNew);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+
+	assert.strictEqual(recordHandler.getDataIsChanged(), true);
+	assert.strictEqual(managedGuiItem.getChanged(), true);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+
+	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeNewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
+
+	let item = managedGuiItem.getAddedMenuPresentation(0);
+	assert.strictEqual(item.nodeName, "SPAN");
+});
+
+QUnit.test("initCheckRightGuiCreatedNewWithData", function(assert) {
+	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithData);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+
+	assert.strictEqual(recordHandler.getDataIsChanged(), true);
+	assert.strictEqual(managedGuiItem.getChanged(), true);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+
+	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeNewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
+
+	let item = managedGuiItem.getAddedMenuPresentation(0);
+	assert.strictEqual(item.nodeName, "SPAN");
+});
+
+QUnit.test("initCheckRightGuiCreatedNewCheckSpecWithData", function(assert) {
+	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithData);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+
+	assert.strictEqual(recordHandler.getDataIsChanged(), true);
+	assert.strictEqual(managedGuiItem.getChanged(), true);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
+	assert.strictEqual(factoredSpec.dataDivider, undefined);
+
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
+});
+
+QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationType", function(assert) {
+	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), true);
@@ -753,6 +838,28 @@ QUnit.test("initCheckRightGuiCreatedNew", function(assert) {
 
 	let item = managedGuiItem.getAddedMenuPresentation(0);
 	assert.strictEqual(item.nodeName, "SPAN");
+});
+
+QUnit.test("initCheckRightGuiCreatedNewCheckSpecWithChoiceValidationType", function(assert) {
+	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+
+	assert.strictEqual(recordHandler.getDataIsChanged(), true);
+	assert.strictEqual(managedGuiItem.getChanged(), true);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
+	assert.strictEqual(factoredSpec.dataDivider, undefined);
+
+	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
+	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
 });
 
 QUnit.test("initCheckNoIncomingLinksButtonForNew", function(assert) {
@@ -1160,7 +1267,7 @@ QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 	assert.strictEqual(item, undefined);
 
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
+	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
 	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
 	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
 	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
@@ -1345,7 +1452,7 @@ QUnit.test("testReloadRecordHandlerViewNewFormFactoredAndAdded", function(assert
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(1);
 
 	let presentationFormIdUsed = factoredRecordGui.getPresentationIdUsed(0);
-	assert.strictEqual(presentationFormIdUsed, "recordTypeFormNewPGroup");
+	assert.strictEqual(presentationFormIdUsed, "recordTypeNewPGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	let factoredForm = factoredRecordGui.getReturnedPresentations(0);

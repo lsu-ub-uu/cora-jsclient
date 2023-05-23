@@ -28,9 +28,16 @@ QUnit.module("reloadableRecordTypeProviderTest.js", {
 			"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
 			"accept" : "application/vnd.uub.recordList+json"
 		};
-
+		var validationTypeListLink = {
+			"requestMethod" : "GET",
+			"rel" : "list",
+			"url" :  "http://epc.ub.uu.se/cora/rest/record/validationType/",
+			"accept" : "application/vnd.uub.recordList+json"
+		};
+		
 		this.spec = {
-			"recordTypeListLink" : recordTypeListLink
+			recordTypeListLink : recordTypeListLink,
+			validationTypeListLink: validationTypeListLink
 		};
 		this.dependencies = {
 			"recordTypeProviderFactory" : CORATEST.standardFactorySpy("recordTypeProviderSpy")
@@ -62,6 +69,7 @@ QUnit.test("initFactorsFirstRecordTypeProviderWithSpec", function(assert) {
 	assert.ok(firstFactoredRecordTypeProvider);
 	var forwardedSpec = this.dependencies.recordTypeProviderFactory.getSpec(0);
 	assert.strictEqual(forwardedSpec.recordTypeListLink, this.spec.recordTypeListLink);
+	assert.strictEqual(forwardedSpec.validationTypeListLink, this.spec.validationTypeListLink);
 	assert.strictEqual(forwardedSpec.callWhenReady, this.spec.callWhenReady);
 });
 
@@ -143,6 +151,7 @@ QUnit.test("testReloadCreatesNewRecordTypeProviderWithSpec", function(assert) {
 	this.reloadableRecordTypeProvider.reload({});
 	var forwardedSpec = this.dependencies.recordTypeProviderFactory.getSpec(1);
 	assert.strictEqual(forwardedSpec.recordTypeListLink, this.spec.recordTypeListLink);
+	assert.strictEqual(forwardedSpec.validationTypeListLink, this.spec.validationTypeListLink);
 	assert.strictEqual(forwardedSpec.callWhenReady,
 			this.reloadableRecordTypeProvider.switchProvider);
 });

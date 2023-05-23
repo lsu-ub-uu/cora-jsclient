@@ -32,6 +32,7 @@ var CORA = (function(cora) {
 		let dataIsChanged = false;
 		let metadataForRecordType;
 		let recordTypeId;
+		let validationTypeId;
 		let actionLinks;
 
 		const start = function() {
@@ -101,21 +102,68 @@ var CORA = (function(cora) {
 		const tryToCreateGuiForNew = function(copiedData) {
 			recordTypeId = spec.recordTypeRecordIdForNew;
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
-			let metadataId = metadataForRecordType.newMetadataId;
+
+			if(copiedDataExists(copiedData)){
+				let cCopiedData = CORA.coraData(copiedData);
+				validationTypeId = getValidationTypeIdFromData(cCopiedData);
+				tryToCreateGuiForNewWithKnownValidationType(copiedData);
+			}else if(onlyOneValiationType()) {
+				validationTypeId = Object.keys(metadataForRecordType.validationTypes)[0];
+				tryToCreateGuiForNewWithKnownValidationType();
+			} else {
+				chooseValidationType();
+			}
+		};
+		
+		const copiedDataExists = function(copiedData){
+			return undefined != copiedData;
+		};
+		
+		const onlyOneValiationType = function(){
+			return 1 == Object.keys(metadataForRecordType.validationTypes).length;
+		};
+		
+		const chooseValidationType = function() {
+			let questionSpec = assembleValidationQuestionSpec();
+			let question = dependencies.questionFactory.factor(questionSpec);
+			let questionView = question.getView();
+			managedGuiItem.addWorkPresentation(questionView);
+		};
+
+		const assembleValidationQuestionSpec = function() {
+			let spec = {
+				text: "Välj validation type för posten!",
+				buttons: []
+			};
+			for(const x of Object.keys(metadataForRecordType.validationTypes)){
+				spec.buttons.push({text: x, onclickFunction: function(){
+					chosenValidationType(x);
+				}});
+			}
+			return spec;
+		};
+		const chosenValidationType = function(z) {
+			validationTypeId = z; 
+			tryToCreateGuiForNewWithKnownValidationType();
+		};
+		
+		const tryToCreateGuiForNewWithKnownValidationType = function(copiedData) {
+			let validationType = metadataForRecordType.validationTypes[validationTypeId];
+			let createDefinitionId = validationType.createDefinitionId;
+			let definitionId = metadataForRecordType.metadataId;
 
 			let permissions = createEmptyPermissions();
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-			recordGui = createRecordGui(metadataId, copiedData, undefined, recordPartPermissionCalculator);
-
-			createAndAddViewsForNew(recordGui, metadataId);
+			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, recordPartPermissionCalculator);
+			createAndAddViewsForNew(recordGui, createDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
 			managedGuiItem.setChanged(dataIsChanged);
 
 			recordHandlerView.addButton("CREATE", sendNewDataToServer, "create");
 		};
-
+		
 		const createAndAddViewsForNew = function(recordGuiIn, metadataId) {
 			if ("true" !== spec.partOfList) {
 				addNewEditPresentationToView(recordGuiIn, metadataId);
@@ -171,7 +219,8 @@ var CORA = (function(cora) {
 		};
 
 		const addNewEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let newPresentationFormId = metadataForRecordType.newPresentationFormId;
+			let newPresentationFormId = metadataForRecordType.validationTypes[validationTypeId].createFormId;
+
 			let presentationView = currentRecordGui.getPresentationHolder(newPresentationFormId,
 				metadataIdUsedInData).getView();
 			recordHandlerView.addToEditView(presentationView);
@@ -323,12 +372,15 @@ var CORA = (function(cora) {
 			let dataDivider = getDataDividerFromData(cData);
 			recordTypeId = getRecordTypeIdFromData(cData);
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
+			validationTypeId = getValidationTypeIdFromData(cData);
+			let validationType = metadataForRecordType.validationTypes[validationTypeId];
+			let updateDefinitionId = validationType.updateDefinitionId;
 
-			let metadataId = metadataForRecordType.metadataId;
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId,
+			let definitionId = metadataForRecordType.metadataId;
+			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-			recordGui = createRecordGui(metadataId, data, dataDivider, recordPartPermissionCalculator);
-			createAndAddViewsForExisting(recordGui, metadataId);
+			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
+			createAndAddViewsForExisting(recordGui, updateDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
 
 			addEditButtonsToView();
@@ -374,8 +426,14 @@ var CORA = (function(cora) {
 			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
+		const getValidationTypeIdFromData = function(cData) {
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cTypeGroup = CORA.coraData(cRecordInfo.getFirstChildByNameInData("validationType"));
+			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
 		const addEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let editViewId = metadataForRecordType.presentationFormId;
+			let editViewId = metadataForRecordType.validationTypes[validationTypeId].updateFormId;
 
 			let editView = currentRecordGui.getPresentationHolder(editViewId, metadataIdUsedInData)
 				.getView();
@@ -404,6 +462,7 @@ var CORA = (function(cora) {
 			let readIncomingLinks = fetchedRecord.actionLinks.read_incoming_links;
 			return readIncomingLinks !== undefined;
 		};
+		
 		const possiblyShowShowDefinitionButton = function() {
 			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
 				recordHandlerView.addDefinitionViewerOpenFunction(showDefinitionViewer);
@@ -414,19 +473,19 @@ var CORA = (function(cora) {
 			const name = fetchedRecord.data.name;
 			return "metadata" === name;
 		};
-		
-		const showDefinitionViewer = function(){
+
+		const showDefinitionViewer = function() {
 			let cData = CORA.coraData(fetchedRecord.data);
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
 			spec.jsClient.openDefinitionViewerForId(id);
 		};
-		
+
 		const showData = function() {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
 				type: CORA.message.INFO,
-				renderHtml : false,
+				renderHtml: false,
 				timeout: 0
 			};
 			messageHolder.createMessage(messageSpec);
@@ -468,7 +527,7 @@ var CORA = (function(cora) {
 
 		const shouldRecordBeDeleted = function() {
 			let questionSpec = assembleQuestionSpec();
-			let question = CORA.question(questionSpec);
+			let question = dependencies.questionFactory.factor(questionSpec);
 			let questionView = question.getView();
 			managedGuiItem.addWorkPresentation(questionView);
 		};
@@ -537,7 +596,7 @@ var CORA = (function(cora) {
 		const callError = function(answer) {
 			busy.hideWithEffect();
 			let messageSpec = {
-				message: answer.status + " "+answer.response,
+				message: answer.status + " " + answer.response,
 				type: CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
@@ -620,7 +679,8 @@ var CORA = (function(cora) {
 			showIndexMessage: showIndexMessage,
 			showTimeoutMessage: showTimeoutMessage,
 			callMethodAfterShowWorkView: callMethodAfterShowWorkView,
-			showDefinitionViewer : showDefinitionViewer
+			showDefinitionViewer: showDefinitionViewer,
+			sendDeleteDataToServer: sendDeleteDataToServer
 		});
 	};
 	return cora;

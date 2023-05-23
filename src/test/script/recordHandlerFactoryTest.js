@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Olov McKie
- * Copyright 2017, 2018 Uppsala University Library
+ * Copyright 2017, 2018, 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -87,6 +87,9 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDependencies.indexHandlerFactory.type, "genericFactory");
 	assert.strictEqual(factoredDependencies.recordPartPermissionCalculatorFactory.type,
 		"genericFactory");
+	assert.strictEqual(factoredDependencies.questionFactory.type, "genericFactory");
+	assert.strictEqual(factoredDependencies.questionFactory.getTypeToFactor(), "question");
+	assert.strictEqual(factoredDependencies.questionFactory.getDependencies(), undefined);
 });
 
 QUnit.test("factorTestType", function(assert) {

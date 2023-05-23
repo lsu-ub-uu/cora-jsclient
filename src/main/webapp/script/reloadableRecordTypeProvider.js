@@ -57,6 +57,7 @@ var CORA = (function(cora) {
 			callWhenSwitched = callAfterSwitch;
 			var reloadingSpec = {
 				recordTypeListLink : spec.recordTypeListLink,
+				validationTypeListLink : spec.validationTypeListLink,
 				callWhenReady : switchProvider
 			};
 			loadingRecordTypeProvider = dependencies.recordTypeProviderFactory

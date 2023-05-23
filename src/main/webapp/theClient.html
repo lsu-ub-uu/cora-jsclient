@@ -277,6 +277,12 @@
 			"url" : baseUrl + "record/metadata/",
 			"accept" : "application/vnd.uub.recordList+json"
 		};
+		var validationTypeListLink = {
+			"requestMethod" : "GET",
+			"rel" : "list",
+			"url" : baseUrl + "record/validationType/",
+			"accept" : "application/vnd.uub.recordList+json"
+		};
 		var presentationListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
@@ -364,6 +370,7 @@
 		};
 		var recordTypeProviderSpec = {
 			"recordTypeListLink" : recordTypeListLink,
+			"validationTypeListLink" : validationTypeListLink,
 			"callWhenReady" : recordTypeProviderReady
 		};
 		recordTypeProvider = CORA.reloadableRecordTypeProvider(

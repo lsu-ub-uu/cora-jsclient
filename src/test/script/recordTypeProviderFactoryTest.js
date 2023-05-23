@@ -20,14 +20,23 @@
 
 QUnit.module("recordTypeProviderFactoryTest.js", {
 	beforeEach : function() {
-		var recordTypeListLink = {
+		let recordTypeListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
 			"accept" : "application/vnd.uub.recordList+json"
 		};
+		let validationTypeListLink = {
+			requestMethod: "GET",
+			rel: "list",
+			url: "http://epc.ub.uu.se/cora/rest/record/validationType/",
+			accept: "application/vnd.uub.recordList+json"
+		};
+		this.validationTypeListLink = recordTypeListLink;
+
 		this.spec = {
-			"recordTypeListLink" : recordTypeListLink
+			recordTypeListLink: recordTypeListLink,
+			validationTypeListLink: validationTypeListLink
 		};
 		this.dependencies = {
 			"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy()
@@ -48,18 +57,18 @@ QUnit.test("getDependencies", function(assert) {
 });
 
 QUnit.test("factorTestType", function(assert) {
-	var recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
+	let recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
 	assert.strictEqual(recordTypeProvider.type, "recordTypeProvider");
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
-	var factoredDependencies = recordTypeProvider.getDependencies();
+	let recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
+	let factoredDependencies = recordTypeProvider.getDependencies();
 	assert.strictEqual(factoredDependencies.ajaxCallFactory, this.dependencies.ajaxCallFactory);
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
-	var usedSpec = recordTypeProvider.getSpec();
+	let recordTypeProvider = this.recordTypeProviderFactory.factor(this.spec);
+	let usedSpec = recordTypeProvider.getSpec();
 	assert.strictEqual(usedSpec, this.spec);
 });

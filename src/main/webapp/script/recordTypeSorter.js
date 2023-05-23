@@ -19,22 +19,22 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordTypeSorter = function() {
-		var sortedList ={};
+		var sortedList = {};
 
-		function sortListUsingChildWithNameInData(listToSort, nameInData){
-			sortedList ={};
+		function sortListUsingChildWithNameInData(listToSort, nameInData) {
+			sortedList = {};
 			listToSort.forEach(function(searchRecord) {
 				addSearchRecordToList(searchRecord, nameInData);
 			});
 			return sortedList;
 		}
 
-		function addSearchRecordToList(searchRecord, nameInData){
+		function addSearchRecordToList(searchRecord, nameInData) {
 			var cSearchRecord = CORA.coraData(searchRecord.data);
 			var sortByValues = cSearchRecord.getChildrenByNameInData(nameInData);
 			sortByValues.forEach(function(sortByValueChild) {
 				var sortByValue = sortByValueChild.value;
-				if(sortedList[sortByValue]  === undefined){
+				if (sortedList[sortByValue] === undefined) {
 					sortedList[sortByValue] = [];
 				}
 				sortedList[sortByValue].push(searchRecord);
@@ -43,8 +43,8 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			type : "recordTypeSorter",
-			sortListUsingChildWithNameInData : sortListUsingChildWithNameInData
+			type: "recordTypeSorter",
+			sortListUsingChildWithNameInData: sortListUsingChildWithNameInData
 		});
 	};
 	return cora;

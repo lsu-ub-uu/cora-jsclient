@@ -62,7 +62,7 @@ var CORA = (function(cora) {
 				"dataDivider": dependencies.dataDivider,
 
 				"pRepeatingElementFactory": pRepeatingElementFactory,
-				"pChildRefHandlerViewFactory": CORA.genericFactory("pChildRefHandlerView")
+				"pChildRefHandlerViewFactory": CORA.genericFactory("pChildRefHandlerView", {})
 			};
 			let pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
 				pChildRefHandlerFactoryDependencies);
@@ -70,7 +70,7 @@ var CORA = (function(cora) {
 			let pNonRepeatingChildRefHandlerFactoryDependencies = {
 				"presentationFactory": self,
 				"pNonRepeatingChildRefHandlerViewFactory": CORA
-					.genericFactory("pNonRepeatingChildRefHandlerView"),
+					.genericFactory("pNonRepeatingChildRefHandlerView", {}),
 				pubSub: dependencies.pubSub,
 				providers: dependencies.providers
 			};

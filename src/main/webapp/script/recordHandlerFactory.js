@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2023 Olov McKie
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -34,7 +34,8 @@ var CORA = (function(cora) {
 			recordGuiFactory: dependencies.recordGuiFactory,
 			managedGuiItemFactory: dependencies.managedGuiItemFactory,
 			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
-			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep)
+			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep),
+			questionFactory: CORA.genericFactory("question", undefined)
 		};
 		const factor = function(recordHandlerSpec) {
 			dep.recordHandlerFactory = out;

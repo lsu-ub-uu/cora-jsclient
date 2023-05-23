@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recordHandlerTest.js", {
+QUnit.module("recordHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.record = CORATEST.recordWithAllLinks;
@@ -47,7 +47,8 @@ QUnit.module.only("recordHandlerTest.js", {
 			recordHandlerViewFactory: this.recordHandlerViewFactorySpy,
 			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy"),
 			indexHandlerFactory: CORATEST.standardFactorySpy("indexHandlerSpy"),
-			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
+			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy"),
+			questionFactory: CORATEST.standardFactorySpy("questionSpy")
 		};
 		this.dependencies = dependencies;
 
@@ -71,7 +72,7 @@ QUnit.module.only("recordHandlerTest.js", {
 			partOfList: "false",
 			createNewRecord: "true",
 			recordTypeRecordIdForNew: "recordType",
-			record: this.record,
+			record: this.record.data,
 			jsClient: CORATEST.jsClientSpy()
 		};
 		this.specForNewWithChoiceValidationType = {
@@ -86,7 +87,7 @@ QUnit.module.only("recordHandlerTest.js", {
 			partOfList: "true",
 			createNewRecord: "true",
 			recordTypeRecordIdForNew: "recordType",
-			record: this.record,
+			record: this.record.data,
 			jsClient: CORATEST.jsClientSpy()
 		};
 
@@ -605,50 +606,47 @@ QUnit.test("testNoUpdateButtonAndEditFormWhenNoUpdateLink", function(assert) {
 	assert.strictEqual(updateButtonSpec, undefined);
 });
 
+QUnit.test("testDeleteQuestion", function(assert) {
+	this.spec.createNewRecord = "false";
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	let deleteButtonSpec = recordHandlerViewSpy.getAddedButton(0);
+	
+	deleteButtonSpec.onclickMethod();
+
+	let questionSpec = this.dependencies.questionFactory.getSpec(0);
+	let questionSpy = this.dependencies.questionFactory.getFactored(0);
+	
+	
+	let expectedQuestionSpec = {
+				text: "Är du säker på att du vill ta bort posten?",
+				buttons: [{
+					text: "Nej"
+				}, {
+					text: "Ja",
+					onclickFunction: recordHandler.sendDeleteDataToServer
+				}]
+			};
+	assert.deepEqual(questionSpec, expectedQuestionSpec);
+	
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let addedQuestionView = managedGuiItem.getAddedWorkPresentation(3);
+	assert.strictEqual(questionSpy.getView(), addedQuestionView);
+});
+	
 QUnit.test("testDeleteCall", function(assert) {
 	this.spec.createNewRecord = "false";
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	this.answerCall(0);
 
-	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "recordTypeGroup");
-
-	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
-
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypePGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
-
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeGroup");
-
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeGroup");
-
-	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
-	let deleteButtonSpec = recordHandlerViewSpy.getAddedButton(0);
-	deleteButtonSpec.onclickMethod();
-
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
-	let question = managedGuiItem.getAddedWorkPresentation(3);
-	assert.strictEqual(question.className, "question");
+
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
 	assert.strictEqual(ajaxCallSpy, undefined, "no delete call should have been made yet");
-
-	let buttonNo = question.firstChild.childNodes[1];
-	assert.strictEqual(buttonNo.value, "Nej");
-	buttonNo.onclick();
-	assert.notVisible(question);
-	let ajaxCallSpy2 = this.ajaxCallFactorySpy.getFactored(1);
-	assert.strictEqual(ajaxCallSpy2, undefined, "no delete call should have been made yet");
-
-	deleteButtonSpec.onclickMethod();
-	let question2 = managedGuiItem.getAddedWorkPresentation(4);
-	assert.strictEqual(question2.className, "question");
-	let ajaxCallSpy3 = this.ajaxCallFactorySpy.getFactored(1);
-	assert.strictEqual(ajaxCallSpy3, undefined, "no delete call should have been made yet");
-	let buttonYes = question.firstChild.childNodes[2];
-	assert.strictEqual(buttonYes.value, "Ja");
-	buttonYes.onclick();
+	
+	recordHandler.sendDeleteDataToServer();
 
 	let ajaxCallSpy4 = this.ajaxCallFactorySpy.getFactored(1);
 	let ajaxCallSpec = ajaxCallSpy4.getSpec();
@@ -668,7 +666,7 @@ QUnit.test("testDeleteCall", function(assert) {
 
 QUnit.test("testDeleteCallNoParentsForViews", function(assert) {
 	this.spec.createNewRecord = "false";
-	CORA.recordHandler(this.dependencies, this.spec);
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
 	this.answerCall(0);
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
@@ -676,10 +674,8 @@ QUnit.test("testDeleteCallNoParentsForViews", function(assert) {
 	deleteButtonSpec.onclickMethod();
 
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
-	let question = managedGuiItem.getAddedWorkPresentation(3);
 
-	let buttonYes = question.firstChild.childNodes[2];
-	buttonYes.onclick();
+	recordHandler.sendDeleteDataToServer();
 	assert.strictEqual(managedGuiItem.getRemoved(), 0);
 	this.answerCall(1);
 
@@ -813,25 +809,34 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpecWithData", function(assert) {
 });
 
 QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationType", function(assert) {
-	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
+	CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 
-	assert.strictEqual(recordHandler.getDataIsChanged(), true);
-	assert.strictEqual(managedGuiItem.getChanged(), true);
+	let questionSpec = this.dependencies.questionFactory.getSpec(0);
+	let questionSpy = this.dependencies.questionFactory.getFactored(0);
+	
+	
+	assert.strictEqual(questionSpec.text, "Välj validation type för posten!");
+	assert.strictEqual(questionSpec.buttons[0].text, "coraText");
+	assert.strictEqual(questionSpec.buttons[1].text, "textSystemOne");
+	assert.strictEqual(questionSpec.buttons[2].text, "text");
+	
+	let addedQuestionView = managedGuiItem.getAddedWorkPresentation(3);
+	assert.strictEqual(questionSpy.getView(), addedQuestionView);
 
-	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
-	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+	questionSpec.buttons[0].onclickFunction();
+	
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeFormNewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "coraTextNewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "coraTextNewGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "coraTextNewGroup");
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "coraTextNewGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
@@ -840,26 +845,98 @@ QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationType", function(asser
 	assert.strictEqual(item.nodeName, "SPAN");
 });
 
-QUnit.test("initCheckRightGuiCreatedNewCheckSpecWithChoiceValidationType", function(assert) {
-	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
+QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationTypeOtherButton", function(assert) {
+	CORA.recordHandler(this.dependencies, this.specForNewWithChoiceValidationType);
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 
-	assert.strictEqual(recordHandler.getDataIsChanged(), true);
-	assert.strictEqual(managedGuiItem.getChanged(), true);
+	let questionSpec = this.dependencies.questionFactory.getSpec(0);
+	let questionSpy = this.dependencies.questionFactory.getFactored(0);
+	
+	
+	assert.strictEqual(questionSpec.text, "Välj validation type för posten!");
+	assert.strictEqual(questionSpec.buttons[0].text, "coraText");
+	assert.strictEqual(questionSpec.buttons[1].text, "textSystemOne");
+	assert.strictEqual(questionSpec.buttons[2].text, "text");
+	
+	let addedQuestionView = managedGuiItem.getAddedWorkPresentation(3);
+	assert.strictEqual(questionSpy.getView(), addedQuestionView);
 
-	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
-	assert.strictEqual(ajaxCallSpy, undefined, "no call to server on new record");
+	questionSpec.buttons[2].onclickFunction();
+	
 
-	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
-	assert.strictEqual(factoredSpec.dataDivider, undefined);
+	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
-	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textNewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textNewGroup");
+
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
+
+	let item = managedGuiItem.getAddedMenuPresentation(0);
+	assert.strictEqual(item.nodeName, "SPAN");
+});
+QUnit.test("testValidationTypeQuestion", function(assert) {
+	this.spec.createNewRecord = "false";
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	let deleteButtonSpec = recordHandlerViewSpy.getAddedButton(0);
+	
+	deleteButtonSpec.onclickMethod();
+
+	let questionSpec = this.dependencies.questionFactory.getSpec(0);
+	let questionSpy = this.dependencies.questionFactory.getFactored(0);
+	
+	
+	let expectedQuestionSpec = {
+				text: "Är du säker på att du vill ta bort posten?",
+				buttons: [{
+					text: "Nej"
+				}, {
+					text: "Ja",
+					onclickFunction: recordHandler.sendDeleteDataToServer
+				}]
+			};
+	assert.deepEqual(questionSpec, expectedQuestionSpec);
+	
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let addedQuestionView = managedGuiItem.getAddedWorkPresentation(3);
+	assert.strictEqual(questionSpy.getView(), addedQuestionView);
+});
+	
+QUnit.test("testValidationCall", function(assert) {
+	this.spec.createNewRecord = "false";
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
+	assert.strictEqual(ajaxCallSpy, undefined, "no delete call should have been made yet");
+	
+	recordHandler.sendDeleteDataToServer();
+
+	let ajaxCallSpy4 = this.ajaxCallFactorySpy.getFactored(1);
+	let ajaxCallSpec = ajaxCallSpy4.getSpec();
+	assert.strictEqual(ajaxCallSpec.url,
+		"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
+	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
+	assert.strictEqual(ajaxCallSpec.accept, undefined);
+	assert.strictEqual(ajaxCallSpec.contentType, undefined);
+	assert.strictEqual(ajaxCallSpec.data, undefined);
+	assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.afterDelete);
+
+	assert.strictEqual(managedGuiItem.getRemoved(), 0);
+	this.answerCall(1);
+
+	assert.strictEqual(managedGuiItem.getRemoved(), 1);
 });
 
 QUnit.test("initCheckNoIncomingLinksButtonForNew", function(assert) {
@@ -1401,7 +1478,7 @@ QUnit.test("rightGuiCreatedPresentationMetadataIsMissingForNew", function(assert
 
 	assert.strictEqual(recordHandlerViewSpy.getObjectAddedToEditView(0),
 		"something went wrong, probably missing metadata, " + "Error: missing metadata");
-	assert.strictEqual(recordHandlerViewSpy.getObjectAddedToEditView(1), this.record);
+	assert.strictEqual(recordHandlerViewSpy.getObjectAddedToEditView(1), this.record.data);
 	assert.ok(recordHandlerViewSpy.getObjectAddedToEditView(2).length > 20);
 });
 

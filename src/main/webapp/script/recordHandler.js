@@ -100,75 +100,32 @@ var CORA = (function(cora) {
 		};
 
 		const tryToCreateGuiForNew = function(copiedData) {
-			
-			/*
-			let validationTypes = recordTypeProvider.getValiationTypes()
-			if more than one pop gui to choose, else continue...
-			
-			retun id
-			 */
-
-			/*
-			things to do:
-			1. in theClient.html add url to get valiationTypes, send it to (reloadable)RecordTypeProvider
-			2. In recordTypeProvider also load validationTypes, and add possiblility to get the list
-			based on recordType FIXED, sent along with getMetadataByRecordTypeId
-			3. update recordHandler to work with validationTypes
-			3a. create copy as new, read validation type from data
-			3b. create new button
-			3c. create validation choice gui in recordHandlerView
-			4a. update loading data from server
-			4b. update provided data
-			 */
-//let expected = [
-//		{
-//			id: "coraText",
-//			textId: "coraTextText",
-//			defTextId: "coraTextValidationDefText",
-//			createDefinitionId: "coraTextNewGroup",
-//			updateDefinitionId: "coraTextGroup",
-//			createFormId: "coraTextNewPGroup",
-//			updateFormId: "coraTextPGroup"
-//		}, 
-//		{
-//			id: "textSystemOne",
-//			textId: "textSystemOneText",
-//			defTextId: "textSystemOneValidationDefText",
-//			createDefinitionId: "textSystemOneNewGroup",
-//			updateDefinitionId: "textSystemOneGroup",
-//			createFormId: "textSystemOneNewPGroup",
-//			updateFormId: "textSystemOnePGroup"
-//		}
-//	];
 			recordTypeId = spec.recordTypeRecordIdForNew;
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
-//			let definitionId = metadataForRecordType.newMetadataId;
-//console.log("metadataForRecordType.validationTypes.keys(): ",Object.keys(metadataForRecordType.validationTypes));
 
-			if(undefined != copiedData){
-//console.log("valiation type from copied data");
-//console.log("copied data", JSON.stringify(copiedData.data, undefined, " "));
-				let cCopiedData = CORA.coraData(copiedData.data);
+			if(copiedDataExists(copiedData)){
+				let cCopiedData = CORA.coraData(copiedData);
 				validationTypeId = getValidationTypeIdFromData(cCopiedData);
 				tryToCreateGuiForNewWithKnownValidationType(copiedData);
-			}else if(1 == Object.keys(metadataForRecordType.validationTypes).length) {
-//console.log("ONLY ONE validation type");				
+			}else if(onlyOneValiationType()) {
 				validationTypeId = Object.keys(metadataForRecordType.validationTypes)[0];
-				tryToCreateGuiForNewWithKnownValidationType(copiedData);
+				tryToCreateGuiForNewWithKnownValidationType();
 			} else {
-//SPIKE  
-console.log("CHOOSE validation type");
-//				validationTypeId = "choosenValidationTypeId";
-console.log("validationTypeId: ", validationTypeId);
-				//tryToCreateGuiForNewWithKnownValidationType(copiedData);
 				chooseValidationType();
-//SPIKE 
 			}
 		};
-//SPIKE
+		
+		const copiedDataExists = function(copiedData){
+			return undefined != copiedData;
+		};
+		
+		const onlyOneValiationType = function(){
+			return 1 == Object.keys(metadataForRecordType.validationTypes).length;
+		};
+		
 		const chooseValidationType = function() {
 			let questionSpec = assembleValidationQuestionSpec();
-			let question = CORA.question(questionSpec);
+			let question = dependencies.questionFactory.factor(questionSpec);
 			let questionView = question.getView();
 			managedGuiItem.addWorkPresentation(questionView);
 		};
@@ -186,29 +143,19 @@ console.log("validationTypeId: ", validationTypeId);
 			return spec;
 		};
 		const chosenValidationType = function(z) {
-			console.log("user pick:", z)
 			validationTypeId = z; 
 			tryToCreateGuiForNewWithKnownValidationType();
 		};
-//SPIKE
+		
 		const tryToCreateGuiForNewWithKnownValidationType = function(copiedData) {
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
-//console.log("validationType: ", validationType)
-			
 			let createDefinitionId = validationType.createDefinitionId;
- 
 			let definitionId = metadataForRecordType.metadataId;
-//			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
-//				permissions);
-//			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
 
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-//			recordGui = createRecordGui(definitionId, copiedData, undefined, recordPartPermissionCalculator);
 			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, recordPartPermissionCalculator);
-
-//			createAndAddViewsForNew(recordGui, definitionId);
 			createAndAddViewsForNew(recordGui, createDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
@@ -425,17 +372,13 @@ console.log("validationTypeId: ", validationTypeId);
 			let dataDivider = getDataDividerFromData(cData);
 			recordTypeId = getRecordTypeIdFromData(cData);
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
-//TODO: test			
 			validationTypeId = getValidationTypeIdFromData(cData);
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
-//console.log("ValidationTypeId: ", validationTypeId);
 			let updateDefinitionId = validationType.updateDefinitionId;
 
 			let definitionId = metadataForRecordType.metadataId;
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
-//			recordGui = createRecordGui(definitionId, data, dataDivider, recordPartPermissionCalculator);
-//			createAndAddViewsForExisting(recordGui, definitionId);
 			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, updateDefinitionId);
 			recordGui.initMetadataControllerStartingGui();
@@ -519,6 +462,7 @@ console.log("validationTypeId: ", validationTypeId);
 			let readIncomingLinks = fetchedRecord.actionLinks.read_incoming_links;
 			return readIncomingLinks !== undefined;
 		};
+		
 		const possiblyShowShowDefinitionButton = function() {
 			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
 				recordHandlerView.addDefinitionViewerOpenFunction(showDefinitionViewer);
@@ -583,7 +527,7 @@ console.log("validationTypeId: ", validationTypeId);
 
 		const shouldRecordBeDeleted = function() {
 			let questionSpec = assembleQuestionSpec();
-			let question = CORA.question(questionSpec);
+			let question = dependencies.questionFactory.factor(questionSpec);
 			let questionView = question.getView();
 			managedGuiItem.addWorkPresentation(questionView);
 		};
@@ -735,7 +679,8 @@ console.log("validationTypeId: ", validationTypeId);
 			showIndexMessage: showIndexMessage,
 			showTimeoutMessage: showTimeoutMessage,
 			callMethodAfterShowWorkView: callMethodAfterShowWorkView,
-			showDefinitionViewer: showDefinitionViewer
+			showDefinitionViewer: showDefinitionViewer,
+			sendDeleteDataToServer: sendDeleteDataToServer
 		});
 	};
 	return cora;

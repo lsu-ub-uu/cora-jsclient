@@ -22,11 +22,11 @@ QUnit.module("genericFactoryTest.js", {
 	beforeEach : function() {
 
 		this.dependencies = {
-			"dummy" : "dummy"
+			dummy : "dummy"
 		};
 
 		this.spec = {
-			"testing" : "testing"
+			testing : "testing"
 		};
 
 	},
@@ -35,37 +35,67 @@ QUnit.module("genericFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
+	let genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
 	assert.ok(genericFactory);
 	assert.strictEqual(genericFactory.type, "genericFactory");
 });
 
 QUnit.test("getTypeToFactor", function(assert) {
-	var genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
+	let genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
 	assert.strictEqual(genericFactory.getTypeToFactor(), "typeToFactor");
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
+	let genericFactory = CORA.genericFactory("typeToFactor", this.dependencies);
 	assert.strictEqual(genericFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("factorTestFactor", function(assert) {
-	var genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
-	var factored = genericFactory.factor(this.spec);
+	let genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
+	let factored = genericFactory.factor(this.spec);
 	assert.strictEqual(factored.type, "incomingLinksListHandlerView");
 });
 
+
 QUnit.test("factorTestDependencies", function(assert) {
-	var genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
-	var factored = genericFactory.factor(this.spec);
-	var factoredDependencies = factored.getDependencies();
+	let genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
+	let factored = genericFactory.factor(this.spec);
+	let factoredDependencies = factored.getDependencies();
 	assert.strictEqual(factoredDependencies, this.dependencies);
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
-	var factored = genericFactory.factor(this.spec);
-	var factoredSpec = factored.getSpec();
+	let genericFactory = CORA.genericFactory("incomingLinksListHandlerView", this.dependencies);
+	let factored = genericFactory.factor(this.spec);
+	let factoredSpec = factored.getSpec();
 	assert.strictEqual(factoredSpec, this.spec);
 });
+
+QUnit.test("factorTestFactorWithoutDependencies", function(assert) {
+	let genericFactory = CORA.genericFactory("spyToFactorWithoutDependencies", undefined);
+
+	let factored = genericFactory.factor(this.spec);
+
+	assert.strictEqual(factored.type, "spyToFactorWithoutDependencies");
+	let factoredSpec = factored.getSpec();
+	assert.strictEqual(factoredSpec, this.spec);
+});
+
+var CORA = (function(cora) {
+	"use strict";
+	cora.spyToFactorWithoutDependencies = function(specIn) {
+		let spec = specIn;
+		let out;
+
+		function getSpec() {
+			return spec;
+		}
+
+		out = Object.freeze({
+			type : "spyToFactorWithoutDependencies",
+			getSpec : getSpec,
+		});
+		return out;
+	};
+	return cora;
+}(CORA));

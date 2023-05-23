@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2023 Uppsala Universitet
  *
  * This file is part of Cora.
  *
@@ -16,33 +16,32 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
+var CORATEST = (function(coraTest) {
 	"use strict";
-	cora.genericFactory = function(typeToFactor, dependencies) {
-		let out;
+	coraTest.questionSpy = function(spec) {
+		let spyView = document.createElement("span");
+		spyView.className = "questionSpySpan";
 
-		function factor(spec) {
-			if(undefined == dependencies){
-				return CORA[typeToFactor](spec);
-			}
-			return CORA[typeToFactor](dependencies, spec);
-		}
+		const getView = function() {
+			return spyView;
+		};
 
-		function getTypeToFactor() {
-			return typeToFactor;
-		}
 
-		function getDependencies() {
-			return dependencies;
-		}
+		const hide = function() {
+			
+		};
 
-		out = Object.freeze({
-			type : "genericFactory",
-			getTypeToFactor : getTypeToFactor,
-			getDependencies : getDependencies,
-			factor : factor
+		const hideWithEffect = function() {
+			
+		};
+		
+		
+		return Object.freeze({
+			type: "questionSpy",
+			getView: getView,
+			hide: hide,
+			hideWithEffect: hideWithEffect
 		});
-		return out;
 	};
-	return cora;
-}(CORA));
+	return coraTest;
+}(CORATEST || {}));

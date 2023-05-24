@@ -1285,7 +1285,9 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 	this.spec.fetchLatestDataFromServer = "false";
 	this.spec.partOfList = "true";
-	this.record.permissions = {
+	this.spec.record = this.recordWithoutUpdateOrDeleteLink;
+
+	this.spec.record.permissions = {
 		write: ["someWriteVariable"],
 		read: ["someReadVariable"]
 	};
@@ -1297,12 +1299,12 @@ QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 	assert.strictEqual(managedGuiItemSpy.getChanged(), false);
 
 	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "recordTypeGroup");
+	assert.strictEqual(factoredSpec.metadataId, "textSystemOneGroup");
 
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
-	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeListPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
+	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textListPGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textGroup");
 
 	let recordGuiSpec = this.dependencies.recordGuiFactory.getSpec(0);
 
@@ -1314,9 +1316,9 @@ QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 	assert.strictEqual(item, undefined);
 
 	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, factoredSpec.metadataId);
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.record.permissions.write);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.record.permissions.read);
+	assert.strictEqual(permissionCalculatorSpec.metadataId, "textGroup");
+	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.spec.record.permissions.write);
+	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.spec.record.permissions.read);
 	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
 	assert.strictEqual(recordGuiSpec.recordPartPermissionCalculator, factoredCalculator);
 });

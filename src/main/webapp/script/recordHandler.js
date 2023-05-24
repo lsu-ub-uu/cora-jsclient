@@ -308,7 +308,6 @@ var CORA = (function(cora) {
 				url: readLink.url,
 				contentType: readLink.contentType,
 				accept: readLink.accept,
-				// processFetchedRecord
 				loadMethod: callAfterAnswer,
 				errorMethod: callError
 			};
@@ -380,7 +379,7 @@ var CORA = (function(cora) {
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
 			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
-			createAndAddViewsForExisting(recordGui, updateDefinitionId);
+			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 
 			addEditButtonsToView();
@@ -398,7 +397,7 @@ var CORA = (function(cora) {
 			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		}
 
-		const createAndAddViewsForExisting = function(recordGuiIn, metadataId) {
+		const createAndAddViewsForExisting = function(recordGuiIn, metadataId, definitionId) {
 			if ("true" !== spec.partOfList) {
 				if (recordHasUpdateLink()) {
 					addEditPresentationToView(recordGuiIn, metadataId);
@@ -406,7 +405,7 @@ var CORA = (function(cora) {
 				addViewPresentationToView(recordGuiIn, metadataId);
 				addMenuPresentationToView(recordGuiIn, metadataId);
 			} else {
-				addListPresentationToView(recordGuiIn, metadataId);
+				addListPresentationToView(recordGuiIn, definitionId);
 			}
 		};
 

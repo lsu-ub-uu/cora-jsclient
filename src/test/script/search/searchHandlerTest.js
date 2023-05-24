@@ -355,4 +355,9 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 
 		assert.strictEqual(factoredView.getNoOfCallsToClearResultHolder(), 1);
 	});
+	
+	test("testInitialSearchTimeoutTime", function(assert) {
+		assert.strictEqual(searchHandler.getSearchTimeoutTime(), 800);
+	});
+	
 });

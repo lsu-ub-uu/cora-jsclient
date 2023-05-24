@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	cora.searchHandler = function(dependencies, spec) {
 		let view;
 		let recordGui;
-		let searchTimeoutTime = 400;
+		let searchTimeoutTime = 800;
 		let delaySearchTimer;
 
 		const start = function() {
@@ -166,7 +166,11 @@ var CORA = (function(cora) {
 
 		const setSearchTimeoutTime = function(time) {
 			searchTimeoutTime = time;
-		}
+		};
+		
+		const getSearchTimeoutTime = function(time) {
+			return searchTimeoutTime;
+		};
 
 		start();
 		return Object.freeze({
@@ -177,7 +181,8 @@ var CORA = (function(cora) {
 			handleSearchResult: handleSearchResult,
 			getView: getView,
 			handleMsg: handleMsg,
-			setSearchTimeoutTime: setSearchTimeoutTime
+			setSearchTimeoutTime: setSearchTimeoutTime,
+			getSearchTimeoutTime: getSearchTimeoutTime
 		});
 	};
 	return cora;

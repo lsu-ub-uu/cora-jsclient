@@ -616,7 +616,7 @@ var CORA = (function(cora) {
 							value: "validationType"
 						}, {
 							name: "linkedRecordId",
-							value: "genericNewBinary"
+							value: "genericBinary"
 						}]
 					}
 					

@@ -3058,7 +3058,7 @@ function MetadataProviderStub() {
 						"value": "recordType"
 					}, {
 						"name": "linkedRecordId",
-						"value": "image"
+						"value": "binary"
 					}],
 					"name": "linkedRecordType"
 				}]

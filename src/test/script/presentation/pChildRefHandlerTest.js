@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pChildRefHandlerTest.js", {
+QUnit.module.only("presentation/pChildRefHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
@@ -180,7 +180,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 				}]
 			}],
 			"attributes": {
-				"type": "image"
+				"type": "genericBinary"
 			}
 		};
 		this.data2 = {
@@ -199,7 +199,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 				}]
 			}],
 			"attributes": {
-				"type": "image"
+				"type": "genericBinary"
 			}
 		};
 		this.data3 = {
@@ -218,7 +218,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 				}]
 			}],
 			"attributes": {
-				"type": "image"
+				"type": "genericBinary"
 			}
 		};
 
@@ -609,7 +609,7 @@ QUnit.test("testHandleFilesSendingOneFile", function(assert) {
 	pChildRefHandler.handleFiles(this.files1);
 
 	let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(0);
-	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "image");
+	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
 	assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
 
@@ -630,7 +630,7 @@ QUnit.test("testHandleFilesSendingOneBinaryFile",
 		pChildRefHandler.handleFiles(this.files1);
 
 		let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(0);
-		this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "genericBinary");
+		this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
 		assert
 			.strictEqual(ajaxCallSpy0.getSpec().loadMethod,
@@ -654,7 +654,7 @@ QUnit.test("testHandleFilesSendingOneFileError", function(assert) {
 	pChildRefHandler.handleFiles(this.files1);
 
 	let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(0);
-	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "image");
+	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
 	assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
 
@@ -1013,6 +1013,7 @@ QUnit.test("testAddOneChildBinary", function(assert) {
 		"userCanMove": true,
 		"userCanAddBefore": false
 	};
+
 	assert.stringifyEqual(factoredSpec, expectedSpec);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 

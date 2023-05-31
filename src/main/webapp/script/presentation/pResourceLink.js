@@ -105,6 +105,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleMsg = function(dataFromMsg) {
+			console.log("pResourceLink, handleMsg: ", dataFromMsg);
 			setInfoInLinkedResourceView(dataFromMsg);
 		};
 

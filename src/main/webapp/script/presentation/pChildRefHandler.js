@@ -593,6 +593,7 @@ var CORA = (function(cora) {
 		const createNewBinaryData = function() {
 			let dataDividerLinkedRecordId = dependencies.dataDivider;
 //			let type = getTypeFromValidationType();
+//			let type = "image";
 			let type = "genericBinary";
 			return {
 				name: "binary",
@@ -616,7 +617,7 @@ var CORA = (function(cora) {
 							value: "validationType"
 						}, {
 							name: "linkedRecordId",
-							value: "genericNewBinary"
+							value: "genericBinary"
 						}]
 					}
 					

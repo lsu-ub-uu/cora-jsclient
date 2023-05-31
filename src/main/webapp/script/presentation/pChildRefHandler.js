@@ -608,9 +608,7 @@ var CORA = (function(cora) {
 							name: "linkedRecordId",
 							value: dataDividerLinkedRecordId
 						}]
-					}
-					
-					,{
+					},{
 						name: "validationType",
 						children: [{
 							name: "linkedRecordType",
@@ -619,9 +617,7 @@ var CORA = (function(cora) {
 							name: "linkedRecordId",
 							value: "genericBinary"
 						}]
-					}
-					
-					]
+					}]
 				}],
 				attributes: {
 					type: type
@@ -650,7 +646,6 @@ var CORA = (function(cora) {
 
 		const getLinkedRecordTypeCreateLink = function() {
 			let recordType = getImplementingLinkedRecordType();
-console.log("recordType: ", recordType)			
 			return recordType.actionLinks.create;
 		};
 

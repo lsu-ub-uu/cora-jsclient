@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pChildRefHandlerTest.js", {
+QUnit.module("presentation/pChildRefHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
@@ -177,7 +177,16 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", {
 						"name": "linkedRecordId",
 						"value": "systemY"
 					}]
-				}]
+				},{
+						name: "validationType",
+						children: [{
+							name: "linkedRecordType",
+							value: "validationType"
+						}, {
+							name: "linkedRecordId",
+							value: "genericBinary"
+						}]
+					}]
 			}],
 			"attributes": {
 				"type": "genericBinary"
@@ -196,7 +205,16 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", {
 						"name": "linkedRecordId",
 						"value": "systemY"
 					}]
-				}]
+				},{
+						name: "validationType",
+						children: [{
+							name: "linkedRecordType",
+							value: "validationType"
+						}, {
+							name: "linkedRecordId",
+							value: "genericBinary"
+						}]
+					}]
 			}],
 			"attributes": {
 				"type": "genericBinary"
@@ -215,7 +233,16 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", {
 						"name": "linkedRecordId",
 						"value": "systemY"
 					}]
-				}]
+				},{
+						name: "validationType",
+						children: [{
+							name: "linkedRecordType",
+							value: "validationType"
+						}, {
+							name: "linkedRecordId",
+							value: "genericBinary"
+						}]
+					}]
 			}],
 			"attributes": {
 				"type": "genericBinary"

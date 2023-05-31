@@ -20,7 +20,7 @@
 var CORATEST = (function (coraTest) {
     "use strict";
     coraTest.recordTypeProviderStub = function () {
-        var recordTypeArray = [];
+        let recordTypeArray = [];
 
         // switch (metadataId) {
         recordTypeArray["presentationVar"] = {
@@ -3095,6 +3095,13 @@ var CORATEST = (function (coraTest) {
                     "rel": "update",
                     "contentType": "application/vnd.uub.record+json",
                     "url": "http://epc.ub.uu.se/cora/rest/record/recordType/binary",
+                    "accept": "application/vnd.uub.record+json"
+                },
+                "create": {
+                    "requestMethod": "POST",
+                    "rel": "create",
+                    "contentType": "application/vnd.uub.record+json",
+                    "url": "http://epc.ub.uu.se/cora/rest/record/binary/",
                     "accept": "application/vnd.uub.record+json"
                 },
                 "list": {

@@ -674,6 +674,7 @@ QUnit.test("testResourceLinkMessage", function(assert) {
 
 QUnit.test("testResourceLinkCorrectCallsToChildAndRepeatInitalizer", function(assert) {
 	this.spec.metadataId = "masterResLink";
+	this.spec.data = {some:"data"};
 
 	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
 	metadataRepeatInitializer.initialize();

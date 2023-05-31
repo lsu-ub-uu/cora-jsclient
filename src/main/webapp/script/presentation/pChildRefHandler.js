@@ -246,7 +246,8 @@ var CORA = (function(cora) {
 
 		const showFileUpload = function() {
 			if (currentChildRefIsRecordLink() && currentChildRefHasLinkedRecordType()) {
-				return calculateIfBinaryOrChildOfBinary();
+//				return calculateIfBinaryOrChildOfBinary();
+				return calculateIfBinary();
 			}
 			return false;
 		};
@@ -268,6 +269,13 @@ var CORA = (function(cora) {
 			return cMetadataElement.containsChildWithNameInData("linkedRecordType");
 		};
 
+		const calculateIfBinary = function() {
+			let cRecordTypeGroup = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("linkedRecordType"));
+			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			return "binary" == recordTypeId;
+		};
+		
 		const calculateIfBinaryOrChildOfBinary = function() {
 			let cRecordType = getLinkedRecordType();
 			let cRecordInfo = CORA.coraData(cRecordType.getFirstChildByNameInData("recordInfo"));
@@ -584,24 +592,35 @@ var CORA = (function(cora) {
 
 		const createNewBinaryData = function() {
 			let dataDividerLinkedRecordId = dependencies.dataDivider;
-			let type = getTypeFromRecordType();
+//			let type = getTypeFromValidationType();
+//			let type = "image";
+			let type = "genericBinary";
 			return {
-				"name": "binary",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "dataDivider",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "system"
+				name: "binary",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "dataDivider",
+						children: [{
+							name: "linkedRecordType",
+							value: "system"
 						}, {
-							"name": "linkedRecordId",
-							"value": dataDividerLinkedRecordId
+							name: "linkedRecordId",
+							value: dataDividerLinkedRecordId
+						}]
+					},{
+						name: "validationType",
+						children: [{
+							name: "linkedRecordType",
+							value: "validationType"
+						}, {
+							name: "linkedRecordId",
+							value: "genericBinary"
 						}]
 					}]
 				}],
-				"attributes": {
-					"type": type
+				attributes: {
+					type: type
 				}
 			};
 		};
@@ -621,7 +640,7 @@ var CORA = (function(cora) {
 				.getFirstChildByNameInData("linkedRecordType"));
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
-			recordTypeId = changeRecordTypeIdIfBinary(recordTypeId);
+//			recordTypeId = changeRecordTypeIdIfBinary(recordTypeId);
 			return dependencies.recordTypeProvider.getRecordTypeById(recordTypeId);
 		};
 
@@ -637,7 +656,7 @@ var CORA = (function(cora) {
 			return recordTypeId;
 		};
 
-		const getTypeFromRecordType = function() {
+		const getTypeFromValidationType = function() {
 			let cMetadataGroup = getNewMetadataGroupFromRecordType();
 			let attributeReferences = cMetadataGroup
 				.getFirstChildByNameInData("attributeReferences");

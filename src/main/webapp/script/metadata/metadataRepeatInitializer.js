@@ -305,7 +305,7 @@ var CORA = (function(cora) {
 			let nextLevelChildReferences = cMetadataGroupForResourceLinkGroup
 				.getFirstChildByNameInData('childReferences');
 			nextLevelChildReferences.children.forEach(function(childReference) {
-				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath);
+				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, spec.data);
 			});
 		};
 

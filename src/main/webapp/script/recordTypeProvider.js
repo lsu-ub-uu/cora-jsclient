@@ -163,114 +163,12 @@ var CORA = (function(cora) {
 
 		const addRecordsToTypesByGroup = function() {
 			let sortedByGroup = sortListUsingNameInData(allRecordTypes, "groupOfRecordType");
-			let recordTypeGroupIdList = putRecordTypeGroupIdsIntoList(sortedByGroup);
-			sortParentsAndChildrenForEachGroupIdInList(sortedByGroup, recordTypeGroupIdList);
+			recordTypesByGroupId = sortedByGroup;
 		};
 
 		const sortListUsingNameInData = function(listToSort, nameInData) {
 			let sorter = CORA.recordTypeSorter();
 			return sorter.sortListUsingChildWithNameInData(listToSort, nameInData);
-		};
-
-		const putRecordTypeGroupIdsIntoList = function(sortedByGroup) {
-			let recordTypeGroupIdList = [];
-			Object.keys(sortedByGroup).forEach(function(id) {
-				recordTypeGroupIdList.push(id);
-			});
-			return recordTypeGroupIdList;
-		};
-
-		const sortParentsAndChildrenForEachGroupIdInList = function(sortedByGroup, recordTypeGroupIdList) {
-			recordTypeGroupIdList.forEach(function(groupId) {
-				let groupSortedByAbstract = sortListUsingNameInData(sortedByGroup[groupId], "abstract");
-				sortGroupOnParentChildren(groupSortedByAbstract, groupId);
-			});
-		};
-
-		const sortGroupOnParentChildren = function(groupSortedByAbstract, groupId) {
-			recordTypesByGroupId[groupId] = [];
-			let splittedImplementing = splitImplementingTypes(groupSortedByAbstract);
-			let parentList = groupSortedByAbstract["true"];
-			possiblyAddParentsAndSortedChildren(parentList, splittedImplementing["children"], groupId);
-			addOrphans(splittedImplementing["orphans"], groupId);
-		};
-
-		const splitImplementingTypes = function(groupSortedByAbstract) {
-			let implementingTypes = groupSortedByAbstract["false"];
-			return splitImplementingIntoChildrenOrOrphans(implementingTypes);
-		};
-
-		const splitImplementingIntoChildrenOrOrphans = function(allChildrenList) {
-			let splittedImplementing = createHolderForChildrenAndOrphans();
-			allChildrenList.forEach(function(child) {
-				sortAsOrphanOrNotOrphan(child, splittedImplementing);
-			});
-			return splittedImplementing;
-		};
-
-		const createHolderForChildrenAndOrphans = function() {
-			let splittedImplementing = {};
-			splittedImplementing["children"] = [];
-			splittedImplementing["orphans"] = [];
-			return splittedImplementing;
-		};
-
-		const sortAsOrphanOrNotOrphan = function(child, splittedImplementing) {
-			if (hasParent(child)) {
-				splittedImplementing["children"].push(child);
-			} else {
-				splittedImplementing["orphans"].push(child);
-			}
-		};
-
-		const hasParent = function(child) {
-			let cChild = CORA.coraData(child.data);
-			return cChild.containsChildWithNameInData("parentId");
-		};
-
-		const possiblyAddParentsAndSortedChildren = function(parentList, childrenList, groupId) {
-			if (parentList !== undefined) {
-				addParentsAndSortedChildren(parentList, childrenList, groupId);
-			}
-		};
-
-		const addParentsAndSortedChildren = function(parentList, childrenList, groupId) {
-			parentList.forEach(function(parent) {
-				recordTypesByGroupId[groupId].push(parent);
-				sortChildren(childrenList, parent, groupId);
-			});
-		};
-
-		const addOrphans = function(orphans, groupId) {
-			orphans.forEach(function(orphan) {
-				recordTypesByGroupId[groupId].push(orphan);
-			});
-		};
-
-		const sortChildren = function(childrenList, parent, groupId) {
-			let parentId = getParentId(parent);
-			childrenList.forEach(function(child) {
-				addChildIfChildToParent(child, parentId, groupId);
-			});
-		};
-
-		const getParentId = function(parent) {
-			let cParent = CORA.coraData(parent.data);
-			let cRecordInfo = CORA.coraData(cParent.getFirstChildByNameInData("recordInfo"));
-			return cRecordInfo.getFirstAtomicValueByNameInData("id");
-		};
-
-		const addChildIfChildToParent = function(child, parentId, groupId) {
-			let childsParentId = getParentIdFromChild(child);
-			if (parentId === childsParentId) {
-				recordTypesByGroupId[groupId].push(child);
-			}
-		};
-
-		const getParentIdFromChild = function(child) {
-			let cChild = CORA.coraData(child.data);
-			let cChildsParentIdGroup = CORA.coraData(cChild.getFirstChildByNameInData("parentId"));
-			return cChildsParentIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getAllRecordTypes = function() {

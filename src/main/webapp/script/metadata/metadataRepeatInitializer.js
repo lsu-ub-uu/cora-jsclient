@@ -209,12 +209,11 @@ var CORA = (function(cora) {
 			let linkedRecordTypeValue = cRecordTypeGroup
 				.getFirstAtomicValueByNameInData("linkedRecordId");
 
-			let implementingRecordType = getImplementingRecordType(linkedRecordTypeValue);
 			let recordTypeData = {
 				name: cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
 				children: [{
 					name: "linkedRecordType",
-					value: implementingRecordType
+					value: linkedRecordTypeValue
 				}]
 			};
 			createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference,
@@ -242,30 +241,6 @@ var CORA = (function(cora) {
 					value: "1"
 				}]
 			};
-		};
-
-		const getImplementingRecordType = function(linkedRecordTypeValue) {
-			let recordTypeDefinition = dependencies.recordTypeProvider.getMetadataByRecordTypeId(linkedRecordTypeValue);
-			return getImplementingRecordTypeFromRecordTypeDefinition(recordTypeDefinition, linkedRecordTypeValue);
-		};
-
-		const getImplementingRecordTypeFromRecordTypeDefinition = function(recordTypeDefinition, linkedRecordTypeValue) {
-			return recordTypeDefinition.abstract === "false" ? linkedRecordTypeValue : getImplementingRecordTypeFromDataIfExists();
-		};
-
-		const getImplementingRecordTypeFromDataIfExists = function() {
-			let implementingRecordType = "";
-			if (dataContainsLinkedRecordType()) {
-				let recordTypeInData = CORA.coraData(spec.data).getFirstChildByNameInData("linkedRecordType");
-				if (recordTypeInData.value !== "") {
-					implementingRecordType = recordTypeInData.value;
-				}
-			}
-			return implementingRecordType;
-		};
-
-		const dataContainsLinkedRecordType = function() {
-			return spec.data !== undefined && CORA.coraData(spec.data).containsChildWithNameInData("linkedRecordType");
 		};
 
 		const initializeLinkedRecordId = function(nextLevelPath) {

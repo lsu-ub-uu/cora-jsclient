@@ -189,7 +189,7 @@ var CORA = (function(cora) {
 		};
 
 		const getTextForAddButton = function(cMetadataElement) {
-			var textId = spec.addText !== undefined ? spec.addText : getTextId(cMetadataElement);
+			let textId = spec.addText !== undefined ? spec.addText : getTextId(cMetadataElement);
 			return dependencies.textProvider.getTranslation(textId);
 		};
 
@@ -246,7 +246,6 @@ var CORA = (function(cora) {
 
 		const showFileUpload = function() {
 			if (currentChildRefIsRecordLink() && currentChildRefHasLinkedRecordType()) {
-//				return calculateIfBinaryOrChildOfBinary();
 				return calculateIfBinary();
 			}
 			return false;
@@ -276,45 +275,6 @@ var CORA = (function(cora) {
 			return "binary" == recordTypeId;
 		};
 		
-		const calculateIfBinaryOrChildOfBinary = function() {
-			let cRecordType = getLinkedRecordType();
-			let cRecordInfo = CORA.coraData(cRecordType.getFirstChildByNameInData("recordInfo"));
-			return isBinaryOrChildOfBinary(cRecordInfo, cRecordType);
-		};
-
-		const getLinkedRecordType = function() {
-			let cRecordTypeGroup = CORA.coraData(cMetadataElement
-				.getFirstChildByNameInData("linkedRecordType"));
-			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			return getRecordTypeById(recordTypeId);
-		};
-
-		const getRecordTypeById = function(id) {
-			return CORA.coraData(dependencies.recordTypeProvider.getRecordTypeById(id).data);
-		};
-
-		const isBinaryOrChildOfBinary = function(cRecordInfo, cRecordType) {
-			return isBinary(cRecordInfo) || isChildOfBinary(cRecordType);
-		};
-
-		const isBinary = function(cRecordInfo) {
-			return cRecordInfo.getFirstAtomicValueByNameInData("id") === "binary";
-		};
-
-		const isChildOfBinary = function(cRecordType) {
-			return hasParent(cRecordType) && parentIsBinary(cRecordType);
-		};
-
-		const hasParent = function(cRecordType) {
-			return cRecordType.containsChildWithNameInData("parentId");
-		};
-
-		const parentIsBinary = function(cRecordType) {
-			let cParentIdGroup = CORA.coraData(cRecordType.getFirstChildByNameInData("parentId"));
-			let parentId = cParentIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			return parentId === "binary";
-		};
-
 		const getView = function() {
 			return pChildRefHandlerView.getView();
 		};
@@ -625,50 +585,16 @@ var CORA = (function(cora) {
 			};
 		};
 
-		const getNewMetadataGroupFromRecordType = function() {
-			let recordType = getImplementingLinkedRecordType();
-			let cData = CORA.coraData(recordType.data);
-			let newMetadataIdGroup = CORA
-				.coraData(cData.getFirstChildByNameInData("newMetadataId"));
-			let newMetadataId = newMetadataIdGroup
-				.getFirstAtomicValueByNameInData("linkedRecordId");
-			return getMetadataById(newMetadataId);
-		};
-
 		const getImplementingLinkedRecordType = function() {
 			let cRecordTypeGroup = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("linkedRecordType"));
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-
-//			recordTypeId = changeRecordTypeIdIfBinary(recordTypeId);
 			return dependencies.recordTypeProvider.getRecordTypeById(recordTypeId);
 		};
 
 		const getLinkedRecordTypeCreateLink = function() {
 			let recordType = getImplementingLinkedRecordType();
 			return recordType.actionLinks.create;
-		};
-
-		const changeRecordTypeIdIfBinary = function(recordTypeId) {
-			if (recordTypeId === "binary") {
-				recordTypeId = "genericBinary";
-			}
-			return recordTypeId;
-		};
-
-		const getTypeFromValidationType = function() {
-			let cMetadataGroup = getNewMetadataGroupFromRecordType();
-			let attributeReferences = cMetadataGroup
-				.getFirstChildByNameInData("attributeReferences");
-			let ref = getRefValueFromAttributeRef(attributeReferences);
-			let cItem = getMetadataById(ref);
-			return cItem.getFirstAtomicValueByNameInData("finalValue");
-		};
-
-		const getRefValueFromAttributeRef = function(attributeReferences) {
-			let cAttributeReferences = CORA.coraData(attributeReferences);
-			let cRefGroup = CORA.coraData(cAttributeReferences.getFirstChildByNameInData("ref"));
-			return cRefGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const processNewBinary = function(answer) {

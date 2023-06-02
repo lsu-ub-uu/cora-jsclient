@@ -167,13 +167,10 @@ var CORA = (function(cora) {
 			let recordTypeIdInData = cData
 				.getFirstAtomicValueByNameInData("linkedRecordType");
 
-			let dataRecordTypeDefinition = recordTypeProvider.getMetadataByRecordTypeId(recordTypeIdInData);
-			let parent = dataRecordTypeDefinition.parentId;
-
 			return function(child) {
 				let cChild = CORA.coraData(child);
 				let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
-				return isSameRecordTypeOrImplementing(recordTypeIdInData, parent, cPresentedRecordType);
+				return isSameRecordType(recordTypeIdInData, cPresentedRecordType);
 			};
 		};
 
@@ -181,16 +178,10 @@ var CORA = (function(cora) {
 			return linkedRecordPresentation !== undefined;
 		};
 
-		const isSameRecordTypeOrImplementing = function(recordTypeIdInData, parent, cPresentedRecordType) {
+		const isSameRecordType = function(recordTypeIdInData, cPresentedRecordType) {
 			let recordTypeIdInLink = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
 			let sameRecordType = recordTypeIdInLink === recordTypeIdInData;
-			let isParentToRecordTypeInData = recordTypeIsParent(parent, recordTypeIdInLink);
-
-			return sameRecordType || isParentToRecordTypeInData;
-		}
-
-		const recordTypeIsParent = function(parent, recordTypeIdInLink) {
-			return parent !== undefined && recordTypeIdInLink === parent;
+			return sameRecordType;
 		}
 
 		const showOrHideOpenLinkedRecordButton = function(payloadFromMsg) {
@@ -257,17 +248,9 @@ var CORA = (function(cora) {
 		};
 
 		const createInputForLinkedRecordType = function() {
-			let recordTypePVarId = "linkedRecordTypePVar";
-			let recordTypeDefinition = recordTypeProvider.getMetadataByRecordTypeId(linkedRecordType);
-			if (linkedRecordTypeIsImplementing(recordTypeDefinition)) {
-				recordTypePVarId = "linkedRecordTypeOutputPVar";
-			}
+			let recordTypePVarId = "linkedRecordTypeOutputPVar";
 			recordTypePath = calculateNewPath("linkedRecordTypeTextVar");
 			createChildView("linkedRecordType", recordTypePVarId);
-		};
-
-		const linkedRecordTypeIsImplementing = function(recordTypeDefinition) {
-			return recordTypeDefinition.abstract === "false";
 		};
 
 		const createInputForLinkedRecordId = function() {

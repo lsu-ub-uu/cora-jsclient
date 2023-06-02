@@ -220,9 +220,6 @@ QUnit.test("testGetChildRefPartOfMetadata2", function(assert) {
 			"name" : "defTextId",
 			"value" : "textSystemOneGroupDefText"
 		}, {
-			"name" : "refParentId",
-			"value" : "textDefaultAlternativeGroup"
-		}, {
 			"children" : [ {
 				"repeatId" : "1",
 				"children" : [ {

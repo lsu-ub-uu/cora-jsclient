@@ -49,10 +49,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -850,10 +846,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -1448,10 +1440,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -2141,10 +2129,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -3063,10 +3047,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -3735,10 +3715,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -4379,10 +4355,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -5053,10 +5025,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -5653,10 +5621,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -6251,10 +6215,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -7013,10 +6973,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -7747,10 +7703,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -8419,10 +8371,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -9081,10 +9029,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -9710,10 +9654,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -10601,10 +10541,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -11271,10 +11207,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -11945,10 +11877,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -12615,10 +12543,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -13413,10 +13337,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -14137,10 +14057,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -14646,10 +14562,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -15361,10 +15273,6 @@ var CORATEST = (function(coraTest) {
 									"name": "metadataId"
 								},
 								{
-									"name": "abstract",
-									"value": "false"
-								},
-								{
 									"children": [
 										{
 											"name": "id",
@@ -15959,10 +15867,6 @@ var CORATEST = (function(coraTest) {
 										}
 									},
 									"name": "metadataId"
-								},
-								{
-									"name": "abstract",
-									"value": "false"
 								},
 								{
 									"children": [
@@ -16909,18 +16813,6 @@ var CORATEST = (function(coraTest) {
 							}, {
 								"name": "selfPresentationViewId",
 								"value": "presentationVarViewSelfPGroup"
-							}, {
-								"name": "abstract",
-								"value": "false"
-							}, {
-								"name": "parentId",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
-								}, {
-									"name": "linkedRecordId",
-									"value": "presentation"
-								}]
 							}],
 						"name": "recordType"
 					},

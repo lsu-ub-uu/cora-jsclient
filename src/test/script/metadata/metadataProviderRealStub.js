@@ -295,9 +295,6 @@ var CORATEST = (function(coraTest) {
 				} ],
 				"name" : "refCollection"
 			}, {
-				"name" : "refParentId",
-				"value" : "textPartTypeCollectionVar"
-			}, {
 				"name" : "finalValue",
 				"value" : "default"
 			} ],

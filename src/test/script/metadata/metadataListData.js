@@ -353,35 +353,6 @@ var CORATEST = (function(coraTest) {
 				                    "name": "childReference"
 				                  },
 				                  {
-				                    "repeatId": "5",
-				                    "children": [
-				                      {
-				                        "name": "ref",
-				                        "children": [
-		             						{
-		             							"name": "linkedRecordType",
-		             							"value": "metadataTextVariable"
-		             						},
-		             						{
-		             							"name": "linkedRecordId",
-		             							"value": "refParentIdTextVar"
-		             						}
-		             					],"attributes": {
-		             						"type": "textVariable"
-		             					}
-				                      },
-				                      {
-				                        "name": "repeatMin",
-				                        "value": "0"
-				                      },
-				                      {
-				                        "name": "repeatMax",
-				                        "value": "1"
-				                      }
-				                    ],
-				                    "name": "childReference"
-				                  },
-				                  {
 				                    "repeatId": "6",
 				                    "children": [
 				                      {
@@ -558,12 +529,7 @@ var CORATEST = (function(coraTest) {
 				                  }
 				                ],
 				                "name": "childReferences"
-				              },
-				              {
-				                "name": "refParentId",
-				                "value": "textPartAlternativeGroup"
-				              },
-				              {
+				              },{
 				                "children": [
 				                  {
 				                    "name": "ref",

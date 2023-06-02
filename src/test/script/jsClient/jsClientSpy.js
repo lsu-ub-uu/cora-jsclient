@@ -67,15 +67,10 @@ var CORATEST = (function(coraTest) {
 			let metadata = {
 				"metadataId" : recordTypeId + "Group",
 				"presentationViewId" : recordTypeId + "ViewPGroup",
-				"presentationFormId" : recordTypeId + "FormPGroup",
-				"newMetadataId" : recordTypeId + "NewGroup",
-				"newPresentationFormId" : recordTypeId + "FormNewPGroup",
 				"menuPresentationViewId" : recordTypeId + "MenuPGroup",
 				"listPresentationViewId" : recordTypeId + "ListPGroup",
 				"search" : recordTypeId + "Search",
 				"userSuppliedId" : "true",
-				"abstract" : "false",
-				"parentId" : "text",
 				"actionLinks" : {
 					"search" : {
 						"requestMethod" : "GET",

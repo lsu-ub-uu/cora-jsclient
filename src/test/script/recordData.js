@@ -41,12 +41,7 @@ var CORATEST = (function(coraTest) {
 						}
 					},
 					"name": "metadataId"
-				},
-				{
-					"name": "abstract",
-					"value": "false"
-				},
-				{
+				},{
 					"children": [
 						{
 							"name": "id",
@@ -1202,9 +1197,6 @@ var CORATEST = (function(coraTest) {
 				"name" : "childReference"
 			} ],
 			"name" : "childReferences"
-		}, {
-			"name" : "refParentId",
-			"value" : "textPartAlternativeGroup"
 		}, {
 			"children" : [ {
 				"name" : "ref",

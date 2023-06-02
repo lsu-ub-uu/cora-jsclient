@@ -74,42 +74,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationVarFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationVarNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationVarFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -145,9 +109,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "presentationVarViewSelfPGroup"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 },
                   {
                     "name": "groupOfRecordType",
@@ -259,42 +220,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -330,9 +255,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "metadataViewSelfPGroup"
-                }, {
-                    "name": "abstract",
-                    "value": "true"
                 } ,{
                     "name": "groupOfRecordType",
                     "value": "metadata",
@@ -431,42 +353,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationSurroundingContainerFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationSurroundingContainerNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationSurroundingContainerFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -502,9 +388,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "presentationSurroundingContainerViewSelfPGroup"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -611,42 +494,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textSystemOneFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textSystemOneNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textSystemOneFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -679,9 +526,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -753,54 +597,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationViewId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "recordTypeViewPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "recordTypeFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "recordTypeNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "recordTypeFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -833,9 +629,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 },{
                     "name": "groupOfRecordType",
                     "value": "metadata",
@@ -934,42 +727,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataGroupFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataGroupNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataGroupFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1002,9 +759,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1115,42 +869,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionItemFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionItemNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionItemFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1183,9 +901,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1296,42 +1011,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1363,9 +1042,6 @@ var CORATEST = (function (coraTest) {
                     "value": "presentationFormSearchPGroup"
                 }, {
                     "name": "userSuppliedId",
-                    "value": "true"
-                }, {
-                    "name": "abstract",
                     "value": "true"
                 },{
                     "name": "groupOfRecordType",
@@ -1465,42 +1141,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataRecordLinkFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataRecordLinkNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataRecordLinkFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1536,9 +1176,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "permissionKey",
                     "value": "RECORDTYPE_METADATARECORDLINK"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1649,42 +1286,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataTextVariableFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataTextVariableNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataTextVariableFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1717,9 +1318,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1830,42 +1428,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationRepeatingContainerFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationRepeatingContainerNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationRepeatingContainerFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -1898,9 +1460,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2011,42 +1570,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionVariableFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionVariableNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataCollectionVariableFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -2079,9 +1602,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2192,42 +1712,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "textFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -2263,9 +1747,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "textViewSelfPGroup"
-                }, {
-                    "name": "abstract",
-                    "value": "true"
                 },{
                     "name": "groupOfRecordType",
                     "value": "metadata",
@@ -2372,42 +1853,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationGroupFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationGroupNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "presentationGroupFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -2440,9 +1885,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2541,54 +1983,6 @@ var CORATEST = (function (coraTest) {
                         }
                     ]
                 }, {
-                    "name": "presentationViewId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataItemCollectionViewPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "presentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataItemCollectionFormPGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newMetadataId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "metadataGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataItemCollectionNewGroup"
-                        }
-                    ]
-                }, {
-                    "name": "newPresentationFormId",
-                    "children": [
-                        {
-                            "name": "linkedRecordType",
-                            "value": "presentationGroup"
-                        },
-                        {
-                            "name": "linkedRecordId",
-                            "value": "metadataItemCollectionFormNewPGroup"
-                        }
-                    ]
-                }, {
                     "name": "menuPresentationViewId",
                     "children": [
                         {
@@ -2621,9 +2015,6 @@ var CORATEST = (function (coraTest) {
                 }, {
                     "name": "userSuppliedId",
                     "value": "true"
-                }, {
-                    "name": "abstract",
-                    "value": "false"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2700,23 +2091,6 @@ var CORATEST = (function (coraTest) {
                         ]
                     },
                     {
-                        "name": "abstract",
-                        "value": "false"
-                    },
-                    {
-                        "name": "parentId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "recordType"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "binary"
-                            }
-                        ]
-                    },
-                    {
                         "children": [
                             {
                                 "name": "id",
@@ -2773,45 +2147,6 @@ var CORATEST = (function (coraTest) {
                             {
                                 "name": "linkedRecordId",
                                 "value": "imageViewPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "presentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "imageFormPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newMetadataId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "metadataGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "imageNewGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newPresentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "imageFormNewPGroup"
                             }
                         ]
                     },
@@ -2924,10 +2259,6 @@ var CORATEST = (function (coraTest) {
                         ]
                     },
                     {
-                        "name": "abstract",
-                        "value": "true"
-                    },
-                    {
                         "children": [
                             {
                                 "name": "id",
@@ -2984,45 +2315,6 @@ var CORATEST = (function (coraTest) {
                             {
                                 "name": "linkedRecordId",
                                 "value": "binaryViewPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "presentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "binaryFormPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newMetadataId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "metadataGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "binaryNewGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newPresentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "binaryFormNewPGroup"
                             }
                         ]
                     },
@@ -3134,10 +2426,6 @@ var CORATEST = (function (coraTest) {
                         ]
                     },
                     {
-                        "name": "abstract",
-                        "value": "false"
-                    },
-                    {
                         "name": "parentId",
                         "children": [
                             {
@@ -3196,45 +2484,6 @@ var CORATEST = (function (coraTest) {
                             }
                         ],
                         "name": "recordInfo"
-                    },
-                    {
-                        "name": "presentationViewId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "genericBinaryViewPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "presentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "genericBinaryFormPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newMetadataId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "metadataGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "genericBinaryNewGroup"
-                            }
-                        ]
                     },
                     {
                         "name": "newPresentationFormId",
@@ -3357,10 +2606,6 @@ var CORATEST = (function (coraTest) {
                         ]
                     },
                     {
-                        "name": "abstract",
-                        "value": "false"
-                    },
-                    {
                         "name": "parentId",
                         "children": [
                             {
@@ -3430,45 +2675,6 @@ var CORATEST = (function (coraTest) {
                             {
                                 "name": "linkedRecordId",
                                 "value": "noDataDividerBinaryViewPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "presentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "noDataDividerBinaryFormPGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newMetadataId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "metadataGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "noDataDividerBinaryNewGroup"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "newPresentationFormId",
-                        "children": [
-                            {
-                                "name": "linkedRecordType",
-                                "value": "presentationGroup"
-                            },
-                            {
-                                "name": "linkedRecordId",
-                                "value": "noDataDividerBinaryFormNewPGroup"
                             }
                         ]
                     },

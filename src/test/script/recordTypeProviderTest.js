@@ -210,10 +210,6 @@ QUnit.test("getRecordTypeById", function(assert) {
 								"name": "metadataId"
 							},
 							{
-								"name": "abstract",
-								"value": "false"
-							},
-							{
 								"children": [
 									{
 										"name": "id",

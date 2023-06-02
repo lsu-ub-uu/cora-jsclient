@@ -66,15 +66,10 @@ var CORATEST = (function(coraTest) {
 				return {
 					"metadataId" : "metadataGroup",
 					"presentationViewId" : "metadataViewPGroup",
-					"presentationFormId" : "metadataFormPGroup",
-					"newMetadataId" : "metadataNewGroup",
-					"newPresentationFormId" : "metadataFormNewPGroup",
 					"menuPresentationViewId" : "metadataMenuPGroup",
 					"listPresentationViewId" : "metadataListPGroup",
 					"search" : "metadataSearch",
 					"userSuppliedId" : "false",
-					"abstract" : "true",
-					"parentId" : undefined,
 					"actionLinks" : undefined
 				};
 			}

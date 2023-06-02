@@ -313,9 +313,6 @@ QUnit.test("getMetadataById", function(assert) {
 			} ],
 			"name" : "childReferences"
 		}, {
-			"name" : "refParentId",
-			"value" : "textPartAlternativeGroup"
-		}, {
 			"children" : [ {
 				"name" : "ref",
 				"value" : "textPartTypeAlternativeCollectionVar"
@@ -393,9 +390,6 @@ QUnit.test("getMetadataRecordById", function(assert) {
 				"name" : "childReference"
 			} ],
 			"name" : "childReferences"
-		}, {
-			"name" : "refParentId",
-			"value" : "textPartAlternativeGroup"
 		}, {
 			"children" : [ {
 				"name" : "ref",

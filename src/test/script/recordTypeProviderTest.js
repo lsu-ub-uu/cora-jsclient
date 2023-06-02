@@ -932,14 +932,10 @@ QUnit.test("getMetadataByRecordTypeIdAllButValidationTypeInfo", function(assert)
 	let expected = {
   "metadataId": "textGroup",
   "presentationViewId": "textOutputPGroup",
-  "presentationFormId": "textPGroup",
-  "newMetadataId": "textNewGroup",
-  "newPresentationFormId": "textNewPGroup",
   "menuPresentationViewId": "textMenuPGroup",
   "listPresentationViewId": "textListPGroup",
   "search": "textSearch",
   "userSuppliedId": "true",
-  "abstract": "false",
   "actionLinks": {
     "search": {
       "requestMethod": "GET",

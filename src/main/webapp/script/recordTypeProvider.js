@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Olov McKie
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -110,15 +110,10 @@ var CORA = (function(cora) {
 			let metadata = {
 				"metadataId": getLinkValueFromRecord("metadataId", cRecord),
 				"presentationViewId": getLinkValueFromRecord("presentationViewId", cRecord),
-				"presentationFormId": getLinkValueFromRecord("presentationFormId", cRecord),
-				"newMetadataId": getLinkValueFromRecord("newMetadataId", cRecord),
-				"newPresentationFormId": getLinkValueFromRecord("newPresentationFormId", cRecord),
 				"menuPresentationViewId": getLinkValueFromRecord("menuPresentationViewId", cRecord),
 				"listPresentationViewId": getLinkValueFromRecord("listPresentationViewId", cRecord),
 				"search": getLinkValueFromRecord("search", cRecord),
 				"userSuppliedId": cRecord.getFirstAtomicValueByNameInData("userSuppliedId"),
-				"abstract": cRecord.getFirstAtomicValueByNameInData("abstract"),
-				"parentId": getLinkValueFromRecord("parentId", cRecord),
 				"actionLinks": record.actionLinks
 			};
 			metadata.validationTypes = getValidationTypesForRecordTypeId(recordId);

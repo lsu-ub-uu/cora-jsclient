@@ -51,12 +51,23 @@ var CORA = (function(cora) {
 				repeatId: spec.repeatId,
 				nameInData: cMetadataElement.getFirstAtomicValueByNameInData("nameInData")
 			};
+			if (hasAttributes()) {
+				const collectedAttributes = collectAttributesForMetadataId(metadataId);
+				addMessage.attributes = collectedAttributes;
+			}
 			pubSub.publish("add", addMessage);
 			if (hasAttributes()) {
 				addAttributes();
 			}
 		};
-
+		
+		const collectAttributesForMetadataId = function(metadataIdIn) {
+			const metadataHelper = CORA.metadataHelper({
+				metadataProvider: dependencies.metadataProvider
+			});
+			return metadataHelper.collectAttributesAsObjectForMetadataId(metadataIdIn);
+		};
+		
 		const hasAttributes = function() {
 			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};

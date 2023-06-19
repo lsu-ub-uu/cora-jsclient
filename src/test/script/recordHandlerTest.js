@@ -586,7 +586,7 @@ QUnit.test("testNoUpdateButtonAndEditFormWhenNoUpdateLink", function(assert) {
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textSystemOneGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textMenuPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textSystemOneGroup");
@@ -698,7 +698,7 @@ QUnit.test("testNoDeleteButtonWhenNoDeleteLink", function(assert) {
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textSystemOneGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textSystemOneGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textSystemOneGroup");

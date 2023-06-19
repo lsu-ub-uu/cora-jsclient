@@ -397,13 +397,13 @@ var CORA = (function(cora) {
 			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		}
 
-		const createAndAddViewsForExisting = function(recordGuiIn, metadataId, definitionId) {
+		const createAndAddViewsForExisting = function(recordGuiIn, updateDefinitionId, definitionId) {
 			if ("true" !== spec.partOfList) {
 				if (recordHasUpdateLink()) {
-					addEditPresentationToView(recordGuiIn, metadataId);
+					addEditPresentationToView(recordGuiIn, updateDefinitionId);
 				}
-				addViewPresentationToView(recordGuiIn, metadataId);
-				addMenuPresentationToView(recordGuiIn, metadataId);
+				addViewPresentationToView(recordGuiIn, definitionId);
+				addMenuPresentationToView(recordGuiIn, updateDefinitionId);
 			} else {
 				addListPresentationToView(recordGuiIn, definitionId);
 			}

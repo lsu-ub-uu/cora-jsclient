@@ -119,7 +119,8 @@ QUnit.test("testMessagesTextVariableWithAttributeNoData", function(assert) {
 
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"groupIdOneTextChildOneAttribute","path":[]' +
-		',"nameInData":"groupIdOneTextChildOneAttribute"}}');
+		',"nameInData":"groupIdOneTextChildOneAttribute"'+
+		',"attributes":{"anAttribute":["aFinalValue"]}}}');
 
 	let message1 = {
 		type: "addAttribute",
@@ -161,7 +162,8 @@ QUnit.test("testMessagesTextVariableWithTwoAttributeNoData", function(assert) {
 
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"groupIdOneTextChildTwoAttributes","path":[]' +
-		',"nameInData":"groupIdOneTextChildTwoAttributes"}}');
+		',"nameInData":"groupIdOneTextChildTwoAttributes"'+
+		',"attributes":{"anAttribute":["aFinalValue"],"anOtherAttribute":["aOtherFinalValue"]}}}');
 
 	let addAttribute1 = {
 		type: "addAttribute",
@@ -229,7 +231,8 @@ QUnit.test("testMessagesTextVariableWithAttributeChoiceNoData", function(assert)
 
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"groupIdOneTextChildOneAttributeChoice","path":[]' +
-		',"nameInData":"groupIdOneTextChildOneAttributeChoice"}}');
+		',"nameInData":"groupIdOneTextChildOneAttributeChoice",'+
+		'"attributes":{"anAttributeChoice":["aFinalValue","aOtherFinalValue"]}}}');
 
 	let message1 = {
 		type: "addAttribute",
@@ -259,7 +262,8 @@ QUnit.test("testMessagesTextVariableWithAttributeChoiceWithData", function(asser
 
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"groupIdOneTextChildOneAttributeChoice","path":[]' +
-		',"nameInData":"groupIdOneTextChildOneAttributeChoice"}}');
+		',"nameInData":"groupIdOneTextChildOneAttributeChoice",'+
+		'"attributes":{"anAttributeChoice":["aFinalValue","aOtherFinalValue"]}}}');
 
 	let message1 = {
 		type: "addAttribute",

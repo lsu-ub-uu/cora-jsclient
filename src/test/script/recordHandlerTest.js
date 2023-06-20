@@ -589,7 +589,7 @@ QUnit.test("testNoUpdateButtonAndEditFormWhenNoUpdateLink", function(assert) {
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textSystemOneGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), undefined);
@@ -701,7 +701,7 @@ QUnit.test("testNoDeleteButtonWhenNoDeleteLink", function(assert) {
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textSystemOneGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textGroup");
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	let updateButtonSpec = recordHandlerViewSpy.getAddedButton(0);
@@ -746,10 +746,10 @@ QUnit.test("initCheckRightGuiCreatedNew", function(assert) {
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
@@ -774,10 +774,10 @@ QUnit.test("initCheckRightGuiCreatedNewWithData", function(assert) {
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "recordTypeViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "recordTypeMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "recordTypeGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
@@ -833,10 +833,10 @@ QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationType", function(asser
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "coraTextNewGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "coraTextNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "coraTextNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
@@ -870,10 +870,10 @@ QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationTypeOtherButton", fun
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textNewGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textViewPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), "textMenuPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), "textGroup");
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(3), undefined);
 	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(3), undefined);
@@ -1336,7 +1336,7 @@ QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 
 	assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeListPGroup");
-	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeNewGroup");
+	assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(managedGuiItem.getAddedListPresentation(0), factoredRecordGui

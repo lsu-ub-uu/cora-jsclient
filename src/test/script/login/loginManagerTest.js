@@ -210,6 +210,12 @@ QUnit
 					appToken: "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
 				},
 				{
+					text: "alvin user",
+					type: "appTokenLogin",
+					userId: "coraUser:4412566252284358",
+					appToken: "935ae709-4056-4b3d-85d2-469b304acfae"
+				},
+				{
 					text: "appToken as 161616 diva",
 					type: "appTokenLogin",
 					userId: "161616",
@@ -240,12 +246,6 @@ QUnit
 					type: "appTokenLogin",
 					userId: "coraUser:491201365536105",
 					appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
-				},
-				{
-					text: "alvin user",
-					type: "appTokenLogin",
-					userId: "coraUser:4412566252284358",
-					appToken: "935ae709-4056-4b3d-85d2-469b304acfae"
 				},
 				{
 					text: "translated_uuLoginUnitText",

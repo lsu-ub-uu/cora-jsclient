@@ -33,6 +33,9 @@ var CORA = (function(cora) {
 		let metadataForRecordType;
 		let recordTypeId;
 		let validationTypeId;
+		let createDefinitionId;
+		let updateDefinitionId;
+		let	definitionId;
 		let actionLinks;
 
 		const start = function() {
@@ -149,8 +152,8 @@ var CORA = (function(cora) {
 		
 		const tryToCreateGuiForNewWithKnownValidationType = function(copiedData) {
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
-			let createDefinitionId = validationType.createDefinitionId;
-			let definitionId = metadataForRecordType.metadataId;
+			createDefinitionId = validationType.createDefinitionId;
+			definitionId = metadataForRecordType.metadataId;
 
 			let permissions = createEmptyPermissions();
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
@@ -373,9 +376,9 @@ var CORA = (function(cora) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 			validationTypeId = getValidationTypeIdFromData(cData);
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
-			let updateDefinitionId = validationType.updateDefinitionId;
+			updateDefinitionId = validationType.updateDefinitionId;
 
-			let definitionId = metadataForRecordType.metadataId;
+			definitionId = metadataForRecordType.metadataId;
 			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
 				permissions);
 			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
@@ -403,6 +406,8 @@ var CORA = (function(cora) {
 					addEditPresentationToView(recordGuiIn, updateDefinitionId);
 				}
 				addViewPresentationToView(recordGuiIn, definitionId);
+//				addViewPresentationToView(recordGuiIn, updateDefinitionId);
+//TODO: should be definitionId
 				addMenuPresentationToView(recordGuiIn, updateDefinitionId);
 			} else {
 				addListPresentationToView(recordGuiIn, definitionId);
@@ -610,6 +615,23 @@ var CORA = (function(cora) {
 		};
 
 		const reloadForMetadataChanges = function() {
+			
+			//
+//			let cData = CORA.coraData(data);
+//			let dataDivider = getDataDividerFromData(cData);
+//			recordTypeId = getRecordTypeIdFromData(cData);
+//			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
+//			validationTypeId = getValidationTypeIdFromData(cData);
+//			let validationType = metadataForRecordType.validationTypes[validationTypeId];
+//			let updateDefinitionId = validationType.updateDefinitionId;
+//
+//			let definitionId = metadataForRecordType.metadataId;
+//			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
+//				permissions);
+//			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
+//			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
+			//
+			
 			recordHandlerView.clearDataViews();
 			initComplete = false;
 			let data = recordGui.dataHolder.getDataWithActionLinks();
@@ -621,9 +643,11 @@ var CORA = (function(cora) {
 			recordGui = createRecordGui(metadataId, data, dataDivider,
 				recordPartPermissionCalculator);
 			if ("true" === createNewRecord) {
-				createAndAddViewsForNew(recordGui, metadataId);
+//				createAndAddViewsForNew(recordGui, metadataId);
+				createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);
 			} else {
-				createAndAddViewsForExisting(recordGui, metadataId);
+//				createAndAddViewsForExisting(recordGui, metadataId);
+				createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			}
 			recordGui.initMetadataControllerStartingGui();
 		};

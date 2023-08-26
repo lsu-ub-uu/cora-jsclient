@@ -321,11 +321,13 @@ textarea {
 .workView .pRecordLink .linkedRecordTypeView {
 	display: inline-block;
 	width: auto;
+	min-width: 5rem;
 }
 
 .workView .pRecordLink .linkedRecordIdView {
 	display: inline-block;
 	width: auto;
+	min-width: 20rem;
 }
 
 .workView .pRecordLink.searchActive {

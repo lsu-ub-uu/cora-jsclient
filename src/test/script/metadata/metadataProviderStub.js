@@ -12082,4 +12082,17 @@ function MetadataProviderStub() {
 			}]
 		};
 	};
+	
+	this.getMetadataRecordById = function(id){
+		return {
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://fake.from.metadataproviderstub/rest/record/sometype/" + id,
+					accept: "application/vnd.uub.record+json"
+				}
+			}
+		};
+	};
 }

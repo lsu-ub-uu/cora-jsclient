@@ -69,11 +69,13 @@ var CORA = (function(cora) {
 				"info": {
 					"text": text,
 					"defText": defText,
-					"technicalInfo": ["textId: " + textId,
-					"defTextId: " + defTextId,
-					"metadataId: " + metadataId,
-					"nameInData: " + nameInData,
-					"linkedRecordType: " + linkedRecordType]
+					"technicalInfo": [
+						"textId: " + textId,
+						"defTextId: " + defTextId,
+						"metadataId: " + metadataId,
+						"nameInData: " + nameInData,
+						"linkedRecordType: " + linkedRecordType
+					]
 				},
 				"pRecordLink": out
 			};

@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		let cPresentation = spec.cPresentation;
+		let presentationId;
 		let metadataId = spec.metadataIdUsedInData;
 		let state = "ok";
 		let previousValue = "";
@@ -64,7 +65,7 @@ var CORA = (function(cora) {
 		const initializePNumVarViewSpec = function() {
 			let textProvider = dependencies.textProvider;
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
@@ -90,7 +91,8 @@ var CORA = (function(cora) {
 					}, {
 						"text": "nameInData: " + nameInData
 					}, {
-						"text": "presentationId: " + presentationId
+						"text": "presentationId: " + presentationId,
+						onclickMethod: openPresentationIdRecord
 					}, {
 						"text": "min: " + min
 					}, {
@@ -274,6 +276,11 @@ var CORA = (function(cora) {
 				.getFirstChildByNameInData("presentationOf").actionLinks.read);
 		}
 
+		const openPresentationIdRecord = function(event) {
+			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
+			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
+		};
+
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -301,6 +308,7 @@ var CORA = (function(cora) {
 			openTextIdRecord: openTextIdRecord,
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
+			openPresentationIdRecord: openPresentationIdRecord,
 			disableNumVar: disableNumVar
 		});
 	};

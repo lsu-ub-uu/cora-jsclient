@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -178,7 +178,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	}, {
 		"text": "nameInData: numVariableId"
 	}, {
-		"text": "presentationId: pNumVarNumVariableId"
+		"text": "presentationId: pNumVarNumVariableId",
+		onclickMethod: attachedPNumVar.pNumVar.openPresentationIdRecord
 	}, {
 		"text": "min: 0",
 	}, {
@@ -425,7 +426,8 @@ QUnit.test("testInitNumberOutput", function(assert) {
 	}, {
 		"text": "nameInData: numVariableId"
 	}, {
-		"text": "presentationId: pNumVarNumVariableIdOutput"
+		"text": "presentationId: pNumVarNumVariableIdOutput",
+		onclickMethod: attachedPNumVar.pNumVar.openPresentationIdRecord
 	}, {
 		"text": "min: 0"
 	}, {
@@ -543,6 +545,33 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 
 	let event2 = document.createEvent('Event');
 	event.ctrlKey = false;
+	attachedPNumVar.pNumVar.openMetadataIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testOpenPresentationIdRecord", function(assert) {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	attachedPNumVar.pNumVar.openPresentationIdRecord(event);
+
+	let jsClient = attachedPNumVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		readLink: {
+			requestMethod: "GET",
+			rel: "read",
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+				+ "pNumVarNumVariableId",
+			accept: "application/vnd.uub.record+json"
+		},
+		loadInBackground: "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
 	attachedPNumVar.pNumVar.openMetadataIdRecord(event2);
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });

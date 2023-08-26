@@ -70,7 +70,6 @@ var CORA = (function(cora) {
 			data.forEach(function(recordContainer) {
 				let recordData = recordContainer.record.data;
 				let recordId = getIdFromRecordData(recordData);
-//				metadata[recordId] = recordData;
 				metadata[recordId] = recordContainer.record;
 			});
 		};

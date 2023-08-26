@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -178,7 +178,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	}, {
 		text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		text: "presentationId: pVarTextVariableId"
+		text: "presentationId: pVarTextVariableId",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -345,7 +346,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	}, {
 		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: textVariableIdTextAreaPVar"
+		"text": "presentationId: textVariableIdTextAreaPVar",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -385,7 +387,8 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	}, {
 		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: textVariableIdShowTextAreaFalsePVar"
+		"text": "presentationId: textVariableIdShowTextAreaFalsePVar",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -430,7 +433,8 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	}, {
 		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: pVarTextVariableId"
+		"text": "presentationId: pVarTextVariableId",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -570,7 +574,8 @@ QUnit.test("testInitTextOutput", function(assert) {
 	}, {
 		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: pVarTextVariableIdOutput"
+		"text": "presentationId: pVarTextVariableIdOutput",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -611,7 +616,8 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	}, {
 		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	}, {
-		"text": "presentationId: pVarTextVariableId"
+		"text": "presentationId: pVarTextVariableId",
+		onclickMethod: attachedPVar.pVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -725,6 +731,33 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 			"accept": "application/vnd.uub.record+json"
 		},
 		"loadInBackground": "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	attachedPVar.pVar.openMetadataIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testOpenPresentationIdRecord", function(assert) {
+	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	attachedPVar.pVar.openPresentationIdRecord(event);
+
+	let jsClient = attachedPVar.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		readLink: {
+			requestMethod: "GET",
+			rel: "read",
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+				+ "pVarTextVariableId",
+			accept: "application/vnd.uub.record+json"
+		},
+		loadInBackground: "false"
 	};
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");

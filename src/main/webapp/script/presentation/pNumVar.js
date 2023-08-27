@@ -101,6 +101,8 @@ var CORA = (function(cora) {
 						"text": "warningMin: " + warningMin
 					}, {
 						"text": "warningMax: " + warningMax
+					}, {
+						"text": "numberOfDecimals: " + numberOfDecimals
 					}]
 				},
 				"onblurFunction": onBlur,
@@ -164,37 +166,8 @@ var CORA = (function(cora) {
 			return CORA.coraData(metadataProvider.getMetadataById(metadataId));
 		};
 
-		const getText = function() {
-			return text;
-		};
-
-		const getDefText = function() {
-			return defText;
-		};
-
-		const getMin = function() {
-			return min;
-		};
-
 		const getValueByNameInData = function(nameInData) {
 			return cMetadataElement.getFirstAtomicValueByNameInData(nameInData);
-		};
-
-		const getMax = function() {
-			return max;
-		};
-
-		const getWarningMin = function() {
-			return warningMin;
-		};
-
-		const getWarningMax = function() {
-			return warningMax;
-		};
-
-		const getNumberOfDecimals = function() {
-			return numberOfDecimals;
-
 		};
 
 		const onBlur = function(valueFromView) {
@@ -294,13 +267,6 @@ var CORA = (function(cora) {
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,
-			getText: getText,
-			getDefText: getDefText,
-			getMin: getMin,
-			getMax: getMax,
-			getWarningMin: getWarningMin,
-			getWarningMax: getWarningMax,
-			getNumberOfDecimals: getNumberOfDecimals,
 			getState: getState,
 			onBlur: onBlur,
 			onkeyup: onkeyup,

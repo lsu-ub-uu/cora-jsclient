@@ -84,17 +84,6 @@ var CORATEST = (function(coraTest) {
 
 	};
 
-	coraTest.testNumVariableMetadata = function(attachedPNumVar, assert) {
-		let pNumVar = attachedPNumVar.pNumVar;
-		assert.strictEqual(pNumVar.getText(), "numVariableIdText");
-		assert.strictEqual(pNumVar.getDefText(), "numVariableIdDefText");
-		assert.strictEqual(pNumVar.getMin(), "0");
-		assert.strictEqual(pNumVar.getMax(), "10");
-		assert.strictEqual(pNumVar.getWarningMin(), "2");
-		assert.strictEqual(pNumVar.getWarningMax(), "8");
-		assert.strictEqual(pNumVar.getNumberOfDecimals(), "0");
-	};
-
 	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
 		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);
@@ -143,7 +132,6 @@ QUnit.test("testInitText", function(assert) {
 	assert.strictEqual(attachedPNumVar.pNumVar.type, "pNumVar");
 
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, path, path);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
 
@@ -188,6 +176,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		"text": "warningMin: 2",
 	}, {
 		"text": "warningMax: 8"
+	},{
+		"text": "numberOfDecimals: 0"
 	});
 
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
@@ -225,7 +215,6 @@ QUnit.test("testInitNumWithFirstLevelPath", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPath, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, firstLevelNumPath, topLevelPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testNumWithFirstLevelPathWithRepeatId", function(assert) {
@@ -234,7 +223,6 @@ QUnit.test("testNumWithFirstLevelPathWithRepeatId", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(firstLevelNumPathWithRepeatId, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, firstLevelNumPathWithRepeatId, expectedPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testNumWithTwoLevelPath", function(assert) {
@@ -243,7 +231,6 @@ QUnit.test("testNumWithTwoLevelPath", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithTwoLevels, expectedPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
@@ -252,7 +239,6 @@ QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithTwoLevels, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithTwoLevels, expectedPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
@@ -261,7 +247,6 @@ QUnit.test("testInitNumWithThreeLevelPath", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithThreeLevels, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithThreeLevels, expectedPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
@@ -270,7 +255,6 @@ QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(numPathWithAttribute, "numVariableId",
 		"pNumVarNumVariableId");
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, numPathWithAttribute, expectedPath);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testSetValueInput", function(assert) {
@@ -436,11 +420,12 @@ QUnit.test("testInitNumberOutput", function(assert) {
 		"text": "warningMin: 2",
 	}, {
 		"text": "warningMax: 8"
+	},{
+		"text": "numberOfDecimals: 0"
 	});
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
 
 	CORATEST.testNumVariableSubscription(attachedPNumVar, assert, path, path);
-	CORATEST.testNumVariableMetadata(attachedPNumVar, assert);
 });
 
 QUnit.test("testSetValueTextOutput", function(assert) {

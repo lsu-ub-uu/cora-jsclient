@@ -443,6 +443,14 @@ position: relative;
 	top: 4.5rem;
 }
 
+.infoView .defTextView {
+	padding-top: 0.1rem;
+}
+
+.infoView .defTextView + .technicalView {
+	padding-top: 0.2rem;
+}
+
 .infoView .clickable {
 	cursor: pointer;
 }

@@ -265,7 +265,7 @@ img {
 	transition: background-color 0.5s linear;
 }
 
-.pVar:hover, pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
+.pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
 	background-color: rgba(0, 129, 198, 0.1);
@@ -290,11 +290,14 @@ textarea {
 	flex: 1;
 }
 
- .pGroup,  .pVar,  .pCollVar,  .pSurroundingContainer {
+ .pGroup, .pMap, .pVar,  .pCollVar, .pNumVar,  .pSurroundingContainer {
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding-right: 16px;
+}
+.pMap {
+	padding-right: 0px;
 }
 
 .pRecordLink {
@@ -321,7 +324,7 @@ textarea {
 .workView .pRecordLink .linkedRecordTypeView {
 	display: inline-block;
 	width: auto;
-	min-width: 5rem;
+	min-width: 6rem;
 }
 
 .workView .pRecordLink .linkedRecordIdView {

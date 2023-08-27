@@ -21,9 +21,11 @@
 }
 
 .workArea .workView > .workItem {
+	padding-right: 1rem;
 	justify-content: space-between;
 }
 .topBar {
+	border: none;
 	order: 0;
 }
 .holder.tool {
@@ -120,9 +122,6 @@ input + input {
 	background: #2a6881;
 	box-shadow: inset 0 2px 2px 0 rgba(255,255,255,0.28);
 }
-.topBar {
-	border: none;
-}
 .editView .repeatingElement:last-child {
 	margin-bottom: 0px;
 }
@@ -137,8 +136,5 @@ input + input {
 .workView .presentation > .pGroup > .pChildRefHandler,
 .workView .presentation > .pGroup > .pNonRepeatingChildRefHandler,
  .workView .pGroup > .pSurroundingContainer, .workView .pGroup > .text {
-	flex: 0 1 calc(100% - 0px);
-}
-.workArea .workView > .workItem {
-	padding-right: 1rem;
+/* 	flex: 0 1 calc(100% - 0px); */
 }

@@ -2764,27 +2764,6 @@ function MetadataProviderStub() {
 						"value": "myLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myLink"
-				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
-					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkText"
-					}],
-					"name": "textId"
-				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
-					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkDefText"
-					}],
-					"name": "defTextId"
-				}, {
 					"children": [{
 						"name": "linkedRecordType",
 						"value": "recordType"
@@ -2793,7 +2772,7 @@ function MetadataProviderStub() {
 						"value": "metadataTextVariable"
 					}],
 					"name": "linkedRecordType"
-				}]
+				}].concat(createNameInDataLinkedTextIdDefTextId2(idToGet))
 			};
 		}
 		if (idToGet === "myAbstractLink") {
@@ -8725,12 +8704,22 @@ function MetadataProviderStub() {
 							"name": "linkedRecordId",
 							"value": "myLink"
 						}],
-						"name": "presentationOf"
+						"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadata/"
+										+ "myLink",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
 					}, {
 						"name": "mode",
 						"value": "input"
 					}]
 				};
+//				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData
 			case "myLinkNoPresentationOfLinkedRecordWithFinalValuePLink":
 				return {
 					"name": "presentation",

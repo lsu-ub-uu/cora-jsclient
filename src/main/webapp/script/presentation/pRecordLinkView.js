@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,20 +19,20 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRecordLinkView = function(dependencies, spec) {
-		var out;
-		var view;
-		var childrenView;
-		var childrenViewInitialDisplay = "";
-		var baseClassName = "pRecordLink";
-		var info;
-		var openLinkedRecordButton;
-		var showSearchButton;
-		var clearLinkedRecordIdButton;
-		var currentLinkedPresentation;
-		var addedSearchHandlerView;
-		var searchHandlerShown;
-		var buttonView;
-		function start() {
+		let out;
+		let view;
+		let childrenView;
+		let childrenViewInitialDisplay = "";
+		let baseClassName = "pRecordLink";
+		let info;
+		let openLinkedRecordButton;
+		let showSearchButton;
+		let clearLinkedRecordIdButton;
+		let currentLinkedPresentation;
+		let addedSearchHandlerView;
+		let searchHandlerShown;
+		let buttonView;
+		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			buttonView = CORA.gui.createSpanWithClassName("buttonView");
 			openLinkedRecordButton = createOpenLinkedRecordButton();
@@ -41,83 +41,92 @@ var CORA = (function(cora) {
 			info = createInfo();
 			buttonView.appendChild(info.getButton());
 			view.appendChild(buttonView);
-		}
+		};
 
-		function createOpenLinkedRecordButton() {
+		const createOpenLinkedRecordButton = function() {
 			return createButtonWithClassNameAndOnclickMethod("openLinkedRecordButton",
 				openLinkedRecord);
-		}
+		};
 
-		function createButtonWithClassNameAndOnclickMethod(className, onclickMethod) {
-			var buttonSpec = {
+		const createButtonWithClassNameAndOnclickMethod = function(className, onclickMethod) {
+			let buttonSpec = {
 				"className": "iconButton " + className,
 				action: {
 					method: onclickMethod
 				}
 			};
 			return CORA.gui.button(buttonSpec);
-		}
+		};
 
-		function createShowSearchButton() {
+		const createShowSearchButton = function() {
 			return createButtonWithClassNameAndOnclickMethod("showSearchButton",
 				toggleSearchHandlerView);
-		}
+		};
 
-		function openLinkedRecord(event) {
-			var loadInBackground = "false";
+		const openLinkedRecord = function(event) {
+			let loadInBackground = "false";
 			if (event.ctrlKey) {
 				loadInBackground = "true";
 			}
 			spec.pRecordLink.openLinkedRecord({
 				"loadInBackground": loadInBackground
 			});
-		}
+		};
 
-		function createChildrenView() {
+		const createChildrenView = function() {
 			childrenView = CORA.gui.createSpanWithClassName("childrenView");
 			view.appendChild(childrenView);
-		}
+		};
 
-		function createInfo() {
-			var infoSpec = {
-				"afterLevelChange": updateClassName,
-				"level1": [{
-					"className": "textView",
-					"text": spec.info.text
+		const createInfo = function() {
+			let infoSpec = {
+				afterLevelChange: updateClassName,
+				level1: [{
+					className: "textView",
+					text: spec.info.text
 				}, {
-					"className": "defTextView",
-					"text": spec.info.defText
+					className: "defTextView",
+					text: spec.info.defText
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
-
-			var newInfo = dependencies.infoFactory.factor(infoSpec);
 			infoSpec.insertBefore = childrenView;
-			return newInfo;
-		}
 
-		function possiblyAddLevel2Info(infoSpec) {
+			return dependencies.infoFactory.factor(infoSpec);
+		};
+
+		const possiblyAddLevel2Info = function(infoSpec) {
 			if (specInfoHasTechnicalInfo()) {
 				addLevelTechnicalInfoAsLevel2(infoSpec);
 			}
-		}
+		};
 
-		function specInfoHasTechnicalInfo() {
+		const specInfoHasTechnicalInfo = function() {
 			return spec.info.technicalInfo;
-		}
+		};
 
-		function addLevelTechnicalInfoAsLevel2(infoSpec) {
+		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
 			infoSpec.level2 = [];
-			spec.info.technicalInfo.forEach(function(text) {
-				infoSpec.level2.push({
-					"className": "technicalView",
-					"text": text
-				});
+			spec.info.technicalInfo.forEach(function(techInfo) {
+				infoSpec.level2.push(createTechInfoPart(techInfo));
 			});
-		}
+		};
 
-		function updateClassName() {
-			var className = baseClassName;
+		const createTechInfoPart = function(techInfo) {
+			let techInfoPart = {
+				className: "technicalView",
+				text: techInfo.text
+			};
+
+			if (techInfo.onclickMethod !== undefined) {
+				techInfoPart.onclickMethod = techInfo.onclickMethod;
+			}
+			return techInfoPart;
+		};
+
+
+		const updateClassName = function() {
+			let className = baseClassName;
 			if (infoIsShown()) {
 				className += " infoActive";
 			}
@@ -126,124 +135,124 @@ var CORA = (function(cora) {
 			}
 
 			view.className = className;
-		}
+		};
 
-		function infoIsShown() {
+		const infoIsShown = function() {
 			return info.getInfoLevel() !== 0;
 		}
 		
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function addChild(childToAdd) {
+		const addChild = function(childToAdd) {
 			childrenView.appendChild(childToAdd);
-		}
+		};
 
-		function hideChildren() {
+		const hideChildren = function() {
 			if (childrenView.style.display !== "none") {
 				childrenViewInitialDisplay = childrenView.style.display;
 			}
 			childrenView.style.display = "none";
-		}
+		};
 
-		function showChildren() {
+		const showChildren = function() {
 			childrenView.style.display = childrenViewInitialDisplay;
-		}
+		};
 
-		function addLinkedPresentation(linkedPresentationToAdd) {
+		const addLinkedPresentation = function(linkedPresentationToAdd) {
 			removeLinkedPresentation();
 			view.appendChild(linkedPresentationToAdd);
 			currentLinkedPresentation = linkedPresentationToAdd;
-		}
+		};
 
-		function removeLinkedPresentation() {
+		const removeLinkedPresentation = function() {
 			if (currentLinkedPresentation !== undefined) {
 				view.removeChild(currentLinkedPresentation);
 				currentLinkedPresentation = undefined;
 			}
-		}
+		};
 
-		function showOpenLinkedRecordButton() {
+		const showOpenLinkedRecordButton = function() {
 			info.getButton().insertAdjacentElement("afterend", openLinkedRecordButton);
-		}
+		};
 
-		function hideOpenLinkedRecordButton() {
+		const hideOpenLinkedRecordButton = function() {
 			if (buttonView.contains(openLinkedRecordButton)) {
 				buttonView.removeChild(openLinkedRecordButton);
 			}
-		}
+		};
 
-		function addSearchHandlerView(searchHandlerViewToAdd) {
+		const addSearchHandlerView = function(searchHandlerViewToAdd) {
 			addShowSearchButton();
 			addedSearchHandlerView = searchHandlerViewToAdd;
 			addSearchHandlerViewToView();
-		}
+		};
 
-		function addSearchHandlerViewToView() {
+		const addSearchHandlerViewToView = function() {
 			childrenView.insertAdjacentElement("beforebegin", addedSearchHandlerView);
 			searchHandlerShown = true;
 			updateClassName();
-		}
+		};
 
-		function hideSearchHandlerView() {
+		const hideSearchHandlerView = function() {
 			if (searchIsAdded() && searchHandlerShown) {
 				view.removeChild(addedSearchHandlerView);
 				searchHandlerShown = false;
 				updateClassName();
 			}
-		}
+		};
 
-		function showSearchHandlerView() {
+		const showSearchHandlerView = function() {
 			if (searchIsAdded()) {
 				addSearchHandlerViewToView();
 			}
-		}
+		};
 
-		function toggleSearchHandlerView() {
+		const toggleSearchHandlerView = function() {
 			if (searchHandlerShown) {
 				hideSearchHandlerView();
 			} else {
 				showSearchHandlerView();
 			}
-		}
+		};
 
-		function addShowSearchButton() {
+		const addShowSearchButton = function() {
 			info.getButton().insertAdjacentElement("afterend", showSearchButton);
-		}
+		};
 
-		function searchIsAdded() {
+		const searchIsAdded = function() {
 			return addedSearchHandlerView !== undefined;
-		}
+		};
 
-		function showClearLinkedRecordIdButton(onclickMethod) {
+		const showClearLinkedRecordIdButton = function(onclickMethod) {
 			hideClearLinkedRecordIdButton();
 			clearLinkedRecordIdButton = createButtonWithClassNameAndOnclickMethod(
 				"clearLinkedRecordIdButton", onclickMethod);
 			info.getButton().insertAdjacentElement("afterend", clearLinkedRecordIdButton);
-		}
+		};
 
-		function hideClearLinkedRecordIdButton() {
+		const hideClearLinkedRecordIdButton = function() {
 			if (undefined !== clearLinkedRecordIdButton) {
 				clearLinkedRecordIdButton.parentNode.removeChild(clearLinkedRecordIdButton);
 				clearLinkedRecordIdButton = undefined;
 			}
-		}
+		};
 
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, view.firstChild);
 		};
 
 		out = Object.freeze({
-			"type": "pRecordLinkView",
+			type: "pRecordLinkView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

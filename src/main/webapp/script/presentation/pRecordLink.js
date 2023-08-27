@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,9 +29,10 @@ var CORA = (function(cora) {
 		let cPresentation = spec.cPresentation;
 		let metadataProvider = dependencies.metadataProvider;
 		let textProvider = dependencies.textProvider;
-		let recordTypeProvider = dependencies.recordTypeProvider;
 
 		let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
+		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+		let	presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		let cPresentationGroup = CORA.coraData(presentationGroup);
 		let metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
@@ -65,19 +66,36 @@ var CORA = (function(cora) {
 			let defText = textProvider.getTranslation(defTextId);
 
 			let viewSpec = {
-				"mode": "input",
-				"info": {
-					"text": text,
-					"defText": defText,
-					"technicalInfo": [
-						"textId: " + textId,
-						"defTextId: " + defTextId,
-						"metadataId: " + metadataId,
-						"nameInData: " + nameInData,
-						"linkedRecordType: " + linkedRecordType
+				mode: "input",
+				info: {
+					text: text,
+					defText: defText,
+					"technicalInfo": [{
+						text: "textId: " + textId,
+						onclickMethod: openTextIdRecord
+					}, {
+						text: "defTextId: " + defTextId,
+						onclickMethod: openDefTextIdRecord
+					}, {
+						text: "metadataId: " + metadataId,
+						onclickMethod: openMetadataIdRecord
+					}, {
+						text: "nameInData: " + nameInData
+					}, {
+						text: "linkedRecordType: " + linkedRecordType
+					}, {
+						"text": "presentationId: " + presentationId,
+						onclickMethod: openPresentationIdRecord
+					} 
+//					technicalInfo: [
+//						"textId: " + textId,
+//						"defTextId: " + defTextId,
+//						"metadataId: " + metadataId,
+//						"nameInData: " + nameInData,
+//						"linkedRecordType: " + linkedRecordType
 					]
 				},
-				"pRecordLink": out
+				pRecordLink: out
 			};
 			return dependencies.pRecordLinkViewFactory.factor(viewSpec);
 		};
@@ -113,11 +131,8 @@ var CORA = (function(cora) {
 			}
 			let cData = CORA.coraData(payloadFromMsg.data);
 			let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
-			if (linkedRecordId !== "") {
-				return true;
-			}
 
-			return false;
+			return linkedRecordId !== "";
 		};
 
 		const handleMsgWithData = function(payloadFromMsg) {
@@ -224,11 +239,11 @@ var CORA = (function(cora) {
 			let cPresentationOfLink = CORA.coraData(presentationOfLink);
 			let linkedMetadataId = cPresentationOfLink.getFirstAtomicValueByNameInData("linkedRecordId");
 			return {
-				"read": readLinkIn,
-				"presentationId": linkedPresentationId,
-				"metadataId": linkedMetadataId,
-				"recordGuiFactory": dependencies.recordGuiFactory,
-				"ajaxCallFactory": dependencies.ajaxCallFactory,
+				read: readLinkIn,
+				presentationId: linkedPresentationId,
+				metadataId: linkedMetadataId,
+				recordGuiFactory: dependencies.recordGuiFactory,
+				ajaxCallFactory: dependencies.ajaxCallFactory,
 				recordPartPermissionCalculatorFactory: spec.recordPartPermissionCalculatorFactory
 			};
 		};
@@ -466,6 +481,38 @@ var CORA = (function(cora) {
 		const showIdPresentations = function() {
 			view.showChildren();
 		};
+		
+		const openLinkedRecordForLink = function(event, link) {
+			let loadInBackground = "false";
+			if (event.ctrlKey) {
+				loadInBackground = "true";
+			}
+			let openInfo = {
+				"readLink": link,
+				"loadInBackground": loadInBackground
+			};
+			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+		};
+
+		const openTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
+		};
+
+		const openDefTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
+		};
+
+		const openMetadataIdRecord = function(event) {
+			openLinkedRecordForLink(event, cPresentation
+				.getFirstChildByNameInData("presentationOf").actionLinks.read);
+		};
+
+		const openPresentationIdRecord = function(event) {
+			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
+			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
+		};
 
 		const getDependencies = function() {
 			return dependencies;
@@ -476,7 +523,7 @@ var CORA = (function(cora) {
 		};
 
 		out = Object.freeze({
-			"type": "pRecordLink",
+			type: "pRecordLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
@@ -484,7 +531,11 @@ var CORA = (function(cora) {
 			openLinkedRecord: openLinkedRecord,
 			setResultFromSearch: setResultFromSearch,
 			valueChangedOnInput: valueChangedOnInput,
-			clearLinkedRecordId: clearLinkedRecordId
+			clearLinkedRecordId: clearLinkedRecordId,
+			openTextIdRecord: openTextIdRecord,
+			openDefTextIdRecord: openDefTextIdRecord,
+			openMetadataIdRecord: openMetadataIdRecord,
+			openPresentationIdRecord: openPresentationIdRecord,
 		});
 		start();
 		return out;

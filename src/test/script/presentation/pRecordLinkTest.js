@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -260,17 +260,38 @@ QUnit.test("testViewIsFactored", function(assert) {
 	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
 
 	let expectedViewSpec = {
-		"mode": "input",
-		"info": {
-			"text": "myLinkText",
-			"defText": "myLinkDefText",
-			"technicalInfo": ["textId: " + "myLinkText", "defTextId: " + "myLinkDefText",
-			"metadataId: " + "myLink", "nameInData: myLink",
-				"linkedRecordType: metadataTextVariable"]
+		mode: "input",
+		info: {
+			text: "myLinkText",
+			defText: "myLinkDefText",
+			technicalInfo: [
+				{
+					text: "textId: myLinkText",
+					onclickMethod: pRecordLink.openTextIdRecord
+				},
+				{
+					text: "defTextId: myLinkDefText",
+					"onclickMethod": pRecordLink.openDefTextIdRecord,
+				},
+				{
+					text: "metadataId: myLink",
+					onclickMethod: pRecordLink.openMetadataIdRecord
+				},
+				{
+					text: "nameInData: myLink"
+				},
+				{
+					text: "linkedRecordType: metadataTextVariable"
+				},
+				{
+					text: "presentationId: myLinkNoPresentationOfLinkedRecordPLink",
+					onclickMethod: pRecordLink.openPresentationIdRecord
+				}
+			]
 		},
 		"pRecordLink": pRecordLink
 	};
-	assert.stringifyEqual(factoredViewSpec, expectedViewSpec);
+	assert.deepEqual(factoredViewSpec, expectedViewSpec);
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {
@@ -917,4 +938,110 @@ QUnit.test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroup", functio
 	assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
 	assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0),
 		pRecordLink.clearLinkedRecordId);
+});
+
+QUnit.test("testOpenTextIdRecord", function(assert) {
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	pRecordLink.openTextIdRecord(event);
+
+	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/text/" + "myLink" + "Text",
+			"accept": "application/vnd.uub.record+json"
+		},
+		"loadInBackground": "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	pRecordLink.openTextIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testOpenDefTextIdRecord", function(assert) {
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	pRecordLink.openDefTextIdRecord(event);
+
+	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/text/" + "myLink"
+				+ "DefText",
+			"accept": "application/vnd.uub.record+json"
+		},
+		"loadInBackground": "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event.ctrlKey = false;
+	pRecordLink.openDefTextIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+QUnit.test("testOpenMetadataIdRecord", function(assert) {
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	pRecordLink.openMetadataIdRecord(event);
+
+	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		"readLink": {
+			"requestMethod": "GET",
+			"rel": "read",
+			"url": "http://localhost:8080/therest/rest/record/" + "metadata/"
+				+ "myLink",
+			"accept": "application/vnd.uub.record+json"
+		},
+		"loadInBackground": "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event.ctrlKey = false;
+	pRecordLink.openMetadataIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testOpenPresentationIdRecord", function(assert) {
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	pRecordLink.openPresentationIdRecord(event);
+
+	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		readLink: {
+			requestMethod: "GET",
+			rel: "read",
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+				+ "myLinkNoPresentationOfLinkedRecordPLink",
+			accept: "application/vnd.uub.record+json"
+		},
+		loadInBackground: "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	pRecordLink.openMetadataIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });

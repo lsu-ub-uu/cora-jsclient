@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,76 +20,83 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.searchRecordHandler = function(dependencies, spec) {
-		var searchId = getIdFromRecord(spec.searchRecord);
+		let searchId;
+		let viewSpec;
+		let view;
+		
+		const start = function() {
+			searchId = getIdFromRecord(spec.searchRecord);
 
-		var viewSpec = {
-			"headerText": getHeadlineText(spec.searchRecord),
-			"openSearchMethod": openSearch
-		};
+			viewSpec = {
+				headerText: getHeadlineText(spec.searchRecord),
+				openSearchMethod: openSearch
+			};
 
-		var view = dependencies.searchRecordHandlerViewFactory.factor(viewSpec);
+			view = dependencies.searchRecordHandlerViewFactory.factor(viewSpec);
+		}
 
-
-		function getHeadlineText(searchRecord) {
-			var cData = CORA.coraData(searchRecord.data);
+		const getHeadlineText = function(searchRecord) {
+			let cData = CORA.coraData(searchRecord.data);
 			if (textIdIsMissingInData(cData)) {
 				return searchId;
 			}
 			return getTranslatedText(cData);
-		}
+		};
 
-		function textIdIsMissingInData(cData) {
+		const textIdIsMissingInData = function(cData) {
 			return !cData.containsChildWithNameInData("textId");
-		}
+		};
 
-		function getTranslatedText(cData) {
-			var cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
-			var textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		const getTranslatedText = function(cData) {
+			let cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
+			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return dependencies.textProvider.getTranslation(textId);
-		}
+		};
 
 
-		function getIdFromRecord(record) {
-			var cData = CORA.coraData(record.data);
-			var cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+		const getIdFromRecord = function(record) {
+			let cData = CORA.coraData(record.data);
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view.getView();
-		}
+		};
 
-		function openSearch() {
-			var searchHandlerSpec = {
-				"metadataId": getLinkValueFromSearchRecord("metadataId"),
-				"presentationId": getLinkValueFromSearchRecord("presentationId")
+		const openSearch = function() {
+			let searchHandlerSpec = {
+				headerText: viewSpec.headerText,
+				metadataId: getLinkValueFromSearchRecord("metadataId"),
+				presentationId: getLinkValueFromSearchRecord("presentationId")
 			};
 			addSearchLinkToSpec(searchHandlerSpec);
 			dependencies.searchHandlerJSClientIntegratorFactory.factor(searchHandlerSpec);
-		}
+		};
 
-		function getLinkValueFromSearchRecord(id) {
-			var cSearchRecordData = CORA.coraData(spec.searchRecord.data);
-			var cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+		const getLinkValueFromSearchRecord = function(id) {
+			let cSearchRecordData = CORA.coraData(spec.searchRecord.data);
+			let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
 			return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function addSearchLinkToSpec(searchHandlerSpec) {
+		const addSearchLinkToSpec = function(searchHandlerSpec) {
 			searchHandlerSpec.searchLink = spec.searchRecord.actionLinks.search;
-		}
+		};
 
-		function addManagedGuiItem(managedGuiItem) {
+		const addManagedGuiItem = function(managedGuiItem) {
 			view.addManagedGuiItem(managedGuiItem);
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
-
+		};
+		
+		start();
 		return Object.freeze({
 			"type": "searchRecordHandler",
 			getSpec: getSpec,

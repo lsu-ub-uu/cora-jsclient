@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,9 +20,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.searchHandlerJsClientIntegrator = function(dependencies, spec) {
-		var menuView;
-		var managedGuiItem;
-		var searchHandler;
+		let menuView;
+		let managedGuiItem;
+		let searchHandler;
 
 		function start() {
 			menuView = createMenuView();
@@ -36,8 +36,8 @@ var CORA = (function(cora) {
 		}
 
 		function createMenuView() {
-			var createdView = CORA.gui.createSpanWithClassName("");
-			createdView.textContent = "search";
+			let createdView = CORA.gui.createSpanWithClassName("searchMenu");
+			createdView.textContent = spec.headerText;
 			return createdView;
 		}
 
@@ -46,7 +46,7 @@ var CORA = (function(cora) {
 		}
 
 		function createManagedGuiItem() {
-			var managedGuiItemSpec = {
+			let managedGuiItemSpec = {
 				"activateMethod" : dependencies.jsClient.showView,
 				"removeMethod" : dependencies.jsClient.viewRemoved
 			};

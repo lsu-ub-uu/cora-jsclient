@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -23,12 +23,12 @@ QUnit.module("recordListHandlerTest.js", {
 	beforeEach : function() {
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
 
-		var openRecordMethodCalledWithcreateNewRecord;
-		var openRecordMethodCalledWithRecord;
-		var openRecordMethodCalledWithLoadInBackground;
+		let openRecordMethodCalledWithcreateNewRecord;
+		let openRecordMethodCalledWithRecord;
+		let openRecordMethodCalledWithLoadInBackground;
 
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
-		var dependencies = {
+		let dependencies = {
 			"ajaxCallFactory" : this.ajaxCallFactorySpy,
 			"managedGuiItemFactory" : CORATEST.standardFactorySpy("managedGuiItemSpy"),
 			"recordGuiFactory" : CORATEST.recordGuiFactorySpy(),
@@ -38,37 +38,37 @@ QUnit.module("recordListHandlerTest.js", {
 		this.dependencies = dependencies;
 
 		this.spec = {
-			"openRecordMethod" : function(createNewRecord, record, loadInBackground) {
+			headerText: "someHeaderText", 
+			openRecordMethod : function(createNewRecord, record, loadInBackground) {
 				openRecordMethodCalledWithcreateNewRecord = createNewRecord;
 				openRecordMethodCalledWithRecord = record;
 				openRecordMethodCalledWithLoadInBackground = loadInBackground;
 			},
-			"jsClient" : CORATEST.jsClientSpy(),
-			"views" : CORATEST.managedGuiItemSpy(),
-			"baseUrl" : "http://epc.ub.uu.se/cora/rest/",
-			"recordTypeRecordId" : "recordType",
-			"listLink" : {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+			jsClient : CORATEST.jsClientSpy(),
+			views : CORATEST.managedGuiItemSpy(),
+			baseUrl : "http://epc.ub.uu.se/cora/rest/",
+			listLink : {
+				requestMethod : "GET",
+				rel : "list",
+				url : "http://epc.ub.uu.se/cora/rest/record/recordType/",
+				accept : "application/vnd.uub.recordList+json"
 			},
-			"listPresentationViewId" : "recordTypeListPGroup"
+			listPresentationViewId : "recordTypeListPGroup"
 		};
 
 		this.answerListCall = function(no) {
-			var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
-			var jsonRecordList = JSON.stringify(CORATEST.recordTypeList);
-			var answer = {
+			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
+			let jsonRecordList = JSON.stringify(CORATEST.recordTypeList);
+			let answer = {
 				"spec" : ajaxCallSpy0.getSpec(),
 				"responseText" : jsonRecordList
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		}
 		this.answerListCallBrokenList = function(no) {
-			var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
-			var jsonRecordList = JSON.stringify(CORATEST.recordTypeBrokenList);
-			var answer = {
+			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
+			let jsonRecordList = JSON.stringify(CORATEST.recordTypeBrokenList);
+			let answer = {
 				"spec" : ajaxCallSpy0.getSpec(),
 				"responseText" : jsonRecordList
 			};
@@ -91,25 +91,25 @@ QUnit.module("recordListHandlerTest.js", {
 });
 
 QUnit.test("testType", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	let recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
 	assert.strictEqual(recordListHandler.type, "recordListHandler");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	let recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
 	assert.strictEqual(recordListHandler.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	let recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
 	assert.strictEqual(recordListHandler.getSpec(), this.spec);
 });
 
 QUnit.test("init", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	let recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
 
-	var ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
-	var ajaxCallSpec = ajaxCallSpy.getSpec();
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/recordType/");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
@@ -119,61 +119,63 @@ QUnit.test("init", function(assert) {
 });
 
 QUnit.test("initTestManagedGuiItemFactoryCalled", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	CORA.recordListHandler(this.dependencies, this.spec);
 
-	var managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
-	var managedGuiItemSpec = managedGuiItemSpy.getSpec(0);
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let managedGuiItemSpec = managedGuiItemSpy.getSpec(0);
 	assert.strictEqual(managedGuiItemSpec.activateMethod, this.spec.jsClient.showView);
 	assert.strictEqual(managedGuiItemSpec.removeMethod, this.spec.jsClient.viewRemoved);
 	assert.ok(managedGuiItemSpy !== undefined);
 });
 
 QUnit.test("initTestManagedGuiItemAddGuiItemCalled", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
-	var managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	CORA.recordListHandler(this.dependencies, this.spec);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(this.spec.jsClient.getAddedGuiItem(0), managedGuiItem);
 });
 
 QUnit.test("initTestManagedGuiItemShowViewCalled", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
-	var managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	CORA.recordListHandler(this.dependencies, this.spec);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(this.spec.jsClient.getViewShowingInWorkView(0), managedGuiItem);
 });
 
 QUnit.test("initCheckRemoveOnMenu", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
-	assert.strictEqual(this.dependencies.managedGuiItemFactory.getFactored(0)
-			.getAddedMenuPresentation(0).textContent, "List (recordType)");
+	CORA.recordListHandler(this.dependencies, this.spec);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	assert.strictEqual(managedGuiItem.getAddedMenuPresentation(0).className, "listMenu");
+	assert.strictEqual(managedGuiItem.getAddedMenuPresentation(0).textContent,
+		"List (someHeaderText)");
 });
 
 QUnit.test("fetchListCheckError", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
-	var ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
+	CORA.recordListHandler(this.dependencies, this.spec);
+	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(0);
 	ajaxCallSpy.getSpec().errorMethod({
 		"status" : 404
 	});
-	var addedItem = this.dependencies.managedGuiItemFactory.getFactored(0)
+	let addedItem = this.dependencies.managedGuiItemFactory.getFactored(0)
 			.getAddedWorkPresentation(0);
 
 	assert.strictEqual(addedItem.textContent, "404");
 });
 
 QUnit.test("fetchListResultHandlerCreated", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	CORA.recordListHandler(this.dependencies, this.spec);
 	this.answerListCall(0);
 
-	var resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
+	let resultHandlerSpec = this.dependencies.resultHandlerFactory.getSpec(0);
 
 	assert.stringifyEqual(resultHandlerSpec.jsClient, this.spec.jsClient);
 	assert.stringifyEqual(resultHandlerSpec.dataList, CORATEST.recordTypeList.dataList);
 });
 
 QUnit.test("fetchListResultHandlerAddedToView", function(assert) {
-	var recordListHandler = CORA.recordListHandler(this.dependencies, this.spec);
+	CORA.recordListHandler(this.dependencies, this.spec);
 	this.answerListCall(0);
 
-	var resultHandler = this.dependencies.resultHandlerFactory.getFactored(0);
-	var managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let resultHandler = this.dependencies.resultHandlerFactory.getFactored(0);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 
 	assert.stringifyEqual(managedGuiItem.getAddedWorkPresentation(0), resultHandler.getView());
 });

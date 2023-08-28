@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -23,12 +23,13 @@ var CORA = (function(cora) {
 
 		let recordId;
 		let view;
+		let headerText;
 		const start = function() {
 			recordId = getIdFromRecord(spec.recordTypeRecord);
-			let headerText = getHeadlineText(spec.recordTypeRecord);
+			headerText = getHeadlineText(spec.recordTypeRecord);
 
 			let viewSpec = {
-				"headerText": headerText
+				headerText: headerText
 			};
 
 			if (recordTypeHasListLink()) {
@@ -81,21 +82,21 @@ var CORA = (function(cora) {
 
 		const createRecordTypeList = function() {
 			let listHandlerSpec = {
-				"openRecordMethod": createRecordHandler,
-				"baseUrl": spec.baseUrl,
-				"jsClient": dependencies.jsClient,
-				"recordTypeRecordId": recordId,
-				"listLink": spec.recordTypeRecord.actionLinks.list
+				headerText: headerText,
+				openRecordMethod: createRecordHandler,
+				baseUrl: spec.baseUrl,
+				jsClient: dependencies.jsClient,
+				listLink: spec.recordTypeRecord.actionLinks.list
 			};
 			dependencies.recordListHandlerFactory.factor(listHandlerSpec);
 		}
 
 		const createRecordHandler = function(createNewRecord, record, loadInBackground) {
 			let recordHandlerSpec = {
-				"createNewRecord": createNewRecord,
-				"record": record,
-				"jsClient": dependencies.jsClient,
-				"recordTypeRecordIdForNew": recordId
+				createNewRecord: createNewRecord,
+				record: record,
+				jsClient: dependencies.jsClient,
+				recordTypeRecordIdForNew: recordId
 			};
 			let recordHandler = dependencies.recordHandlerFactory.factor(recordHandlerSpec);
 			addRecordHandlerToJsClient(recordHandler, loadInBackground);
@@ -123,7 +124,7 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			"type": "recordTypeHandler",
+			type: "recordTypeHandler",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

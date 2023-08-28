@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -41,53 +41,54 @@ QUnit.module("search/searchRecordHandlerTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchRecordHandler.type, "searchRecordHandler");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchRecordHandler.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
 	assert.strictEqual(searchRecordHandler.getSpec(), this.spec);
 });
 
 QUnit.test("testViewIsCreatedUsingFactory", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.searchRecordHandlerViewFactory.getFactored(0);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let factoredView = this.dependencies.searchRecordHandlerViewFactory.getFactored(0);
 	assert.strictEqual(searchRecordHandler.getView(), factoredView.getView());
 });
 
 QUnit.test("testViewSpec", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.searchRecordHandlerViewFactory.getSpec(0);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let factoredSpec = this.dependencies.searchRecordHandlerViewFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.headerText, "translated_coraTextSearchText");
 	assert.strictEqual(factoredSpec.openSearchMethod, searchRecordHandler.openSearch);
 });
 QUnit.test("testHeaderWhenNoText", function(assert) {
 	this.spec.searchRecord = CORATEST.searchRecordList.dataList.data[1].record;
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.searchRecordHandlerViewFactory.getSpec(0);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let factoredSpec = this.dependencies.searchRecordHandlerViewFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.headerText, "someSearch");
 	assert.strictEqual(factoredSpec.openSearchMethod, searchRecordHandler.openSearch);
 });
 
 QUnit.test("testAddManagedGuiItemPassedOnToView", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
-	var factoredView = this.dependencies.searchRecordHandlerViewFactory.getFactored(0);
-	var aItem = CORATEST.managedGuiItemSpy();
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let factoredView = this.dependencies.searchRecordHandlerViewFactory.getFactored(0);
+	let aItem = CORATEST.managedGuiItemSpy();
 	searchRecordHandler.addManagedGuiItem(aItem);
 	assert.strictEqual(factoredView.getAddedManagedGuiItem(0), aItem);
 });
 
 QUnit.test("testOpenSearchFactorSearchHandler", function(assert) {
-	var searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
 	searchRecordHandler.openSearch();
-	var factoredSpec = this.dependencies.searchHandlerJSClientIntegratorFactory.getSpec(0);
+	let factoredSpec = this.dependencies.searchHandlerJSClientIntegratorFactory.getSpec(0);
 
+	assert.strictEqual(factoredSpec.headerText, "translated_coraTextSearchText");
 	assert.strictEqual(factoredSpec.metadataId, "autocompleteSearchGroup");
 	assert.strictEqual(factoredSpec.presentationId, "autocompleteSearchPGroup");
 	assert.strictEqual(factoredSpec.searchLink, this.search.actionLinks.search);

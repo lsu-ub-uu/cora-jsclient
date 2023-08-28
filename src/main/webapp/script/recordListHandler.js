@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,81 +20,81 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordListHandler = function(dependencies, spec) {
-		var managedGuiItem;
-		var recordId = spec.recordTypeRecordId;
+		let managedGuiItem;
 
-		function start() {
+		const start = function() {
 			managedGuiItem = createManagedGuiItem();
 			addToViewToJsClient(managedGuiItem);
 			showViewInClient(managedGuiItem);
 
 			addTextToMenuView();
 			fetchDataFromServer(createRecordTypeListFromAnswer);
-		}
+		};
 
-		function createManagedGuiItem() {
-			var managedGuiItemSpec = {
-				"activateMethod" : spec.jsClient.showView,
-				"removeMethod" : spec.jsClient.viewRemoved
+		const createManagedGuiItem = function() {
+			let managedGuiItemSpec = {
+				activateMethod : spec.jsClient.showView,
+				removeMethod : spec.jsClient.viewRemoved
 			};
 			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
-		}
+		};
 
-		function addToViewToJsClient(managedGuiItemToAdd) {
+		const addToViewToJsClient = function(managedGuiItemToAdd) {
 			spec.jsClient.addGuiItem(managedGuiItemToAdd);
-		}
+		};
 
-		function showViewInClient(managedGuiItemToShow) {
+		const showViewInClient = function(managedGuiItemToShow) {
 			spec.jsClient.showView(managedGuiItemToShow);
-		}
+		};
 
-		function addTextToMenuView() {
-			var menuPresentation = CORA.gui.createSpanWithClassName("");
-			menuPresentation.textContent = "List (" + recordId + ")";
+		const addTextToMenuView = function() {
+			let menuPresentation = CORA.gui.createSpanWithClassName("listMenu");
+			menuPresentation.textContent = "List (" + spec.headerText + ")";
 			managedGuiItem.addMenuPresentation(menuPresentation);
-		}
+		};
 
-		function fetchDataFromServer(callAfterAnswer) {
-			var listLink = spec.listLink;
-			var callSpec = {
-				"requestMethod" : listLink.requestMethod,
-				"url" : listLink.url,
-				"contentType" : listLink.contentType,
-				"accept" : listLink.accept,
-				"loadMethod" : callAfterAnswer,
-				"errorMethod" : callError
+		const fetchDataFromServer = function(callAfterAnswer) {
+			let listLink = spec.listLink;
+			let callSpec = {
+				requestMethod : listLink.requestMethod,
+				url : listLink.url,
+				contentType : listLink.contentType,
+				accept : listLink.accept,
+				loadMethod : callAfterAnswer,
+				errorMethod : callError
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function createRecordTypeListFromAnswer(answer) {
-			var resultHandlerSpec = {
-				"dataList" : JSON.parse(answer.responseText).dataList,
-				"jsClient" : spec.jsClient
+		const createRecordTypeListFromAnswer = function(answer) {
+			let resultHandlerSpec = {
+				dataList : JSON.parse(answer.responseText).dataList,
+				jsClient : spec.jsClient
 			};
-			var resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
+			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			managedGuiItem.addWorkPresentation(resultHandler.getView());
-		}
+		};
 
-		function callError(answer) {
-			var messageHolder = CORA.messageHolder();
+		const callError = function(answer) {
+			let messageHolder = CORA.messageHolder();
 			managedGuiItem.addWorkPresentation(messageHolder.getView());
-			var messageSpec = {
-				"message" : answer.status,
-				"type" : CORA.message.ERROR
+			let messageSpec = {
+				message : answer.status,
+				type : CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
-		var out = Object.freeze({
-			"type" : "recordListHandler",
+		};
+		
+		let out = Object.freeze({
+			type : "recordListHandler",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			open : open,

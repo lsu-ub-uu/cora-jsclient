@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -143,10 +143,9 @@ QUnit.test("fetchListCheckSpec", function(assert) {
 
 	recordTypeHandler.createRecordTypeList();
 	let factoredSpec = this.dependencies.recordListHandlerFactory.getSpec(0);
-
+	assert.strictEqual(factoredSpec.headerText, "translated_collectTermText");
 	assert.strictEqual(factoredSpec.baseUrl, this.spec.baseUrl);
-
-	assert.strictEqual(factoredSpec.recordTypeRecordId, "collectTerm");
+	assert.strictEqual(factoredSpec.jsClient, this.dependencies.jsClient);
 	let expectedListLink = {
 		"requestMethod" : "GET",
 		"rel" : "list",
@@ -213,7 +212,5 @@ QUnit.test("testManagedGuiItemForRecordHandlerNotShownInJsClientWhenBackground",
 	let recordTypeHandler = CORA.recordTypeHandler(this.dependencies, this.spec);
 	recordTypeHandler.createRecordHandler("false", this.record, "true");
 
-	let recordHandler = this.dependencies.recordHandlerFactory.getFactored(0);
-	let managedGuiItem = recordHandler.getManagedGuiItem();
 	assert.strictEqual(this.dependencies.jsClient.getViewShowingInWorkView(0), undefined);
 });

@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pNumVar = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
+		let textProvider = dependencies.textProvider;
 		let pubSub = dependencies.pubSub;
 		let jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
@@ -59,6 +60,7 @@ var CORA = (function(cora) {
 
 		const factorPNumVarView = function() {
 			let pNumVarViewSpec = initializePNumVarViewSpec();
+			possiblyAddPlaceHolderText(textProvider, pNumVarViewSpec);
 			pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
 		};
 
@@ -108,6 +110,16 @@ var CORA = (function(cora) {
 				"onblurFunction": onBlur,
 				onkeyupFunction: onkeyup
 			};
+		};
+		
+		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+				let cEmptyTextId = CORA.coraData(cPresentation
+					.getFirstChildByNameInData("emptyTextId"));
+				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+				let emptyText = textProvider.getTranslation(emptyTextId);
+				pVarViewSpec.placeholderText = emptyText;
+			}
 		};
 
 		const subscribeToPubSub = function() {

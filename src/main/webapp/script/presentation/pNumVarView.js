@@ -119,6 +119,7 @@ var CORA = (function(cora) {
 			valueView = createTextTypeInput();
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
+			possiblyAddPlaceholderText(valueView);
 			return valueView;
 		};
 
@@ -135,6 +136,12 @@ var CORA = (function(cora) {
 				valueViewIn.onblur = function() {
 					spec.onblurFunction(valueViewIn.value);
 				};
+			}
+		};
+		
+		const possiblyAddPlaceholderText = function(inputNew) {
+			if (spec.placeholderText !== undefined) {
+				inputNew.placeholder = spec.placeholderText;
 			}
 		};
 

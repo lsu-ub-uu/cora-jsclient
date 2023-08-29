@@ -188,6 +188,13 @@ QUnit.test("testInput", function(assert) {
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
+	assert.strictEqual(valueView.placeholder, "");
+});
+
+QUnit.test("testInputPlaceholder", function(assert) {
+	this.spec.placeholderText = "placeholderText";
+	let valueView = this.getValueView();
+	assert.strictEqual(valueView.placeholder, "placeholderText");
 });
 
 QUnit.test("testInputOnblur", function(assert) {

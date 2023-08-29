@@ -152,7 +152,54 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		"onblurFunction": attachedPNumVar.pNumVar.onBlur,
 		"onkeyupFunction": attachedPNumVar.pNumVar.onkeyup,
 		"mode": "input",
+		"presentationId": "pNumVarNumVariableId",
+		placeholderText: "Skriv din text här",
+		
+	};
+	expectedPNumVarViewSpec.info.technicalInfo.push({
+		"text": "textId: numVariableIdText",
+		"onclickMethod": attachedPNumVar.pNumVar.openTextIdRecord
+	}, {
+		"text": "defTextId: numVariableIdDefText",
+		"onclickMethod": attachedPNumVar.pNumVar.openDefTextIdRecord
+	}, {
+		"text": "metadataId: numVariableId",
+		"onclickMethod": attachedPNumVar.pNumVar.openMetadataIdRecord
+	}, {
+		"text": "nameInData: numVariableId"
+	}, {
+		"text": "presentationId: pNumVarNumVariableId",
+		onclickMethod: attachedPNumVar.pNumVar.openPresentationIdRecord
+	}, {
+		"text": "min: 0",
+	}, {
+		"text": "max: 10"
+	}, {
+		"text": "warningMin: 2",
+	}, {
+		"text": "warningMax: 8"
+	},{
+		"text": "numberOfDecimals: 0"
+	});
+
+	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
+});
+QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyText", function(assert) {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdNoEmptyText");
+
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
+	let expectedPNumVarViewSpec = {
+		"info": {
+			"defText": "numVariableIdDefText",
+			"technicalInfo": [],
+			"text": "numVariableIdText"
+		},
+		"onblurFunction": attachedPNumVar.pNumVar.onBlur,
+		"onkeyupFunction": attachedPNumVar.pNumVar.onkeyup,
+		"mode": "input",
 		"presentationId": "pNumVarNumVariableId"
+		
 	};
 	expectedPNumVarViewSpec.info.technicalInfo.push({
 		"text": "textId: numVariableIdText",

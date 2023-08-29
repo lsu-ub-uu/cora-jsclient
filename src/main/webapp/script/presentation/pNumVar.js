@@ -183,8 +183,22 @@ var CORA = (function(cora) {
 		};
 
 		const onBlur = function(valueFromView) {
+			if(numberOfDecimals > 0){
+				valueFromView = valueFromView.replaceAll(",", ".");
+	//			numberOfDecimals
+				if(!valueFromView.includes(".")){
+					valueFromView+=".";
+				}
+	//			valueFromView = valueFromView.padEnd(5, '0');
+				let noDec = valueFromView.length-valueFromView.lastIndexOf('.');
+				for(let i=noDec; i<=numberOfDecimals; i++){
+					valueFromView+="0";
+				}
+				pNumVarView.setValue(valueFromView);
+			}
 			handleValueFromView(valueFromView, "error");
 		};
+		
 
 		const handleValueFromView = function(valueFromView, errorState) {
 			if (valueFromView === "") {

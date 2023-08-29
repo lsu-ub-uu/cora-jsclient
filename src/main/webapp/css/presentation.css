@@ -46,7 +46,7 @@ img {
 
 .errorStillFocused input, .errorStillFocused select, .errorStillFocused textarea
 	{
-	border-color: red;
+	border-color: orange;
 }
 
 .iconButton {

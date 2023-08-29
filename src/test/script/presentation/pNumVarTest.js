@@ -315,8 +315,8 @@ QUnit.test("testSetValueInput", function(assert) {
 QUnit.test("testHandleMessage", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	let data = {
-		"data": "2",
-		"path": {}
+		data: "2",
+		path: {}
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
@@ -427,6 +427,27 @@ QUnit.test("testChangedValueError", function(assert) {
 	assert.equal(pNumVarViewSpy.getState(), "errorStillFocused");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "errorStillFocused");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+QUnit.test("testChangedValueOkThenErrorThenEmpty", function(assert) {
+	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnkeyupWithValue("4");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 1);
+	assert.strictEqual(dataArray[0].data, "4");
+
+	pNumVarViewSpy.callOnkeyupWithValue("4X");
+	assert.equal(pNumVarViewSpy.getState(), "errorStillFocused");
+	assert.equal(attachedPNumVar.pNumVar.getState(), "errorStillFocused");
+	assert.strictEqual(dataArray.length, 1);
+	
+	pNumVarViewSpy.callOnkeyupWithValue("");
+	assert.equal(pNumVarViewSpy.getState(), "ok");
+	assert.strictEqual(dataArray.length, 2);
+	assert.strictEqual(dataArray[0].data, "4");
+	assert.strictEqual(dataArray[1].data, "");
+	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
 });
 
 QUnit.test("testInitNumberOutput", function(assert) {

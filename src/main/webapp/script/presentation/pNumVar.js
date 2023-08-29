@@ -76,38 +76,38 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 
 			return {
-				"mode": mode,
-				"presentationId": presentationId,
-				"info": {
-					"text": text,
-					"defText": defText,
-					"technicalInfo": [{
-						"text": "textId: " + textId,
+				mode: mode,
+				presentationId: presentationId,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [{
+						text: "textId: " + textId,
 						onclickMethod: openTextIdRecord
 					}, {
-						"text": "defTextId: " + defTextId,
+						text: "defTextId: " + defTextId,
 						onclickMethod: openDefTextIdRecord
 					}, {
-						"text": "metadataId: " + metadataId,
+						text: "metadataId: " + metadataId,
 						onclickMethod: openMetadataIdRecord
 					}, {
-						"text": "nameInData: " + nameInData
+						text: "nameInData: " + nameInData
 					}, {
-						"text": "presentationId: " + presentationId,
+						text: "presentationId: " + presentationId,
 						onclickMethod: openPresentationIdRecord
 					}, {
-						"text": "min: " + min
+						text: "min: " + min
 					}, {
-						"text": "max: " + max
+						text: "max: " + max
 					}, {
-						"text": "warningMin: " + warningMin
+						text: "warningMin: " + warningMin
 					}, {
-						"text": "warningMax: " + warningMax
+						text: "warningMax: " + warningMax
 					}, {
-						"text": "numberOfDecimals: " + numberOfDecimals
+						text: "numberOfDecimals: " + numberOfDecimals
 					}]
 				},
-				"onblurFunction": onBlur,
+				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
 		};
@@ -187,14 +187,16 @@ var CORA = (function(cora) {
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if (valueFromView !== "") {
+			if (valueFromView === "") {
+				state = "ok";
+			} else {
 				checkValueBetweenMinAndMaxIfNumber(valueFromView, errorState);
 			}
 			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
-					"data": valueFromView,
-					"path": path
+					data: valueFromView,
+					path: path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
@@ -203,7 +205,7 @@ var CORA = (function(cora) {
 
 		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView, errorState) {
 			let validator = CORA.numberVariableValidator({
-				"metadataProvider": metadataProvider,
+				metadataProvider: metadataProvider,
 			});
 			let validationAnswer = validator.validateData(valueFromView, cMetadataElement);
 
@@ -240,8 +242,8 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
+				readLink: link,
+				loadInBackground: loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};

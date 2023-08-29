@@ -1,5 +1,6 @@
 /*
  * Copyright 2018, 2020 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -28,31 +29,25 @@ var CORA = (function(cora) {
 			if (isNaN(value) || value === "") {
 				return false;
 			}
-			return valueIsBetweenMinAndMax(value);
+			return validateValue(value);
 		}
 
-		const valueIsBetweenMinAndMax = function(valueIn, cMetadataElementIn) {
-			if (valueBetweenMinAndMax(value) && valueHasCorrectNumberOfDecimals(value)) {
-				return true;
-			}
-			return false;
+		const validateValue = function(valueIn, cMetadataElementIn) {
+			return (valueBetweenMinAndMax(value) && valueHasCorrectNumberOfDecimals(value));
 		}
 
 		const valueBetweenMinAndMax = function(value) {
 			let max = cMetadataElement.getFirstAtomicValueByNameInData("max");
 			let min = cMetadataElement.getFirstAtomicValueByNameInData("min");
-			if (valueAboveMax(value, max) || valueBelowMin(value, min)) {
-				return false;
-			}
-			return true;
+			return (valueBelowMax(value, max) && valueAboveMin(value, min));
 		}
 
-		const valueAboveMax = function(value, max) {
-			return parseFloat(value) > parseFloat(max);
+		const valueBelowMax = function(value, max) {
+			return parseFloat(value) <= parseFloat(max);
 		}
 
-		const valueBelowMin = function(value, min) {
-			return parseFloat(value) < parseFloat(min);
+		const valueAboveMin = function(value, min) {
+			return parseFloat(value) >= parseFloat(min);
 		}
 
 		const valueHasCorrectNumberOfDecimals = function(value) {

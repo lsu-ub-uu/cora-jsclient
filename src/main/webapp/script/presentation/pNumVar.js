@@ -183,7 +183,7 @@ var CORA = (function(cora) {
 		};
 
 		const onBlur = function(valueFromView) {
-			if(numberOfDecimals > 0){
+			if(numberOfDecimals > 0 && valueFromView.length > 0){
 				valueFromView = tryToAutoFormatEnteredValueForDecimals(valueFromView);
 				pNumVarView.setValue(valueFromView);
 			}

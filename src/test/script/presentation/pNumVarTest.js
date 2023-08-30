@@ -385,7 +385,7 @@ QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
-QUnit.test("testOnBlurAutoFixingInputNothingWithoutDecimals", function(assert) {
+QUnit.test("testOnBlurAutoFormatInputNothingWithoutDecimals", function(assert) {
 	this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
@@ -393,6 +393,16 @@ QUnit.test("testOnBlurAutoFixingInputNothingWithoutDecimals", function(assert) {
 	let dataArray = this.jsBookkeeper.getDataArray();
 	assert.strictEqual(dataArray.length, 0);
 	assert.equal(pNumVarViewSpy.getState(), "error");
+});
+
+QUnit.test("testOnBlurAutoFixingInputChangeCommaToDotNoValue", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 0);
+	assert.equal(pNumVarViewSpy.getState(), "ok");
 });
 
 QUnit.test("testOnBlurAutoFixingInputChangeCommaToDot", function(assert) {

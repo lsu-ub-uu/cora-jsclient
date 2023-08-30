@@ -188,6 +188,10 @@ var CORATEST = (function(coraTest) {
 				return "numVariableIdText";
 			case "numVariableIdDefText":
 				return "numVariableIdDefText";
+			case "numVariableWithDecimalsIdText":
+				return "numVariableWithDecimalsIdText";
+			case "numVariableWithDecimalsIdDefText":
+				return "numVariableWithDecimalsIdDefText";
 			case "someTextToPresentAsLinkText":
 				return "text for: someTextToPresentAsLinkText";
 			case "anAttributeText":

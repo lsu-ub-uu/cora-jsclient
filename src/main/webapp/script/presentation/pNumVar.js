@@ -184,21 +184,23 @@ var CORA = (function(cora) {
 
 		const onBlur = function(valueFromView) {
 			if(numberOfDecimals > 0){
-				valueFromView = valueFromView.replaceAll(",", ".");
-	//			numberOfDecimals
-				if(!valueFromView.includes(".")){
-					valueFromView+=".";
-				}
-	//			valueFromView = valueFromView.padEnd(5, '0');
-				let noDec = valueFromView.length-valueFromView.lastIndexOf('.');
-				for(let i=noDec; i<=numberOfDecimals; i++){
-					valueFromView+="0";
-				}
+				valueFromView = tryToAutoFormatEnteredValueForDecimals(valueFromView);
 				pNumVarView.setValue(valueFromView);
 			}
 			handleValueFromView(valueFromView, "error");
 		};
 		
+		const tryToAutoFormatEnteredValueForDecimals = function(valueFromView){
+			let updatedValue = valueFromView.replaceAll(",", ".");
+			if(!updatedValue.includes(".")){
+				updatedValue+=".";
+			}
+			let noDec = updatedValue.length-updatedValue.lastIndexOf('.');
+			for(let i=noDec; i<=numberOfDecimals; i++){
+				updatedValue+="0";
+			}
+			return updatedValue;
+		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
 			if (valueFromView === "") {

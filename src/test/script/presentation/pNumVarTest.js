@@ -375,6 +375,7 @@ QUnit.test("testChangedValueMinError", function(assert) {
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
+
 QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
@@ -383,6 +384,65 @@ QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
 	assert.equal(attachedPNumVar.pNumVar.getState(), "error");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
+
+QUnit.test("testOnBlurAutoFixingInputNothingWithoutDecimals", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("3,45");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 0);
+	assert.equal(pNumVarViewSpy.getState(), "error");
+});
+
+QUnit.test("testOnBlurAutoFixingInputChangeCommaToDot", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("3,45");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 1);
+	assert.strictEqual(dataArray[0].data, "3.45");
+	assert.equal(pNumVarViewSpy.getState(), "ok");
+	assert.equal(pNumVarViewSpy.getValue(), "3.45");
+});
+
+QUnit.test("testOnBlurAutoFixingInputAddToFewDecimals", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("3,");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 1);
+	assert.strictEqual(dataArray[0].data, "3.00");
+	assert.equal(pNumVarViewSpy.getState(), "ok");
+	assert.equal(pNumVarViewSpy.getValue(), "3.00");
+});
+
+QUnit.test("testOnBlurAutoFixingInputAddOneToFewDecimals", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("3,4");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 1);
+	assert.strictEqual(dataArray[0].data, "3.40");
+	assert.equal(pNumVarViewSpy.getState(), "ok");
+	assert.equal(pNumVarViewSpy.getValue(), "3.40");
+});
+
+QUnit.test("testOnBlurAutoFixingInputAddMissingDotAndDecimals", function(assert) {
+	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	
+	pNumVarViewSpy.callOnblurWithValue("3");
+	let dataArray = this.jsBookkeeper.getDataArray();
+	assert.strictEqual(dataArray.length, 1);
+	assert.strictEqual(dataArray[0].data, "3.00");
+	assert.equal(pNumVarViewSpy.getState(), "ok");
+	assert.equal(pNumVarViewSpy.getValue(), "3.00");
+});
+
 QUnit.test("testHandleValidationError", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	let message = {
@@ -428,6 +488,7 @@ QUnit.test("testChangedValueError", function(assert) {
 	assert.equal(attachedPNumVar.pNumVar.getState(), "errorStillFocused");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
+
 QUnit.test("testChangedValueOkThenErrorThenEmpty", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);

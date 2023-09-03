@@ -1,6 +1,6 @@
 /*
  * Copyright 2019, 2020 Uppsala University Library
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2016, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -28,91 +28,25 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
-			info = createInfo();
-
-			createValueView();
+			view = CORA.gui.createLabelWithClassName(baseClassName);
+			possiblyAddLableTextToView();
+			valueView = createValueView();
 			view.appendChild(valueView);
+			info = createInfo();
 			view.appendChild(info.getButton());
 		};
-
-		const createInfo = function() {
-			let infoSpec = {
-				appendTo: view,
-				afterLevelChange: updateClassName,
-				level1: [{
-					className: "textView",
-					text: spec.info.text
-				}, {
-					className: "defTextView",
-					text: spec.info.defText
-				}]
-			};
-			possiblyAddLevel2Info(infoSpec);
-			return dependencies.infoFactory.factor(infoSpec);
-		};
-
-		const possiblyAddLevel2Info = function(infoSpec) {
-			if (specInfoHasTechnicalInfo()) {
-				addLevelTechnicalInfoAsLevel2(infoSpec);
+		
+		const possiblyAddLableTextToView = function() {
+			if(spec.label){
+				view.appendChild(document.createTextNode(spec.label));
 			}
 		};
-
-		const specInfoHasTechnicalInfo = function() {
-			return spec.info.technicalInfo;
-		};
-
-		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
-			infoSpec.level2 = [];
-			spec.info.technicalInfo.forEach(function(techInfo) {
-				infoSpec.level2.push(createTechInfoPart(techInfo));
-			});
-		};
-
-		const createTechInfoPart = function(techInfo) {
-			let techInfoPart = {
-				className: "technicalView",
-				text: techInfo.text
-			};
-
-			if (techInfo.onclickMethod !== undefined) {
-				techInfoPart.onclickMethod = techInfo.onclickMethod;
-			}
-			return techInfoPart;
-		};
-
-		const updateClassName = function() {
-			let className = baseClassName;
-			if (stateIndicatesError()) {
-				className += " error";
-			}
-			if (stateIndicatesErrorStillFocused()) {
-				className += " errorStillFocused";
-			}
-			if (infoIsShown()) {
-				className += " infoActive";
-			}
-			view.className = className;
-		};
-
-		const stateIndicatesError = function() {
-			return state === "error";
-		};
-
-		const stateIndicatesErrorStillFocused = function() {
-			return state === "errorStillFocused";
-		};
-
-		const infoIsShown = function() {
-			return info.getInfoLevel() !== 0;
-		};
-
+		
 		const createValueView = function() {
 			if (spec.mode === "input") {
-				valueView = createInput();
-			} else {
-				valueView = createOutput();
+				return createInput();
 			}
+			return createOutput();
 		};
 
 		const createInput = function() {
@@ -196,6 +130,77 @@ var CORA = (function(cora) {
 				outputNew.textContent = value;
 			};
 			return outputNew;
+		};
+		
+		const createInfo = function() {
+			let infoSpec = {
+				appendTo: view,
+				afterLevelChange: updateClassName,
+				level1: [{
+					className: "textView",
+					text: spec.info.text
+				}, {
+					className: "defTextView",
+					text: spec.info.defText
+				}]
+			};
+			possiblyAddLevel2Info(infoSpec);
+			return dependencies.infoFactory.factor(infoSpec);
+		};
+
+		const possiblyAddLevel2Info = function(infoSpec) {
+			if (specInfoHasTechnicalInfo()) {
+				addLevelTechnicalInfoAsLevel2(infoSpec);
+			}
+		};
+
+		const specInfoHasTechnicalInfo = function() {
+			return spec.info.technicalInfo;
+		};
+
+		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
+			infoSpec.level2 = [];
+			spec.info.technicalInfo.forEach(function(techInfo) {
+				infoSpec.level2.push(createTechInfoPart(techInfo));
+			});
+		};
+
+		const createTechInfoPart = function(techInfo) {
+			let techInfoPart = {
+				className: "technicalView",
+				text: techInfo.text
+			};
+
+			if (techInfo.onclickMethod !== undefined) {
+				techInfoPart.onclickMethod = techInfo.onclickMethod;
+			}
+			return techInfoPart;
+		};
+
+		const updateClassName = function() {
+			let className = baseClassName;
+			if (stateIndicatesError()) {
+				className += " error";
+			}
+			if (stateIndicatesErrorStillFocused()) {
+				className += " errorStillFocused";
+			}
+			if (infoIsShown()) {
+				className += " infoActive";
+			}
+			view.className = className;
+		};
+
+		const stateIndicatesError = function() {
+			return state === "error";
+		};
+
+		const stateIndicatesErrorStillFocused = function() {
+			return state === "errorStillFocused";
+		};
+
+		const infoIsShown = function() {
+			return info.getInfoLevel() !== 0;
 		};
 
 		const getView = function() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2023 Olov McKie
  * Copyright 2016 Uppsala University Library
  *
  * This file is part of Cora.
@@ -20,7 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.gui.createRemoveButton = function(onclick) {
-		var spec = {
+		let spec = {
 			"className" : "iconButton removeButton",
 			action : {
 				method : onclick
@@ -30,15 +30,21 @@ var CORA = (function(cora) {
 	};
 
 	cora.gui.createSpanWithClassName = function(className) {
-		var spanNew = document.createElement("span");
+		let spanNew = document.createElement("span");
 		spanNew.className = className;
 		return spanNew;
 	};
 
 	cora.gui.createDivWithClassName = function(className) {
-		var divNew = document.createElement("div");
+		let divNew = document.createElement("div");
 		divNew.className = className;
 		return divNew;
+	};
+
+	cora.gui.createLabelWithClassName = function(className) {
+		let titleNew = document.createElement("label");
+		titleNew.className = className;
+		return titleNew;
 	};
 
 	return cora;

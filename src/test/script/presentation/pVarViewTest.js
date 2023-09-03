@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2016, 2018, 2023 Olov McKie
  * Copyright 2018 , 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -33,6 +33,7 @@ QUnit.module("presentation/pVarViewTest.js", {
 			inputType: "input",
 			outputFormat: "text",
 			presentationId: "somePresentationId",
+			label: "Some label text",
 			info: {
 				text: "someText",
 				defText: "someDefText",
@@ -64,7 +65,7 @@ QUnit.module("presentation/pVarViewTest.js", {
 			if (this.pVarView === undefined) {
 				this.pVarView = CORA.pVarView(this.dependencies, this.spec);
 			}
-			return this.pVarView.getView().childNodes[0];
+			return this.pVarView.getView().childNodes[1];
 		};
 	}
 });
@@ -87,7 +88,7 @@ QUnit.test("getDependencies", function(assert) {
 
 QUnit.test("getView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.nodeName, "SPAN");
+	assert.strictEqual(view.nodeName, "LABEL");
 });
 
 QUnit.test("testClassName", function(assert) {
@@ -131,7 +132,7 @@ QUnit.test("testInfoSpec", function(assert) {
 });
 QUnit.test("testInfoButtonAddedToView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.childNodes[1].className, "infoButtonSpy");
+	assert.strictEqual(view.childNodes[2].className, "infoButtonSpy");
 
 });
 
@@ -185,6 +186,18 @@ QUnit.test("testStateShownInClassName", function(assert) {
 	assert.strictEqual(view.className, "pVar somePresentationId error infoActive");
 	pVarView.setState("ok");
 	assert.strictEqual(view.className, "pVar somePresentationId infoActive");
+});
+
+QUnit.test("testLabel", function(assert) {
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(this.getView().childNodes.length, 3);
+	assert.strictEqual(label.nodeName, "#text");
+	assert.strictEqual(label.textContent, "Some label text");
+});
+
+QUnit.test("testNoLabel", function(assert) {
+	this.spec.label = undefined;
+	assert.strictEqual(this.getView().childNodes.length, 2);
 });
 
 QUnit.test("testInput", function(assert) {

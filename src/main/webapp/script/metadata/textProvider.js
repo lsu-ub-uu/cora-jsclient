@@ -21,90 +21,97 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.textProvider = function(dependencies, spec) {
-		var texts = {};
-		var currentLang = "sv";
-		var metadata = {};
+		let texts = {};
+		let currentLang = "sv";
+		let metadata = {};
 		let languages = [];
-		fetchTextListAndThen(processFetchedTextdata);
-
-		function fetchTextListAndThen(callAfterAnswer) {
+		
+		const start = function() {
+			fetchTextListAndThen(processFetchedTextdata);
+		};
+		
+		const fetchTextListAndThen = function(callAfterAnswer) {
 			callThroughAjax(spec.textListLink, callAfterAnswer);
-		}
+		};
 
-		function callThroughAjax(linkSpec, callAfterAnswer) {
-			var ajaxCallSpec = createIndependentCopy(linkSpec);
+		const callThroughAjax = function(linkSpec, callAfterAnswer) {
+			let ajaxCallSpec = createIndependentCopy(linkSpec);
 			ajaxCallSpec.loadMethod = callAfterAnswer;
 			dependencies.ajaxCallFactory.factor(ajaxCallSpec);
-		}
+		};
 
-		function createIndependentCopy(someObject) {
+		const createIndependentCopy = function(someObject) {
 			return JSON.parse(JSON.stringify(someObject));
-		}
+		};
 
-		function processFetchedTextdata(answer) {
+		const processFetchedTextdata = function(answer) {
 			createTextObjectFromAnswer(answer);
 			if (spec.callWhenReady) {
 				spec.callWhenReady();
 			}
-		}
+		};
 
-		function createTextObjectFromAnswer(answer) {
-			var data = JSON.parse(answer.responseText).dataList.data;
+		const createTextObjectFromAnswer = function(answer) {
+			let data = JSON.parse(answer.responseText).dataList.data;
 			data.forEach(function(recordContainer) {
 				createTextObjectFromRecordContainer(recordContainer);
 			});
-		}
+		};
 
-		function createTextObjectFromRecordContainer(recordContainer) {
-			var recordData = recordContainer.record.data;
-			var recordId = getIdFromRecordData(recordData);
+		const createTextObjectFromRecordContainer = function(recordContainer) {
+			let recordData = recordContainer.record.data;
+			let recordId = getIdFromRecordData(recordData);
 
 			metadata[recordId] = recordData;
 
-			var cRecordData = CORA.coraData(recordData);
-			var textParts = cRecordData.getChildrenByNameInData("textPart");
+			let cRecordData = CORA.coraData(recordData);
+			let textParts = cRecordData.getChildrenByNameInData("textPart");
 			textParts.forEach(function(textPart) {
 				createTextObjectFromTextPart(recordId, textPart);
 			});
-		}
+		};
 
-		function getIdFromRecordData(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+		const getIdFromRecordData = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
-		}
+		};
 
-		function createTextObjectFromTextPart(recordId, textPart) {
-			var lang = textPart.attributes.lang;
-			var text = textPart.children[0].value;
+		const createTextObjectFromTextPart = function(recordId, textPart) {
+			let lang = textPart.attributes.lang;
+			let text = textPart.children[0].value;
 			if (texts[lang] === undefined) {
 				texts[lang] = [];
 				languages.push(lang);
 			}
 			texts[lang][recordId] = text;
-		}
+		};
 
-		function getTranslation(textId) {
-			if (texts[currentLang][textId] !== undefined) {
-				return texts[currentLang][textId];
+		const getTranslation = function(textId) {
+			return getTranslationForLangAndTextId(currentLang, textId);
+		};
+
+		const getTranslationForLangAndTextId = function(lang, textId) {
+			if (texts[lang][textId] !== undefined) {
+				return texts[lang][textId];
 			}
-			return "MISSING TRANSLATION FOR TEXTID:" + textId;
-		}
+			return `MISSING TRANSLATION FOR TEXTID:${textId}`;
+		};
 
-		function setCurrentLang(lang) {
+		const setCurrentLang = function(lang) {
 			currentLang = lang;
-		}
+		};
 
-		function getCurrentLang() {
+		const getCurrentLang = function() {
 			return currentLang;
-		}
+		};
 
-		function getMetadataById(metadataId) {
+		const getMetadataById = function(metadataId) {
 			if (metadata[metadataId] !== undefined) {
 				return metadata[metadataId];
 			}
-			throw new Error("Id(" + metadataId + ") not found in textProvider");
-		}
+			throw new Error(`Id(${metadataId}) not found in textProvider`);
+		};
 
 		const getLanguages = function(){
 			return languages;
@@ -113,25 +120,22 @@ var CORA = (function(cora) {
 		const getAllTranslations = function(textId){
 			let answer = {};
 			languages.forEach(function(lang) {
-				if (texts[lang][textId] !== undefined) {
-					answer[lang] = texts[lang][textId];
-				} else {
-					answer[lang] = "MISSING TRANSLATION FOR TEXTID:" + textId;
-				}
+				answer[lang] = getTranslationForLangAndTextId(lang, textId);
 			});
 			return answer;
 		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
+		start();
 		return Object.freeze({
-			"type" : "textProvider",
+			type : "textProvider",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getTranslation : getTranslation,

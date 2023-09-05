@@ -25,7 +25,7 @@ QUnit.module("metadata/textProviderTest.js", {
 		this.dependencies = {
 			"ajaxCallFactory" : this.ajaxCallFactorySpy
 		};
-		var textListLink = {
+		let textListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/text/",
@@ -48,43 +48,43 @@ QUnit.module("metadata/textProviderTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	assert.strictEqual(textProvider.type, "textProvider");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	assert.strictEqual(textProvider.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	assert.strictEqual(textProvider.getSpec(), this.spec);
 });
 
 QUnit.test("testInitAjaxCallMadeOnStart", function(assert) {
 	function assertAjaxCallSpecIsCorrect(ajaxCallSpy, recordType) {
-		var ajaxCallSpec = ajaxCallSpy.getSpec();
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/" + recordType
 				+ "/");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 		assert.strictEqual(ajaxCallSpec.loadMethod, textProvider.processFetchedTextdata);
 	}
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 
-	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
+	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
 	assertAjaxCallSpecIsCorrect(ajaxCallSpy0, "text");
 });
 
 QUnit.test("callWhenReadyCalledWhenReady", function(assert) {
-	var providerStarted = false;
+	let providerStarted = false;
 	function providerReady() {
 		providerStarted = true;
 	}
 
 	this.spec.callWhenReady = providerReady;
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 
 	assert.notOk(providerStarted);
 
@@ -94,52 +94,52 @@ QUnit.test("callWhenReadyCalledWhenReady", function(assert) {
 });
 
 QUnit.test("callWhenReadyNotCalledWhenReadyIfUnspecified", function(assert) {
-	var providerStarted = false;
+	let providerStarted = false;
 	function providerReady() {
 		providerStarted = true;
 	}
 
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 
 	textProvider.processFetchedTextdata(this.textAnswer);
 	assert.notOk(providerStarted);
 });
 
 QUnit.test("testInitEnteredTextListLinkIsNotChanged", function(assert) {
-	var textListLinkJson = this.textListLinkJson;
+	let textListLinkJson = this.textListLinkJson;
 
-	var textListLinkJsonAfter = JSON.stringify(this.textListLink);
+	let textListLinkJsonAfter = JSON.stringify(this.textListLink);
 	assert.deepEqual(textListLinkJsonAfter, textListLinkJson);
 });
 
 QUnit.test("testGetTranslation", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
-	var translation = textProvider.getTranslation("textPartSvPGroupText");
+	let translation = textProvider.getTranslation("textPartSvPGroupText");
 	assert.deepEqual(translation, "Svenska");
 });
 
 QUnit.test("testGetTranslationNotFound", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
-	var translation = textProvider.getTranslation("textPartSvPGroupTextNOT");
+	let translation = textProvider.getTranslation("textPartSvPGroupTextNOT");
 	assert.deepEqual(translation, "MISSING TRANSLATION FOR TEXTID:textPartSvPGroupTextNOT");
 });
 
 QUnit.test("testSetCurrentLang", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
-	var translation = textProvider.getTranslation("1Text");
+	let translation = textProvider.getTranslation("1Text");
 	assert.deepEqual(translation, "Nästan kortaste möjliga id");
 
 	textProvider.setCurrentLang("en");
 
-	var translationEn = textProvider.getTranslation("1Text");
+	let translationEn = textProvider.getTranslation("1Text");
 	assert.deepEqual(translationEn, "Almost shortest possible id");
 });
 
 QUnit.test("testGetCurrentLang", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 
 	textProvider.setCurrentLang("en");
 
@@ -147,9 +147,9 @@ QUnit.test("testGetCurrentLang", function(assert) {
 });
 
 QUnit.test("getMetadataById", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
-	var expected = {
+	let expected = {
 		"children" : [ {
 			"children" : [ {
 				"name" : "id",
@@ -181,17 +181,17 @@ QUnit.test("getMetadataById", function(assert) {
 		} ],
 		"name" : "text"
 	};
-	var x = textProvider.getMetadataById("textPartSvPGroupText");
+	let x = textProvider.getMetadataById("textPartSvPGroupText");
 	assert.stringifyEqual(x, expected);
 });
 
 QUnit.test("getMetadataByIdNotFound", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
-	var error = false;
-	var errorMessage;
+	let error = false;
+	let errorMessage;
 	try {
-		var x = textProvider.getMetadataById("someNonExistingMetadataId");
+		textProvider.getMetadataById("someNonExistingMetadataId");
 	} catch (e) {
 		error = true;
 		errorMessage = e.message;
@@ -203,7 +203,7 @@ QUnit.test("getMetadataByIdNotFound", function(assert) {
 
 
 QUnit.test("testGetLanguages", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
 	
 	let languages = textProvider.getLanguages();
@@ -213,7 +213,7 @@ QUnit.test("testGetLanguages", function(assert) {
 //1Text
 
 QUnit.test("testGetAllTranslations", function(assert) {
-	var textProvider = CORA.textProvider(this.dependencies, this.spec);
+	let textProvider = CORA.textProvider(this.dependencies, this.spec);
 	textProvider.processFetchedTextdata(this.textAnswer);
 	
 	let all = textProvider.getAllTranslations("1Text");

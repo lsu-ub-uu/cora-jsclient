@@ -62,8 +62,7 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 
-			return {
-				label: text,
+			let pVarViewSpec = {
 				id: path.join(""),
 				mode: mode,
 				inputType: getInputType(),
@@ -74,33 +73,33 @@ var CORA = (function(cora) {
 					text: text,
 					defText: defText,
 					technicalInfo: [{
-						text: "textId: " + textId,
+						text: `textId: ${textId}`,
 						onclickMethod: openTextIdRecord
 					}, {
-						text: "defTextId: " + defTextId,
+						text: `defTextId: ${defTextId}`,
 						onclickMethod: openDefTextIdRecord
 					}, {
-						text: "metadataId: " + metadataId,
+						text: `metadataId: ${metadataId}`,
 						onclickMethod: openMetadataIdRecord
 					}, {
-						text: "nameInData: " + nameInData
+						text: `nameInData: ${nameInData}`,
 					}, {
-						text: "regEx: " + regEx
+						text: `regEx: ${regEx}`,
 					}, {
-						text: "presentationId: " + presentationId,
+						text: `presentationId: ${presentationId}`,
 						onclickMethod: openPresentationIdRecord
 					}]
 				},
 				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
+			pVarViewSpec.label = text;
+			return pVarViewSpec;
 		};
 
 		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-				let cEmptyTextId = CORA.coraData(cPresentation
-					.getFirstChildByNameInData("emptyTextId"));
-				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
 				let emptyText = textProvider.getTranslation(emptyTextId);
 				pVarViewSpec.placeholderText = emptyText;
 			}
@@ -125,9 +124,8 @@ var CORA = (function(cora) {
 		};
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
-			let cTextGroup = CORA.coraData(cMetadataElementIn
-				.getFirstChildByNameInData(textNameInData));
-			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
+				
 		};
 
 		const getInputType = function() {

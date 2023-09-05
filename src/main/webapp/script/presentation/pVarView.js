@@ -28,7 +28,7 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.gui.createLabelWithClassName(baseClassName);
+			view = CORA.gui.createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
@@ -38,23 +38,64 @@ var CORA = (function(cora) {
 		
 		const possiblyAddLableTextToView = function() {
 			if(spec.label){
-				view.appendChild(document.createTextNode(spec.label));
+				if(modeIsInput()){
+					addLabelForInput();
+				}else{
+					addLabelForOutput();
+				}
 			}
 		};
 		
+		const addLabelForInput = function(){
+			let label = document.createElement("label");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+			label.htmlFor = spec.id;
+		};
+
+		const addLabelForOutput = function(){
+			let label = document.createElement("span");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+		};
+		
 		const createValueView = function() {
-			if (spec.mode === "input") {
+			if (modeIsInput()) {
 				return createInput();
 			}
 			return createOutput();
 		};
+		
+		const modeIsInput = function(){
+			return (spec.mode === "input");
+		};
 
 		const createInput = function() {
 			valueView = createTextTypeInput();
+			valueView.id = spec.id;
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);
 			return valueView;
+		};
+		
+		const createTextTypeInput = function() {
+			let inputNew = document.createElement(getInputTypeFromSpec());
+			if (spec.inputFormat === "password") {
+				inputNew.setAttribute("type", "password");
+			}
+
+			inputNew.setValue = function(value) {
+				inputNew.value = value;
+			};
+			return inputNew;
+		};
+
+		const getInputTypeFromSpec = function() {
+			if (spec.inputType !== undefined) {
+				return spec.inputType;
+			}
+			return "input";
 		};
 
 		const possiblyAddOnkeyupEvent = function(valueViewIn) {
@@ -77,25 +118,6 @@ var CORA = (function(cora) {
 			if (spec.placeholderText !== undefined) {
 				inputNew.placeholder = spec.placeholderText;
 			}
-		};
-
-		const createTextTypeInput = function() {
-			let inputNew = document.createElement(getInputTypeFromSpec());
-			if (spec.inputFormat === "password") {
-				inputNew.setAttribute("type", "password");
-			}
-
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
-			return inputNew;
-		};
-
-		const getInputTypeFromSpec = function() {
-			if (spec.inputType !== undefined) {
-				return spec.inputType;
-			}
-			return "input";
 		};
 
 		const createOutput = function() {
@@ -229,7 +251,7 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, view.firstChild);
+			view.insertBefore(attributesView, valueView);
 		};
 
 		out = Object.freeze({

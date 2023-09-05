@@ -105,7 +105,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pVarTest.js", {
+QUnit.module.only("presentation/pVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -145,11 +145,13 @@ QUnit.test("testInitText", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableId");
+	let attachedPVar = this.pVarFactory.factor(["one", "two"], "textVariableId", "pVarTextVariableId");
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
 			technicalInfo: [],
@@ -314,10 +316,12 @@ QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "textVariableIdTextAreaPVar");
+	let attachedPVar = this.pVarFactory.factor(["one","two"], "textVariableId", "textVariableIdTextAreaPVar");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		"info": {
 			"defText": "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo": [],
@@ -353,12 +357,14 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 });
 
 QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(["one","two"], "textVariableId",
 		"textVariableIdShowTextAreaFalsePVar");
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		"info": {
 			"defText": "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo": [],
@@ -392,7 +398,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert, [], []);
+	CORATEST.testVariableSubscription(attachedPVar, assert, ["one","two"], ["one","two"]);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 
 	assert.equal(attachedPVar.pVar.getState(), "ok");
@@ -401,11 +407,13 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 });
 
 QUnit.test("testInitTextInputFormatPassword", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(["one","two"], "textVariableId",
 		"pVarTextVariableIdInputPassword");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		"info": {
 			"defText": "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo": [],
@@ -438,7 +446,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert, [], []);
+	CORATEST.testVariableSubscription(attachedPVar, assert, ["one","two"], ["one","two"]);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 
@@ -543,10 +551,12 @@ QUnit.test("testChangedValueError", function(assert) {
 });
 
 QUnit.test("testInitTextOutput", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId", "pVarTextVariableIdOutput");
+	let attachedPVar = this.pVarFactory.factor(["one","two"], "textVariableId", "pVarTextVariableIdOutput");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		"info": {
 			"defText": "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo": [],
@@ -579,16 +589,18 @@ QUnit.test("testInitTextOutput", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert, [], []);
+	CORATEST.testVariableSubscription(attachedPVar, assert, ["one","two"], ["one","two"]);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 
 QUnit.test("testInitTextOutputFormatImage", function(assert) {
-	let attachedPVar = this.pVarFactory.factor([], "textVariableId",
+	let attachedPVar = this.pVarFactory.factor(["one","two"], "textVariableId",
 		"pVarTextVariableIdOutputImage");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
 		"info": {
 			"defText": "Detta är en exempeldefinition för en textvariabel.",
 			"technicalInfo": [],
@@ -621,7 +633,7 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-	CORATEST.testVariableSubscription(attachedPVar, assert, [], []);
+	CORATEST.testVariableSubscription(attachedPVar, assert, ["one","two"], ["one","two"]);
 	CORATEST.testVariableMetadata(attachedPVar, assert);
 });
 

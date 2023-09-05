@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pVarViewTest.js", {
+QUnit.module.only("presentation/pVarViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			"infoFactory": CORATEST.infoFactorySpy()
@@ -34,6 +34,7 @@ QUnit.module("presentation/pVarViewTest.js", {
 			outputFormat: "text",
 			presentationId: "somePresentationId",
 			label: "Some label text",
+			id: "someId",
 			info: {
 				text: "someText",
 				defText: "someDefText",
@@ -88,7 +89,7 @@ QUnit.test("getDependencies", function(assert) {
 
 QUnit.test("getView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.nodeName, "LABEL");
+	assert.strictEqual(view.nodeName, "SPAN");
 });
 
 QUnit.test("testClassName", function(assert) {
@@ -188,11 +189,20 @@ QUnit.test("testStateShownInClassName", function(assert) {
 	assert.strictEqual(view.className, "pVar somePresentationId infoActive");
 });
 
-QUnit.test("testLabel", function(assert) {
+QUnit.test("testLabelInInput", function(assert) {
 	let label = this.getView().childNodes[0];
-	assert.strictEqual(this.getView().childNodes.length, 3);
-	assert.strictEqual(label.nodeName, "#text");
+	assert.strictEqual(label.nodeName, "LABEL");
 	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(label.htmlFor, "someId");
+	assert.strictEqual(this.getView().childNodes.length, 3);
+});
+
+QUnit.test("testLabelInOutput", function(assert) {
+	this.spec.mode = "output";
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(label.nodeName, "SPAN");
+	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(this.getView().childNodes.length, 3);
 });
 
 QUnit.test("testNoLabel", function(assert) {
@@ -204,6 +214,7 @@ QUnit.test("testInput", function(assert) {
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
+	assert.strictEqual(valueView.id, "someId");
 });
 
 QUnit.test("testInputUnknownTypeIsText", function(assert) {
@@ -218,6 +229,7 @@ QUnit.test("testInputTypeTextArea", function(assert) {
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "TEXTAREA");
 	assert.strictEqual(valueView.type, "textarea");
+	assert.strictEqual(valueView.id, "someId");
 });
 
 QUnit.test("testInputFormatPassword", function(assert) {
@@ -227,6 +239,7 @@ QUnit.test("testInputFormatPassword", function(assert) {
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "password");
+	assert.strictEqual(valueView.id, "someId");
 });
 
 QUnit.test("testInputPlaceholder", function(assert) {
@@ -358,6 +371,6 @@ QUnit.test("testAddAttributesView", function(assert) {
 	fakeView.appendChild(document.createTextNode("fake view"));
 
 	pVarView.addAttributesView(fakeView);
-	assert.strictEqual(pVarView.getView().firstChild, fakeView);
+	assert.strictEqual(pVarView.getView().childNodes[1], fakeView);
 
 });

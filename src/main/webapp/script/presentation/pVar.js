@@ -63,6 +63,8 @@ var CORA = (function(cora) {
 			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 
 			return {
+				label: text,
+				id: path.join(""),
 				mode: mode,
 				inputType: getInputType(),
 				outputFormat: outputFormat,

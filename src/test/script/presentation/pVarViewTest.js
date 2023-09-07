@@ -201,6 +201,7 @@ QUnit.test("testLabelInOutput", function(assert) {
 	this.spec.mode = "output";
 	let label = this.getView().childNodes[0];
 	assert.strictEqual(label.nodeName, "SPAN");
+	assert.strictEqual(label.className, "label");
 	assert.strictEqual(label.textContent, "Some label text");
 	assert.strictEqual(this.getView().childNodes.length, 3);
 });

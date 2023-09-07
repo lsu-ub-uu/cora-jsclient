@@ -186,6 +186,27 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
 
+QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", function(assert) {
+	this.pVarFactory.factor(["one", "two"], "textVariableId", "pVarTextVariableIdShowLabelFalse");
+
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(pVarViewSpy.getSpec().label, undefined);
+});
+
+QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", function(assert) {
+	this.pVarFactory.factor(["one", "two"], "textVariableId", "pVarTextVariableIdShowLabelFalse");
+
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(pVarViewSpy.getSpec().label, undefined);
+});
+
+QUnit.test("testFactoredViewCorrectlyForInputTextVariableOtherLabelText", function(assert) {
+	this.pVarFactory.factor(["one", "two"], "textVariableId", "pVarTextVariableIdOtherLabelText");
+
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(pVarViewSpy.getSpec().label, "otherLabelText_text");
+});
+
 QUnit.test("testFactoredPAttributes", function(assert) {
 	let path = [];
 	this.pVarFactory.factor(path, "textVariableId", "pVarTextVariableId");

@@ -541,6 +541,10 @@ position: relative;
 	font-style: italic;
 }
 
+label, .label {
+	font-style: italic;
+}
+
 .presentation .text.labelTextStyle {
 	font-weight: bold;
 }

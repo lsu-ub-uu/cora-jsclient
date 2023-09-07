@@ -54,7 +54,7 @@ var CORA = (function(cora) {
 		};
 
 		const addLabelForOutput = function(){
-			let label = document.createElement("span");
+			let label = CORA.gui.createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};

@@ -21,27 +21,25 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pVar = function(dependencies, spec) {
 
-		let metadataProvider = dependencies.metadataProvider;
-		let pubSub = dependencies.pubSub;
-		let jsBookkeeper = dependencies.jsBookkeeper;
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
+		const pubSub = dependencies.pubSub;
+		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
+		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
 		let presentationId;
 		let state = "ok";
 		let previousValue = "";
 		let pVarView;
-		let cMetadataElement;
 		let text;
 		let defText;
 		let regEx;
 		let mode;
-		let textProvider;
 		let pAttributes;
 
 		const start = function() {
-			textProvider = dependencies.textProvider;
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
-			possiblyAddPlaceHolderText(textProvider, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
@@ -93,11 +91,12 @@ var CORA = (function(cora) {
 				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
-			pVarViewSpec.label = text;
+			possiblyAddPlaceHolderText(pVarViewSpec);
+			possiblyAddLabelToViewSpec(pVarViewSpec);
 			return pVarViewSpec;
 		};
 
-		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
+		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
 				let emptyText = textProvider.getTranslation(emptyTextId);
@@ -105,6 +104,29 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
+			if(labelShouldBeShown()){
+				addLabelToViewSpec(pVarViewSpec);
+			}
+		};
+		
+		const addLabelToViewSpec = function(pVarViewSpec){
+			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
+				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
+				let labelText = textProvider.getTranslation(otherLabelTextId);
+				pVarViewSpec.label = labelText;
+			}else{
+				pVarViewSpec.label = text;
+			}
+		};
+		
+		const labelShouldBeShown = function (){
+			if(!cPresentation.containsChildWithNameInData("showLabel")){
+				return true;
+			}
+			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+		};
+		
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};

@@ -170,7 +170,7 @@ QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", fu
 
 	let pVarView = childRefHandler.firstChild.firstChild.firstChild;
 	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
-	let input = pVarView.firstChild;
+	let input = pVarView.childNodes[1];
 	assert.deepEqual(input.value, "");
 
 	let path2 = ["textVariableId"];

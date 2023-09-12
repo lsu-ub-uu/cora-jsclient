@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("presentation/pVarViewTest.js", {
+QUnit.module("presentation/pVarViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			"infoFactory": CORATEST.infoFactorySpy()

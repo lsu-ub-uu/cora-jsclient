@@ -110,21 +110,21 @@ var CORA = (function(cora) {
 			}
 		};
 		
-		const addLabelToViewSpec = function(pVarViewSpec){
-			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
-				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
-				let labelText = textProvider.getTranslation(otherLabelTextId);
-				pVarViewSpec.label = labelText;
-			}else{
-				pVarViewSpec.label = text;
-			}
-		};
-		
 		const labelShouldBeShown = function (){
 			if(!cPresentation.containsChildWithNameInData("showLabel")){
 				return true;
 			}
 			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+		};
+		
+		const addLabelToViewSpec = function(pVarViewSpec){
+			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
+				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
+				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
+				pVarViewSpec.label = otherLabelText;
+			}else{
+				pVarViewSpec.label = text;
+			}
 		};
 		
 		const getMetadataById = function(id) {

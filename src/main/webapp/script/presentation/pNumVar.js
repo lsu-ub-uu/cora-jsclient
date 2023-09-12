@@ -60,7 +60,6 @@ var CORA = (function(cora) {
 
 		const factorPNumVarView = function() {
 			let pNumVarViewSpec = initializePNumVarViewSpec();
-			possiblyAddPlaceHolderText(textProvider, pNumVarViewSpec);
 			pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
 		};
 
@@ -75,7 +74,7 @@ var CORA = (function(cora) {
 			let defTextId = getTextId(cMetadataElement, "defTextId");
 			defText = textProvider.getTranslation(defTextId);
 
-			return {
+			let pNumViewSpec =  {
 				mode: mode,
 				presentationId: presentationId,
 				info: {
@@ -110,6 +109,9 @@ var CORA = (function(cora) {
 				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
+			possiblyAddPlaceHolderText(textProvider, pNumViewSpec);
+			possiblyAddLabelToViewSpec(pNumViewSpec);
+			return pNumViewSpec;
 		};
 		
 		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
@@ -121,6 +123,30 @@ var CORA = (function(cora) {
 				pVarViewSpec.placeholderText = emptyText;
 			}
 		};
+		
+		const possiblyAddLabelToViewSpec = function(pNumViewSpec){
+			if(labelShouldBeShown()){
+				addLabelToViewSpec(pNumViewSpec);
+			}
+		};
+		
+		const labelShouldBeShown = function (){
+			if(!cPresentation.containsChildWithNameInData("showLabel")){
+				return true;
+			}
+			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+		};
+		
+		const addLabelToViewSpec = function(pNumViewSpec){
+			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
+				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
+				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
+				pNumViewSpec.label = otherLabelText;
+			}else{
+				pNumViewSpec.label = text;
+			}
+		};
+		
 
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);

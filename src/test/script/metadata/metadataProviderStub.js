@@ -5074,6 +5074,110 @@ function MetadataProviderStub() {
 							}]
 						}]
 				};
+			case "pNumVarNumVariableIdShowLabelFalse":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pNumVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pNumVarNumVariableIdShowLabelFalse"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataNumberVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "numVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataNumberVariable/"
+										+ "numVariableId",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "showLabel",
+							"value": "false"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
+			case "pNumVarNumVariableIdOtherLabelText":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pNumVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pNumVarNumVariableIdOtherLabelText"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataNumberVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "numVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataNumberVariable/"
+										+ "numVariableId",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "otherLabelText",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "otherLabelText"
+							}]
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
 			case "pNumVarNumVariableIdNoEmptyText":
 				return {
 					"name": "presentation",

@@ -96,7 +96,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pNumVarTest.js", {
+QUnit.module.only("presentation/pNumVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -144,52 +144,69 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
-		"info": {
-			"defText": "numVariableIdDefText",
-			"technicalInfo": [],
-			"text": "numVariableIdText"
+		label: "numVariableIdText",
+		info: {
+			defText: "numVariableIdDefText",
+			technicalInfo: [],
+			text: "numVariableIdText"
 		},
-		"onblurFunction": attachedPNumVar.pNumVar.onBlur,
-		"onkeyupFunction": attachedPNumVar.pNumVar.onkeyup,
-		"mode": "input",
-		"presentationId": "pNumVarNumVariableId",
+		onblurFunction: attachedPNumVar.pNumVar.onBlur,
+		onkeyupFunction: attachedPNumVar.pNumVar.onkeyup,
+		mode: "input",
+		presentationId: "pNumVarNumVariableId",
 		placeholderText: "Skriv din text här",
 		
 	};
 	expectedPNumVarViewSpec.info.technicalInfo.push({
-		"text": "textId: numVariableIdText",
-		"onclickMethod": attachedPNumVar.pNumVar.openTextIdRecord
+		text: "textId: numVariableIdText",
+		onclickMethod: attachedPNumVar.pNumVar.openTextIdRecord
 	}, {
-		"text": "defTextId: numVariableIdDefText",
-		"onclickMethod": attachedPNumVar.pNumVar.openDefTextIdRecord
+		text: "defTextId: numVariableIdDefText",
+		onclickMethod: attachedPNumVar.pNumVar.openDefTextIdRecord
 	}, {
-		"text": "metadataId: numVariableId",
-		"onclickMethod": attachedPNumVar.pNumVar.openMetadataIdRecord
+		text: "metadataId: numVariableId",
+		onclickMethod: attachedPNumVar.pNumVar.openMetadataIdRecord
 	}, {
-		"text": "nameInData: numVariableId"
+		text: "nameInData: numVariableId"
 	}, {
-		"text": "presentationId: pNumVarNumVariableId",
+		text: "presentationId: pNumVarNumVariableId",
 		onclickMethod: attachedPNumVar.pNumVar.openPresentationIdRecord
 	}, {
-		"text": "min: 0",
+		text: "min: 0",
 	}, {
-		"text": "max: 10"
+		text: "max: 10"
 	}, {
-		"text": "warningMin: 2",
+		text: "warningMin: 2",
 	}, {
-		"text": "warningMax: 8"
+		text: "warningMax: 8"
 	},{
-		"text": "numberOfDecimals: 0"
+		text: "numberOfDecimals: 0"
 	});
 
 	assert.deepEqual(pNumVarViewSpy.getSpec(), expectedPNumVarViewSpec);
 });
+
+QUnit.test("testFactoredViewCorrectlyForInputNumVariableShowLabelFalse", function(assert) {
+	this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableIdShowLabelFalse");
+
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	assert.strictEqual(pNumVarViewSpy.getSpec().label, undefined);
+});
+
+QUnit.test("testFactoredViewCorrectlyForInputNumVariableOtherLabelText", function(assert) {
+	this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableIdOtherLabelText");
+
+	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
+	assert.strictEqual(pNumVarViewSpy.getSpec().label, "otherLabelText_text");
+});
+
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyText", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdNoEmptyText");
 
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		label: "numVariableIdText",
 		"info": {
 			"defText": "numVariableIdDefText",
 			"technicalInfo": [],
@@ -527,6 +544,7 @@ QUnit.test("testInitNumberOutput", function(assert) {
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		label: "numVariableIdText",
 		"info": {
 			"defText": "numVariableIdDefText",
 			"technicalInfo": [],

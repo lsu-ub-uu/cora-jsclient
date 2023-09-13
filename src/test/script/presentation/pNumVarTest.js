@@ -96,7 +96,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module.only("presentation/pNumVarTest.js", {
+QUnit.module("presentation/pNumVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -111,23 +111,23 @@ QUnit.module.only("presentation/pNumVarTest.js", {
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.getDependencies(), attachedPNumVar.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.getSpec(), attachedPNumVar.spec);
 });
 
 QUnit.test("testGetView", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let spyView = this.pNumVarViewFactory.getFactored(0);
 	assert.strictEqual(attachedPNumVar.pNumVar.getView(), spyView.getView());
 });
 
 QUnit.test("testInitText", function(assert) {
-	let path = {};
+	let path = ["one","two"];
 	let attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
 	assert.strictEqual(attachedPNumVar.pNumVar.type, "pNumVar");
 
@@ -139,11 +139,12 @@ QUnit.test("testInitText", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		id: "onetwo",
 		label: "numVariableIdText",
 		info: {
 			defText: "numVariableIdDefText",
@@ -201,12 +202,13 @@ QUnit.test("testFactoredViewCorrectlyForInputNumVariableOtherLabelText", functio
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyText", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdNoEmptyText");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableIdNoEmptyText");
 
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
 		label: "numVariableIdText",
+		id: "onetwo",
 		"info": {
 			"defText": "numVariableIdDefText",
 			"technicalInfo": [],
@@ -262,7 +264,7 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 QUnit.test("testDisableAttributes", function(assert) {
 	let path = [];
 
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableId");
 
 	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
@@ -322,7 +324,7 @@ QUnit.test("testInitNumWithPathWithAttribute", function(assert) {
 });
 
 QUnit.test("testSetValueInput", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	attachedPNumVar.pNumVar.setValue("3");
 
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
@@ -330,7 +332,7 @@ QUnit.test("testSetValueInput", function(assert) {
 });
 
 QUnit.test("testHandleMessage", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let data = {
 		data: "2",
 		path: {}
@@ -341,7 +343,7 @@ QUnit.test("testHandleMessage", function(assert) {
 });
 
 QUnit.test("testChangedValueEmpty", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let data = {
 		"data": "1",
 		"path": {}
@@ -355,7 +357,7 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
@@ -367,7 +369,7 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueNotANumberError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("not a number");
 	assert.equal(pNumVarViewSpy.getState(), "error");
@@ -376,7 +378,7 @@ QUnit.test("testChangedValueNotANumberError", function(assert) {
 });
 
 QUnit.test("testChangedValueMaxError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("200");
 	assert.equal(pNumVarViewSpy.getState(), "error");
@@ -385,7 +387,7 @@ QUnit.test("testChangedValueMaxError", function(assert) {
 });
 
 QUnit.test("testChangedValueMinError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("-1");
 	assert.equal(pNumVarViewSpy.getState(), "error");
@@ -394,7 +396,7 @@ QUnit.test("testChangedValueMinError", function(assert) {
 });
 
 QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("3.45");
 	assert.equal(pNumVarViewSpy.getState(), "error");
@@ -403,7 +405,7 @@ QUnit.test("testChangedValueIncorrectNumberOfDecimalsError", function(assert) {
 });
 
 QUnit.test("testOnBlurAutoFormatInputNothingWithoutDecimals", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("3,45");
@@ -413,7 +415,7 @@ QUnit.test("testOnBlurAutoFormatInputNothingWithoutDecimals", function(assert) {
 });
 
 QUnit.test("testOnBlurAutoFixingInputChangeCommaToDotNoValue", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableWithDecimalsId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("");
@@ -423,7 +425,7 @@ QUnit.test("testOnBlurAutoFixingInputChangeCommaToDotNoValue", function(assert) 
 });
 
 QUnit.test("testOnBlurAutoFixingInputChangeCommaToDot", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableWithDecimalsId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("3,45");
@@ -435,7 +437,7 @@ QUnit.test("testOnBlurAutoFixingInputChangeCommaToDot", function(assert) {
 });
 
 QUnit.test("testOnBlurAutoFixingInputAddToFewDecimals", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableWithDecimalsId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("3,");
@@ -447,7 +449,7 @@ QUnit.test("testOnBlurAutoFixingInputAddToFewDecimals", function(assert) {
 });
 
 QUnit.test("testOnBlurAutoFixingInputAddOneToFewDecimals", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableWithDecimalsId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("3,4");
@@ -459,7 +461,7 @@ QUnit.test("testOnBlurAutoFixingInputAddOneToFewDecimals", function(assert) {
 });
 
 QUnit.test("testOnBlurAutoFixingInputAddMissingDotAndDecimals", function(assert) {
-	this.pNumVarFactory.factor({}, "numVariableWithDecimalsId", "pNumVarNumVariableId");
+	this.pNumVarFactory.factor(["one","two"], "numVariableWithDecimalsId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnblurWithValue("3");
@@ -471,7 +473,7 @@ QUnit.test("testOnBlurAutoFixingInputAddMissingDotAndDecimals", function(assert)
 });
 
 QUnit.test("testHandleValidationError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let message = {
 		"metadataId": "textVariableId",
 		"path": {}
@@ -483,7 +485,7 @@ QUnit.test("testHandleValidationError", function(assert) {
 });
 
 QUnit.test("testChangedValueEmptyAfterKeyUp", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let data = {
 		"data": "notEmpty",
 		"path": {}
@@ -497,7 +499,7 @@ QUnit.test("testChangedValueEmptyAfterKeyUp", function(assert) {
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
@@ -508,7 +510,7 @@ QUnit.test("testChangedValueOk", function(assert) {
 });
 
 QUnit.test("testChangedValueError", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("999");
 	assert.equal(pNumVarViewSpy.getState(), "errorStillFocused");
@@ -517,7 +519,7 @@ QUnit.test("testChangedValueError", function(assert) {
 });
 
 QUnit.test("testChangedValueOkThenErrorThenEmpty", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	
 	pNumVarViewSpy.callOnkeyupWithValue("4");
@@ -539,11 +541,12 @@ QUnit.test("testChangedValueOkThenErrorThenEmpty", function(assert) {
 });
 
 QUnit.test("testInitNumberOutput", function(assert) {
-	let path = {};
+	let path = ["one","two"];
 	let attachedPNumVar = this.pNumVarFactory.factor(path, "numVariableId", "pNumVarNumVariableIdOutput");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		id: "onetwo",
 		label: "numVariableIdText",
 		"info": {
 			"defText": "numVariableIdDefText",
@@ -586,7 +589,7 @@ QUnit.test("testInitNumberOutput", function(assert) {
 });
 
 QUnit.test("testSetValueTextOutput", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableIdOutput");
 
 	attachedPNumVar.pNumVar.setValue("7");
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
@@ -594,7 +597,7 @@ QUnit.test("testSetValueTextOutput", function(assert) {
 });
 
 QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableIdOutput");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableIdOutput");
 	let message = {
 		"metadataId": "numVariableId",
 		"path": {}
@@ -613,7 +616,7 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 });
 
 QUnit.test("testOpenTextIdRecord", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
@@ -639,7 +642,7 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 });
 
 QUnit.test("testOpenDefTextIdRecord", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
@@ -665,7 +668,7 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 });
 QUnit.test("testOpenMetadataIdRecord", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
@@ -692,7 +695,7 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 });
 
 QUnit.test("testOpenPresentationIdRecord", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
@@ -719,7 +722,7 @@ QUnit.test("testOpenPresentationIdRecord", function(assert) {
 });
 
 QUnit.test("testDisable", function(assert) {
-	let attachedPNumVar = this.pNumVarFactory.factor({}, "numVariableId", "pNumVarNumVariableId");
+	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	attachedPNumVar.pNumVar.disableNumVar();
 
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018, 2020 Uppsala University Library
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2016, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,13 +29,42 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
+			possiblyAddLableTextToView();
 			info = createInfo();
 
 			createValueView();
 			view.appendChild(valueView);
 			view.appendChild(info.getButton());
 		};
+		
+		const possiblyAddLableTextToView = function() {
+			if(spec.label){
+				if(modeIsInput()){
+					addLabelForInput();
+				}else{
+					addLabelForOutput();
+				}
+			}
+		};
+		
+		
+		const modeIsInput = function(){
+			return (spec.mode === "input");
+		};
+		
+		const addLabelForInput = function(){
+			let label = document.createElement("label");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+			label.htmlFor = spec.id;
+		};
 
+		const addLabelForOutput = function(){
+			let label = CORA.gui.createSpanWithClassName("label");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+		};
+		
 		const createInfo = function() {
 			let infoSpec = {
 				"appendTo": view,
@@ -117,6 +146,7 @@ var CORA = (function(cora) {
 
 		const createInput = function() {
 			valueView = createTextTypeInput();
+			valueView.id = spec.id;
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);

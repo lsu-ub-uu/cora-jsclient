@@ -75,6 +75,7 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 
 			let pNumViewSpec =  {
+				id: path.join(""),
 				mode: mode,
 				presentationId: presentationId,
 				info: {

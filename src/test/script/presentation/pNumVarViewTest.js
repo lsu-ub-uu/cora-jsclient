@@ -1,6 +1,6 @@
 /*
  * Copyright 2018, 2020 Uppsala University Library
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2016, 2018, 2023 Olov McKie
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -30,6 +30,8 @@ QUnit.module("presentation/pNumVarViewTest.js", {
 		this.spec = {
 			"mode" : "input",
 			"presentationId" : "somePresentationId",
+			label: "Some label text",
+			id: "someId",
 			"info" : {
 				"text" : "someText",
 				"defText" : "someDefText",
@@ -61,7 +63,7 @@ QUnit.module("presentation/pNumVarViewTest.js", {
 			if (this.pNumVarView === undefined) {
 				this.pNumVarView = CORA.pNumVarView(this.dependencies, this.spec);
 			}
-			return this.pNumVarView.getView().childNodes[0];
+			return this.pNumVarView.getView().childNodes[1];
 		};
 	}
 });
@@ -128,7 +130,7 @@ QUnit.test("testInfoSpec", function(assert) {
 });
 QUnit.test("testInfoButtonAddedToView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.childNodes[1].className, "infoButtonSpy");
+	assert.strictEqual(view.childNodes[2].className, "infoButtonSpy");
 
 });
 
@@ -184,11 +186,34 @@ QUnit.test("testStateShownInClassName", function(assert) {
 	assert.strictEqual(view.className, "pNumVar somePresentationId infoActive");
 });
 
+QUnit.test("testLabelInInput", function(assert) {
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(label.nodeName, "LABEL");
+	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(label.htmlFor, "someId");
+	assert.strictEqual(this.getView().childNodes.length, 3);
+});
+
+QUnit.test("testLabelInOutput", function(assert) {
+	this.spec.mode = "output";
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(label.nodeName, "SPAN");
+	assert.strictEqual(label.className, "label");
+	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(this.getView().childNodes.length, 3);
+});
+
+QUnit.test("testNoLabel", function(assert) {
+	this.spec.label = undefined;
+	assert.strictEqual(this.getView().childNodes.length, 2);
+});
+
 QUnit.test("testInput", function(assert) {
 	let valueView = this.getValueView();
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
 	assert.strictEqual(valueView.placeholder, "");
+	assert.strictEqual(valueView.id, "someId");
 });
 
 QUnit.test("testInputPlaceholder", function(assert) {

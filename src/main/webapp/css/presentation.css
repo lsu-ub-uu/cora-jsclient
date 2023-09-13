@@ -542,7 +542,13 @@ position: relative;
 }
 
 label, .label {
-	font-style: italic;
+/* 	font-style: italic; */
+	font-weight: bold;
+	color: #575757;
+}
+
+label::after, .label:after {
+	content: ": ";
 }
 
 .presentation .text.labelTextStyle {

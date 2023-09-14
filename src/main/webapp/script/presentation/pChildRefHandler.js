@@ -552,7 +552,7 @@ var CORA = (function(cora) {
 
 		const createNewBinaryData = function(file) {
 			let dataDividerLinkedRecordId = dependencies.dataDivider;
-			let type = "genericBinary";
+			let type = "generic";
 			return {
 				name: "binary",
 				children: [{
@@ -577,7 +577,7 @@ var CORA = (function(cora) {
 						}]
 					}]
 				},{
-					name: "expectedFileName",
+					name: "originalFileName",
 					value: file.name
 				},{
 					name: "expectedFileSize",

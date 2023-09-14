@@ -188,14 +188,14 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 					}]
 				}]
 			},{
-				name: "expectedFileName",
+				name: "originalFileName",
 				value: "someFile.tif"
 			},{
 				name: "expectedFileSize",
 				value: "1234567890"
 			}],
 			"attributes": {
-				"type": "genericBinary"
+				"type": "generic"
 			}
 		};
 		this.data2 = {
@@ -222,14 +222,14 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 					}]
 				}]
 			},{
-				name: "expectedFileName",
+				name: "originalFileName",
 				value: "someFile2.tif"
 			},{
 				name: "expectedFileSize",
 				value: "9876543210"
 			}],
 			"attributes": {
-				"type": "genericBinary"
+				"type": "generic"
 			}
 		};
 		this.data3 = {
@@ -256,14 +256,14 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 						}]
 					}]
 			},{
-				name: "expectedFileName",
+				name: "originalFileName",
 				value: "someFile3.tif"
 			},{
 				name: "expectedFileSize",
 				value: "1122334455"
 			}],
 			attributes: {
-				type: "genericBinary"
+				type: "generic"
 			}
 		};
 
@@ -681,7 +681,7 @@ QUnit.test("testHandleFilesSendingOneBinaryFile",
 				pChildRefHandler.processNewBinary);
 
 		let data = JSON.parse(JSON.stringify(this.data));
-		data.attributes.type = "genericBinary";
+		data.attributes.type = "generic";
 		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
 	});
 

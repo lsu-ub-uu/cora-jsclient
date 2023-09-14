@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2020, 2023 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -534,7 +534,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleFile = function(file) {
-			let data = createNewBinaryData();
+			let data = createNewBinaryData(file);
 			let createLink = getLinkedRecordTypeCreateLink();
 			let localFile = file;
 			let callSpec = {
@@ -550,10 +550,8 @@ var CORA = (function(cora) {
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
-		const createNewBinaryData = function() {
+		const createNewBinaryData = function(file) {
 			let dataDividerLinkedRecordId = dependencies.dataDivider;
-//			let type = getTypeFromValidationType();
-//			let type = "image";
 			let type = "genericBinary";
 			return {
 				name: "binary",
@@ -578,6 +576,12 @@ var CORA = (function(cora) {
 							value: "genericBinary"
 						}]
 					}]
+				},{
+					name: "expectedFileName",
+					value: file.name
+				},{
+					name: "expectedFileSize",
+					value: ""+file.size
 				}],
 				attributes: {
 					type: type

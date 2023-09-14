@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2020, 2023 Uppsala University Library
  * Copyright 2016, 2017, 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -165,73 +165,85 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 		}
 
 		this.data = {
-			"name": "binary",
-			"children": [{
-				"name": "recordInfo",
-				"children": [{
-					"name": "dataDivider",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "system"
+			name: "binary",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "dataDivider",
+					children: [{
+						name: "linkedRecordType",
+						value: "system"
 					}, {
-						"name": "linkedRecordId",
-						"value": "systemY"
+						name: "linkedRecordId",
+						value: "systemY"
 					}]
 				},{
-						name: "validationType",
-						children: [{
-							name: "linkedRecordType",
-							value: "validationType"
-						}, {
-							name: "linkedRecordId",
-							value: "genericBinary"
-						}]
+					name: "validationType",
+					children: [{
+						name: "linkedRecordType",
+						value: "validationType"
+					}, {
+						name: "linkedRecordId",
+						value: "genericBinary"
 					}]
+				}]
+			},{
+				name: "expectedFileName",
+				value: "someFile.tif"
+			},{
+				name: "expectedFileSize",
+				value: "1234567890"
 			}],
 			"attributes": {
 				"type": "genericBinary"
 			}
 		};
 		this.data2 = {
-			"name": "binary",
-			"children": [{
-				"name": "recordInfo",
-				"children": [{
-					"name": "dataDivider",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "system"
+			name: "binary",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "dataDivider",
+					children: [{
+						name: "linkedRecordType",
+						value: "system"
 					}, {
-						"name": "linkedRecordId",
-						"value": "systemY"
+						name: "linkedRecordId",
+						value: "systemY"
 					}]
 				},{
-						name: "validationType",
-						children: [{
-							name: "linkedRecordType",
-							value: "validationType"
-						}, {
-							name: "linkedRecordId",
-							value: "genericBinary"
-						}]
+					name: "validationType",
+					children: [{
+						name: "linkedRecordType",
+						value: "validationType"
+					}, {
+						name: "linkedRecordId",
+						value: "genericBinary"
 					}]
+				}]
+			},{
+				name: "expectedFileName",
+				value: "someFile2.tif"
+			},{
+				name: "expectedFileSize",
+				value: "9876543210"
 			}],
 			"attributes": {
 				"type": "genericBinary"
 			}
 		};
 		this.data3 = {
-			"name": "binary",
-			"children": [{
-				"name": "recordInfo",
-				"children": [{
-					"name": "dataDivider",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "system"
+			name: "binary",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "dataDivider",
+					children: [{
+						name: "linkedRecordType",
+						value: "system"
 					}, {
-						"name": "linkedRecordId",
-						"value": "systemY"
+						name: "linkedRecordId",
+						value: "systemY"
 					}]
 				},{
 						name: "validationType",
@@ -243,9 +255,15 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 							value: "genericBinary"
 						}]
 					}]
+			},{
+				name: "expectedFileName",
+				value: "someFile3.tif"
+			},{
+				name: "expectedFileSize",
+				value: "1122334455"
 			}],
-			"attributes": {
-				"type": "genericBinary"
+			attributes: {
+				type: "genericBinary"
 			}
 		};
 
@@ -277,7 +295,6 @@ QUnit.test("testInit", function(assert) {
 	let pChildRefHandler = CORA.pChildRefHandler(this.dependencies, this.spec);
 	let view = pChildRefHandler.getView();
 	this.fixture.appendChild(view);
-	let childrenView = view.firstChild;
 	assert.ok(pChildRefHandler.isRepeating === false);
 	assert.ok(pChildRefHandler.isStaticNoOfChildren === true);
 
@@ -1304,7 +1321,6 @@ QUnit.test("testRepeatingElementStaticNoOfChildrenNoAddButton", function(assert)
 	let factored = pRepeatingElementFactory.getFactored(0);
 	assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-	//	let pRepeatingElementFactory = this.dependencies.pRepeatingElementFactory;
 	let factoredRepeatingSpec = pRepeatingElementFactory.getSpec(0);
 
 	let expectedRepeatingSpec = {
@@ -1557,7 +1573,7 @@ QUnit.test("testShowAddAndAddBeforeButtonWhenBelowMaxRepeatWhenNoPermission", fu
 	let view = pChildRefHandler.getView();
 	this.fixture.appendChild(view);
 
-	var factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
+	let factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.addMethod, undefined);
 });
 
@@ -1754,10 +1770,6 @@ QUnit.test("testPresentationMatchingNameInData", function(assert) {
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
-	let expectedSpec = {
-		"presentationId": "pVarTextVariableId",
-		"isRepeating": true
-	};
 	assert.strictEqual(factoredSpec.presentationId, "recordInfoPGroup");
 });
 
@@ -1773,10 +1785,6 @@ QUnit.test("testPresentationMatchingNameInDataAndAttributes", function(assert) {
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerViewFactory.getSpec(0);
-	let expectedSpec = {
-		"presentationId": "pVarTextVariableId",
-		"isRepeating": true
-	};
 	assert.strictEqual(factoredSpec.presentationId, "recordInfoAttributePGroup");
 });
 

@@ -110,14 +110,6 @@ var CORATEST = (function(coraTest) {
 
 	};
 
-	coraTest.testVariableMetadata = function(attachedPCollectionVar, assert) {
-		let pCollectionVar = attachedPCollectionVar.pCollectionVar;
-		assert.strictEqual(pCollectionVar.getText(), "Exempel textvariabel");
-		assert.strictEqual(pCollectionVar.getDefText(), "Detta är en exempeldefinition "
-			+ "för en textvariabel.");
-		assert.strictEqual(pCollectionVar.getRegEx(), "^[0-9A-Öa-ö\\s!*.]{2,50}$");
-	};
-
 	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
 		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);

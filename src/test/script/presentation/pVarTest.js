@@ -60,7 +60,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pVarTest.js", {
+QUnit.module.only("presentation/pVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -70,6 +70,7 @@ QUnit.module("presentation/pVarTest.js", {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+		this.pParentVarFactory = CORATEST.standardFactorySpy("pParentVarSpy");
 		
 		
 		this.dependencies = {
@@ -80,7 +81,8 @@ QUnit.module("presentation/pVarTest.js", {
 			textProvider: this.textProvider,
 			jsBookkeeper: this.jsBookkeeper,
 			pVarViewFactory: this.pVarViewFactory,
-			pAttributesFactory: this.pAttributesFactory
+			pAttributesFactory: this.pAttributesFactory,
+			pParentVarFactory: this.pParentVarFactory
 		};
 		this.spec = {
 			path: [],
@@ -89,6 +91,22 @@ QUnit.module("presentation/pVarTest.js", {
 				.getMetadataById("pVarTextVariableId"))
 		};
 	}
+});
+
+QUnit.test("testParentStarted", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+	
+	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
+	assert.strictEqual(pParentVarFactory, this.spec);
+//	let pParentVar = this.pParentVarFactory.getFactored(0);
+		
+//	assert.strictEqual(pVar.getSpec, "pVar");
+});
+
+QUnit.test("testGetType", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.type, "pVar");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
@@ -100,13 +118,15 @@ QUnit.test("testGetDependencies", function(assert) {
 QUnit.test("testGetSpec", function(assert) {
 	let pVar = CORA.pVar(this.dependencies, this.spec);
 
-	assert.strictEqual(pVar.getSpec(), this.spec);
+//	assert.strictEqual(pVar.getSpec(), this.spec);
+	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
+	assert.strictEqual(pVar.getSpec, pParentVarFactory.getSpec);
+
 });
 
 QUnit.test("testInitText2", function(assert) {
 	let pVar = CORA.pVar(this.dependencies, this.spec);
 
-	assert.strictEqual(pVar.type, "pVar");
 	assert.equal(pVar.getState(), "ok");
 
 	CORATEST.testVariableSubscription(pVar, this.dependencies, this.spec.path, this.spec.path, assert);

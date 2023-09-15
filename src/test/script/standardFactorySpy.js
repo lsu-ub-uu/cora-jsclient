@@ -69,7 +69,7 @@ var CORATEST = (function(coraTest) {
 		};
 
 		let out = Object.freeze({
-			"type": "standardFactorySpy",
+			type: "standardFactorySpy",
 			factor: factor,
 			getFactored: getFactored,
 			getSpec: getSpec,

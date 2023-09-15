@@ -37,8 +37,11 @@ var CORA = (function(cora) {
 		let regEx;
 		let mode;
 		let pAttributes;
+		let pParentVar;
 
 		const start = function() {
+			pParentVar = dependencies.pParentVarFactory.factor(spec);
+			
 			let pVarViewSpec = intializePVarViewSpec(textProvider);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
@@ -302,7 +305,9 @@ var CORA = (function(cora) {
 		return Object.freeze({
 			type: "pVar",
 			getDependencies: getDependencies,
-			getSpec: getSpec,
+//			getSpec: getSpec,
+			getSpec: pParentVar.getSpec,
+	
 			getView: getView,
 			setValue: setValue,
 			handleMsg: handleMsg,

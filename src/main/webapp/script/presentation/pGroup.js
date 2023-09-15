@@ -58,7 +58,7 @@ var CORA = (function(cora) {
 		start();
 
 		return Object.freeze({
-			"type": "pGroup",
+			type: "pGroup",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
 			getView: parent.getView

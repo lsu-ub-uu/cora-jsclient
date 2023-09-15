@@ -40,13 +40,10 @@ var CORA = (function(cora) {
 			cMetadataElement = getMetadataById(my.metadataId);
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 
-			let cTextGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("textId"));
-			textId = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			textId = cMetadataElement.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
 			text = textProvider.getTranslation(textId);
 
-			let cDefTextGroup = CORA.coraData(cMetadataElement
-				.getFirstChildByNameInData("defTextId"));
-			defTextId = cDefTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			defTextId = cMetadataElement.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
 			defText = textProvider.getTranslation(defTextId);
 
 			view = my.createBaseViewHolder();
@@ -87,8 +84,7 @@ var CORA = (function(cora) {
 			let cPresentationChildRef = CORA.coraData(presentationChildRef);
 			let cRefGroup = CORA.coraData(cPresentationChildRef
 				.getFirstChildByNameInData("refGroup"));
-			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
-			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 		};
 
 		const constraintsShouldBeChecked = function() {
@@ -130,9 +126,7 @@ var CORA = (function(cora) {
 		const checkReadPermissionForSurroundingContainer = function(cPresentationChild) {
 			let presentationsOf = cPresentationChild.getFirstChildByNameInData("presentationsOf");
 
-			for (var i = 0; i < presentationsOf.children.length; i++) {
-				let childReference = presentationsOf.children[i];
-
+			for (const childReference of presentationsOf.children) {
 				let cContainerChildReference = CORA.coraData(childReference);
 				if (checkHasReadPermission(cContainerChildReference)) {
 					return true;
@@ -177,30 +171,30 @@ var CORA = (function(cora) {
 		const createInfo = function() {
 			let infoSpec = {
 				// "insertAfter" is set to infoButton below
-				"afterLevelChange": updateView,
-				"level1": [{
-					"className": "textView",
-					"text": text
+				afterLevelChange: updateView,
+				level1: [{
+					className: "textView",
+					text: text
 				}, {
-					"className": "defTextView",
-					"text": defText
+					className: "defTextView",
+					text: defText
 				}],
-				"level2": [{
-					"className": "textIdView",
-					"text": "textId: " + textId
+				level2: [{
+					className: "textIdView",
+					text: `textId: ${textId}`
 					// onclickMethod : openTextIdRecord
 				}, {
-					"className": "defTextIdView",
-					"text": "defTextId: " + defTextId
+					className: "defTextIdView",
+					text: `defTextId: ${defTextId}`
 				}, {
-					"className": "metadataIdView",
-					"text": "metadataId: " + my.metadataId
+					className: "metadataIdView",
+					text: `metadataId: ${my.metadataId}`
 				}, {
-					"className": "technicalView",
-					"text": "nameInData: " + nameInData
+					className: "technicalView",
+					text: `nameInData: ${nameInData}`
 				}, {
-					"className": "technicalView",
-					"text": "presentationId: " + getPresentationId()
+					className: "technicalView",
+					text: `presentationId: ${getPresentationId()}`
 				}]
 			};
 			let newInfo = CORA.info(infoSpec);
@@ -273,9 +267,7 @@ var CORA = (function(cora) {
 		};
 
 		const getTextForLink = function(cPresentationChild) {
-			let cElementTextGroup = CORA.coraData(cPresentationChild
-				.getFirstChildByNameInData("elementText"));
-			let elementTextId = cElementTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			let elementTextId = cPresentationChild.getLinkedRecordIdFromFirstChildLinkWithNameInData("elementText");
 			return textProvider.getTranslation(elementTextId);
 		};
 
@@ -340,9 +332,7 @@ var CORA = (function(cora) {
 
 		const possiblyAddAddTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("addText")) {
-				let cTextGroup = CORA.coraData(cPresentationChildRef
-					.getFirstChildByNameInData("addText"));
-				let addText = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+				let addText = cPresentationChildRef.getLinkedRecordIdFromFirstChildLinkWithNameInData("addText");
 				childRefHandlerSpec.addText = addText;
 			}
 		};
@@ -378,11 +368,7 @@ var CORA = (function(cora) {
 		const getAlternativePresentation = function(cPresentationChildRef) {
 			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef
 				.getChildByNameInDataAndIndex("refGroup", 1));
-
-			let cAlternativePresRef = CORA.coraData(cAlternativePresRefGroup
-				.getFirstChildByNameInData("ref"));
-			let alternativePresRefId = cAlternativePresRef
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+			let alternativePresRefId = cAlternativePresRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 			return getMetadataById(alternativePresRefId);
 		};
 
@@ -414,7 +400,7 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			"type": "pMultipleChildren",
+			type: "pMultipleChildren",
 			getPresentationId: getPresentationId,
 			init: init,
 			getView: getView,

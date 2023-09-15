@@ -20,10 +20,10 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pNumVar = function(dependencies, spec) {
-		let metadataProvider = dependencies.metadataProvider;
-		let textProvider = dependencies.textProvider;
-		let pubSub = dependencies.pubSub;
-		let jsBookkeeper = dependencies.jsBookkeeper;
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
+		const pubSub = dependencies.pubSub;
+		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		let cPresentation = spec.cPresentation;
 		let presentationId;
@@ -50,7 +50,7 @@ var CORA = (function(cora) {
 		};
 
 		const initializeGlobalVariables = function() {
-			cMetadataElement = getMetadataById();
+			cMetadataElement = getMetadataById(metadataId);
 			min = getValueByNameInData("min");
 			max = getValueByNameInData("max");
 			warningMin = getValueByNameInData("warningMin");
@@ -64,7 +64,6 @@ var CORA = (function(cora) {
 		};
 
 		const initializePNumVarViewSpec = function() {
-			let textProvider = dependencies.textProvider;
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
@@ -110,12 +109,12 @@ var CORA = (function(cora) {
 				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup
 			};
-			possiblyAddPlaceHolderText(textProvider, pNumViewSpec);
+			possiblyAddPlaceHolderText(pNumViewSpec);
 			possiblyAddLabelToViewSpec(pNumViewSpec);
 			return pNumViewSpec;
 		};
 		
-		const possiblyAddPlaceHolderText = function(textProvider, pVarViewSpec) {
+		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let cEmptyTextId = CORA.coraData(cPresentation
 					.getFirstChildByNameInData("emptyTextId"));
@@ -201,8 +200,8 @@ var CORA = (function(cora) {
 			updateView();
 		};
 
-		const getMetadataById = function() {
-			return CORA.coraData(metadataProvider.getMetadataById(metadataId));
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getValueByNameInData = function(nameInData) {

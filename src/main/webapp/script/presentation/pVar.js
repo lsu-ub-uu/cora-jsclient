@@ -42,17 +42,16 @@ var CORA = (function(cora) {
 		const start = function() {
 			pParentVar = dependencies.pParentVarFactory.factor(spec);
 			
-			let pVarViewSpec = intializePVarViewSpec(textProvider);
+			let pVarViewSpec = intializePVarViewSpec();
+			addTypeSpecificInfoToViewSpec(pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
 		};
 
-		const intializePVarViewSpec = function(textProvider) {
+		const intializePVarViewSpec = function() {
 			let metadataId = spec.metadataIdUsedInData;
 			cMetadataElement = getMetadataById(metadataId);
-			let outputFormat = getOutputFormat();
-			let inputFormat = getInputFormat();
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
@@ -61,14 +60,10 @@ var CORA = (function(cora) {
 			text = textProvider.getTranslation(textId);
 			let defTextId = getTextId(cMetadataElement, "defTextId");
 			defText = textProvider.getTranslation(defTextId);
-			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 
 			let pVarViewSpec = {
 				id: path.join(""),
 				mode: mode,
-				inputType: getInputType(),
-				outputFormat: outputFormat,
-				inputFormat: inputFormat,
 				presentationId: presentationId,
 				info: {
 					text: text,
@@ -85,20 +80,30 @@ var CORA = (function(cora) {
 					}, {
 						text: `nameInData: ${nameInData}`,
 					}, {
-						text: `regEx: ${regEx}`,
-					}, {
 						text: `presentationId: ${presentationId}`,
 						onclickMethod: openPresentationIdRecord
 					}]
 				},
 				onblurFunction: onBlur,
-				onkeyupFunction: onkeyup
+				onkeyupFunction: onkeyup,
 			};
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
+			
+			
 			return pVarViewSpec;
 		};
-
+		
+		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+			pVarViewSpec.inputType = getInputType();
+			pVarViewSpec.outputFormat = getOutputFormat();
+			pVarViewSpec.inputFormat = getInputFormat();
+			
+			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+				
+		};
+		
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");

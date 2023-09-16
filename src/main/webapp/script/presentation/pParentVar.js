@@ -19,58 +19,54 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pParentVar = function(dependencies, spec) {
+	cora.pParentVar = function(dependencies, spec, child) {
 
-//		const metadataProvider = dependencies.metadataProvider;
-//		const textProvider = dependencies.textProvider;
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
 //		const pubSub = dependencies.pubSub;
 //		const jsBookkeeper = dependencies.jsBookkeeper;
-//		let path = spec.path;
-//		let cMetadataElement;
-//		let cPresentation = spec.cPresentation;
-//		let presentationId;
+		let path = spec.path;
+		let cMetadataElement;
+		let cPresentation = spec.cPresentation;
+		let presentationId;
 //		let state = "ok";
 //		let previousValue = "";
-//		let pVarView;
-//		let text;
-//		let defText;
+		let pVarView;
+		let text;
+		let defText;
 //		let regEx;
-//		let mode;
+		let mode;
 //		let pAttributes;
 
 		const start = function() {
-//			let pVarViewSpec = intializePVarViewSpec(textProvider);
-//			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
+			let pVarViewSpec = intializePVarViewSpec();
+//			addTypeSpecificInfoToViewSpec(pVarViewSpec);
+			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 //			subscribeToPubSub();
 //			initPAttributes();
 		};
 
-//		const intializePVarViewSpec = function(textProvider) {
-//			let metadataId = spec.metadataIdUsedInData;
-//			cMetadataElement = getMetadataById(metadataId);
-//			let outputFormat = getOutputFormat();
-//			let inputFormat = getInputFormat();
-//			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-//			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-//			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		const intializePVarViewSpec = function() {
+			let metadataId = spec.metadataIdUsedInData;
+			cMetadataElement = getMetadataById(metadataId);
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 //			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-//			let textId = getTextId(cMetadataElement, "textId");
-//			text = textProvider.getTranslation(textId);
-//			let defTextId = getTextId(cMetadataElement, "defTextId");
-//			defText = textProvider.getTranslation(defTextId);
-//			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-//
-//			let pVarViewSpec = {
-//				id: path.join(""),
-//				mode: mode,
-//				inputType: getInputType(),
-//				outputFormat: outputFormat,
-//				inputFormat: inputFormat,
-//				presentationId: presentationId,
-//				info: {
-//					text: text,
-//					defText: defText,
-//					technicalInfo: [{
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
+
+			let pVarViewSpec = {
+				id: path.join(""),
+				mode: mode,
+				presentationId: presentationId,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [
+//					{
 //						text: `textId: ${textId}`,
 //						onclickMethod: openTextIdRecord
 //					}, {
@@ -82,55 +78,66 @@ var CORA = (function(cora) {
 //					}, {
 //						text: `nameInData: ${nameInData}`,
 //					}, {
-//						text: `regEx: ${regEx}`,
-//					}, {
 //						text: `presentationId: ${presentationId}`,
 //						onclickMethod: openPresentationIdRecord
-//					}]
-//				},
+//					}
+					]
+				},
 //				onblurFunction: onBlur,
-//				onkeyupFunction: onkeyup
-//			};
-//			possiblyAddPlaceHolderText(pVarViewSpec);
-//			possiblyAddLabelToViewSpec(pVarViewSpec);
-//			return pVarViewSpec;
-//		};
+//				onkeyupFunction: onkeyup,
+			};
+			possiblyAddPlaceHolderText(pVarViewSpec);
+			possiblyAddLabelToViewSpec(pVarViewSpec);
+			
+			
+			return pVarViewSpec;
+		};
+		
+		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+			pVarViewSpec.inputType = getInputType();
+			pVarViewSpec.outputFormat = getOutputFormat();
+			pVarViewSpec.inputFormat = getInputFormat();
+			
+			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+				
+		};
 //
-//		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
+		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 //			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-//				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
-//				let emptyText = textProvider.getTranslation(emptyTextId);
-//				pVarViewSpec.placeholderText = emptyText;
+				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
+				let emptyText = textProvider.getTranslation(emptyTextId);
+				pVarViewSpec.placeholderText = emptyText;
 //			}
-//		};
-//
-//		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
-//			if(labelShouldBeShown()){
-//				addLabelToViewSpec(pVarViewSpec);
-//			}
-//		};
-//		
-//		const labelShouldBeShown = function (){
+		};
+
+		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
+			if(labelShouldBeShown()){
+				addLabelToViewSpec(pVarViewSpec);
+			}
+		};
+		
+		const labelShouldBeShown = function (){
 //			if(!cPresentation.containsChildWithNameInData("showLabel")){
-//				return true;
+				return true;
 //			}
 //			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
-//		};
-//		
-//		const addLabelToViewSpec = function(pVarViewSpec){
+		};
+		
+		const addLabelToViewSpec = function(pVarViewSpec){
 //			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
 //				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
 //				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
 //				pVarViewSpec.label = otherLabelText;
 //			}else{
-//				pVarViewSpec.label = text;
+				pVarViewSpec.label = text;
 //			}
-//		};
-//		
-//		const getMetadataById = function(id) {
-//			return CORA.coraData(metadataProvider.getMetadataById(id));
-//		};
-//
+		};
+		
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+
 //		const getOutputFormat = function() {
 //			if (cPresentation.containsChildWithNameInData("outputFormat")) {
 //				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
@@ -144,12 +151,12 @@ var CORA = (function(cora) {
 //			}
 //			return "text";
 //		};
-//
-//		const getTextId = function(cMetadataElementIn, textNameInData) {
-//			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
-//				
-//		};
-//
+
+		const getTextId = function(cMetadataElementIn, textNameInData) {
+			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
+				
+		};
+
 //		const getInputType = function() {
 //			if (cPresentation.containsChildWithNameInData("inputType")) {
 //				return cPresentation.getFirstAtomicValueByNameInData("inputType");

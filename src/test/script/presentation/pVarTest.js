@@ -170,10 +170,10 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	}, {
 		text: "nameInData: textVariableId"
 	}, {
-		text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		text: "presentationId: pVarTextVariableId",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -374,10 +374,10 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	}, {
 		"text": "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		"text": "presentationId: textVariableIdTextAreaPVar",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -420,10 +420,10 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	}, {
 		"text": "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		"text": "presentationId: textVariableIdShowTextAreaFalsePVar",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 	
@@ -470,10 +470,10 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	}, {
 		"text": "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		"text": "presentationId: pVarTextVariableId",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -627,10 +627,10 @@ QUnit.test("testInitTextOutput", function(assert) {
 	}, {
 		"text": "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		"text": "presentationId: pVarTextVariableIdOutput",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
@@ -677,10 +677,10 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	}, {
 		"text": "nameInData: textVariableId"
 	}, {
-		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
-	}, {
 		"text": "presentationId: pVarTextVariableId",
 		onclickMethod: pVar.openPresentationIdRecord
+	}, {
+		"text": "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 

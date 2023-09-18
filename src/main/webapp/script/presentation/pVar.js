@@ -224,8 +224,11 @@ var CORA = (function(cora) {
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			checkRegEx(valueFromView, errorState);
-			updateView();
+			if(valueFromView === "" || checkRegEx(valueFromView)){
+				state = "ok";	
+			}else{
+				state = errorState;
+			}
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
@@ -234,15 +237,11 @@ var CORA = (function(cora) {
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
+			updateView();
 		};
 
-		const checkRegEx = function(valueFromView, errorState) {
-			let value = valueFromView;
-			if (value.length === 0 || new RegExp(regEx).test(value)) {
-				state = "ok";
-			} else {
-				state = errorState;
-			}
+		const checkRegEx = function(valueFromView) {
+			return new RegExp(regEx).test(valueFromView);
 		};
 
 		const onkeyup = function(valueFromView) {

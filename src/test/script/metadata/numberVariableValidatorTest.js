@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/numberVariableValidatorTest.js", {
+QUnit.module("metadata/numberVariableValidatorTest.js", {
 	beforeEach : function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.cMetadataElement = CORA.coraData(this.metadataProvider.getMetadataById("numVariableId"));

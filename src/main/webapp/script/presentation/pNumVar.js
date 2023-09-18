@@ -229,12 +229,11 @@ var CORA = (function(cora) {
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if (valueFromView === "") {
-				state = "ok";
-			} else {
-				checkValueBetweenMinAndMaxIfNumber(valueFromView, errorState);
+			if(valueFromView === "" || checkValueBetweenMinAndMaxIfNumber(valueFromView)){
+				state = "ok";	
+			}else{
+				state = errorState;
 			}
-			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
@@ -243,19 +242,12 @@ var CORA = (function(cora) {
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
+			updateView();
 		};
 
-		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView, errorState) {
-			let validator = CORA.numberVariableValidator({
-				metadataProvider: metadataProvider,
-			});
-			let validationAnswer = validator.validateData(valueFromView, cMetadataElement);
-
-			if (validationAnswer) {
-				state = "ok";
-			} else {
-				state = errorState;
-			}
+		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView) {
+			let validator = CORA.numberVariableValidator();
+			return validator.validateData(valueFromView, cMetadataElement);
 		};
 
 		const onkeyup = function(valueFromView) {

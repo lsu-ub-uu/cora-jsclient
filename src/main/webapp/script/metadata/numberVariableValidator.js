@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2018, 2020 Uppsala University Library
  * Copyright 2023 Olov McKie
  *
@@ -19,7 +19,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.numberVariableValidator = function(dependencies) {
+	cora.numberVariableValidator = function() {
 		let value;
 		let cMetadataElement;
 
@@ -32,7 +32,7 @@ var CORA = (function(cora) {
 			return validateValue(value);
 		}
 
-		const validateValue = function(valueIn, cMetadataElementIn) {
+		const validateValue = function(valueIn) {
 			return (valueBetweenMinAndMax(value) && valueHasCorrectNumberOfDecimals(value));
 		}
 
@@ -76,8 +76,7 @@ var CORA = (function(cora) {
 
 		return Object.freeze({
 			type : "numberVariableValidator",
-			validateData : validateData,
-			getDependencies : getDependencies
+			validateData : validateData
 		});
 	};
 	return cora;

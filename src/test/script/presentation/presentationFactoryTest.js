@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  * Copyright 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -168,6 +168,9 @@ QUnit.test("testFactorPRecordLink", function(assert) {
 
 QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
+	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
+
+	
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
 	this.setCPresentation("masterPResLink");
 
@@ -232,14 +235,13 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(dependencies.uploadManager, context.dependencies.uploadManager);
 	assert.strictEqual(dependencies.authTokenHolder, context.dependencies.authTokenHolder);
 
-
-
 	assert.strictEqual(dependencies.pAttributesFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pAttributesFactory.getTypeToFactor(), "pAttributes");
 	let pAttributesDependencies = dependencies.pAttributesFactory.getDependencies();
 	assert.strictEqual(pAttributesDependencies.presentationFactory, context.newPresentationFactory);
 	assert.strictEqual(pAttributesDependencies.pubSub, context.dependencies.pubSub);
-	assert.deepEqual(pAttributesDependencies.view.type, CORA.pAttributesView().type);
+	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.type, "genericFactory");
+	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.getTypeToFactor(), "pAttributesView");
 
 	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");

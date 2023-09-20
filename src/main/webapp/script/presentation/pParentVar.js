@@ -40,7 +40,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			let pVarViewSpec = intializePVarViewSpec();
-//			addTypeSpecificInfoToViewSpec(pVarViewSpec);
+			addTypeSpecificInfoToViewSpec(pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 //			subscribeToPubSub();
 //			initPAttributes();
@@ -97,18 +97,18 @@ var CORA = (function(cora) {
 			pVarViewSpec.inputType = getInputType();
 			pVarViewSpec.outputFormat = getOutputFormat();
 			pVarViewSpec.inputFormat = getInputFormat();
-			
-			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+//			
+//			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
+//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
 				
 		};
 //
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
-//			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
 				let emptyText = textProvider.getTranslation(emptyTextId);
 				pVarViewSpec.placeholderText = emptyText;
-//			}
+			}
 		};
 
 		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
@@ -118,51 +118,51 @@ var CORA = (function(cora) {
 		};
 		
 		const labelShouldBeShown = function (){
-//			if(!cPresentation.containsChildWithNameInData("showLabel")){
+			if(!cPresentation.containsChildWithNameInData("showLabel")){
 				return true;
-//			}
-//			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+			}
+			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
 		};
 		
 		const addLabelToViewSpec = function(pVarViewSpec){
-//			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
-//				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
-//				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
-//				pVarViewSpec.label = otherLabelText;
-//			}else{
+			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
+				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
+				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
+				pVarViewSpec.label = otherLabelText;
+			}else{
 				pVarViewSpec.label = text;
-//			}
+			}
 		};
 		
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-//		const getOutputFormat = function() {
+		const getOutputFormat = function() {
 //			if (cPresentation.containsChildWithNameInData("outputFormat")) {
 //				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
 //			}
-//			return "text";
-//		};
+			return "text";
+		};
 //
-//		const getInputFormat = function() {
-//			if (cPresentation.containsChildWithNameInData("inputFormat")) {
-//				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
-//			}
-//			return "text";
-//		};
+		const getInputFormat = function() {
+			if (cPresentation.containsChildWithNameInData("inputFormat")) {
+				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
+			}
+			return "text";
+		};
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
 				
 		};
 
-//		const getInputType = function() {
-//			if (cPresentation.containsChildWithNameInData("inputType")) {
-//				return cPresentation.getFirstAtomicValueByNameInData("inputType");
-//			}
-//			return "input";
-//		};
+		const getInputType = function() {
+			if (cPresentation.containsChildWithNameInData("inputType")) {
+				return cPresentation.getFirstAtomicValueByNameInData("inputType");
+			}
+			return "input";
+		};
 //
 //		const subscribeToPubSub = function() {
 //			pubSub.subscribe("setValue", path, undefined, handleMsg);

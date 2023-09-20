@@ -20,11 +20,15 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pVar = function(dependencies, spec) {
-
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
 		const jsBookkeeper = dependencies.jsBookkeeper;
+		const pParentVarFactory = dependencies.pParentVarFactory;
+		const pAttributesFactory = dependencies.pAttributesFactory;
+		const clientInstanceProvider = dependencies.clientInstanceProvider;
+		const pVarViewFactory = dependencies.pVarViewFactory;
+		
 		let path = spec.path;
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
@@ -40,11 +44,11 @@ var CORA = (function(cora) {
 		let pParentVar;
 
 		const start = function() {
-			pParentVar = dependencies.pParentVarFactory.factor(spec);
+			pParentVar = pParentVarFactory.factor(spec);
 			
 			let pVarViewSpec = intializePVarViewSpec();
 			addTypeSpecificInfoToViewSpec(pVarViewSpec);
-			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
+			pVarView = pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
 		};
@@ -178,7 +182,7 @@ var CORA = (function(cora) {
 				path: path,
 				mode: mode
 			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			pAttributes = pAttributesFactory.factor(pAttributesSpec);
 		};
 
 
@@ -273,7 +277,7 @@ var CORA = (function(cora) {
 				readLink: link,
 				loadInBackground: loadInBackground
 			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+			clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};
 
 		const openTextIdRecord = function(event) {

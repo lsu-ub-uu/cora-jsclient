@@ -24,6 +24,11 @@ var CORA = (function(cora) {
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
 		const jsBookkeeper = dependencies.jsBookkeeper;
+		const pParentVarFactory = dependencies.pParentVarFactory;
+		const pAttributesFactory = dependencies.pAttributesFactory;
+		const clientInstanceProvider = dependencies.clientInstanceProvider;
+		const pNumVarViewFactory = dependencies.pNumVarViewFactory;
+		
 		let path = spec.path;
 		let cPresentation = spec.cPresentation;
 		let presentationId;
@@ -60,7 +65,7 @@ var CORA = (function(cora) {
 
 		const factorPNumVarView = function() {
 			let pNumVarViewSpec = initializePNumVarViewSpec();
-			pNumVarView = dependencies.pNumVarViewFactory.factor(pNumVarViewSpec);
+			pNumVarView = pNumVarViewFactory.factor(pNumVarViewSpec);
 		};
 
 		const initializePNumVarViewSpec = function() {
@@ -161,7 +166,7 @@ var CORA = (function(cora) {
 				path: path,
 				mode: mode
 			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			pAttributes = pAttributesFactory.factor(pAttributesSpec);
 		};
 
 		const disableNumVar = function() {
@@ -279,7 +284,7 @@ var CORA = (function(cora) {
 				readLink: link,
 				loadInBackground: loadInBackground
 			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+			clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};
 
 		const openTextIdRecord = function(event) {

@@ -21,43 +21,43 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPResourceLinkFactory = function(metadataProvider, pubSub, textProvider,
-			presentationFactory, jsBookkeeper, recordTypeProvider, fixture) {
+		presentationFactory, jsBookkeeper, recordTypeProvider, fixture) {
 		var factor = function(presentationId) {
 			var cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
 			var pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		
+
 			var dependencies = {
-				authTokenHolder : CORATEST.authTokenHolderSpy(),
-				metadataProvider : metadataProvider,
-				pubSub : pubSub,
-				textProvider : textProvider,
-				presentationFactory : presentationFactory,
+				authTokenHolder: CORATEST.authTokenHolderSpy(),
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				presentationFactory: presentationFactory,
 				pAttributesFactory: pAttributesFactory,
-				jsBookkeeper : jsBookkeeper,
-				recordTypeProvider : recordTypeProvider,
-				pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+				jsBookkeeper: jsBookkeeper,
+				recordTypeProvider: recordTypeProvider,
+				pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 			};
 			var spec = {
-				"path" : [],
-				"cPresentation" : cPresentation,
-				"cParentPresentation" : undefined,
-				"dataDivider" : "systemX"
+				"path": [],
+				"cPresentation": cPresentation,
+				"cParentPresentation": undefined,
+				"dataDivider": "systemX"
 			};
 			var pResourceLink = CORA.pResourceLink(dependencies, spec);
 
 			var view = pResourceLink.getView();
 			fixture.appendChild(view);
 			return {
-				pResourceLink : pResourceLink,
-				fixture : fixture,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub,
-				view : view
+				pResourceLink: pResourceLink,
+				fixture: fixture,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				view: view
 			};
 
 		};
 		return Object.freeze({
-			factor : factor
+			factor: factor
 		});
 	};
 
@@ -65,7 +65,7 @@ var CORATEST = (function(coraTest) {
 }(CORATEST || {}));
 
 QUnit.module("presentation/pResourceLinkTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -75,27 +75,27 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.newAttachedPResourceLink = CORATEST.attachedPResourceLinkFactory(
-				this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
-				this.jsBookkeeper, this.recordTypeProvider, this.fixture);
-				
+			this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
+			this.jsBookkeeper, this.recordTypeProvider, this.fixture);
+
 		this.dependencies = {
-			authTokenHolder : CORATEST.authTokenHolderSpy(),
-			metadataProvider : this.metadataProvider,
-			pubSub : this.pubSub,
-			textProvider : this.textProvider,
-			presentationFactory : this.presentationFactory,
+			authTokenHolder: CORATEST.authTokenHolderSpy(),
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub,
+			textProvider: this.textProvider,
+			presentationFactory: this.presentationFactory,
 			pAttributesFactory: this.pAttributesFactory,
-			jsBookkeeper : this.jsBookkeeper,
-			recordTypeProvider : this.recordTypeProvider,
-			pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			jsBookkeeper: this.jsBookkeeper,
+			recordTypeProvider: this.recordTypeProvider,
+			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy")
 		};
 		this.presentationId = "masterPResLink";
 		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));
 		this.spec = {
-			"path" : [],
-			"cPresentation" : this.cPresentation,
-			"cParentPresentation" : undefined,
-			"dataDivider" : "systemX"
+			"path": ["somePath"],
+			"cPresentation": this.cPresentation,
+			"cParentPresentation": undefined,
+			"dataDivider": "systemX"
 		};
 	},
 });
@@ -108,6 +108,8 @@ QUnit.test("testGetDependencies", function(assert) {
 QUnit.test("testGetSpec", function(assert) {
 	var pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 	assert.strictEqual(pResourceLink.getSpec(), this.spec);
+	assert.equal(this.dependencies.pubSub.getSubscriptions()[0].path[0],"somePath");
+	assert.equal(this.dependencies.pubSub.getSubscriptions()[0].path[1],"resourceLinkResLink");
 });
 
 QUnit.test("testInit", function(assert) {
@@ -140,24 +142,24 @@ QUnit.test("testInitInfo", function(assert) {
 	assert.equal(infoView.className, "infoView");
 
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "textView",
-			"metadataGroupForResourceLinkGroupText", assert);
+		"metadataGroupForResourceLinkGroupText", assert);
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[1], "defTextView",
-			"metadataGroupForResourceLinkGroupDefText", assert);
+		"metadataGroupForResourceLinkGroupDefText", assert);
 
 	CORATESTHELPER.simulateOnclick(infoButton);
 	assert.equal(view.childNodes.length, 4);
 	assert.equal(infoView.childNodes.length, 7);
 
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[2], "textIdView",
-			"textId: metadataGroupForResourceLinkGroupText", assert);
+		"textId: metadataGroupForResourceLinkGroupText", assert);
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[3], "defTextIdView",
-			"defTextId: metadataGroupForResourceLinkGroupDefText", assert);
+		"defTextId: metadataGroupForResourceLinkGroupDefText", assert);
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[4], "metadataIdView",
-			"metadataId: metadataGroupForResourceLinkGroup", assert);
+		"metadataId: metadataGroupForResourceLinkGroup", assert);
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[5], "technicalView",
-			"nameInData: metadataGroupForResourceLinkGroup", assert);
+		"nameInData: metadataGroupForResourceLinkGroup", assert);
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[6], "technicalView",
-			"presentationId: masterPResLink", assert);
+		"presentationId: masterPResLink", assert);
 
 	CORATESTHELPER.simulateOnclick(infoButton);
 	assert.equal(view.childNodes.length, 3);
@@ -178,29 +180,17 @@ QUnit.test("testInitOneChild", function(assert) {
 
 });
 CORATEST.resourceLinkDataFromMessage = {
-	"data" : {
-		"name" : "master",
-		"children" : [ {
-			"name" : "streamId",
-			"value" : "binary:123456789"
-		}, {
-			"name" : "filename",
-			"value" : "adele.png"
-		}, {
-			"name" : "filesize",
-			"value" : "12345"
-		}, {
-			"name" : "mimeType",
-			"value" : "application/png"
-		} ],
-		"actionLinks" : {
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://localhost:8080/therest/rest/record/image/image:123456/master",
-				"accept" : "application/octet-stream"
+	"data": {
+		"actionLinks": {
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master",
+				"accept": "application/octet-stream"
 			}
-		}
+		},
+		"name": "master",
+		"mimeType": "application/octet-stream"
 	}
 };
 
@@ -214,14 +204,14 @@ QUnit.test("testOneChildHandleLinkedResource", function(assert) {
 	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
 
 	var image = view.childNodes[2];
-	assert.equal(image.src, "http://localhost:8080/therest/rest/record/image/image:123456/master"
-			+ "?authToken=fitnesseAdminToken");
+	assert.equal(image.src, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
+		+ "?authToken=fitnesseAdminToken");
 
 });
 
 QUnit.test("testOneChildHandleLinkedResourceNoChildReferences", function(assert) {
 	var attachedPResourceLink = this.newAttachedPResourceLink
-			.factor("masterPResLinkNoChildReferences");
+		.factor("masterPResLinkNoChildReferences");
 	var view = attachedPResourceLink.view;
 
 	assert.deepEqual(view.childNodes.length, 2);
@@ -230,14 +220,14 @@ QUnit.test("testOneChildHandleLinkedResourceNoChildReferences", function(assert)
 	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
 
 	var image = view.childNodes[1];
-	assert.equal(image.src, "http://localhost:8080/therest/rest/record/image/image:123456/master"
-			+ "?authToken=fitnesseAdminToken");
+	assert.equal(image.src, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
+		+ "?authToken=fitnesseAdminToken");
 
 });
 
 QUnit.test("testOneChildMasterPResLinkNoOutputFormat", function(assert) {
 	var attachedPResourceLink = this.newAttachedPResourceLink
-			.factor("masterPResLinkNoOutputFormat");
+		.factor("masterPResLinkNoOutputFormat");
 	var view = attachedPResourceLink.view;
 
 	assert.deepEqual(view.childNodes.length, 2);
@@ -252,7 +242,7 @@ QUnit.test("testOneChildMasterPResLinkNoOutputFormat", function(assert) {
 
 QUnit.test("testOneChildMasterPResLinkDownloadOutputFormat", function(assert) {
 	var attachedPResourceLink = this.newAttachedPResourceLink
-			.factor("masterPResLinkDownloadOutputFormat");
+		.factor("masterPResLinkDownloadOutputFormat");
 	var view = attachedPResourceLink.view;
 
 	assert.deepEqual(view.childNodes.length, 2);
@@ -262,8 +252,8 @@ QUnit.test("testOneChildMasterPResLinkDownloadOutputFormat", function(assert) {
 
 	var link = view.childNodes[1];
 	assert.equal(link.nodeName, "A");
-	assert.equal(link.href, "http://localhost:8080/therest/rest/record/image/image:123456/master"
-			+ "?authToken=fitnesseAdminToken");
+	assert.equal(link.href, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
+		+ "?authToken=fitnesseAdminToken");
 	assert.equal(link.textContent, "Ladda ner");
 	assert.equal(link.target, "_blank");
 

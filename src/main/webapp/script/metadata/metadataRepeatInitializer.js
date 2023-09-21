@@ -141,7 +141,7 @@ var CORA = (function(cora) {
 				initializeMetadataRecordLink(nextLevelPath);
 				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
-				initializeMetadataResourceLink(nextLevelPath);
+//				initializeMetadataResourceLink(nextLevelPath);
 				pubSub.publish("linkedResource", message);
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);

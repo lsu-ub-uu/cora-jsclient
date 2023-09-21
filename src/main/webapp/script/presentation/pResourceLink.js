@@ -101,8 +101,13 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToLinkedResourceMessage = function() {
-			dependencies.pubSub.subscribe("linkedResource", spec.path, undefined, handleMsg);
+			const resourceLinkPath = addResourceLinkResLinkToMasterGroupPath();
+			dependencies.pubSub.subscribe("linkedResource", resourceLinkPath, undefined, handleMsg);
 		};
+		
+		const addResourceLinkResLinkToMasterGroupPath = function (){
+			return spec.path.concat(["resourceLinkResLink"]);
+		}
 
 		const handleMsg = function(dataFromMsg) {
 			setInfoInLinkedResourceView(dataFromMsg);

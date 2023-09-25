@@ -44,8 +44,8 @@ var CORA = (function(cora) {
 		let pParentVar;
 
 		const start = function() {
-			pParentVar = pParentVarFactory.factor(spec);
-			
+			pParentVar = pParentVarFactory.factor(spec, self);
+		
 			let pVarViewSpec = intializePVarViewSpec();
 			addTypeSpecificInfoToViewSpec(pVarViewSpec);
 			pVarView = pVarViewFactory.factor(pVarViewSpec);
@@ -228,11 +228,8 @@ var CORA = (function(cora) {
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if(valueFromView === "" || checkRegEx(valueFromView)){
-				state = "ok";	
-			}else{
-				state = errorState;
-			}
+			checkRegEx(valueFromView, errorState);
+			updateView();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
@@ -241,11 +238,15 @@ var CORA = (function(cora) {
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
-			updateView();
 		};
 
-		const checkRegEx = function(valueFromView) {
-			return new RegExp(regEx).test(valueFromView);
+		const checkRegEx = function(valueFromView, errorState) {
+			let value = valueFromView;
+			if (value.length === 0 || new RegExp(regEx).test(value)) {
+				state = "ok";
+			} else {
+				state = errorState;
+			}
 		};
 
 		const onkeyup = function(valueFromView) {
@@ -308,13 +309,16 @@ var CORA = (function(cora) {
 			pAttributes.disableExistingAttributes();
 			pVarView.disable();
 		};
+		const self = {
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+		};
 
 		start();
 		return Object.freeze({
 			type: "pVar",
 			getDependencies: getDependencies,
-//			getSpec: getSpec,
-			getSpec: pParentVar.getSpec,
+			getSpec: getSpec,
+//			getSpec: pParentVar.getSpec,
 	
 			getView: getView,
 			setValue: setValue,
@@ -332,6 +336,7 @@ var CORA = (function(cora) {
 			openPresentationIdRecord: openPresentationIdRecord,
 			disableVar: disableVar
 		});
+//		return self;
 
 	};
 	return cora;

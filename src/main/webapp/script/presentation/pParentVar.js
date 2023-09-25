@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-//			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
 			text = textProvider.getTranslation(textId);
 			let defTextId = getTextId(cMetadataElement, "defTextId");
@@ -66,21 +66,21 @@ var CORA = (function(cora) {
 					text: text,
 					defText: defText,
 					technicalInfo: [
-//					{
-//						text: `textId: ${textId}`,
-//						onclickMethod: openTextIdRecord
-//					}, {
-//						text: `defTextId: ${defTextId}`,
-//						onclickMethod: openDefTextIdRecord
-//					}, {
-//						text: `metadataId: ${metadataId}`,
-//						onclickMethod: openMetadataIdRecord
-//					}, {
-//						text: `nameInData: ${nameInData}`,
-//					}, {
-//						text: `presentationId: ${presentationId}`,
-//						onclickMethod: openPresentationIdRecord
-//					}
+					{
+						text: `textId: ${textId}`,
+						onclickMethod: openTextIdRecord
+					}, {
+						text: `defTextId: ${defTextId}`,
+						onclickMethod: openDefTextIdRecord
+					}, {
+						text: `metadataId: ${metadataId}`,
+						onclickMethod: openMetadataIdRecord
+					}, {
+						text: `nameInData: ${nameInData}`,
+					}, {
+						text: `presentationId: ${presentationId}`,
+						onclickMethod: openPresentationIdRecord
+					}
 					]
 				},
 //				onblurFunction: onBlur,
@@ -94,9 +94,9 @@ var CORA = (function(cora) {
 		};
 		
 		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
-			pVarViewSpec.inputType = getInputType();
-			pVarViewSpec.outputFormat = getOutputFormat();
-			pVarViewSpec.inputFormat = getInputFormat();
+//			pVarViewSpec.inputType = getInputType();
+//			pVarViewSpec.outputFormat = getOutputFormat();
+//			pVarViewSpec.inputFormat = getInputFormat();
 //			
 //			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 //			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
@@ -264,38 +264,38 @@ var CORA = (function(cora) {
 //			return spec;
 //		};
 //
-//		const openLinkedRecordForLink = function(event, link) {
-//			let loadInBackground = "false";
-//			if (event.ctrlKey) {
-//				loadInBackground = "true";
-//			}
-//			let openInfo = {
-//				readLink: link,
-//				loadInBackground: loadInBackground
-//			};
-//			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-//		};
-//
-//		const openTextIdRecord = function(event) {
-//			openLinkedRecordForLink(event,
-//				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-//		};
-//
-//		const openDefTextIdRecord = function(event) {
-//			openLinkedRecordForLink(event,
-//				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
-//		};
-//
-//		const openMetadataIdRecord = function(event) {
-//			openLinkedRecordForLink(event, cPresentation
-//				.getFirstChildByNameInData("presentationOf").actionLinks.read);
-//		};
-//
-//		const openPresentationIdRecord = function(event) {
-//			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
-//			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
-//		};
-//
+		const openLinkedRecordForLink = function(event, link) {
+			let loadInBackground = "false";
+			if (event.ctrlKey) {
+				loadInBackground = "true";
+			}
+			let openInfo = {
+				readLink: link,
+				loadInBackground: loadInBackground
+			};
+			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+		};
+
+		const openTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
+		};
+
+		const openDefTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
+		};
+
+		const openMetadataIdRecord = function(event) {
+			openLinkedRecordForLink(event, cPresentation
+				.getFirstChildByNameInData("presentationOf").actionLinks.read);
+		};
+
+		const openPresentationIdRecord = function(event) {
+			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
+			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
+		};
+
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -305,10 +305,10 @@ var CORA = (function(cora) {
 		};
 //
 //		
-//		const disableVar = function() {
+		const disableVar = function() {
 //			pAttributes.disableExistingAttributes();
-//			pVarView.disable();
-//		};
+			pVarView.disable();
+		};
 
 		start();
 		return Object.freeze({
@@ -325,11 +325,11 @@ var CORA = (function(cora) {
 //			onBlur: onBlur,
 //			onkeyup: onkeyup,
 //			handleValidationError: handleValidationError,
-//			openTextIdRecord: openTextIdRecord,
-//			openDefTextIdRecord: openDefTextIdRecord,
-//			openMetadataIdRecord: openMetadataIdRecord,
-//			openPresentationIdRecord: openPresentationIdRecord,
-//			disableVar: disableVar
+			openTextIdRecord: openTextIdRecord,
+			openDefTextIdRecord: openDefTextIdRecord,
+			openMetadataIdRecord: openMetadataIdRecord,
+			openPresentationIdRecord: openPresentationIdRecord,
+			disableVar: disableVar
 		});
 
 	};

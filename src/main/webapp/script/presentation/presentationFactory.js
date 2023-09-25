@@ -110,7 +110,7 @@ var CORA = (function(cora) {
 			pNonRepeatingChildRefHandlerFactory: pNonRepeatingChildRefHandlerFactory,
 			pAttributesFactory: pAttributesFactory
 		};
-		childDependencies.pParentVarFactory = CORA.genericFactory("pParentVar", childDependencies);
+		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
 	
 	
 		const factor = function(spec) {

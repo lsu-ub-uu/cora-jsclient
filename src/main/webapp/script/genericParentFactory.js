@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -18,14 +18,14 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.genericFactory = function(typeToFactor, dependencies) {
+	cora.genericParentFactory = function(typeToFactor, dependencies) {
 		let out;
 
-		const factor = function(spec) {
+		const factor = function(spec, child) {
 			if(undefined == dependencies){
-				return CORA[typeToFactor](spec);
+				return CORA[typeToFactor](spec, child);
 			}
-			return CORA[typeToFactor](dependencies, spec);
+			return CORA[typeToFactor](dependencies, spec, child);
 		};
 
 		const getTypeToFactor = function() {
@@ -37,7 +37,7 @@ var CORA = (function(cora) {
 		};
 
 		out = Object.freeze({
-			type : "genericFactory",
+			type : "genericParentFactory",
 			getTypeToFactor : getTypeToFactor,
 			getDependencies : getDependencies,
 			factor : factor

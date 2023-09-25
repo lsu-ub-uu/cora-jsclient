@@ -70,7 +70,7 @@ QUnit.module.only("presentation/pVarTest.js", {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		this.pParentVarFactory = CORATEST.standardFactorySpy("pParentVarSpy");
+		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		
 		
 		this.dependencies = {
@@ -98,7 +98,14 @@ QUnit.test("testParentStarted", function(assert) {
 	
 	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
 	assert.strictEqual(pParentVarFactory, this.spec);
-//	let pParentVar = this.pParentVarFactory.getFactored(0);
+	
+	const child = this.pParentVarFactory.getChild(0);
+//	console.log("child2", child)
+		
+//	assert.strictEqual(pVar, this.pParentVarFactory.getChild());
+//	addTypeSpecificInfoToViewSpec
+	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
+//	let pParentVar = this.pParentVarFactory.getFactored(0); 
 		
 //	assert.strictEqual(pVar.getSpec, "pVar");
 });
@@ -118,9 +125,9 @@ QUnit.test("testGetDependencies", function(assert) {
 QUnit.test("testGetSpec", function(assert) {
 	let pVar = CORA.pVar(this.dependencies, this.spec);
 
-//	assert.strictEqual(pVar.getSpec(), this.spec);
-	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
-	assert.strictEqual(pVar.getSpec, pParentVarFactory.getSpec);
+	assert.strictEqual(pVar.getSpec(), this.spec);
+//	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
+//	assert.strictEqual(pVar.getSpec, pParentVarFactory.getSpec);
 
 });
 

@@ -41,11 +41,11 @@ var CORATEST = (function(coraTest) {
 		assert.deepEqual(subscriptions.length, 3);
 	};
 
-	coraTest.testVariableMetadata = function(pParentVar, assert) {
+	coraTest.testParentVariableMetadata = function(pParentVar, assert) {
 		assert.strictEqual(pParentVar.getText(), "Exempel textvariabel");
 		assert.strictEqual(pParentVar.getDefText(), "Detta är en exempeldefinition "
 			+ "för en textvariabel.");
-		assert.strictEqual(pParentVar.getRegEx(), "^[0-9A-Öa-ö\\s!*.]{2,50}$");
+//		assert.strictEqual(pParentVar.getRegEx(), "^[0-9A-Öa-ö\\s!*.]{2,50}$");
 	};
 
 	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
@@ -92,6 +92,9 @@ QUnit.module.only("presentation/pParentVarTest.js", {
 			return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
 		}
 		this.child = {
+			addTypeSpecificInfoToViewSpec: function (pVarViewSpec) {
+				pVarViewSpec.childExtra = "added by child";
+			}
 //			metadataId: this.spec.metadataIdUsedInData,
 //			cPresentation: CORA.coraData(this.dependencies.metadataProvider
 //				.getMetadataById("pgGroupIdOneTextChildMinimized")),
@@ -99,7 +102,7 @@ QUnit.module.only("presentation/pParentVarTest.js", {
 //			cParentPresentation: CORA.coraData(this.dependencies.metadataProvider
 //				.getMetadataById("pgGroupIdOneTextChildMinimized")),
 //			createBaseViewHolder: createBaseViewHolder
-		}
+		};
 	}
 });
 
@@ -121,17 +124,23 @@ QUnit.test("testGetSpec", function(assert) {
 	assert.strictEqual(pParentVar.getSpec(), this.spec);
 });
 
+QUnit.test("testGetView", function(assert) {
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
+	let spyView = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(pParentVar.getView(), spyView.getView());
+});
+
 QUnit.test("testInitText2", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
+	assert.equal(pParentVar.getState(), "ok");
 
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
-//	CORATEST.testVariableMetadata(pParentVar, assert);
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
+	CORATEST.testParentVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
-QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
+QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	this.spec.path = ["one", "two"];
 	
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
@@ -155,6 +164,9 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 //		outputFormat: "text",
 //		inputFormat: "text",
 	};
+	
+	expectedPVarViewSpec.childExtra = "added by child";
+	
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{
 		text: "textId: textVariableIdText",
@@ -242,18 +254,18 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyTextId", functio
 //	assert.strictEqual(pVarViewSpy.getSpec().inputType, "textarea");
 //});
 
-//QUnit.test("testFactoredPAttributes", function(assert) {
-//	CORA.pParentVar(this.dependencies, this.spec, this.child);
-//	
-//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-//
-//	let attributesSpec = this.pAttributesFactory.getSpec(0);
-//
-//	assert.strictEqual(attributesSpec.addViewToParent, pVarViewSpy.addAttributesView);
-//	assert.strictEqual(attributesSpec.path, this.spec.path);
-//	assert.strictEqual(attributesSpec.mode, "input");
-//});
-//
+QUnit.test("testFactoredPAttributes", function(assert) {
+	CORA.pParentVar(this.dependencies, this.spec, this.child);
+	
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+
+	assert.strictEqual(attributesSpec.addViewToParent, pVarViewSpy.addAttributesView);
+	assert.strictEqual(attributesSpec.path, this.spec.path);
+	assert.strictEqual(attributesSpec.mode, "input");
+});
+
 //QUnit.test("testGetRegexpShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", function(assert) {
 //	let pVarTextVariableId2 = this.metadataProvider.getMetadataById("pVarTextVariableId2");
 //	let presentationOf2 = pVarTextVariableId2.children[1].children[1].value;
@@ -275,7 +287,7 @@ QUnit.test("testInitTextArea", function(assert) {
 	
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 	
-//	assert.equal(pParentVar.getState(), "ok");
+	assert.equal(pParentVar.getState(), "ok");
 //	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
@@ -289,8 +301,8 @@ QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 	
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -303,8 +315,8 @@ QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -317,8 +329,8 @@ QUnit.test("testTextAreaWithTwoLevelPath", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -331,8 +343,8 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -345,8 +357,8 @@ QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -359,8 +371,8 @@ QUnit.test("testPathWithTwoLevelPathWithRepeatId", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -373,8 +385,8 @@ QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -404,6 +416,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 //		"outputFormat": "text",
 //		"inputFormat": "text",
 	};
+	expectedPVarViewSpec.childExtra = "added by child";
+	
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -450,6 +464,8 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 //		"outputFormat": "text",
 //		"inputFormat": "text",
 	};
+	expectedPVarViewSpec.childExtra = "added by child";
+	
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -469,8 +485,8 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 	
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
@@ -500,6 +516,8 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 //		outputFormat: "text",
 //		inputFormat: "password",
 	};
+	expectedPVarViewSpec.childExtra = "added by child";
+	
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -519,31 +537,32 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 
-//	assert.equal(pParentVar.getState(), "ok");
-//	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
+	assert.equal(pParentVar.getState(), "ok");
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 //	CORATEST.testVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 //
-//QUnit.test("testSetValueInput", function(assert) {
-//	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
-//	pParentVar.setValue("A Value");
-//
-//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-//	assert.equal(pVarViewSpy.getValue(), "A Value");
-//});
-//
-//QUnit.test("testHandleMessage", function(assert) {
-//	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
-//	let data = {
-//		"data": "A new value",
-//		"path": []
-//	};
-//	pParentVar.handleMsg(data);
-//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-//	assert.equal(pVarViewSpy.getValue(), "A new value");
-//});
-//
+QUnit.test("testSetValueInput", function(assert) {
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
+	pParentVar.setValue("A Value");
+
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.equal(pVarViewSpy.getValue(), "A Value");
+});
+
+QUnit.test("testHandleMessage", function(assert) {
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
+	let data = {
+		"data": "A new value",
+		"path": []
+	};
+	pParentVar.handleMsg(data);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.equal(pVarViewSpy.getValue(), "A new value");
+	assert.equal(pVarViewSpy.getState(), "ok");
+});
+
 //QUnit.test("testChangedValueEmpty", function(assert) {
 //	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 //	
@@ -554,11 +573,10 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 //	pParentVar.handleMsg(data);
 //	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 //	pVarViewSpy.callOnblurWithValue("");
-//	assert.equal(pVarViewSpy.getState(), "ok");
 //	assert.equal(pParentVar.getState(), "ok");
 //	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", assert);
 //});
-//
+
 //QUnit.test("testChangedValueOk", function(assert) {
 //	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
 //	
@@ -891,13 +909,13 @@ QUnit.test("testDisable", function(assert) {
 	assert.equal(pVarViewSpy.getDisabledCalled(), true);
 });
 
-//QUnit.test("testDisableAttributes", function(assert) {
-//	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
-//
-//	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
-//	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
-//
-//	pParentVar.disableVar();
-//
-//	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
-//});
+QUnit.test("testDisableAttributes", function(assert) {
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.child);
+
+	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
+
+	pParentVar.disableVar();
+
+	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
+});

@@ -23,27 +23,27 @@ var CORA = (function(cora) {
 
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
-//		const pubSub = dependencies.pubSub;
+		const pubSub = dependencies.pubSub;
 //		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
 		let presentationId;
-//		let state = "ok";
+		let state = "ok";
 //		let previousValue = "";
 		let pVarView;
 		let text;
 		let defText;
 //		let regEx;
 		let mode;
-//		let pAttributes;
+		let pAttributes;
 
 		const start = function() {
 			let pVarViewSpec = intializePVarViewSpec();
-			addTypeSpecificInfoToViewSpec(pVarViewSpec);
+			child.addTypeSpecificInfoToViewSpec(pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
-//			subscribeToPubSub();
-//			initPAttributes();
+			subscribeToPubSub();
+			initPAttributes();
 		};
 
 		const intializePVarViewSpec = function() {
@@ -93,7 +93,7 @@ var CORA = (function(cora) {
 			return pVarViewSpec;
 		};
 		
-		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+//		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
 //			pVarViewSpec.inputType = getInputType();
 //			pVarViewSpec.outputFormat = getOutputFormat();
 //			pVarViewSpec.inputFormat = getInputFormat();
@@ -101,7 +101,7 @@ var CORA = (function(cora) {
 //			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
 //			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
 				
-		};
+//		};
 //
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
@@ -138,82 +138,82 @@ var CORA = (function(cora) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-		const getOutputFormat = function() {
+//		const getOutputFormat = function() {
 //			if (cPresentation.containsChildWithNameInData("outputFormat")) {
 //				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
 //			}
-			return "text";
-		};
+//			return "text";
+//		};
 //
-		const getInputFormat = function() {
-			if (cPresentation.containsChildWithNameInData("inputFormat")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
-			}
-			return "text";
-		};
+//		const getInputFormat = function() {
+//			if (cPresentation.containsChildWithNameInData("inputFormat")) {
+//				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
+//			}
+//			return "text";
+//		};
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
 				
 		};
 
-		const getInputType = function() {
-			if (cPresentation.containsChildWithNameInData("inputType")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputType");
-			}
-			return "input";
+//		const getInputType = function() {
+//			if (cPresentation.containsChildWithNameInData("inputType")) {
+//				return cPresentation.getFirstAtomicValueByNameInData("inputType");
+//			}
+//			return "input";
+//		};
+//
+		const subscribeToPubSub = function() {
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
+			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
 //
-//		const subscribeToPubSub = function() {
-//			pubSub.subscribe("setValue", path, undefined, handleMsg);
-//			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-//			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
-//			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-//		};
-//
-//		const initPAttributes = function() {
-//			let pAttributesSpec = {
-//				addViewToParent: pVarView.addAttributesView,
-//				path: path,
-//				mode: mode
-//			};
-//			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
-//		};
+		const initPAttributes = function() {
+			let pAttributesSpec = {
+				addViewToParent: pVarView.addAttributesView,
+				path: path,
+				mode: mode
+			};
+			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		};
 //
 //
-//		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-//			let pathUtils = CORA.pathUtils();
-//			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-//		};
-//
-//		const getView = function() {
-//			return pVarView.getView();
-//		};
-//
-//		const setValue = function(value) {
+		const ensureNoRepeatIdInLowestLevelOfPath = function() {
+			let pathUtils = CORA.pathUtils();
+			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
+		};
+
+		const getView = function() {
+			return pVarView.getView();
+		};
+
+		const setValue = function(value) {
 //			state = "ok";
 //			previousValue = value;
-//			pVarView.setValue(value);
-//		};
+			pVarView.setValue(value);
+		};
 //
-//		const handleMsg = function(dataFromMsg) {
-//			setValue(dataFromMsg.data);
-//			updateView();
-//		};
+		const handleMsg = function(dataFromMsg) {
+			setValue(dataFromMsg.data);
+			updateView();
+		};
 //
-//		const handleValidationError = function() {
+		const handleValidationError = function() {
 //			state = "error";
 //			updateView();
-//		};
-//
-//		const getText = function() {
-//			return text;
-//		};
-//
-//		const getDefText = function() {
-//			return defText;
-//		};
-//
+		};
+
+		const getText = function() {
+			return text;
+		};
+
+		const getDefText = function() {
+			return defText;
+		};
+
 //		const getRegEx = function() {
 //			return regEx;
 //		};
@@ -247,23 +247,19 @@ var CORA = (function(cora) {
 //		const onkeyup = function(valueFromView) {
 //			handleValueFromView(valueFromView, "errorStillFocused");
 //		};
-//
-//		const updateView = function() {
-//			pVarView.setState(state);
-//		};
-//
+
+		const updateView = function() {
+			pVarView.setState(state);
+		};
+
 //		const valueHasChanged = function(valueFromView) {
 //			return valueFromView !== previousValue;
 //		};
-//
-//		const getState = function() {
-//			return state;
-//		};
-//
-//		const getSpec = function() {
-//			return spec;
-//		};
-//
+
+		const getState = function() {
+			return state;
+		};
+
 		const openLinkedRecordForLink = function(event, link) {
 			let loadInBackground = "false";
 			if (event.ctrlKey) {
@@ -303,10 +299,9 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
-//
-//		
+
 		const disableVar = function() {
-//			pAttributes.disableExistingAttributes();
+			pAttributes.disableExistingAttributes();
 			pVarView.disable();
 		};
 
@@ -315,16 +310,16 @@ var CORA = (function(cora) {
 			type: "pParentVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-//			getView: getView,
-//			setValue: setValue,
-//			handleMsg: handleMsg,
-//			getText: getText,
-//			getDefText: getDefText,
+			getView: getView,
+			setValue: setValue,
+			handleMsg: handleMsg,
+			getText: getText,
+			getDefText: getDefText,
 //			getRegEx: getRegEx,
-//			getState: getState,
+			getState: getState,
 //			onBlur: onBlur,
 //			onkeyup: onkeyup,
-//			handleValidationError: handleValidationError,
+			handleValidationError: handleValidationError,
 			openTextIdRecord: openTextIdRecord,
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,

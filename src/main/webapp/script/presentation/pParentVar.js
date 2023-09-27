@@ -24,13 +24,13 @@ var CORA = (function(cora) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
-//		const jsBookkeeper = dependencies.jsBookkeeper;
+		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
 		let presentationId;
 		let state = "ok";
-//		let previousValue = "";
+		let previousValue = "";
 		let pVarView;
 		let text;
 		let defText;
@@ -83,8 +83,8 @@ var CORA = (function(cora) {
 					}
 					]
 				},
-//				onblurFunction: onBlur,
-//				onkeyupFunction: onkeyup,
+				onblurFunction: onBlur,
+				onkeyupFunction: onkeyup,
 			};
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
@@ -192,7 +192,7 @@ var CORA = (function(cora) {
 
 		const setValue = function(value) {
 //			state = "ok";
-//			previousValue = value;
+			previousValue = value;
 			pVarView.setValue(value);
 		};
 //
@@ -202,8 +202,8 @@ var CORA = (function(cora) {
 		};
 //
 		const handleValidationError = function() {
-//			state = "error";
-//			updateView();
+			state = "error";
+			updateView();
 		};
 
 		const getText = function() {
@@ -217,23 +217,31 @@ var CORA = (function(cora) {
 //		const getRegEx = function() {
 //			return regEx;
 //		};
-//
-//		const onBlur = function(valueFromView) {
-//			handleValueFromView(valueFromView, "error");
-//		};
-//
-//		const handleValueFromView = function(valueFromView, errorState) {
+
+		const onBlur = function(valueFromView) {
+			handleValueFromView(valueFromView, "error");
+		};
+
+		const handleValueFromView = function(valueFromView, errorState) {
 //			checkRegEx(valueFromView, errorState);
-//			updateView();
-//			if (state === "ok" && valueHasChanged(valueFromView)) {
-//				let data = {
-//					data: valueFromView,
+			if(validateTypeSpecificValue()){
+				state = "ok";
+			}else{
+				state = errorState;
+			}
+			updateView();
+			if (state === "ok" && valueHasChanged(valueFromView)) {
+				let data = {
+					data: valueFromView,
 //					path: path
-//				};
-//				jsBookkeeper.setValue(data);
-//				previousValue = valueFromView;
-//			}
-//		};
+				};
+				jsBookkeeper.setValue(data);
+				previousValue = valueFromView;
+			}
+		};
+		const validateTypeSpecificValue = function (valueFromView){
+			return child.validateTypeSpecificValue();
+		}
 //
 //		const checkRegEx = function(valueFromView, errorState) {
 //			let value = valueFromView;
@@ -244,17 +252,17 @@ var CORA = (function(cora) {
 //			}
 //		};
 //
-//		const onkeyup = function(valueFromView) {
+		const onkeyup = function(valueFromView) {
 //			handleValueFromView(valueFromView, "errorStillFocused");
-//		};
+		};
 
 		const updateView = function() {
 			pVarView.setState(state);
 		};
 
-//		const valueHasChanged = function(valueFromView) {
-//			return valueFromView !== previousValue;
-//		};
+		const valueHasChanged = function(valueFromView) {
+			return valueFromView !== previousValue;
+		};
 
 		const getState = function() {
 			return state;
@@ -317,8 +325,8 @@ var CORA = (function(cora) {
 			getDefText: getDefText,
 //			getRegEx: getRegEx,
 			getState: getState,
-//			onBlur: onBlur,
-//			onkeyup: onkeyup,
+			onBlur: onBlur,
+			onkeyup: onkeyup,
 			handleValidationError: handleValidationError,
 			openTextIdRecord: openTextIdRecord,
 			openDefTextIdRecord: openDefTextIdRecord,

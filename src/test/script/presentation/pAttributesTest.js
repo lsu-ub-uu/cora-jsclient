@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("presentation/pAttributesTest.js", {
+QUnit.module("presentation/pAttributesTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();

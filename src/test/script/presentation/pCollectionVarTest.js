@@ -114,11 +114,11 @@ var CORATEST = (function(coraTest) {
 		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);
 	};
-	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-		let dataArray = jsBookkeeper.getDataArray();
-		assert.strictEqual(dataArray.length, 1);
-		assert.strictEqual(dataArray[0].data, value);
-	};
+//	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
+//		let dataArray = jsBookkeeper.getDataArray();
+//		assert.strictEqual(dataArray.length, 1);
+//		assert.strictEqual(dataArray[0].data, value);
+//	};
 	return coraTest;
 }(CORATEST || {}));
 
@@ -285,9 +285,9 @@ QUnit.test("testChangedValueOk", function(assert) {
 	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "ok");
 	assert.equal(attachedPCollectionVar.view.className,
 		"pCollVar userSuppliedIdCollectionVarPCollVar");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", [], assert);
 	attachedPCollectionVar.valueView.onblur();
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", [], assert);
 
 });
 

@@ -187,8 +187,14 @@ function MetadataProviderStub() {
 		return [createRecordInfoJson(idToGet)]
 			.concat(createNameInDataLinkedTextIdDefTextId2(nameInData));
 	}
-
+	
+	let requestedMetadataIds = [];
+	this.getRequestedMetadataIds = function(){
+		return requestedMetadataIds;
+	}
+	
 	this.getMetadataById = function(idToGet) {
+		requestedMetadataIds.push(idToGet);
 		if (idToGet === "textVariableId") {
 			return {
 				"name": "metadata",
@@ -4929,7 +4935,7 @@ function MetadataProviderStub() {
 								"value": "metadataTextVariable"
 							}, {
 								"name": "linkedRecordId",
-								"value": "textVariableId"
+								"value": "textVariableId2"
 							}],
 							"actionLinks": {
 								"read": {

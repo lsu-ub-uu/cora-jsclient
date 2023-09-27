@@ -225,7 +225,7 @@ var CORA = (function(cora) {
 		};
 
 		out = Object.freeze({
-			"type": "pNumVarView",
+			type: "pNumVarView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

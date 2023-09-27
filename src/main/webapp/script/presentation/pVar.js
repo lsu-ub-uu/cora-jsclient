@@ -21,296 +21,53 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
-		const textProvider = dependencies.textProvider;
-		const pubSub = dependencies.pubSub;
-		const jsBookkeeper = dependencies.jsBookkeeper;
 		const pParentVarFactory = dependencies.pParentVarFactory;
-		const pAttributesFactory = dependencies.pAttributesFactory;
-		const clientInstanceProvider = dependencies.clientInstanceProvider;
-		const pVarViewFactory = dependencies.pVarViewFactory;
 		
-		let path = spec.path;
-		let cMetadataElement;
-		let cPresentation = spec.cPresentation;
-		let presentationId;
-		let state = "ok";
-		let previousValue = "";
-		let pVarView;
-		let text;
-		let defText;
+		const cPresentation = spec.cPresentation;
 		let regEx;
-		let mode;
-		let pAttributes;
 		let pParentVar;
 
 		const start = function() {
-			pParentVar = pParentVarFactory.factor(spec, self);
-		
-			let pVarViewSpec = intializePVarViewSpec();
-			addTypeSpecificInfoToViewSpec(pVarViewSpec);
-			pVarView = pVarViewFactory.factor(pVarViewSpec);
-			subscribeToPubSub();
-			initPAttributes();
-		};
-
-		const intializePVarViewSpec = function() {
-			let metadataId = spec.metadataIdUsedInData;
-			cMetadataElement = getMetadataById(metadataId);
-			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-			let textId = getTextId(cMetadataElement, "textId");
-			text = textProvider.getTranslation(textId);
-			let defTextId = getTextId(cMetadataElement, "defTextId");
-			defText = textProvider.getTranslation(defTextId);
-
-			let pVarViewSpec = {
-				id: path.join(""),
-				mode: mode,
-				presentationId: presentationId,
-				info: {
-					text: text,
-					defText: defText,
-					technicalInfo: [{
-						text: `textId: ${textId}`,
-						onclickMethod: openTextIdRecord
-					}, {
-						text: `defTextId: ${defTextId}`,
-						onclickMethod: openDefTextIdRecord
-					}, {
-						text: `metadataId: ${metadataId}`,
-						onclickMethod: openMetadataIdRecord
-					}, {
-						text: `nameInData: ${nameInData}`,
-					}, {
-						text: `presentationId: ${presentationId}`,
-						onclickMethod: openPresentationIdRecord
-					}]
-				},
-				onblurFunction: onBlur,
-				onkeyupFunction: onkeyup,
-			};
-			possiblyAddPlaceHolderText(pVarViewSpec);
-			possiblyAddLabelToViewSpec(pVarViewSpec);
-			
-			
-			return pVarViewSpec;
-		};
-		
-		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
-			pVarViewSpec.inputType = getInputType();
-			pVarViewSpec.outputFormat = getOutputFormat();
-			pVarViewSpec.inputFormat = getInputFormat();
-			
+			let cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
 			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
-				
-		};
-		
-		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
-			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
-				let emptyText = textProvider.getTranslation(emptyTextId);
-				pVarViewSpec.placeholderText = emptyText;
-			}
-		};
-
-		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
-			if(labelShouldBeShown()){
-				addLabelToViewSpec(pVarViewSpec);
-			}
-		};
-		
-		const labelShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showLabel")){
-				return true;
-			}
-			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
-		};
-		
-		const addLabelToViewSpec = function(pVarViewSpec){
-			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
-				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
-				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
-				pVarViewSpec.label = otherLabelText;
-			}else{
-				pVarViewSpec.label = text;
-			}
+			
+			pParentVar = pParentVarFactory.factor(spec, self);
 		};
 		
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-		const getOutputFormat = function() {
-			if (cPresentation.containsChildWithNameInData("outputFormat")) {
-				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
+		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
+			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
+			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+			
+			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+		};
+
+		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+			if (cPresentation.containsChildWithNameInData(nameInData)) {
+				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
 			}
-			return "text";
+			return defaultValue;
 		};
-
-		const getInputFormat = function() {
-			if (cPresentation.containsChildWithNameInData("inputFormat")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
-			}
-			return "text";
-		};
-
-		const getTextId = function(cMetadataElementIn, textNameInData) {
-			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
-				
-		};
-
-		const getInputType = function() {
-			if (cPresentation.containsChildWithNameInData("inputType")) {
-				return cPresentation.getFirstAtomicValueByNameInData("inputType");
-			}
-			return "input";
-		};
-
-		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
-			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
-			pubSub.subscribe("disable", disablePath, undefined, disableVar);
-		};
-
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: pVarView.addAttributesView,
-				path: path,
-				mode: mode
-			};
-			pAttributes = pAttributesFactory.factor(pAttributesSpec);
-		};
-
-
-		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-			let pathUtils = CORA.pathUtils();
-			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-		};
-
-		const getView = function() {
-			return pVarView.getView();
-		};
-
-		const setValue = function(value) {
-			state = "ok";
-			previousValue = value;
-			pVarView.setValue(value);
-		};
-
-		const handleMsg = function(dataFromMsg) {
-			setValue(dataFromMsg.data);
-			updateView();
-		};
-
-		const handleValidationError = function() {
-			state = "error";
-			updateView();
-		};
-
-		const getText = function() {
-			return text;
-		};
-
-		const getDefText = function() {
-			return defText;
-		};
-
-		const getRegEx = function() {
-			return regEx;
-		};
-
-		const onBlur = function(valueFromView) {
-			handleValueFromView(valueFromView, "error");
-		};
-
-		const handleValueFromView = function(valueFromView, errorState) {
-			checkRegEx(valueFromView, errorState);
-			updateView();
-			if (state === "ok" && valueHasChanged(valueFromView)) {
-				let data = {
-					data: valueFromView,
-					path: path
-				};
-				jsBookkeeper.setValue(data);
-				previousValue = valueFromView;
-			}
-		};
-
-		const checkRegEx = function(valueFromView, errorState) {
-			let value = valueFromView;
-			if (value.length === 0 || new RegExp(regEx).test(value)) {
-				state = "ok";
-			} else {
-				state = errorState;
-			}
-		};
-
-		const onkeyup = function(valueFromView) {
-			handleValueFromView(valueFromView, "errorStillFocused");
-		};
-
-		const updateView = function() {
-			pVarView.setState(state);
-		};
-
-		const valueHasChanged = function(valueFromView) {
-			return valueFromView !== previousValue;
-		};
-
-		const getState = function() {
-			return state;
+		
+		const validateTypeSpecificValue = function(valueFromView) {
+			return valueFromView.length === 0 || new RegExp(regEx).test(valueFromView);
 		};
 
 		const getSpec = function() {
 			return spec;
 		};
 
-		const openLinkedRecordForLink = function(event, link) {
-			let loadInBackground = "false";
-			if (event.ctrlKey) {
-				loadInBackground = "true";
-			}
-			let openInfo = {
-				readLink: link,
-				loadInBackground: loadInBackground
-			};
-			clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-		};
-
-		const openTextIdRecord = function(event) {
-			openLinkedRecordForLink(event,
-				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-		};
-
-		const openDefTextIdRecord = function(event) {
-			openLinkedRecordForLink(event,
-				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
-		};
-
-		const openMetadataIdRecord = function(event) {
-			openLinkedRecordForLink(event, cPresentation
-				.getFirstChildByNameInData("presentationOf").actionLinks.read);
-		};
-
-		const openPresentationIdRecord = function(event) {
-			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
-			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
-		};
-
 		const getDependencies = function() {
 			return dependencies;
 		};
 
-		const disableVar = function() {
-			pAttributes.disableExistingAttributes();
-			pVarView.disable();
-		};
 		const self = {
-			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+			validateTypeSpecificValue:validateTypeSpecificValue
 		};
 
 		start();
@@ -318,25 +75,8 @@ var CORA = (function(cora) {
 			type: "pVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-//			getSpec: pParentVar.getSpec,
-	
-			getView: getView,
-			setValue: setValue,
-			handleMsg: handleMsg,
-			getText: getText,
-			getDefText: getDefText,
-			getRegEx: getRegEx,
-			getState: getState,
-			onBlur: onBlur,
-			onkeyup: onkeyup,
-			handleValidationError: handleValidationError,
-			openTextIdRecord: openTextIdRecord,
-			openDefTextIdRecord: openDefTextIdRecord,
-			openMetadataIdRecord: openMetadataIdRecord,
-			openPresentationIdRecord: openPresentationIdRecord,
-			disableVar: disableVar
+			getView: pParentVar.getView,
 		});
-//		return self;
 
 	};
 	return cora;

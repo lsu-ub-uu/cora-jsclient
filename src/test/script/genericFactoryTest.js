@@ -17,8 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-
-QUnit.module.only("genericFactoryTest.js", {
+QUnit.module("genericFactoryTest.js", {
 	beforeEach : function() {
 
 		this.dependencies = {

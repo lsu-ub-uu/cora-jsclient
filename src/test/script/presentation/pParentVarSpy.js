@@ -19,24 +19,17 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.pParentVarSpy = function() {
-//		let disableExistingAttributesNoCalls = 0;
-//
-//		const disableExistingAttributes = function() {
-//			disableExistingAttributesNoCalls += 1;
-//		};
-//
-//		const getNoOfCallsToDisable = function() {
-//			return disableExistingAttributesNoCalls;
-//		};
 		const getDependencies = function(){
 			return "fakeDependencies from pParentVarSpy";
+		}
+		const getView = function(){
+			return "fakeView from pParentVarSpy";
 		}
 
 		return Object.freeze({
 			type: "pParentVarSpy",
-			getDependencies: getDependencies
-//			disableExistingAttributes: disableExistingAttributes,
-//			getNoOfCallsToDisable: getNoOfCallsToDisable
+			getDependencies: getDependencies,
+			getView: getView
 		});
 	};
 	return coraTest;

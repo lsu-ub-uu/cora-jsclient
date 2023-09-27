@@ -34,7 +34,6 @@ var CORA = (function(cora) {
 		let pVarView;
 		let text;
 		let defText;
-//		let regEx;
 		let mode;
 		let pAttributes;
 
@@ -89,20 +88,9 @@ var CORA = (function(cora) {
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
 			
-			
 			return pVarViewSpec;
 		};
 		
-//		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
-//			pVarViewSpec.inputType = getInputType();
-//			pVarViewSpec.outputFormat = getOutputFormat();
-//			pVarViewSpec.inputFormat = getInputFormat();
-//			
-//			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
-				
-//		};
-//
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
@@ -138,39 +126,18 @@ var CORA = (function(cora) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-//		const getOutputFormat = function() {
-//			if (cPresentation.containsChildWithNameInData("outputFormat")) {
-//				return cPresentation.getFirstAtomicValueByNameInData("outputFormat");
-//			}
-//			return "text";
-//		};
-//
-//		const getInputFormat = function() {
-//			if (cPresentation.containsChildWithNameInData("inputFormat")) {
-//				return cPresentation.getFirstAtomicValueByNameInData("inputFormat");
-//			}
-//			return "text";
-//		};
-
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
 				
 		};
 
-//		const getInputType = function() {
-//			if (cPresentation.containsChildWithNameInData("inputType")) {
-//				return cPresentation.getFirstAtomicValueByNameInData("inputType");
-//			}
-//			return "input";
-//		};
-//
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
 		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
-//
+
 		const initPAttributes = function() {
 			let pAttributesSpec = {
 				addViewToParent: pVarView.addAttributesView,
@@ -179,8 +146,7 @@ var CORA = (function(cora) {
 			};
 			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};
-//
-//
+
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
 			let pathUtils = CORA.pathUtils();
 			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
@@ -191,16 +157,16 @@ var CORA = (function(cora) {
 		};
 
 		const setValue = function(value) {
-//			state = "ok";
+			state = "ok";
 			previousValue = value;
 			pVarView.setValue(value);
 		};
-//
+
 		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();
 		};
-//
+
 		const handleValidationError = function() {
 			state = "error";
 			updateView();
@@ -214,17 +180,12 @@ var CORA = (function(cora) {
 			return defText;
 		};
 
-//		const getRegEx = function() {
-//			return regEx;
-//		};
-
 		const onBlur = function(valueFromView) {
 			handleValueFromView(valueFromView, "error");
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-//			checkRegEx(valueFromView, errorState);
-			if(validateTypeSpecificValue()){
+			if(child.validateTypeSpecificValue(valueFromView)){
 				state = "ok";
 			}else{
 				state = errorState;
@@ -233,27 +194,15 @@ var CORA = (function(cora) {
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
-//					path: path
+					path: path
 				};
 				jsBookkeeper.setValue(data);
 				previousValue = valueFromView;
 			}
 		};
-		const validateTypeSpecificValue = function (valueFromView){
-			return child.validateTypeSpecificValue();
-		}
-//
-//		const checkRegEx = function(valueFromView, errorState) {
-//			let value = valueFromView;
-//			if (value.length === 0 || new RegExp(regEx).test(value)) {
-//				state = "ok";
-//			} else {
-//				state = errorState;
-//			}
-//		};
-//
+
 		const onkeyup = function(valueFromView) {
-//			handleValueFromView(valueFromView, "errorStillFocused");
+			handleValueFromView(valueFromView, "errorStillFocused");
 		};
 
 		const updateView = function() {
@@ -323,7 +272,6 @@ var CORA = (function(cora) {
 			handleMsg: handleMsg,
 			getText: getText,
 			getDefText: getDefText,
-//			getRegEx: getRegEx,
 			getState: getState,
 			onBlur: onBlur,
 			onkeyup: onkeyup,

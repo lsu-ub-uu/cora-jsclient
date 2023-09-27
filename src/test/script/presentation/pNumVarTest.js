@@ -88,15 +88,15 @@ var CORATEST = (function(coraTest) {
 		let dataArray = jsBookkeeper.getDataArray();
 		assert.strictEqual(dataArray.length, 0);
 	};
-	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-		let dataArray = jsBookkeeper.getDataArray();
-		assert.strictEqual(dataArray.length, 1);
-		assert.strictEqual(dataArray[0].data, value);
-	};
+//	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
+//		let dataArray = jsBookkeeper.getDataArray();
+//		assert.strictEqual(dataArray.length, 1);
+//		assert.strictEqual(dataArray[0].data, value);
+//	};
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module.only("presentation/pNumVarTest.js", {
+QUnit.module("presentation/pNumVarTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
@@ -346,14 +346,14 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let data = {
 		"data": "1",
-		"path": {}
+		"path": ["one", "two"]
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnblurWithValue("");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", ["one", "two"], assert);
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
@@ -362,9 +362,9 @@ QUnit.test("testChangedValueOk", function(assert) {
 	pNumVarViewSpy.callOnblurWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", ["one", "two"], assert);
 	pNumVarViewSpy.callOnblurWithValue("4");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", ["one", "two"], assert);
 
 });
 
@@ -488,14 +488,14 @@ QUnit.test("testChangedValueEmptyAfterKeyUp", function(assert) {
 	let attachedPNumVar = this.pNumVarFactory.factor(["one", "two"], "numVariableId", "pNumVarNumVariableId");
 	let data = {
 		"data": "notEmpty",
-		"path": {}
+		"path": ["one", "two"]
 	};
 	attachedPNumVar.pNumVar.handleMsg(data);
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	pNumVarViewSpy.callOnkeyupWithValue("");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", ["one", "two"], assert);
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
@@ -504,9 +504,9 @@ QUnit.test("testChangedValueOk", function(assert) {
 	pNumVarViewSpy.callOnkeyupWithValue("4");
 	assert.equal(pNumVarViewSpy.getState(), "ok");
 	assert.equal(attachedPNumVar.pNumVar.getState(), "ok");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", ["one", "two"], assert);
 	pNumVarViewSpy.callOnkeyupWithValue("4");
-	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", assert);
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "4", ["one", "two"], assert);
 });
 
 QUnit.test("testChangedValueError", function(assert) {

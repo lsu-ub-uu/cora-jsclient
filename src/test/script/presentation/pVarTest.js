@@ -37,18 +37,6 @@ QUnit.module("presentation/pVarTest.js", {
 	}
 });
 
-QUnit.test("testParentStarted", function(assert) {
-	CORA.pVar(this.dependencies, this.spec);
-	
-	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
-	assert.strictEqual(pParentVarFactory, this.spec);
-	
-	const child = this.pParentVarFactory.getChild(0);
-
-	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
-	assert.notEqual(child.validateTypeSpecificValue, undefined);
-});
-
 QUnit.test("testGetType", function(assert) {
 	let pVar = CORA.pVar(this.dependencies, this.spec);
 
@@ -65,6 +53,18 @@ QUnit.test("testGetSpec", function(assert) {
 	let pVar = CORA.pVar(this.dependencies, this.spec);
 
 	assert.strictEqual(pVar.getSpec(), this.spec);
+});
+
+QUnit.test("testParentStarted", function(assert) {
+	CORA.pVar(this.dependencies, this.spec);
+	
+	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
+	assert.strictEqual(pParentVarFactory, this.spec);
+	
+	const child = this.pParentVarFactory.getChild(0);
+
+	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
+	assert.notEqual(child.validateTypeSpecificValue, undefined);
 });
 
 QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {

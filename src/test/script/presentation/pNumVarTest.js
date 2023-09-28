@@ -18,97 +18,134 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.attachedPNumVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
-		fixture, pNumVarViewFactory, pAttributesFactory) {
-		let factor = function(path, metadataIdUsedInData, pNumVarPresentationId) {
-			let cPNumVarPresentation = CORA.coraData(metadataProvider
-				.getMetadataById(pNumVarPresentationId));
-			let dependencies = {
-				clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
-				metadataProvider: metadataProvider,
-				pubSub: pubSub,
-				textProvider: textProvider,
-				jsBookkeeper: jsBookkeeper,
-//				pNumVarViewFactory: pNumVarViewFactory,
-				pVarViewFactory: pNumVarViewFactory,
-				pAttributesFactory: pAttributesFactory
-			};
-			let spec = {
-				"path": path,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPNumVarPresentation
-			};
-			let pNumVar = CORA.pNumVar(dependencies, spec);
-			return {
-				spec: spec,
-				pNumVar: pNumVar,
-				fixture: fixture,
-				metadataProvider: metadataProvider,
-				pubSub: pubSub,
-				textProvider: textProvider,
-				jsBookkeeper: jsBookkeeper,
-				dependencies: dependencies
-			};
-
-		};
-		return Object.freeze({
-			factor: factor
-		});
-	};
-
-	return coraTest;
-}(CORATEST || {}));
-
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, path, disablePath) {
-		let subscriptions = attachedPNumVar.pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 3);
-
-		let firstSubsription = subscriptions[0];
-		assert.strictEqual(firstSubsription.type, "setValue");
-		assert.deepEqual(firstSubsription.path, path);
-		let pNumVar = attachedPNumVar.pNumVar;
-		assert.ok(firstSubsription.functionToCall === pNumVar.handleMsg);
-
-		let secondSubsription = subscriptions[1];
-		assert.strictEqual(secondSubsription.type, "validationError");
-		assert.deepEqual(secondSubsription.path, path);
-		assert.ok(secondSubsription.functionToCall === pNumVar.handleValidationError);
-
-		let disableSubsription = subscriptions[2];
-		assert.strictEqual(disableSubsription.type, "disable");
-		assert.stringifyEqual(disableSubsription.path, disablePath);
-		assert.ok(disableSubsription.functionToCall === pNumVar.disableNumVar);
-
-	};
-
-	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
-		let dataArray = jsBookkeeper.getDataArray();
-		assert.strictEqual(dataArray.length, 0);
-	};
-//	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-//		let dataArray = jsBookkeeper.getDataArray();
-//		assert.strictEqual(dataArray.length, 1);
-//		assert.strictEqual(dataArray[0].data, value);
+//var CORATEST = (function(coraTest) {
+//	"use strict";
+//	coraTest.attachedPNumVarFactory = function(metadataProvider, pubSub, textProvider, jsBookkeeper,
+//		fixture, pNumVarViewFactory, pAttributesFactory) {
+//		let factor = function(path, metadataIdUsedInData, pNumVarPresentationId) {
+//			let cPNumVarPresentation = CORA.coraData(metadataProvider
+//				.getMetadataById(pNumVarPresentationId));
+//			let dependencies = {
+//				clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
+//				metadataProvider: metadataProvider,
+//				pubSub: pubSub,
+//				textProvider: textProvider,
+//				jsBookkeeper: jsBookkeeper,
+////				pNumVarViewFactory: pNumVarViewFactory,
+//				pVarViewFactory: pNumVarViewFactory,
+//				pAttributesFactory: pAttributesFactory
+//			};
+//			let spec = {
+//				"path": path,
+//				"metadataIdUsedInData": metadataIdUsedInData,
+//				"cPresentation": cPNumVarPresentation
+//			};
+//			let pNumVar = CORA.pNumVar(dependencies, spec);
+//			return {
+//				spec: spec,
+//				pNumVar: pNumVar,
+//				fixture: fixture,
+//				metadataProvider: metadataProvider,
+//				pubSub: pubSub,
+//				textProvider: textProvider,
+//				jsBookkeeper: jsBookkeeper,
+//				dependencies: dependencies
+//			};
+//
+//		};
+//		return Object.freeze({
+//			factor: factor
+//		});
 //	};
-	return coraTest;
-}(CORATEST || {}));
+//
+//	return coraTest;
+//}(CORATEST || {}));
+//
+//var CORATEST = (function(coraTest) {
+//	"use strict";
+//	coraTest.testNumVariableSubscription = function(attachedPNumVar, assert, path, disablePath) {
+//		let subscriptions = attachedPNumVar.pubSub.getSubscriptions();
+//		assert.deepEqual(subscriptions.length, 3);
+//
+//		let firstSubsription = subscriptions[0];
+//		assert.strictEqual(firstSubsription.type, "setValue");
+//		assert.deepEqual(firstSubsription.path, path);
+//		let pNumVar = attachedPNumVar.pNumVar;
+//		assert.ok(firstSubsription.functionToCall === pNumVar.handleMsg);
+//
+//		let secondSubsription = subscriptions[1];
+//		assert.strictEqual(secondSubsription.type, "validationError");
+//		assert.deepEqual(secondSubsription.path, path);
+//		assert.ok(secondSubsription.functionToCall === pNumVar.handleValidationError);
+//
+//		let disableSubsription = subscriptions[2];
+//		assert.strictEqual(disableSubsription.type, "disable");
+//		assert.stringifyEqual(disableSubsription.path, disablePath);
+//		assert.ok(disableSubsription.functionToCall === pNumVar.disableNumVar);
+//
+//	};
+//
+//	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
+//		let dataArray = jsBookkeeper.getDataArray();
+//		assert.strictEqual(dataArray.length, 0);
+//	};
+////	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
+////		let dataArray = jsBookkeeper.getDataArray();
+////		assert.strictEqual(dataArray.length, 1);
+////		assert.strictEqual(dataArray[0].data, value);
+////	};
+//	return coraTest;
+//}(CORATEST || {}));
+
+//QUnit.module("presentation/pNumVarTest.js", {
+//	beforeEach: function() {
+//		this.fixture = document.getElementById("qunit-fixture");
+//		this.metadataProvider = new MetadataProviderStub();
+//		this.pubSub = CORATEST.pubSubSpy();
+//		this.textProvider = CORATEST.textProviderStub();
+//		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
+//		this.pNumVarViewFactory = CORATEST.standardFactorySpy("pNumVarViewSpy");
+//		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+//		this.pNumVarFactory = CORATEST.attachedPNumVarFactory(this.metadataProvider, this.pubSub,
+//			this.textProvider, this.jsBookkeeper, this.fixture, this.pNumVarViewFactory, this.pAttributesFactory);
+//	}
+//});
 
 QUnit.module("presentation/pNumVarTest.js", {
 	beforeEach: function() {
-		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
-		this.pubSub = CORATEST.pubSubSpy();
-		this.textProvider = CORATEST.textProviderStub();
-		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-		this.pNumVarViewFactory = CORATEST.standardFactorySpy("pNumVarViewSpy");
-		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		this.pNumVarFactory = CORATEST.attachedPNumVarFactory(this.metadataProvider, this.pubSub,
-			this.textProvider, this.jsBookkeeper, this.fixture, this.pNumVarViewFactory, this.pAttributesFactory);
+		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
+		
+		
+		this.dependencies = {
+			metadataProvider: this.metadataProvider,
+			pParentVarFactory: this.pParentVarFactory
+		};
+		this.spec = {
+			path: [],
+			metadataIdUsedInData: "numVariableId",
+			cPresentation: CORA.coraData(this.metadataProvider
+				.getMetadataById("pNumVarNumVariableId"))
+		};
 	}
+});
+
+QUnit.only("testGetType", function(assert) {
+	let pVar = CORA.pNumVar(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.type, "pNumVar");
+});
+
+QUnit.only("testGetDependencies", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.getDependencies(), this.dependencies);
+});
+
+QUnit.only("testGetSpec", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.getSpec(), this.spec);
 });
 
 QUnit.test("testGetDependencies", function(assert) {

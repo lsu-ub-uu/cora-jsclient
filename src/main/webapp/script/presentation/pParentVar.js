@@ -181,11 +181,20 @@ var CORA = (function(cora) {
 		};
 
 		const onBlur = function(valueFromView) {
+			valueFromView = autoFormatEnteredValue(valueFromView);
+			pVarView.setValue(valueFromView);
 			handleValueFromView(valueFromView, "error");
+		};
+		
+		const autoFormatEnteredValue = function(valueFromView){
+			if(valueFromView.length === 0){
+				return valueFromView;
+			}
+			return child.autoFormatEnteredValue(valueFromView);
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if(child.validateTypeSpecificValue(valueFromView)){
+			if(valueFromView.length === 0 || child.validateTypeSpecificValue(valueFromView)){
 				state = "ok";
 			}else{
 				state = errorState;

@@ -74,8 +74,6 @@ QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	assert.strictEqual(pVar.getView, pParentVar.getView);
 });
 
-
-
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	CORA.pVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
@@ -209,15 +207,6 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	assert.deepEqual(viewSpec, expectedSpec);
 });
 
-QUnit.test("testValidateTypeSpecificValueEmpty", function(assert) {
-	CORA.pVar(this.dependencies, this.spec);
-	const child = this.pParentVarFactory.getChild(0);
-	
-	const valid = child.validateTypeSpecificValue("");
-	
-	assert.true(valid);
-});
-
 QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	CORA.pVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
@@ -234,4 +223,13 @@ QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	const valid = child.validateTypeSpecificValue("hej####/(&/%&/¤/");
 	
 	assert.false(valid);
+});
+
+QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
+	CORA.pVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const formated = child.autoFormatEnteredValue("Hej hopp");
+	
+	assert.strictEqual(formated, "Hej hopp");
 });

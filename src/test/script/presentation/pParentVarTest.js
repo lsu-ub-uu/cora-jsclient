@@ -89,7 +89,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 		};
 		
 		this.createChildSpy = function (){
-			let lastValueSentToValidateTypeSpecificValue="";
+			let lastValueSentToValidateTypeSpecificValue="no call to validateTypeSpecificValue";
 			const addTypeSpecificInfoToViewSpec= function (pVarViewSpec) {
 				pVarViewSpec.childExtra = "added by child";
 			};
@@ -100,10 +100,14 @@ QUnit.module("presentation/pParentVarTest.js", {
 			const getLastValueSentToValidateTypeSpecificValue= function (value) {
 				return lastValueSentToValidateTypeSpecificValue;
 			};
+			const autoFormatEnteredValue= function (valueFromView) {
+				return valueFromView;
+			};
 			return {
-				getLastValueSentToValidateTypeSpecificValue:getLastValueSentToValidateTypeSpecificValue,
-				addTypeSpecificInfoToViewSpec:addTypeSpecificInfoToViewSpec,
-				validateTypeSpecificValue:validateTypeSpecificValue
+				getLastValueSentToValidateTypeSpecificValue: getLastValueSentToValidateTypeSpecificValue,
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+				validateTypeSpecificValue: validateTypeSpecificValue,
+				autoFormatEnteredValue: autoFormatEnteredValue
 			};
 		};
 	}
@@ -528,6 +532,49 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", ["one", "two"], assert);
 });
 
+QUnit.test("testAutoFormatEnteredValueEmptyDoNothing", function(assert) {
+	let child = this.createChildSpy();
+	child.autoFormatEnteredValue= function (valueFromView) {
+		return "autoFormatEnteredValue by child";
+	};
+	this.spec.path = ["one", "two"];
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
+	
+	let data = {
+		"data": "",
+		"path": ["one", "two"]
+	};
+	pParentVar.handleMsg(data);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	
+	pParentVar.onBlur("");
+	
+	assert.equal(pVarViewSpy.getValue(), "");
+	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+QUnit.test("testAutoFormatEnteredValueEmptyDoNothing", function(assert) {
+	let child = this.createChildSpy();
+	child.autoFormatEnteredValue= function (valueFromView) {
+		return "autoFormatEnteredValue by child";
+	};
+	this.spec.path = ["one", "two"];
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
+	
+	let data = {
+		"data": "Not empty",
+		"path": ["one", "two"]
+	};
+	pParentVar.handleMsg(data);
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	
+	pParentVar.onBlur("some value");
+	
+	assert.equal(pVarViewSpy.getValue(), "autoFormatEnteredValue by child");
+	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "autoFormatEnteredValue by child",
+		["one", "two"], assert);
+});
+
 QUnit.test("testChangedValueOk", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 	
@@ -607,6 +654,18 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", [], assert);
+});
+
+QUnit.test("testChangedValueNoCallToChildValidateTypeSpecificValue", function(assert) {
+	const childSpy = this.createChildSpy();
+	CORA.pParentVar(this.dependencies, this.spec, childSpy);
+	
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	
+	pVarViewSpy.callOnkeyupWithValue("");
+	
+	assert.strictEqual(childSpy.getLastValueSentToValidateTypeSpecificValue(), 
+		"no call to validateTypeSpecificValue");
 });
 
 QUnit.test("testChangedValueOk", function(assert) {

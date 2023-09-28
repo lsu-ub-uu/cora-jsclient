@@ -55,9 +55,13 @@ var CORA = (function(cora) {
 		};
 		
 		const validateTypeSpecificValue = function(valueFromView) {
-			return valueFromView.length === 0 || new RegExp(regEx).test(valueFromView);
+			return new RegExp(regEx).test(valueFromView);
 		};
-
+		
+		const autoFormatEnteredValue = function(valueFromView){
+			return valueFromView;
+		};
+		
 		const getSpec = function() {
 			return spec;
 		};
@@ -68,7 +72,8 @@ var CORA = (function(cora) {
 
 		const self = {
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
-			validateTypeSpecificValue:validateTypeSpecificValue
+			validateTypeSpecificValue: validateTypeSpecificValue,
+			autoFormatEnteredValue: autoFormatEnteredValue
 		};
 
 		start();
@@ -76,7 +81,7 @@ var CORA = (function(cora) {
 			type: "pVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: pParentVar.getView,
+			getView: pParentVar.getView
 		});
 
 	};

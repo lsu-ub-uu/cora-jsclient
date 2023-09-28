@@ -31,7 +31,8 @@ var CORATEST = (function(coraTest) {
 				pubSub: pubSub,
 				textProvider: textProvider,
 				jsBookkeeper: jsBookkeeper,
-				pNumVarViewFactory: pNumVarViewFactory,
+//				pNumVarViewFactory: pNumVarViewFactory,
+				pVarViewFactory: pNumVarViewFactory,
 				pAttributesFactory: pAttributesFactory
 			};
 			let spec = {
@@ -144,6 +145,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		type: "pNumVar",
 		id: "onetwo",
 		label: "numVariableIdText",
 		info: {
@@ -207,6 +209,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyText", function(
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		type: "pNumVar",
 		label: "numVariableIdText",
 		id: "onetwo",
 		"info": {
@@ -546,6 +549,7 @@ QUnit.test("testInitNumberOutput", function(assert) {
 	let pNumVarViewSpy = this.pNumVarViewFactory.getFactored(0);
 	assert.deepEqual(pNumVarViewSpy.type, "pNumVarViewSpy");
 	let expectedPNumVarViewSpec = {
+		type: "pNumVar",
 		id: "onetwo",
 		label: "numVariableIdText",
 		"info": {

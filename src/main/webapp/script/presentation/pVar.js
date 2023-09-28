@@ -39,6 +39,7 @@ var CORA = (function(cora) {
 		};
 
 		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+			pVarViewSpec.type = "pTextVar";
 			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
 			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
 			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");

@@ -27,7 +27,8 @@ var CORA = (function(cora) {
 		const pParentVarFactory = dependencies.pParentVarFactory;
 		const pAttributesFactory = dependencies.pAttributesFactory;
 		const clientInstanceProvider = dependencies.clientInstanceProvider;
-		const pNumVarViewFactory = dependencies.pNumVarViewFactory;
+//		const pNumVarViewFactory = dependencies.pNumVarViewFactory;
+		const pNumVarViewFactory = dependencies.pVarViewFactory;
 		
 		let path = spec.path;
 		let cPresentation = spec.cPresentation;
@@ -79,6 +80,7 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 
 			let pNumViewSpec =  {
+				type: "pNumVar",
 				id: path.join(""),
 				mode: mode,
 				presentationId: presentationId,

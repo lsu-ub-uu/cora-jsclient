@@ -248,12 +248,14 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	let PParentVarFactoyrDependencies = dependencies.pParentVarFactory.getDependencies();
 	assert.strictEqual(PParentVarFactoyrDependencies.pubSub, context.dependencies.pubSub);
 
-	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
-	assert.strictEqual(dependencies.pNumVarViewFactory.type, "genericFactory");
-	assert.strictEqual(dependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");
-	let pNumVarDependencies = dependencies.pNumVarViewFactory.getDependencies();
-	assert.strictEqual(pNumVarDependencies.infoFactory.type, "infoFactory");
+//	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
+//	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
+	assert.strictEqual(dependencies.pVarViewFactory.type, "pVarViewFactory");
+//	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
+//	assert.strictEqual(dependencies.pNumVarViewFactory.type, "genericFactory");
+//	assert.strictEqual(dependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");
+//	let pNumVarDependencies = dependencies.pNumVarViewFactory.getDependencies();
+//	assert.strictEqual(pNumVarDependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.getTypeToFactor(), "pRecordLinkView");
 	let pRLVFDependencies = dependencies.pRecordLinkViewFactory.getDependencies();

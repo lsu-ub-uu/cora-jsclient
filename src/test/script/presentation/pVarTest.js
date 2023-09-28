@@ -88,6 +88,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	child.addTypeSpecificInfoToViewSpec(viewSpec);
 	
 	let expectedSpec = {
+		type: "pTextVar",
 		inputType: "input",
 		outputFormat: "text",
 		inputFormat: "text",
@@ -114,6 +115,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	child.addTypeSpecificInfoToViewSpec(viewSpec);
 	
 	let expectedSpec = {
+		type: "pTextVar",
 		inputType: "textarea",
 		outputFormat: "text",
 		inputFormat: "text",
@@ -140,6 +142,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	child.addTypeSpecificInfoToViewSpec(viewSpec);
 	
 	let expectedSpec = {
+		type: "pTextVar",
 		inputType: "input",
 		outputFormat: "text",
 		inputFormat: "text",
@@ -166,6 +169,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	child.addTypeSpecificInfoToViewSpec(viewSpec);
 	
 	let expectedSpec = {
+		type: "pTextVar",
 		inputType: "input",
 		outputFormat: "text",
 		inputFormat: "password",
@@ -192,6 +196,7 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	child.addTypeSpecificInfoToViewSpec(viewSpec);
 	
 	let expectedSpec = {
+		type: "pTextVar",
 		inputType: "input",
 		outputFormat: "image",
 		inputFormat: "text",

@@ -65,7 +65,6 @@ var CORA = (function(cora) {
 			return function(child) {
 				if (filter(child) && attributesFilter(child)) {
 					return true;
-
 				}
 				return false;
 			};
@@ -80,7 +79,7 @@ var CORA = (function(cora) {
 		function getChildrenByNameInData(nameInData) {
 			return getChildrenToContainerByNameInData(children, nameInData);
 		}
-		
+
 		let getChildrenToContainerByNameInData = function(container, nameInData) {
 			let filter = createNameInDataFilter(nameInData);
 			let foundChildren = container.filter(filter);
@@ -89,7 +88,7 @@ var CORA = (function(cora) {
 			}
 			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
 		}
-		
+
 
 		function getChildrenByNameInDataAndAttributes(nameInData, attributes) {
 			var foundContainers = findContainersSpecifiedByNameInDataAndAttributes(nameInData,
@@ -317,8 +316,8 @@ var CORA = (function(cora) {
 				+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
 				+ NOT_FOUND_IN_CHILDREN);
 		}
-		
-		const getLinkedRecordIdFromFirstChildLinkWithNameInData = function (nameInData){
+
+		const getLinkedRecordIdFromFirstChildLinkWithNameInData = function(nameInData) {
 			let child = getFirstChildByNameInData(nameInData);
 			let linkedRecordId = getChildrenToContainerByNameInData(child.children, "linkedRecordId");
 			return linkedRecordId[0].value;

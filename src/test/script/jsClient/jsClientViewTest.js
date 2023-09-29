@@ -135,6 +135,9 @@ QUnit.test("testSetLanguageButton", function(assert) {
 	assert.strictEqual(languageChoice.options[0].text, "sv");
 	assert.strictEqual(languageChoice.options[1].value, "en");
 	assert.strictEqual(languageChoice.options[1].text, "en");
+	assert.strictEqual(languageChoice.options[2].value, "no");
+	assert.strictEqual(languageChoice.options[2].text, "no");
+	assert.strictEqual(languageChoice.options.length, 3);
 
 	languageChoice.options[1].selected = true;
 	languageChoice.onchange();

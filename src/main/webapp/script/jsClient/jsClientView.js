@@ -169,6 +169,8 @@ var CORA = (function(cora) {
 			languageChoice.appendChild(svOption);
 			var enOption = new Option("en", "en");
 			languageChoice.appendChild(enOption);
+			var noOption = new Option("no", "no");
+			languageChoice.appendChild(noOption);
 			header.appendChild(languageChoice);
 		}
 

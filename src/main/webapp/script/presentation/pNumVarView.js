@@ -30,10 +30,9 @@ var CORA = (function(cora) {
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
-			info = createInfo();
-
 			createValueView();
 			view.appendChild(valueView);
+			info = createInfo();
 			view.appendChild(info.getButton());
 		};
 		
@@ -46,7 +45,6 @@ var CORA = (function(cora) {
 				}
 			}
 		};
-		
 		
 		const modeIsInput = function(){
 			return (spec.mode === "input");
@@ -65,16 +63,76 @@ var CORA = (function(cora) {
 			label.appendChild(document.createTextNode(spec.label));
 		};
 		
+		const createValueView = function() {
+			if (spec.mode === "input") {
+				valueView = createInput();
+			} else {
+				valueView = createOutput();
+			}
+		};
+
+		const createInput = function() {
+			valueView = createTextTypeInput();
+			valueView.id = spec.id;
+			possiblyAddOnkeyupEvent(valueView);
+			possiblyAddOnblurEvent(valueView);
+			possiblyAddPlaceholderText(valueView);
+			return valueView;
+		};
+//different
+		const createTextTypeInput = function() {
+			let inputNew = document.createElement("input");
+			inputNew.setValue = function(value) {
+				inputNew.value = value;
+			};
+			return inputNew;
+		};
+
+		const possiblyAddOnkeyupEvent = function(valueViewIn) {
+			if (spec.onkeyupFunction !== undefined) {
+				valueViewIn.onkeyup = function() {
+					spec.onkeyupFunction(valueViewIn.value);
+				};
+			}
+		};
+
+		const possiblyAddOnblurEvent = function(valueViewIn) {
+			if (spec.onblurFunction !== undefined) {
+				valueViewIn.onblur = function() {
+					spec.onblurFunction(valueViewIn.value);
+				};
+			}
+		};
+		
+		const possiblyAddPlaceholderText = function(inputNew) {
+			if (spec.placeholderText !== undefined) {
+				inputNew.placeholder = spec.placeholderText;
+			}
+		};
+
+//different
+		const createOutput = function() {
+			return createOutputText();
+		};
+
+		const createOutputText = function() {
+			let outputNew = CORA.gui.createSpanWithClassName("value");
+			outputNew.setValue = function(value) {
+				outputNew.textContent = value;
+			};
+			return outputNew;
+		};
+		
 		const createInfo = function() {
 			let infoSpec = {
-				"appendTo": view,
-				"afterLevelChange": updateClassName,
-				"level1": [{
-					"className": "textView",
-					"text": spec.info.text
+				appendTo: view,
+				afterLevelChange: updateClassName,
+				level1: [{
+					className: "textView",
+					text: spec.info.text
 				}, {
-					"className": "defTextView",
-					"text": spec.info.defText
+					className: "defTextView",
+					text: spec.info.defText
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
@@ -100,8 +158,8 @@ var CORA = (function(cora) {
 
 		const createTechInfoPart = function(techInfo) {
 			let techInfoPart = {
-				"className": "technicalView",
-				"text": techInfo.text
+				className: "technicalView",
+				text: techInfo.text
 			};
 
 			if (techInfo.onclickMethod !== undefined) {
@@ -135,66 +193,7 @@ var CORA = (function(cora) {
 		const infoIsShown = function() {
 			return info.getInfoLevel() !== 0;
 		};
-
-		const createValueView = function() {
-			if (spec.mode === "input") {
-				valueView = createInput();
-			} else {
-				valueView = createOutput();
-			}
-		};
-
-		const createInput = function() {
-			valueView = createTextTypeInput();
-			valueView.id = spec.id;
-			possiblyAddOnkeyupEvent(valueView);
-			possiblyAddOnblurEvent(valueView);
-			possiblyAddPlaceholderText(valueView);
-			return valueView;
-		};
-
-		const possiblyAddOnkeyupEvent = function(valueViewIn) {
-			if (spec.onkeyupFunction !== undefined) {
-				valueViewIn.onkeyup = function() {
-					spec.onkeyupFunction(valueViewIn.value);
-				};
-			}
-		};
-
-		const possiblyAddOnblurEvent = function(valueViewIn) {
-			if (spec.onblurFunction !== undefined) {
-				valueViewIn.onblur = function() {
-					spec.onblurFunction(valueViewIn.value);
-				};
-			}
-		};
 		
-		const possiblyAddPlaceholderText = function(inputNew) {
-			if (spec.placeholderText !== undefined) {
-				inputNew.placeholder = spec.placeholderText;
-			}
-		};
-
-		const createTextTypeInput = function() {
-			let inputNew = document.createElement("input");
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
-			return inputNew;
-		};
-
-		const createOutput = function() {
-			return createOutputText();
-		};
-
-		const createOutputText = function() {
-			let outputNew = CORA.gui.createSpanWithClassName("value");
-			outputNew.setValue = function(value) {
-				outputNew.textContent = value;
-			};
-			return outputNew;
-		};
-
 		const getView = function() {
 			return view;
 		};

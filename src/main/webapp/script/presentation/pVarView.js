@@ -46,6 +46,10 @@ var CORA = (function(cora) {
 			}
 		};
 		
+		const modeIsInput = function(){
+			return (spec.mode === "input");
+		};
+		
 		const addLabelForInput = function(){
 			let label = document.createElement("label");
 			view.appendChild(label);
@@ -65,10 +69,6 @@ var CORA = (function(cora) {
 			}
 			return createOutput();
 		};
-		
-		const modeIsInput = function(){
-			return (spec.mode === "input");
-		};
 
 		const createInput = function() {
 			valueView = createTextTypeInput();
@@ -78,7 +78,7 @@ var CORA = (function(cora) {
 			possiblyAddPlaceholderText(valueView);
 			return valueView;
 		};
-		
+//different		
 		const createTextTypeInput = function() {
 			let inputNew = document.createElement(getInputTypeFromSpec());
 			if (spec.inputFormat === "password") {
@@ -90,7 +90,7 @@ var CORA = (function(cora) {
 			};
 			return inputNew;
 		};
-
+//only in pVarView
 		const getInputTypeFromSpec = function() {
 			if (spec.inputType !== undefined) {
 				return spec.inputType;
@@ -119,7 +119,7 @@ var CORA = (function(cora) {
 				inputNew.placeholder = spec.placeholderText;
 			}
 		};
-
+//different
 		const createOutput = function() {
 			if (spec.outputFormat === "image") {
 				return createOutputImage();
@@ -128,7 +128,7 @@ var CORA = (function(cora) {
 			}
 			return createOutputText();
 		};
-
+//only in textvar
 		const createOutputImage = function() {
 			let outputNew = document.createElement("img");
 			outputNew.setValue = function(value) {
@@ -137,6 +137,7 @@ var CORA = (function(cora) {
 			return outputNew;
 		};
 
+//only in textvar
 		const createOutputLink = function() {
 			let outputNew = document.createElement("a");
 			outputNew.setValue = function(value) {

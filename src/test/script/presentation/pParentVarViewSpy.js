@@ -16,30 +16,21 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
+var CORATEST = (function(coraTest) {
 	"use strict";
-	cora.pVarViewFactory = function() {
-		const childDependencies = {
-			infoFactory: CORA.infoFactory(),
-		};
-		
-		const dependencies = {
-			//TODO: remove when pNumVarView uses pParentVarView
-			infoFactory: CORA.infoFactory(),
-			pParentVarViewFactory: CORA.genericParentFactory("pParentVarView", childDependencies)
-		};
-		
-		function factor(spec) {
-			if(spec.type === "pNumVar"){
-				return CORA.pNumVarView(dependencies, spec);
-			}
-			return CORA.pVarView(dependencies, spec);
+	coraTest.pParentVarViewSpy = function() {
+		const getDependencies = function(){
+			return "fakeDependencies from pParentVarViewSpy";
+		}
+		const getView = function(){
+			return "fakeView from pParentVarViewSpy";
 		}
 
 		return Object.freeze({
-			type : "pVarViewFactory",
-			factor : factor
+			type: "pParentVarViewSpy",
+			getDependencies: getDependencies,
+			getView: getView
 		});
 	};
-	return cora;
-}(CORA));
+	return coraTest;
+}(CORATEST || {}));

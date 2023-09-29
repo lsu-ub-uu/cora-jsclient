@@ -1,6 +1,6 @@
 /*
- * Copyright 2019, 2020 Uppsala University Library
  * Copyright 2016, 2018, 2023 Olov McKie
+ * Copyright 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,67 +20,15 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pVarView = function(dependencies, spec) {
-		let out;
-		let view;
-		let valueView;
-		let baseClassName = "pVar " + spec.presentationId;
-		let info;
-		let state = "ok";
+		const pParentVarViewFactory = dependencies.pParentVarViewFactory;
+		let pParentVarView;
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
-			possiblyAddLableTextToView();
-			valueView = createValueView();
-			view.appendChild(valueView);
-			info = createInfo();
-			view.appendChild(info.getButton());
+			pParentVarView = pParentVarViewFactory.factor(spec, self);
 		};
 		
-		const possiblyAddLableTextToView = function() {
-			if(spec.label){
-				if(modeIsInput()){
-					addLabelForInput();
-				}else{
-					addLabelForOutput();
-				}
-			}
-		};
-		
-		const modeIsInput = function(){
-			return (spec.mode === "input");
-		};
-		
-		const addLabelForInput = function(){
-			let label = document.createElement("label");
-			view.appendChild(label);
-			label.appendChild(document.createTextNode(spec.label));
-			label.htmlFor = spec.id;
-		};
-
-		const addLabelForOutput = function(){
-			let label = CORA.gui.createSpanWithClassName("label");
-			view.appendChild(label);
-			label.appendChild(document.createTextNode(spec.label));
-		};
-		
-		const createValueView = function() {
-			if (modeIsInput()) {
-				return createInput();
-			}
-			return createOutput();
-		};
-
-		const createInput = function() {
-			valueView = createTextTypeInput();
-			valueView.id = spec.id;
-			possiblyAddOnkeyupEvent(valueView);
-			possiblyAddOnblurEvent(valueView);
-			possiblyAddPlaceholderText(valueView);
-			return valueView;
-		};
-//different		
-		const createTextTypeInput = function() {
-			let inputNew = document.createElement(getInputTypeFromSpec());
+		const createInputElementWithSetValueFunction = function() {
+			let inputNew = document.createElement(spec.inputType);
 			if (spec.inputFormat === "password") {
 				inputNew.setAttribute("type", "password");
 			}
@@ -90,45 +38,18 @@ var CORA = (function(cora) {
 			};
 			return inputNew;
 		};
-//only in pVarView
-		const getInputTypeFromSpec = function() {
-			if (spec.inputType !== undefined) {
-				return spec.inputType;
-			}
-			return "input";
-		};
 
-		const possiblyAddOnkeyupEvent = function(valueViewIn) {
-			if (spec.onkeyupFunction !== undefined) {
-				valueViewIn.onkeyup = function() {
-					spec.onkeyupFunction(valueViewIn.value);
-				};
-			}
+		const useStandardOutput = function() {
+			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
 		};
-
-		const possiblyAddOnblurEvent = function(valueViewIn) {
-			if (spec.onblurFunction !== undefined) {
-				valueViewIn.onblur = function() {
-					spec.onblurFunction(valueViewIn.value);
-				};
-			}
-		};
-
-		const possiblyAddPlaceholderText = function(inputNew) {
-			if (spec.placeholderText !== undefined) {
-				inputNew.placeholder = spec.placeholderText;
-			}
-		};
-//different
-		const createOutput = function() {
+		
+		const createOutputWithSetValueFunction = function() {
 			if (spec.outputFormat === "image") {
 				return createOutputImage();
-			} else if (spec.outputFormat === "link") {
-				return createOutputLink();
-			}
-			return createOutputText();
+			} 
+			return createOutputLink();
 		};
-//only in textvar
+		
 		const createOutputImage = function() {
 			let outputNew = document.createElement("img");
 			outputNew.setValue = function(value) {
@@ -137,7 +58,6 @@ var CORA = (function(cora) {
 			return outputNew;
 		};
 
-//only in textvar
 		const createOutputLink = function() {
 			let outputNew = document.createElement("a");
 			outputNew.setValue = function(value) {
@@ -147,89 +67,6 @@ var CORA = (function(cora) {
 			return outputNew;
 		};
 
-		const createOutputText = function() {
-			let outputNew = CORA.gui.createSpanWithClassName("value");
-			outputNew.setValue = function(value) {
-				outputNew.textContent = value;
-			};
-			return outputNew;
-		};
-		
-		const createInfo = function() {
-			let infoSpec = {
-				appendTo: view,
-				afterLevelChange: updateClassName,
-				level1: [{
-					className: "textView",
-					text: spec.info.text
-				}, {
-					className: "defTextView",
-					text: spec.info.defText
-				}]
-			};
-			possiblyAddLevel2Info(infoSpec);
-			return dependencies.infoFactory.factor(infoSpec);
-		};
-
-		const possiblyAddLevel2Info = function(infoSpec) {
-			if (specInfoHasTechnicalInfo()) {
-				addLevelTechnicalInfoAsLevel2(infoSpec);
-			}
-		};
-
-		const specInfoHasTechnicalInfo = function() {
-			return spec.info.technicalInfo;
-		};
-
-		const addLevelTechnicalInfoAsLevel2 = function(infoSpec) {
-			infoSpec.level2 = [];
-			spec.info.technicalInfo.forEach(function(techInfo) {
-				infoSpec.level2.push(createTechInfoPart(techInfo));
-			});
-		};
-
-		const createTechInfoPart = function(techInfo) {
-			let techInfoPart = {
-				className: "technicalView",
-				text: techInfo.text
-			};
-
-			if (techInfo.onclickMethod !== undefined) {
-				techInfoPart.onclickMethod = techInfo.onclickMethod;
-			}
-			return techInfoPart;
-		};
-
-		const updateClassName = function() {
-			let className = baseClassName;
-			if (stateIndicatesError()) {
-				className += " error";
-			}
-			if (stateIndicatesErrorStillFocused()) {
-				className += " errorStillFocused";
-			}
-			if (infoIsShown()) {
-				className += " infoActive";
-			}
-			view.className = className;
-		};
-
-		const stateIndicatesError = function() {
-			return state === "error";
-		};
-
-		const stateIndicatesErrorStillFocused = function() {
-			return state === "errorStillFocused";
-		};
-
-		const infoIsShown = function() {
-			return info.getInfoLevel() !== 0;
-		};
-
-		const getView = function() {
-			return view;
-		};
-
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -237,37 +74,25 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
-
-		const setValue = function(value) {
-			valueView.setValue(value);
+		
+		const self = {
+			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
+			useStandardOutput: useStandardOutput,
+			createOutputWithSetValueFunction: createOutputWithSetValueFunction
 		};
-
-		const setState = function(stateIn) {
-			state = stateIn;
-			updateClassName();
-		};
-
-		const disable = function() {
-			valueView.disabled = true;
-		};
-
-		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, valueView);
-		};
-
-		out = Object.freeze({
+		
+		start();
+		return Object.freeze({
 			type: "pVarView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView,
-			setValue: setValue,
-			updateClassName: updateClassName,
-			setState: setState,
-			disable: disable,
-			addAttributesView: addAttributesView
+			getView: pParentVarView.getView,
+			setValue: pParentVarView.setValue,
+			updateClassName: pParentVarView.updateClassName,
+			setState: pParentVarView.setState,
+			disable: pParentVarView.disable,
+			addAttributesView: pParentVarView.addAttributesView
 		});
-		start();
-		return out;
 	};
 	return cora;
 }(CORA));

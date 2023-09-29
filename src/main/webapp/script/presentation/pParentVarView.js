@@ -1,6 +1,6 @@
 /*
- * Copyright 2018, 2020 Uppsala University Library
  * Copyright 2016, 2018, 2023 Olov McKie
+ * Copyright 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,18 +19,19 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pNumVarView = function(dependencies, spec) {
+	cora.pParentVarView = function(dependencies, spec, child) {
+		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
 		let valueView;
-		let baseClassName = "pNumVar " + spec.presentationId;
+		let baseClassName = "pVar " + spec.presentationId;
 		let info;
 		let state = "ok";
 
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
-			createValueView();
+			valueView = createValueView();
 			view.appendChild(valueView);
 			info = createInfo();
 			view.appendChild(info.getButton());
@@ -64,29 +65,35 @@ var CORA = (function(cora) {
 		};
 		
 		const createValueView = function() {
-			if (spec.mode === "input") {
-				valueView = createInput();
-			} else {
-				valueView = createOutput();
+			if (modeIsInput()) {
+				return createInput();
 			}
+			return createOutput();
 		};
 
 		const createInput = function() {
 			valueView = createInputElement();
+			valueView.setValue = function(value) {
+				valueView.value = value;
+			};
 			valueView.id = spec.id;
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);
 			return valueView;
 		};
-//different
-//createInputElementWithSetValueFunction
+//different		
 		const createInputElement = function() {
-			let inputNew = document.createElement("input");
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
-			return inputNew;
+			return child.createInputElementWithSetValueFunction();
+//			let inputNew = document.createElement(spec.inputType);
+//			if (spec.inputFormat === "password") {
+//				inputNew.setAttribute("type", "password");
+//			}
+//
+//			inputNew.setValue = function(value) {
+//				inputNew.value = value;
+//			};
+//			return inputNew;
 		};
 
 		const possiblyAddOnkeyupEvent = function(valueViewIn) {
@@ -104,21 +111,42 @@ var CORA = (function(cora) {
 				};
 			}
 		};
-		
+
 		const possiblyAddPlaceholderText = function(inputNew) {
 			if (spec.placeholderText !== undefined) {
 				inputNew.placeholder = spec.placeholderText;
 			}
 		};
-
 //different
-//const useStandardOutput = function(){
-//				return true;
-//			};
-//createOutputWithSetValueFunction
 		const createOutput = function() {
-			return createOutputText();
+//			if (spec.outputFormat === "image") {
+//				return createOutputImage();
+//			} else if (spec.outputFormat === "link") {
+//				return createOutputLink();
+//			}
+			if(child.useStandardOutput()){
+				return createOutputText();
+			}
+			return child.createOutputWithSetValueFunction();
 		};
+//only in textvar
+//		const createOutputImage = function() {
+//			let outputNew = document.createElement("img");
+//			outputNew.setValue = function(value) {
+//				outputNew.src = value;
+//			};
+//			return outputNew;
+//		};
+//
+////only in textvar
+//		const createOutputLink = function() {
+//			let outputNew = document.createElement("a");
+//			outputNew.setValue = function(value) {
+//				outputNew.href = value;
+//				outputNew.text = value;
+//			};
+//			return outputNew;
+//		};
 
 		const createOutputText = function() {
 			let outputNew = CORA.gui.createSpanWithClassName("value");
@@ -141,7 +169,7 @@ var CORA = (function(cora) {
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
-			return dependencies.infoFactory.factor(infoSpec);
+			return infoFactory.factor(infoSpec);
 		};
 
 		const possiblyAddLevel2Info = function(infoSpec) {
@@ -198,7 +226,7 @@ var CORA = (function(cora) {
 		const infoIsShown = function() {
 			return info.getInfoLevel() !== 0;
 		};
-		
+
 		const getView = function() {
 			return view;
 		};
@@ -225,11 +253,11 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, view.firstChild);
+			view.insertBefore(attributesView, valueView);
 		};
 
 		out = Object.freeze({
-			type: "pNumVarView",
+			type: "pParentVarView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

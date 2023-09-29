@@ -269,7 +269,7 @@ QUnit.test("testInputOnkeyupNotSet", function(assert) {
 
 QUnit.test("testOutputText", function(assert) {
 	this.spec.mode = "output";
-	let valueView = this.getValueView();
+	let valueView = this.getValueView(); 
 	assert.strictEqual(valueView.nodeName, "SPAN");
 	assert.strictEqual(valueView.className,"value");
 });

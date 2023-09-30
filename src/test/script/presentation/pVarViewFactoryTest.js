@@ -54,16 +54,16 @@ QUnit.test("init", function(assert) {
 });
 
 QUnit.test("testFactorViewForPTextVar", function(assert) {
-	var view = this.pVarViewFactory.factor(this.spec);
+	let view = this.pVarViewFactory.factor(this.spec);
 	
 	assert.ok(view);
 	assert.strictEqual(view.type, "pVarView");
 });
 
 QUnit.test("factorSetsSpecInPTextVarView", function(assert) {
-	var view = this.pVarViewFactory.factor(this.spec);
+	let view = this.pVarViewFactory.factor(this.spec);
 	
-	var spec = view.getSpec();
+	let spec = view.getSpec();
 	assert.deepEqual(spec, this.spec);
 });
 
@@ -78,7 +78,7 @@ QUnit.test("factorSetsDependenciesInPTextVarView", function(assert) {
 	let pParentDependencies = dependencies.pParentVarViewFactory.getDependencies();
 	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
 });
-//
+
 QUnit.test("testFactorViewForPNumVar", function(assert) {
 	this.spec.type = "pNumVar";
 	
@@ -95,16 +95,16 @@ QUnit.test("testFactorViewForPNumVar", function(assert) {
 
 QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
 	this.spec.type = "pNumVar";
-	var view = this.pVarViewFactory.factor(this.spec);
+	let view = this.pVarViewFactory.factor(this.spec);
 	
-	var spec = view.getSpec();
+	let spec = view.getSpec();
 	assert.deepEqual(spec, this.spec);
 });
 
 QUnit.test("factorSetsDependenciesInPNumVarView", function(assert) {
 	this.spec.type = "pNumVar";
-	var view = this.pVarViewFactory.factor(this.spec);
+	let view = this.pVarViewFactory.factor(this.spec);
 	
-	var dependencies = view.getDependencies();
+	let dependencies = view.getDependencies();
 	assert.deepEqual(dependencies.infoFactory.type, "infoFactory");
 });

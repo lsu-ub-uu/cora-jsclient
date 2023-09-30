@@ -18,7 +18,6 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-
 QUnit.module("presentation/pVarViewTest.js", {
 	beforeEach: function() {
 		this.pParentVarViewFactory = CORATEST.standardParentFactorySpy("pParentVarViewSpy");

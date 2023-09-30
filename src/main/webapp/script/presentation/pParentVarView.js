@@ -73,27 +73,15 @@ var CORA = (function(cora) {
 
 		const createInput = function() {
 			valueView = createInputElement();
-			valueView.setValue = function(value) {
-				valueView.value = value;
-			};
 			valueView.id = spec.id;
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);
 			return valueView;
 		};
-//different		
+
 		const createInputElement = function() {
 			return child.createInputElementWithSetValueFunction();
-//			let inputNew = document.createElement(spec.inputType);
-//			if (spec.inputFormat === "password") {
-//				inputNew.setAttribute("type", "password");
-//			}
-//
-//			inputNew.setValue = function(value) {
-//				inputNew.value = value;
-//			};
-//			return inputNew;
 		};
 
 		const possiblyAddOnkeyupEvent = function(valueViewIn) {
@@ -117,36 +105,13 @@ var CORA = (function(cora) {
 				inputNew.placeholder = spec.placeholderText;
 			}
 		};
-//different
+
 		const createOutput = function() {
-//			if (spec.outputFormat === "image") {
-//				return createOutputImage();
-//			} else if (spec.outputFormat === "link") {
-//				return createOutputLink();
-//			}
 			if(child.useStandardOutput()){
 				return createOutputText();
 			}
 			return child.createOutputWithSetValueFunction();
 		};
-//only in textvar
-//		const createOutputImage = function() {
-//			let outputNew = document.createElement("img");
-//			outputNew.setValue = function(value) {
-//				outputNew.src = value;
-//			};
-//			return outputNew;
-//		};
-//
-////only in textvar
-//		const createOutputLink = function() {
-//			let outputNew = document.createElement("a");
-//			outputNew.setValue = function(value) {
-//				outputNew.href = value;
-//				outputNew.text = value;
-//			};
-//			return outputNew;
-//		};
 
 		const createOutputText = function() {
 			let outputNew = CORA.gui.createSpanWithClassName("value");

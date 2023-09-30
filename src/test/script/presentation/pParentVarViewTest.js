@@ -65,7 +65,11 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 		
 		this.createChildSpy = function (){
 			const createInputElementWithSetValueFunction = function(){
-				return document.createElement("input");
+				const valueView = document.createElement("input");
+				valueView.setValue = function(value) {
+					valueView.value = value;
+				};
+				return valueView;
 			};
 			const useStandardOutput = function(){
 				return true;
@@ -76,7 +80,6 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 					outputNew.textContent = value;
 				};
 			return outputNew;
-//			return CORA.gui.createSpanWithClassName("from child spy");
 			};
 			return {
 				createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
@@ -234,24 +237,6 @@ QUnit.test("testInput", function(assert) {
 	assert.strictEqual(valueView.id, "someId");
 });
 
-//QUnit.test("testInputTypeTextArea", function(assert) {
-//	this.spec.inputType = "textarea";
-//	let valueView = this.getValueView();
-//	assert.strictEqual(valueView.nodeName, "TEXTAREA");
-//	assert.strictEqual(valueView.type, "textarea");
-//	assert.strictEqual(valueView.id, "someId");
-//});
-
-//QUnit.test("testInputFormatPassword", function(assert) {
-//	this.spec.inputType = "input";
-//	this.spec.inputFormat = "password";
-//
-//	let valueView = this.getValueView();
-//	assert.strictEqual(valueView.nodeName, "INPUT");
-//	assert.strictEqual(valueView.type, "password");
-//	assert.strictEqual(valueView.id, "someId");
-//});
-
 QUnit.test("testInputPlaceholder", function(assert) {
 	this.spec.placeholderText = "placeholderText";
 	let valueView = this.getValueView();
@@ -269,6 +254,7 @@ QUnit.test("testInputOnblur", function(assert) {
 	CORATESTHELPER.simulateBlur(this.getValueView());
 	assert.strictEqual(valueFromView, "a Value");
 });
+
 QUnit.test("testInputOnblurNotSet", function(assert) {
 	let valueFromView = "";
 
@@ -342,36 +328,6 @@ QUnit.test("testSetValueOutputText", function(assert) {
 	assert.strictEqual(valueView.innerHTML, "a Value");
 });
 
-//QUnit.test("testSetValueOutputImage", function(assert) {
-//	this.spec.mode = "output";
-//	this.spec.outputFormat = "image";
-//	let pParentVarView = this.getpParentVarView();
-//	let valueView = this.getValueView();
-//
-//	assert.strictEqual(valueView.src, "");
-//	pParentVarView.setValue("http://www.some.domain.nu/image01.jpg");
-//	assert.strictEqual(valueView.src, "http://www.some.domain.nu/image01.jpg");
-//});
-//
-//QUnit.test("testOutputLink", function(assert) {
-//	this.spec.mode = "output";
-//	this.spec.outputFormat = "link";
-//	let valueView = this.getValueView();
-//	assert.strictEqual(valueView.nodeName, "A");
-//});
-//
-//QUnit.test("testSetValueOutputLink", function(assert) {
-//	this.spec.mode = "output";
-//	this.spec.outputFormat = "link";
-//	let pParentVarView = this.getpParentVarView();
-//	let valueView = this.getValueView();
-//
-//	assert.strictEqual(valueView.href, "");
-//	pParentVarView.setValue("http://www.some.domain.nu");
-//	assert.strictEqual(valueView.href, "http://www.some.domain.nu/");
-//	assert.strictEqual(valueView.text, "http://www.some.domain.nu");
-//});
-
 QUnit.test("testDisableInput", function(assert) {
 	let pParentVarView = this.getpParentVarView();
 	let valueView = this.getValueView();
@@ -388,5 +344,4 @@ QUnit.test("testAddAttributesView", function(assert) {
 
 	pParentVarView.addAttributesView(fakeView);
 	assert.strictEqual(pParentVarView.getView().childNodes[1], fakeView);
-
 });

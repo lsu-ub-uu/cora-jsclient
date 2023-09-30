@@ -24,14 +24,15 @@ var CORA = (function(cora) {
 		};
 		
 		const dependencies = {
-			//TODO: remove when pNumVarView uses pParentVarView
-			infoFactory: CORA.infoFactory(),
 			pParentVarViewFactory: CORA.genericParentFactory("pParentVarView", childDependencies)
 		};
 		
 		function factor(spec) {
 			if(spec.type === "pNumVar"){
 				return CORA.pNumVarView(dependencies, spec);
+			}
+			if(spec.type === "pCollVar"){
+				return CORA.pCollectionVarView(dependencies, spec);
 			}
 			return CORA.pVarView(dependencies, spec);
 		}

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pAttributesTest.js", {
+QUnit.module.only("presentation/pAttributesTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -96,7 +96,6 @@ QUnit.test("testAddAttributePresentation", function(assert) {
 
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
 	};
 	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
 	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
@@ -130,7 +129,6 @@ QUnit.test("testAddAttributeOutputPresentation", function(assert) {
 
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
 	};
 	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(1);
 	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);

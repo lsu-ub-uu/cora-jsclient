@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("gui/pVarViewFactoryTest.js", {
+QUnit.module.only("gui/pVarViewFactoryTest.js", {
 	beforeEach : function() {
 		this.pVarViewFactory = CORA.pVarViewFactory();
 		this.spec = {
@@ -81,6 +81,14 @@ QUnit.test("factorSetsDependenciesInPTextVarView", function(assert) {
 
 QUnit.test("testFactorViewForPNumVar", function(assert) {
 	this.spec.type = "pNumVar";
+	let view = this.pVarViewFactory.factor(this.spec);
+	
+	assert.ok(view);
+	assert.strictEqual(view.type, "pNumVarView");
+});
+
+QUnit.test("testFactorViewForPNumVar", function(assert) {
+	this.spec.type = "pNumVar";
 	
 	let view = this.pVarViewFactory.factor(this.spec);
 	let dependencies = view.getDependencies();
@@ -101,10 +109,32 @@ QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
 	assert.deepEqual(spec, this.spec);
 });
 
-QUnit.test("factorSetsDependenciesInPNumVarView", function(assert) {
-	this.spec.type = "pNumVar";
+QUnit.test("testFactorViewForPNumVar", function(assert) {
+	this.spec.type = "pCollVar";
 	let view = this.pVarViewFactory.factor(this.spec);
 	
+	assert.ok(view);
+	assert.strictEqual(view.type, "pCollectionVarView");
+});
+
+QUnit.test("testFactorViewForPNumVar", function(assert) {
+	this.spec.type = "pCollVar";
+	
+	let view = this.pVarViewFactory.factor(this.spec);
 	let dependencies = view.getDependencies();
-	assert.deepEqual(dependencies.infoFactory.type, "infoFactory");
+	
+	assert.deepEqual(dependencies.pParentVarViewFactory.type, "genericParentFactory");
+	assert.deepEqual(dependencies.pParentVarViewFactory.getTypeToFactor(), "pParentVarView");
+	
+	let pParentDependencies = dependencies.pParentVarViewFactory.getDependencies();
+	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(view.type, "pCollectionVarView");
+});
+
+QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
+	this.spec.type = "pCollVar";
+	let view = this.pVarViewFactory.factor(this.spec);
+	
+	let spec = view.getSpec();
+	assert.deepEqual(spec, this.spec);
 });

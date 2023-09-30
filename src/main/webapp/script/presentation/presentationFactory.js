@@ -21,13 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.presentationFactory = function(dependencies) {
 		const infoFactory = CORA.infoFactory();
-//		const pVarViewFactoryDependencies = {
-//			infoFactory: infoFactory
-//		};
-//		const pVarViewFactory = CORA.genericFactory("pVarView", pVarViewFactoryDependencies);
 		const pVarViewFactory = CORA.pVarViewFactory();
-		
-//		const pNumVarViewFactory = CORA.genericFactory("pNumVarView", pVarViewFactoryDependencies);
 		
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,

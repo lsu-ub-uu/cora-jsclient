@@ -258,6 +258,7 @@ var CORA = (function(cora) {
 					+ error);
 			recordHandlerView.addObjectToEditView(data);
 			recordHandlerView.addObjectToEditView(error.stack);
+			throw(error);
 		};
 
 		const sendNewDataToServer = function() {

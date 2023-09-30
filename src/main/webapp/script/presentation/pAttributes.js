@@ -56,7 +56,6 @@ var CORA = (function(cora) {
 
 			let attributePresentation = {
 				view: attributePVar.getView(),
-				text: attributePVar.getText()
 			};
 			view.addAttributePresentation(attributePresentation);
 		};

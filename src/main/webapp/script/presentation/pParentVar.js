@@ -49,8 +49,11 @@ var CORA = (function(cora) {
 			let metadataId = spec.metadataIdUsedInData;
 			cMetadataElement = getMetadataById(metadataId);
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			if (cPresentation.containsChildWithNameInData("recordInfo")) {
+				//TODO: fix..
+				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			}
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
 			text = textProvider.getTranslation(textId);

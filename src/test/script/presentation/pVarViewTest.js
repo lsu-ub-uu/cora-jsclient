@@ -108,7 +108,7 @@ QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
 	assert.strictEqual(inputElement.value, "trams");
 });
 
-QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
+QUnit.test("createInputElementWithSetValueFunctionPassword", function(assert) {
 	this.spec.inputFormat = "password";
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);

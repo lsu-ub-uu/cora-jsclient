@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  * 
  *
  * This file is part of Cora.
@@ -18,528 +18,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-//"use strict";
-//var CORATEST = (function(coraTest) {
-//	"use strict";
-//	coraTest.attachedPCollectionVarFactory = function(metadataProvider, pubSub, textProvider,
-//		jsBookkeeper, fixture, pAttributesFactory) {
-//		let factor = function(path, pCollectionVarPresentationId) {
-//			let cPCollectionVarPresentation = CORA.coraData(metadataProvider
-//				.getMetadataById(pCollectionVarPresentationId));
-//			let dependencies = {
-//				"metadataProvider": metadataProvider,
-//				"pubSub": pubSub,
-//				"textProvider": textProvider,
-//				"jsBookkeeper": jsBookkeeper,
-//				pAttributesFactory: pAttributesFactory
-//			};
-//			let spec = {
-//				"path": path,
-//				"cPresentation": cPCollectionVarPresentation
-//			};
-//			let pCollectionVar = CORA.pCollectionVar(dependencies, spec);
-//			let view = pCollectionVar.getView();
-//			fixture.appendChild(view);
-//			let valueView = view.firstChild;
-//			return {
-//				pCollectionVar: pCollectionVar,
-//				fixture: fixture,
-//				valueView: valueView,
-//				metadataProvider: metadataProvider,
-//				pubSub: pubSub,
-//				textProvider: textProvider,
-//				jsBookkeeper: jsBookkeeper,
-//				view: view,
-//				pAttributesFactory: pAttributesFactory
-//			};
-//
-//		};
-//		return Object.freeze({
-//			factor: factor
-//		});
-//	};
-//
-//	return coraTest;
-//}(CORATEST || {}));
-//
-//QUnit.module("presentation/pCollectionVarTest.js", {
-//	beforeEach: function() {
-//		this.fixture = document.getElementById("qunit-fixture");
-//		this.metadataProvider = new MetadataProviderStub();
-//		this.pubSub = CORATEST.pubSubSpy();
-//		this.textProvider = CORATEST.textProviderStub();
-//		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-//		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-//		this.pCollectionVarFactory = CORATEST.attachedPCollectionVarFactory(this.metadataProvider,
-//			this.pubSub, this.textProvider, this.jsBookkeeper, this.fixture, this.pAttributesFactory);
-//		this.dependencies = {
-//			metadataProvider: this.metadataProvider,
-//			pubSub: this.pubSub,
-//			textProvider: this.textProvider,
-//			jsBookkeeper: this.jsBookkeeper,
-//			pAttributesFactory: this.pAttributesFactory,
-//		};
-//		this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
-//		let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//			.getMetadataById(this.pCollectionVarPresentationId));
-//		this.path = [];
-//		this.spec = {
-//			path: this.path,
-//			cPresentation: cPCollectionVarPresentation
-//		};
-//	}
-//});
-//
-//var CORATEST = (function(coraTest) {
-//	"use strict";
-//	coraTest.testCollectionVariableSubscription = function(attachedPCollectionVar, assert) {
-//		let subscriptions = attachedPCollectionVar.pubSub.getSubscriptions();
-//		assert.deepEqual(subscriptions.length, 3);
-//
-//		let firstSubsription = subscriptions[0];
-//		assert.strictEqual(firstSubsription.type, "setValue");
-//		assert.deepEqual(firstSubsription.path, []);
-//		let pCollectionVar = attachedPCollectionVar.pCollectionVar;
-//		assert.ok(firstSubsription.functionToCall === pCollectionVar.handleMsg);
-//
-//		let secondSubsription = subscriptions[1];
-//		assert.strictEqual(secondSubsription.type, "validationError");
-//		assert.deepEqual(secondSubsription.path, []);
-//		pCollectionVar = attachedPCollectionVar.pCollectionVar;
-//		assert.ok(secondSubsription.functionToCall === pCollectionVar.handleValidationError);
-//
-//	};
-//
-//	coraTest.testJSBookkeeperNoCall = function(jsBookkeeper, assert) {
-//		let dataArray = jsBookkeeper.getDataArray();
-//		assert.strictEqual(dataArray.length, 0);
-//	};
-////	coraTest.testJSBookkeeperOneCallWithValue = function(jsBookkeeper, value, assert) {
-////		let dataArray = jsBookkeeper.getDataArray();
-////		assert.strictEqual(dataArray.length, 1);
-////		assert.strictEqual(dataArray[0].data, value);
-////	};
-//	return coraTest;
-//}(CORATEST || {}));
-//
-//QUnit.test("testGetDependencies", function(assert) {
-//	this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
-//	assert.strictEqual(pCollectionVar.getDependencies(), this.dependencies);
-//});
-//
-//QUnit.test("testGetSpec", function(assert) {
-//	this.pCollectionVarPresentationId = "userSuppliedIdCollectionVarPCollVar";
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
-//	assert.strictEqual(pCollectionVar.getSpec(), this.spec);
-//});
-//
-//
-//QUnit.test("testInitInfoButtonCollectionVariable", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVar");
-//	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
-//	assert.deepEqual(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdCollectionVarPCollVar");
-//	let view = attachedPCollectionVar.view;
-//	let infoButton = view.childNodes[1];
-//
-//	assert.equal(infoButton.nodeName, "SPAN");
-//	assert.equal(infoButton.className, "iconButton infoButton");
-//
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	assert.ok(new RegExp("^(.*\\s)*infoActive(\\s.*)*$")
-//		.test(attachedPCollectionVar.view.className));
-//	assert.equal(view.childNodes.length, 3);
-//
-//	let infoView = view.childNodes[2];
-//	assert.equal(infoView.childNodes.length, 2);
-//	assert.equal(infoView.nodeName, "SPAN");
-//	assert.equal(infoView.className, "infoView");
-//
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "textView",
-//		"userSuppliedIdCollectionVarText", assert);
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[1], "defTextView",
-//		"userSuppliedIdCollectionVarDefText", assert);
-//
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	assert.ok(new RegExp("^(.*\\s)*infoActive(\\s.*)*$")
-//		.test(attachedPCollectionVar.view.className));
-//	assert.equal(view.childNodes.length, 3);
-//	assert.equal(infoView.childNodes.length, 7);
-//
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[2], "textIdView",
-//		"textId: userSuppliedIdCollectionVarText", assert);
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[3], "defTextIdView",
-//		"defTextId: userSuppliedIdCollectionVarDefText", assert);
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[4], "metadataIdView",
-//		"metadataId: userSuppliedIdCollectionVar", assert);
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[5], "technicalView",
-//		"nameInData: userSuppliedId", assert);
-//	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[6], "technicalView",
-//		"presentationId: userSuppliedIdCollectionVarPCollVar", assert);
-//
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	assert.notOk(new RegExp("^(.*\\s)*infoActive(\\s.*)*$")
-//		.test(attachedPCollectionVar.view.className));
-//	assert.equal(view.childNodes.length, 2);
-//
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	assert.ok(new RegExp("^(.*\\s)*infoActive(\\s.*)*$")
-//		.test(attachedPCollectionVar.view.className));
-//	assert.equal(view.childNodes.length, 3);
-//});
-//
-//QUnit.test("testInitInfoButtonCollectionVariableNoRecordInfo", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVarWithoutRecordInfo");
-//
-//	assert.deepEqual(attachedPCollectionVar.view.className, "pCollVar");
-//
-//	let view = attachedPCollectionVar.view;
-//	let infoButton = view.childNodes[1];
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	let infoView = view.childNodes[2];
-//	CORATESTHELPER.simulateOnclick(infoButton);
-//	assert.equal(infoView.childNodes.length, 6);
-//});
-//
-//QUnit.test("testInitCollection", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVar");
-//	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
-//	assert.deepEqual(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdCollectionVarPCollVar");
-//	let view = attachedPCollectionVar.view;
-//	assert.ok(view.modelObject === attachedPCollectionVar.pCollectionVar);
-//	assert.equal(view.childNodes.length, 2);
-//
-//	let valueView = attachedPCollectionVar.valueView;
-//	assert.equal(valueView.nodeName, "SELECT");
-//	assert.equal(valueView.type, "select-one");
-//	assert.equal(valueView.value, "");
-//
-//	let options = valueView.childNodes;
-//	assert.equal(options[0].nodeName, "OPTION");
-//	assert.equal(options[0].text, "-- Gör ett val ur listan --");
-//	assert.equal(options[0].value, "");
-//	assert.equal(options[0].selected, true);
-//
-//	assert.equal(options[1].nodeName, "OPTION");
-//	assert.equal(options[1].text, "false");
-//	assert.equal(options[1].value, "false");
-//
-//	CORATEST.testCollectionVariableSubscription(attachedPCollectionVar, assert);
-//
-//	let pCollectionVar = attachedPCollectionVar.pCollectionVar;
-//	assert.strictEqual(pCollectionVar.getText(), "userSuppliedIdCollectionVarText");
-//	assert.strictEqual(pCollectionVar.getDefText(), "userSuppliedIdCollectionVarDefText");
-//
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "ok");
-//
-//	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
-//});
-//
-//QUnit.test("testInitCollectionNoEmptyTextId", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdNoEmptyTextIdCollectionVarPCollVar");
-//	assert.strictEqual(attachedPCollectionVar.pCollectionVar.type, "pCollVar");
-//	assert.deepEqual(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdNoEmptyTextIdCollectionVarPCollVar");
-//	let view = attachedPCollectionVar.view;
-//	assert.ok(view.modelObject === attachedPCollectionVar.pCollectionVar);
-//	assert.ok(view.childNodes.length, 2);
-//
-//	let valueView = attachedPCollectionVar.valueView;
-//	assert.equal(valueView.nodeName, "SELECT");
-//	assert.equal(valueView.type, "select-one");
-//
-//	let options = valueView.childNodes;
-//	assert.equal(options[0].nodeName, "OPTION");
-//	assert.equal(options[0].text, "false");
-//	assert.equal(options[0].value, "false");
-//
-//	CORATEST.testCollectionVariableSubscription(attachedPCollectionVar, assert);
-//
-//	let pCollectionVar = attachedPCollectionVar.pCollectionVar;
-//	assert.strictEqual(pCollectionVar.getText(), "userSuppliedIdCollectionVarText");
-//	assert.strictEqual(pCollectionVar.getDefText(), "userSuppliedIdCollectionVarDefText");
-//
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "ok");
-//
-//	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
-//});
-//
-//QUnit.test("testSetValueCollectionInput", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVar");
-//	attachedPCollectionVar.pCollectionVar.setValue("true");
-//	assert.equal(attachedPCollectionVar.valueView.value, "true");
-//});
-//
-//QUnit.test("testChangedValueOk", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVar");
-//	attachedPCollectionVar.valueView.value = "true";
-//	attachedPCollectionVar.valueView.onblur();
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "ok");
-//	assert.equal(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdCollectionVarPCollVar");
-//	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", [], assert);
-//	attachedPCollectionVar.valueView.onblur();
-//	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "true", [], assert);
-//
-//});
-//
-//QUnit.test("testInitCollectionOutput", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarOutputPCollVar");
-//	assert.deepEqual(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdCollectionVarOutputPCollVar");
-//	let view = attachedPCollectionVar.view;
-//	assert.ok(view.modelObject === attachedPCollectionVar.pCollectionVar);
-//	assert.ok(view.childNodes.length, 2);
-//
-//	let valueView = attachedPCollectionVar.valueView;
-//	assert.equal(valueView.nodeName, "SPAN");
-//	assert.equal(valueView.className, "value");
-//	assert.equal(valueView.innerHTML, "");
-//
-//	CORATEST.testCollectionVariableSubscription(attachedPCollectionVar, assert);
-//});
-//
-//QUnit.test("testSetValueCollectionInputEmptyTextId", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"yesNoUnknownPCollVar");
-//
-//	let view = attachedPCollectionVar.view;
-//	assert.ok(view.modelObject === attachedPCollectionVar.pCollectionVar);
-//	assert.ok(view.childNodes.length, 3);
-//
-//	let valueView = attachedPCollectionVar.valueView;
-//	assert.equal(valueView.nodeName, "SELECT");
-//	assert.equal(valueView.type, "select-one");
-//
-//	let options = valueView.childNodes;
-//	assert.equal(options[0].nodeName, "OPTION");
-//	assert.equal(options[0].text, "-- Gör ett val ur listan --");
-//	assert.equal(options[0].value, "");
-//
-//	assert.equal(options[1].nodeName, "OPTION");
-//	assert.equal(options[1].text, "Ja");
-//	assert.equal(options[1].value, "yes");
-//});
-//
-//QUnit.test("testSetValueCollectionOutputEmptyTextId", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarOutputPCollVar");
-//	let valueView = attachedPCollectionVar.valueView;
-//
-//	attachedPCollectionVar.pCollectionVar.setValue("false");
-//	assert.equal(valueView.innerHTML, "false");
-//	attachedPCollectionVar.pCollectionVar.setValue("");
-//	assert.equal(valueView.innerHTML, "");
-//});
-//
-//QUnit.test("testHandleMessage", function(assert) {
-//	let attachedPCollectionVar = this.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarOutputPCollVar");
-//	let data = {
-//		"data": "false",
-//		"path": []
-//	};
-//	attachedPCollectionVar.pCollectionVar.handleMsg(data);
-//	assert.equal(attachedPCollectionVar.valueView.innerHTML, "false");
-//});
-//
-//QUnit.test("testHandleValidationError", function(assert) {
-//	let attachedPCollectionVar = CORATEST.createAttachedPCollectionVarWithError(this);
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "error");
-//	assert.ok(new RegExp("^(.*\\s)*error(\\s.*)*$").test(attachedPCollectionVar.view.className));
-//});
-//
-//CORATEST.createAttachedPCollectionVarWithError = function(testScope) {
-//	let attachedPCollectionVar = testScope.pCollectionVarFactory.factor([],
-//		"userSuppliedIdCollectionVarPCollVar");
-//	let message = {
-//		"metadataId": "userSuppliedIdCollectionVar",
-//		"path": []
-//	};
-//	attachedPCollectionVar.pCollectionVar.handleValidationError(message);
-//	return attachedPCollectionVar;
-//};
-//
-//QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
-//	let attachedPCollectionVar = CORATEST.createAttachedPCollectionVarWithError(this);
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "error");
-//	assert.ok(new RegExp("^(.*\\s)*error(\\s.*)*$").test(attachedPCollectionVar.view.className));
-//
-//	let data = {
-//		"data": "false",
-//		"path": []
-//	};
-//	attachedPCollectionVar.pCollectionVar.handleMsg(data);
-//
-//	assert.equal(attachedPCollectionVar.pCollectionVar.getState(), "ok");
-//	assert.strictEqual(attachedPCollectionVar.view.className,
-//		"pCollVar userSuppliedIdCollectionVarPCollVar");
-//});
-//
-//QUnit.test("testHandleValidationErrorResetByChangingValue", function(assert) {
-//	let attachedPCollectionVar = CORATEST.createAttachedPCollectionVarWithError(this);
-//	attachedPCollectionVar.valueView.value = "false";
-//	attachedPCollectionVar.valueView.onblur();
-//	let jsBookkeeper = this.jsBookkeeper;
-//	let dataArray = jsBookkeeper.getDataArray();
-//	assert.strictEqual(dataArray.length, 1);
-//	assert.strictEqual(dataArray[0].data, "false");
-//});
-//
-//QUnit.test("testPubSubMessagesWithFirstLevelPath", function(assert) {
-//	let firstLevelPath = ["textVariableId"];
-//	let expectedPath = ["textVariableId"];
-//
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: firstLevelPath,
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, spec);
-//	let subscriptions = this.pubSub.getSubscriptions();
-//	assert.deepEqual(subscriptions.length, 3);
-//
-//	let disableSubscription = subscriptions[2];
-//
-//	assert.strictEqual(disableSubscription.type, "disable");
-//	assert.deepEqual(disableSubscription.path, expectedPath);
-//	assert.ok(pCollectionVar.disableCollectionVar);
-//	assert.ok(disableSubscription.functionToCall === pCollectionVar.disableCollectionVar);
-//});
-//
-//QUnit.test("testDisablePubSubMessagesWithFirstLevelPathWithRepeatId", function(assert) {
-//	let firstLevelPath = ["textVariableId.0"];
-//
-//	let expectedPath = ["textVariableId"]
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: firstLevelPath,
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, spec);
-//	let subscriptions = this.pubSub.getSubscriptions();
-//	assert.deepEqual(subscriptions.length, 3);
-//
-//	let disableSubscription = subscriptions[2];
-//
-//	assert.strictEqual(disableSubscription.type, "disable");
-//	assert.deepEqual(disableSubscription.path, expectedPath);
-//	assert.ok(pCollectionVar.disableCollectionVar);
-//	assert.ok(disableSubscription.functionToCall === pCollectionVar.disableCollectionVar);
-//});
-//
-//QUnit.test("testPubSubMessagesWithTwoLevelPath", function(assert) {
-//	let pathWithTwoLevels = ["recordInfo", "dataDivider"];
-//	let expectedPath = ["recordInfo", "dataDivider"];
-//
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: pathWithTwoLevels,
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//
-//	CORA.pCollectionVar(this.dependencies, spec);
-//	let subscriptions = this.pubSub.getSubscriptions();
-//
-//	let disableSubscription = subscriptions[2];
-//	assert.deepEqual(disableSubscription.path, expectedPath);
-//});
-//
-//QUnit.test("testPubSubMessagesWithTwoLevelPathAndAttribute", function(assert) {
-//	let pathWithAttribute = ["textPart", "numVariableId"];
-//
-//	let expectedPath = pathWithAttribute;
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: pathWithAttribute,
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//
-//	CORA.pCollectionVar(this.dependencies, spec);
-//	let subscriptions = this.pubSub.getSubscriptions();
-//
-//	let disableSubscription = subscriptions[2];
-//	assert.deepEqual(disableSubscription.path, expectedPath);
-//});
-//QUnit.test("testPubSubMessagesWithTwoLevelPathWithRepeatIdLowestLevel", function(assert) {
-//	let pathWithAttribute = ["userRole", "userRole.0"];
-//
-//	let expectedPath = ["userRole", "userRole"];
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: pathWithAttribute,
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//	CORA.pCollectionVar(this.dependencies, spec);
-//	let subscriptions = this.pubSub.getSubscriptions();
-//
-//	let disableSubscription = subscriptions[2];
-//	assert.deepEqual(disableSubscription.path, expectedPath);
-//});
-//
-//QUnit.test("testDisable", function(assert) {
-//	let cPCollectionVarPresentation = CORA.coraData(this.metadataProvider
-//		.getMetadataById("userSuppliedIdCollectionVarPCollVar"));
-//	let spec = {
-//		path: [],
-//		cPresentation: cPCollectionVarPresentation
-//	};
-//	let collectionVar = CORA.pCollectionVar(this.dependencies, spec);
-//	let view = collectionVar.getView();
-//	let valueView = view.childNodes[0];
-//	assert.notOk(valueView.disabled)
-//	collectionVar.disableCollectionVar();
-//
-//	assert.ok(valueView.disabled)
-//});
-//
-//QUnit.test("testFactoredPAttributes", function(assert) {
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
-//	let attributesSpec = this.pAttributesFactory.getSpec(0);
-//	assert.strictEqual(attributesSpec.addViewToParent, pCollectionVar.addAttributesView);
-//	assert.strictEqual(attributesSpec.path, this.path);
-//	assert.strictEqual(attributesSpec.mode, "input");
-//	
-//});
-//
-//QUnit.test("testAddAttributesView", function(assert) {
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
-//	let fakeView = document.createElement("span");
-//	fakeView.appendChild(document.createTextNode("fake view"));
-//	pCollectionVar.addAttributesView(fakeView);
-//	assert.strictEqual(pCollectionVar.getView().firstChild, fakeView);
-//	
-//});
-//
-//QUnit.test("testDisableAttributes", function(assert) {
-//	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
-//
-//	let pAttributesSpy = this.pAttributesFactory.getFactored(0);
-//	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 0);
-//
-//	pCollectionVar.disableCollectionVar();
-//
-//	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
-//});
-
 "use strict";
-QUnit.module.only("presentation/pCollectionVarTest.js", {
+QUnit.module("presentation/pCollectionVarTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.textProvider = new CORATEST.textProviderStub();
@@ -588,6 +68,7 @@ QUnit.test("testParentStarted", function(assert) {
 
 	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
 	assert.notEqual(child.validateTypeSpecificValue, undefined);
+	assert.notEqual(child.transformValueForView, undefined);
 });
 
 QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
@@ -610,130 +91,45 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	
 	let expectedSpec = {
 		type: "pCollVar",
-//		inputType: "input",
-//		outputFormat: "text",
-//		inputFormat: "text",
 		options: [
-			["empty", ""],
-			["text1", "value1"],
-			["text2", "value2"]
+			["-- Gör ett val ur listan --", ""],
+			["false translated", "false"],
+			["true translated", "true"]
 		],
 		info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
 	assert.deepEqual(viewSpec, expectedSpec);
 });
 
-//QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert) {
-//	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
-//		"textVariableIdTextAreapCollVar"))
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	let viewSpec = {
-//		info:{
-//			technicalInfo:[]
-//		}
-//	};
-//	
-//	child.addTypeSpecificInfoToViewSpec(viewSpec);
-//	
-//	let expectedSpec = {
-//		type: "pTextVar",
-//		inputType: "textarea",
-//		outputFormat: "text",
-//		inputFormat: "text",
-//		info:{
-//			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
-//			]
-//		}
-//	};
-//	assert.deepEqual(viewSpec, expectedSpec);
-//});
-
-//QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
-//	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
-//		"textVariableIdShowTextAreaFalsepCollVar"))
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	let viewSpec = {
-//		info:{
-//			technicalInfo:[]
-//		}
-//	};
-//	
-//	child.addTypeSpecificInfoToViewSpec(viewSpec);
-//	
-//	let expectedSpec = {
-////		type: "pTextVar",
-////		inputType: "input",
-////		outputFormat: "text",
-////		inputFormat: "text",
-//		info:{
-//			technicalInfo:[
-////				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
-//			]
-//		}
-//	};
-//	assert.deepEqual(viewSpec, expectedSpec);
-//});
-
-//QUnit.test("testInitTextInputFormatPassword", function(assert) {
-//	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
-//		"pCollVarTextVariableIdInputPassword"))
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	let viewSpec = {
-//		info:{
-//			technicalInfo:[]
-//		}
-//	};
-//	
-//	child.addTypeSpecificInfoToViewSpec(viewSpec);
-//	
-//	let expectedSpec = {
-//		type: "pTextVar",
-//		inputType: "input",
-//		outputFormat: "text",
-//		inputFormat: "password",
-//		info:{
-//			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
-//			]
-//		}
-//	};
-//	assert.deepEqual(viewSpec, expectedSpec);
-//});
-
-//QUnit.test("testInitTextOutputFormatImage", function(assert) {
-//	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
-//		"pCollVarTextVariableIdOutputImage"))
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	let viewSpec = {
-//		info:{
-//			technicalInfo:[]
-//		}
-//	};
-//	
-//	child.addTypeSpecificInfoToViewSpec(viewSpec);
-//	
-//	let expectedSpec = {
-//		type: "pTextVar",
-//		inputType: "input",
-//		outputFormat: "image",
-//		inputFormat: "text",
-//		info:{
-//			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
-//			]
-//		}
-//	};
-//	assert.deepEqual(viewSpec, expectedSpec);
-//});
+QUnit.test("testFactoredViewCorrectlyForInputCollectionVariableNoEmptyTextId", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider
+				.getMetadataById("userSuppliedIdNoEmptyTextIdCollectionVarPCollVar"))
+	CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	
+	let expectedSpec = {
+		type: "pCollVar",
+		options: [
+			["false translated", "false"],
+			["true translated", "true"]
+		],
+		info:{
+			technicalInfo:[
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
 
 QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	CORA.pCollectionVar(this.dependencies, this.spec);
@@ -744,20 +140,38 @@ QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	assert.true(valid);
 });
 
-//QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	
-//	const valid = child.validateTypeSpecificValue("hej####/(&/%&/¤/");
-//	
-//	assert.false(valid);
-//});
-//
-//QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
-//	CORA.pCollectionVar(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	
-//	const formated = child.autoFormatEnteredValue("Hej hopp");
-//	
-//	assert.strictEqual(formated, "Hej hopp");
-//});
+QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
+	CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const formated = child.autoFormatEnteredValue("Hej hopp");
+	
+	assert.strictEqual(formated, "Hej hopp");
+});
+
+QUnit.test("testTransformValueForViewDoNothingOnInput", function(assert) {
+	CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const transformed = child.transformValueForView("input", "true");
+	
+	assert.strictEqual(transformed, "true");
+});
+
+QUnit.test("testTransformValueForViewTranslateValueToTextOnOutputEmptyValue", function(assert) {
+	CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const transformed = child.transformValueForView("output", "");
+	
+	assert.strictEqual(transformed, "");
+});
+
+QUnit.test("testTransformValueForViewTranslateValueToTextOnOutput", function(assert) {
+	CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const transformed = child.transformValueForView("output", "true");
+	
+	assert.strictEqual(transformed, "true translated");
+});

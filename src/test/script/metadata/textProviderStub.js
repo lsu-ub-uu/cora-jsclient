@@ -135,11 +135,11 @@ var CORATEST = (function(coraTest) {
 			case "theClient_loginMenuText":
 				return "Login";
 			case "trueItemText":
-				return "true";
+				return "true translated";
 			case "trueItemDefText":
 				return "true";
 			case "falseItemText":
-				return "false";
+				return "false translated";
 			case "falseItemDefText":
 				return "false";
 			case "userSuppliedIdCollectionVarText":

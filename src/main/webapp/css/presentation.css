@@ -286,6 +286,19 @@ img {
 	flex: 1;
 }
 
+.attributes {
+	display: flex;	
+}
+
+.attributes label, .attributes .label {
+	font-style: italic;
+	font-weight: normal;
+}
+
+.attributes .pVar {
+	flex: initial;
+}
+
 textarea {
 	flex: 1;
 }

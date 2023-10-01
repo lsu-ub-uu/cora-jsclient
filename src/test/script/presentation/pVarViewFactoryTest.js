@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("gui/pVarViewFactoryTest.js", {
+QUnit.module("gui/pVarViewFactoryTest.js", {
 	beforeEach : function() {
 		this.pVarViewFactory = CORA.pVarViewFactory();
 		this.spec = {

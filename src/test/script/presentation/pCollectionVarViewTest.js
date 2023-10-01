@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pCollectionVarViewTest.js", {
+QUnit.module("presentation/pCollectionVarViewTest.js", {
 	beforeEach: function() {
 		this.pParentVarViewFactory = CORATEST.standardParentFactorySpy("pParentVarViewSpy");
 		this.dependencies = {
@@ -106,10 +106,14 @@ QUnit.test("createInputElementOptionsCreatedAsExpected", function(assert) {
 	
 	let options = inputElement.options;
 	assert.strictEqual(options.length, 3);
+	assert.strictEqual(options[0].nodeName, "OPTION");
 	assert.strictEqual(options[0].text, "empty");
 	assert.strictEqual(options[0].value, "");
+	assert.strictEqual(options[0].selected, true);
+	assert.strictEqual(options[1].nodeName, "OPTION");
 	assert.strictEqual(options[1].text, "text1");
 	assert.strictEqual(options[1].value, "value1");
+	assert.strictEqual(options[2].nodeName, "OPTION");
 	assert.strictEqual(options[2].text, "text2");
 	assert.strictEqual(options[2].value, "value2");
 		
@@ -121,3 +125,4 @@ QUnit.test("useStandardOutput", function(assert) {
 	
 	assert.strictEqual(child.useStandardOutput(), true);
 });
+

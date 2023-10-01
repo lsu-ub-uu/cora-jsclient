@@ -80,6 +80,10 @@ var CORA = (function(cora) {
 			}
 			return updatedValue;
 		};
+		
+		const transformValueForView = function(mode, valueForView){
+			return valueForView;
+		};
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
@@ -96,7 +100,8 @@ var CORA = (function(cora) {
 		const self = {
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 			validateTypeSpecificValue: validateTypeSpecificValue,
-			autoFormatEnteredValue: autoFormatEnteredValue
+			autoFormatEnteredValue: autoFormatEnteredValue,
+			transformValueForView: transformValueForView
 		};
 		
 		start();

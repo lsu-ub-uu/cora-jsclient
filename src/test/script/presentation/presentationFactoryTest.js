@@ -28,30 +28,29 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 		this.dataDivider = "systemX";
 
 		this.dependencies = {
-			"providers": {
-				"metadataProvider": this.metadataProvider,
-				"textProvider": this.textProvider,
-				"recordTypeProvider": this.recordTypeProvider,
-				"clientInstanceProvider": CORATEST.clientInstanceProviderSpy(),
+			providers: {
+				metadataProvider: this.metadataProvider,
+				textProvider: this.textProvider,
+				recordTypeProvider: this.recordTypeProvider,
+				clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
 			},
-			"globalFactories": {
-				"searchHandlerFactory": CORATEST.standardFactorySpy("searchHandlerSpy")
+			globalFactories: {
+				searchHandlerFactory: CORATEST.standardFactorySpy("searchHandlerSpy")
 			},
-			"pubSub": this.pubSub,
-			"jsBookkeeper": this.jsBookkeeper,
-			"dataDivider": this.dataDivider,
-			"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+			pubSub: this.pubSub,
+			jsBookkeeper: this.jsBookkeeper,
+			dataDivider: this.dataDivider,
+			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
 		this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
-			"path": [],
-			"metadataIdUsedInData": "textVariableId",
-			"cPresentation": CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableId")),
-			"cParentPresentation": null,
+			path: [],
+			metadataIdUsedInData: "textVariableId",
+			cPresentation: CORA.coraData(this.metadataProvider.getMetadataById("pVarTextVariableId")),
+			cParentPresentation: null,
 			recordPartPermissionCalculator: this.recordPartPermissionCalculator
 		};
 		this.getMetadataAsCoraData = function(id) {
@@ -89,6 +88,7 @@ QUnit.test("testFactorPVar", function(assert) {
 
 
 QUnit.test("testFactorPCollVar", function(assert) {
+	this.spec.metadataIdUsedInData = "userSuppliedIdCollectionVar";
 	this.setCPresentation("userSuppliedIdCollectionVarPCollVar");
 	let pCollVar = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pCollVar.type, "pCollVar");
@@ -248,14 +248,7 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	let PParentVarFactoyrDependencies = dependencies.pParentVarFactory.getDependencies();
 	assert.strictEqual(PParentVarFactoyrDependencies.pubSub, context.dependencies.pubSub);
 
-//	assert.strictEqual(dependencies.pVarViewFactory.type, "genericFactory");
-//	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
 	assert.strictEqual(dependencies.pVarViewFactory.type, "pVarViewFactory");
-//	assert.strictEqual(dependencies.pVarViewFactory.getTypeToFactor(), "pVarView");
-//	assert.strictEqual(dependencies.pNumVarViewFactory.type, "genericFactory");
-//	assert.strictEqual(dependencies.pNumVarViewFactory.getTypeToFactor(), "pNumVarView");
-//	let pNumVarDependencies = dependencies.pNumVarViewFactory.getDependencies();
-//	assert.strictEqual(pNumVarDependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.getTypeToFactor(), "pRecordLinkView");
 	let pRLVFDependencies = dependencies.pRecordLinkViewFactory.getDependencies();

@@ -131,7 +131,6 @@ var CORA = (function(cora) {
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
-				
 		};
 
 		const subscribeToPubSub = function() {
@@ -162,7 +161,8 @@ var CORA = (function(cora) {
 		const setValue = function(value) {
 			state = "ok";
 			previousValue = value;
-			pVarView.setValue(value);
+			const valueForView = child.transformValueForView(mode, value);
+			pVarView.setValue(valueForView);
 		};
 
 		const handleMsg = function(dataFromMsg) {
@@ -252,8 +252,8 @@ var CORA = (function(cora) {
 		};
 
 		const openMetadataIdRecord = function(event) {
-			openLinkedRecordForLink(event, cPresentation
-				.getFirstChildByNameInData("presentationOf").actionLinks.read);
+			const metadataRecord = metadataProvider.getMetadataRecordById(spec.metadataIdUsedInData);
+			openLinkedRecordForLink(event, metadataRecord.actionLinks.read);
 		};
 
 		const openPresentationIdRecord = function(event) {

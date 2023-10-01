@@ -103,11 +103,21 @@ QUnit.module("presentation/pParentVarTest.js", {
 			const autoFormatEnteredValue= function (valueFromView) {
 				return valueFromView;
 			};
+			let lastTransformValueForViewMode="";
+			const transformValueForView= function (mode, valueFromView) {
+				lastTransformValueForViewMode=mode;
+				return "Transformed "+valueFromView;
+			};
+			const getLastTransformValueForViewMode= function (value) {
+				return lastTransformValueForViewMode;
+			};
 			return {
 				getLastValueSentToValidateTypeSpecificValue: getLastValueSentToValidateTypeSpecificValue,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 				validateTypeSpecificValue: validateTypeSpecificValue,
-				autoFormatEnteredValue: autoFormatEnteredValue
+				autoFormatEnteredValue: autoFormatEnteredValue,
+				transformValueForView: transformValueForView,
+				getLastTransformValueForViewMode: getLastTransformValueForViewMode
 			};
 		};
 	}
@@ -498,11 +508,14 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 });
 //
 QUnit.test("testSetValueInput", function(assert) {
-	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+	const childSpy = this.createChildSpy();
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, childSpy);
 	pParentVar.setValue("A Value");
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	assert.equal(pVarViewSpy.getValue(), "A Value");
+	assert.equal(pVarViewSpy.getValue(), "Transformed A Value");
+	
+	assert.strictEqual(childSpy.getLastTransformValueForViewMode(), "input");
 });
 
 QUnit.test("testHandleMessage", function(assert) {
@@ -513,7 +526,7 @@ QUnit.test("testHandleMessage", function(assert) {
 	};
 	pParentVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	assert.equal(pVarViewSpy.getValue(), "A new value");
+	assert.equal(pVarViewSpy.getValue(), "Transformed A new value");
 	assert.equal(pVarViewSpy.getState(), "ok");
 });
 
@@ -762,12 +775,12 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 		"readLink": {
 			"requestMethod": "GET",
 			"rel": "read",
-			"url": "http://localhost:8080/therest/rest/record/" + "metadataTextVariable/"
-				+ "textVariableTextVar",
+			"url": "http://fake.from.metadataproviderstub/rest/record/sometype/textVariableId",
 			"accept": "application/vnd.uub.record+json"
 		},
 		"loadInBackground": "false"
 	};
+	
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 

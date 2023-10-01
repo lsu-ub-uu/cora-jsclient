@@ -62,6 +62,10 @@ var CORA = (function(cora) {
 			return valueFromView;
 		};
 		
+		const transformValueForView = function(mode, valueForView){
+			return valueForView;
+		};
+		
 		const getSpec = function() {
 			return spec;
 		};
@@ -73,7 +77,8 @@ var CORA = (function(cora) {
 		const self = {
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 			validateTypeSpecificValue: validateTypeSpecificValue,
-			autoFormatEnteredValue: autoFormatEnteredValue
+			autoFormatEnteredValue: autoFormatEnteredValue,
+			transformValueForView: transformValueForView
 		};
 
 		start();

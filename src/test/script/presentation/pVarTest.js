@@ -65,6 +65,7 @@ QUnit.test("testParentStarted", function(assert) {
 
 	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
 	assert.notEqual(child.validateTypeSpecificValue, undefined);
+	assert.notEqual(child.transformValueForView, undefined);
 });
 
 QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
@@ -232,4 +233,13 @@ QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
 	const formated = child.autoFormatEnteredValue("Hej hopp");
 	
 	assert.strictEqual(formated, "Hej hopp");
+});
+
+QUnit.test("testTransformValueForViewDoNothing", function(assert) {
+	CORA.pVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const transformed = child.transformValueForView("input", "Hej hopp");
+	
+	assert.strictEqual(transformed, "Hej hopp");
 });

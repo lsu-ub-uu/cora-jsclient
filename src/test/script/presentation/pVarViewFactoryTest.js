@@ -87,7 +87,7 @@ QUnit.test("testFactorViewForPNumVar", function(assert) {
 	assert.strictEqual(view.type, "pNumVarView");
 });
 
-QUnit.test("testFactorViewForPNumVar", function(assert) {
+QUnit.test("testFactorViewForPNumVarDependencies", function(assert) {
 	this.spec.type = "pNumVar";
 	
 	let view = this.pVarViewFactory.factor(this.spec);
@@ -109,16 +109,26 @@ QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
 	assert.deepEqual(spec, this.spec);
 });
 
-QUnit.test("testFactorViewForPNumVar", function(assert) {
+QUnit.test("testFactorViewForPCollVar", function(assert) {
 	this.spec.type = "pCollVar";
+	this.spec.options= [
+				["empty", ""],
+				["text1", "value1"],
+				["text2", "value2"]
+			];
 	let view = this.pVarViewFactory.factor(this.spec);
 	
 	assert.ok(view);
 	assert.strictEqual(view.type, "pCollectionVarView");
 });
 
-QUnit.test("testFactorViewForPNumVar", function(assert) {
+QUnit.test("testFactorViewForPCollVarDependencies", function(assert) {
 	this.spec.type = "pCollVar";
+	this.spec.options= [
+				["empty", ""],
+				["text1", "value1"],
+				["text2", "value2"]
+			];
 	
 	let view = this.pVarViewFactory.factor(this.spec);
 	let dependencies = view.getDependencies();
@@ -131,8 +141,13 @@ QUnit.test("testFactorViewForPNumVar", function(assert) {
 	assert.strictEqual(view.type, "pCollectionVarView");
 });
 
-QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
+QUnit.test("factorSetsSpecInPCollVarView", function(assert) {
 	this.spec.type = "pCollVar";
+	this.spec.options= [
+				["empty", ""],
+				["text1", "value1"],
+				["text2", "value2"]
+			];
 	let view = this.pVarViewFactory.factor(this.spec);
 	
 	let spec = view.getSpec();

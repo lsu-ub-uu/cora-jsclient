@@ -613,6 +613,11 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 //		inputType: "input",
 //		outputFormat: "text",
 //		inputFormat: "text",
+		options: [
+			["empty", ""],
+			["text1", "value1"],
+			["text2", "value2"]
+		],
 		info:{
 			technicalInfo:[
 //				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}

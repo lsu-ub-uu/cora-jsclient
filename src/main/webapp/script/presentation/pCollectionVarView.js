@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2018, 2023 Olov McKie
- * Copyright 2019, 2020 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,46 +28,28 @@ var CORA = (function(cora) {
 		
 		const createInputElementWithSetValueFunction = function() {
 			let inputNew = document.createElement("select");
-let emptyTextOption = new Option("trams", "");
-inputNew.appendChild(emptyTextOption);
-//			if (spec.inputFormat === "password") {
-//				inputNew.setAttribute("type", "password");
-//			}
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
+			addOptionsToInput(spec.options, inputNew);
+			addSetValueFunctionToInput(inputNew);
 			return inputNew;
+		};
+		
+		const addOptionsToInput = function(options, input) {
+			options.forEach((optionSpec)=>{
+				const option = new Option(optionSpec[0],optionSpec[1]);
+				input.appendChild(option);
+			});
+		};
+		
+		const addSetValueFunctionToInput = function(input) {
+			input.setValue = function(value) {
+				input.value = value;
+			};
 		};
 
 		const useStandardOutput = function() {
-//			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
-			return false;
+			return true;
 		};
 		
-		const createOutputWithSetValueFunction = function() {
-			if (spec.outputFormat === "image") {
-				return createOutputImage();
-			} 
-			return createOutputLink();
-		};
-		
-		const createOutputImage = function() {
-			let outputNew = document.createElement("img");
-			outputNew.setValue = function(value) {
-				outputNew.src = value;
-			};
-			return outputNew;
-		};
-
-		const createOutputLink = function() {
-			let outputNew = document.createElement("a");
-			outputNew.setValue = function(value) {
-				outputNew.href = value;
-				outputNew.text = value;
-			};
-			return outputNew;
-		};
-
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -80,7 +61,6 @@ inputNew.appendChild(emptyTextOption);
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
 			useStandardOutput: useStandardOutput,
-			createOutputWithSetValueFunction: createOutputWithSetValueFunction
 		};
 		
 		start();

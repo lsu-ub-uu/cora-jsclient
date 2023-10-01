@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2018, 2023 Olov McKie
- * Copyright 2018 , 2019, 2020 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -26,7 +25,11 @@ QUnit.module.only("presentation/pCollectionVarViewTest.js", {
 			pParentVarViewFactory: this.pParentVarViewFactory
 		};
 		this.spec = {
-//			inputType: "input"
+			options: [
+				["empty", ""],
+				["text1", "value1"],
+				["text2", "value2"]
+			]
 		};
 
 		this.getpCollectionVarView = function() {
@@ -64,7 +67,6 @@ QUnit.test("testParentStarted", function(assert) {
 
 	assert.notEqual(child.createInputElementWithSetValueFunction, undefined);
 	assert.notEqual(child.useStandardOutput, undefined);
-	assert.notEqual(child.createOutputWithSetValueFunction, undefined);
 });
 
 QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
@@ -88,89 +90,34 @@ QUnit.test("createInputElementWithSetValueFunction", function(assert) {
 	assert.strictEqual(inputElement.nodeName, "SELECT");
 	assert.strictEqual(inputElement.type, "select-one");
 	
-	//TODO:get working again :)
-//	assert.strictEqual(inputElement.value, "");
-//	inputElement.setValue("trams");
-//	assert.strictEqual(inputElement.value, "trams");
+	let options = inputElement.options;
+	assert.strictEqual(options.length, 3);
+	
+	assert.strictEqual(inputElement.value, "");
+	inputElement.setValue("value1");
+	assert.strictEqual(inputElement.value, "value1");
 });
 
-//QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
-//	this.spec.inputType = "textarea";
-//	this.getpCollectionVarView();
-//	const child = this.pParentVarViewFactory.getChild(0);
-//	
-//	let inputElement = child.createInputElementWithSetValueFunction();
-//	
-//	assert.strictEqual(inputElement.nodeName, "TEXTAREA");
-//	assert.strictEqual(inputElement.type, "textarea");
-//	
-//	assert.strictEqual(inputElement.value, "");
-//	inputElement.setValue("trams");
-//	assert.strictEqual(inputElement.value, "trams");
-//});
-//
-//QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
-//	this.spec.inputFormat = "password";
-//	this.getpCollectionVarView();
-//	const child = this.pParentVarViewFactory.getChild(0);
-//	
-//	let inputElement = child.createInputElementWithSetValueFunction();
-//	
-//	assert.strictEqual(inputElement.nodeName, "INPUT");
-//	assert.strictEqual(inputElement.type, "password");
-//	
-//	assert.strictEqual(inputElement.value, "");
-//	inputElement.setValue("trams");
-//	assert.strictEqual(inputElement.value, "trams");
-//});
+QUnit.test("createInputElementOptionsCreatedAsExpected", function(assert) {
+	this.getpCollectionVarView();
+	const child = this.pParentVarViewFactory.getChild(0);
+	
+	let inputElement = child.createInputElementWithSetValueFunction();
+	
+	let options = inputElement.options;
+	assert.strictEqual(options.length, 3);
+	assert.strictEqual(options[0].text, "empty");
+	assert.strictEqual(options[0].value, "");
+	assert.strictEqual(options[1].text, "text1");
+	assert.strictEqual(options[1].value, "value1");
+	assert.strictEqual(options[2].text, "text2");
+	assert.strictEqual(options[2].value, "value2");
+		
+});
 
 QUnit.test("useStandardOutput", function(assert) {
 	this.getpCollectionVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), false);
-});
-
-//QUnit.test("useStandardOutputImageIsFalse", function(assert) {
-//	this.spec.outputFormat = "image";
-//	this.getpCollectionVarView();
-//	const child = this.pParentVarViewFactory.getChild(0);
-//	
-//	assert.strictEqual(child.useStandardOutput(), false);
-//});
-//
-//QUnit.test("useStandardOutputLinlIsFalse", function(assert) {
-//	this.spec.outputFormat = "link";
-//	this.getpCollectionVarView();
-//	const child = this.pParentVarViewFactory.getChild(0);
-//	
-//	assert.strictEqual(child.useStandardOutput(), false);
-//});
-
-QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {
-	this.spec.outputFormat = "image";
-	this.getpCollectionVarView();
-	const child = this.pParentVarViewFactory.getChild(0);
-	
-	let inputElement = child.createOutputWithSetValueFunction();
-	
-	assert.strictEqual(inputElement.nodeName, "IMG");
-	assert.strictEqual(inputElement.src, "");
-	inputElement.setValue("http://localhost/trams");
-	assert.strictEqual(inputElement.src, "http://localhost/trams");
-});
-
-QUnit.test("createOutputWithSetValueFunctionLink", function(assert) {
-	this.spec.outputFormat = "link";
-	this.getpCollectionVarView();
-	const child = this.pParentVarViewFactory.getChild(0);
-	
-	let inputElement = child.createOutputWithSetValueFunction();
-	
-	assert.strictEqual(inputElement.nodeName, "A");
-	assert.strictEqual(inputElement.href, "");
-	assert.strictEqual(inputElement.text, "");
-	inputElement.setValue("http://localhost/trams");
-	assert.strictEqual(inputElement.href, "http://localhost/trams");
-	assert.strictEqual(inputElement.text, "http://localhost/trams");
+	assert.strictEqual(child.useStandardOutput(), true);
 });

@@ -90,8 +90,13 @@ QUnit.module("presentation/pParentVarTest.js", {
 		
 		this.createChildSpy = function (){
 			let lastValueSentToValidateTypeSpecificValue="no call to validateTypeSpecificValue";
-			const addTypeSpecificInfoToViewSpec= function (pVarViewSpec) {
+			let lastInfoValueForViewMode="";
+			const addTypeSpecificInfoToViewSpec= function (mode, pVarViewSpec) {
+				lastInfoValueForViewMode = mode;
 				pVarViewSpec.childExtra = "added by child";
+			};
+			const getLastInfoValueForViewMode= function (value) {
+				return lastInfoValueForViewMode;
 			};
 			const validateTypeSpecificValue= function (value) {
 				lastValueSentToValidateTypeSpecificValue=value;
@@ -114,6 +119,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 			return {
 				getLastValueSentToValidateTypeSpecificValue: getLastValueSentToValidateTypeSpecificValue,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+				getLastInfoValueForViewMode: getLastInfoValueForViewMode,
 				validateTypeSpecificValue: validateTypeSpecificValue,
 				autoFormatEnteredValue: autoFormatEnteredValue,
 				transformValueForView: transformValueForView,
@@ -159,8 +165,9 @@ QUnit.test("testInitText2", function(assert) {
 
 QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	this.spec.path = ["one", "two"];
+	let child = this.createChildSpy();
 	
-	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
@@ -180,6 +187,8 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	};
 	
 	expectedPVarViewSpec.childExtra = "added by child";
+	
+	assert.strictEqual(child.getLastInfoValueForViewMode(),"input");
 	
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{
@@ -796,6 +805,40 @@ QUnit.test("testOpenPresentationIdRecord", function(assert) {
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	pParentVar.openPresentationIdRecord(event);
+
+	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
+	let expectedOpenInfo = {
+		readLink: {
+			requestMethod: "GET",
+			rel: "read",
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+				+ "pVarTextVariableId",
+			accept: "application/vnd.uub.record+json"
+		},
+		loadInBackground: "false"
+	};
+	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
+	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
+
+	let event2 = document.createEvent('Event');
+	event2.ctrlKey = false;
+	pParentVar.openMetadataIdRecord(event2);
+	assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
+});
+
+QUnit.test("testOpenLinkedRecordForLink", function(assert) {
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+
+	let event = document.createEvent('Event');
+	let link = {
+			requestMethod: "GET",
+			rel: "read",
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+				+ "pVarTextVariableId",
+			accept: "application/vnd.uub.record+json"
+		};
+	event.ctrlKey = true;
+	pParentVar.openLinkedRecordForLink(event, link);
 
 	let jsClient = this.dependencies.clientInstanceProvider.getJsClient();
 	let expectedOpenInfo = {

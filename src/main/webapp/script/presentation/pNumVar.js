@@ -42,7 +42,7 @@ var CORA = (function(cora) {
 			pParentVar = pParentVarFactory.factor(spec, self);
 		};
 		
-		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 			pVarViewSpec.type = "pNumVar";
 			
 			pVarViewSpec.info.technicalInfo.push({text: `min: ${min}`});

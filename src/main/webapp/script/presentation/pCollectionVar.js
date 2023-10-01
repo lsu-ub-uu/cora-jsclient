@@ -27,9 +27,14 @@ var CORA = (function(cora) {
 		const cPresentation = spec.cPresentation;
 		let pParentVar;
 		let cMetadataElement;
+		let refCollectionId;
 		
 		const start = function() {
 			cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
+			let cRefCollection = CORA.coraData(cMetadataElement
+				.getFirstChildByNameInData("refCollection"));
+			refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
+			
 			pParentVar = pParentVarFactory.factor(spec, self);
 		}; 
 		
@@ -37,15 +42,27 @@ var CORA = (function(cora) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-		const addTypeSpecificInfoToViewSpec = function(pCollVarViewSpec) {
+		const addTypeSpecificInfoToViewSpec = function(mode, pCollVarViewSpec) {
 			pCollVarViewSpec.type = "pCollVar";
-
-			const specOptions = [];
-			possiblyAddOptionForEmptyText(specOptions);
-			addOptionForCollectionItems(specOptions);
-			pCollVarViewSpec.options = specOptions;
+			pCollVarViewSpec.info.technicalInfo.push({text: `itemCollection: ${refCollectionId}`,
+				onclickMethod: openRefCollectionIdRecord});
+			addOptionsToSpecIfInput(mode, pCollVarViewSpec);
 		};
-
+		
+		const openRefCollectionIdRecord = function(event) {
+			let collectionRecord = metadataProvider.getMetadataRecordById(refCollectionId);
+			pParentVar.openLinkedRecordForLink(event, collectionRecord.actionLinks.read);
+		};
+		
+		const addOptionsToSpecIfInput = function(mode, pCollVarViewSpec) {
+			if(mode==="input"){
+				const specOptions = [];
+				possiblyAddOptionForEmptyText(specOptions);
+				addOptionForCollectionItems(specOptions);
+				pCollVarViewSpec.options = specOptions;
+			}
+		};
+			
 		const possiblyAddOptionForEmptyText = function(specOptions) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				const emptyOption = createOptionForEmptyText();
@@ -72,9 +89,6 @@ var CORA = (function(cora) {
 		};
 		
 		const getCollectionItemReferencesChildren = function() {
-			let cRefCollection = CORA.coraData(cMetadataElement
-				.getFirstChildByNameInData("refCollection"));
-			let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cMetadataCollection = getMetadataById(refCollectionId);
 			let collectionItemReferences = cMetadataCollection
 				.getFirstChildByNameInData("collectionItemReferences");
@@ -151,7 +165,8 @@ var CORA = (function(cora) {
 			type: "pCollVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: pParentVar.getView
+			getView: pParentVar.getView,
+			openRefCollectionIdRecord: openRefCollectionIdRecord
 		});
 
 	};

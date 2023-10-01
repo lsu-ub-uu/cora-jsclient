@@ -90,7 +90,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pNumVar",

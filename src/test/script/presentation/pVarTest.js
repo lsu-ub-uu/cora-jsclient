@@ -84,7 +84,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pTextVar",
@@ -111,7 +111,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pTextVar",
@@ -138,7 +138,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pTextVar",
@@ -165,7 +165,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pTextVar",
@@ -192,7 +192,7 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("output", viewSpec);
 	
 	let expectedSpec = {
 		type: "pTextVar",

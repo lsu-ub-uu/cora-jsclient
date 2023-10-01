@@ -39,7 +39,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			let pVarViewSpec = intializePVarViewSpec();
-			child.addTypeSpecificInfoToViewSpec(pVarViewSpec);
+			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
@@ -292,6 +292,7 @@ var CORA = (function(cora) {
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
+			openLinkedRecordForLink: openLinkedRecordForLink,
 			disableVar: disableVar
 		});
 

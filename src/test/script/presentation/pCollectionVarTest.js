@@ -78,8 +78,8 @@ QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	assert.strictEqual(pCollVar.getView, pParentVar.getView);
 });
 
-QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
-	CORA.pCollectionVar(this.dependencies, this.spec);
+QUnit.test("testFactoredViewCorrectlyForInputCollectionVariable", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
 		info:{
@@ -87,7 +87,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pCollVar",
@@ -98,6 +98,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 		],
 		info:{
 			technicalInfo:[
+				{text: `itemCollection: trueFalseCollection`,
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
 			]
 		}
 	};
@@ -107,7 +109,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 QUnit.test("testFactoredViewCorrectlyForInputCollectionVariableNoEmptyTextId", function(assert) {
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
 				.getMetadataById("userSuppliedIdNoEmptyTextIdCollectionVarPCollVar"))
-	CORA.pCollectionVar(this.dependencies, this.spec);
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
 		info:{
@@ -115,7 +117,7 @@ QUnit.test("testFactoredViewCorrectlyForInputCollectionVariableNoEmptyTextId", f
 		}
 	};
 	
-	child.addTypeSpecificInfoToViewSpec(viewSpec);
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
 	
 	let expectedSpec = {
 		type: "pCollVar",
@@ -125,17 +127,59 @@ QUnit.test("testFactoredViewCorrectlyForInputCollectionVariableNoEmptyTextId", f
 		],
 		info:{
 			technicalInfo:[
+				{text: `itemCollection: trueFalseCollection`,
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
 			]
 		}
 	};
 	assert.deepEqual(viewSpec, expectedSpec);
 });
 
+QUnit.test("testFactoredViewCorrectlyForOutputNoOptions", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("output", viewSpec);
+	
+	let expectedSpec = {
+		type: "pCollVar",
+		info:{
+			technicalInfo:[
+				{text: `itemCollection: trueFalseCollection`,
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testOpenRefCollectionIdRecord", function(assert) {
+	let pCollectionVar = CORA.pCollectionVar(this.dependencies, this.spec);
+	let event = document.createEvent('Event');
+	event.ctrlKey = true;
+	
+	pCollectionVar.openRefCollectionIdRecord(event);
+	
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+	let expected = [event, {
+	    "accept": "application/vnd.uub.record+json",
+	    "rel": "read",
+	    "requestMethod": "GET",
+	    "url": "http://fake.from.metadataproviderstub/rest/record/sometype/trueFalseCollection"
+	  }];
+	assert.deepEqual(pParentVar.getOpenLinkedRecordForLink(0), expected);
+});
+
 QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	CORA.pCollectionVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	
-	const valid = child.validateTypeSpecificValue("A Value");
+	const valid = child.validateTypeSpecificValue("input", "A Value");
 	
 	assert.true(valid);
 });

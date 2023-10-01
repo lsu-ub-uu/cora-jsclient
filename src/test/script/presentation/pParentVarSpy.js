@@ -21,15 +21,27 @@ var CORATEST = (function(coraTest) {
 	coraTest.pParentVarSpy = function() {
 		const getDependencies = function(){
 			return "fakeDependencies from pParentVarSpy";
-		}
+		};
+		
 		const getView = function(){
 			return "fakeView from pParentVarSpy";
-		}
+		};
+		
+		let openLinkedRecordForLinkCalls = [];
+		const openLinkedRecordForLink = function(event, readLink){
+			openLinkedRecordForLinkCalls.push([event, readLink]);
+		};
+
+		const getOpenLinkedRecordForLink = function(no){
+			return openLinkedRecordForLinkCalls[no];
+		};
 
 		return Object.freeze({
 			type: "pParentVarSpy",
 			getDependencies: getDependencies,
-			getView: getView
+			getView: getView,
+			openLinkedRecordForLink: openLinkedRecordForLink,
+			getOpenLinkedRecordForLink: getOpenLinkedRecordForLink
 		});
 	};
 	return coraTest;

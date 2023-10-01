@@ -38,7 +38,7 @@ var CORA = (function(cora) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
-		const addTypeSpecificInfoToViewSpec = function(pVarViewSpec) {
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 			pVarViewSpec.type = "pTextVar";
 			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
 			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");

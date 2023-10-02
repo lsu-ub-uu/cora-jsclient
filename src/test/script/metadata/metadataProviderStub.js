@@ -4865,6 +4865,52 @@ function MetadataProviderStub() {
 							}]
 						}]
 				};
+			case "pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pVar"
+					},
+					"children": [
+//						{
+//							"name": "recordInfo",
+//							"children": [{
+//								"name": "id",
+//								"value": "pVarTextVariableId"
+//							}]
+//						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataTextVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "textVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataTextVariable/"
+										+ "textVariableTextVar",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
 			case "pVarTextVariableIdShowLabelFalse":
 				return {
 					"name": "presentation",

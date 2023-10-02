@@ -43,17 +43,17 @@ var CORA = (function(cora) {
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
+//			if (spec.mode === "input") {
+//				view.showContent();
+//			} else {
+//				view.hideContent();
+//			}
 		};
 
 		const intializePVarViewSpec = function() {
 			let metadataId = spec.metadataIdUsedInData;
 			cMetadataElement = getMetadataById(metadataId);
 			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			if (cPresentation.containsChildWithNameInData("recordInfo")) {
-				//TODO: fix..
-				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			}
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
 			text = textProvider.getTranslation(textId);
@@ -63,7 +63,6 @@ var CORA = (function(cora) {
 			let pVarViewSpec = {
 				id: path.join(""),
 				mode: mode,
-				presentationId: presentationId,
 				info: {
 					text: text,
 					defText: defText,
@@ -79,19 +78,33 @@ var CORA = (function(cora) {
 						onclickMethod: openMetadataIdRecord
 					}, {
 						text: `nameInData: ${nameInData}`,
-					}, {
-						text: `presentationId: ${presentationId}`,
-						onclickMethod: openPresentationIdRecord
 					}
 					]
 				},
 				onblurFunction: onBlur,
 				onkeyupFunction: onkeyup,
 			};
+			possiblyAddPresentationInfo(pVarViewSpec);
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
 			
 			return pVarViewSpec;
+		};
+		
+		const possiblyAddPresentationInfo = function(pVarViewSpec) {
+			if (cPresentation.containsChildWithNameInData("recordInfo")) {
+				addPresentationInfoWhenNotFakePresentationFromAttributes(pVarViewSpec);
+			}
+		};
+		
+		const addPresentationInfoWhenNotFakePresentationFromAttributes = function(pVarViewSpec) {
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			pVarViewSpec.presentationId=presentationId;
+			pVarViewSpec.info.technicalInfo.push({
+				text: `presentationId: ${presentationId}`,
+				onclickMethod: openPresentationIdRecord
+			});
 		};
 		
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
@@ -164,7 +177,16 @@ var CORA = (function(cora) {
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
 		};
-
+//		if (isInOutputMode()) {
+//				view.hideContent();
+//			}
+//const isInOutputMode = function() {
+//			return spec.mode === "output";
+//		};
+//if (isInOutputMode()) {
+//				view.showContent();
+//				publishPresentationShown();
+//			}
 		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();

@@ -220,7 +220,35 @@ var CORA = (function(cora) {
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, valueView);
 		};
-
+		
+//		const hide = function(element) {
+//			if (element !== undefined && element.style.display !== "none") {
+//				element.styleOriginal = element.style.display;
+//				element.style.display = "none";
+//			}
+//		};
+//
+//		const show = function(element) {
+//			if (element !== undefined) {
+//				if (element.styleOriginal !== undefined) {
+//					element.style.display = element.styleOriginal;
+//				} else {
+//					element.style.display = "";
+//				}
+//			}
+//		};
+//
+//		const hideContent = function() {
+//			hide(defaultPresentation);
+//			hide(buttonView);
+//			hide(alternativePresentation);
+//		};
+//
+//		const showContent = function() {
+//			show(buttonView);
+//			toggleDefaultShown(currentDefaultShown);
+//		};
+		
 		out = Object.freeze({
 			type: "pParentVarView",
 			getDependencies: getDependencies,

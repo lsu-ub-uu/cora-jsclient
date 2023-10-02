@@ -209,6 +209,7 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
 
+
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
@@ -514,6 +515,56 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
+});
+
+QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", function(assert) {
+	this.spec.path = ["one","two"];
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
+		"pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes"))
+	
+	this.spec.path = ["one", "two"];
+	let child = this.createChildSpy();
+	
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
+
+	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
+	let expectedPVarViewSpec = {
+		label: "Exempel textvariabel",
+		id: "onetwo",
+		mode: "input",
+		info: {
+			defText: "Detta är en exempeldefinition för en textvariabel.",
+			technicalInfo: [],
+			text: "Exempel textvariabel"
+		},
+		onblurFunction: pParentVar.onBlur,
+		onkeyupFunction: pParentVar.onkeyup,
+		placeholderText: "Skriv din text här",
+//		presentationId: undefined
+	};
+	
+	expectedPVarViewSpec.childExtra = "added by child";
+	
+	assert.strictEqual(child.getLastInfoValueForViewMode(),"input");
+	
+	expectedPVarViewSpec.info.technicalInfo.push(
+		{
+		text: "textId: textVariableIdText",
+		onclickMethod: pParentVar.openTextIdRecord
+	}, {
+		text: "defTextId: textVariableIdDefText",
+		onclickMethod: pParentVar.openDefTextIdRecord
+	}, {
+		text: "metadataId: textVariableId",
+		onclickMethod: pParentVar.openMetadataIdRecord
+	}, {
+		text: "nameInData: textVariableId"
+//	}, {
+//		text: "presentationId: undefined",
+//		onclickMethod: pParentVar.openPresentationIdRecord
+	});
+	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
 //
 QUnit.test("testSetValueInput", function(assert) {

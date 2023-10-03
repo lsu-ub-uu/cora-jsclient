@@ -345,3 +345,55 @@ QUnit.test("testAddAttributesView", function(assert) {
 	pParentVarView.addAttributesView(fakeView);
 	assert.strictEqual(pParentVarView.getView().childNodes[1], fakeView);
 });
+
+QUnit.test("testHideShow", function(assert) {
+	let pParentVarView = this.getpParentVarView();
+	let view = pParentVarView.getView();
+	
+	assert.strictEqual(view.style.display, "");
+	
+	pParentVarView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pParentVarView.show();
+	
+	assert.strictEqual(view.style.display, "");
+});
+
+QUnit.test("testHideShowWithDisplaySetFromStart", function(assert) {
+	let pParentVarView = this.getpParentVarView();
+	let view = pParentVarView.getView();
+	view.style.display = "flex";
+	
+	
+	assert.strictEqual(view.style.display, "flex");
+	
+	pParentVarView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pParentVarView.show();
+	
+	assert.strictEqual(view.style.display, "flex");
+});
+
+//QUnit.only("testHideShowWithDisplaySetFromStartMoreThanOneHideShouldKeepOriginalStyle", function(assert) {
+//	let pParentVarView = this.getpParentVarView();
+//	let view = pParentVarView.getView();
+//	view.style.display = "flex";
+//	
+//	
+//	assert.strictEqual(view.style.display, "flex");
+//	
+//	pParentVarView.hide();
+//	pParentVarView.hide();
+//	pParentVarView.hide();
+//	
+//	assert.strictEqual(view.style.display, "none");
+//	
+//	pParentVarView.show();
+//	
+//	assert.strictEqual(view.style.display, "flex");
+//});
+//

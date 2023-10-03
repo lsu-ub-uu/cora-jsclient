@@ -221,33 +221,20 @@ var CORA = (function(cora) {
 			view.insertBefore(attributesView, valueView);
 		};
 		
-//		const hide = function(element) {
-//			if (element !== undefined && element.style.display !== "none") {
-//				element.styleOriginal = element.style.display;
-//				element.style.display = "none";
+		const hide = function(element) {
+//			if (view.style.display !== "none") {
+				view.styleOriginal = view.style.display;
+				view.style.display = "none";
 //			}
-//		};
-//
-//		const show = function(element) {
-//			if (element !== undefined) {
-//				if (element.styleOriginal !== undefined) {
-//					element.style.display = element.styleOriginal;
-//				} else {
-//					element.style.display = "";
-//				}
-//			}
-//		};
-//
-//		const hideContent = function() {
-//			hide(defaultPresentation);
-//			hide(buttonView);
-//			hide(alternativePresentation);
-//		};
-//
-//		const showContent = function() {
-//			show(buttonView);
-//			toggleDefaultShown(currentDefaultShown);
-//		};
+		};
+
+		const show = function(element) {
+			if (view.styleOriginal !== undefined) {
+				view.style.display = view.styleOriginal;
+			} else {
+				view.style.display = "";
+			}
+		};
 		
 		out = Object.freeze({
 			type: "pParentVarView",
@@ -258,7 +245,9 @@ var CORA = (function(cora) {
 			updateClassName: updateClassName,
 			setState: setState,
 			disable: disable,
-			addAttributesView: addAttributesView
+			addAttributesView: addAttributesView,
+			hide: hide,
+			show: show
 		});
 		start();
 		return out;

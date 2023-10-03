@@ -27,6 +27,8 @@ var CORATEST = (function(coraTest) {
 		let value;
 		let disabledCalled = false;
 		let presentationAttributeView = [];
+		let hideCalled = 0;
+		let showCalled = 0;
 
 		const getView = function() {
 			return view;
@@ -73,7 +75,19 @@ var CORATEST = (function(coraTest) {
 		};
 
 		const addAttributesView = function(attributesView) {
-
+		};
+		
+		const hide = function(){
+			hideCalled++;
+		};
+		const getHideCalled = function(){
+			return hideCalled;
+		};
+		const show = function(){
+			showCalled++;
+		};
+		const getShowCalled = function(){
+			return showCalled
 		};
 
 		return Object.freeze({
@@ -91,7 +105,12 @@ var CORATEST = (function(coraTest) {
 			getDisabledCalled: getDisabledCalled,
 			addAttributePresentation: addAttributePresentation,
 			getAttributePresentation: getAttributePresentation,
-			addAttributesView: addAttributesView
+			addAttributesView: addAttributesView,
+			hide: hide,
+			getHideCalled: getHideCalled,
+			show: show,
+			getShowCalled: getShowCalled
+			
 		});
 	};
 	return coraTest;

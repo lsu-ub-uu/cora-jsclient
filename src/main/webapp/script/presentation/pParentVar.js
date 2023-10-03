@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 		let path = spec.path;
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
+		const metadataId = spec.metadataIdUsedInData;
 		let presentationId;
 		let state = "ok";
 		let previousValue = "";
@@ -38,22 +39,21 @@ var CORA = (function(cora) {
 		let pAttributes;
 
 		const start = function() {
+			cMetadataElement = getMetadataById(metadataId);
+			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let pVarViewSpec = intializePVarViewSpec();
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
-//			if (spec.mode === "input") {
-//				view.showContent();
-//			} else {
-//				view.hideContent();
-//			}
+			if (mode === "input") {
+				pVarView.show();
+			} else {
+				pVarView.hide();
+			}
 		};
 
 		const intializePVarViewSpec = function() {
-			let metadataId = spec.metadataIdUsedInData;
-			cMetadataElement = getMetadataById(metadataId);
-			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
 			text = textProvider.getTranslation(textId);

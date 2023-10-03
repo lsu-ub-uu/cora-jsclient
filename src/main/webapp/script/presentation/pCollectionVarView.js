@@ -73,7 +73,9 @@ var CORA = (function(cora) {
 			updateClassName: pParentVarView.updateClassName,
 			setState: pParentVarView.setState,
 			disable: pParentVarView.disable,
-			addAttributesView: pParentVarView.addAttributesView
+			addAttributesView: pParentVarView.addAttributesView,
+			hide: pParentVarView.hide,
+			show: pParentVarView.show
 		});
 	};
 	return cora;

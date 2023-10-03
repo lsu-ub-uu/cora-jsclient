@@ -46,9 +46,7 @@ var CORA = (function(cora) {
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
-			if (mode === "input") {
-				pVarView.show();
-			} else {
+			if (mode === "output") {
 				pVarView.hide();
 			}
 		};
@@ -176,17 +174,19 @@ var CORA = (function(cora) {
 			previousValue = value;
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
+			hideOrShowOutputPresentation(valueForView);
 		};
-//		if (isInOutputMode()) {
-//				view.hideContent();
-//			}
-//const isInOutputMode = function() {
-//			return spec.mode === "output";
-//		};
-//if (isInOutputMode()) {
-//				view.showContent();
-//				publishPresentationShown();
-//			}
+		
+		const hideOrShowOutputPresentation = function(valueForView) {
+			if (mode === "output") {
+				if(valueForView !== ""){
+					pVarView.show();
+				} else {
+					pVarView.hide();
+				}
+			}
+		};
+
 		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
 			updateView();

@@ -79,6 +79,8 @@ QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
 	assert.strictEqual(pCollectionVarView.setState, pParentVarView.setState);
 	assert.strictEqual(pCollectionVarView.disable, pParentVarView.disable);
 	assert.strictEqual(pCollectionVarView.addAttributesView, pParentVarView.addAttributesView);
+	assert.strictEqual(pCollectionVarView.hide, pParentVarView.hide);
+	assert.strictEqual(pCollectionVarView.show, pParentVarView.show);
 });
 
 QUnit.test("createInputElementWithSetValueFunction", function(assert) {

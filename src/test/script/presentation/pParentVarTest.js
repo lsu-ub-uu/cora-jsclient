@@ -60,7 +60,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module.only("presentation/pParentVarTest.js", {
+QUnit.module("presentation/pParentVarTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -161,14 +161,6 @@ QUnit.test("testInitText2", function(assert) {
 	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
-});
-
-QUnit.test("testViewShownInInputMode", function(assert) {
-	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
-	let spyView = this.pVarViewFactory.getFactored(0);
-	assert.strictEqual(spyView.getShowCalled(), 1);
-	assert.strictEqual(spyView.getHideCalled(), 0);
 });
 
 QUnit.test("testViewHiddenInOutputMode", function(assert) {
@@ -577,9 +569,6 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 		onclickMethod: pParentVar.openMetadataIdRecord
 	}, {
 		text: "nameInData: textVariableId"
-//	}, {
-//		text: "presentationId: undefined",
-//		onclickMethod: pParentVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
 });
@@ -595,23 +584,36 @@ QUnit.test("testSetValueInput", function(assert) {
 	assert.strictEqual(childSpy.getLastTransformValueForViewMode(), "input");
 });
 
-//QUnit.test("testViewShownInInputMode", function(assert) {
-//	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-//	
-//	let spyView = this.pVarViewFactory.getFactored(0);
-//	assert.strictEqual(spyView.getShowCalled(), 1);
-//	assert.strictEqual(spyView.getHideCalled(), 0);
-//});
-//
-//QUnit.test("testViewHiddenInOutputMode", function(assert) {
-//	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("idTextOutputPVar"));
-//	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-//	
-//	let spyView = this.pVarViewFactory.getFactored(0);
-//	assert.strictEqual(spyView.getShowCalled(), 0);
-//	assert.strictEqual(spyView.getHideCalled(), 1);
-//});
-//
+QUnit.test("testSetValueNoChangeToShowHideInInputMode", function(assert) {
+	const pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+	
+	pParentVar.setValue("A Value");
+	
+	let spyView = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(spyView.getShowCalled(), 0);
+	assert.strictEqual(spyView.getHideCalled(), 0);
+});
+
+QUnit.test("testSetValueChangeShowHideInOutputMode", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("idTextOutputPVar"));
+	const child = this.createChildSpy();
+	child.transformValueForView=function(mode, valueFromView){return valueFromView};
+	const pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
+	
+	let spyView = this.pVarViewFactory.getFactored(0);
+	assert.strictEqual(spyView.getShowCalled(), 0);
+	assert.strictEqual(spyView.getHideCalled(), 1);
+	
+	pParentVar.setValue("A Value");
+	
+	assert.strictEqual(spyView.getShowCalled(), 1);
+	assert.strictEqual(spyView.getHideCalled(), 1);
+
+	pParentVar.setValue("");
+
+	assert.strictEqual(spyView.getShowCalled(), 1);
+	assert.strictEqual(spyView.getHideCalled(), 2);
+});
 
 QUnit.test("testHandleMessage", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());

@@ -21,15 +21,43 @@ var CORATEST = (function(coraTest) {
 	coraTest.pParentVarViewSpy = function() {
 		const getDependencies = function(){
 			return "fakeDependencies from pParentVarViewSpy";
-		}
+		};
 		const getView = function(){
 			return "fakeView from pParentVarViewSpy";
-		}
+		};
+		const setValue = function(){
+			return "fake setValue from pParentVarViewSpy";
+		};
+		const updateClassName = function(){
+			return "fake updateClassName from pParentVarViewSpy";
+		};
+		const setState = function(){
+			return "fake setState from pParentVarViewSpy";
+		};
+		const disable = function(){
+			return "fake disable from pParentVarViewSpy";
+		};
+		const addAttributesView = function(){
+			return "fake addAttributesView from pParentVarViewSpy";
+		};
+		const hide = function(){
+			return "fake hide from pParentVarViewSpy";
+		};
+		const show = function(){
+			return "fake show from pParentVarViewSpy";
+		};
 
 		return Object.freeze({
 			type: "pParentVarViewSpy",
 			getDependencies: getDependencies,
-			getView: getView
+			getView: getView,
+			setValue: setValue,
+			updateClassName: updateClassName,
+			setState: setState,
+			disable: disable,
+			addAttributesView: addAttributesView,
+			hide: hide,
+			show: show
 		});
 	};
 	return coraTest;

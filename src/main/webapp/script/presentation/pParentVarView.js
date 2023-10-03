@@ -222,10 +222,8 @@ var CORA = (function(cora) {
 		};
 		
 		const hide = function(element) {
-//			if (view.style.display !== "none") {
-				view.styleOriginal = view.style.display;
-				view.style.display = "none";
-//			}
+			view.styleOriginal = view.style.display;
+			view.style.display = "none";
 		};
 
 		const show = function(element) {

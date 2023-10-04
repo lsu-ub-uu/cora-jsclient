@@ -559,6 +559,9 @@ label, .label {
 	font-weight: bold;
 	color: #575757;
 }
+.pRecordLink .label {
+	flex: 1 1 100%;
+}
 
 label::after, .label:after {
 	content: ": ";

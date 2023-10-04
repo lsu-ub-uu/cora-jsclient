@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("presentation/pRecordLinkViewTest.js", {
+QUnit.module("presentation/pRecordLinkViewTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.textIdOnclickMethod = {};
@@ -481,11 +481,55 @@ QUnit.test("testShowSearchButtonAddedToView", function(assert) {
 	assert.strictEqual(view.contains(fakeSearchHandlerView), true);
 });
 
-QUnit.test("testAddAttributesView", function(assert) {
+QUnit.test("testAddAttributesViewAfterInfo", function(assert) {
 	let pRecordLinkView = this.getPRecordLinkView();
 	let fakeView = document.createElement("span");
 	fakeView.appendChild(document.createTextNode("fake view"));
 
 	pRecordLinkView.addAttributesView(fakeView);
-	assert.strictEqual(pRecordLinkView.getView().firstChild, fakeView);
+	assert.strictEqual(pRecordLinkView.getView().childNodes[2], fakeView);
+});
+
+QUnit.test("testAddAttributesViewAfterInfoWithLabel", function(assert) {
+	this.spec.label= "Some label text";
+
+	let pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+
+	pRecordLinkView.addAttributesView(fakeView);
+	assert.strictEqual(pRecordLinkView.getView().childNodes[3], fakeView);
+});
+
+QUnit.test("testHideShow", function(assert) {
+	let pRecordLinkView = this.getPRecordLinkView();
+	let view = pRecordLinkView.getView();
+	
+	assert.strictEqual(view.style.display, "");
+	
+	pRecordLinkView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pRecordLinkView.show();
+	
+	assert.strictEqual(view.style.display, "");
+});
+
+QUnit.test("testHideShowWithDisplaySetFromStart", function(assert) {
+	let pRecordLinkView = this.getPRecordLinkView();
+	let view = pRecordLinkView.getView();
+	view.style.display = "flex";
+	
+	
+	assert.strictEqual(view.style.display, "flex");
+	
+	pRecordLinkView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pRecordLinkView.show();
+	
+	assert.strictEqual(view.style.display, "flex");
 });

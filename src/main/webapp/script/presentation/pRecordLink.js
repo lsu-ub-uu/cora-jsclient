@@ -56,6 +56,10 @@ var CORA = (function(cora) {
 			createValueView();
 			possiblyCreateSearchHandler();
 			subscribeToSetValueIfLinkedPresentationExists();
+			subscribeToTextVarSetValue();
+			if (mode === "output") {
+				view.hide();
+			}
 			initPAttributes();
 		};
 
@@ -300,7 +304,6 @@ var CORA = (function(cora) {
 			let metadataIdUsedInData = id + "TextVar";
 			let childViewNew = document.createElement("span");
 			childViewNew.className = id + "View";
-			childViewNew.appendChild(createText(id + "Text"));
 
 			let childParentPath = calculateNewPath(id + "TextVar");
 			let cPresentationChild = CORA.coraData(metadataProvider
@@ -313,13 +316,6 @@ var CORA = (function(cora) {
 			let pVar = dependencies.presentationFactory.factor(presentationSpec);
 			childViewNew.appendChild(pVar.getView());
 			view.addChild(childViewNew);
-		};
-
-		const createText = function(presRef) {
-			let text = document.createElement("span");
-			text.appendChild(document.createTextNode(textProvider.getTranslation(presRef)));
-			text.className = "text";
-			return text;
 		};
 
 		const calculateNewPath = function(metadataIdToAdd) {
@@ -400,12 +396,28 @@ var CORA = (function(cora) {
 				valueChangedOnInput);
 		};
 
-		const valueChangedOnInput = function() {
+		const valueChangedOnInput = function(dataFromMsg) {
 			view.removeLinkedPresentation();
 			view.hideOpenLinkedRecordButton();
 			view.hideClearLinkedRecordIdButton();
 		};
-
+		
+		const subscribeToTextVarSetValue = function() {
+			dependencies.pubSub.subscribe("setValue",
+				calculateNewPath("linkedRecordIdTextVar"), undefined,
+				hideOrShowOutputPresentation);
+		};
+		
+		const hideOrShowOutputPresentation = function(dataFromMsg) {
+			let valueForView = dataFromMsg.data;
+			if (mode === "output") {
+				if(valueForView !== ""){
+					view.show();
+				} else {
+					view.hide();
+				}
+			}
+		};
 
 		const initPAttributes = function() {
 			let pAttributesSpec = {
@@ -553,6 +565,7 @@ var CORA = (function(cora) {
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
+			hideOrShowOutputPresentation: hideOrShowOutputPresentation
 		});
 		start();
 		return out;

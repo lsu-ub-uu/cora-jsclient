@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Olov McKie
+ * Copyright 2016, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *

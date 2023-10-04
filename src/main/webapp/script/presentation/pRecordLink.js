@@ -48,6 +48,7 @@ var CORA = (function(cora) {
 		let linkedRecordType = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		let view;
+		let text;
 
 		const start = function() {
 			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
@@ -60,7 +61,7 @@ var CORA = (function(cora) {
 
 		const createBaseView = function() {
 			let textId = extractTextId("textId");
-			let text = textProvider.getTranslation(textId);
+			text = textProvider.getTranslation(textId);
 
 			let defTextId = extractTextId("defTextId");
 			let defText = textProvider.getTranslation(defTextId);
@@ -70,41 +71,57 @@ var CORA = (function(cora) {
 				info: {
 					text: text,
 					defText: defText,
-					"technicalInfo": [{
-						text: "textId: " + textId,
+					technicalInfo: [{
+						text: `textId: ${textId}`,
 						onclickMethod: openTextIdRecord
 					}, {
-						text: "defTextId: " + defTextId,
+						text: `defTextId: ${defTextId}`,
 						onclickMethod: openDefTextIdRecord
 					}, {
-						text: "metadataId: " + metadataId,
+						text: `metadataId: ${metadataId}`,
 						onclickMethod: openMetadataIdRecord
 					}, {
-						text: "nameInData: " + nameInData
+						text: `nameInData: ${nameInData}`,
 					}, {
-						text: "linkedRecordType: " + linkedRecordType
+						text: `linkedRecordType: ${linkedRecordType}`,
 					}, {
-						"text": "presentationId: " + presentationId,
+						text: `presentationId: ${presentationId}`,
 						onclickMethod: openPresentationIdRecord
 					} 
-//					technicalInfo: [
-//						"textId: " + textId,
-//						"defTextId: " + defTextId,
-//						"metadataId: " + metadataId,
-//						"nameInData: " + nameInData,
-//						"linkedRecordType: " + linkedRecordType
 					]
 				},
 				pRecordLink: out
 			};
+			possiblyAddLabelToViewSpec(viewSpec);
 			return dependencies.pRecordLinkViewFactory.factor(viewSpec);
 		};
 
 		const extractTextId = function(textNameInData) {
-			let cTextIdGroup = CORA.coraData(cMetadataElement
-				.getFirstChildByNameInData(textNameInData));
-			return cTextIdGroup
-				.getFirstAtomicValueByNameInData("linkedRecordId");
+			let cTextIdGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
+			return cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+		
+		const possiblyAddLabelToViewSpec = function(viewSpec){
+			if(labelShouldBeShown()){
+				addLabelToViewSpec(viewSpec);
+			}
+		};
+		
+		const labelShouldBeShown = function (){
+			if(!cPresentation.containsChildWithNameInData("showLabel")){
+				return true;
+			}
+			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+		};
+		
+		const addLabelToViewSpec = function(viewSpec){
+			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
+				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
+				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
+				viewSpec.label = otherLabelText;
+			}else{
+				viewSpec.label = text;
+			}
 		};
 
 		const createValueView = function() {

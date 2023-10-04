@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pRecordLinkViewTest.js", {
+QUnit.module.only("presentation/pRecordLinkViewTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.textIdOnclickMethod = {};
@@ -99,6 +99,24 @@ QUnit.test("testGetView", function(assert) {
 	let pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
 	let view = pRecordLinkView.getView();
 	assert.strictEqual(view.className, "pRecordLink");
+});
+
+QUnit.test("testLabel", function(assert) {
+	this.spec.label= "Some label text";
+
+	CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(label.nodeName, "SPAN");
+	assert.strictEqual(label.className, "label");
+	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(this.getView().childNodes.length, 3);
+});
+
+QUnit.test("testNoLabel", function(assert) {
+	CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	assert.strictEqual(this.getView().childNodes.length, 2);
 });
 
 QUnit.test("testChildrenViewIsCreatedOnInit", function(assert) {

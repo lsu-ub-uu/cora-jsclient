@@ -34,6 +34,7 @@ var CORA = (function(cora) {
 		let buttonView;
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
+			possiblyAddLableTextToView();
 			buttonView = CORA.gui.createSpanWithClassName("buttonView");
 			openLinkedRecordButton = createOpenLinkedRecordButton();
 			showSearchButton = createShowSearchButton();
@@ -42,7 +43,19 @@ var CORA = (function(cora) {
 			buttonView.appendChild(info.getButton());
 			view.appendChild(buttonView);
 		};
-
+		
+		const possiblyAddLableTextToView = function() {
+			if(spec.label){
+				addLabel();
+			}
+		};
+		
+		const addLabel = function(){
+			let label = CORA.gui.createSpanWithClassName("label");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+		};
+		
 		const createOpenLinkedRecordButton = function() {
 			return createButtonWithClassNameAndOnclickMethod("openLinkedRecordButton",
 				openLinkedRecord);

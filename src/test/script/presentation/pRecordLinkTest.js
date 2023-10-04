@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pRecordLinkTest.js", {
+QUnit.module.only("presentation/pRecordLinkTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
@@ -261,6 +261,7 @@ QUnit.test("testViewIsFactored", function(assert) {
 
 	let expectedViewSpec = {
 		mode: "input",
+		label: "myLinkText",
 		info: {
 			text: "myLinkText",
 			defText: "myLinkDefText",
@@ -292,6 +293,26 @@ QUnit.test("testViewIsFactored", function(assert) {
 		"pRecordLink": pRecordLink
 	};
 	assert.deepEqual(factoredViewSpec, expectedViewSpec);
+});
+
+QUnit.test("testViewIsFactoredWithoutLabelIfShowLabelFalse", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+		.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink"));
+
+	CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
+	assert.deepEqual(factoredViewSpec.label, undefined);
+});
+
+QUnit.test("testViewIsFactoredWithOtherLabelIfOtherLabelTextIsSet", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+		.getMetadataById("myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink"));
+
+	CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
+	assert.deepEqual(factoredViewSpec.label, "otherLabelText_text");
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016, 2017 Olov McKie
+ * Copyright 2015, 2016, 2017, 2023 Olov McKie
  * Copyright 2015, 2017, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -9024,6 +9024,88 @@ function MetadataProviderStub() {
 					}, {
 						"name": "mode",
 						"value": "input"
+					}]
+				};
+			case "myLinkNoLabelNoPresentationOfLinkedRecordPLink":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pRecordLink"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "myLinkNoPresentationOfLinkedRecordPLink"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataRecordLink"
+						}, {
+							"name": "linkedRecordId",
+							"value": "myLink"
+						}],
+						"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadata/"
+										+ "myLink",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					},{
+						"name": "showLabel",
+						"value": "false"
+					}]
+				};
+			case "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pRecordLink"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataRecordLink"
+						}, {
+							"name": "linkedRecordId",
+							"value": "myLink"
+						}],
+						"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadata/"
+										+ "myLink",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					},{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "coraText"
+						}, {
+							"name": "linkedRecordId",
+							"value": "otherLabelText"
+						}],
+							"name": "otherLabelText"
 					}]
 				};
 //				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData

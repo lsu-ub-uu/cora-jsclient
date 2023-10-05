@@ -106,6 +106,8 @@ var CORA = (function(cora) {
 			pAttributesFactory: pAttributesFactory
 		};
 		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
+		childDependencies.pMultipleChildrenFactory = CORA.genericParentFactory("pMultipleChildren",
+			childDependencies);
 	
 	
 		const factor = function(spec) {

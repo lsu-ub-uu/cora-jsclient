@@ -41,7 +41,8 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 			jsBookkeeper: this.jsBookkeeper,
 			dataDivider: this.dataDivider,
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
+			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy"),
+			pMultipleChildrenFactory: CORATEST.standardParentFactorySpy("pMultipleChildrenSpy")
 		};
 		this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
 
@@ -247,6 +248,11 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(dependencies.pParentVarFactory.getTypeToFactor(), "pParentVar");
 	let PParentVarFactoyrDependencies = dependencies.pParentVarFactory.getDependencies();
 	assert.strictEqual(PParentVarFactoyrDependencies.pubSub, context.dependencies.pubSub);
+	
+	assert.strictEqual(dependencies.pMultipleChildrenFactory.type, "genericParentFactory");
+	assert.strictEqual(dependencies.pMultipleChildrenFactory.getTypeToFactor(), "pMultipleChildren");
+	let pMultipleChildrenFactoryDependencies = dependencies.pMultipleChildrenFactory.getDependencies();
+	assert.strictEqual(pMultipleChildrenFactoryDependencies.pubSub, context.dependencies.pubSub);
 
 	assert.strictEqual(dependencies.pVarViewFactory.type, "pVarViewFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.type, "genericFactory");

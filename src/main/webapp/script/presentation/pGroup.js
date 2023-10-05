@@ -31,6 +31,7 @@ var CORA = (function(cora) {
 				createBaseViewHolder: createBaseViewHolder
 			};
 			parent = CORA.pMultipleChildren(dependencies, spec, my);
+//			parent = dependencies.pMultipleChildrenFactory.factor(spec, my);
 			parent.init();
 		};
 

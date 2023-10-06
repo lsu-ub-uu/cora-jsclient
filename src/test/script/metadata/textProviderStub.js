@@ -135,11 +135,11 @@ var CORATEST = (function(coraTest) {
 			case "theClient_loginMenuText":
 				return "Login";
 			case "trueItemText":
-				return "true";
+				return "true translated";
 			case "trueItemDefText":
 				return "true";
 			case "falseItemText":
-				return "false";
+				return "false translated";
 			case "falseItemDefText":
 				return "false";
 			case "userSuppliedIdCollectionVarText":
@@ -198,6 +198,8 @@ var CORATEST = (function(coraTest) {
 				return "Attribute";
 			case "anOtherAttributeText":
 				return "OtherA";
+			case "otherLabelText":
+				return "otherLabelText_text";
 			default:
 				console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");

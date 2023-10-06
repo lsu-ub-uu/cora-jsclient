@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -19,21 +19,20 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.standardFactorySpy = function(toFactor) {
+	coraTest.standardParentFactorySpy = function(toFactor) {
 		let factoredList = [];
 		let factoredSpec = [];
+		let factoredChildren = [];
 		let spySpecList = [];
 		let spySpec = {};
 		let spyDependencies = {};
 
-		const factor = function(standardSpec) {
+		const factor = function(standardSpec, child) {
 			factoredSpec.push(standardSpec);
+			factoredChildren.push(child);
 			let spySpecToUse = getSpySpecOrFromListIfListIsSet();
 			let factored = CORATEST[toFactor]({}, standardSpec, spySpecToUse);
 			factoredList.push(factored);
-//			if(extraInfo === "add"){
-//				console.log("pushing "+JSON.stringify(standardSpec) + "length "+factoredList.length)}
-//			
 			return factored;
 		};
 
@@ -50,6 +49,10 @@ var CORATEST = (function(coraTest) {
 
 		const getSpec = function(number) {
 			return factoredSpec[number];
+		};
+
+		const getChild = function(number) {
+			return factoredChildren[number];
 		};
 
 		const setSpySpec = function(spySpecIn) {
@@ -73,6 +76,7 @@ var CORATEST = (function(coraTest) {
 			factor: factor,
 			getFactored: getFactored,
 			getSpec: getSpec,
+			getChild: getChild,
 			getDependencies: getDependencies,
 			setSpyDependencies: setSpyDependencies,
 			setSpySpec: setSpySpec,

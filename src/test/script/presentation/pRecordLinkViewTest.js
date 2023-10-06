@@ -101,6 +101,24 @@ QUnit.test("testGetView", function(assert) {
 	assert.strictEqual(view.className, "pRecordLink");
 });
 
+QUnit.test("testLabel", function(assert) {
+	this.spec.label= "Some label text";
+
+	CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	let label = this.getView().childNodes[0];
+	assert.strictEqual(label.nodeName, "SPAN");
+	assert.strictEqual(label.className, "label");
+	assert.strictEqual(label.textContent, "Some label text");
+	assert.strictEqual(this.getView().childNodes.length, 3);
+});
+
+QUnit.test("testNoLabel", function(assert) {
+	CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	assert.strictEqual(this.getView().childNodes.length, 2);
+});
+
 QUnit.test("testChildrenViewIsCreatedOnInit", function(assert) {
 	let pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
 	let view = pRecordLinkView.getView();
@@ -463,11 +481,55 @@ QUnit.test("testShowSearchButtonAddedToView", function(assert) {
 	assert.strictEqual(view.contains(fakeSearchHandlerView), true);
 });
 
-QUnit.test("testAddAttributesView", function(assert) {
+QUnit.test("testAddAttributesViewAfterInfo", function(assert) {
 	let pRecordLinkView = this.getPRecordLinkView();
 	let fakeView = document.createElement("span");
 	fakeView.appendChild(document.createTextNode("fake view"));
 
 	pRecordLinkView.addAttributesView(fakeView);
-	assert.strictEqual(pRecordLinkView.getView().firstChild, fakeView);
+	assert.strictEqual(pRecordLinkView.getView().childNodes[2], fakeView);
+});
+
+QUnit.test("testAddAttributesViewAfterInfoWithLabel", function(assert) {
+	this.spec.label= "Some label text";
+
+	let pRecordLinkView = CORA.pRecordLinkView(this.dependencies, this.spec);
+
+	let fakeView = document.createElement("span");
+	fakeView.appendChild(document.createTextNode("fake view"));
+
+	pRecordLinkView.addAttributesView(fakeView);
+	assert.strictEqual(pRecordLinkView.getView().childNodes[3], fakeView);
+});
+
+QUnit.test("testHideShow", function(assert) {
+	let pRecordLinkView = this.getPRecordLinkView();
+	let view = pRecordLinkView.getView();
+	
+	assert.strictEqual(view.style.display, "");
+	
+	pRecordLinkView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pRecordLinkView.show();
+	
+	assert.strictEqual(view.style.display, "");
+});
+
+QUnit.test("testHideShowWithDisplaySetFromStart", function(assert) {
+	let pRecordLinkView = this.getPRecordLinkView();
+	let view = pRecordLinkView.getView();
+	view.style.display = "flex";
+	
+	
+	assert.strictEqual(view.style.display, "flex");
+	
+	pRecordLinkView.hide();
+	
+	assert.strictEqual(view.style.display, "none");
+	
+	pRecordLinkView.show();
+	
+	assert.strictEqual(view.style.display, "flex");
 });

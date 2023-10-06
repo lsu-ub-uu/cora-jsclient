@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -21,20 +21,20 @@ var CORA = (function(cora) {
 	cora.genericFactory = function(typeToFactor, dependencies) {
 		let out;
 
-		function factor(spec) {
+		const factor = function(spec) {
 			if(undefined == dependencies){
 				return CORA[typeToFactor](spec);
 			}
 			return CORA[typeToFactor](dependencies, spec);
-		}
+		};
 
-		function getTypeToFactor() {
+		const getTypeToFactor = function() {
 			return typeToFactor;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		out = Object.freeze({
 			type : "genericFactory",

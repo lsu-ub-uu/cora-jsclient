@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -27,12 +27,12 @@ QUnit.module("gui/basicGuiTest.js", {
 });
 
 QUnit.test("testCreateRemoveButton", function(assert) {
-	var clicked = false;
+	let clicked = false;
 
-	var onclick = function() {
+	let onclick = function() {
 		clicked = true;
 	};
-	var button = CORA.gui.createRemoveButton(onclick);
+	let button = CORA.gui.createRemoveButton(onclick);
 	assert.strictEqual(button.className, "iconButton removeButton");
 
 	CORATESTHELPER.simulateOnclick(button);
@@ -41,13 +41,19 @@ QUnit.test("testCreateRemoveButton", function(assert) {
 });
 
 QUnit.test("testCreateSpanWithClassName", function(assert) {
-	var span = CORA.gui.createSpanWithClassName("className");
+	let span = CORA.gui.createSpanWithClassName("className");
 	assert.strictEqual(span.nodeName, "SPAN");
 	assert.strictEqual(span.className, "className");
 });
 
 QUnit.test("testCreateDivWithClassName", function(assert) {
-	var div = CORA.gui.createDivWithClassName("className");
+	let div = CORA.gui.createDivWithClassName("className");
 	assert.strictEqual(div.nodeName, "DIV");
+	assert.strictEqual(div.className, "className");
+});
+
+QUnit.test("testCreateLabelWithClassName", function(assert) {
+	let div = CORA.gui.createLabelWithClassName("className");
+	assert.strictEqual(div.nodeName, "LABEL");
 	assert.strictEqual(div.className, "className");
 });

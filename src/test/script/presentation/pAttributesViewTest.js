@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pAttributesTest.js", {
+QUnit.module("presentation/pAttributesViewTest.js", {
 	beforeEach: function() {
 		this.pAttributesView = CORA.pAttributesView();
 		this.dependencies = {
@@ -51,17 +51,7 @@ QUnit.test("testAddAttributes", function(assert) {
 
 	assert.strictEqual(view.children.length, 1);
 
-	let addedAttributeContainer = view.firstChild;
-	assert.strictEqual(addedAttributeContainer.className, "attribute");
-
-	let attributeName = addedAttributeContainer.firstChild;
-	assert.strictEqual(attributeName.className, "attributeName");
-
-	let textNode = attributeName.firstChild;
-	assert.strictEqual(textNode.textContent, "clearTextAttribute");
-	assert.strictEqual(textNode.nodeValue, "clearTextAttribute");
-
-	assert.strictEqual(addedAttributeContainer.lastChild, fakeView);
+	assert.strictEqual(view.lastChild, fakeView);
 });
 
 QUnit.test("testAddTwoAttributes", function(assert) {

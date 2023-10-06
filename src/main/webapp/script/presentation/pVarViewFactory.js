@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2023 Olov McKie
- * Copyright 2016 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,33 +18,29 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.gui.createRemoveButton = function(onclick) {
-		let spec = {
-			"className" : "iconButton removeButton",
-			action : {
-				method : onclick
-			}
+	cora.pVarViewFactory = function() {
+		const childDependencies = {
+			infoFactory: CORA.infoFactory(),
 		};
-		return CORA.gui.button(spec);
-	};
+		
+		const dependencies = {
+			pParentVarViewFactory: CORA.genericParentFactory("pParentVarView", childDependencies)
+		};
+		
+		function factor(spec) {
+			if(spec.type === "pNumVar"){
+				return CORA.pNumVarView(dependencies, spec);
+			}
+			if(spec.type === "pCollVar"){
+				return CORA.pCollectionVarView(dependencies, spec);
+			}
+			return CORA.pVarView(dependencies, spec);
+		}
 
-	cora.gui.createSpanWithClassName = function(className) {
-		let spanNew = document.createElement("span");
-		spanNew.className = className;
-		return spanNew;
+		return Object.freeze({
+			type : "pVarViewFactory",
+			factor : factor
+		});
 	};
-
-	cora.gui.createDivWithClassName = function(className) {
-		let divNew = document.createElement("div");
-		divNew.className = className;
-		return divNew;
-	};
-
-	cora.gui.createLabelWithClassName = function(className) {
-		let titleNew = document.createElement("label");
-		titleNew.className = className;
-		return titleNew;
-	};
-
 	return cora;
 }(CORA));

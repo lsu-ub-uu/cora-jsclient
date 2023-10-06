@@ -21,15 +21,15 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pGroup = function(dependencies, spec) {
 		let cPresentation = spec.cPresentation;
-		let my = {
-			metadataId: spec.metadataIdUsedInData,
-			cPresentation: cPresentation,
-			cParentPresentation: cPresentation
-		};
 		let parent;
 
 		const start = function() {
-			my.createBaseViewHolder = createBaseViewHolder;
+			let my = {
+				metadataId: spec.metadataIdUsedInData,
+				cPresentation: cPresentation,
+				cParentPresentation: cPresentation,
+				createBaseViewHolder: createBaseViewHolder
+			};
 			parent = CORA.pMultipleChildren(dependencies, spec, my);
 			parent.init();
 		};
@@ -58,7 +58,7 @@ var CORA = (function(cora) {
 		start();
 
 		return Object.freeze({
-			"type": "pGroup",
+			type: "pGroup",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
 			getView: parent.getView

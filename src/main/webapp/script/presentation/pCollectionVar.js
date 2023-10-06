@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,163 +20,75 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pCollectionVar = function(dependencies, spec) {
-		let path = spec.path;
-		let cPresentation = spec.cPresentation;
-		let metadataProvider = dependencies.metadataProvider;
-		let pubSub = dependencies.pubSub;
-		let textProvider = dependencies.textProvider;
-		let jsBookkeeper = dependencies.jsBookkeeper;
-		let state = "ok";
-		let previousValue = "";
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
+		const pParentVarFactory = dependencies.pParentVarFactory;
+		
+		const cPresentation = spec.cPresentation;
+		let pParentVar;
 		let cMetadataElement;
-		let view;
-		let presentationId;
-		let mode;
-		let nameInData;
-		let originalClassName;
-		let text;
-		let defText;
-		let metadataId;
-		let valueView;
-		let info;
-		let pAttributes;
-
+		let refCollectionId;
+		
 		const start = function() {
-			if (cPresentation.containsChildWithNameInData("recordInfo")) {
-				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			}
-			extractMetadataId();
-			cMetadataElement = getMetadataById(metadataId);
-			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-			view = createBaseView();
-			originalClassName = view.className;
-			valueView = createValueView();
-			view.appendChild(valueView);
-			info = createInfoSpec();
-			let infoButton = info.getButton();
-			view.appendChild(infoButton);
-			if (mode === "input") {
-				valueView.onblur = onBlur;
-			}
-			subscribeToPubSub();
-			initPAttributes();
-		};
-		
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: addAttributesView,
-				path: path,
-				mode: mode
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
-		};
-		
-		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, view.firstChild);
-		};
-		
-		const extractMetadataId = function() {
-			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
-			let cPresentationGroup = CORA.coraData(presentationGroup);
-			metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
-
-		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
-			pubSub.subscribe("validationError", path, undefined, handleValidationError);
-			pubSub.subscribe("disable", ensureNoRepeatIdInLowestLevelOfPath(), undefined,
-				disableCollectionVar);
-		};
-
-		const createInfoSpec = function() {
-			let textId = getTextId(cMetadataElement, "textId");
-			text = textProvider.getTranslation(textId);
-
-			let defTextId = getTextId(cMetadataElement, "defTextId");
-			defText = textProvider.getTranslation(defTextId);
-
-			let infoSpec = {
-				appendTo: view,
-				afterLevelChange: updateView,
-				level1: [{
-					className: "textView",
-					text: text
-				}, {
-					className: "defTextView",
-					text: defText
-				}],
-				level2: [{
-					className: "textIdView",
-					text: "textId: " + textId
-				}, {
-					className: "defTextIdView",
-					text: "defTextId: " + defTextId
-				}, {
-					className: "metadataIdView",
-					text: "metadataId: " + metadataId
-				}, {
-					className: "technicalView",
-					text: "nameInData: " + nameInData
-				}]
-			};
-			if (undefined !== presentationId) {
-				let presentationInfo = {
-					className: "technicalView",
-					text: "presentationId: " + presentationId
-				};
-				infoSpec.level2.push(presentationInfo);
-			}
-			return CORA.info(infoSpec);
-		};
-
-		const createBaseView = function() {
-			let presentationIdClassName = "pCollVar";
-			if (undefined !== presentationId) {
-				presentationIdClassName += " " + presentationId;
-			}
-			return CORA.gui.createSpanWithClassName(presentationIdClassName);
-		};
-
-		const createValueView = function() {
-			if (mode === "input") {
-				return createInput();
-			}
-			return createOutput();
-		};
-
-		const createInput = function() {
-			return createCollectionInput();
-		};
-
-		const createCollectionInput = function() {
-			let inputNew = document.createElement("select");
-
-			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
-				let cEmptyTextId = CORA.coraData(cPresentation
-					.getFirstChildByNameInData("emptyTextId"));
-				let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
-
-				let optionText = textProvider.getTranslation(emptyTextId);
-				let emptyTextOption = new Option(optionText, "");
-				inputNew.appendChild(emptyTextOption);
-				inputNew.value = "";
-			}
-
-			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
-
-			collectionItemReferencesChildren.forEach(function(ref) {
-				let option = createOptionForRef(ref);
-				inputNew.appendChild(option);
-			});
-			return inputNew;
-		};
-
-		const getCollectionItemReferencesChildren = function() {
+			cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
 			let cRefCollection = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("refCollection"));
-			let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
+			refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
+			
+			pParentVar = pParentVarFactory.factor(spec, self);
+		}; 
+		
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+
+		const addTypeSpecificInfoToViewSpec = function(mode, pCollVarViewSpec) {
+			pCollVarViewSpec.type = "pCollVar";
+			pCollVarViewSpec.info.technicalInfo.push({text: `itemCollection: ${refCollectionId}`,
+				onclickMethod: openRefCollectionIdRecord});
+			addOptionsToSpecIfInput(mode, pCollVarViewSpec);
+		};
+		
+		const openRefCollectionIdRecord = function(event) {
+			let collectionRecord = metadataProvider.getMetadataRecordById(refCollectionId);
+			pParentVar.openLinkedRecordForLink(event, collectionRecord.actionLinks.read);
+		};
+		
+		const addOptionsToSpecIfInput = function(mode, pCollVarViewSpec) {
+			if(mode==="input"){
+				const specOptions = [];
+				possiblyAddOptionForEmptyText(specOptions);
+				addOptionForCollectionItems(specOptions);
+				pCollVarViewSpec.options = specOptions;
+			}
+		};
+			
+		const possiblyAddOptionForEmptyText = function(specOptions) {
+			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
+				const emptyOption = createOptionForEmptyText();
+				specOptions.push(emptyOption);
+			}
+		};
+		
+		const createOptionForEmptyText = function() {
+			let cEmptyTextId = CORA.coraData(cPresentation
+				.getFirstChildByNameInData("emptyTextId"));
+			let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
+
+			let optionText = textProvider.getTranslation(emptyTextId);
+			return [optionText, ""];
+		};
+		
+		const addOptionForCollectionItems = function(specOptions) {
+			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+
+			collectionItemReferencesChildren.forEach((ref)=> {
+				let option = createOptionForRef(ref);
+				specOptions.push(option);
+			});
+		};
+		
+		const getCollectionItemReferencesChildren = function() {
 			let cMetadataCollection = getMetadataById(refCollectionId);
 			let collectionItemReferences = cMetadataCollection
 				.getFirstChildByNameInData("collectionItemReferences");
@@ -195,163 +107,68 @@ var CORA = (function(cora) {
 
 			let optionText = textProvider.getTranslation(textIdToTranslate);
 
-			return new Option(optionText, value);
+			return [optionText, value];
 		};
-
-		const createOutput = function() {
-			return CORA.gui.createSpanWithClassName("value");
+		
+		const validateTypeSpecificValue = function(valueFromView) {
+			return true;
 		};
-
-		const getTextId = function(cMetadataElementIn, textNameInData) {
-			let cTextGroup = CORA.coraData(cMetadataElementIn
-				.getFirstChildByNameInData(textNameInData));
-			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		
+		const autoFormatEnteredValue = function(valueFromView){
+			return valueFromView;
 		};
-
-		const getView = function() {
-			return view;
-		};
-
-		const setValue = function(value) {
-			state = "ok";
-			previousValue = value;
-			if (mode === "input") {
-				valueView.value = value;
-			} else {
-				setValueForOutput(value);
+		
+		const transformValueForView = function(mode, valueForView){
+			if(mode === "input" || valueForView === ""){
+				return valueForView;
 			}
+			return getTranslatedTextForOptionValue(valueForView);
 		};
-
-		const setValueForOutput = function(value) {
-			setValueForCollectionOutput(value);
+		
+		const getTranslatedTextForOptionValue = function(value) {
+			let item = findItemForValue(value);
+			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
+			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			return textProvider.getTranslation(textIdToTranslate);
 		};
-
-		const setValueForCollectionOutput = function(value) {
-			if (value === "") {
-				valueView.textContent = "";
-			} else {
-				setOutputValueFromItemReference(value);
-			}
-		};
-
-		const findItemReferenceForValue = function(value) {
+		
+		const findItemForValue = function(value) {
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
-			return collectionItemReferencesChildren.find(function(ref) {
+			let item;
+			collectionItemReferencesChildren.find((ref)=> {
 				let cItemRef = CORA.coraData(ref);
 				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-				let item = getMetadataById(itemRefId);
+				item = getMetadataById(itemRefId);
 				let refValue = item.getFirstAtomicValueByNameInData("nameInData");
 				return refValue === value;
 			});
+			return item;
 		};
-
-		const setOutputValueFromItemReference = function(value) {
-			let itemReference = findItemReferenceForValue(value);
-			let cItemRef = CORA.coraData(itemReference);
-			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-			let item = getMetadataById(itemRefId);
-			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
-			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			let outputText = textProvider.getTranslation(textIdToTranslate);
-			valueView.textContent = outputText;
-		};
-
-		const handleMsg = function(dataFromMsg) {
-			setValue(dataFromMsg.data);
-			updateView();
-		};
-
-		const handleValidationError = function() {
-			state = "error";
-			updateView();
-		};
-
-		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
-
-		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-			let pathUtils = CORA.pathUtils();
-			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
-		};
-
-		const disableCollectionVar = function() {
-			pAttributes.disableExistingAttributes();
-			valueView.disabled = true;
-		};
-
-		const getText = function() {
-			return text;
-		};
-
-		const getDefText = function() {
-			return defText;
-		};
-
-		const onBlur = function() {
-			updateView();
-			if (valueHasChanged()) {
-				let data = {
-					data: valueView.value,
-					path: path
-				};
-				jsBookkeeper.setValue(data);
-				previousValue = valueView.value;
-			}
-		};
-
-		const updateView = function() {
-			let className = originalClassName;
-			if (state === "error") {
-				className += " error";
-			}
-			if (info.getInfoLevel() !== 0) {
-				className += " infoActive";
-			}
-			view.className = className;
-		};
-
-		const valueHasChanged = function() {
-			return (valueView.value !== previousValue);
-		};
-
-		const getState = function() {
-			return state;
-		};
-
-		const initializeViewModelObject = function() {
-			view.modelObject = out;
-		};
-
-		const getDepdendencies = function() {
-			return dependencies;
-		};
-
+		
 		const getSpec = function() {
 			return spec;
 		};
 
-		start();
+		const getDependencies = function() {
+			return dependencies;
+		};
 
-		let out = Object.freeze({
+		const self = {
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+			validateTypeSpecificValue: validateTypeSpecificValue,
+			autoFormatEnteredValue: autoFormatEnteredValue,
+			transformValueForView: transformValueForView
+		};
+
+		start();
+		return Object.freeze({
 			type: "pCollVar",
-			getDependencies: getDepdendencies,
+			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView,
-			setValue: setValue,
-			handleMsg: handleMsg,
-			getText: getText,
-			getDefText: getDefText,
-			getState: getState,
-			onBlur: onBlur,
-			handleValidationError: handleValidationError,
-			disableCollectionVar: disableCollectionVar,
-			addAttributesView: addAttributesView
+			getView: pParentVar.getView,
+			openRefCollectionIdRecord: openRefCollectionIdRecord
 		});
 
-		initializeViewModelObject();
-
-		return out;
 	};
 	return cora;
 }(CORA));

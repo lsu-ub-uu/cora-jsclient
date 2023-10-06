@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,31 +16,33 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
+var CORATEST = (function(coraTest) {
 	"use strict";
-	cora.pAttributesView = function() {
-		let out;
-		let view;
-
-		const start = function() {
-			view = CORA.gui.createSpanWithClassName("attributes");
+	coraTest.pParentVarSpy = function() {
+		const getDependencies = function(){
+			return "fakeDependencies from pParentVarSpy";
+		};
+		
+		const getView = function(){
+			return "fakeView from pParentVarSpy";
+		};
+		
+		let openLinkedRecordForLinkCalls = [];
+		const openLinkedRecordForLink = function(event, readLink){
+			openLinkedRecordForLinkCalls.push([event, readLink]);
 		};
 
-		const getView = function() {
-			return view;
+		const getOpenLinkedRecordForLink = function(no){
+			return openLinkedRecordForLinkCalls[no];
 		};
 
-		const addAttributePresentation = function(attributePresentation) {
-			view.appendChild(attributePresentation.view);
-		};
-
-		out = Object.freeze({
-			type: "pAttributesView",
+		return Object.freeze({
+			type: "pParentVarSpy",
+			getDependencies: getDependencies,
 			getView: getView,
-			addAttributePresentation: addAttributePresentation
+			openLinkedRecordForLink: openLinkedRecordForLink,
+			getOpenLinkedRecordForLink: getOpenLinkedRecordForLink
 		});
-		start();
-		return out;
 	};
-	return cora;
-}(CORA));
+	return coraTest;
+}(CORATEST || {}));

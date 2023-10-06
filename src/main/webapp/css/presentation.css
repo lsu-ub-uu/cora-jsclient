@@ -222,7 +222,7 @@ img {
 
 .beeingDragged {
 	/* 	chrome can not hadle css changes on dragging :( */
-	/* 	transform: scale(0.8); */
+	transform: scale(0.8);
 	border: 1px solid black;
 }
 
@@ -284,6 +284,19 @@ img {
 
 .workView .pVar {
 	flex: 1;
+}
+
+.attributes {
+	display: flex;	
+}
+
+.attributes label, .attributes .label {
+	font-style: italic;
+	font-weight: normal;
+}
+
+.attributes .pVar {
+	flex: initial;
 }
 
 textarea {
@@ -539,6 +552,19 @@ position: relative;
 
 .h7TextStyle {
 	font-style: italic;
+}
+
+label, .label {
+/* 	font-style: italic; */
+	font-weight: bold;
+	color: #575757;
+}
+.pRecordLink .label {
+	flex: 1 1 100%;
+}
+
+label::after, .label:after {
+	content: ": ";
 }
 
 .presentation .text.labelTextStyle {

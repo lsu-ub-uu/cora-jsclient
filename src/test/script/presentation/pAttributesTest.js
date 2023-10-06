@@ -1,5 +1,6 @@
 /*
  * Copyright 2022 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -18,13 +19,12 @@
  */
 "use strict";
 
-QUnit.module("presentation/pVarTest.js", {
+QUnit.module("presentation/pAttributesTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
-
-		this.viewSpy = CORATEST.pAttributesViewSpy();
+		this.pAttributesViewFactory = CORATEST.standardFactorySpy("pAttributesViewSpy");
 
 		let addViewFunctionCalled = 0;
 		let addedView = undefined;
@@ -38,7 +38,7 @@ QUnit.module("presentation/pVarTest.js", {
 		this.dependencies = {
 			pubSub: this.pubSub,
 			presentationFactory: this.presentationFactory,
-			view: this.viewSpy
+			pAttributesViewFactory: this.pAttributesViewFactory
 		};
 		this.spec = {
 			path: ["whatEverPathToPresentationUsingAttributes"],
@@ -62,6 +62,12 @@ QUnit.test("testGetDependencies", function(assert) {
 
 QUnit.test("testGetSpec", function(assert) {
 	assert.strictEqual(this.pAttributes.getSpec(), this.spec);
+});
+
+QUnit.test("testViewFactored", function(assert) {
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
+	assert.strictEqual(pAttributesViewSpy.type, "pAttributesViewSpy");
+	assert.strictEqual(this.pAttributesViewFactory.getSpec(0), undefined);
 });
 
 QUnit.test("testSubscribeToAddAttribute", function(assert) {
@@ -90,9 +96,9 @@ QUnit.test("testAddAttributePresentation", function(assert) {
 
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
 	};
-	assert.deepEqual(this.viewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
+	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
 });
 
 var CORATEST = (function(coraTest) {
@@ -123,9 +129,9 @@ QUnit.test("testAddAttributeOutputPresentation", function(assert) {
 
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
-		text: "fake text from presentationSpy, anAttribute"
 	};
-	assert.deepEqual(this.viewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(1);
+	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
 });
 
 const buildExpectedPresentationForAttribute = function(metadataId, mode) {
@@ -162,7 +168,8 @@ QUnit.test("testAttributesViewAddedUsingAddViewFunction", function(assert) {
 	this.pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
 
 	assert.strictEqual(this.getAddViewFunctionCalled(), 1);
-	assert.strictEqual(this.getAddedView(), this.viewSpy.getView());
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
+	assert.strictEqual(this.getAddedView(), pAttributesViewSpy.getView());
 });
 
 

@@ -32,8 +32,11 @@ var CORA = (function(cora) {
 		let addedSearchHandlerView;
 		let searchHandlerShown;
 		let buttonView;
+		let label;
+			
 		const start = function() {
 			view = CORA.gui.createSpanWithClassName(baseClassName);
+			possiblyAddLableTextToView();
 			buttonView = CORA.gui.createSpanWithClassName("buttonView");
 			openLinkedRecordButton = createOpenLinkedRecordButton();
 			showSearchButton = createShowSearchButton();
@@ -42,7 +45,19 @@ var CORA = (function(cora) {
 			buttonView.appendChild(info.getButton());
 			view.appendChild(buttonView);
 		};
-
+		
+		const possiblyAddLableTextToView = function() {
+			if(spec.label){
+				addLabel();
+			}
+		};
+		
+		const addLabel = function(){
+			label = CORA.gui.createSpanWithClassName("label");
+			view.appendChild(label);
+			label.appendChild(document.createTextNode(spec.label));
+		};
+		
 		const createOpenLinkedRecordButton = function() {
 			return createButtonWithClassNameAndOnclickMethod("openLinkedRecordButton",
 				openLinkedRecord);
@@ -248,9 +263,22 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, view.firstChild);
+			view.insertBefore(attributesView, info.nextSibling);
+		};
+		
+		const hide = function(element) {
+			view.styleOriginal = view.style.display;
+			view.style.display = "none";
 		};
 
+		const show = function(element) {
+			if (view.styleOriginal !== undefined) {
+				view.style.display = view.styleOriginal;
+			} else {
+				view.style.display = "";
+			}
+		};
+		
 		out = Object.freeze({
 			type: "pRecordLinkView",
 			getDependencies: getDependencies,
@@ -271,7 +299,9 @@ var CORA = (function(cora) {
 
 			addSearchHandlerView: addSearchHandlerView,
 			hideSearchHandlerView: hideSearchHandlerView,
-			showSearchHandlerView: showSearchHandlerView
+			showSearchHandlerView: showSearchHandlerView,
+			hide: hide,
+			show: show
 		});
 		start();
 		return out;

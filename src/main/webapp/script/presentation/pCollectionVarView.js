@@ -1,6 +1,5 @@
 /*
- * Copyright 2018, 2020 Uppsala University Library
- * Copyright 2016, 2018, 2023 Olov McKie
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,7 +18,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pNumVarView = function(dependencies, spec) {
+	cora.pCollectionVarView = function(dependencies, spec) {
 		const pParentVarViewFactory = dependencies.pParentVarViewFactory;
 		let pParentVarView;
 
@@ -28,11 +27,23 @@ var CORA = (function(cora) {
 		};
 		
 		const createInputElementWithSetValueFunction = function() {
-			let inputNew = document.createElement("input");
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
+			let inputNew = document.createElement("select");
+			addOptionsToInput(spec.options, inputNew);
+			addSetValueFunctionToInput(inputNew);
 			return inputNew;
+		};
+		
+		const addOptionsToInput = function(options, input) {
+			options.forEach((optionSpec)=>{
+				const option = new Option(optionSpec[0],optionSpec[1]);
+				input.appendChild(option);
+			});
+		};
+		
+		const addSetValueFunctionToInput = function(input) {
+			input.setValue = function(value) {
+				input.value = value;
+			};
 		};
 
 		const useStandardOutput = function() {
@@ -54,7 +65,7 @@ var CORA = (function(cora) {
 		
 		start();
 		return Object.freeze({
-			type: "pNumVarView",
+			type: "pCollectionVarView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: pParentVarView.getView,

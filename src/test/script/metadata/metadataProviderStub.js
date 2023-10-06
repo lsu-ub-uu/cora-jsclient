@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016, 2017 Olov McKie
+ * Copyright 2015, 2016, 2017, 2023 Olov McKie
  * Copyright 2015, 2017, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -187,8 +187,14 @@ function MetadataProviderStub() {
 		return [createRecordInfoJson(idToGet)]
 			.concat(createNameInDataLinkedTextIdDefTextId2(nameInData));
 	}
-
+	
+	let requestedMetadataIds = [];
+	this.getRequestedMetadataIds = function(){
+		return requestedMetadataIds;
+	}
+	
 	this.getMetadataById = function(idToGet) {
+		requestedMetadataIds.push(idToGet);
 		if (idToGet === "textVariableId") {
 			return {
 				"name": "metadata",
@@ -4859,6 +4865,157 @@ function MetadataProviderStub() {
 							}]
 						}]
 				};
+			case "pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pVar"
+					},
+					"children": [
+//						{
+//							"name": "recordInfo",
+//							"children": [{
+//								"name": "id",
+//								"value": "pVarTextVariableId"
+//							}]
+//						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataTextVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "textVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataTextVariable/"
+										+ "textVariableTextVar",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
+			case "pVarTextVariableIdShowLabelFalse":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pVarTextVariableId"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataTextVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "textVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataTextVariable/"
+										+ "textVariableTextVar",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+						}, {
+							"name": "showLabel",
+							"value": "false"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
+			case "pVarTextVariableIdOtherLabelText":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pVarTextVariableId"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataTextVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "textVariableId2"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataTextVariable/"
+										+ "textVariableTextVar",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}, {
+							"name": "otherLabelText",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "otherLabelText"
+							}]
+						}]
+				};
 			case "userSuppliedIdCollectionVarPCollVar":
 				return {
 					"name": "presentation",
@@ -4958,6 +5115,110 @@ function MetadataProviderStub() {
 						}, {
 							"name": "mode",
 							"value": "input"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
+			case "pNumVarNumVariableIdShowLabelFalse":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pNumVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pNumVarNumVariableIdShowLabelFalse"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataNumberVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "numVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataNumberVariable/"
+										+ "numVariableId",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "showLabel",
+							"value": "false"
+						}, {
+							"name": "emptyTextId",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "enterTextHereText"
+							}]
+						}]
+				};
+			case "pNumVarNumVariableIdOtherLabelText":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pNumVar"
+					},
+					"children": [
+						{
+							"name": "recordInfo",
+							"children": [{
+								"name": "id",
+								"value": "pNumVarNumVariableIdOtherLabelText"
+							}]
+						},
+						{
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "metadataNumberVariable"
+							}, {
+								"name": "linkedRecordId",
+								"value": "numVariableId"
+							}],
+							"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadataNumberVariable/"
+										+ "numVariableId",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+						}, {
+							"name": "mode",
+							"value": "input"
+						}, {
+							"name": "otherLabelText",
+							"children": [{
+								"name": "linkedRecordType",
+								"value": "text"
+							}, {
+								"name": "linkedRecordId",
+								"value": "otherLabelText"
+							}]
 						}, {
 							"name": "emptyTextId",
 							"children": [{
@@ -8763,6 +9024,88 @@ function MetadataProviderStub() {
 					}, {
 						"name": "mode",
 						"value": "input"
+					}]
+				};
+			case "myLinkNoLabelNoPresentationOfLinkedRecordPLink":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pRecordLink"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "myLinkNoPresentationOfLinkedRecordPLink"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataRecordLink"
+						}, {
+							"name": "linkedRecordId",
+							"value": "myLink"
+						}],
+						"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadata/"
+										+ "myLink",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					},{
+						"name": "showLabel",
+						"value": "false"
+					}]
+				};
+			case "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pRecordLink"
+					},
+					"children": [{
+						"name": "recordInfo",
+						"children": [{
+							"name": "id",
+							"value": "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink"
+						}]
+					}, {
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataRecordLink"
+						}, {
+							"name": "linkedRecordId",
+							"value": "myLink"
+						}],
+						"actionLinks": {
+								"read": {
+									"requestMethod": "GET",
+									"rel": "read",
+									"url": "http://localhost:8080/therest/rest/record/metadata/"
+										+ "myLink",
+									"accept": "application/vnd.uub.record+json"
+								}
+							},
+							"name": "presentationOf"
+					}, {
+						"name": "mode",
+						"value": "input"
+					},{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "coraText"
+						}, {
+							"name": "linkedRecordId",
+							"value": "otherLabelText"
+						}],
+							"name": "otherLabelText"
 					}]
 				};
 //				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData

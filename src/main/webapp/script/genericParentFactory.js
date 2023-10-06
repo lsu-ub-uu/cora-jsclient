@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, 2023 Olov McKie
- * Copyright 2016 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,33 +18,31 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.gui.createRemoveButton = function(onclick) {
-		let spec = {
-			"className" : "iconButton removeButton",
-			action : {
-				method : onclick
+	cora.genericParentFactory = function(typeToFactor, dependencies) {
+		let out;
+
+		const factor = function(spec, child) {
+			if(undefined == dependencies){
+				return CORA[typeToFactor](spec, child);
 			}
+			return CORA[typeToFactor](dependencies, spec, child);
 		};
-		return CORA.gui.button(spec);
-	};
 
-	cora.gui.createSpanWithClassName = function(className) {
-		let spanNew = document.createElement("span");
-		spanNew.className = className;
-		return spanNew;
-	};
+		const getTypeToFactor = function() {
+			return typeToFactor;
+		};
 
-	cora.gui.createDivWithClassName = function(className) {
-		let divNew = document.createElement("div");
-		divNew.className = className;
-		return divNew;
-	};
+		const getDependencies = function() {
+			return dependencies;
+		};
 
-	cora.gui.createLabelWithClassName = function(className) {
-		let titleNew = document.createElement("label");
-		titleNew.className = className;
-		return titleNew;
+		out = Object.freeze({
+			type : "genericParentFactory",
+			getTypeToFactor : getTypeToFactor,
+			getDependencies : getDependencies,
+			factor : factor
+		});
+		return out;
 	};
-
 	return cora;
 }(CORA));

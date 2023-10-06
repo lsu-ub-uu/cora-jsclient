@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -38,6 +38,8 @@ var CORATEST = (function(coraTest) {
 
 		var clearLinkedRecordIdMethods = [];
 		var hideClearLinkedRecordIdButtonCalled = 0;
+		let hideCalled = 0;
+		let showCalled = 0;
 
 		function getView() {
 			return view;
@@ -126,7 +128,20 @@ var CORATEST = (function(coraTest) {
 		function getHideClearLinkedRecordIdButtons() {
 			return hideClearLinkedRecordIdButtonCalled;
 		}
-
+		
+		const hide = function(){
+			hideCalled++;
+		};
+		const getHideCalled = function(){
+			return hideCalled;
+		};
+		const show = function(){
+			showCalled++;
+		};
+		const getShowCalled = function(){
+			return showCalled
+		};
+		
 		var out = Object.freeze({
 			"type" : "pRecordLinkViewSpy",
 			getDependencies : getDependencies,
@@ -158,7 +173,11 @@ var CORATEST = (function(coraTest) {
 			addSearchHandlerView : addSearchHandlerView,
 			getAddedSearchHandlerView : getAddedSearchHandlerView,
 			hideSearchHandlerView : hideSearchHandlerView,
-			getHideSearchHandlerView : getHideSearchHandlerView
+			getHideSearchHandlerView : getHideSearchHandlerView,
+			hide: hide,
+			getHideCalled: getHideCalled,
+			show: show,
+			getShowCalled: getShowCalled
 		});
 		return out;
 	};

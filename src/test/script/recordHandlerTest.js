@@ -1454,8 +1454,12 @@ QUnit.test("checkRightGuiCreatedPresentationMetadataIsMissing", function(assert)
 	this.spec.createNewRecord = "false";
 	this.dependencies.recordGuiFactory = recordGuiFactorySpy;
 
-	CORA.recordHandler(this.dependencies, this.spec);
-	this.answerCall(0);
+	try{
+		CORA.recordHandler(this.dependencies, this.spec);
+		this.answerCall(0);
+	}catch (error){
+		assert.strictEqual(error.message, "missing metadata");
+	}
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 
@@ -1468,14 +1472,17 @@ QUnit.test("checkRightGuiCreatedPresentationMetadataIsMissing", function(assert)
 
 QUnit.test("rightGuiCreatedPresentationMetadataIsMissingForNew", function(assert) {
 	let recordGuiFactorySpy = {
-		// factor : function(metadataId, data) {
 		factor: function() {
 			throw new Error("missing metadata");
 		}
 	};
 	this.dependencies.recordGuiFactory = recordGuiFactorySpy;
 
-	CORA.recordHandler(this.dependencies, this.specForNewWithData);
+	try{
+		CORA.recordHandler(this.dependencies, this.specForNewWithData);
+	}catch (error){
+		assert.strictEqual(error.message, "missing metadata");
+	}
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 
 	assert.strictEqual(recordHandlerViewSpy.getObjectAddedToEditView(0),

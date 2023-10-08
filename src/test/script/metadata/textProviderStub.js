@@ -198,8 +198,8 @@ var CORATEST = (function(coraTest) {
 				return "Attribute";
 			case "anOtherAttributeText":
 				return "OtherA";
-			case "otherLabelText":
-				return "otherLabelText_text";
+			case "specifiedLabelText":
+				return "specifiedLabelText_text";
 			default:
 				console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");

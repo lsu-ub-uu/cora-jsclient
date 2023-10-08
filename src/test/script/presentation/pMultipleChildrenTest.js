@@ -406,7 +406,6 @@ QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(asser
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
 	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
-
 });
 
 QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(assert) {
@@ -474,7 +473,6 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 	assert.strictEqual(attributesSpec.addViewToParent, pMultipleChildren.addAttributesView);
 	assert.strictEqual(attributesSpec.path, this.path);
 	assert.strictEqual(attributesSpec.mode, "input");
-	
 });
 
 QUnit.test("testAddAttributesView", function(assert) {
@@ -484,6 +482,31 @@ QUnit.test("testAddAttributesView", function(assert) {
 	fakeView.appendChild(document.createTextNode("fake view"));
 	pMultipleChildren.addAttributesView(fakeView);
 	assert.strictEqual(pMultipleChildren.getView().firstChild, fakeView);
+});
+
+QUnit.test("testSurroundingNoAttributes", function(assert) {
+//	this.setMyMetadataId("groupIdTwoTextChildRepeat1to5");
+//	this.setMyCPresentation("groupWithSContainerPGroup");
+//	this.setMyCParentPresentation("groupWithSContainerPGroup");
+	this.my.type="pSurroundingContainer";
+
+	let pMultipleChildren = this.createAndInitPMultipleChildren();
 	
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+	
+	assert.strictEqual(attributesSpec, undefined);
+
+//	let view = pMultipleChildren.getView();
+//	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
+//	assert.strictEqual(view.childNodes[1], factored.getView());
+//
+//	let factored2 = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(1);
+//	assert.strictEqual(factored2, undefined);
+//
+//	let factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
+//
+//	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
+//	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
+//	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
 });
 

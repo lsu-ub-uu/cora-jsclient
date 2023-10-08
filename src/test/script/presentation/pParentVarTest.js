@@ -230,15 +230,15 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", functi
 	assert.strictEqual(pVarViewSpy.getSpec().label, undefined);
 });
 
-QUnit.test("testFactoredViewCorrectlyForInputTextVariableOtherLabelText", function(assert) {
+QUnit.test("testFactoredViewCorrectlyForInputTextVariableSpecifiedLabelText", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdOtherLabelText"))
+				.getMetadataById("pVarTextVariableIdSpecifiedLabelText"))
 	
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	assert.strictEqual(pVarViewSpy.getSpec().label, "otherLabelText_text");
+	assert.strictEqual(pVarViewSpy.getSpec().label, "specifiedLabelText_text");
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyTextId", function(assert) {
@@ -272,7 +272,7 @@ QUnit.test("testMetadataIdUsedInData_IsUsedAndNot_PresentationOf", function(asse
 
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdOtherLabelText"));
+				.getMetadataById("pVarTextVariableIdSpecifiedLabelText"));
 	
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 	

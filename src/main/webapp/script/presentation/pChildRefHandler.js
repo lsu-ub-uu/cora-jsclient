@@ -114,10 +114,7 @@ var CORA = (function(cora) {
 			if (isStaticNoOfChildren) {
 				return false;
 			}
-			if (!spec.hasWritePermissionsForRecordPart) {
-				return false;
-			}
-			return true;
+			return spec.hasWritePermissionsForRecordPart;
 		};
 
 		const calculateUserCanMove = function() {
@@ -127,10 +124,7 @@ var CORA = (function(cora) {
 			if (!isRepeating) {
 				return false;
 			}
-			if (!spec.hasWritePermissionsForRecordPart) {
-				return false;
-			}
-			return true;
+			return spec.hasWritePermissionsForRecordPart;
 		};
 
 		const calculateUserCanAddBefore = function() {
@@ -146,10 +140,7 @@ var CORA = (function(cora) {
 			if (userCanUploadFile) {
 				return false;
 			}
-			if (!spec.hasWritePermissionsForRecordPart) {
-				return false;
-			}
-			return true;
+			return spec.hasWritePermissionsForRecordPart;
 		};
 
 		const childRefFoundInCurrentlyUsedParentMetadata = function() {

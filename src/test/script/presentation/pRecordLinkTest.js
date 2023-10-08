@@ -375,14 +375,14 @@ QUnit.test("testViewIsFactoredWithoutLabelIfShowLabelFalse", function(assert) {
 	assert.deepEqual(factoredViewSpec.label, undefined);
 });
 
-QUnit.test("testViewIsFactoredWithOtherLabelIfOtherLabelTextIsSet", function(assert) {
+QUnit.test("testViewIsFactoredWithSpecifiedLabelIfSpecifiedLabelTextIsSet", function(assert) {
 	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
-		.getMetadataById("myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink"));
+		.getMetadataById("myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink"));
 
 	CORA.pRecordLink(this.dependencies, this.spec);
 
 	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
-	assert.deepEqual(factoredViewSpec.label, "otherLabelText_text");
+	assert.deepEqual(factoredViewSpec.label, "specifiedLabelText_text");
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {

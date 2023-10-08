@@ -4961,7 +4961,7 @@ function MetadataProviderStub() {
 							}]
 						}]
 				};
-			case "pVarTextVariableIdOtherLabelText":
+			case "pVarTextVariableIdSpecifiedLabelText":
 				return {
 					"name": "presentation",
 					"attributes": {
@@ -5006,13 +5006,13 @@ function MetadataProviderStub() {
 								"value": "enterTextHereText"
 							}]
 						}, {
-							"name": "otherLabelText",
+							"name": "specifiedLabelText",
 							"children": [{
 								"name": "linkedRecordType",
 								"value": "text"
 							}, {
 								"name": "linkedRecordId",
-								"value": "otherLabelText"
+								"value": "specifiedLabelText"
 							}]
 						}]
 				};
@@ -5175,7 +5175,7 @@ function MetadataProviderStub() {
 							}]
 						}]
 				};
-			case "pNumVarNumVariableIdOtherLabelText":
+			case "pNumVarNumVariableIdSpecifiedLabelText":
 				return {
 					"name": "presentation",
 					"attributes": {
@@ -5186,7 +5186,7 @@ function MetadataProviderStub() {
 							"name": "recordInfo",
 							"children": [{
 								"name": "id",
-								"value": "pNumVarNumVariableIdOtherLabelText"
+								"value": "pNumVarNumVariableIdSpecifiedLabelText"
 							}]
 						},
 						{
@@ -5211,13 +5211,13 @@ function MetadataProviderStub() {
 							"name": "mode",
 							"value": "input"
 						}, {
-							"name": "otherLabelText",
+							"name": "specifiedLabelText",
 							"children": [{
 								"name": "linkedRecordType",
 								"value": "text"
 							}, {
 								"name": "linkedRecordId",
-								"value": "otherLabelText"
+								"value": "specifiedLabelText"
 							}]
 						}, {
 							"name": "emptyTextId",
@@ -9064,7 +9064,7 @@ function MetadataProviderStub() {
 						"value": "false"
 					}]
 				};
-			case "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink":
+			case "myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink":
 				return {
 					"name": "presentation",
 					"attributes": {
@@ -9074,7 +9074,7 @@ function MetadataProviderStub() {
 						"name": "recordInfo",
 						"children": [{
 							"name": "id",
-							"value": "myLinkOtherLabelTextNoPresentationOfLinkedRecordPLink"
+							"value": "myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink"
 						}]
 					}, {
 						"children": [{
@@ -9103,9 +9103,9 @@ function MetadataProviderStub() {
 							"value": "coraText"
 						}, {
 							"name": "linkedRecordId",
-							"value": "otherLabelText"
+							"value": "specifiedLabelText"
 						}],
-							"name": "otherLabelText"
+							"name": "specifiedLabelText"
 					}]
 				};
 //				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData

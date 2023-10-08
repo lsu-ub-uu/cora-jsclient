@@ -179,9 +179,9 @@ var CORA = (function(cora) {
 
 		const findOrAddPathToStored = function(pathAsArray) {
 			let currentPartOfStoredValuePositions = storedValuePositions;
-			for (let i = 0; i < pathAsArray.length; i++) {
+			for (let pathPart of pathAsArray) {
 				currentPartOfStoredValuePositions = returnOrCreatePathPart(
-					currentPartOfStoredValuePositions, pathAsArray[i]);
+					currentPartOfStoredValuePositions, pathPart);
 			}
 			return currentPartOfStoredValuePositions;
 		};

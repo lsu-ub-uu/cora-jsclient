@@ -23,7 +23,9 @@ var CORA = (function(cora) {
 		let spec = specIn;
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
+//		let cParentPresentation = cPresentation;
 		let my = {
+			type: "pSurroundingContainer",
 			metadataId: spec.metadataIdUsedInData,
 			cPresentation: cPresentation,
 			cParentPresentation: cParentPresentation

@@ -29,6 +29,7 @@ var CORA = (function(cora) {
 		let textId;
 		let text;
 		let defTextId;
+		
 		let defText;
 		let info;
 		let infoButton;
@@ -62,7 +63,9 @@ var CORA = (function(cora) {
 				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
 			originalClassName = view.className;
-			initPAttributes();
+			if ("pSurroundingContainer" !== my.type) {
+				initPAttributes();
+			}
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
@@ -169,34 +172,49 @@ var CORA = (function(cora) {
 		};
 
 		const createInfo = function() {
-			let infoSpec = {
-				// "insertAfter" is set to infoButton below
-				afterLevelChange: updateView,
-				level1: [{
-					className: "textView",
-					text: text
-				}, {
-					className: "defTextView",
-					text: defText
-				}],
-				level2: [{
-					className: "textIdView",
-					text: `textId: ${textId}`
-					// onclickMethod : openTextIdRecord
-				}, {
-					className: "defTextIdView",
-					text: `defTextId: ${defTextId}`
-				}, {
-					className: "metadataIdView",
-					text: `metadataId: ${my.metadataId}`
-				}, {
-					className: "technicalView",
-					text: `nameInData: ${nameInData}`
-				}, {
-					className: "technicalView",
-					text: `presentationId: ${getPresentationId()}`
-				}]
-			};
+			let infoSpec;
+			if ("pSurroundingContainer" == my.type) {
+				infoSpec = {
+					afterLevelChange: updateView,
+					level1: [{
+						className: "technicalView",
+						text: `presentationId: ${getPresentationId()}`
+					}],
+					level2: [{
+						className: "technicalView",
+						text: `presentationId: ${getPresentationId()}`
+					}]
+				};
+			}else{
+				infoSpec = {
+					// "insertAfter" is set to infoButton below
+					afterLevelChange: updateView,
+					level1: [{
+						className: "textView",
+						text: text
+					}, {
+						className: "defTextView",
+						text: defText
+					}],
+					level2: [{
+						className: "textIdView",
+						text: `textId: ${textId}`
+						// onclickMethod : openTextIdRecord
+					}, {
+						className: "defTextIdView",
+						text: `defTextId: ${defTextId}`
+					}, {
+						className: "metadataIdView",
+						text: `metadataId: ${my.metadataId}`
+					}, {
+						className: "technicalView",
+						text: `nameInData: ${nameInData}`
+					}, {
+						className: "technicalView",
+						text: `presentationId: ${getPresentationId()}`
+					}]
+				};
+			}
 			let newInfo = CORA.info(infoSpec);
 			infoSpec.insertAfter = newInfo.getButton();
 			return newInfo;

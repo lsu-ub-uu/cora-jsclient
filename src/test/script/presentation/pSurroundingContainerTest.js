@@ -159,6 +159,28 @@ QUnit.test("testInitInfo", function(assert) {
 	var infoButton = view.childNodes[0];
 	assert.equal(infoButton.nodeName, "SPAN");
 	assert.equal(infoButton.className, "iconButton infoButton");
+	
+	
+	assert.notOk(new RegExp("^(.*\\s)*infoActive(\\s.*)*$").test(view.className));
+
+	CORATESTHELPER.simulateOnclick(infoButton);
+	assert.ok(new RegExp("^(.*\\s)*infoActive(\\s.*)*$").test(view.className));
+
+	let infoView = view.childNodes[1];
+	assert.equal(infoView.childNodes.length, 1);
+	assert.equal(infoView.nodeName, "SPAN");
+	assert.equal(infoView.className, "infoView");
+
+	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "technicalView",
+			"presentationId: pTextVariablePlus2SContainer", assert);
+
+	CORATESTHELPER.simulateOnclick(infoButton);
+	assert.equal(infoView.childNodes.length, 2);
+	assert.equal(infoView.nodeName, "SPAN");
+	assert.equal(infoView.className, "infoView");
+
+	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "technicalView",
+			"presentationId: pTextVariablePlus2SContainer", assert);
 });
 
 QUnit.test("testNestedSurroundingContainer", function(assert) {

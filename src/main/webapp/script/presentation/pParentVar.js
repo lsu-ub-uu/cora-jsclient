@@ -127,10 +127,10 @@ var CORA = (function(cora) {
 		};
 		
 		const addLabelToViewSpec = function(pVarViewSpec){
-			if (cPresentation.containsChildWithNameInData("otherLabelText")) {
-				let otherLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("otherLabelText");
-				let otherLabelText = textProvider.getTranslation(otherLabelTextId);
-				pVarViewSpec.label = otherLabelText;
+			if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
+				let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
+				let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
+				pVarViewSpec.label = specifiedLabelText;
 			}else{
 				pVarViewSpec.label = text;
 			}

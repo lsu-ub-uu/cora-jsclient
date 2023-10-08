@@ -563,6 +563,10 @@ label, .label {
 	flex: 1 1 100%;
 }
 
+.pRecordLink .pVar label, .pRecordLink .pVar .label {
+	font-weight: normal;
+}
+
 label::after, .label:after {
 	content: ": ";
 }

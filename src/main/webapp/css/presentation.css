@@ -300,15 +300,37 @@ img {
 }
 
 textarea {
-	flex: 1;
+	flex: 1 auto;
 }
 
- .pGroup, .pMap, .pVar,  .pCollVar, .pNumVar,  .pSurroundingContainer {
+.pGroup, .pMap, .pVar,  .pCollVar, .pNumVar,  .pSurroundingContainer {
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding-right: 16px;
 }
+.pMap, .pVar, .pCollVar, .pNumVar {
+    margin-bottom: 0.5em;
+}
+
+.pChildRefHandler {
+/*     margin-bottom: 1em; */
+}
+
+.pChildRefHandler, .pNonRepeatingChildRefHandler, .text {
+	width: 100%;
+}
+.menuView .pChildRefHandler, .menuView .pNonRepeatingChildRefHandler, .menuView .text {
+	width: auto;
+}
+
+.pGroup {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	column-gap: 1rem;
+}
+
 .pMap {
 	padding-right: 0px;
 }
@@ -673,10 +695,6 @@ label::after, .label:after {
 	background: #d9e9f2;
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 	padding:4px;
-}
-
-.pChildRefHandler {
-    margin-bottom: 1em;
 }
 
 .frameChildStyle {

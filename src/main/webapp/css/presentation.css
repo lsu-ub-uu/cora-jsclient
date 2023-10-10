@@ -367,6 +367,9 @@ textarea {
 	width: auto;
 	min-width: 10rem;
 }
+.workView .editView .pRecordLink .linkedRecordIdView {
+	min-width: 20rem;
+}
 
 .workView .pRecordLink.searchActive {
 	border: 1px dashed #c5c5c5;	

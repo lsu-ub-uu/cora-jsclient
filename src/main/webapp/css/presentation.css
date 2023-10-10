@@ -365,7 +365,7 @@ textarea {
 .workView .pRecordLink .linkedRecordIdView {
 	display: inline-block;
 	width: auto;
-	min-width: 20rem;
+	min-width: 10rem;
 }
 
 .workView .pRecordLink.searchActive {

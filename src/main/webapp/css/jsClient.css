@@ -606,7 +606,7 @@ body {
 	position: absolute;
 }
 
-.presentation .containsData .text.h2TextStyle {
+.presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
   color: orange;
 }
 

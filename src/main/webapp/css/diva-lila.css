@@ -193,19 +193,12 @@ input[type="button"], .form-style-10 input[type="submit"] {
 .editView .repeatingElement:last-child {
 	margin-bottom: 0;
 }
-.pChildRefHandler {
-	margin-bottom: 5px;
-}
+
 .jsClient .workItem > .incomingLinksView {
 	flex: 0 0 50%;
 	order: 10;
 }
 
-.workView .presentation > .pGroup > .pChildRefHandler,
-.workView .presentation > .pGroup > .pNonRepeatingChildRefHandler,
- .workView .pGroup > .pSurroundingContainer, .workView .pGroup > .text {
-	flex: 0 1 calc(100% - 0px);
-}
 .workArea .workView > .workItem {
 	padding-right: 0.3rem;
 }

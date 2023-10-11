@@ -20,6 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pMultipleChildren = function(dependencies, spec, my) {
+		const infoFactory = dependencies.infoFactory;
+//		console.log(infoFactory);
 		let path = spec.path;
 		let textProvider = dependencies.textProvider;
 

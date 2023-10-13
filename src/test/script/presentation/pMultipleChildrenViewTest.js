@@ -30,8 +30,8 @@ QUnit.module("presentation/pMultipleChildrenViewTest.js", {
 		};
 		this.spec = {
 			mode: "input",
-			inputType: "input",
-			outputFormat: "text",
+//			inputType: "input",
+//			outputFormat: "text",
 			presentationId: "somePresentationId",
 			label: "Some label text",
 			id: "someId",

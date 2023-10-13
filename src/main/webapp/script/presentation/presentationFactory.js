@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 	cora.presentationFactory = function(dependencies) {
 		const infoFactory = CORA.infoFactory();
 		const pVarViewFactory = CORA.pVarViewFactory();
+		const pMultipleChildrenViewFactory = CORA.pVarViewFactory();
 		
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,

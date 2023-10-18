@@ -35,7 +35,8 @@ var CORATEST = (function(coraTest) {
 				pAttributesFactory: pAttributesFactory,
 				jsBookkeeper: jsBookkeeper,
 				recordTypeProvider: recordTypeProvider,
-				pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+				pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+				pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
 			};
 			var spec = {
 				"path": [],
@@ -87,7 +88,8 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 			pAttributesFactory: this.pAttributesFactory,
 			jsBookkeeper: this.jsBookkeeper,
 			recordTypeProvider: this.recordTypeProvider,
-			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
 		};
 		this.presentationId = "masterPResLink";
 		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));

@@ -36,7 +36,8 @@ QUnit.module("presentation/pGroupTest.js", {
 			pAttributesFactory: this.pAttributesFactory,
 			jsBookkeeper : CORATEST.jsBookkeeperSpy(),
 			recordTypeProvider : CORATEST.recordTypeProviderStub(),
-			pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy")
+			pChildRefHandlerFactory : CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
+				pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
 		};
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		

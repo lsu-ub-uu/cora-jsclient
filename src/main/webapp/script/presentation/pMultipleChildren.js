@@ -41,7 +41,8 @@ var CORA = (function(cora) {
 
 		const init = function() {
 			console.log("trying to factor view from pMultiplieChildren")
-			dependencies.pMultipleChildrenViewFactory.factor(my);
+			spec.info = {text: "tramstext waiting for better in pMultipleChildren"};
+			dependencies.pMultipleChildrenViewFactory.factor(spec, my);
 			
 			cMetadataElement = getMetadataById(my.metadataId);
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");

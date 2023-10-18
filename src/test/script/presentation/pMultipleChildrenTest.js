@@ -37,7 +37,8 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 			recordTypeProvider: CORATEST.recordTypeProviderStub(),
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			pNonRepeatingChildRefHandlerFactory: CORATEST
-				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
+				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy"),
+			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
 		};
 
 		this.spec = {

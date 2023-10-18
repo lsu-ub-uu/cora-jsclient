@@ -19,7 +19,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pMultipleChildrenView = function(dependencies, spec, child) {
+	cora.pParentMultipleChildrenView = function(dependencies, spec, child) {
 		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
@@ -235,7 +235,7 @@ var CORA = (function(cora) {
 		};
 		
 		out = Object.freeze({
-			type: "pMultipleChildrenView",
+			type: "pParentMultipleChildrenView",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

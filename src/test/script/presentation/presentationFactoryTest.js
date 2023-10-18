@@ -249,6 +249,7 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(PParentVarFactoyrDependencies.pubSub, context.dependencies.pubSub);
 
 	assert.strictEqual(dependencies.pVarViewFactory.type, "pVarViewFactory");
+	assert.strictEqual(dependencies.pMultipleChildrenViewFactory.type, "pMultipleChildrenViewFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pRecordLinkViewFactory.getTypeToFactor(), "pRecordLinkView");
 	let pRLVFDependencies = dependencies.pRecordLinkViewFactory.getDependencies();

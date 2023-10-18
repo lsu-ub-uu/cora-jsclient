@@ -24,23 +24,26 @@ var CORA = (function(cora) {
 		};
 		
 		const dependencies = {
-			pParentVarViewFactory: CORA.genericParentFactory("pParentVarView", childDependencies)
+			pParentMultipleChildrenViewFactory: CORA.genericParentFactory("pParentMultipleChildrenView", childDependencies)
 		};
 		
 		function factor(spec) {
-			if(spec.type === "pNumVar"){
-				return CORA.pNumVarView(dependencies, spec);
-			}
-			if(spec.type === "pCollVar"){
-				return CORA.pCollectionVarView(dependencies, spec);
-			}
-			return CORA.pVarView(dependencies, spec);
+//			if(spec.type === "pNumVar"){
+//				return CORA.pNumVarView(dependencies, spec);
+//			}
+//			if(spec.type === "pCollVar"){
+//				return CORA.pCollectionVarView(dependencies, spec);
+//			}
+			console.log("factoring pGroupView in pParentMultipleChildrenViewFactory")
+			return CORA.pGroupView(dependencies, spec);
 		}
 
-		return Object.freeze({
+		const self = Object.freeze({
 			type : "pMultipleChildrenViewFactory",
 			factor : factor
 		});
+//		dependencies.pMultipleChildrenViewFactory = self;
+		return self;
 	};
 	return cora;
 }(CORA));

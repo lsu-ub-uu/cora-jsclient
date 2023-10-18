@@ -40,6 +40,9 @@ var CORA = (function(cora) {
 		let pAttributes;
 
 		const init = function() {
+			console.log("trying to factor view from pMultiplieChildren")
+			dependencies.pMultipleChildrenViewFactory.factor(my);
+			
 			cMetadataElement = getMetadataById(my.metadataId);
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 

@@ -19,7 +19,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pMultipleChildren = function(dependencies, spec, my) {
+	cora.pParentMultipleChildren = function(dependencies, spec, my) {
 		const infoFactory = dependencies.infoFactory;
 //		console.log(infoFactory);
 		let path = spec.path;
@@ -41,7 +41,7 @@ var CORA = (function(cora) {
 
 		const init = function() {
 			console.log("trying to factor view from pMultiplieChildren")
-			spec.info = {text: "tramstext waiting for better in pMultipleChildren"};
+			spec.info = {text: "tramstext waiting for better in pParentMultipleChildren"};
 			dependencies.pMultipleChildrenViewFactory.factor(spec, my);
 			
 			cMetadataElement = getMetadataById(my.metadataId);
@@ -424,7 +424,7 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type: "pMultipleChildren",
+			type: "pParentMultipleChildren",
 			getPresentationId: getPresentationId,
 			init: init,
 			getView: getView,

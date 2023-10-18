@@ -41,7 +41,7 @@ var CORA = (function(cora) {
 			my.cParentPresentation = cPresentation;
 			my.createBaseViewHolder = createBaseViewHolder;
 
-			parent = CORA.pMultipleChildren(dependencies, spec, my);
+			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
 			parent.init();
 		};
 

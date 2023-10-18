@@ -24,7 +24,7 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.standardNoOfChildren = 1;
-		this.pMultipleChildren = null;
+		this.pParentMultipleChildren = null;
 		this.path = [];
 		
 		this.dependencies = {
@@ -54,7 +54,7 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 		}
 		
 		let createBaseViewHolder = function() {
-			return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
+			return CORA.gui.createDivWithClassName("pParentMultipleChildren pGroup");
 		}
 		
 		this.my = {
@@ -79,12 +79,12 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 			this.my.cParentPresentation = this.getMetadataAsCoraData(metadataId);
 		};
 		this.createAndInitPMultipleChildren = function() {
-			this.pMultipleChildren = CORA.pMultipleChildren(this.dependencies, this.spec, this.my);
-			this.pMultipleChildren.init();
-			return this.pMultipleChildren;
+			this.pParentMultipleChildren = CORA.pParentMultipleChildren(this.dependencies, this.spec, this.my);
+			this.pParentMultipleChildren.init();
+			return this.pParentMultipleChildren;
 		}
 		this.assertNoOfChildrenAddedToView = function(assert, no) {
-			let view = this.pMultipleChildren.getView();
+			let view = this.pParentMultipleChildren.getView();
 			assert.strictEqual(view.childNodes.length - this.standardNoOfChildren, no);
 		};
 
@@ -92,19 +92,19 @@ QUnit.module("presentation/pMultipleChildrenTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
-	assert.strictEqual(pMultipleChildren.type, "pMultipleChildren");
-	assert.visible(view, "pMultipleChildren view should be visible");
-	let expectedClassName = 'pMultipleChildren pGroup';
+	assert.strictEqual(pParentMultipleChildren.type, "pParentMultipleChildren");
+	assert.visible(view, "pParentMultipleChildren view should be visible");
+	let expectedClassName = 'pParentMultipleChildren pGroup';
 	assert.deepEqual(view.className, expectedClassName);
 });
 
 QUnit.test("testFirstPChildRefHandlerSpec", function(assert) {
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -127,8 +127,8 @@ QUnit.test("testFirstPChildRefHandlerSpec", function(assert) {
 
 QUnit.test("testFirstMinimizedDefaultPChildRefHandlerSpec", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextChildMinimizedDefault");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -146,8 +146,8 @@ QUnit.test("testFirstMinimizedDefaultPChildRefHandlerSpec", function(assert) {
 
 QUnit.test("testFirstPChildRefHandlerSpecNoStyleInfo", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextChildMinimizedDefaultNoStyleInfo");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -176,8 +176,8 @@ QUnit.test("testPGroupChildRefHandlerSpecPresentationSizeFirstSmaller", function
 
 QUnit.test("testFirstPChildRefHandlerSpecNoStyleInfoMinNumberOfRepeatingToShow", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextChildMinimizedDefaultNoStyleInfoMinNumberOfRepeatingToShow");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -200,8 +200,8 @@ QUnit.test("testFirstPChildRefHandlerSpecNoStyleInfoMinNumberOfRepeatingToShow",
 
 QUnit.test("pgGroupIdOneTextChildMinimizedDefaultModeInput", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextChildMinimizedDefaultModeInput");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -210,8 +210,8 @@ QUnit.test("pgGroupIdOneTextChildMinimizedDefaultModeInput", function(assert) {
 
 QUnit.test("pgGroupIdOneTextChildMinimizedDefaultModeOutput", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextChildMinimizedDefaultModeOutput");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
@@ -220,16 +220,16 @@ QUnit.test("pgGroupIdOneTextChildMinimizedDefaultModeOutput", function(assert) {
 
 QUnit.test("testText", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextOneTextChildTwoAttributes");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	assert.strictEqual(view.childNodes[1].className, "text h2TextStyle fourChildStyle");
 });
 QUnit.test("testTextNoTextStyle", function(assert) {
 	this.setMyCPresentation("pgGroupIdOneTextOneTextChildTwoAttributesNoTextStyle");
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	assert.strictEqual(view.childNodes[1].className, "text");
@@ -240,8 +240,8 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 	this.setMyCPresentation("groupWithSContainerPGroup");
 	this.setMyCParentPresentation("groupWithSContainerPGroup");
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 
@@ -279,8 +279,8 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpecWithMinimized", function(assert)
 	this.setMyCPresentation("groupWithSContainerAndAlternativeSContainerPGroup");
 	this.setMyCParentPresentation("groupWithSContainerAndAlternativeSContainerPGroup");
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	let factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
@@ -304,7 +304,7 @@ QUnit.test("testGuiElementLink", function(assert) {
 		"path": {},
 	};
 	let createBaseViewHolder = function() {
-		return CORA.gui.createDivWithClassName("pMultipleChildren pGroup");
+		return CORA.gui.createDivWithClassName("pParentMultipleChildren pGroup");
 	}
 
 	let my = {
@@ -314,9 +314,9 @@ QUnit.test("testGuiElementLink", function(assert) {
 		"createBaseViewHolder": createBaseViewHolder
 	};
 
-	let pMultipleChildren = CORA.pMultipleChildren(this.dependencies, spec, my);
-	pMultipleChildren.init();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = CORA.pParentMultipleChildren(this.dependencies, spec, my);
+	pParentMultipleChildren.init();
+	let view = pParentMultipleChildren.getView();
 	this.fixture.appendChild(view);
 
 	assert.strictEqual(view.childNodes[1].className, "guiElement");
@@ -393,9 +393,9 @@ QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(asser
 	this.setMyCPresentation("groupWithSContainerPGroup");
 	this.setMyCParentPresentation("groupWithSContainerPGroup");
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
 
-	let view = pMultipleChildren.getView();
+	let view = pParentMultipleChildren.getView();
 	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
 	assert.strictEqual(view.childNodes[1], factored.getView());
 
@@ -416,8 +416,8 @@ QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(
 
 	this.recordPartPermissionCalculator.addIdToReturnFalseForRead("metadataTextVariable_textVariableId2");
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
-	let view = pMultipleChildren.getView();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
 
 	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
 	assert.strictEqual(view.childNodes[1], factored.getView());
@@ -467,22 +467,22 @@ QUnit.test("testFirstPChildRefHandlerSpecWhenNoConstraints", function(assert) {
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
 	
 	let attributesSpec = this.pAttributesFactory.getSpec(0);
 
-	assert.strictEqual(attributesSpec.addViewToParent, pMultipleChildren.addAttributesView);
+	assert.strictEqual(attributesSpec.addViewToParent, pParentMultipleChildren.addAttributesView);
 	assert.strictEqual(attributesSpec.path, this.path);
 	assert.strictEqual(attributesSpec.mode, "input");
 });
 
 QUnit.test("testAddAttributesView", function(assert) {
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
 	
 	let fakeView = document.createElement("span");
 	fakeView.appendChild(document.createTextNode("fake view"));
-	pMultipleChildren.addAttributesView(fakeView);
-	assert.strictEqual(pMultipleChildren.getView().firstChild, fakeView);
+	pParentMultipleChildren.addAttributesView(fakeView);
+	assert.strictEqual(pParentMultipleChildren.getView().firstChild, fakeView);
 });
 
 QUnit.test("testSurroundingNoAttributes", function(assert) {
@@ -491,13 +491,13 @@ QUnit.test("testSurroundingNoAttributes", function(assert) {
 //	this.setMyCParentPresentation("groupWithSContainerPGroup");
 	this.my.type="pSurroundingContainer";
 
-	let pMultipleChildren = this.createAndInitPMultipleChildren();
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
 	
 	let attributesSpec = this.pAttributesFactory.getSpec(0);
 	
 	assert.strictEqual(attributesSpec, undefined);
 
-//	let view = pMultipleChildren.getView();
+//	let view = pParentMultipleChildren.getView();
 //	let factored = this.dependencies.pNonRepeatingChildRefHandlerFactory.getFactored(0);
 //	assert.strictEqual(view.childNodes[1], factored.getView());
 //

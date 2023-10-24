@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pMultipleChildrenTest.js", {
+QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");

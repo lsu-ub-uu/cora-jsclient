@@ -28,12 +28,12 @@ var CORA = (function(cora) {
 		};
 		
 		function factor(spec) {
-//			if(spec.type === "pNumVar"){
-//				return CORA.pNumVarView(dependencies, spec);
-//			}
-//			if(spec.type === "pCollVar"){
-//				return CORA.pCollectionVarView(dependencies, spec);
-//			}
+			if(spec.type === "pSurroundingContainer"){
+				return CORA.pSurroundingContainerView(dependencies, spec);
+			}
+			if(spec.type === "pResourceLink"){
+				return CORA.pResourceLinkView(dependencies, spec);
+			}
 			console.log("factoring pGroupView in pParentMultipleChildrenViewFactory")
 			return CORA.pGroupView(dependencies, spec);
 		}

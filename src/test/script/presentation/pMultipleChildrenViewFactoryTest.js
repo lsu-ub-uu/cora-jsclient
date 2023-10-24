@@ -78,37 +78,67 @@ QUnit.test("factorSetsDependenciesInPGroupVarView", function(assert) {
 	let pParentDependencies = dependencies.pParentMultipleChildrenViewFactory.getDependencies();
 	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
 });
-//
-//QUnit.test("testFactorViewForPNumVar", function(assert) {
-//	this.spec.type = "pNumVar";
-//	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
-//	
-//	assert.ok(view);
-//	assert.strictEqual(view.type, "pNumVarView");
-//});
-//
-//QUnit.test("testFactorViewForPNumVarDependencies", function(assert) {
-//	this.spec.type = "pNumVar";
-//	
-//	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
-//	let dependencies = view.getDependencies();
-//	
-//	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.type, "genericParentFactory");
-//	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.getTypeToFactor(), "pParentVarView");
-//	
-//	let pParentDependencies = dependencies.pParentMultipleChildrenViewFactory.getDependencies();
-//	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
-//	assert.strictEqual(view.type, "pNumVarView");
-//});
-//
-//QUnit.test("factorSetsSpecInPNumVarView", function(assert) {
-//	this.spec.type = "pNumVar";
-//	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
-//	
-//	let spec = view.getSpec();
-//	assert.deepEqual(spec, this.spec);
-//});
-//
+
+QUnit.test("testFactorViewForPSurroundingContainer", function(assert) {
+	this.spec.type = "pSurroundingContainer";
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	
+	assert.ok(view);
+	assert.strictEqual(view.type, "pSurroundingContainerView");
+});
+
+QUnit.test("testFactorViewForPSurroundingContainerDependencies", function(assert) {
+	this.spec.type = "pSurroundingContainer";
+	
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	let dependencies = view.getDependencies();
+	
+	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.type, "genericParentFactory");
+	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.getTypeToFactor(), "pParentMultipleChildrenView");
+	
+	let pParentDependencies = dependencies.pParentMultipleChildrenViewFactory.getDependencies();
+	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(view.type, "pSurroundingContainerView");
+});
+
+QUnit.test("factorSetsSpecInPSurroundingContainerView", function(assert) {
+	this.spec.type = "pSurroundingContainer";
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	
+	let spec = view.getSpec();
+	assert.deepEqual(spec, this.spec);
+});
+
+QUnit.test("testFactorViewForpResourceLink", function(assert) {
+	this.spec.type = "pResourceLink";
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	
+	assert.ok(view);
+	assert.strictEqual(view.type, "pResourceLinkView");
+});
+
+QUnit.test("testFactorViewForPResourceLinkDependencies", function(assert) {
+	this.spec.type = "pResourceLink";
+	
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	let dependencies = view.getDependencies();
+	
+	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.type, "genericParentFactory");
+	assert.deepEqual(dependencies.pParentMultipleChildrenViewFactory.getTypeToFactor(), "pParentMultipleChildrenView");
+	
+	let pParentDependencies = dependencies.pParentMultipleChildrenViewFactory.getDependencies();
+	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(view.type, "pResourceLinkView");
+});
+
+QUnit.test("factorSetsSpecInPResourceLinkView", function(assert) {
+	this.spec.type = "pResourceLink";
+	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
+	
+	let spec = view.getSpec();
+	assert.deepEqual(spec, this.spec);
+});
+
 //QUnit.test("testFactorViewForPCollVar", function(assert) {
 //	this.spec.type = "pCollVar";
 //	this.spec.options= [

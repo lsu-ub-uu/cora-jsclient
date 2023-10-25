@@ -89,6 +89,9 @@ var CORATEST = (function(coraTest) {
 		const getShowCalled = function(){
 			return showCalled
 		};
+		const appendChild = function(child){
+			
+		};
 
 		return Object.freeze({
 			"type": "pMultipleChildrenViewSpy",
@@ -109,7 +112,8 @@ var CORATEST = (function(coraTest) {
 			hide: hide,
 			getHideCalled: getHideCalled,
 			show: show,
-			getShowCalled: getShowCalled
+			getShowCalled: getShowCalled,
+			appendChild: appendChild
 			
 		});
 	};

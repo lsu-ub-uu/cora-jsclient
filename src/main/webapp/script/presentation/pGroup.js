@@ -28,25 +28,39 @@ var CORA = (function(cora) {
 				metadataId: spec.metadataIdUsedInData,
 				cPresentation: cPresentation,
 				cParentPresentation: cPresentation,
-				createBaseViewHolder: createBaseViewHolder
+				createBaseViewHolder: createBaseViewHolder,
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
+//console.log("parent")
 			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
-			parent.init();
+//			parent.init();
+//console.log(parent)
 		};
 
-		const createBaseViewHolder = function() {
+		const createBaseViewHolder = function(presentationIdIn) {
 			let presentationStyle = getPresentationStyle();
-			let presentationId = parent.getPresentationId();
-			return CORA.gui.createDivWithClassName("pGroup " + presentationStyle + presentationId);
+//			let presentationId = parent.getPresentationId();
+			let presentationId = presentationIdIn; 
+			return CORA.gui.createDivWithClassName(`pGroup ${presentationStyle}${presentationId}`);
 		};
 
 		const getPresentationStyle = function() {
 			if (cPresentation.containsChildWithNameInData("presentationStyle")) {
-				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle") + " ";
+				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle")+" ";
 			}
 			return "";
 		};
-
+		
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
+			//TODO: test when factory for parent added
+			pVarViewSpec.type = "pGroup";
+//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
+//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
+//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+//			
+//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+		};
+		
 		const getSpec = function() {
 			return spec;
 		};

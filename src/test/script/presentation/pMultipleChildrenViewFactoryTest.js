@@ -88,7 +88,8 @@ QUnit.test("testFactorViewForPSurroundingContainer", function(assert) {
 });
 
 QUnit.test("testFactorViewForPSurroundingContainerDependencies", function(assert) {
-	this.spec.type = "pSurroundingContainer";
+//	this.spec.type = "pSurroundingContainer";
+	this.spec.type = "container";
 	
 	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
 	let dependencies = view.getDependencies();
@@ -102,7 +103,8 @@ QUnit.test("testFactorViewForPSurroundingContainerDependencies", function(assert
 });
 
 QUnit.test("factorSetsSpecInPSurroundingContainerView", function(assert) {
-	this.spec.type = "pSurroundingContainer";
+//	this.spec.type = "pSurroundingContainer";
+	this.spec.type = "container";
 	let view = this.pMultipleChildrenViewFactory.factor(this.spec);
 	
 	let spec = view.getSpec();

@@ -29,7 +29,7 @@ QUnit.module("presentation/pSurroundingContainerViewTest.js", {
 			inputType: "input"
 		};
 
-		this.getPVarView = function() {
+		this.getPSurroundingContainerView = function() {
 			if (this.pSurroundingContainerView === undefined) {
 				this.pSurroundingContainerView = CORA.pSurroundingContainerView(this.dependencies, this.spec);
 			}
@@ -39,23 +39,23 @@ QUnit.module("presentation/pSurroundingContainerViewTest.js", {
 });
 
 QUnit.test("getType", function(assert) {
-	let pSurroundingContainerView = this.getPVarView();
+	let pSurroundingContainerView = this.getPSurroundingContainerView();
 	assert.strictEqual(pSurroundingContainerView.type, "pSurroundingContainerView");
 	assert.ok(this.pSurroundingContainerView);
 });
 
 QUnit.test("getSpec", function(assert) {
-	let pSurroundingContainerView = this.getPVarView();
+	let pSurroundingContainerView = this.getPSurroundingContainerView();
 	assert.strictEqual(pSurroundingContainerView.getSpec(), this.spec);
 });
 
 QUnit.test("getDependencies", function(assert) {
-	let pSurroundingContainerView = this.getPVarView();
+	let pSurroundingContainerView = this.getPSurroundingContainerView();
 	assert.strictEqual(pSurroundingContainerView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testParentStarted", function(assert) {
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	
 	let pParentVarViewSpec = this.pParentMultipleChildrenViewFactory.getSpec(0);
 	assert.strictEqual(pParentVarViewSpec, this.spec);
@@ -68,7 +68,7 @@ QUnit.test("testParentStarted", function(assert) {
 });
 
 QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
-	let pSurroundingContainerView = this.getPVarView();
+	let pSurroundingContainerView = this.getPSurroundingContainerView();
 	let pParentVarView = this.pParentMultipleChildrenViewFactory.getFactored(0);
 	
 	assert.strictEqual(pSurroundingContainerView.getView, pParentVarView.getView);
@@ -81,8 +81,15 @@ QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
 	assert.strictEqual(pSurroundingContainerView.show, pParentVarView.show);
 });
 
+QUnit.test("testGetBaseClassName", function(assert) {
+	let pSurroundingContainerView = this.getPSurroundingContainerView();
+	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
+	
+	assert.strictEqual(child.getBaseClassName(), "pSurroundingContainer");
+});
+
 QUnit.test("createInputElementWithSetValueFunction", function(assert) {
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	let inputElement = child.createInputElementWithSetValueFunction();
@@ -97,7 +104,7 @@ QUnit.test("createInputElementWithSetValueFunction", function(assert) {
 
 QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
 	this.spec.inputType = "textarea";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	let inputElement = child.createInputElementWithSetValueFunction();
@@ -112,7 +119,7 @@ QUnit.test("createInputElementWithSetValueFunctionTextArea", function(assert) {
 
 QUnit.test("createInputElementWithSetValueFunctionPassword", function(assert) {
 	this.spec.inputFormat = "password";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	let inputElement = child.createInputElementWithSetValueFunction();
@@ -126,7 +133,7 @@ QUnit.test("createInputElementWithSetValueFunctionPassword", function(assert) {
 });
 
 QUnit.test("useStandardOutput", function(assert) {
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	assert.strictEqual(child.useStandardOutput(), true);
@@ -134,7 +141,7 @@ QUnit.test("useStandardOutput", function(assert) {
 
 QUnit.test("useStandardOutputImageIsFalse", function(assert) {
 	this.spec.outputFormat = "image";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	assert.strictEqual(child.useStandardOutput(), false);
@@ -142,7 +149,7 @@ QUnit.test("useStandardOutputImageIsFalse", function(assert) {
 
 QUnit.test("useStandardOutputLinlIsFalse", function(assert) {
 	this.spec.outputFormat = "link";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	assert.strictEqual(child.useStandardOutput(), false);
@@ -150,7 +157,7 @@ QUnit.test("useStandardOutputLinlIsFalse", function(assert) {
 
 QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {
 	this.spec.outputFormat = "image";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	let inputElement = child.createOutputWithSetValueFunction();
@@ -163,7 +170,7 @@ QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {
 
 QUnit.test("createOutputWithSetValueFunctionLink", function(assert) {
 	this.spec.outputFormat = "link";
-	this.getPVarView();
+	this.getPSurroundingContainerView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
 	let inputElement = child.createOutputWithSetValueFunction();

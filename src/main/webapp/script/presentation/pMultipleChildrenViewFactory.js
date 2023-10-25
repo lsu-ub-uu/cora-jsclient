@@ -28,9 +28,11 @@ var CORA = (function(cora) {
 		};
 		
 		function factor(spec) {
-			if(spec.type === "pSurroundingContainer"){
+//			if(spec.type === "pSurroundingContainer"){
+			if(spec.type === "container"){
 				return CORA.pSurroundingContainerView(dependencies, spec);
 			}
+			
 			if(spec.type === "pResourceLink"){
 				return CORA.pResourceLinkView(dependencies, spec);
 			}

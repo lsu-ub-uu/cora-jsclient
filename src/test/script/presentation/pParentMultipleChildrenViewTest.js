@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pParentMultipleChildrenViewFactory.js", {
+QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			infoFactory: CORATEST.infoFactorySpy()
@@ -60,7 +60,7 @@ QUnit.module("presentation/pParentMultipleChildrenViewFactory.js", {
 			return this.getpParentMultipleChildrenView().getView();
 		};
 		this.getValueView = function() {
-			return this.getView().childNodes[1];
+			return this.getView().childNodes[2];
 		};
 		
 		this.createChildSpy = function (){
@@ -79,12 +79,16 @@ QUnit.module("presentation/pParentMultipleChildrenViewFactory.js", {
 				outputNew.setValue = function(value) {
 					outputNew.textContent = value;
 				};
-			return outputNew;
+				return outputNew;
 			};
+			const getBaseClassName = function(){
+				return "fakeBaseClassName";
+			}
 			return {
 				createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
 				useStandardOutput: useStandardOutput,
-				createOutputWithSetValueFunction: createOutputWithSetValueFunction
+				createOutputWithSetValueFunction: createOutputWithSetValueFunction,
+				getBaseClassName: getBaseClassName
 			};
 		};
 	}
@@ -108,17 +112,17 @@ QUnit.test("getDependencies", function(assert) {
 
 QUnit.test("getView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.nodeName, "SPAN");
+	assert.strictEqual(view.nodeName, "DIV");
 });
 
 QUnit.test("testClassName", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.className, "pVar somePresentationId");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
 });
 
 QUnit.test("testInfoSpec", function(assert) {
 	let expectedSpec = {
-		appendTo: {},
+//		appendTo: {},
 		level1: [{
 			className: "textView",
 			text: "someText"
@@ -137,13 +141,14 @@ QUnit.test("testInfoSpec", function(assert) {
 		}, {
 			className: "technicalView",
 			text: "metadataId: metadataId"
-		}]
+		}],
+		insertAfter: {}
 	};
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
-	assert.strictEqual(usedSpec.appendTo, this.getView());
+	assert.strictEqual(usedSpec.insertAfter, infoSpy.getButton());
 	assert.strictEqual(usedSpec.afterLevelChange, pParentMultipleChildrenView.updateClassName);
 	assert.strictEqual(usedSpec.level2[0].onclickMethod, this.textIdOnclickMethod);
 	assert.strictEqual(usedSpec.level2[1].onclickMethod, this.defTextIdOnclickMethod);
@@ -152,64 +157,65 @@ QUnit.test("testInfoSpec", function(assert) {
 });
 QUnit.test("testInfoButtonAddedToView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.childNodes[2].className, "infoButtonSpy");
+	assert.strictEqual(view.childNodes[0].className, "infoButtonSpy");
 
 });
 
 QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 	this.spec.info.technicalInfo = null;
 	let expectedSpec = {
-		appendTo: {},
+//		appendTo: {},
 		level1: [{
 			className: "textView",
 			text: "someText"
 		}, {
 			className: "defTextView",
 			text: "someDefText"
-		}]
+		}],
+		insertAfter: {}
 	};
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
-	assert.strictEqual(usedSpec.appendTo, pParentMultipleChildrenView.getView());
+	assert.strictEqual(usedSpec.insertAfter, infoSpy.getButton());
 });
 
 QUnit.test("testActiveInfoShownInClassName", function(assert) {
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let view = this.getView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
-	assert.strictEqual(view.className, "pVar somePresentationId");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
 	infoSpy.setInfoLevel(0);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "pVar somePresentationId");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
 	infoSpy.setInfoLevel(1);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "pVar somePresentationId infoActive");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId infoActive");
 	infoSpy.setInfoLevel(0);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "pVar somePresentationId");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
 });
 
 QUnit.test("testStateShownInClassName", function(assert) {
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let view = this.getView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
-	assert.strictEqual(view.className, "pVar somePresentationId");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
 	pParentMultipleChildrenView.setState("error");
-	assert.strictEqual(view.className, "pVar somePresentationId error");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId error");
 	pParentMultipleChildrenView.setState("errorStillFocused");
-	assert.strictEqual(view.className, "pVar somePresentationId errorStillFocused");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId errorStillFocused");
 	pParentMultipleChildrenView.setState("error");
 	infoSpy.setInfoLevel(1);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "pVar somePresentationId error infoActive");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId error infoActive");
 	pParentMultipleChildrenView.setState("ok");
-	assert.strictEqual(view.className, "pVar somePresentationId infoActive");
+	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId infoActive");
 });
 
 QUnit.test("testLabelInInput", function(assert) {
-	let label = this.getView().childNodes[0];
+	let label = this.getView().childNodes[1];
 	assert.strictEqual(label.nodeName, "LABEL");
 	assert.strictEqual(label.textContent, "Some label text");
 	assert.strictEqual(label.htmlFor, "someId");
@@ -218,7 +224,7 @@ QUnit.test("testLabelInInput", function(assert) {
 
 QUnit.test("testLabelInOutput", function(assert) {
 	this.spec.mode = "output";
-	let label = this.getView().childNodes[0];
+	let label = this.getView().childNodes[1];
 	assert.strictEqual(label.nodeName, "SPAN");
 	assert.strictEqual(label.className, "label");
 	assert.strictEqual(label.textContent, "Some label text");
@@ -305,7 +311,7 @@ QUnit.test("testOutputNotStandard", function(assert) {
 
 	let pParentMultipleChildrenView = CORA.pParentMultipleChildrenView(this.dependencies, this.spec, child);
 
-	let valueView = pParentMultipleChildrenView.getView().childNodes[1];
+	let valueView = pParentMultipleChildrenView.getView().childNodes[2];
 	assert.strictEqual(valueView.className, "from child spy");
 });
 
@@ -343,7 +349,7 @@ QUnit.test("testAddAttributesView", function(assert) {
 	fakeView.appendChild(document.createTextNode("fake view"));
 
 	pParentMultipleChildrenView.addAttributesView(fakeView);
-	assert.strictEqual(pParentMultipleChildrenView.getView().childNodes[1], fakeView);
+	assert.strictEqual(pParentMultipleChildrenView.getView().childNodes[2], fakeView);
 });
 
 QUnit.test("testHideShow", function(assert) {

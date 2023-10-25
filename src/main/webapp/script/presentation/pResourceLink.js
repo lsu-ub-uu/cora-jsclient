@@ -40,14 +40,26 @@ var CORA = (function(cora) {
 			my.cPresentation = cPresentation;
 			my.cParentPresentation = cPresentation;
 			my.createBaseViewHolder = createBaseViewHolder;
+			my.addTypeSpecificInfoToViewSpec = addTypeSpecificInfoToViewSpec;
 
 			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
-			parent.init();
+//			parent.init();
 		};
 
-		const createBaseViewHolder = function() {
-			let presentationId = parent.getPresentationId();
+		const createBaseViewHolder = function(presentationIdIn) {
+//			let presentationId = parent.getPresentationId();
+			let presentationId = presentationIdIn; 
 			return CORA.gui.createDivWithClassName("pResourceLink " + presentationId);
+		};
+
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
+			//TODO: test when factory for parent added
+			pVarViewSpec.type = "pResourceLink";
+//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
+//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
+//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+//			
+//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
 		};
 
 		const presentationHasOutputFormat = function() {

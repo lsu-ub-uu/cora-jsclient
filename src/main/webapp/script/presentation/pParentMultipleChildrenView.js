@@ -24,17 +24,19 @@ var CORA = (function(cora) {
 		let out;
 		let view;
 		let valueView;
-		let baseClassName = "pVar " + spec.presentationId;
+//		let baseClassName = "pVar " + spec.presentationId;
+//TODO: test spec.className, or move it to getBaseClassName for children that need it
+		let baseClassName = child.getBaseClassName()+" "+spec.className+" " + spec.presentationId;
 		let info;
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
+			view = CORA.gui.createDivWithClassName(baseClassName);
+			info = createInfo();
+			view.appendChild(info.getButton());
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
-			info = createInfo();
-			view.appendChild(info.getButton());
 		};
 		
 		const possiblyAddLableTextToView = function() {
@@ -123,7 +125,8 @@ var CORA = (function(cora) {
 		
 		const createInfo = function() {
 			let infoSpec = {
-				appendTo: view,
+//				appendTo: view,
+				// "insertAfter" is set to infoButton below
 				afterLevelChange: updateClassName,
 				level1: [{
 					className: "textView",
@@ -134,7 +137,9 @@ var CORA = (function(cora) {
 				}]
 			};
 			possiblyAddLevel2Info(infoSpec);
-			return infoFactory.factor(infoSpec);
+			let newInfo = infoFactory.factor(infoSpec);
+			infoSpec.insertAfter = newInfo.getButton();
+			return newInfo;
 		};
 
 		const possiblyAddLevel2Info = function(infoSpec) {
@@ -233,7 +238,10 @@ var CORA = (function(cora) {
 				view.style.display = "";
 			}
 		};
-		
+		//TODO: test
+		const appendChild = function(child) {
+			view.appendChild(child);
+		};
 		out = Object.freeze({
 			type: "pParentMultipleChildrenView",
 			getDependencies: getDependencies,
@@ -244,6 +252,7 @@ var CORA = (function(cora) {
 			setState: setState,
 			disable: disable,
 			addAttributesView: addAttributesView,
+			appendChild: appendChild,
 			hide: hide,
 			show: show
 		});

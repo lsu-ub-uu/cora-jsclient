@@ -29,6 +29,10 @@ var CORA = (function(cora) {
 			pParentVarView = pParentMultipleChildrenViewFactory.factor(spec, self);
 		};
 		
+		const getBaseClassName = function(){
+			return "pSurroundingContainer";
+		};
+		
 		const createInputElementWithSetValueFunction = function() {
 			let inputNew = document.createElement(spec.inputType);
 			if (spec.inputFormat === "password") {
@@ -80,7 +84,8 @@ var CORA = (function(cora) {
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
 			useStandardOutput: useStandardOutput,
-			createOutputWithSetValueFunction: createOutputWithSetValueFunction
+			createOutputWithSetValueFunction: createOutputWithSetValueFunction,
+			getBaseClassName: getBaseClassName
 		};
 		
 		start();
@@ -95,7 +100,9 @@ var CORA = (function(cora) {
 			disable: pParentVarView.disable,
 			addAttributesView: pParentVarView.addAttributesView,
 			hide: pParentVarView.hide,
-			show: pParentVarView.show
+			show: pParentVarView.show,
+			//TODO: test
+			appendChild: pParentVarView.appendChild
 		});
 	};
 	return cora;

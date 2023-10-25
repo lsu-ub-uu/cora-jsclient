@@ -20,11 +20,20 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pParentMultipleChildren = function(dependencies, spec, my) {
+		const metadataProvider = dependencies.metadataProvider;
+		let presentationId;
+		let child = my;
+//		let cPresentation = spec.cPresentation;
+//TODO: should be spec....
+		let cPresentation = my.cPresentation;
+		
+		
 		const infoFactory = dependencies.infoFactory;
 //		console.log(infoFactory);
 		let path = spec.path;
 		let textProvider = dependencies.textProvider;
-
+		const metadataId = spec.metadataIdUsedInData;
+		
 		let view;
 		let originalClassName;
 		let cMetadataElement;
@@ -37,9 +46,9 @@ var CORA = (function(cora) {
 		let infoButton;
 		let nameInData;
 		let mode = "input";
-		let pAttributes;
+		let pAttributes; 
 
-		const init = function() {
+		const start = function() {
 			cMetadataElement = getMetadataById(my.metadataId);
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 
@@ -49,14 +58,19 @@ var CORA = (function(cora) {
 			defTextId = cMetadataElement.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
 			defText = textProvider.getTranslation(defTextId);
 
+//			console.log("factoredView")
 			let viewSpec = intializeViewSpec();
-			let factoredView = dependencies.pMultipleChildrenViewFactory.factor(viewSpec, my);
+			child.addTypeSpecificInfoToViewSpec(mode, viewSpec);
+			view = dependencies.pMultipleChildrenViewFactory.factor(viewSpec, my);
+//			console.log(view)
+//			console.log(factoredView)
 			
-			view = my.createBaseViewHolder();
+//		console.log("asdfasdf");
+//			view = my.createBaseViewHolder(getPresentationId());
 
-			info = createInfo();
-			infoButton = info.getButton();
-			view.appendChild(infoButton);
+//			info = createInfo();
+//			infoButton = info.getButton();
+//			view.appendChild(infoButton);
 
 			if (my.cPresentation.containsChildWithNameInData("mode")) {
 				mode = my.cPresentation.getFirstAtomicValueByNameInData("mode");
@@ -67,19 +81,19 @@ var CORA = (function(cora) {
 					.getFirstChildByNameInData("childReferences").children;
 				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
-			originalClassName = view.className;
+//			originalClassName = view.className;
 			if ("pSurroundingContainer" !== my.type) {
 				initPAttributes();
 			}
 		};
 
 		const intializeViewSpec = function() {
-			let viewSpec = {
-				info: {
-					text: "tramstext waiting for better in pParentMultipleChildren"
-				}
-			};
-			return viewSpec;
+//			let viewSpec = {
+//				info: {
+//					text: "tramstext waiting for better in pParentMultipleChildren"
+//				}
+//			};
+//			return viewSpec;
 //			console.log("trying to factor view from pParentMultiplieChildren")
 //			console.log("factoredView: ", factoredView)
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
@@ -88,7 +102,8 @@ var CORA = (function(cora) {
 			let defTextId = getTextId(cMetadataElement, "defTextId");
 			defText = textProvider.getTranslation(defTextId);
 
-			let pVarViewSpec = {
+			let viewSpec = {
+				className: getPresentationStyle(),
 				id: path.join(""),
 				mode: mode,
 				info: {
@@ -109,15 +124,43 @@ var CORA = (function(cora) {
 					}
 					]
 				},
-				onblurFunction: onBlur,
-				onkeyupFunction: onkeyup,
+//				onblurFunction: onBlur,
+//				onkeyupFunction: onkeyup,
 			};
-			possiblyAddPresentationInfo(pVarViewSpec);
-			possiblyAddPlaceHolderText(pVarViewSpec);
-			possiblyAddLabelToViewSpec(pVarViewSpec);
+			possiblyAddPresentationInfo(viewSpec);
+//			possiblyAddPlaceHolderText(pVarViewSpec);
+//			possiblyAddLabelToViewSpec(pVarViewSpec);
 			
-			return pVarViewSpec;
+			return viewSpec;
 		};
+		
+		const possiblyAddPresentationInfo = function(pVarViewSpec) {
+		//TODO: remove if
+			if (cPresentation.containsChildWithNameInData("recordInfo")) {
+				addPresentationInfoWhenNotFakePresentationFromAttributes(pVarViewSpec);
+			}
+		};
+		const addPresentationInfoWhenNotFakePresentationFromAttributes = function(pVarViewSpec) {
+			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			pVarViewSpec.presentationId=presentationId;
+			pVarViewSpec.info.technicalInfo.push({
+				text: `presentationId: ${presentationId}`,
+				onclickMethod: openPresentationIdRecord
+			});
+		};
+		
+		const getPresentationStyle = function() {
+			if (my.cPresentation.containsChildWithNameInData("presentationStyle")) {
+				return my.cPresentation.getFirstAtomicValueByNameInData("presentationStyle")+" ";
+			}
+			return "";
+		};
+
+		const getTextId = function(cMetadataElementIn, textNameInData) {
+			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
+		};
+		
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
 			let cPresentationChildRef = CORA.coraData(presentationChildRef);
 			let refId = extractRefId(presentationChildRef);
@@ -442,7 +485,9 @@ var CORA = (function(cora) {
 
 		const initPAttributes = function() {
 			let pAttributesSpec = {
-				addViewToParent: addAttributesView,
+//				addViewToParent: addAttributesView,
+//TODO: test
+				addViewToParent: view.addAttributesView,
 				path: path,
 				mode: mode
 			};
@@ -463,16 +508,56 @@ var CORA = (function(cora) {
 		};
 
 
-		const getView = function() {
-			return view;
+		const openLinkedRecordForLink = function(event, link) {
+			let loadInBackground = "false";
+			if (event.ctrlKey) {
+				loadInBackground = "true";
+			}
+			let openInfo = {
+				readLink: link,
+				loadInBackground: loadInBackground
+			};
+			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};
 
+		const openTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
+		};
+
+		const openDefTextIdRecord = function(event) {
+			openLinkedRecordForLink(event,
+				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
+		};
+
+		const openMetadataIdRecord = function(event) {
+			const metadataRecord = metadataProvider.getMetadataRecordById(spec.metadataIdUsedInData);
+			openLinkedRecordForLink(event, metadataRecord.actionLinks.read);
+		};
+
+		const openPresentationIdRecord = function(event) {
+			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
+			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
+		};
+
+		const getView = function() {
+//			return view;
+			return view.getView();
+		};
+		
+		start();
 		return Object.freeze({
 			type: "pParentMultipleChildren",
 			getPresentationId: getPresentationId,
-			init: init,
+//			init: init,
 			getView: getView,
-			addAttributesView: addAttributesView
+			addAttributesView: addAttributesView,
+			
+			openTextIdRecord: openTextIdRecord,
+			openDefTextIdRecord: openDefTextIdRecord,
+			openMetadataIdRecord: openMetadataIdRecord,
+			openPresentationIdRecord: openPresentationIdRecord,
+			openLinkedRecordForLink: openLinkedRecordForLink,
 		});
 	};
 	return cora;

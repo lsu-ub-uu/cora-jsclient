@@ -24,25 +24,45 @@ var CORA = (function(cora) {
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
 //		let cParentPresentation = cPresentation;
-		let my = {
-			type: "pSurroundingContainer",
-			metadataId: spec.metadataIdUsedInData,
-			cPresentation: cPresentation,
-			cParentPresentation: cParentPresentation
-		};
 		let parent;
 
 		const start = function() {
+			let my = {
+				type: "pSurroundingContainer",
+				metadataId: spec.metadataIdUsedInData,
+				cPresentation: cPresentation,
+				cParentPresentation: cParentPresentation,
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			};
 			my.createBaseViewHolder = createBaseViewHolder;
 			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
-			parent.init();
+//			parent.init();
 		};
 
-		const createBaseViewHolder = function() {
+		const createBaseViewHolder = function(presentationIdIn) {
 			let presentationStyle = getPresentationStyle();
-			let presentationId = parent.getPresentationId();
+//			let presentationId = parent.getPresentationId();
+			let presentationId = presentationIdIn; 
 			return CORA.gui.createSpanWithClassName("pSurroundingContainer " + presentationStyle
 				+ presentationId);
+		};
+
+		
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
+			//TODO: test when factory for parent added
+			pVarViewSpec.type = "container";
+//			console.log(pVarViewSpec)
+//			console.log(pVarViewSpec.info.text)
+			delete pVarViewSpec.info.text;
+//			console.log(pVarViewSpec.info.text)
+//			delete pVarViewSpec.info.defText;
+//			delete pVarViewSpec.info.technicalInfo.metadataId;
+//			delete pVarViewSpec.info.technicalInfo.nameInData;
+//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
+//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
+//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+//			
+//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
 		};
 
 		const getPresentationStyle = function() {

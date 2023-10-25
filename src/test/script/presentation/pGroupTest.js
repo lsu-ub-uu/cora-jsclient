@@ -87,6 +87,31 @@ QUnit.test("testDependencies", function(assert) {
 	assert.strictEqual(pGroup.getDependencies(), this.dependencies);
 });
 
+//QUnit.test("testAddTypeSpecificInfoToViewSpec", function(assert) {
+//	let pGroup = CORA.pGroup(this.dependencies, this.spec);
+//	const child = this.pParentVarFactory.getChild(0);
+//	let viewSpec = {
+//		info:{
+//			technicalInfo:[]
+//		}
+//	};
+//	
+//	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
+//	
+//	let expectedSpec = {
+//		type: "pTextVar",
+//		inputType: "input",
+//		outputFormat: "text",
+//		inputFormat: "text",
+//		info:{
+//			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+//			]
+//		}
+//	};
+//	assert.deepEqual(viewSpec, expectedSpec);
+//});
+
 QUnit.test("testInitInfo", function(assert) {
 	let pGroup = CORA.pGroup(this.dependencies, this.spec);
 	let view = pGroup.getView();

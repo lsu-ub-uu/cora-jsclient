@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 			if(spec.type === "pResourceLink"){
 				return CORA.pResourceLinkView(dependencies, spec);
 			}
-			console.log("factoring pGroupView in pParentMultipleChildrenViewFactory")
+//			console.log("factoring pGroupView in pParentMultipleChildrenViewFactory")
 			return CORA.pGroupView(dependencies, spec);
 		}
 

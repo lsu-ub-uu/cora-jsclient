@@ -24,8 +24,8 @@ var CORA = (function(cora) {
 		let pParentVarView;
 
 		const start = function() {
-			console.log("spec: ",spec)
-			console.log("factoring pParentMultipleView in pSurroundingContainerView")
+//			console.log("spec: ",spec)
+//			console.log("factoring pParentMultipleView in pSurroundingContainerView")
 			pParentVarView = pParentMultipleChildrenViewFactory.factor(spec, self);
 		};
 		

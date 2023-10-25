@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pParentMultipleChildrenTest.js", {
+QUnit.module.only("presentation/pParentMultipleChildrenTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
@@ -26,6 +26,7 @@ QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 		this.standardNoOfChildren = 1;
 		this.pParentMultipleChildren = null;
 		this.path = [];
+		this.pMultipleChildrenViewFactory = CORATEST.standardFactorySpy("pMultipleChildrenViewSpy");
 		
 		this.dependencies = {
 			metadataProvider: new MetadataProviderStub(),
@@ -38,7 +39,7 @@ QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			pNonRepeatingChildRefHandlerFactory: CORATEST
 				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy"),
-			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
+			pMultipleChildrenViewFactory: this.pMultipleChildrenViewFactory
 		};
 
 		this.spec = {
@@ -101,6 +102,85 @@ QUnit.test("testInit", function(assert) {
 	let expectedClassName = 'pParentMultipleChildren pGroup';
 	assert.deepEqual(view.className, expectedClassName);
 });
+
+//QUnit.test("testGetView", function(assert) {
+//	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+//	let spyView = this.pVarViewFactory.getFactored(0);
+//	assert.strictEqual(pParentVar.getView(), spyView.getView());
+//});
+
+QUnit.only("testFactoredViewCorrectlyForInputVariable", function(assert) {
+	this.spec.path = ["one", "two"];
+//	let child = this.createChildSpy();
+	let child = this.my;
+	let pParentVar = CORA.pParentMultipleChildren(this.dependencies, this.spec, child);
+
+	console.log(this.pMultipleChildrenViewFactory)
+	let viewSpy = this.pMultipleChildrenViewFactory.getFactored(0);
+	console.log(viewSpy)
+	assert.deepEqual(viewSpy.type, "pVarViewSpy");
+	let expectedViewSpec = {
+//		label: "Exempel textvariabel",
+//		id: "onetwo",
+//		mode: "input",
+		info: {
+//			defText: "Detta är en exempeldefinition för en textvariabel.",
+//			technicalInfo: [],
+			text: "Exempel textvariabel"
+		},
+//		onblurFunction: pParentVar.onBlur,
+//		onkeyupFunction: pParentVar.onkeyup,
+//		placeholderText: "Skriv din text här",
+//		presentationId: "pVarTextVariableId"
+	};
+	
+//	expectedPVarViewSpec.childExtra = "added by child";
+//	
+//	assert.strictEqual(child.getLastInfoValueForViewMode(),"input");
+//	
+//	expectedPVarViewSpec.info.technicalInfo.push(
+//		{
+//		text: "textId: textVariableIdText",
+//		onclickMethod: pParentVar.openTextIdRecord
+//	}, {
+//		text: "defTextId: textVariableIdDefText",
+//		onclickMethod: pParentVar.openDefTextIdRecord
+//	}, {
+//		text: "metadataId: textVariableId",
+//		onclickMethod: pParentVar.openMetadataIdRecord
+//	}, {
+//		text: "nameInData: textVariableId"
+//	}, {
+//		text: "presentationId: pVarTextVariableId",
+//		onclickMethod: pParentVar.openPresentationIdRecord
+//	});
+	assert.deepEqual(viewSpy.getSpec(), expectedViewSpec);
+});
+
+
+//QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", function(assert) {
+//	this.spec.path = ["one", "two"];
+//	this.spec.cPresentation = CORA.coraData(this.metadataProvider
+//				.getMetadataById("pVarTextVariableIdShowLabelFalse"))
+//	
+//	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+//
+//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+//	assert.strictEqual(pVarViewSpy.getSpec().label, undefined);
+//});
+//
+//QUnit.test("testFactoredViewCorrectlyForInputTextVariableSpecifiedLabelText", function(assert) {
+//	this.spec.path = ["one", "two"];
+//	this.spec.cPresentation = CORA.coraData(this.metadataProvider
+//				.getMetadataById("pVarTextVariableIdSpecifiedLabelText"))
+//	
+//	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+//
+//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+//	assert.strictEqual(pVarViewSpy.getSpec().label, "specifiedLabelText_text");
+//});
+//
+
 
 QUnit.test("testFirstPChildRefHandlerSpec", function(assert) {
 	let pParentMultipleChildren = this.createAndInitPMultipleChildren();

@@ -40,11 +40,6 @@ var CORA = (function(cora) {
 		let pAttributes;
 
 		const init = function() {
-			console.log("trying to factor view from pMultiplieChildren")
-			spec.info = {text: "tramstext waiting for better in pParentMultipleChildren"};
-			let factoredView = dependencies.pMultipleChildrenViewFactory.factor(spec, my);
-			console.log("factoredView: ", factoredView)
-			
 			cMetadataElement = getMetadataById(my.metadataId);
 			nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 
@@ -54,6 +49,9 @@ var CORA = (function(cora) {
 			defTextId = cMetadataElement.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
 			defText = textProvider.getTranslation(defTextId);
 
+			let viewSpec = intializeViewSpec();
+			let factoredView = dependencies.pMultipleChildrenViewFactory.factor(viewSpec, my);
+			
 			view = my.createBaseViewHolder();
 
 			info = createInfo();
@@ -75,6 +73,51 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const intializeViewSpec = function() {
+			let viewSpec = {
+				info: {
+					text: "tramstext waiting for better in pParentMultipleChildren"
+				}
+			};
+			return viewSpec;
+//			console.log("trying to factor view from pParentMultiplieChildren")
+//			console.log("factoredView: ", factoredView)
+			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+			let textId = getTextId(cMetadataElement, "textId");
+			text = textProvider.getTranslation(textId);
+			let defTextId = getTextId(cMetadataElement, "defTextId");
+			defText = textProvider.getTranslation(defTextId);
+
+			let pVarViewSpec = {
+				id: path.join(""),
+				mode: mode,
+				info: {
+					text: text,
+					defText: defText,
+					technicalInfo: [
+					{
+						text: `textId: ${textId}`,
+						onclickMethod: openTextIdRecord
+					}, {
+						text: `defTextId: ${defTextId}`,
+						onclickMethod: openDefTextIdRecord
+					}, {
+						text: `metadataId: ${metadataId}`,
+						onclickMethod: openMetadataIdRecord
+					}, {
+						text: `nameInData: ${nameInData}`,
+					}
+					]
+				},
+				onblurFunction: onBlur,
+				onkeyupFunction: onkeyup,
+			};
+			possiblyAddPresentationInfo(pVarViewSpec);
+			possiblyAddPlaceHolderText(pVarViewSpec);
+			possiblyAddLabelToViewSpec(pVarViewSpec);
+			
+			return pVarViewSpec;
+		};
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
 			let cPresentationChildRef = CORA.coraData(presentationChildRef);
 			let refId = extractRefId(presentationChildRef);

@@ -34,18 +34,19 @@ var CORA = (function(cora) {
 				cParentPresentation: cParentPresentation,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
-			my.createBaseViewHolder = createBaseViewHolder;
-			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
+//			my.createBaseViewHolder = createBaseViewHolder;
+//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
 //			parent.init();
 		};
 
-		const createBaseViewHolder = function(presentationIdIn) {
-			let presentationStyle = getPresentationStyle();
-//			let presentationId = parent.getPresentationId();
-			let presentationId = presentationIdIn; 
-			return CORA.gui.createSpanWithClassName("pSurroundingContainer " + presentationStyle
-				+ presentationId);
-		};
+//		const createBaseViewHolder = function(presentationIdIn) {
+//			let presentationStyle = getPresentationStyle();
+////			let presentationId = parent.getPresentationId();
+//			let presentationId = presentationIdIn; 
+//			return CORA.gui.createSpanWithClassName("pSurroundingContainer " + presentationStyle
+//				+ presentationId);
+//		};
 
 		
 		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
@@ -86,7 +87,8 @@ var CORA = (function(cora) {
 			type: "pSurroundingContainer",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView
+			getView: parent.getView,
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 		});
 
 		parent.getView().modelObject = out;

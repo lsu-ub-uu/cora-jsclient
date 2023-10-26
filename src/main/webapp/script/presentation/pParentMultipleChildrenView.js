@@ -24,13 +24,14 @@ var CORA = (function(cora) {
 		let out;
 		let view;
 		let valueView;
-//		let baseClassName = "pVar " + spec.presentationId;
-//TODO: test spec.className, or move it to getBaseClassName for children that need it
-		let baseClassName = child.getBaseClassName()+" "+spec.className+" " + spec.presentationId;
+		let baseClassName;
 		let info;
 		let state = "ok";
 
 		const start = function() {
+		//		let baseClassName = "pVar " + spec.presentationId;
+		//TODO: test spec.className, or move it to getBaseClassName for children that need it
+			baseClassName = child.getBaseClassName()+" "+spec.className+" " + spec.presentationId;
 			view = CORA.gui.createDivWithClassName(baseClassName);
 			info = createInfo();
 			view.appendChild(info.getButton());

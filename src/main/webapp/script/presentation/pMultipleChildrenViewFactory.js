@@ -24,11 +24,11 @@ var CORA = (function(cora) {
 		};
 		
 		const dependencies = {
-			pParentMultipleChildrenViewFactory: CORA.genericParentFactory("pParentMultipleChildrenView", childDependencies)
+			pParentMultipleChildrenViewFactory: CORA.genericParentFactory("pParentMultipleChildrenView",
+				childDependencies)
 		};
 		
 		function factor(spec) {
-//			if(spec.type === "pSurroundingContainer"){
 			if(spec.type === "container"){
 				return CORA.pSurroundingContainerView(dependencies, spec);
 			}
@@ -36,7 +36,7 @@ var CORA = (function(cora) {
 			if(spec.type === "pResourceLink"){
 				return CORA.pResourceLinkView(dependencies, spec);
 			}
-//			console.log("factoring pGroupView in pParentMultipleChildrenViewFactory")
+			
 			return CORA.pGroupView(dependencies, spec);
 		}
 
@@ -44,7 +44,6 @@ var CORA = (function(cora) {
 			type : "pMultipleChildrenViewFactory",
 			factor : factor
 		});
-//		dependencies.pMultipleChildrenViewFactory = self;
 		return self;
 	};
 	return cora;

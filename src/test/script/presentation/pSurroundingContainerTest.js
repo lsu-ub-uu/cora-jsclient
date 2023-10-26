@@ -74,14 +74,15 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module.only("presentation/pSurroundingContainerTest.js", {
+QUnit.module("presentation/pSurroundingContainerTest.js", {
 	beforeEach: function() {
 		this.getId = function(cData) {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");
 			var id = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			return id;
 		};
-		
+		this.pParentMultipleChildrenFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenSpy");
+			
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		
 		this.fixture = document.getElementById("qunit-fixture");
@@ -96,7 +97,8 @@ QUnit.module.only("presentation/pSurroundingContainerTest.js", {
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			pNonRepeatingChildRefHandlerFactory: CORATEST
 				.standardFactorySpy("pNonRepeatingChildRefHandlerSpy"),
-				pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
+			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy"),
+			pParentMultipleChildrenFactory: this.pParentMultipleChildrenFactory
 		};
 		this.spec = {
 			"metadataIdUsedInData": "groupIdTwoTextChildRepeat1to5",
@@ -110,19 +112,13 @@ QUnit.module.only("presentation/pSurroundingContainerTest.js", {
 });
 
 
-QUnit.only("testInit", function(assert) {
+QUnit.test("testInit", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
 	
 	assert.strictEqual(pSurroundingContainer.type, "pSurroundingContainer");
-//	let view = pGroup.getView();
-//	this.fixture.appendChild(view);
-//
-//	assert.visible(view, "pGroup view should be visible");
-//	let expectedClassName = 'pGroup pgGroupIdOneTextChild';
-//	assert.deepEqual(view.className, expectedClassName);
 });
 
-QUnit.only("testInitParentFactoryCalled", function(assert) {
+QUnit.test("testInitParentFactoryCalled", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
 	
 	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);
@@ -130,7 +126,7 @@ QUnit.only("testInitParentFactoryCalled", function(assert) {
 	
 	assert.strictEqual(child.metadataId, this.spec.metadataIdUsedInData);
 	assert.strictEqual(child.cPresentation, this.spec.cPresentation);
-	assert.strictEqual(child.cParentPresentation, this.spec.cPresentation);
+	assert.strictEqual(child.cParentPresentation, this.spec.cParentPresentation);
 	assert.strictEqual(child.addTypeSpecificInfoToViewSpec, pSurroundingContainer.addTypeSpecificInfoToViewSpec);
 	
 });
@@ -222,14 +218,17 @@ QUnit.test("testNestedSurroundingContainer", function(assert) {
 	this.spec.cParentPresentation = CORA.coraData(this.dependencies.metadataProvider
 		.getMetadataById("pgGroupIdTwoTextChildSurrounding2TextPGroup2"));
 	var pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
-	var view = pSurroundingContainer.getView();
-	this.fixture.appendChild(view);
-
+//	var view = pSurroundingContainer.getView();
+//	this.fixture.appendChild(view);
+//	let viewSpy = this.pParentMultipleChildrenFactory.getFactored(0);
+//	assert.deepEqual(viewSpy.type, "pMultipleChildrenViewSpy");
+	
 	assert.strictEqual(pSurroundingContainer.type, "pSurroundingContainer");
-	assert.deepEqual(view.className, "pSurroundingContainer " + "pTextVariablePlus2SContainer2");
-	assert.ok(view.modelObject === pSurroundingContainer,
-		"modelObject should be a pointer to the javascript object instance");
-	assert.strictEqual(view.childNodes.length, 3);
+//	assert.deepEqual(view.className, "pSurroundingContainer " + "pTextVariablePlus2SContainer2");
+//	assert.ok(view.modelObject === pSurroundingContainer,
+//		"modelObject should be a pointer to the javascript object instance");
+//	assert.strictEqual(view.childNodes.length, 3);
+	assert.strictEqual(viewSpy.getNoOfAddedChildren, 3);
 
 	assert.strictEqual(view.childNodes[1].textContent, "En rubrik");
 

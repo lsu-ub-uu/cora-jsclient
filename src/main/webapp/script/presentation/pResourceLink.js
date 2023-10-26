@@ -22,7 +22,6 @@ var CORA = (function(cora) {
 	cora.pResourceLink = function(dependencies, spec) {
 		let cPresentation = spec.cPresentation;
 
-		let my = {};
 		let parent;
 		let hasOutputFormat;
 		let resourceView;
@@ -35,15 +34,17 @@ var CORA = (function(cora) {
 		};
 
 		const initParent = function() {
+			let my = {};
 			my.metadataId = "metadataGroupForResourceLinkGroup";
-
+				
 			my.cPresentation = cPresentation;
 			my.cParentPresentation = cPresentation;
 			my.createBaseViewHolder = createBaseViewHolder;
 			my.addTypeSpecificInfoToViewSpec = addTypeSpecificInfoToViewSpec;
 
-			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
+//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
 //			parent.init();
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
 		};
 
 		const createBaseViewHolder = function(presentationIdIn) {
@@ -142,7 +143,8 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			handleMsg: handleMsg
+			handleMsg: handleMsg,
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 		});
 		start();
 		return out;

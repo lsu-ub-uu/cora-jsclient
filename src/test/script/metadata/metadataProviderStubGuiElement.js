@@ -62,7 +62,68 @@ function MetadataProviderStubGuiElement() {
 				} ]
 			} ])
 		};
-
+case "pgGroupIdOneTextChildMinimized":
+				return {
+					"name": "presentation",
+					"attributes": {
+						"type": "pGroup"
+					},
+					"children": [createRecordInfoJson(idToGet)].concat([{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataGroup"
+						}, {
+							"name": "linkedRecordId",
+							"value": "groupIdOneTextChildRepeat1to3"
+						}],
+						"name": "presentationOf"
+					}, {
+						"name": "childReferences",
+						"children": [{
+							"name": "childReference",
+							"repeatId": "1",
+							"children": [{
+								"name": "refGroup",
+								"repeatId": "0",
+								"children": [{
+									"name": "ref",
+									"children": [{
+										"name": "linkedRecordType",
+										"value": "presentation"
+									}, {
+										"name": "linkedRecordId",
+										"value": "pVarTextVariableId"
+									}],
+									"attributes": {
+										"type": "presentation"
+									}
+								}]
+							}, {
+								"name": "refGroup",
+								"repeatId": "1",
+								"children": [{
+									"name": "ref",
+									"children": [{
+										"name": "linkedRecordType",
+										"value": "presentation"
+									}, {
+										"name": "linkedRecordId",
+										"value": "pVarTextVariableIdOutput"
+									}],
+									"attributes": {
+										"type": "presentation"
+									}
+								}]
+							}, {
+								"name": "textStyle",
+								"value": "h1TextStyle"
+							}, {
+								"name": "childStyle",
+								"value": "oneChildStyle"
+							}]
+						}]
+					}])
+				};
 		case "childGuiElementLink":
 			return {
 				"name" : "guiElement",

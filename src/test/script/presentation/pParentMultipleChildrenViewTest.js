@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
+QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			infoFactory: CORATEST.infoFactorySpy()
@@ -27,7 +27,7 @@ QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 		this.textIdOnclickMethod = {};
 		this.defTextIdOnclickMethod = {
 			tramas: "trams"
-		};
+		}; 
 		this.spec = {
 			mode: "input",
 //			inputType: "input",

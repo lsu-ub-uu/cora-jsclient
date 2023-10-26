@@ -485,8 +485,6 @@ var CORA = (function(cora) {
 
 		const initPAttributes = function() {
 			let pAttributesSpec = {
-//				addViewToParent: addAttributesView,
-//TODO: test
 				addViewToParent: view.addAttributesView,
 				path: path,
 				mode: mode

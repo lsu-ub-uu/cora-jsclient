@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.pMultipleChildrenViewSpy = function(dependencies, spec) {
 		let addedViews = [];
 		let addedToolViews = [];
-		let showDataF = null;
+		let showData = null;
 		let view = document.createElement("span");
 		let state;
 		let value;
@@ -29,6 +29,8 @@ var CORATEST = (function(coraTest) {
 		let presentationAttributeView = [];
 		let hideCalled = 0;
 		let showCalled = 0;
+		
+		let appendChildren = [];
 
 		const getView = function() {
 			return view;
@@ -89,9 +91,18 @@ var CORATEST = (function(coraTest) {
 		const getShowCalled = function(){
 			return showCalled
 		};
+		
 		const appendChild = function(child){
-			
+			appendChildren.push(child);
 		};
+		const getAppendedChild = function(index) {
+			return appendChildren[index];
+		};
+		const getNoOfAppendedChildren = function(index) {
+			return appendChildren.length;
+		};
+		
+
 
 		return Object.freeze({
 			"type": "pMultipleChildrenViewSpy",
@@ -113,7 +124,10 @@ var CORATEST = (function(coraTest) {
 			getHideCalled: getHideCalled,
 			show: show,
 			getShowCalled: getShowCalled,
-			appendChild: appendChild
+			
+			appendChild: appendChild,
+			getAppendedChild: getAppendedChild,
+			getNoOfAppendedChildren: getNoOfAppendedChildren
 			
 		});
 	};

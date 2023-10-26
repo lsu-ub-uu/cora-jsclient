@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("presentation/pGroupTest.js", {
+QUnit.module("presentation/pGroupTest.js", {
 	beforeEach : function() {
 		this.getId = function(cData) {
 			let recordInfo = cData.getFirstChildByNameInData("recordInfo");
@@ -57,19 +57,13 @@ QUnit.module.only("presentation/pGroupTest.js", {
 	}
 });
 
-QUnit.only("testInit", function(assert) {
+QUnit.test("testInit", function(assert) {
 	let pGroup = CORA.pGroup(this.dependencies, this.spec);
 	
 	assert.strictEqual(pGroup.type, "pGroup");
-//	let view = pGroup.getView();
-//	this.fixture.appendChild(view);
-//
-//	assert.visible(view, "pGroup view should be visible");
-//	let expectedClassName = 'pGroup pgGroupIdOneTextChild';
-//	assert.deepEqual(view.className, expectedClassName);
 });
 
-QUnit.only("testInitParentFactoryCalled", function(assert) {
+QUnit.test("testInitParentFactoryCalled", function(assert) {
 	let pGroup = CORA.pGroup(this.dependencies, this.spec);
 	
 	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);

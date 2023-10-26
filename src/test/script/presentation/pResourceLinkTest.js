@@ -78,7 +78,9 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.newAttachedPResourceLink = CORATEST.attachedPResourceLinkFactory(
 			this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
 			this.jsBookkeeper, this.recordTypeProvider, this.fixture);
-
+		
+		this.pParentMultipleChildrenFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenSpy");
+		
 		this.dependencies = {
 			authTokenHolder: CORATEST.authTokenHolderSpy(),
 			metadataProvider: this.metadataProvider,
@@ -89,7 +91,8 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 			jsBookkeeper: this.jsBookkeeper,
 			recordTypeProvider: this.recordTypeProvider,
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy")
+			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy"),
+			pParentMultipleChildrenFactory: this.pParentMultipleChildrenFactory
 		};
 		this.presentationId = "masterPResLink";
 		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));
@@ -100,6 +103,25 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 			"dataDivider": "systemX"
 		};
 	},
+});
+
+QUnit.test("testInit", function(assert) {
+	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
+	
+	assert.strictEqual(pResourceLink.type, "pResourceLink");
+});
+
+QUnit.test("testInitParentFactoryCalled", function(assert) {
+	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
+	
+	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);
+	let child = this.pParentMultipleChildrenFactory.getChild(0);
+	
+//	assert.strictEqual(child.metadataId, this.spec.metadataIdUsedInData);
+	assert.strictEqual(child.metadataId, "metadataGroupForResourceLinkGroup");
+	assert.strictEqual(child.cPresentation, this.spec.cPresentation);
+	assert.strictEqual(child.cParentPresentation, this.spec.cPresentation);
+	assert.strictEqual(child.addTypeSpecificInfoToViewSpec, pResourceLink.addTypeSpecificInfoToViewSpec);
 });
 
 QUnit.test("testGetDependencies", function(assert) {

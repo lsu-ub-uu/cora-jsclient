@@ -32,7 +32,8 @@ var CORA = (function(cora) {
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
 //console.log("parent")
-			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
+//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
 //			parent.init();
 //console.log(parent)
 		};
@@ -75,7 +76,9 @@ var CORA = (function(cora) {
 			type: "pGroup",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView
+			getView: parent.getView,
+			createBaseViewHolder: createBaseViewHolder,
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 		});
 
 	};

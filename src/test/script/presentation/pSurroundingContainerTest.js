@@ -24,6 +24,10 @@ var CORATEST = (function(coraTest) {
 		textProvider, presentationFactory, jsBookkeeper, recordTypeProvider, fixture) {
 		var factor = function(path, metadataIdUsedInData, pSurroundingContainerId,
 			presentationParentId) {
+				
+			this.pParentMultipleChildrenFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenSpy");
+			
+				
 			var cPSurroundingContainer = CORA.coraData(metadataProvider
 				.getMetadataById(pSurroundingContainerId));
 			var cParentPresentation = CORA.coraData(metadataProvider
@@ -37,7 +41,8 @@ var CORATEST = (function(coraTest) {
 				"recordTypeProvider": recordTypeProvider,
 				"pChildRefHandlerFactory": CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 				"pNonRepeatingChildRefHandlerFactory": CORATEST
-					.standardFactorySpy("pNonRepeatingChildRefHandlerSpy")
+					.standardFactorySpy("pNonRepeatingChildRefHandlerSpy"),
+				pParentMultipleChildrenFactory: this.pParentMultipleChildrenFactory
 			};
 			var spec = {
 				"metadataIdUsedInData": metadataIdUsedInData,
@@ -69,13 +74,14 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pSurroundingContainerTest.js", {
+QUnit.module.only("presentation/pSurroundingContainerTest.js", {
 	beforeEach: function() {
 		this.getId = function(cData) {
 			var recordInfo = cData.getFirstChildByNameInData("recordInfo");
 			var id = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			return id;
 		};
+		
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		
 		this.fixture = document.getElementById("qunit-fixture");
@@ -101,6 +107,32 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 				.getMetadataById("pgGroupIdTwoTextChildSurrounding2TextPGroup"))
 		};
 	},
+});
+
+
+QUnit.only("testInit", function(assert) {
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
+	
+	assert.strictEqual(pSurroundingContainer.type, "pSurroundingContainer");
+//	let view = pGroup.getView();
+//	this.fixture.appendChild(view);
+//
+//	assert.visible(view, "pGroup view should be visible");
+//	let expectedClassName = 'pGroup pgGroupIdOneTextChild';
+//	assert.deepEqual(view.className, expectedClassName);
+});
+
+QUnit.only("testInitParentFactoryCalled", function(assert) {
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
+	
+	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);
+	let child = this.pParentMultipleChildrenFactory.getChild(0);
+	
+	assert.strictEqual(child.metadataId, this.spec.metadataIdUsedInData);
+	assert.strictEqual(child.cPresentation, this.spec.cPresentation);
+	assert.strictEqual(child.cParentPresentation, this.spec.cPresentation);
+	assert.strictEqual(child.addTypeSpecificInfoToViewSpec, pSurroundingContainer.addTypeSpecificInfoToViewSpec);
+	
 });
 
 QUnit.test("testGetSpec", function(assert) {

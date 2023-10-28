@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -23,54 +23,22 @@ var CORA = (function(cora) {
 		let spec = specIn;
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
-//		let cParentPresentation = cPresentation;
 		let parent;
 
 		const start = function() {
 			let my = {
 				type: "pSurroundingContainer",
 				metadataId: spec.metadataIdUsedInData,
-				cPresentation: cPresentation,
-				cParentPresentation: cParentPresentation,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
-//			my.createBaseViewHolder = createBaseViewHolder;
-//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
 			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
-//			parent.init();
 		};
 
-//		const createBaseViewHolder = function(presentationIdIn) {
-//			let presentationStyle = getPresentationStyle();
-////			let presentationId = parent.getPresentationId();
-//			let presentationId = presentationIdIn; 
-//			return CORA.gui.createSpanWithClassName("pSurroundingContainer " + presentationStyle
-//				+ presentationId);
-//		};
-
-		
-		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
-			//TODO: test when factory for parent added
-			pVarViewSpec.type = "container";
-//			console.log(pVarViewSpec)
-//			console.log(pVarViewSpec.info.text)
-			delete pVarViewSpec.info.text;
-//			console.log(pVarViewSpec.info.text)
-//			delete pVarViewSpec.info.defText;
-//			delete pVarViewSpec.info.technicalInfo.metadataId;
-//			delete pVarViewSpec.info.technicalInfo.nameInData;
-//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
-//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
-//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
-//			
-//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
-		};
-
-		const getPresentationStyle = function() {
-			if (cPresentation.containsChildWithNameInData("presentationStyle")) {
-				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle") + " ";
-			}
-			return "";
+		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
+			viewSpec.type = "container";
+			viewSpec.info.text = "surroundingContainer";
+			viewSpec.info.defText = "surroundingContainer";
+			viewSpec.info.technicalInfo.splice(0, 4); 
 		};
 
 		const getSpec = function() {
@@ -87,8 +55,7 @@ var CORA = (function(cora) {
 			type: "pSurroundingContainer",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView,
-			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			getView: parent.getView
 		});
 
 		parent.getView().modelObject = out;

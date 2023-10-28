@@ -46,6 +46,9 @@ var CORATEST = (function(coraTest) {
 		const show = function(){
 			return "fake show from pParentMultipleChildrenViewSpy";
 		};
+		const appendChild = function(){
+			return "fake appendChild from pParentMultipleChildrenViewSpy";
+		};
 
 		return Object.freeze({
 			type: "pParentMultipleChildrenViewSpy",
@@ -57,7 +60,8 @@ var CORATEST = (function(coraTest) {
 			disable: disable,
 			addAttributesView: addAttributesView,
 			hide: hide,
-			show: show
+			show: show,
+			appendChild:appendChild
 		});
 	};
 	return coraTest;

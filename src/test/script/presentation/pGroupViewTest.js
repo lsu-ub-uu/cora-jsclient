@@ -79,6 +79,8 @@ QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
 	assert.strictEqual(pGroupView.addAttributesView, pParentVarView.addAttributesView);
 	assert.strictEqual(pGroupView.hide, pParentVarView.hide);
 	assert.strictEqual(pGroupView.show, pParentVarView.show);
+	assert.ok(pGroupView.appendChild);
+	assert.strictEqual(pGroupView.appendChild, pParentVarView.appendChild);
 });
 
 QUnit.test("testGetBaseClassName", function(assert) {

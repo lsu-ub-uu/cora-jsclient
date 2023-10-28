@@ -29,9 +29,7 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-		//		let baseClassName = "pVar " + spec.presentationId;
-		//TODO: test spec.className, or move it to getBaseClassName for children that need it
-			baseClassName = child.getBaseClassName()+" "+spec.className+" " + spec.presentationId;
+			baseClassName = spec.className;
 			view = CORA.gui.createDivWithClassName(baseClassName);
 			info = createInfo();
 			view.appendChild(info.getButton());
@@ -126,7 +124,6 @@ var CORA = (function(cora) {
 		
 		const createInfo = function() {
 			let infoSpec = {
-//				appendTo: view,
 				// "insertAfter" is set to infoButton below
 				afterLevelChange: updateClassName,
 				level1: [{
@@ -239,10 +236,11 @@ var CORA = (function(cora) {
 				view.style.display = "";
 			}
 		};
-		//TODO: test
+
 		const appendChild = function(child) {
 			view.appendChild(child);
 		};
+		
 		out = Object.freeze({
 			type: "pParentMultipleChildrenView",
 			getDependencies: getDependencies,

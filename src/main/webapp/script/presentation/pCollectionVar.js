@@ -102,11 +102,8 @@ var CORA = (function(cora) {
 			let item = getMetadataById(itemRefId);
 			let value = item.getFirstAtomicValueByNameInData("nameInData");
 
-			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
-			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-
+			let textIdToTranslate = item.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
 			let optionText = textProvider.getTranslation(textIdToTranslate);
-
 			return [optionText, value];
 		};
 		

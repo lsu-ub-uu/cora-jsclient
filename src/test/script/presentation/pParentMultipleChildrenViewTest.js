@@ -18,8 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-
-QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
+QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			infoFactory: CORATEST.infoFactorySpy()
@@ -33,6 +32,7 @@ QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
 //			inputType: "input",
 //			outputFormat: "text",
 			presentationId: "somePresentationId",
+			className: "someClassName",
 			label: "Some label text",
 			id: "someId",
 			info: {
@@ -117,12 +117,11 @@ QUnit.test("getView", function(assert) {
 
 QUnit.test("testClassName", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
+	assert.strictEqual(view.className, "someClassName");
 });
 
 QUnit.test("testInfoSpec", function(assert) {
 	let expectedSpec = {
-//		appendTo: {},
 		level1: [{
 			className: "textView",
 			text: "someText"
@@ -185,33 +184,33 @@ QUnit.test("testActiveInfoShownInClassName", function(assert) {
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let view = this.getView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
+	assert.strictEqual(view.className, "someClassName");
 	infoSpy.setInfoLevel(0);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
+	assert.strictEqual(view.className, "someClassName");
 	infoSpy.setInfoLevel(1);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId infoActive");
+	assert.strictEqual(view.className, "someClassName infoActive");
 	infoSpy.setInfoLevel(0);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
+	assert.strictEqual(view.className, "someClassName");
 });
 
 QUnit.test("testStateShownInClassName", function(assert) {
 	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
 	let view = this.getView();
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId");
+	assert.strictEqual(view.className, "someClassName");
 	pParentMultipleChildrenView.setState("error");
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId error");
+	assert.strictEqual(view.className, "someClassName error");
 	pParentMultipleChildrenView.setState("errorStillFocused");
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId errorStillFocused");
+	assert.strictEqual(view.className, "someClassName errorStillFocused");
 	pParentMultipleChildrenView.setState("error");
 	infoSpy.setInfoLevel(1);
 	pParentMultipleChildrenView.updateClassName();
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId error infoActive");
+	assert.strictEqual(view.className, "someClassName error infoActive");
 	pParentMultipleChildrenView.setState("ok");
-	assert.strictEqual(view.className, "fakeBaseClassName somePresentationId infoActive");
+	assert.strictEqual(view.className, "someClassName infoActive");
 });
 
 QUnit.test("testLabelInInput", function(assert) {

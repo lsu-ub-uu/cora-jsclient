@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,46 +20,19 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pGroup = function(dependencies, spec) {
-		let cPresentation = spec.cPresentation;
 		let parent;
 
 		const start = function() {
 			let my = {
+				type: "pGroup",
 				metadataId: spec.metadataIdUsedInData,
-				cPresentation: cPresentation,
-				cParentPresentation: cPresentation,
-				createBaseViewHolder: createBaseViewHolder,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
-//console.log("parent")
 			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
-//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
-//			parent.init();
-//console.log(parent)
 		};
 
-		const createBaseViewHolder = function(presentationIdIn) {
-			let presentationStyle = getPresentationStyle();
-//			let presentationId = parent.getPresentationId();
-			let presentationId = presentationIdIn; 
-			return CORA.gui.createDivWithClassName(`pGroup ${presentationStyle}${presentationId}`);
-		};
-
-		const getPresentationStyle = function() {
-			if (cPresentation.containsChildWithNameInData("presentationStyle")) {
-				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle")+" ";
-			}
-			return "";
-		};
-		
-		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
-			//TODO: test when factory for parent added
-			pVarViewSpec.type = "pGroup";
-//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
-//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
-//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
-//			
-//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
+			viewSpec.type = "pGroup";
 		};
 		
 		const getSpec = function() {
@@ -76,9 +49,7 @@ var CORA = (function(cora) {
 			type: "pGroup",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView,
-			createBaseViewHolder: createBaseViewHolder,
-			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			getView: parent.getView
 		});
 
 	};

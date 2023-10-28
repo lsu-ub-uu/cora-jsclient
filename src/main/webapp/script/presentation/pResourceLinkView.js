@@ -24,8 +24,6 @@ var CORA = (function(cora) {
 		let pParentVarView;
 
 		const start = function() {
-//			console.log("spec: ",spec)
-//			console.log("factoring pParentMultipleView in pResourceLinkView")
 			pParentVarView = pParentMultipleChildrenViewFactory.factor(spec, self);
 		};
 		
@@ -101,7 +99,6 @@ var CORA = (function(cora) {
 			addAttributesView: pParentVarView.addAttributesView,
 			hide: pParentVarView.hide,
 			show: pParentVarView.show,
-			//TODO: test
 			appendChild: pParentVarView.appendChild
 		});
 	};

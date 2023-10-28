@@ -1,7 +1,7 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
-*
+ * Copyright 2017, 2023 Olov McKie
+ *
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
-		let cPresentation = spec.cPresentation;
+		const cPresentation = spec.cPresentation;
 
 		let parent;
 		let hasOutputFormat;
@@ -34,33 +34,17 @@ var CORA = (function(cora) {
 		};
 
 		const initParent = function() {
-			let my = {};
-			my.metadataId = "metadataGroupForResourceLinkGroup";
-				
-			my.cPresentation = cPresentation;
-			my.cParentPresentation = cPresentation;
-			my.createBaseViewHolder = createBaseViewHolder;
-			my.addTypeSpecificInfoToViewSpec = addTypeSpecificInfoToViewSpec;
+			let my = {
+				type: "pResourceLink",
+				metadataId: "metadataGroupForResourceLinkGroup",
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			};
 
-//			parent = CORA.pParentMultipleChildren(dependencies, spec, my);
-//			parent.init();
 			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
 		};
 
-		const createBaseViewHolder = function(presentationIdIn) {
-//			let presentationId = parent.getPresentationId();
-			let presentationId = presentationIdIn; 
-			return CORA.gui.createDivWithClassName("pResourceLink " + presentationId);
-		};
-
-		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
-			//TODO: test when factory for parent added
-			pVarViewSpec.type = "pResourceLink";
-//			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
-//			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
-//			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
-//			
-//			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
+			viewSpec.type = "pResourceLink";
 		};
 
 		const presentationHasOutputFormat = function() {
@@ -126,10 +110,6 @@ var CORA = (function(cora) {
 			setInfoInLinkedResourceView(dataFromMsg);
 		};
 
-		const getView = function() {
-			return parent.getView();
-		};
-
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -138,15 +118,14 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+		start();
 		let out = Object.freeze({
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView,
-			handleMsg: handleMsg,
-			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			getView: parent.getView,
+			handleMsg: handleMsg
 		});
-		start();
 		return out;
 	};
 	return cora;

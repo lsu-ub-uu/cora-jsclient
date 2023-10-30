@@ -23,7 +23,6 @@ var CORA = (function(cora) {
 		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
-		let valueView;
 		let baseClassName;
 		let info;
 		let state = "ok";
@@ -33,93 +32,19 @@ var CORA = (function(cora) {
 			view = CORA.gui.createDivWithClassName(baseClassName);
 			info = createInfo();
 			view.appendChild(info.getButton());
-			possiblyAddLableTextToView();
-			valueView = createValueView();
-			view.appendChild(valueView);
+			possiblyAddHeadlineTextToView();
 		};
 		
-		const possiblyAddLableTextToView = function() {
-			if(spec.label){
-				if(modeIsInput()){
-					addLabelForInput();
-				}else{
-					addLabelForOutput();
-				}
+		const possiblyAddHeadlineTextToView = function() {
+			if(spec.headline){
+				addHeadline();
 			}
 		};
 		
-		const modeIsInput = function(){
-			return (spec.mode === "input");
-		};
-		
-		const addLabelForInput = function(){
-			let label = document.createElement("label");
-			view.appendChild(label);
-			label.appendChild(document.createTextNode(spec.label));
-			label.htmlFor = spec.id;
-		};
-
-		const addLabelForOutput = function(){
-			let label = CORA.gui.createSpanWithClassName("label");
-			view.appendChild(label);
-			label.appendChild(document.createTextNode(spec.label));
-		};
-		
-		const createValueView = function() {
-			if (modeIsInput()) {
-				return createInput();
-			}
-			return createOutput();
-		};
-
-		const createInput = function() {
-			valueView = createInputElement();
-			valueView.id = spec.id;
-			possiblyAddOnkeyupEvent(valueView);
-			possiblyAddOnblurEvent(valueView);
-			possiblyAddPlaceholderText(valueView);
-			return valueView;
-		};
-
-		const createInputElement = function() {
-			return child.createInputElementWithSetValueFunction();
-		};
-
-		const possiblyAddOnkeyupEvent = function(valueViewIn) {
-			if (spec.onkeyupFunction !== undefined) {
-				valueViewIn.onkeyup = function() {
-					spec.onkeyupFunction(valueViewIn.value);
-				};
-			}
-		};
-
-		const possiblyAddOnblurEvent = function(valueViewIn) {
-			if (spec.onblurFunction !== undefined) {
-				valueViewIn.onblur = function() {
-					spec.onblurFunction(valueViewIn.value);
-				};
-			}
-		};
-
-		const possiblyAddPlaceholderText = function(inputNew) {
-			if (spec.placeholderText !== undefined) {
-				inputNew.placeholder = spec.placeholderText;
-			}
-		};
-
-		const createOutput = function() {
-			if(child.useStandardOutput()){
-				return createOutputText();
-			}
-			return child.createOutputWithSetValueFunction();
-		};
-
-		const createOutputText = function() {
-			let outputNew = CORA.gui.createSpanWithClassName("value");
-			outputNew.setValue = function(value) {
-				outputNew.textContent = value;
-			};
-			return outputNew;
+		const addHeadline = function(){
+			let headline = CORA.gui.createSpanWithClassName("headline");
+			view.appendChild(headline);
+			headline.appendChild(document.createTextNode(spec.headline));
 		};
 		
 		const createInfo = function() {
@@ -207,21 +132,13 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
-		const setValue = function(value) {
-			valueView.setValue(value);
-		};
-
 		const setState = function(stateIn) {
 			state = stateIn;
 			updateClassName();
 		};
 
-		const disable = function() {
-			valueView.disabled = true;
-		};
-
 		const addAttributesView = function(attributesView) {
-			view.insertBefore(attributesView, valueView);
+			view.appendChild(attributesView);
 		};
 		
 		const hide = function(element) {
@@ -246,10 +163,8 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			setValue: setValue,
 			updateClassName: updateClassName,
 			setState: setState,
-			disable: disable,
 			addAttributesView: addAttributesView,
 			appendChild: appendChild,
 			hide: hide,

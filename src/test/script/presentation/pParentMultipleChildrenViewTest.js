@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
+QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			infoFactory: CORATEST.infoFactorySpy()
@@ -29,11 +29,9 @@ QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 		}; 
 		this.spec = {
 			mode: "input",
-//			inputType: "input",
-//			outputFormat: "text",
 			presentationId: "somePresentationId",
 			className: "someClassName",
-			label: "Some label text",
+			headline: "Some headline text",
 			id: "someId",
 			info: {
 				text: "someText",
@@ -59,10 +57,7 @@ QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 		this.getView = function() {
 			return this.getpParentMultipleChildrenView().getView();
 		};
-		this.getValueView = function() {
-			return this.getView().childNodes[2];
-		};
-		
+
 		this.createChildSpy = function (){
 			const createInputElementWithSetValueFunction = function(){
 				const valueView = document.createElement("input");
@@ -213,133 +208,18 @@ QUnit.test("testStateShownInClassName", function(assert) {
 	assert.strictEqual(view.className, "someClassName infoActive");
 });
 
-QUnit.test("testLabelInInput", function(assert) {
-	let label = this.getView().childNodes[1];
-	assert.strictEqual(label.nodeName, "LABEL");
-	assert.strictEqual(label.textContent, "Some label text");
-	assert.strictEqual(label.htmlFor, "someId");
-	assert.strictEqual(this.getView().childNodes.length, 3);
-});
-
-QUnit.test("testLabelInOutput", function(assert) {
+QUnit.test("testHeadlineInOutput", function(assert) {
 	this.spec.mode = "output";
-	let label = this.getView().childNodes[1];
-	assert.strictEqual(label.nodeName, "SPAN");
-	assert.strictEqual(label.className, "label");
-	assert.strictEqual(label.textContent, "Some label text");
-	assert.strictEqual(this.getView().childNodes.length, 3);
-});
-
-QUnit.test("testNoLabel", function(assert) {
-	this.spec.label = undefined;
+	let headline = this.getView().childNodes[1];
+	assert.strictEqual(headline.nodeName, "SPAN");
+	assert.strictEqual(headline.className, "headline");
+	assert.strictEqual(headline.textContent, "Some headline text");
 	assert.strictEqual(this.getView().childNodes.length, 2);
 });
 
-QUnit.test("testInput", function(assert) {
-	let valueView = this.getValueView();
-	assert.strictEqual(valueView.nodeName, "INPUT");
-	assert.strictEqual(valueView.type, "text");
-	assert.strictEqual(valueView.id, "someId");
-});
-
-QUnit.test("testInputPlaceholder", function(assert) {
-	this.spec.placeholderText = "placeholderText";
-	let valueView = this.getValueView();
-	assert.strictEqual(valueView.placeholder, "placeholderText");
-});
-
-QUnit.test("testInputOnblur", function(assert) {
-	let valueFromView = "";
-	this.spec.onblurFunction = function(value) {
-		valueFromView = value;
-	};
-
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	pParentMultipleChildrenView.setValue("a Value");
-	CORATESTHELPER.simulateBlur(this.getValueView());
-	assert.strictEqual(valueFromView, "a Value");
-});
-
-QUnit.test("testInputOnblurNotSet", function(assert) {
-	let valueFromView = "";
-
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	pParentMultipleChildrenView.setValue("a Value");
-	CORATESTHELPER.simulateBlur(this.getValueView());
-	assert.strictEqual(valueFromView, "");
-});
-
-QUnit.test("testInputOnkeyup", function(assert) {
-	let valueFromView = "";
-	this.spec.onkeyupFunction = function(value) {
-		valueFromView = value;
-	};
-
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	pParentMultipleChildrenView.setValue("a Value");
-
-	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
-
-	assert.strictEqual(valueFromView, "a Value");
-});
-
-QUnit.test("testInputOnkeyupNotSet", function(assert) {
-	let valueFromView = "";
-
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	pParentMultipleChildrenView.setValue("a Value");
-
-	CORATESTHELPER.simulateKeyup(this.getValueView(), "a");
-
-	assert.strictEqual(valueFromView, "");
-});
-
-QUnit.test("testOutputText", function(assert) {
-	this.spec.mode = "output";
-	let valueView = this.getValueView();
-	assert.strictEqual(valueView.nodeName, "SPAN");
-	assert.strictEqual(valueView.className, "value");
-});
-
-QUnit.test("testOutputNotStandard", function(assert) {
-	let child = this.createChildSpy();
-	child.useStandardOutput = function(){
-		return false;
-	};
-	this.spec.mode = "output";
-
-	let pParentMultipleChildrenView = CORA.pParentMultipleChildrenView(this.dependencies, this.spec, child);
-
-	let valueView = pParentMultipleChildrenView.getView().childNodes[2];
-	assert.strictEqual(valueView.className, "from child spy");
-});
-
-QUnit.test("testSetValueInput", function(assert) {
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	let valueView = this.getValueView();
-
-	assert.strictEqual(valueView.value, "");
-	pParentMultipleChildrenView.setValue("a Value");
-	assert.strictEqual(valueView.value, "a Value");
-});
-
-QUnit.test("testSetValueOutputText", function(assert) {
-	this.spec.mode = "output";
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	let valueView = this.getValueView();
-
-	assert.strictEqual(valueView.innerHTML, "");
-	pParentMultipleChildrenView.setValue("a Value");
-	assert.strictEqual(valueView.innerHTML, "a Value");
-});
-
-QUnit.test("testDisableInput", function(assert) {
-	let pParentMultipleChildrenView = this.getpParentMultipleChildrenView();
-	let valueView = this.getValueView();
-
-	assert.strictEqual(valueView.disabled, false);
-	pParentMultipleChildrenView.disable();
-	assert.strictEqual(valueView.disabled, true);
+QUnit.test("testNoHeadline", function(assert) {
+	this.spec.headline = undefined;
+	assert.strictEqual(this.getView().childNodes.length, 1);
 });
 
 QUnit.test("testAddAttributesView", function(assert) {

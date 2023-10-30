@@ -435,17 +435,11 @@ var CORA = (function(cora) {
 			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
 		};
 
-		const getView = function() {
-//			return view;
-			return view.getView();
-		};
-		
 		start();
 		return Object.freeze({
 			type: "pParentMultipleChildren",
 			getPresentationId: getPresentationId,
-//			init: init,
-			getView: getView,
+			getView: view.getView,
 			addAttributesView: addAttributesView,
 			
 			openTextIdRecord: openTextIdRecord,

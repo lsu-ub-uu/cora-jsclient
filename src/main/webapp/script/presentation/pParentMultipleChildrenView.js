@@ -138,7 +138,11 @@ var CORA = (function(cora) {
 		};
 
 		const addAttributesView = function(attributesView) {
-			view.appendChild(attributesView);
+			if(spec.headline){
+				view.childNodes[1].after(attributesView);
+			}else{
+				view.childNodes[0].after(attributesView);
+			}
 		};
 		
 		const hide = function(element) {

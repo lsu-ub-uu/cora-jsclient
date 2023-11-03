@@ -123,6 +123,8 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 
 	let expectedViewSpec ={
 		className: "someChildType pgGroupIdOneTextChildMinimized",
+		headline: "groupIdOneTextChildText",
+	  	headlineLevel: "h2",
 	  	id: "onetwo",
 	  	info: {
 	    	defText: "groupIdOneTextChildDefText",
@@ -889,7 +891,6 @@ QUnit.test("testNestedSurroundingContainer", function(assert) {
 	let factoredSpec = this.dependencies.pNonRepeatingChildRefHandlerFactory.getSpec(0);
 	assert.deepEqual(factoredSpec.parentPath, this.spec.path);
 
-//	assert.strictEqual(this.getId(factoredSpec.cParentMetadata), "groupIdTwoTextChildRepeat1to5");
 	assert.strictEqual(factoredSpec.parentMetadataId, "groupIdTwoTextChildRepeat1to5");
 	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pTextVariablePlus2SContainer");
 	assert.strictEqual(this.getId(factoredSpec.cParentPresentation), "pgGroupIdTwoTextChildSurrounding2TextPGroup2");
@@ -907,6 +908,8 @@ QUnit.test("testGetInfoShowsMetadataIdUsedInDataIsUsedAndNotPresentationOf", fun
 
 	let expectedViewSpec ={
 		className: "someChildType pgGroupIdOneTextChild",
+		headline: "specifiedHeadlineText_text",
+	  	headlineLevel: "h3",
 	  	id: "onetwo",
 	  	info: {
 	    	defText: "groupIdOneTextChild2DefText",

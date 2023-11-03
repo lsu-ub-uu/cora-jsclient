@@ -39,8 +39,14 @@ var CORA = (function(cora) {
 			viewSpec.info.text = "surroundingContainer";
 			viewSpec.info.defText = "surroundingContainer";
 			viewSpec.info.technicalInfo.splice(0, 4); 
+			removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines(viewSpec);
 		};
-
+		
+		const removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines = function(viewSpec) {
+			viewSpec.headline = undefined;
+			viewSpec.headlineLevel = undefined;
+		};
+		
 		const getSpec = function() {
 			return spec;
 		};

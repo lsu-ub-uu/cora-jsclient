@@ -26,13 +26,14 @@ var CORA = (function(cora) {
 		let baseClassName;
 		let info;
 		let state = "ok";
-
+		let headline;
+		
 		const start = function() {
 			baseClassName = spec.className;
 			view = CORA.gui.createDivWithClassName(baseClassName);
+			possiblyAddHeadlineTextToView();
 			info = createInfo();
 			view.appendChild(info.getButton());
-			possiblyAddHeadlineTextToView();
 		};
 		
 		const possiblyAddHeadlineTextToView = function() {
@@ -42,7 +43,11 @@ var CORA = (function(cora) {
 		};
 		
 		const addHeadline = function(){
-			let headline = CORA.gui.createSpanWithClassName("headline");
+			let level = "h2";
+			if(spec.headlineLevel){
+				level = spec.headlineLevel;
+			}
+			headline = document.createElement(level);
 			view.appendChild(headline);
 			headline.appendChild(document.createTextNode(spec.headline));
 		};
@@ -61,7 +66,11 @@ var CORA = (function(cora) {
 			};
 			possiblyAddLevel2Info(infoSpec);
 			let newInfo = infoFactory.factor(infoSpec);
-			infoSpec.insertAfter = newInfo.getButton();
+			if(spec.headline){
+				infoSpec.insertAfter = headline;
+			} else {
+				infoSpec.insertAfter = newInfo.getButton();
+			}					
 			return newInfo;
 		};
 

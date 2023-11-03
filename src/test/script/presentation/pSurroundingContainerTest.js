@@ -80,6 +80,8 @@ QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(as
 	
 	let spec ={
 		className: "someChildType pgGroupIdOneTextChildMinimized",
+		headline: "Headline",
+		headlineLevel: "h5",
 	  	id: "onetwo",
 	  	info: {
 	    	defText: "groupIdOneTextChildDefText",
@@ -115,6 +117,9 @@ QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(as
 	assert.strictEqual(spec.type, "container");
 	assert.strictEqual(spec.info.text, "surroundingContainer");
 	assert.strictEqual(spec.info.defText, "surroundingContainer");
+	
+	assert.strictEqual(spec.headline, undefined);
+	assert.strictEqual(spec.headlineLevel, undefined);
 	
 	assert.strictEqual(spec.info.technicalInfo.length, 1);
 	assert.deepEqual(spec.info.technicalInfo[0], {

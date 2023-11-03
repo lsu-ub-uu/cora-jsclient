@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 		
 		let mode = "input";
 		let pAttributes; 
+		let text;
 
 		const start = function() {
 			cMetadataElement = getMetadataById(child.metadataId);
@@ -60,7 +61,7 @@ var CORA = (function(cora) {
 		const intializeViewSpec = function() {
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
-			let text = textProvider.getTranslation(textId);
+			text = textProvider.getTranslation(textId);
 			let defTextId = getTextId(cMetadataElement, "defTextId");
 			let defText = textProvider.getTranslation(defTextId);
 
@@ -90,15 +91,40 @@ var CORA = (function(cora) {
 						}
 					]
 				},
-//				onblurFunction: onBlur,
-//				onkeyupFunction: onkeyup,
 			};
-//			possiblyAddPlaceHolderText(pVarViewSpec);
-//			possiblyAddLabelToViewSpec(pVarViewSpec);
+			possiblyAddHeadlineToViewSpec(viewSpec);
 			
 			return viewSpec;
 		};
 		
+		const possiblyAddHeadlineToViewSpec = function(viewSpec){
+			if(headlineShouldBeShown()){
+				addHeadlineToViewSpec(viewSpec);
+			}
+		};
+		
+		const headlineShouldBeShown = function (){
+			if(!cPresentation.containsChildWithNameInData("showHeadline")){
+				return true;
+			}
+			return (cPresentation.getFirstAtomicValueByNameInData("showHeadline") !== "false");
+		};
+		
+		const addHeadlineToViewSpec = function(viewSpec){
+			if (cPresentation.containsChildWithNameInData("specifiedHeadlineText")) {
+				let specifiedHeadlineTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedHeadlineText");
+				let specifiedHeadlineText = textProvider.getTranslation(specifiedHeadlineTextId);
+				viewSpec.headline = specifiedHeadlineText;
+			}else{
+				viewSpec.headline = text;
+			}
+			if (cPresentation.containsChildWithNameInData("specifiedHeadlineLevel")) {
+				viewSpec.headlineLevel = cPresentation.getFirstAtomicValueByNameInData("specifiedHeadlineLevel");
+			}else{
+				viewSpec.headlineLevel = "h2";
+			}
+		};
+
 		const getClassName = function(){
 			let possiblePresentationStyle = getPresentationStyle();
 			return child.type +" "+possiblePresentationStyle + presentationId;

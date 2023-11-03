@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
+QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			infoFactory: CORATEST.infoFactorySpy()
@@ -32,6 +32,7 @@ QUnit.module.only("presentation/pParentMultipleChildrenViewTest.js", {
 			presentationId: "somePresentationId",
 			className: "someClassName",
 			headline: "Some headline text",
+			headlineLevel: "h2",
 			id: "someId",
 			info: {
 				text: "someText",
@@ -142,7 +143,7 @@ QUnit.test("testInfoSpec", function(assert) {
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
-	assert.strictEqual(usedSpec.insertAfter, infoSpy.getButton());
+	assert.strictEqual(usedSpec.insertAfter, pParentMultipleChildrenView.getView().childNodes[0]);
 	assert.strictEqual(usedSpec.afterLevelChange, pParentMultipleChildrenView.updateClassName);
 	assert.strictEqual(usedSpec.level2[0].onclickMethod, this.textIdOnclickMethod);
 	assert.strictEqual(usedSpec.level2[1].onclickMethod, this.defTextIdOnclickMethod);
@@ -151,7 +152,7 @@ QUnit.test("testInfoSpec", function(assert) {
 });
 QUnit.test("testInfoButtonAddedToView", function(assert) {
 	let view = this.getView();
-	assert.strictEqual(view.childNodes[0].className, "infoButtonSpy");
+	assert.strictEqual(view.childNodes[1].className, "infoButtonSpy");
 
 });
 
@@ -172,7 +173,8 @@ QUnit.test("testInfoSpecNoTechnicalPart", function(assert) {
 	let infoSpy = this.dependencies.infoFactory.getFactored(0);
 	let usedSpec = infoSpy.getSpec();
 	assert.stringifyEqual(usedSpec, expectedSpec);
-	assert.strictEqual(usedSpec.insertAfter, infoSpy.getButton());
+	assert.strictEqual(usedSpec.insertAfter, pParentMultipleChildrenView.getView().childNodes[0]);
+	
 });
 
 QUnit.test("testActiveInfoShownInClassName", function(assert) {
@@ -210,16 +212,39 @@ QUnit.test("testStateShownInClassName", function(assert) {
 
 QUnit.test("testHeadlineInOutput", function(assert) {
 	this.spec.mode = "output";
-	let headline = this.getView().childNodes[1];
-	assert.strictEqual(headline.nodeName, "SPAN");
-	assert.strictEqual(headline.className, "headline");
+	let headline = this.getView().childNodes[0];
+	assert.strictEqual(headline.nodeName, "H2");
 	assert.strictEqual(headline.textContent, "Some headline text");
 	assert.strictEqual(this.getView().childNodes.length, 2);
+});
+
+QUnit.test("testHeadlineInOutputNoClassName", function(assert) {
+	this.spec.mode = "output";
+	this.spec.headline = "Different headline";
+	this.spec.headlineLevel = undefined;
+
+	let headline = this.getView().childNodes[0];
+
+	assert.strictEqual(headline.nodeName, "H2");
+	assert.strictEqual(headline.textContent, "Different headline");
+});
+
+QUnit.test("testHeadlineInOutputOtherClassName", function(assert) {
+	this.spec.mode = "output";
+	this.spec.headline = "Different headline";
+	this.spec.headlineLevel = "h4";
+	let headline = this.getView().childNodes[0];
+	assert.strictEqual(headline.nodeName, "H4");
+	assert.strictEqual(headline.textContent, "Different headline");
 });
 
 QUnit.test("testNoHeadline", function(assert) {
 	this.spec.headline = undefined;
 	assert.strictEqual(this.getView().childNodes.length, 1);
+	let infoSpy = this.dependencies.infoFactory.getFactored(0);
+	let usedSpec = infoSpy.getSpec();
+	assert.ok(usedSpec.insertAfter);
+	assert.strictEqual(usedSpec.insertAfter, infoSpy.getButton());
 });
 
 QUnit.test("testAddAttributesView", function(assert) {

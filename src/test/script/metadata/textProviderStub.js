@@ -198,6 +198,8 @@ var CORATEST = (function(coraTest) {
 				return "Attribute";
 			case "anOtherAttributeText":
 				return "OtherA";
+			case "specifiedHeadlineText":
+				return "specifiedHeadlineText_text";
 			case "specifiedLabelText":
 				return "specifiedLabelText_text";
 			default:

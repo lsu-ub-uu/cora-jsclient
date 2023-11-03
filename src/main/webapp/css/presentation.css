@@ -554,32 +554,45 @@ position: relative;
 	width: 0;
 }
 
+.presentation .headline {
+	width: 100%;
+}
+
 .presentation .text {
 	margin: 4px;
 	display: inline-block;
 }
 
-.h1TextStyle {
+h1, h2, h3, h4, h5, h6 {
+	width: 100%;
+	color: #575757;
+	font-weight: normal;
+	margin-top: .5rem;
+	margin-bottom: 0rem;
+}
+
+h1, .h1TextStyle {
+	margin-top: 0;
 	font-size: 2rem;
 }
 
-.h2TextStyle {
+h2, .h2TextStyle {
 	font-size: 1.4rem;
 }
 
-.h3TextStyle {
+h3, .h3TextStyle {
 	font-size: 1rem;
 }
 
-.h4TextStyle {
+h4, .h4TextStyle {
 	font-size: 0.8rem;
 }
 
-.h5TextStyle {
+h5, .h5TextStyle {
 	font-size: 0.7rem;
 }
 
-.h6TextStyle {
+h6, .h6TextStyle {
 	font-size: 0.6rem;
 }
 

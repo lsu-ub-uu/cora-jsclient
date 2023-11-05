@@ -1,5 +1,8 @@
 :root {
   --main-loading-color: #c68444;
+  --alvin-color: #7fbfa7;
+  --alvin-text-color: #575757;
+  --alvin-alternative-text-color: #bf7125;
 }
 #systemOneLoading, #divaLoading {
 	display: none;
@@ -15,7 +18,7 @@
     font-style: normal;
 }
 .jsClient.mainView {
-	border-color: #7fbfa7;
+	border-color: var(--alvin-color);
 	font-family: "Open Sans", verdana, arial, helvetica, sans-serif;
 }
 .jsClient > .sideBar {
@@ -69,36 +72,37 @@
    padding-top:0.5rem;
    border:none;
    border-top: 10px solid lightgrey;
-   border-bottom: 1px solid #7fbfa7;
+   border-bottom: 1px solid var(--alvin-color);
 }
 
 .jsClient .showView .h1TextStyle .text { 
 	color: black;
 }
 
-.editView .presentation .text.h2TextStyle {
-	background-color: #7fbfa7;
+.editView .presentation h2, .editView .presentation .text.h2TextStyle {
+	background-color: var(--alvin-color);
 }
 
-.editView .presentation .pSurroundingContainer .text.h2TextStyle {
+.editView .presentation .pSurroundingContainer h2, 
+	.editView .presentation .pSurroundingContainer .text.h2TextStyle {
 	background-color: transparent;
 	margin-top: 0;
 }
 
 .jsClient .sideBar{
-	color: #BF7125;
+	color: var(--alvin-alternative-text-color);
 }
 
 .holder.loginManagerView {
-	background: #7fbfa7;
+	background: var(--alvin-color);
 }
 
 .topBar {
-	border-color: #7fbfa7;
+	border-color: var(--alvin-color);
 }
 
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler {
-	border: 1px solid #7fbfa7;
+	border: 1px solid var(--alvin-color);
 	margin-bottom: 1rem;
 }
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler > .pSurroundingContainer .pChildRefHandler {
@@ -108,13 +112,13 @@
 	margin-top: none;
 }
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler.containsData {
-	border: 1px solid #7fbfa7;
-	background: linear-gradient( #7fbfa7 1.8rem, transparent 1.8rem);
+	border: 1px solid var(--alvin-color);
+	background: linear-gradient( var(--alvin-color) 1.8rem, transparent 1.8rem);
 }
 
 .editView .presentation > .pGroup >  .pNonRepeatingChildRefHandler.containsNoData {
-	border: 1px solid #7FBFA7;
-	background: linear-gradient( #dddddd 1.8rem, #7fbfa7 1px, transparent calc(1.8rem + 1px));
+	border: 1px solid var(--alvin-color);
+	background: linear-gradient( #dddddd 1.8rem, var(--alvin-color) 1px, transparent calc(1.8rem + 1px));
 }
 
 .presentation .text.labelTextStyle {
@@ -123,7 +127,7 @@
 }
 
 .jsClient .text.h2TextStyle, .recordTypeGroupHeadline{
-	color:#575757;
+	color:var(--alvin-text-color);
 }
 
 .header select{
@@ -177,7 +181,7 @@ input[type="button"] {
 } 
 
 .listView .h1TextStyle, .listView .h1TextStyle .text {
-	color: #bf7125;
+	color: var(--alvin-alternative-text-color);
 	font-size: 1rem;
 }
 

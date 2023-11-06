@@ -300,7 +300,7 @@ QUnit.test("testInit", function(assert) {
 
 	// subscription
 	let subscriptions = this.dependencies.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 3);
+	assert.deepEqual(subscriptions.length, 4);
 
 	let firstSubsription = subscriptions[0];
 	assert.strictEqual(firstSubsription.type, "add");
@@ -313,9 +313,14 @@ QUnit.test("testInit", function(assert) {
 	assert.ok(secondSubscription.functionToCall === pChildRefHandler.handleMsg);
 
 	let thirdSubscription = subscriptions[2];
-	assert.strictEqual(thirdSubscription.type, "addUpToMinNumberOfRepeating");
+	assert.strictEqual(thirdSubscription.type, "newElementsAdded");
 	assert.deepEqual(thirdSubscription.path, []);
 	assert.ok(thirdSubscription.functionToCall === pChildRefHandler.newElementsAdded);
+
+	let fourthSubscription = subscriptions[3];
+	assert.strictEqual(fourthSubscription.type, "addUpToMinNumberOfRepeating");
+	assert.deepEqual(fourthSubscription.path, []);
+	assert.ok(fourthSubscription.functionToCall === pChildRefHandler.newElementsAdded);
 });
 
 QUnit.test("testInitViewIsFromFactoredView", function(assert) {
@@ -432,7 +437,7 @@ QUnit.test("testInitRepeatingVariableNoOfChildren", function(assert) {
 
 	// subscription
 	let subscriptions = this.dependencies.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 3);
+	assert.deepEqual(subscriptions.length, 4);
 });
 
 QUnit.test("testInitRepeatingStaticNoOfChildren", function(assert) {
@@ -457,7 +462,7 @@ QUnit.test("testInitRepeatingStaticNoOfChildren", function(assert) {
 
 	// subscription
 	let subscriptions = this.dependencies.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 3);
+	assert.deepEqual(subscriptions.length, 4);
 });
 
 QUnit.test("testAddButtonFor1toX", function(assert) {
@@ -1227,9 +1232,9 @@ QUnit.test("testRepeatingElement", function(assert) {
 
 	// subscription
 	let subscriptions = this.dependencies.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 4);
+	assert.deepEqual(subscriptions.length, 5);
 
-	let firstSubsription = subscriptions[3];
+	let firstSubsription = subscriptions[4];
 
 	assert.strictEqual(firstSubsription.type, "remove");
 	assert.deepEqual(firstSubsription.path, ["textVariableId.one"]);
@@ -1447,7 +1452,7 @@ QUnit.test("testShowAddAndAddBeforeButtonWhenBelowMaxRepeat", function(assert) {
 	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 1);
 
 	// call remove function in pChildRefHandler
-	this.dependencies.pubSub.getSubscriptions()[3].functionToCall();
+	this.dependencies.pubSub.getSubscriptions()[4].functionToCall();
 	assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 	assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 3);
@@ -1475,7 +1480,7 @@ QUnit.test("testHideAndShowAddAndAddBeforeButtonNotCalledWhenBelowMaxRepeat", fu
 	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 	// call remove function in pChildRefHandler
-	this.dependencies.pubSub.getSubscriptions()[3].functionToCall();
+	this.dependencies.pubSub.getSubscriptions()[4].functionToCall();
 	assert.strictEqual(factoredView.getShowButtonViewCalled(), 1);
 	assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 	assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1514,7 +1519,7 @@ QUnit.test("testHideChildrensRemoveAndAddBeforeButtonWhenAtMinRepeat", function(
 	assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 	// call remove function in pChildRefHandler
-	this.dependencies.pubSub.getSubscriptions()[3].functionToCall();
+	this.dependencies.pubSub.getSubscriptions()[4].functionToCall();
 	assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 	assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 	assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 1);

@@ -1,6 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,39 +18,33 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.pGroup = function(dependencies, spec) {
-		let parent;
-
-		const start = function() {
-			let my = {
-				type: "pGroup",
-				metadataId: spec.metadataIdUsedInData,
-				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
-			};
-			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
-		};
-
-		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
-			viewSpec.type = "pGroup";
+	cora.pMultipleChildrenViewFactory = function() {
+		const childDependencies = {
+			infoFactory: CORA.infoFactory(),
 		};
 		
-		const getSpec = function() {
-			return spec;
+		const dependencies = {
+			pParentMultipleChildrenViewFactory: CORA.genericParentFactory("pParentMultipleChildrenView",
+				childDependencies)
 		};
+		
+		function factor(spec) {
+			if(spec.type === "container"){
+				return CORA.pSurroundingContainerView(dependencies, spec);
+			}
+			
+			if(spec.type === "pResourceLink"){
+				return CORA.pResourceLinkView(dependencies, spec);
+			}
+			
+			return CORA.pGroupView(dependencies, spec);
+		}
 
-		const getDependencies = function() {
-			return dependencies;
-		};
-
-		start();
-
-		return Object.freeze({
-			type: "pGroup",
-			getSpec: getSpec,
-			getDependencies: getDependencies,
-			getView: parent.getView
+		const self = Object.freeze({
+			type : "pMultipleChildrenViewFactory",
+			factor : factor
 		});
-
+		return self;
 	};
 	return cora;
 }(CORA));

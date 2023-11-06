@@ -8,7 +8,9 @@
 	display: block;
 }
 
-.jsClient .sideBar, .showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {
+.jsClient .sideBar, 
+	.showView .presentation h1, .showView .presentation h2, 
+	.showView .presentation .text.h2TextStyle, .showView .presentation .text.h1TextStyle {
 	color: #334DA2;
 }
 .jsClient > .header {
@@ -101,7 +103,7 @@
 	box-shadow: 0 0 10px rgba(0,0,0,0.13);
 }
 
-.presentation .text.h1TextStyle {
+.presentation h1, .presentation .text.h1TextStyle {
 	color: #334DA2;
 	background-color: #C6D4BA;
 	border-radius: 10px 10px 0 0;
@@ -112,7 +114,7 @@
 	z-index: 3;
 }
 
-.presentation .text.h2TextStyle {
+.presentation  h2, .presentation .text.h2TextStyle {
 	color: #2a88ad;
 	position: sticky;
 	top: 2.5rem;

@@ -168,7 +168,8 @@ QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", fu
 	this.fixture.appendChild(view);
 
 	let pGroupView = view.firstChild;
-	let childRefHandler = pGroupView.childNodes[1];
+	let childRefHandler = pGroupView.childNodes[2];
+
 
 	let pVarView = childRefHandler.firstChild.firstChild.firstChild;
 	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");

@@ -99,7 +99,8 @@ var CORA = (function(cora) {
 		const subscribeToMessagesFromForm = function() {
 			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			dependencies.pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-			if (spec.minNumberOfRepeatingToShow !== undefined) {
+//			if (spec.minNumberOfRepeatingToShow !== undefined) {
+			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode==="input") {
 				newElementsAddedSubscriptionId = dependencies.pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
@@ -659,10 +660,16 @@ var CORA = (function(cora) {
 		};
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
-
-			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
+			let mininumOfOneMinNumberToShow = 1;
+			if(spec.minNumberOfRepeatingToShow){
+				mininumOfOneMinNumberToShow = Number(spec.minNumberOfRepeatingToShow);
+			}
+	
+//			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
+			let numberLeftToAdd = mininumOfOneMinNumberToShow - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {
 				if (!maxLimitOfChildrenReached()) {
+//					console.log("SEND ADD: "+d, spec.cPresentation.getData())
 					sendAdd();
 				}
 			}

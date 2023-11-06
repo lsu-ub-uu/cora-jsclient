@@ -54,6 +54,7 @@ var CORA = (function(cora) {
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
+//			addGuiItem(dependencies.uploadManager.getManagedGuiItem());
 		};
 		
 		const createLoginManager = function() {

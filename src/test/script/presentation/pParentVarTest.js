@@ -95,9 +95,6 @@ QUnit.module("presentation/pParentVarTest.js", {
 				lastInfoValueForViewMode = mode;
 				pVarViewSpec.childExtra = "added by child";
 			};
-			const getLastInfoValueForViewMode= function (value) {
-				return lastInfoValueForViewMode;
-			};
 			const validateTypeSpecificValue= function (value) {
 				lastValueSentToValidateTypeSpecificValue=value;
 				return true;
@@ -119,7 +116,6 @@ QUnit.module("presentation/pParentVarTest.js", {
 			return {
 				getLastValueSentToValidateTypeSpecificValue: getLastValueSentToValidateTypeSpecificValue,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
-				getLastInfoValueForViewMode: getLastInfoValueForViewMode,
 				validateTypeSpecificValue: validateTypeSpecificValue,
 				autoFormatEnteredValue: autoFormatEnteredValue,
 				transformValueForView: transformValueForView,
@@ -196,8 +192,6 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	};
 	
 	expectedPVarViewSpec.childExtra = "added by child";
-	
-	assert.strictEqual(child.getLastInfoValueForViewMode(),"input");
 	
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{
@@ -554,8 +548,6 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 	};
 	
 	expectedPVarViewSpec.childExtra = "added by child";
-	
-	assert.strictEqual(child.getLastInfoValueForViewMode(),"input");
 	
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{

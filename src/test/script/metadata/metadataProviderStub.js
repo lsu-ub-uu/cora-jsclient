@@ -5819,7 +5819,22 @@ function MetadataProviderStub() {
 							"value": "groupIdOneTextChild"
 						}],
 						"name": "presentationOf"
+					}
+					,{
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "coraText"
+						}, {
+							"name": "linkedRecordId",
+							"value": "specifiedHeadlineText"
+						}],
+						"name": "specifiedHeadlineText"
 					}, {
+							"name": "specifiedHeadlineLevel",
+							"value": "h3"
+						}
+					
+					, {
 						"name": "childReferences",
 						"children": [{
 							"name": "childReference",

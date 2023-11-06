@@ -26,39 +26,50 @@ function start() {
 	} else if (href.indexOf("alvin") !== -1) {
 		enableCSS("alvinCSS");
 		useAlvin();
+		enableIcon("alvin");
 	} else if (href.indexOf("diva") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDiva();
+		enableIcon("diva");
 	} else if (href.indexOf("localhost:38080") !== -1 ) {
 		useLocalhostWithPort("38080","38180", "SystemOne local dev", "systemone");
 	} else if (href.indexOf("localhost:38081") !== -1 ) {
 		enableCSS("alvinCSS");
 		useLocalhostWithPort("38081","38181","ALVIN local dev", "alvin");
+		enableIcon("alvin");
 	} else if (href.indexOf("localhost:38082") !== -1 ) {
 		enableCSS("divaLilaCSS");
 		useLocalhostWithPort("38082","38182", "DiVA local dev", "diva");
+		enableIcon("diva");
 	} else if (href.indexOf("116:38080") !== -1) {
 		useDevWithPort("38080","38180", "SystemOne dev", "systemone");
 	} else if (href.indexOf("116:38081") !== -1) {
 		enableCSS("alvinCSS");
 		useDevWithPort("38081","38181", "ALVIN dev", "alvin");
+		enableIcon("alvin");
 	} else if (href.indexOf("116:38082") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDevWithPort("38082","38182","DiVA dev", "diva");
+		enableIcon("diva");
 	} else if (href.indexOf("238:38080") !== -1) {
 		useDevExternallyWithPort("38080","38180", "SystemOne dev", "systemone");
 	} else if (href.indexOf("238:38081") !== -1) {
 		enableCSS("alvinCSS");
 		useDevExternallyWithPort("38081","38181", "ALVIN dev", "alvin");
+		enableIcon("alvin");
 	} else if (href.indexOf("238:38082") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDevExternallyWithPort("38082","38182","DiVA dev", "diva");
+		enableIcon("diva");
 	}
 	else {
 		askForServerToUse();
 	}
 }
 
+function enableIcon(systemName){
+	document.getElementById("tabIcon").href = `images/${systemName}Icon.svg`;
+}
 function enableCSS(cssName){
 	document.getElementById(cssName).disabled = true;
 	document.getElementById(cssName).disabled = false;

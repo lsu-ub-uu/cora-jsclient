@@ -22,6 +22,8 @@ var CORA = (function(cora) {
 	cora.presentationFactory = function(dependencies) {
 		const infoFactory = CORA.infoFactory();
 		const pVarViewFactory = CORA.pVarViewFactory();
+		const pMultipleChildrenViewFactory = CORA.pMultipleChildrenViewFactory();
+//		const pParentMultipleChildrenViewFactory = CORA.pParentMultipleChildrenViewFactory();
 		
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,
@@ -98,6 +100,7 @@ var CORA = (function(cora) {
 			authTokenHolder: dependencies.authTokenHolder,
 
 			pVarViewFactory: pVarViewFactory,
+			pMultipleChildrenViewFactory: pMultipleChildrenViewFactory,
 //			pNumVarViewFactory: pNumVarViewFactory,
 			pRecordLinkViewFactory: pRecordLinkViewFactory,
 			pMapViewFactory: pMapViewFactory,
@@ -106,6 +109,7 @@ var CORA = (function(cora) {
 			pAttributesFactory: pAttributesFactory
 		};
 		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
+		childDependencies.pParentMultipleChildrenFactory = CORA.genericParentFactory("pParentMultipleChildren", childDependencies);
 	
 	
 		const factor = function(spec) {

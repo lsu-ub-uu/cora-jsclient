@@ -1,7 +1,7 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
-*
+ * Copyright 2017, 2023 Olov McKie
+ *
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -20,9 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
-		let cPresentation = spec.cPresentation;
+		const cPresentation = spec.cPresentation;
 
-		let my = {};
 		let parent;
 		let hasOutputFormat;
 		let resourceView;
@@ -35,19 +34,17 @@ var CORA = (function(cora) {
 		};
 
 		const initParent = function() {
-			my.metadataId = "metadataGroupForResourceLinkGroup";
+			let my = {
+				type: "pResourceLink",
+				metadataId: "metadataGroupForResourceLinkGroup",
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			};
 
-			my.cPresentation = cPresentation;
-			my.cParentPresentation = cPresentation;
-			my.createBaseViewHolder = createBaseViewHolder;
-
-			parent = CORA.pMultipleChildren(dependencies, spec, my);
-			parent.init();
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
 		};
 
-		const createBaseViewHolder = function() {
-			let presentationId = parent.getPresentationId();
-			return CORA.gui.createDivWithClassName("pResourceLink " + presentationId);
+		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
+			viewSpec.type = "pResourceLink";
 		};
 
 		const presentationHasOutputFormat = function() {
@@ -113,10 +110,6 @@ var CORA = (function(cora) {
 			setInfoInLinkedResourceView(dataFromMsg);
 		};
 
-		const getView = function() {
-			return parent.getView();
-		};
-
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -125,14 +118,14 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+		start();
 		let out = Object.freeze({
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView,
+			getView: parent.getView,
 			handleMsg: handleMsg
 		});
-		start();
 		return out;
 	};
 	return cora;

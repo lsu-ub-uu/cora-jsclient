@@ -502,48 +502,60 @@ position: relative;
 	display: block;
 }
 
-.workView .tenChildStyle {
+.workView .twelveChildStyle {
 	width: 100%;
 }
 
+.workView .elevenChildStyle {
+	width: 91%;
+}
+
+.workView .tenChildStyle {
+	width: 83%;
+}
+
 .workView .nineChildStyle {
-	width: 90%;
+	width: 75%;
 }
 
 .workView .eightChildStyle {
-	width: 80%;
+	width: 66%;
 }
 
 .workView .sevenChildStyle {
-	width: 70%;
+	width: 58%;
 }
 
 .workView .sixChildStyle {
-	width: 60%;
-}
-
-.workView .fiveChildStyle {
 	width: 50%;
 }
 
+.workView .fiveChildStyle {
+	width: 41%;
+}
+
 .workView .fourChildStyle {
-	width: 40%;
+	width: 33%;
 }
 
 .workView .threeChildStyle {
-	width: 30%;
+	width: 25%;
 }
 
 .workView .twoChildStyle {
-	width: 20%;
+	width: 16%;
 }
 
 .workView .oneChildStyle {
-	width: 10%;
+	width: 8%;
 }
 
 .workView .zeroChildStyle {
 	width: 0;
+}
+
+.presentation .headline {
+	width: 100%;
 }
 
 .presentation .text {
@@ -551,27 +563,36 @@ position: relative;
 	display: inline-block;
 }
 
-.h1TextStyle {
+h1, h2, h3, h4, h5, h6 {
+	width: 100%;
+	color: #575757;
+	font-weight: normal;
+	margin-top: .5rem;
+	margin-bottom: 0rem;
+}
+
+h1, .h1TextStyle {
+	margin-top: 0;
 	font-size: 2rem;
 }
 
-.h2TextStyle {
+h2, .h2TextStyle {
 	font-size: 1.4rem;
 }
 
-.h3TextStyle {
+h3, .h3TextStyle {
 	font-size: 1rem;
 }
 
-.h4TextStyle {
+h4, .h4TextStyle {
 	font-size: 0.8rem;
 }
 
-.h5TextStyle {
+h5, .h5TextStyle {
 	font-size: 0.7rem;
 }
 
-.h6TextStyle {
+h6, .h6TextStyle {
 	font-size: 0.6rem;
 }
 

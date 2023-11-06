@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -23,35 +23,30 @@ var CORA = (function(cora) {
 		let spec = specIn;
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
-//		let cParentPresentation = cPresentation;
-		let my = {
-			type: "pSurroundingContainer",
-			metadataId: spec.metadataIdUsedInData,
-			cPresentation: cPresentation,
-			cParentPresentation: cParentPresentation
-		};
 		let parent;
 
 		const start = function() {
-			my.createBaseViewHolder = createBaseViewHolder;
-			parent = CORA.pMultipleChildren(dependencies, spec, my);
-			parent.init();
+			let my = {
+				type: "pSurroundingContainer",
+				metadataId: spec.metadataIdUsedInData,
+				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+			};
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
 		};
 
-		const createBaseViewHolder = function() {
-			let presentationStyle = getPresentationStyle();
-			let presentationId = parent.getPresentationId();
-			return CORA.gui.createSpanWithClassName("pSurroundingContainer " + presentationStyle
-				+ presentationId);
+		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
+			viewSpec.type = "container";
+			viewSpec.info.text = "surroundingContainer";
+			viewSpec.info.defText = "surroundingContainer";
+			viewSpec.info.technicalInfo.splice(0, 4); 
+			removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines(viewSpec);
 		};
-
-		const getPresentationStyle = function() {
-			if (cPresentation.containsChildWithNameInData("presentationStyle")) {
-				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle") + " ";
-			}
-			return "";
+		
+		const removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines = function(viewSpec) {
+			viewSpec.headline = undefined;
+			viewSpec.headlineLevel = undefined;
 		};
-
+		
 		const getSpec = function() {
 			return spec;
 		};

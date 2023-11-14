@@ -60,7 +60,20 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		};
 	},
 });
-
+/*
+{
+  "actionLinks": {
+    "read": {
+      "requestMethod": "GET",
+      "rel": "read",
+      "url": "http://localhost:38080/systemone/rest/record/binary/binary:176527754137154/master",
+      "accept": "image/jpeg"
+    }
+  },
+  "name": "master",
+  "mimeType": "image/jpeg"
+},
+*/
 QUnit.test("testInit", function(assert) {
 	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 	
@@ -132,6 +145,7 @@ CORATEST.resourceLinkDataFromMessage = {
 		"name": "master",
 		"mimeType": "application/octet-stream"
 	}
+	
 };
 
 QUnit.test("testOneChildHandleLinkedResource", function(assert) {

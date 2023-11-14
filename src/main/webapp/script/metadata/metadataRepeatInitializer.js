@@ -143,6 +143,16 @@ var CORA = (function(cora) {
 			} else if (isResourceLink()) {
 //				initializeMetadataResourceLink(nextLevelPath);
 				pubSub.publish("linkedResource", message);
+				console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
+				console.log("in metadataRepeatInitializer, spec: ",spec )
+				console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
+//				publishIfDataIsPresent(nextLevelPath)
+//				const publishIfDataIsPresent = function(nextLevelPath) {
+					if (spec.data !== undefined) {
+//						publishVariableValue(spec.data.value, nextLevelPath);
+						publishVariableValue(spec.data, nextLevelPath);
+					}
+//				};
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);
 			}

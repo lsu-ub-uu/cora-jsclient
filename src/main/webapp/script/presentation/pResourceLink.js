@@ -21,28 +21,47 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
 		const cPresentation = spec.cPresentation;
-
+const pubSub = dependencies.pubSub;
+		
 		let parent;
 		let hasOutputFormat;
 		let resourceView;
-
+		
+		let path = spec.path;
+		
 		const start = function() {
 			initParent();
-			hasOutputFormat = presentationHasOutputFormat();
-			createResourceViewIfOutputFormatInMetadata();
+//			hasOutputFormat = presentationHasOutputFormat();
+//			createResourceViewIfOutputFormatInMetadata();
 			subscribeToLinkedResourceMessage();
 		};
 
 		const initParent = function() {
+			console.log("spec.metadataIdUsedInData: "+spec.metadataIdUsedInData)
+			console.log("spec: ",spec)
 			let my = {
 				type: "pResourceLink",
-				metadataId: "metadataGroupForResourceLinkGroup",
+//				metadataId: "metadataGroupForResourceLinkGroup",
+				metadataId: spec.metadataIdUsedInData,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
 			};
 
-			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
+//			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
+			subscribeToPubSub();
+		};
+		const subscribeToPubSub = function() {
+			pubSub.subscribe("setValue", path, undefined, handleMsg);
+//		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
+//			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
+//			pubSub.subscribe("disable", disablePath, undefined, disableVar);
+		};
+		const handleMsg = function(dataFromMsg) {
+//			setValue(dataFromMsg.data);
+//			updateView();
+			console.log("in pResourceLink, dataFromMsg:" ,dataFromMsg)
 		};
 
+		
 		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
 			viewSpec.type = "pResourceLink";
 		};
@@ -106,9 +125,9 @@ var CORA = (function(cora) {
 			return spec.path.concat(["resourceLinkResLink"]);
 		}
 
-		const handleMsg = function(dataFromMsg) {
-			setInfoInLinkedResourceView(dataFromMsg);
-		};
+//		const handleMsg = function(dataFromMsg) {
+//			setInfoInLinkedResourceView(dataFromMsg);
+//		};
 
 		const getDependencies = function() {
 			return dependencies;
@@ -117,13 +136,17 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
+		const getView = function(){
+			return CORA.gui.createSpanWithClassName("fake pResourceLink")
+		}
 
 		start();
 		let out = Object.freeze({
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: parent.getView,
+//			getView: parent.getView,
+			getView: getView,
 			handleMsg: handleMsg
 		});
 		return out;

@@ -627,11 +627,19 @@ body {
 	cursor: pointer;
 }
 
+.definitionViewer .finalValue {
+	font-size: .9rem;
+	color: #b30b0b;
+	padding-right: 0.2rem;
+	cursor: pointer;
+}
+
 .definitionViewer .attributes {
 	font-size: 0.8rem;
 	color: #2e7af0;
 	font-weight: bold;
 	padding-right: 0.2rem;
+	display: inline;
 }
 
 .definitionViewer .details {

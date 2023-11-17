@@ -134,6 +134,7 @@
 	float:right;
 	margin-top:0.3em;
 }
+
 input[type="button"] {
 	display: inline-block;
 	border: none;
@@ -148,6 +149,7 @@ input[type="button"] {
 	cursor: pointer;
 	text-align: center;
 	transition: background 250ms ease-in-out, transform 150ms ease;
+	transform: scale(0.99);
 }
 
 input[type="button"]:hover,
@@ -159,11 +161,10 @@ input[type="button"]:focus {
 	outline: 1px solid #fff;
 	outline-offset: -4px;
 }
-
-input[type="button"] {
-	transform: scale(0.99);
+	
+.pChildRefHandler .pChildRefHandler input[type="button"] {
+	margin-left: .5rem;
 }
-
 .infoButton::before {
 	background-position: -64px -32px;
 }

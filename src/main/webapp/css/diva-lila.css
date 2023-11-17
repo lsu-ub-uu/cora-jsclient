@@ -114,8 +114,8 @@ height: calc(100% - 2.5rem);
 
 .sideBar .active, .header .active {
 	font-weight: bold;
-	background-color: var(--main-loading-color) !important;
-	color: var(--color-selected-on-menu);
+/* 	background-color: var(--main-loading-color) !important; */
+/* 	color: var(--color-selected-on-menu); */
 }
 
 .workItem > .buttonView {

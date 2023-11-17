@@ -318,8 +318,13 @@ body {
 
 .sideBar .active, .header .active {
 	font-weight: bold;
-	background-color: rgba(5, 131, 249, 0.49);
 }
+
+.sideBar .childrenView .active::before {
+	content: ">";
+	position: absolute;
+	left: -.6rem;
+}	
 
 .openGuiItemHandlerView .menuView, .recordTypesView .recordType  span,
 	.searchesView>.searchRecord  span {

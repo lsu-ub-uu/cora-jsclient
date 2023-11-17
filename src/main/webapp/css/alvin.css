@@ -55,10 +55,10 @@
 .infoActive {
 	background-color: rgba(127, 191, 167, 0.1);
 }
-.sideBar .active, .header .active {
-	font-weight: bold;
-	background-color: rgba(127, 191, 167, 0.5);
-}
+/* .sideBar .active, .header .active { */
+/* 	font-weight: bold; */
+/* 	background-color: rgba(127, 191, 167, 0.5); */
+/* } */
 .pVar:hover, .pCollVar:hover, .pGroup:hover, .pSurroundingContainer:hover, .repeatingElement:hover {
 	background-color: rgba(127, 191, 167, 0.1);
 }

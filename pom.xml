@@ -139,7 +139,7 @@
 									<arguments>
 										<argument>run</argument>
 										<argument>--name</argument>
-										<argument>myJsClientContainer</argument>
+										<argument>myJsClientContainer2</argument>
 										<argument>${project.artifactId}:${project.version}</argument>
 									</arguments>
 								</configuration>
@@ -155,7 +155,7 @@
 									<workingDirectory>${project.basedir}</workingDirectory>
 									<arguments>
 										<argument>cp</argument>
-										<argument>myJsClientContainer:/workspace/jsReportFromDocker</argument>
+										<argument>myJsClientContainer2:/workspace/jsReportFromDocker</argument>
 										<argument>target</argument>
 									</arguments>
 								</configuration>
@@ -171,7 +171,7 @@
 									<workingDirectory>${project.basedir}</workingDirectory>
 									<arguments>
 										<argument>rm</argument>
-										<argument>myJsClientContainer</argument>
+										<argument>myJsClientContainer2</argument>
 									</arguments>
 								</configuration>
 							</execution>

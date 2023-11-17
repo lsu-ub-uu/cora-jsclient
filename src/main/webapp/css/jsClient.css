@@ -1,3 +1,18 @@
+:root {
+  --main-loading-color: #0082c9;
+  --main-darkare-color: #014d77;
+  --color-light-grey: #DCDCDC;
+  --color-white: white;
+  --color-grey: #131313;
+  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
+  --text-shadow-12-trans: rgba(0,0,0,0.12);
+  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
+  --blue-10-trans: rgba(117, 88, 141, 0.1);
+  --color-selected-on-menu: black;
+  --inbox-28-shadow: rgba(255,255,255,0.28);
+  --box-sahow-17-trans:rgba(255,255,255,0.17);
+  --menu-2n-color: rgba(167, 114, 166, 0.5);
+}
 html {
 	margin: 0px;
 	height: calc(100%);
@@ -9,6 +24,11 @@ body {
 	height: 100%;
 	padding: 0px;
 	font-family: 'Open Sans', sans-serif;
+}
+
+.header select{
+	float:right;
+	margin-top:1rem;
 }
 
 .holder.tool {
@@ -71,7 +91,7 @@ body {
 
 .jsClient>.header {
 	display: block;
-	height: 3rem;
+	height: 3.5rem;
 	font-size: 2.5rem;
 	text-align: center;
 	color: white;
@@ -81,6 +101,7 @@ body {
 	background-color: #0082c9;
 	padding-left: 1rem;
 	padding-right: 1rem;
+	
 }
 
 .jsClient>.header .menuView {
@@ -89,13 +110,14 @@ body {
 	height: auto;
 	font-size: 1rem;
 	text-align: center;
-	color: black;
+	color: white;
 	border-bottom: none;
 	border-color: inherit;
-	text-shadow: none;
-	padding: .2rem;
+	padding-left: 1rem;
 	cursor: pointer;
 	position: relative;
+	margin-top: .9rem;
+	text-shadow: none;
 }
 
 .jsClient>.header .menuView.uploading::before {
@@ -125,8 +147,8 @@ body {
 	transform: none;
 	font-size: 1.1rem;
 	float: right;
-	margin-right: 0.4rem;
-	margin-top: 0.6rem;
+	margin-right: 1rem;
+	margin-top: .9rem;
 	cursor: pointer;
 }
 
@@ -138,12 +160,13 @@ body {
 .holder.loginManagerView {
 	min-width: 10rem;
 	min-height: 10rem;
-	border: 1px solid black;
 	position: absolute;
-	top: 2.2rem;
-	right: 1rem;
 	z-index: 1000;
 	background: lightblue;
+	padding: 10px;
+	top: 3.2rem;
+	right: 0rem;
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
 }
 
 .loginManagerView .menuOption {
@@ -151,14 +174,16 @@ body {
 	cursor: pointer;
 }
 
-.jsClient>.sideBar {
-	border-color: inherit;
-	border-right: 1px solid;
-	display: inline-block;
-	height: calc(100% - 3rem - 6px);
+.jsClient > .sideBar {
 	overflow: auto;
-	padding: 0rem 0.5rem;
-	position: relative;
+	scrollbar-width: thin;
+	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
+	height: calc(100% - 3.5rem);
+	box-shadow: 0 0 10px var(--black-box-10-shadow);
+	color: var(--color-grey);
+	background: var(--color-white);
+	display: inline-block;
+	padding: 0rem 1rem;
 	width: 20rem;
 }
 
@@ -180,6 +205,11 @@ body {
 	font-weight: bold;
 }
 
+
+.recordTypeGroupHeadline{
+	color: var(--main-loading-color);
+	font-size: 1.2rem;
+}
 .recordTypesView>.recordTypeGroup {
 	display: block;
 	border-color: inherit;

@@ -205,11 +205,30 @@ body {
 	font-weight: bold;
 }
 
-.searchesViewHeadline,  .recordTypeGroupHeadline{
+.sideBar .openGuiItemHandlerView > .header, .searchesViewHeadline,  .recordTypeGroupHeadline{
 	color: var(--main-loading-color);
 	font-size: 1.2rem;
 	font-weight: bold;
 	margin-top: 1rem;
+	position: relative;
+	border-bottom: none;
+}
+
+.searchesViewHeadline {
+	margin-left: 1.5rem;
+}
+
+.searchesViewHeadline::before {
+	background: url("../images/icons3.svg") no-repeat scroll;
+	content: "";
+	background-position: -224px -32px;
+	opacity: 1;
+	height: 16px;
+	width: 16px;
+	transform: scale(1, 1);
+	position: absolute;
+	left: -1.5rem;
+	top: .4rem;
 }
 
 .recordTypesView>.recordTypeGroup {
@@ -377,7 +396,6 @@ body {
 .jsClient .workItem>.buttonView {
 	height: 2rem;
 	display: block;
-	height: 2rem;
 	flex: 0 0 100%;
 }
 
@@ -660,10 +678,10 @@ body {
 }
 
 .definitionViewer .finalValue {
-	font-size: .9rem;
+	font-size: .8rem;
 	color: #b30b0b;
+	font-weight: bold;
 	padding-right: 0.2rem;
-	cursor: pointer;
 }
 
 .definitionViewer .attributes {

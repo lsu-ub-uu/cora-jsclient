@@ -121,7 +121,7 @@ QUnit.test("testBasicMetadataWithFinalValue", function(assert) {
 	let metadataHeader = firstLevelMetadata.childNodes[0];
 	let childNodes = metadataHeader.childNodes;
 	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
-	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "finalValue", "(someFinalValue)", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "finalValue", "{someFinalValue}", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details",  "", assert);
 });
 

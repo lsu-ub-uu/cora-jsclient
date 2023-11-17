@@ -296,8 +296,10 @@ QUnit.test("testMessagesTextVariableFinalValue", function(assert) {
 		+ '"metadataId":"textVariableWithFinalValueId","path":[],"nameInData":"textVariableWithFinalValueId"}}');
 	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"someFinalValue",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
+	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{'
+		+ '"path":["textVariableWithFinalValueId"]}}');
 
-	assert.equal(messages.length, 2);
+	assert.equal(messages.length, 3);
 });
 
 QUnit.test("testMessagesTextVariableWithWrongFinalValue", function(assert) {
@@ -313,8 +315,10 @@ QUnit.test("testMessagesTextVariableWithWrongFinalValue", function(assert) {
 		+ '"metadataId":"textVariableWithFinalValueId","path":[],"nameInData":"textVariableWithFinalValueId"}}');
 	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"someFinalValue",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
+	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{'
+		+ '"path":["textVariableWithFinalValueId"]}}');
 
-	assert.equal(messages.length, 2);
+	assert.equal(messages.length, 3);
 });
 
 CORATEST.createRefForRepeatIntitalizer = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {

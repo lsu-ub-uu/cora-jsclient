@@ -306,6 +306,7 @@ var CORA = (function(cora) {
 		const setFinalValue = function(nextLevelPath) {
 			let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
 			publishVariableValue(finalValue, nextLevelPath);
+			pubSub.publish("disable", { path: nextLevelPath });
 		};
 
 		const publishVariableValue = function(value, nextLevelPath) {

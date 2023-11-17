@@ -20,16 +20,19 @@
 
 QUnit.module("jsClient/jsClientViewTest.js", {
 	beforeEach : function() {
-
+		this.textProvider = CORATEST.textProviderSpy();
+		this.providers = {
+			textProvider : this.textProvider			
+		};
 		this.dependencies = {
-			"messageHolderFactory" : CORATEST.messageHolderFactorySpy()
+			messageHolderFactory : CORATEST.messageHolderFactorySpy()
 		};
 		this.spec = {
-			"name" : "The Client",
-			"serverAddress" : "http://epc.ub.uu.se/cora/rest/",
-			"reloadProvidersMethod" : function() {
+			name : "The Client",
+			serverAddress : "http://epc.ub.uu.se/cora/rest/",
+			reloadProvidersMethod : function() {
 			},
-			"setLanguageMethod" : function() {
+			setLanguageMethod : function() {
 			}
 		};
 	},
@@ -38,56 +41,61 @@ QUnit.module("jsClient/jsClientViewTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	assert.strictEqual(jsClientView.type, "jsClientView");
-	var mainView = jsClientView.getView();
+	let mainView = jsClientView.getView();
 
 	assert.strictEqual(mainView.modelObject, jsClientView);
 });
 
+QUnit.test("testGetProviders", function(assert) {
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	assert.strictEqual(jsClientView.getProviders(), this.providers);
+});
+
 QUnit.test("testGetDependencies", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	assert.strictEqual(jsClientView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	assert.strictEqual(jsClientView.getSpec(), this.spec);
 });
 
 QUnit.test("initCreatesMessageHolder", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
 
 	assert.strictEqual(jsClientView.getHeader().childNodes[1], messageHolder.getView());
 });
 
 QUnit.test("testMainLayout", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var mainView = jsClientView.getView();
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let mainView = jsClientView.getView();
 	assert.strictEqual(mainView.className, "jsClient mainView");
 
-	var header = jsClientView.getHeader();
+	let header = jsClientView.getHeader();
 	assert.strictEqual(header.className, "header");
 	assert.strictEqual(header, mainView.childNodes[0]);
 
-	var sideBar = jsClientView.getSideBar();
+	let sideBar = jsClientView.getSideBar();
 	assert.strictEqual(sideBar.className, "sideBar");
 	assert.strictEqual(sideBar, mainView.childNodes[1]);
 
-    var serverAddress = sideBar.childNodes[2];
+    let serverAddress = sideBar.childNodes[2];
     assert.strictEqual(serverAddress.className, "serverAddress");
     assert.strictEqual(serverAddress.textContent, this.spec.serverAddress);
 
-	var searchesView = jsClientView.getSearchesView();
+	let searchesView = jsClientView.getSearchesView();
 	assert.strictEqual(searchesView.className, "searchesView");
 	assert.strictEqual(searchesView, sideBar.childNodes[0]);
 
-	var recordTypesView = jsClientView.getRecordTypesView();
+	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.className, "recordTypesView");
 	assert.strictEqual(recordTypesView, sideBar.childNodes[1]);
 
-	var workArea = jsClientView.getWorkView();
+	let workArea = jsClientView.getWorkView();
 	assert.strictEqual(workArea.className, "workArea");
 	assert.strictEqual(workArea, mainView.childNodes[2]);
 
@@ -95,23 +103,23 @@ QUnit.test("testMainLayout", function(assert) {
 });
 
 QUnit.test("testReloadProvidersButton", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var mainView = jsClientView.getView();
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let mainView = jsClientView.getView();
 
-	var header = jsClientView.getHeader();
+	let header = jsClientView.getHeader();
 	assert.strictEqual(header.childNodes.length, 7);
-	var reloadProvidersButton = header.childNodes[2];
+	let reloadProvidersButton = header.childNodes[2];
 	assert.strictEqual(reloadProvidersButton.onclick, this.spec.reloadProvidersMethod);
 	assert.strictEqual(reloadProvidersButton.textContent, "Ladda om");
 });
 
 QUnit.test("testReloadProvidersButtonStatus", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var mainView = jsClientView.getView();
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let mainView = jsClientView.getView();
 
-	var header = jsClientView.getHeader();
+	let header = jsClientView.getHeader();
 	assert.strictEqual(header.childNodes.length, 7);
-	var reloadProvidersButton = header.childNodes[2];
+	let reloadProvidersButton = header.childNodes[2];
 	assert.strictEqual(reloadProvidersButton.className, "menuView");
 	jsClientView.setReloadingProviders(true);
 	assert.strictEqual(reloadProvidersButton.className, "menuView uploading");
@@ -120,16 +128,16 @@ QUnit.test("testReloadProvidersButtonStatus", function(assert) {
 });
 
 QUnit.test("testSetLanguageButton", function(assert) {
-	var settedLang = "";
+	let settedLang = "";
 	this.spec.setLanguageMethod = function(lang) {
 		settedLang = lang;
 	};
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var mainView = jsClientView.getView();
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let mainView = jsClientView.getView();
 
-	var header = jsClientView.getHeader();
+	let header = jsClientView.getHeader();
 	assert.strictEqual(header.childNodes.length, 7);
-	var languageChoice = header.childNodes[3];
+	let languageChoice = header.childNodes[3];
 	assert.strictEqual(languageChoice.type, "select-one");
 	assert.strictEqual(languageChoice.options[0].value, "sv");
 	assert.strictEqual(languageChoice.options[0].text, "sv");
@@ -149,76 +157,89 @@ QUnit.test("testSetLanguageButton", function(assert) {
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	assert.strictEqual(jsClientView.getSpec(), this.spec);
 });
 
 QUnit.test("testAddToOpenGuiItemsView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var aView = document.createElement("SPAN");
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let aView = document.createElement("SPAN");
 	jsClientView.addOpenGuiItemHandlerView(aView);
 
-	var sideBar = jsClientView.getSideBar();
+	let sideBar = jsClientView.getSideBar();
 	assert.strictEqual(aView, sideBar.childNodes[0]);
 });
 
+QUnit.test("testSearchesViewHasHeadline", function(assert) {
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let searchesView = jsClientView.getSearchesView();
+	
+	let searchesViewFirstChild = searchesView.childNodes[0];
+	assert.strictEqual(searchesViewFirstChild.nodeName, "DIV");
+	assert.strictEqual(searchesViewFirstChild.className, "searchesViewHeadline");
+	assert.strictEqual(searchesViewFirstChild.textContent, "translated_theClient_searchesHeadlineText");
+});
+
 QUnit.test("testAddToSearchesView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
-	var aView = document.createElement("SPAN");
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let searchesView = jsClientView.getSearchesView();
+	let aView = document.createElement("SPAN");
+	
 	jsClientView.addToSearchesView(aView);
-	var searchesViewFirstChild = jsClientView.getSearchesView().childNodes[0];
-	assert.strictEqual(searchesViewFirstChild, aView);
+	
+	let searchesViewHeadline = searchesView.childNodes[1];
+	assert.strictEqual(searchesViewHeadline, aView);
 });
 
 QUnit.test("testClearSearchesView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	
-	var aView = document.createElement("SPAN");
+	let aView = document.createElement("SPAN");
 	jsClientView.addToSearchesView(aView);
 	
-	var searchesView = jsClientView.getSearchesView();
-	assert.strictEqual(searchesView.childNodes.length, 1);
+	let searchesView2 = jsClientView.getSearchesView();
+	assert.strictEqual(searchesView2.childNodes.length, 2);
 	
 	jsClientView.clearSearchesView();
 	
-	assert.strictEqual(searchesView.childNodes.length, 0);
+	assert.strictEqual(searchesView2.childNodes.length, 1);
 });
 
 QUnit.test("testAddToRecordTypesView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var recordTypesView = jsClientView.getRecordTypesView();
+	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.childNodes.length, 0);
 
-	var someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.gui.createSpanWithClassName("recordType");
 	jsClientView.addToRecordTypesView(someView);
 
-	var firstRecordType = recordTypesView.childNodes[0];
+	let firstRecordType = recordTypesView.childNodes[0];
 	assert.strictEqual(firstRecordType, someView);
 	assert.strictEqual(firstRecordType.className, "recordType");
 });
 
 QUnit.test("testAddGroupOfRecordTypeToRecordTypesView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var recordTypesView = jsClientView.getRecordTypesView();
+	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.childNodes.length, 0);
 
-	var someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.gui.createSpanWithClassName("recordType");
 	jsClientView.addGroupOfRecordTypesToView(someView);
 
-	var firstRecordType = recordTypesView.childNodes[0];
+	let firstRecordType = recordTypesView.childNodes[0];
 	assert.strictEqual(firstRecordType, someView);
 	assert.strictEqual(firstRecordType.className, "recordType");
 });
 
 QUnit.test("testClearRecordTypesView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.gui.createSpanWithClassName("recordType");
 	jsClientView.addToRecordTypesView(someView);
 
-	var recordTypesView = jsClientView.getRecordTypesView();
+	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.childNodes.length, 1);
 
 	jsClientView.clearRecordTypesView();
@@ -227,59 +248,59 @@ QUnit.test("testClearRecordTypesView", function(assert) {
 });
 
 QUnit.test("testAddWorkView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var workView = jsClientView.getWorkView();
+	let workView = jsClientView.getWorkView();
 	assert.strictEqual(workView.childNodes.length, 0);
 
-	var someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.gui.createSpanWithClassName("recordType");
 	jsClientView.addToWorkView(someView);
 
-	var firstWorkView = workView.childNodes[0];
+	let firstWorkView = workView.childNodes[0];
 	assert.strictEqual(firstWorkView, someView);
 	assert.strictEqual(firstWorkView.className, "recordType");
 });
 
 QUnit.test("testRemoveFromWorkView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var workView = jsClientView.getWorkView();
-	var someView = CORA.gui.createSpanWithClassName("recordType");
+	let workView = jsClientView.getWorkView();
+	let someView = CORA.gui.createSpanWithClassName("recordType");
 	jsClientView.addToWorkView(someView);
 
-	var firstWorkView = workView.childNodes[0];
+	let firstWorkView = workView.childNodes[0];
 	assert.strictEqual(firstWorkView, someView);
 
 	jsClientView.removeFromWorkView(someView);
 
-	var firstWorkView = workView.childNodes[0];
-	assert.strictEqual(firstWorkView, undefined);
+	let firstWorkView2 = workView.childNodes[0];
+	assert.strictEqual(firstWorkView2, undefined);
 });
 
 QUnit.test("testAddLoginManagerView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var someView = CORA.gui.createSpanWithClassName("loginManagerView");
+	let someView = CORA.gui.createSpanWithClassName("loginManagerView");
 	jsClientView.addLoginManagerView(someView);
 
 	assert.strictEqual(jsClientView.getHeader().childNodes[7], someView);
 });
 
 QUnit.test("testAddGlobalView", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	var someView = CORA.gui.createSpanWithClassName("globalView");
+	let someView = CORA.gui.createSpanWithClassName("globalView");
 	jsClientView.addGlobalView(someView);
 
 	assert.strictEqual(jsClientView.getHeader().childNodes[7], someView);
 });
 
 QUnit.test("testSetErrorMessage", function(assert) {
-	var jsClientView = CORA.jsClientView(this.dependencies, this.spec);
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
 	jsClientView.addErrorMessage("some error text");
-	var messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
-	var expectedMessageSpec = {
+	let messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
+	let expectedMessageSpec = {
 		"message" : "some error text",
 		"type" : CORA.message.ERROR
 	};

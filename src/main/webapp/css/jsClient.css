@@ -205,11 +205,13 @@ body {
 	font-weight: bold;
 }
 
-
-.recordTypeGroupHeadline{
+.searchesViewHeadline,  .recordTypeGroupHeadline{
 	color: var(--main-loading-color);
 	font-size: 1.2rem;
+	font-weight: bold;
+	margin-top: 1rem;
 }
+
 .recordTypesView>.recordTypeGroup {
 	display: block;
 	border-color: inherit;

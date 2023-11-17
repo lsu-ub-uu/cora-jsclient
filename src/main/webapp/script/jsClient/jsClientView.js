@@ -19,18 +19,18 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.jsClientView = function(dependencies, spec) {
-		var out;
-		var mainView;
-		var header;
-		var sideBar;
-		var searchesView;
-		var recordTypesView;
-		var workArea;
-		var messageHolder;
-		var reloadProvidersButton;
-		var logo;
-		var logoImage;
+	cora.jsClientView = function(providers, dependencies, spec) {
+		let out;
+		let mainView;
+		let header;
+		let sideBar;
+		let searchesView;
+		let recordTypesView;
+		let workArea;
+		let messageHolder;
+		let reloadProvidersButton;
+		let logo;
+		let logoImage;
 
 		function start() {
 			mainView = createMainView();
@@ -41,8 +41,8 @@ var CORA = (function(cora) {
 		}
 
 		function createMainView() {
-			var view = CORA.gui.createSpanWithClassName("jsClient mainView");
-			var serverAddress = CORA.gui.createSpanWithClassName("serverAddress");
+			let view = CORA.gui.createSpanWithClassName("jsClient mainView");
+			let serverAddress = CORA.gui.createSpanWithClassName("serverAddress");
 			serverAddress.textContent = spec.serverAddress;
 
 			header = CORA.gui.createSpanWithClassName("header");
@@ -54,6 +54,7 @@ var CORA = (function(cora) {
 
 			searchesView = CORA.gui.createSpanWithClassName("searchesView");
 			sideBar.appendChild(searchesView);
+			clearSearchesView();
 
 			recordTypesView = CORA.gui.createSpanWithClassName("recordTypesView");
 			sideBar.appendChild(recordTypesView);
@@ -78,7 +79,7 @@ var CORA = (function(cora) {
 			header.appendChild(logo);
 			logoImage = CORA.gui.createDivWithClassName("logoHeaderLogo");
 			header.appendChild(logoImage);
-			var menu = document.createElement("button");
+			let menu = document.createElement("button");
 			menu.className = "menu";
 			header.appendChild(menu);
 		}
@@ -102,6 +103,14 @@ var CORA = (function(cora) {
 
 		function clearSearchesView() {
 			searchesView.innerHTML = "";
+			searchesView.appendChild(createSearchesHeadline());
+		}
+
+		function createSearchesHeadline() {
+			let searchesHeadline = CORA.gui.createDivWithClassName("searchesViewHeadline");
+			let searchesText = providers.textProvider.getTranslation("theClient_searchesHeadlineText");
+			searchesHeadline.textContent = searchesText;
+			return searchesHeadline;
 		}
 
 		function addToRecordTypesView(recordTypeView) {
@@ -149,7 +158,7 @@ var CORA = (function(cora) {
 		}
 
 		function addErrorMessage(errorText) {
-			var messageSpec = {
+			let messageSpec = {
 				"message" : errorText,
 				"type" : CORA.message.ERROR
 			};
@@ -161,21 +170,25 @@ var CORA = (function(cora) {
 		}
 
 		function addSetLanguageChoice() {
-			var languageChoice = document.createElement("select");
+			let languageChoice = document.createElement("select");
 			languageChoice.onchange = function() {
 				spec.setLanguageMethod(languageChoice.value);
 			};
-			var svOption = new Option("sv", "sv");
+			let svOption = new Option("sv", "sv");
 			languageChoice.appendChild(svOption);
-			var enOption = new Option("en", "en");
+			let enOption = new Option("en", "en");
 			languageChoice.appendChild(enOption);
-			var noOption = new Option("no", "no");
+			let noOption = new Option("no", "no");
 			languageChoice.appendChild(noOption);
 			header.appendChild(languageChoice);
 		}
 
 		function addGroupOfRecordTypesToView(groupIn) {
 			recordTypesView.appendChild(groupIn);
+		}
+
+		function getProviders() {
+			return providers;
 		}
 
 		function getDependencies() {
@@ -186,8 +199,9 @@ var CORA = (function(cora) {
 			return spec;
 		}
 		out = Object.freeze({
-			"type" : "jsClientView",
+			type : "jsClientView",
 			getDependencies : getDependencies,
+			getProviders : getProviders,
 			getSpec : getSpec,
 			getView : getView,
 			addOpenGuiItemHandlerView : addOpenGuiItemHandlerView,

@@ -12,6 +12,9 @@
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.5);
+  --maincolor-10-trans: rgba(117, 89, 142, 0.1);
+  --maincolor-30-trans: rgba(117, 89, 142, 0.3);
+  --maincolor-50-trans: rgba(117, 89, 142, 0.5);
 }
 #systemOneLoading, #alvinLoading {
 	display: none;

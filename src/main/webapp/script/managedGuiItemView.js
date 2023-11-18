@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 
 		function createMenuView() {
 			var newMenuView = CORA.gui.createSpanWithClassName(originalMenuViewClassName);
+			newMenuView.draggable = true;
 			newMenuView.onclick = spec.activateMethod;
 			possiblyCreateRemoveButton(newMenuView);
 			return newMenuView;

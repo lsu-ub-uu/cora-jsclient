@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,24 +20,28 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pChildRefHandlerView = function(dependencies, spec) {
-		var view = createBaseView();
-		var childrenView = createChildrenView();
-		var buttonView;
+		let view;
+		let childrenView;
+		let buttonView;
 
-		var nodeBeeingDragged;
-		var lastChangedWith;
-		var addDragged;
-		var beeingDraggedY;
-		var childIsCurrentlyBeeingDragged = false;
-		var lastRepeatingElementDraggedOver;
+		let nodeBeeingDragged;
+		let lastChangedWith;
+		let addDragged;
+		let beeingDraggedY;
+		let childIsCurrentlyBeeingDragged = false;
+		let lastRepeatingElementDraggedOver;
 
-		view.appendChild(childrenView);
-		if (spec.mode === "input" && (spec.addMethod !== undefined || spec.upload === "true")) {
-			createButtonView();
-		}
+		const start = function() {
+			view = createBaseView();
+			childrenView = createChildrenView();
+			view.appendChild(childrenView);
+			if (spec.mode === "input" && (spec.addMethod !== undefined || spec.upload === "true")) {
+				createButtonView();
+			};
+		};
 
-		function createBaseView() {
-			var newClassName = "pChildRefHandler";
+		const createBaseView = function() {
+			let newClassName = "pChildRefHandler";
 			if (spec.textStyle !== undefined) {
 				newClassName += " " + spec.textStyle;
 			}
@@ -46,14 +50,14 @@ var CORA = (function(cora) {
 			}
 			newClassName += " " + spec.presentationId;
 			return CORA.gui.createSpanWithClassName(newClassName);
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function createButtonView() {
-			var buttonViewNew = CORA.gui.createSpanWithClassName("buttonView");
+		const createButtonView = function() {
+			let buttonViewNew = CORA.gui.createSpanWithClassName("buttonView");
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
@@ -62,125 +66,124 @@ var CORA = (function(cora) {
 			}
 			buttonView = buttonViewNew;
 			view.appendChild(buttonView);
-		}
+		};
 
-		function createAddButton() {
-			var button = document.createElement("input");
+		const createAddButton = function() {
+			let button = document.createElement("input");
 			button.type = "button";
 			button.value = spec.addText;
 			button.onclick = spec.addMethod;
 			return button;
-		}
+		};
 
-		function createBrowseButton() {
-			var button = document.createElement("input");
+		const createBrowseButton = function() {
+			let button = document.createElement("input");
 			button.type = "file";
 			button.multiple = "true";
 			button.onchange = function() {
 				spec.handleFilesMethod(this.files);
 			};
 			return button;
-		}
+		};
 
-		function hideButtonView() {
+		const hideButtonView = function() {
 			buttonView.styleOriginal = buttonView.style.display;
 			buttonView.style.display = "none";
-		}
+		};
 
-		function showButtonView() {
+		const showButtonView = function() {
 			if (buttonView.styleOriginal !== undefined) {
 				buttonView.style.display = buttonView.styleOriginal;
 			}
-		}
+		};
 
-		function setRepeatingElementDragOver(repeatingElement) {
+		const setRepeatingElementDragOver = function(repeatingElement) {
 			lastRepeatingElementDraggedOver = repeatingElement;
-		}
+		};
 
-		function createChildrenView() {
-			var childrenViewNew = CORA.gui.createSpanWithClassName("childrenView");
+		const createChildrenView = function() {
+			let childrenViewNew = CORA.gui.createSpanWithClassName("childrenView");
 			if (spec.isRepeating) {
 				addDragEventHandlers(childrenViewNew);
 			}
 			return childrenViewNew;
-		}
+		};
 
-		function addDragEventHandlers(childrenViewNew) {
+		const addDragEventHandlers = function(childrenViewNew) {
 			childrenViewNew.ondragstart = dragstartHandler;
-		}
+		};
 
-		function dragstartHandler(event) {
+		const dragstartHandler = function(event) {
 			if (nodeBeeingDraggedIsRepeatingElementChildOfThisHandler(event)) {
 				startDragHandling(event);
 			}
-		}
+		};
 
-		function nodeBeeingDraggedIsRepeatingElementChildOfThisHandler(event) {
+		const nodeBeeingDraggedIsRepeatingElementChildOfThisHandler = function(event) {
 			return event.target.parentNode === childrenView;
-		}
+		};
 
-		function startDragHandling(event) {
+		const startDragHandling = function(event) {
 			setInformationInEventForDragging(event);
 			addOtherDragEventsToChildrenView();
 			setStatesForDragging(event);
 			setStyleOnNodeBeeingDragged();
-		}
+		};
 
-		function setInformationInEventForDragging(event) {
+		const setInformationInEventForDragging = function(event) {
 			event.stopPropagation();
 			event.dataTransfer.setData("text/notInUse", "notUsed");
 			event.dataTransfer.effectAllowed = "move";
-		}
+		};
 
-		function addOtherDragEventsToChildrenView() {
+		const addOtherDragEventsToChildrenView = function() {
 			childrenView.ondragover = dragoverHandler;
 			childrenView.ondragenter = dragenterHandler;
 			childrenView.ondrop = dropHandler;
 			childrenView.ondragend = dragendHandler;
-		}
+		};
 
-		function setStatesForDragging(event) {
+		const setStatesForDragging = function(event) {
 			childIsCurrentlyBeeingDragged = true;
 			nodeBeeingDragged = event.target;
 			beeingDraggedY = event.screenY;
-		}
+		};
 
-		function setStyleOnNodeBeeingDragged() {
-			nodeBeeingDragged.originalClassname = nodeBeeingDragged.className;
-			nodeBeeingDragged.className = nodeBeeingDragged.className + " beeingDragged";
-		}
+		const setStyleOnNodeBeeingDragged = function() {
+			nodeBeeingDragged.classList.add("beeingDragged");
+		};
 
-		function dragoverHandler(event) {
+		const dragoverHandler = function(event) {
 			event.preventDefault();
 			event.dataTransfer.dropEffect = "move";
-		}
+		};
 
-		function dragenterHandler(event) {
+		const dragenterHandler = function(event) {
 			event.preventDefault();
 			event.dataTransfer.dropEffect = "move";
 			if (childIsCurrentlyBeeingDragged && aRepeatingElementHasBeenDraggedOver()) {
 				moveNodeBeeingDraggedIfDraggedOverSibblingNode(event);
 			}
-		}
+		};
 
-		function aRepeatingElementHasBeenDraggedOver() {
+		const aRepeatingElementHasBeenDraggedOver = function() {
 			return lastRepeatingElementDraggedOver !== undefined;
-		}
+		};
 
-		function moveNodeBeeingDraggedIfDraggedOverSibblingNode(event) {
+		const moveNodeBeeingDraggedIfDraggedOverSibblingNode = function(event) {
 			if (isSibblingNodes(nodeBeeingDragged, lastRepeatingElementDraggedOver.getView())) {
 				moveNodeBeeingDragged(event);
 			}
-		}
+		};
 
-		function isSibblingNodes(node1, node2) {
+		const isSibblingNodes = function(node1, node2) {
 			if (node1 === node2) {
 				return false;
 			}
 			return node1.parentNode === node2.parentNode;
-		}
+		};
 
-		function moveNodeBeeingDragged(event) {
+		const moveNodeBeeingDragged = function(event) {
 			event.stopPropagation();
 			event.preventDefault();
 			lastChangedWith = lastRepeatingElementDraggedOver;
@@ -193,22 +196,22 @@ var CORA = (function(cora) {
 				nodeBeeingDragged.parentElement.insertBefore(nodeBeeingDragged,
 						lastRepeatingElementDraggedOver.getView());
 			}
-		}
+		};
 
-		function dragDirectionIsDown(event) {
-			var difY = event.screenY - beeingDraggedY;
+		const dragDirectionIsDown = function(event) {
+			let difY = event.screenY - beeingDraggedY;
 			return difY > 0;
-		}
+		};
 
-		function dropHandler(event) {
+		const dropHandler = function(event) {
 			event.preventDefault();
 			if (childIsCurrentlyBeeingDragged) {
 				event.stopPropagation();
 				event.dataTransfer.dropEffect = "move";
 			}
-		}
+		};
 
-		function dragendHandler(event) {
+		const dragendHandler = function(event) {
 			event.preventDefault();
 			if (childIsCurrentlyBeeingDragged) {
 				handleDraggedElements(event);
@@ -218,114 +221,113 @@ var CORA = (function(cora) {
 				childrenView.ondrop = null;
 				childrenView.ondragend = null;
 			}
-		}
+		};
 
-		function handleDraggedElements(event) {
+		const handleDraggedElements = function(event) {
 			event.stopPropagation();
 			resetNodeBeeingDragged();
 			possiblySendMoveMessage();
 			resetDragSystem();
-		}
+		};
 
-		function resetNodeBeeingDragged() {
-			var indexClassName = nodeBeeingDragged.className.indexOf(" beeingDragged");
-			nodeBeeingDragged.className = nodeBeeingDragged.className.substring(0, indexClassName);
+		const resetNodeBeeingDragged = function() {
+			nodeBeeingDragged.classList.remove("beeingDragged");
 			nodeBeeingDragged.draggable = undefined;
-		}
+		};
 
-		function possiblySendMoveMessage() {
+		const possiblySendMoveMessage = function() {
 			if (nodesHasChangedPlace()) {
 				sendMoveMessage();
 			}
-		}
+		};
 
-		function nodesHasChangedPlace() {
+		const nodesHasChangedPlace = function() {
 			return lastChangedWith !== undefined;
-		}
+		};
 
-		function sendMoveMessage() {
-			var data = {
-				"moveChild" : nodeBeeingDragged.modelObject.getPath(),
-				"basePositionOnChild" : lastChangedWith.getPath(),
-				"newPosition" : addDragged
+		const sendMoveMessage = function() {
+			let data = {
+				moveChild : nodeBeeingDragged.modelObject.getPath(),
+				basePositionOnChild : lastChangedWith.getPath(),
+				newPosition : addDragged
 			};
 			view.modelObject.childMoved(data);
-		}
+		};
 
-		function resetDragSystem() {
+		const resetDragSystem = function() {
 			nodeBeeingDragged = undefined;
 			lastChangedWith = undefined;
 			addDragged = undefined;
 			beeingDraggedY = undefined;
 			childIsCurrentlyBeeingDragged = false;
 			lastRepeatingElementDraggedOver = undefined;
-		}
+		};
 
-		function addChild(child) {
+		const addChild = function(child) {
 			childrenView.appendChild(child);
-		}
+		};
 
-		function removeChild(child) {
+		const removeChild = function(child) {
 			childrenView.removeChild(child);
-		}
+		};
 
-		function moveChild(dataFromMsg) {
-			var childToMove = findRepeatingElementByPath(dataFromMsg.moveChild);
-			var basePositionOnChild = findRepeatingElementByPath(dataFromMsg.basePositionOnChild);
+		const moveChild = function(dataFromMsg) {
+			let childToMove = findRepeatingElementByPath(dataFromMsg.moveChild);
+			let basePositionOnChild = findRepeatingElementByPath(dataFromMsg.basePositionOnChild);
 
 			if (dataFromMsg.newPosition === "after") {
 				childrenView.insertBefore(childToMove, basePositionOnChild.nextSibling);
 			} else {
 				childrenView.insertBefore(childToMove, basePositionOnChild);
 			}
-		}
+		};
 
-		function findRepeatingElementByPath(pathToFind) {
-			var repeatingElements = childrenView.childNodes;
-			var jsonPathToFind = JSON.stringify(pathToFind);
-			var childKeys = Object.keys(childrenView.childNodes);
-			var foundKey = childKeys.find(function(repeatingElementKey) {
-				var repeatingElement = repeatingElements[repeatingElementKey];
-				var jsonPath = JSON.stringify(repeatingElement.modelObject.getPath());
+		const findRepeatingElementByPath = function(pathToFind) {
+			let repeatingElements = childrenView.childNodes;
+			let jsonPathToFind = JSON.stringify(pathToFind);
+			let childKeys = Object.keys(childrenView.childNodes);
+			let foundKey = childKeys.find(function(repeatingElementKey) {
+				let repeatingElement = repeatingElements[repeatingElementKey];
+				let jsonPath = JSON.stringify(repeatingElement.modelObject.getPath());
 				return jsonPathToFind === jsonPath;
 			});
 			return repeatingElements[foundKey];
-		}
+		};
 
-		function hideChildrensRemoveButton() {
+		const hideChildrensRemoveButton = function() {
 			callOnceOnEachRepeatingElement("hideRemoveButton");
-		}
+		};
 
-		function callOnceOnEachRepeatingElement(functionToRun) {
-			var repeatingElements = childrenView.childNodes;
-			var repeatingElementsKeys = Object.keys(repeatingElements);
+		const callOnceOnEachRepeatingElement = function(functionToRun) {
+			let repeatingElements = childrenView.childNodes;
+			let repeatingElementsKeys = Object.keys(repeatingElements);
 			repeatingElementsKeys.forEach(function(key) {
 				repeatingElements[key].modelObject[functionToRun]();
 			});
-		}
+		};
 
-		function showChildrensRemoveButton() {
+		const showChildrensRemoveButton = function() {
 			callOnceOnEachRepeatingElement("showRemoveButton");
-		}
+		};
 
-		function hideChildrensDragButton() {
+		const hideChildrensDragButton = function() {
 			callOnceOnEachRepeatingElement("hideDragButton");
-		}
+		};
 
-		function showChildrensDragButton() {
+		const showChildrensDragButton = function() {
 			callOnceOnEachRepeatingElement("showDragButton");
-		}
+		};
 
-		function hideChildrensAddBeforeButton() {
+		const hideChildrensAddBeforeButton = function() {
 			callOnceOnEachRepeatingElement("hideAddBeforeButton");
-		}
+		};
 
-		function showChildrensAddBeforeButton() {
+		const showChildrensAddBeforeButton = function() {
 			callOnceOnEachRepeatingElement("showAddBeforeButton");
-		}
+		};
 
-		var out = Object.freeze({
-			"type" : "pChildRefHandlerView",
+		let out = Object.freeze({
+			type : "pChildRefHandlerView",
 			getView : getView,
 			setRepeatingElementDragOver : setRepeatingElementDragOver,
 			addChild : addChild,
@@ -345,6 +347,7 @@ var CORA = (function(cora) {
 			hideButtonView : hideButtonView,
 			showButtonView : showButtonView
 		});
+		start();
 		view.viewObject = out;
 		return out;
 	};

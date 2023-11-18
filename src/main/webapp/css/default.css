@@ -6,3 +6,14 @@
 	right: 1rem;
 	z-index: 999;
 }
+
+h1{
+	color: var(--color-white);
+	background-color: var(--maincolor-50-trans);
+}
+h2{
+	background-color: var(--maincolor-30-trans);
+}
+h3{
+	background-color: var(--maincolor-10-trans);
+}

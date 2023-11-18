@@ -1,5 +1,5 @@
 :root {
-  --main-loading-color: #0082c9;
+  --main-loading-color: #0082c8;
   --main-darkare-color: #014d77;
   --color-light-grey: #DCDCDC;
   --color-white: white;
@@ -7,7 +7,9 @@
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --blue-10-trans: rgba(117, 88, 141, 0.1);
+  --maincolor-10-trans: rgba(0, 130, 200, 0.1);
+  --maincolor-30-trans: rgba(0, 130, 200, 0.3);
+  --maincolor-50-trans: rgba(0, 130, 200, 0.5);
   --color-selected-on-menu: black;
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);

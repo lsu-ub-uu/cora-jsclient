@@ -3,6 +3,10 @@
   --alvin-color: #7fbfa7;
   --alvin-text-color: #575757;
   --alvin-alternative-text-color: #bf7125;
+  --color-white: white;
+  --maincolor-10-trans: rgba(198, 132, 68, 0.1);
+  --maincolor-30-trans: rgba(198, 132, 68, 0.3);
+  --maincolor-50-trans: rgba(198, 132, 68, 0.5);
 }
 #systemOneLoading, #divaLoading {
 	display: none;

@@ -20,19 +20,21 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.jsClient = function(dependencies, spec) {
+		const metadataProvider = dependencies.providers.metadataProvider;
+		const textProvider = dependencies.providers.textProvider;
+		const recordTypeProvider = dependencies.providers.recordTypeProvider;
+		const searchProvider = dependencies.providers.searchProvider;
+
+		const loginManagerFactory = dependencies.globalFactories.loginManagerFactory;
+		const recordHandlerFactory = dependencies.globalFactories.recordHandlerFactory;
+		const managedGuiItemFactory = dependencies.globalFactories.managedGuiItemFactory;
+		
 		let out;
 		let NO_OF_PROVIDERS = 4;
 		let reloadingProvidersInProgress = false;
 		let reloadedProviders = 0;
 
-		let metadataProvider = dependencies.providers.metadataProvider;
-		let textProvider = dependencies.providers.textProvider;
-		let recordTypeProvider = dependencies.providers.recordTypeProvider;
-		let searchProvider = dependencies.providers.searchProvider;
-
 		let jsClientView;
-		let managedGuiItemShowing = undefined;
-		let managedGuiItemList = [];
 		let openGuiItemHandler;
 
 		const start = function() {
@@ -49,12 +51,10 @@ var CORA = (function(cora) {
 			let loginManager = createLoginManager();
 			jsClientView.addLoginManagerView(loginManager.getHtml());
 
-			jsClientView
-				.addGlobalView(dependencies.uploadManager.getManagedGuiItem().getMenuView());
+			jsClientView.addGlobalView(dependencies.uploadManager.getManagedGuiItem().getMenuView());
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
-//			addGuiItem(dependencies.uploadManager.getManagedGuiItem());
 		};
 		
 		const createLoginManager = function() {
@@ -66,8 +66,7 @@ var CORA = (function(cora) {
 				baseUrl: spec.baseUrl,
 				jsClient: out
 			};
-			let loginManager = dependencies.globalFactories.loginManagerFactory
-				.factor(loginManagerSpec);
+			let loginManager = loginManagerFactory.factor(loginManagerSpec);
 			dependencies.globalInstances.loginManager = loginManager;
 			return loginManager;
 		};
@@ -126,41 +125,24 @@ var CORA = (function(cora) {
 		};
 
 		const showView = function(managedGuiItem) {
-			resetLastShowingMenuItem();
 			showNewWorkView(managedGuiItem);
-			updateShowingManagedGuiItem(managedGuiItem);
-			managedGuiItemShowing = managedGuiItem;
+			openGuiItemHandler.showView(managedGuiItem);
 		};
 
 		const addGuiItem = function(managedGuiItem) {
 			openGuiItemHandler.addManagedGuiItem(managedGuiItem);
 		};
 
-		const resetLastShowingMenuItem = function() {
-			if (managedGuiItemShowing !== undefined) {
-				managedGuiItemShowing.setActive(false);
-				managedGuiItemShowing.hideWorkView();
-			}
-		};
-
 		const showNewWorkView = function(managedGuiItem) {
 			if (managedGuiItem.getWorkView().parentNode !== jsClientView.getWorkView()) {
 				jsClientView.addToWorkView(managedGuiItem.getWorkView());
 			}
-			managedGuiItem.showWorkView();
-
-			removeManagedGuiItemFromList(managedGuiItem);
-			managedGuiItemList.push(managedGuiItem);
 		};
 
-		const removeManagedGuiItemFromList = function(managedGuiItem) {
-			if (managedGuiItemList.indexOf(managedGuiItem) >= 0) {
-				managedGuiItemList.splice(managedGuiItemList.indexOf(managedGuiItem), 1);
-			}
-		};
 
-		const updateShowingManagedGuiItem = function(managedGuiItem) {
-			managedGuiItem.setActive(true);
+		const viewRemoved = function(managedGuiItem) {
+			openGuiItemHandler.viewRemoved(managedGuiItem);
+			jsClientView.removeFromWorkView(managedGuiItem.getWorkView());
 		};
 
 		const getMetadataForRecordTypeId = function(recordTypeId) {
@@ -187,19 +169,6 @@ var CORA = (function(cora) {
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 		};
 
-		const hideAndRemoveView = function(managedGuiItem) {
-			jsClientView.removeFromWorkView(managedGuiItem.getWorkView());
-		};
-
-		const viewRemoved = function(managedGuiItem) {
-			removeManagedGuiItemFromList(managedGuiItem);
-			let previous = managedGuiItemList.pop();
-			if (previous) {
-				showView(previous);
-			} else {
-				resetLastShowingMenuItem();
-			}
-		};
 
 		const openRecordUsingReadLink = function(openInfo) {
 			let record = {
@@ -214,8 +183,7 @@ var CORA = (function(cora) {
 				record: record,
 				jsClient: out
 			};
-			let recordHandlerNew = dependencies.globalFactories.recordHandlerFactory
-				.factor(recordHandlerSpec);
+			let recordHandlerNew = recordHandlerFactory.factor(recordHandlerSpec);
 			addGuiItem(recordHandlerNew.getManagedGuiItem());
 			if (openInfo.loadInBackground !== "true") {
 				showView(recordHandlerNew.getManagedGuiItem());
@@ -235,11 +203,11 @@ var CORA = (function(cora) {
 			
 			addGuiItem(definitionManagedGuiItem);
 			showView(definitionManagedGuiItem);
-			
 		};
+		
 		const createManagedGuiItem = function(reloadForMetadataChanges) {
 			let managedGuiItemSpec = assembleManagedGuiItemSpec(reloadForMetadataChanges);
-			return dependencies.globalFactories.managedGuiItemFactory.factor(managedGuiItemSpec);
+			return managedGuiItemFactory.factor(managedGuiItemSpec);
 		};
 
 		const assembleManagedGuiItemSpec = function(reloadForMetadataChanges) {
@@ -247,7 +215,6 @@ var CORA = (function(cora) {
 				activateMethod: showView,
 				removeMethod: viewRemoved,
 				callOnMetadataReloadMethod: reloadForMetadataChanges
-//				callMethodAfterShowWorkView: callMethodAfterShowWorkView
 			};
 		};
 		
@@ -282,7 +249,7 @@ var CORA = (function(cora) {
 		};
 
 		const reloadOpenRecords = function() {
-			managedGuiItemList.forEach(function(managedGuiItem) {
+			openGuiItemHandler.getItemList().forEach(function(managedGuiItem) {
 				managedGuiItem.reloadForMetadataChanges();
 			});
 		};
@@ -311,7 +278,6 @@ var CORA = (function(cora) {
 			afterLogout: afterLogout,
 			afterRecordTypeProviderReload: afterRecordTypeProviderReload,
 			afterSearchProviderReload: afterSearchProviderReload,
-			hideAndRemoveView: hideAndRemoveView,
 			viewRemoved: viewRemoved,
 			addGuiItem: addGuiItem,
 			openRecordUsingReadLink: openRecordUsingReadLink,

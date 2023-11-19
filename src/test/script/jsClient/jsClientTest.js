@@ -346,39 +346,27 @@ QUnit.test("initFactoresRecordTypeHandlersNotAddedToViewIfRecordTypeWithoutActio
 QUnit.test("showView", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
 
 	let aView = CORATEST.managedGuiItemSpy();
-	assert.strictEqual(aView.getActive(), false);
-	assert.strictEqual(aView.getWorkViewShown(), 0);
 
 	jsClient.showView(aView);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), aView.getWorkView());
-	assert.strictEqual(aView.getActive(), true);
-	assert.strictEqual(aView.getWorkViewShown(), 1);
-	assert.strictEqual(aView.getWorkViewHidden(), 0);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), aView);
 
 	let aDifferentView = CORATEST.managedGuiItemSpy();
 	assert.strictEqual(aDifferentView.getActive(), false);
 
 	jsClient.showView(aDifferentView);
 	assert.strictEqual(jsClientView.getAddedWorkView(1), aDifferentView.getWorkView());
-	assert.strictEqual(aView.getActive(), false);
-	assert.strictEqual(aView.getWorkViewHidden(), 1);
-	assert.strictEqual(aView.getWorkViewShown(), 1);
-	assert.strictEqual(aDifferentView.getActive(), true);
-	assert.strictEqual(aDifferentView.getWorkViewHidden(), 0);
-	assert.strictEqual(aDifferentView.getWorkViewShown(), 1);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(1), aDifferentView);
 
 	jsClient.showView(aView);
-	assert.strictEqual(aView.getActive(), true);
-	assert.strictEqual(aView.getWorkViewHidden(), 1);
-	assert.strictEqual(aView.getWorkViewShown(), 2);
-	assert.strictEqual(aDifferentView.getActive(), false);
-	assert.strictEqual(aDifferentView.getWorkViewHidden(), 1);
-	assert.strictEqual(aDifferentView.getWorkViewShown(), 1);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(2), aView);
 });
+
 QUnit.test("testAddGuiItem", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
@@ -398,63 +386,45 @@ QUnit.test("testAddGuiItem", function(assert) {
 	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(1), aDifferentView);
 });
 
-QUnit.test("hideAndRemoveView", function(assert) {
-	let jsClient = CORA.jsClient(this.dependencies, this.spec);
-	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
-
-	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
-
-	let aView = CORATEST.managedGuiItemSpy();
-	jsClient.showView(aView);
-
-	assert.strictEqual(jsClientView.getAddedWorkView(0), aView.getWorkView());
-
-	jsClient.hideAndRemoveView(aView);
-	assert.strictEqual(jsClientView.getRemovedWorkView(0), aView.getWorkView());
-});
 QUnit.test("testViewRemoved", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
 
 	let aView = CORATEST.managedGuiItemSpy();
-	assert.strictEqual(aView.getActive(), false);
-	assert.strictEqual(aView.getWorkViewShown(), 0);
 
 	jsClient.showView(aView);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), aView.getWorkView());
-	assert.strictEqual(aView.getActive(), true);
-	assert.strictEqual(aView.getWorkViewShown(), 1);
-	assert.strictEqual(aView.getWorkViewHidden(), 0);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), aView);
 
 	let aDifferentView = CORATEST.managedGuiItemSpy();
-	assert.strictEqual(aDifferentView.getActive(), false);
 
 	jsClient.showView(aDifferentView);
 	assert.strictEqual(jsClientView.getAddedWorkView(1), aDifferentView.getWorkView());
-	assert.strictEqual(aView.getActive(), false);
-	assert.strictEqual(aView.getWorkViewHidden(), 1);
-	assert.strictEqual(aView.getWorkViewShown(), 1);
-	assert.strictEqual(aDifferentView.getActive(), true);
-	assert.strictEqual(aDifferentView.getWorkViewHidden(), 0);
-	assert.strictEqual(aDifferentView.getWorkViewShown(), 1);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(1), aDifferentView);
 
 	let aThirdView = CORATEST.managedGuiItemSpy();
-	assert.strictEqual(aThirdView.getActive(), false);
 	jsClient.showView(aThirdView);
-	assert.strictEqual(jsClientView.getAddedWorkView(2), aThirdView.getWorkView());
+	assert.strictEqual(openGuiItemHandler.getShowViewList(2), aThirdView);
 
 	jsClient.showView(aDifferentView);
+	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(3), undefined);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(3), aDifferentView);
 	jsClient.viewRemoved(aThirdView);
+	assert.strictEqual(openGuiItemHandler.getViewRemovedList(0), aThirdView);
+	assert.strictEqual(jsClientView.getRemovedWorkView(0), aThirdView.getWorkView());
+	
 
 	jsClient.viewRemoved(aDifferentView);
-	assert.strictEqual(aView.getActive(), true);
-	assert.strictEqual(aView.getWorkViewHidden(), 1);
-	assert.strictEqual(aView.getWorkViewShown(), 2);
+	assert.strictEqual(openGuiItemHandler.getViewRemovedList(1), aDifferentView);
+	assert.strictEqual(jsClientView.getRemovedWorkView(1), aDifferentView.getWorkView());
 
 	jsClient.viewRemoved(aView);
-	assert.strictEqual(aView.getActive(), false);
+	assert.strictEqual(openGuiItemHandler.getViewRemovedList(2), aView);
+	assert.strictEqual(jsClientView.getRemovedWorkView(2), aView.getWorkView());
 });
 
 QUnit.test("getMetadataIdForRecordTypeIsPassedOnToRecordProvider", function(assert) {
@@ -571,6 +541,8 @@ QUnit.test("testOpenRecordUsingReadLink", function(assert) {
 	let recordHandler = this.recordHandlerFactory.getFactored(0);
 	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), recordHandler
 		.getManagedGuiItem());
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), recordHandler
+		.getManagedGuiItem());
 
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), recordHandler.getManagedGuiItem()
@@ -602,6 +574,7 @@ QUnit.test("testOpenRecordUsingReadLinkInBackground", function(assert) {
 	let recordHandler = this.recordHandlerFactory.getFactored(0);
 	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), recordHandler
 		.getManagedGuiItem());
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), undefined);
 
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
@@ -633,6 +606,7 @@ QUnit.test("testOpenDefinitionViewerForId", function(assert) {
 	
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
 
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
@@ -729,8 +703,12 @@ QUnit.test("testReloadProvidersReloadsManagedGuiItem", function(assert) {
 	jsClient.showView(aGuiItem);
 	let aGuiItem2 = CORATEST.managedGuiItemSpy();
 	jsClient.showView(aGuiItem2);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	openGuiItemHandler.setGetItemList([aGuiItem, aGuiItem2]);
+
 
 	jsClient.reloadProviders();
+	
 	this.metadataProvider.callWhenReloadedMethod();
 	this.textProvider.callWhenReloadedMethod();
 	this.recordTypeProvider.callWhenReloadedMethod();
@@ -773,10 +751,13 @@ QUnit.test("testSetCurrentLangReloadsManagedGuiItem", function(assert) {
 	this.dependencies.providers.recordTypeProvider = this.recordTypeProvider;
 
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
+	
 	let aGuiItem = CORATEST.managedGuiItemSpy();
 	jsClient.showView(aGuiItem);
 	let aGuiItem2 = CORATEST.managedGuiItemSpy();
-	jsClient.showView(aGuiItem2);
+	jsClient.showView(aGuiItem2);	
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	openGuiItemHandler.setGetItemList([aGuiItem, aGuiItem2]);
 
 	jsClient.setCurrentLang("en");
 

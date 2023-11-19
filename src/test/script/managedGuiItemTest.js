@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -120,15 +120,6 @@ QUnit.test("testRemoveMethodPassedOnToViewCallsMethodWithSelf", function(assert)
 	var factoredSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
 	factoredSpec.removeMethod();
 	assert.strictEqual(calledWithManagedGuiItem, managedGuiItem);
-});
-
-QUnit.test("testRemoveMethodCallsRemoveOnView", function(assert) {
-	var managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
-	var factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
-
-	assert.strictEqual(factoredView.getRemoved(), 0);
-	managedGuiItem.remove();
-	assert.strictEqual(factoredView.getRemoved(), 1);
 });
 
 QUnit.test("testDisableRemoveNoRemoveFunctionToView", function(assert) {

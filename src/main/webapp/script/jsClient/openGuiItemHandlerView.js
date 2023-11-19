@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,12 +20,12 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.openGuiItemHandlerView = function(dependencies, spec) {
-		var out;
-		var view;
-		var header;
-		var childrenView;
+		let out;
+		let view;
+		let header;
+		let childrenView;
 
-		function start() {
+		const start = function() {
 			view = CORA.gui.createSpanWithClassName("openGuiItemHandlerView");
 
 			header = createHeader();
@@ -33,35 +33,47 @@ var CORA = (function(cora) {
 
 			childrenView = CORA.gui.createSpanWithClassName("childrenView");
 			view.appendChild(childrenView);
-		}
+		};
 
-		function createHeader() {
-			var headerNew = CORA.gui.createSpanWithClassName("header");
+		const createHeader = function() {
+			let headerNew = CORA.gui.createSpanWithClassName("header");
 			headerNew.onclick = spec.openSearchMethod;
 			headerNew.textContent = spec.headerText;
 			return headerNew;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function addManagedGuiItem(managedGuiItem) {
-			childrenView.appendChild(managedGuiItem.getMenuView());
+		const addManagedGuiItem = function(menuView) {
+			childrenView.appendChild(menuView);
 			view.scrollIntoView();
-		}
+		};
 
-		function removeManagedGuiItem(managedGuiItem) {
-			childrenView.removeChild(managedGuiItem.getMenuView());
-		}
-
-		function getDependencies() {
+		const removeManagedGuiItem = function(menuView) {
+			childrenView.removeChild(menuView);
+		};
+		
+		const moveMenuViewUp = function(menuView){
+			if(menuView.previousSibling){
+				childrenView.insertBefore(menuView, menuView.previousSibling);
+			}
+		};
+		
+		const moveMenuViewDown = function(menuView){
+			if(menuView.nextSibling){
+				childrenView.insertBefore(menuView, menuView.nextSibling.nextSibling);
+			}
+		};
+		
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		out = Object.freeze({
 			type : "openGuiItemHandlerView",
@@ -69,7 +81,9 @@ var CORA = (function(cora) {
 			getSpec : getSpec,
 			getView : getView,
 			addManagedGuiItem : addManagedGuiItem,
-			removeManagedGuiItem : removeManagedGuiItem
+			removeManagedGuiItem : removeManagedGuiItem,
+			moveMenuViewUp : moveMenuViewUp,
+			moveMenuViewDown : moveMenuViewDown
 		});
 		start();
 		return out;

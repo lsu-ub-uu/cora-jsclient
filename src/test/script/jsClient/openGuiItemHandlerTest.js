@@ -217,6 +217,58 @@ QUnit.test("testAddManagedGuiItem_viewRemoved_lastActiveReset", function(assert)
 	assert.strictEqual(openGuiItemHandler.getShowingItem(), undefined);
 });
 
+QUnit.test("testGetShowingGuiItem", function(assert) {
+	let openGuiItemHandler = CORA.openGuiItemHandler(this.dependencies, this.spec);
+	let aItem = CORATEST.managedGuiItemSpy();
+	let bItem = CORATEST.managedGuiItemSpy();
+	
+	openGuiItemHandler.addManagedGuiItem(aItem);
+	openGuiItemHandler.addManagedGuiItem(bItem);
+	
+	assert.strictEqual(openGuiItemHandler.getShowingGuiItem(), undefined);
+	
+	openGuiItemHandler.showView(aItem);
+	assert.strictEqual(openGuiItemHandler.getShowingGuiItem(), aItem);
+});
+
+QUnit.test("testGetNextGuiItem", function(assert) {
+	let openGuiItemHandler = CORA.openGuiItemHandler(this.dependencies, this.spec);
+	let aItem = CORATEST.managedGuiItemSpy();
+	let bItem = CORATEST.managedGuiItemSpy();
+	assert.strictEqual(openGuiItemHandler.getNextGuiItem(), undefined);
+	
+	openGuiItemHandler.addManagedGuiItem(aItem);
+	openGuiItemHandler.addManagedGuiItem(bItem);
+	
+	assert.strictEqual(openGuiItemHandler.getNextGuiItem(), undefined);
+	
+	openGuiItemHandler.showView(aItem);
+	assert.strictEqual(openGuiItemHandler.getNextGuiItem(), bItem);
+	
+	openGuiItemHandler.showView(bItem);
+	assert.strictEqual(openGuiItemHandler.getNextGuiItem(), undefined);
+});
+
+QUnit.test("testGetPreviousGuiItem", function(assert) {
+	let openGuiItemHandler = CORA.openGuiItemHandler(this.dependencies, this.spec);
+	let aItem = CORATEST.managedGuiItemSpy();
+	let bItem = CORATEST.managedGuiItemSpy();
+	assert.strictEqual(openGuiItemHandler.getNextGuiItem(), undefined);
+	
+	openGuiItemHandler.addManagedGuiItem(aItem);
+	openGuiItemHandler.addManagedGuiItem(bItem);
+	
+	assert.strictEqual(openGuiItemHandler.getPreviousGuiItem(), undefined);
+	
+	openGuiItemHandler.showView(aItem);
+	assert.strictEqual(openGuiItemHandler.getPreviousGuiItem(), undefined);
+	
+	openGuiItemHandler.showView(bItem);
+	assert.strictEqual(openGuiItemHandler.getPreviousGuiItem(), aItem);
+});
+
+
+
 QUnit.test("testAddManagedGuiItem_noMoveIfNoCurrentMenuView", function(assert) {
 	let openGuiItemHandler = CORA.openGuiItemHandler(this.dependencies, this.spec);
 	let factoredView = this.dependencies.openGuiItemHandlerViewFactory.getFactored(0);
@@ -232,21 +284,47 @@ QUnit.test("testAddManagedGuiItem_noMoveIfNoCurrentMenuView", function(assert) {
 	assert.strictEqual(factoredView.getMoveMenuViewUp(0), undefined);
 	assert.strictEqual(factoredView.getMoveMenuViewDown(0), undefined);
 });
+
 QUnit.test("testAddManagedGuiItem_moveCurrentMenuViewUp", function(assert) {
 	let openGuiItemHandler = CORA.openGuiItemHandler(this.dependencies, this.spec);
 	let factoredView = this.dependencies.openGuiItemHandlerViewFactory.getFactored(0);
 	let aItem = CORATEST.managedGuiItemSpy();
 	let bItem = CORATEST.managedGuiItemSpy();
+	let cItem = CORATEST.managedGuiItemSpy();
 	
 	openGuiItemHandler.addManagedGuiItem(aItem);
-	openGuiItemHandler.showView(aItem);
 	openGuiItemHandler.addManagedGuiItem(bItem);
-	openGuiItemHandler.showView(bItem);
+	openGuiItemHandler.addManagedGuiItem(cItem);
 	openGuiItemHandler.showView(aItem);
+	openGuiItemHandler.showView(bItem);
+	openGuiItemHandler.showView(cItem);
+	assert.deepEqual(openGuiItemHandler.getItemList(), [aItem, bItem, cItem]);
 	
 	openGuiItemHandler.moveCurrentMenuViewUp();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [aItem, cItem, bItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
 	
-	assert.strictEqual(factoredView.getMoveMenuViewUp(0), aItem.getMenuView());
+	openGuiItemHandler.moveCurrentMenuViewUp();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [cItem, aItem, bItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
+	
+	openGuiItemHandler.moveCurrentMenuViewUp();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [cItem, aItem, bItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
+	
+	openGuiItemHandler.moveCurrentMenuViewDown();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [aItem, cItem, bItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
+	
+	openGuiItemHandler.moveCurrentMenuViewDown();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [aItem, bItem, cItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
+	
+	openGuiItemHandler.moveCurrentMenuViewDown();
+	assert.deepEqual(openGuiItemHandler.getItemList(), [aItem, bItem, cItem]);
+	assert.strictEqual(factoredView.getMoveMenuViewUp(0), cItem.getMenuView());
+	
+	
 });
 
 QUnit.test("testAddManagedGuiItem_moveCurrentMenuViewDown", function(assert) {

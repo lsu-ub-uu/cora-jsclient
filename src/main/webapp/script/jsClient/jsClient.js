@@ -38,6 +38,7 @@ var CORA = (function(cora) {
 		let openGuiItemHandler;
 
 		const start = function() {
+			document.addEventListener('keydown', onKeyDown);
 			dependencies.globalInstances.clientInstanceProvider.setJsClient(out);
 			let jsClientViewSpec = {
 				name: spec.name,
@@ -55,6 +56,69 @@ var CORA = (function(cora) {
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
+			
+		};
+		
+		const onKeyDown = function(event){
+			let keyPressed = event.key;
+			if (event.altKey && keyPressed === 's') {
+				return save(event);
+			}
+			if (event.altKey && keyPressed === 'w') {
+				return close(event);
+			}
+			if (event.ctrlKey && event.altKey && keyPressed === 'ArrowUp') {
+				return moveShowingUp(event);
+			}
+			if (event.ctrlKey && event.altKey && keyPressed === 'ArrowDown') {
+				return moveShowingDown(event);
+			}
+			if (event.altKey && keyPressed === 'ArrowUp') {
+				return changeToPreviousShowing(event);
+			}
+			if (event.altKey && keyPressed === 'ArrowDown') {
+				return changeToNextShowing(event);
+			}
+		};
+		
+		const save = function(event) {
+			event.preventDefault();
+			if(openGuiItemHandler.getShowingGuiItem()){
+				openGuiItemHandler.getShowingGuiItem().sendDataToServer();
+			}
+		};
+		
+		const close = function(event) {
+			event.preventDefault();
+			if(openGuiItemHandler.getShowingGuiItem()){
+				viewRemoved(openGuiItemHandler.getShowingGuiItem());
+			}
+		};
+		
+		const moveShowingUp = function(event) {
+			event.preventDefault();
+			openGuiItemHandler.moveCurrentMenuViewUp();
+		};
+		
+		const moveShowingDown = function(event) {
+			event.preventDefault();
+			openGuiItemHandler.moveCurrentMenuViewDown();
+		};
+		
+		const changeToPreviousShowing = function(event) {
+			event.preventDefault();
+			let switchToItem = openGuiItemHandler.getPreviousGuiItem();
+			if(switchToItem){
+				showView(switchToItem);
+			}
+		};
+		
+		const changeToNextShowing = function(event) {
+			event.preventDefault();
+			let switchToItem = openGuiItemHandler.getNextGuiItem();
+			if(switchToItem){
+				showView(switchToItem);
+			}
 		};
 		
 		const createLoginManager = function() {
@@ -283,7 +347,8 @@ var CORA = (function(cora) {
 			openRecordUsingReadLink: openRecordUsingReadLink,
 			reloadProviders: reloadProviders,
 			setCurrentLang: setCurrentLang,
-			openDefinitionViewerForId : openDefinitionViewerForId
+			openDefinitionViewerForId : openDefinitionViewerForId,
+			onKeyDown: onKeyDown
 		});
 		start();
 

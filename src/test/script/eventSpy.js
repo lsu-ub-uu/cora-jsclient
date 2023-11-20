@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,17 +19,20 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.eventSpy = function() {
-		var stopPropagationIsCalled = false;
-		var preventDefaultIsCalled = false;
-		var target;
-		var screenY;
-		var dataTransfer = function() {
-			var format = "";
-			var data = "";
+		let stopPropagationIsCalled = false;
+		let preventDefaultIsCalled = false;
+		let target;
+		let screenY;
+		let key;
+		let ctrlKey;
+		let altKey;
+		
+		let dataTransfer = function() {
+			let format = "";
+			let data = "";
 			function setData(formatIn, dataIn) {
 				format = formatIn;
 				data = dataIn;
-//				console.log(formatIn + dataIn)
 			}
 			function getFormat(){
 				return format;
@@ -68,6 +71,9 @@ var CORATEST = (function(coraTest) {
 			target : target,
 			screenY : screenY,
 			dataTransfer : dataTransfer,
+			key : key,
+			ctrlKey : ctrlKey,
+			altKey : altKey
 		});
 	};
 	return coraTest;

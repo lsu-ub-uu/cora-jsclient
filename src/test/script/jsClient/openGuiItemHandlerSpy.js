@@ -29,6 +29,12 @@ var CORATEST = (function(coraTest) {
 		let callsToItemList = 0;
 		let getItemListList = [];
 
+		let callsToMoveCurrentMenuViewUp = 0;
+		let callsToMoveCurrentMenuViewDown = 0;
+		let previousGuiItem;
+		let nextGuiItem;
+		let showingGuiItem;
+		
 		function getView() {
 			getViewCalled++;
 			return view;
@@ -71,6 +77,40 @@ var CORATEST = (function(coraTest) {
 			return showViewList[number];
 		}
 
+		function moveCurrentMenuViewUp() {
+			callsToMoveCurrentMenuViewUp++;
+		}
+		function getCallsToMoveCurrentMenuViewUp() {
+			return callsToMoveCurrentMenuViewUp;
+		}
+		
+		function moveCurrentMenuViewDown() {
+			callsToMoveCurrentMenuViewDown++;
+		}
+		function getCallsToMoveCurrentMenuViewDown() {
+			return callsToMoveCurrentMenuViewDown;
+		}
+
+		function getPreviousGuiItem() {
+			return previousGuiItem;
+		}
+		function setGetPreviousGuiItem(itemToReturn) {
+			previousGuiItem = itemToReturn;
+		}
+		function getNextGuiItem() {
+			return nextGuiItem;
+		}
+		function setGetNextGuiItem(itemToReturn) {
+			nextGuiItem = itemToReturn;
+		}
+		
+		function getShowingGuiItem() {
+			return showingGuiItem;
+		}
+		function setGetShowingGuiItem(itemToReturn) {
+			showingGuiItem = itemToReturn;
+		}
+		
 		return Object.freeze({
 			type : "openGuiItemHandlerSpy",
 			getView : getView,
@@ -84,7 +124,22 @@ var CORATEST = (function(coraTest) {
 			viewRemoved : viewRemoved,
 			getViewRemovedList: getViewRemovedList,
 			showView : showView,
-			getShowViewList: getShowViewList
+			getShowViewList: getShowViewList,
+			
+			moveCurrentMenuViewUp: moveCurrentMenuViewUp,
+			callsToMoveCurrentMenuViewUp: callsToMoveCurrentMenuViewUp,
+			getCallsToMoveCurrentMenuViewUp: getCallsToMoveCurrentMenuViewUp,
+			moveCurrentMenuViewDown: moveCurrentMenuViewDown,
+			callsToMoveCurrentMenuViewDown: callsToMoveCurrentMenuViewDown,
+			getCallsToMoveCurrentMenuViewDown: getCallsToMoveCurrentMenuViewDown,
+			getPreviousGuiItem: getPreviousGuiItem,
+			setGetPreviousGuiItem: setGetPreviousGuiItem,
+			getNextGuiItem: getNextGuiItem,
+			setGetNextGuiItem: setGetNextGuiItem,
+			
+			getShowingGuiItem: getShowingGuiItem,
+			setGetShowingGuiItem: setGetShowingGuiItem
+			
 		});
 	};
 	return coraTest;

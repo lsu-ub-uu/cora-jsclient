@@ -125,7 +125,7 @@ var CORATEST = (function(coraTest) {
 		}
 		
 		var out = Object.freeze({
-			"type" : "jsClientViewSpy",
+			type : "jsClientViewSpy",
 			getView : getView,
 			addToSearchesView : addToSearchesView,
 			getSearchesView : getSearchesView,

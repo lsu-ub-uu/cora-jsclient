@@ -50,7 +50,6 @@ height: calc(100% - 2.5rem);
 }
 
 .jsClient > .header .menuView {
-	top: 0.3rem;
 	left: 20rem;
 	padding-left: 1rem;
 }

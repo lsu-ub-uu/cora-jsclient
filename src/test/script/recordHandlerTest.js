@@ -252,6 +252,7 @@ QUnit.test("testInitRecordHandlerViewMenuFactoredAndAdded", function(assert) {
 
 QUnit.test("testInitRecordHandlerViewButtonCreated", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	this.answerCall(0);
 
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
@@ -265,6 +266,8 @@ QUnit.test("testInitRecordHandlerViewButtonCreated", function(assert) {
 	assert.strictEqual(updateButtonSpec.text, "UPDATE");
 	assert.strictEqual(updateButtonSpec.className, "update");
 	assert.strictEqual(updateButtonSpec.onclickMethod, recordHandler.sendUpdateDataToServer);
+	assert.strictEqual(managedGuiItem.getSendDataToServer(), recordHandler.sendUpdateDataToServer);
+	
 });
 
 QUnit.test("testShowData", function(assert) {
@@ -1356,6 +1359,7 @@ QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 
 QUnit.test("testCreateNewCall", function(assert) {
 	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNew);
+	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 0);
 
@@ -1363,6 +1367,10 @@ QUnit.test("testCreateNewCall", function(assert) {
 	let createButtonSpec = recordHandlerViewSpy.getAddedButton(0);
 	assert.strictEqual(createButtonSpec.className, "create");
 	createButtonSpec.onclickMethod();
+	assert.strictEqual(createButtonSpec.text, "CREATE");
+	assert.strictEqual(createButtonSpec.className, "create");
+	assert.strictEqual(createButtonSpec.onclickMethod, recordHandler.sendNewDataToServer);
+	assert.strictEqual(managedGuiItem.getSendDataToServer(), recordHandler.sendNewDataToServer);
 
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 1);
 
@@ -1389,7 +1397,7 @@ QUnit.test("testCreateNewCall", function(assert) {
 	assert.strictEqual(updateButtonSpec.className, "update");
 });
 
-QUnit.test("testCreateNewCall", function(assert) {
+QUnit.test("testCreateNewCall2", function(assert) {
 	CORA.recordHandler(this.dependencies, this.specForNew);
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 0);

@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let changed = false;
 		let viewSpec;
 		let view;
+		let sendDataToServerMethod;
 
 		const start = function() {
 			viewSpec = {
@@ -117,6 +118,16 @@ var CORA = (function(cora) {
 				spec.callOnMetadataReloadMethod();
 			}
 		};
+		
+		const setSendDataToServer = function(method) {
+			sendDataToServerMethod = method;
+		};
+		
+		const sendDataToServer = function() {
+			if (sendDataToServerMethod !== undefined) {
+				sendDataToServerMethod();
+			}
+		};
 
 		out = Object.freeze({
 			type : "managedGuiItem",
@@ -135,7 +146,9 @@ var CORA = (function(cora) {
 			showWorkView : showWorkView,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
-			reloadForMetadataChanges : reloadForMetadataChanges
+			reloadForMetadataChanges : reloadForMetadataChanges,
+			setSendDataToServer : setSendDataToServer,
+			sendDataToServer : sendDataToServer
 		});
 		start();
 		return out;

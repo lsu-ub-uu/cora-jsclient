@@ -95,18 +95,53 @@ var CORA = (function(cora) {
 			} 
 		};
 		
+		const getShowingGuiItem = function(){
+			return managedGuiItemShowing;
+		};
+
+		const getNextGuiItem = function(){
+			if(managedGuiItemShowing){
+				return managedGuiItemList[managedGuiItemList.indexOf(managedGuiItemShowing)+1];
+			}
+			return undefined;
+		};
+		
+		const getPreviousGuiItem = function(){
+			if(managedGuiItemShowing){
+				return managedGuiItemList[managedGuiItemList.indexOf(managedGuiItemShowing)-1];
+			}
+			return undefined;
+		};
+
 		const moveCurrentMenuViewUp = function(){
 			if(managedGuiItemShowing){
+				moveShowingGuiItemUpInInternalList();
 				view.moveMenuViewUp(managedGuiItemShowing.getMenuView());
 			}
 		};
 		
+		const moveShowingGuiItemUpInInternalList = function(){
+			let currentIndex = managedGuiItemList.indexOf(managedGuiItemShowing);
+			if(currentIndex > 0){
+				managedGuiItemList.splice(currentIndex, 1);
+				managedGuiItemList.splice(currentIndex-1, 0, managedGuiItemShowing);
+			}
+		} 
+		
 		const moveCurrentMenuViewDown = function(menuView){
 			if(managedGuiItemShowing){
+				moveShowingGuiItemDownInInternalList();
 				view.moveMenuViewDown(managedGuiItemShowing.getMenuView());
 			}
 		};
 		
+		const moveShowingGuiItemDownInInternalList = function(){
+			let currentIndex = managedGuiItemList.indexOf(managedGuiItemShowing);
+			if(currentIndex < managedGuiItemList.length-1 ){
+				managedGuiItemList.splice(currentIndex, 1);
+				managedGuiItemList.splice(currentIndex+1, 0, managedGuiItemShowing);
+			}
+		} 
 
 		const getView = function() {
 			return view.getView();
@@ -130,8 +165,11 @@ var CORA = (function(cora) {
 			getItemList : getItemList,
 			viewRemoved : viewRemoved,
 			showView : showView,
+			getShowingGuiItem : getShowingGuiItem,
+			getNextGuiItem : getNextGuiItem,
+			getPreviousGuiItem : getPreviousGuiItem,
 			moveCurrentMenuViewUp : moveCurrentMenuViewUp,
-			moveCurrentMenuViewDown : moveCurrentMenuViewDown
+			moveCurrentMenuViewDown : moveCurrentMenuViewDown,
 		});
 		start();
 		return out;

@@ -43,7 +43,7 @@ h2 {
 height: calc(100% - 2.5rem);
 }
 
-.jsClient .text {
+.jsClient .text, .jsClient h1, .jsClient h2, .jsClient h3, .jsClient h3 {
     margin: 0;
     color: #5C4A6B;
     letter-spacing: 2px;

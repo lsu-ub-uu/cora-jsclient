@@ -1,5 +1,6 @@
 :root {
   --main-loading-color: #0082c8;
+  --main-color: #0082c8;
   --main-darkare-color: #014d77;
   --color-light-grey: #DCDCDC;
   --color-white: white;
@@ -34,7 +35,7 @@ body {
 }
 
 .holder.tool {
-	background-color: #c3ddeb;
+	background-color: var(--main-color);
 	display: flex;
 	min-height: 5rem;
 	position: absolute;

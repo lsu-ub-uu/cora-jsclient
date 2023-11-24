@@ -1,12 +1,16 @@
 :root {
-  --main-loading-color: #c68444;
-  --alvin-color: #7fbfa7;
-  --alvin-text-color: #575757;
-  --alvin-alternative-text-color: #bf7125;
+  --main-loading-color: #bF7125;
+  --main-color: #7fbfa7;
+  --main-darkare-color: #55967d;
+  --title-text-color: #575757;
+  --alvin-alternative-text-color: #bF7125;
   --color-white: white;
-  --maincolor-10-trans: rgba(198, 132, 68, 0.1);
-  --maincolor-30-trans: rgba(198, 132, 68, 0.3);
-  --maincolor-50-trans: rgba(198, 132, 68, 0.5);
+  --color-black: black;
+  --maincolor-10-trans: rgba(127, 191, 167, 0.4);
+  --maincolor-30-trans: rgba(127, 191, 167, 0.6);
+  --maincolor-50-trans: rgba(127, 191, 167, 1);
+  
+  --alternative-color-medium-trans: rgba(215, 170, 120, 1);
 }
 #systemOneLoading, #divaLoading {
 	display: none;
@@ -22,10 +26,11 @@
     font-style: normal;
 }
 .jsClient.mainView {
-	border-color: var(--alvin-color);
+	border-color: var(--main-color);
 	font-family: "Open Sans", verdana, arial, helvetica, sans-serif;
 }
 .jsClient > .sideBar {
+	scrollbar-color: var(--main-color) var(--color-light-grey);
     border-color: inherit;
     border-right-style: none;
     border-left: 1px solid;
@@ -34,6 +39,10 @@
 	position: absolute;
 	right: 0;
 }
+.sideBar .openGuiItemHandlerView > .header, .searchesViewHeadline, .recordTypeGroupHeadline {
+	color: var(--title-text-color);
+}
+
 .jsClient > .workArea {
 	margin-right: 0.5rem;
 	margin-left: 0.5rem;
@@ -68,7 +77,7 @@
 }
 .jsClient>.header {
 	text-shadow: none;
-	background-color: #ffffff;
+	background-color: var(--color-white);
     font-family: 'UniversalisADFStdRegular';
    font-weight: normal;
    font-style: normal;
@@ -76,15 +85,27 @@
    padding-top:0.5rem;
    border:none;
    border-top: 10px solid lightgrey;
-   border-bottom: 1px solid var(--alvin-color);
+   border-bottom: 1px solid var(--main-color);
+}
+.jsClient > .header .menuView{
+	color:#222222;
 }
 
 .jsClient .showView .h1TextStyle .text { 
 	color: black;
 }
 
+h1, .h1TextStyle{
+  font-size: 1.6rem;
+  color: var(--color-white);
+  background-color: var(--color-black);
+}
+.removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
+	transform: none;
+}
+
 .editView .presentation h2, .editView .presentation .text.h2TextStyle {
-	background-color: var(--alvin-color);
+	background-color: var(--main-color);
 }
 
 .editView .presentation .pSurroundingContainer h2, 
@@ -98,15 +119,15 @@
 }
 
 .holder.loginManagerView {
-	background: var(--alvin-color);
+	background: var(--main-color);
 }
 
 .topBar {
-	border-color: var(--alvin-color);
+	border-color: var(--main-color);
 }
 
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler {
-	border: 1px solid var(--alvin-color);
+	border: 1px solid var(--main-color);
 	margin-bottom: 1rem;
 }
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler > .pSurroundingContainer .pChildRefHandler {
@@ -116,13 +137,13 @@
 	margin-top: none;
 }
 .editView .presentation > .pGroup > .pNonRepeatingChildRefHandler.containsData {
-	border: 1px solid var(--alvin-color);
-	background: linear-gradient( var(--alvin-color) 1.8rem, transparent 1.8rem);
+	border: 1px solid var(--main-color);
+	background: linear-gradient( var(--main-color) 1.8rem, transparent 1.8rem);
 }
 
 .editView .presentation > .pGroup >  .pNonRepeatingChildRefHandler.containsNoData {
-	border: 1px solid var(--alvin-color);
-	background: linear-gradient( #dddddd 1.8rem, var(--alvin-color) 1px, transparent calc(1.8rem + 1px));
+	border: 1px solid var(--main-color);
+	background: linear-gradient( #dddddd 1.8rem, var(--main-color) 1px, transparent calc(1.8rem + 1px));
 }
 
 .presentation .text.labelTextStyle {
@@ -131,7 +152,7 @@
 }
 
 .jsClient .text.h2TextStyle, .recordTypeGroupHeadline{
-	color:var(--alvin-text-color);
+	color:var(--title-text-color);
 }
 
 .header select{
@@ -146,7 +167,7 @@ input[type="button"] {
 	margin: 0.1rem;
 	text-decoration: none;
 	background: #232323;
-	color: #ffffff;
+	color: var(--color-white);
 	font-size: 0.7rem;
 	font-weight: bold;
 	line-height: 1;

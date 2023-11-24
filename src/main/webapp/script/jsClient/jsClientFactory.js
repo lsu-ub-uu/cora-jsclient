@@ -186,7 +186,7 @@ var CORA = (function(cora) {
 				"globalFactories" : globalFactories,
 
 				"authTokenHolder" : authTokenHolder,
-				"jsClientViewFactory" : CORA.jsClientViewFactory(),
+				"jsClientViewFactory" : CORA.jsClientViewFactory(providers),
 				"appTokenLoginFactory" : appTokenLoginFactory,
 				"openGuiItemHandlerFactory" : openGuiItemHandlerFactory,
 				"uploadManager" : uploadManager,

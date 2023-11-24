@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -21,50 +21,56 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.managedGuiItemView = function(spec) {
 
-		var originalMenuViewClassName = "menuView";
-		var menuView = createMenuView();
-		var workView = CORA.gui.createSpanWithClassName("workView");
-		var listView = CORA.gui.createSpanWithClassName("listView");
-
-		function createMenuView() {
-			var newMenuView = CORA.gui.createSpanWithClassName(originalMenuViewClassName);
+		let originalMenuViewClassName = "menuView";
+		let menuView;
+		let workView;
+		let listView;
+		
+		const start = function() {
+			menuView = createMenuView();
+			workView = CORA.gui.createSpanWithClassName("workView");
+			listView = CORA.gui.createSpanWithClassName("listView");
+		};
+		
+		const createMenuView = function() {
+			let newMenuView = CORA.gui.createSpanWithClassName(originalMenuViewClassName);
 			newMenuView.onclick = spec.activateMethod;
 			possiblyCreateRemoveButton(newMenuView);
 			return newMenuView;
-		}
+		};
 
-		function possiblyCreateRemoveButton(addToView) {
+		const possiblyCreateRemoveButton = function(addToView) {
 			if (spec.removeMethod !== undefined) {
 				createRemoveButton(addToView);
 			}
 		}
-		function createRemoveButton(addToView) {
-			var newButton = CORA.gui.createRemoveButton(spec.removeMethod);
+		const createRemoveButton = function(addToView) {
+			let newButton = CORA.gui.createRemoveButton(spec.removeMethod);
 			addToView.appendChild(newButton);
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getMenuView() {
+		const getMenuView = function() {
 			return menuView;
-		}
+		};
 
-		function getWorkView() {
+		const getWorkView = function() {
 			return workView;
-		}
+		};
 
-		function addMenuPresentation(presentationToAdd) {
+		const addMenuPresentation = function(presentationToAdd) {
 			menuView.insertBefore(presentationToAdd, menuView.lastChild);
-		}
+		};
 
-		function addWorkPresentation(presentationToAdd) {
+		const addWorkPresentation = function(presentationToAdd) {
 			workView.appendChild(presentationToAdd);
-		}
+		};
 
-		function updateMenuView(state) {
-			var className = originalMenuViewClassName;
+		const updateMenuView = function(state) {
+			let className = originalMenuViewClassName;
 			if (state.changed) {
 				className += " changed";
 			}
@@ -72,51 +78,42 @@ var CORA = (function(cora) {
 				className += " active";
 			}
 			menuView.className = className;
-		}
+		};
 
-		function clearMenuView() {
-			var tempButton = menuView.lastChild;
+		const clearMenuView = function() {
+			let tempButton = menuView.lastChild;
 			clearNodeChildren(menuView);
 			menuView.appendChild(tempButton);
-		}
+		};
 
-		function clearNodeChildren(node) {
+		const clearNodeChildren = function(node) {
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-		}
+		};
 
-		function clearWorkView() {
+		const clearWorkView = function() {
 			clearNodeChildren(workView);
-		}
+		};
 
-		function hideWorkView() {
+		const hideWorkView = function() {
 			workView.style.display = "none";
-		}
+		};
 
-		function showWorkView() {
+		const showWorkView = function() {
 			workView.style.display = "";
-		}
+		};
 
-		function removeViews() {
-			if (menuView.parentNode) {
-				menuView.parentNode.removeChild(menuView);
-			}
-			if (workView.parentNode) {
-				workView.parentNode.removeChild(workView);
-			}
-		}
-
-		function getListView() {
+		const getListView = function() {
 			return listView;
-		}
+		};
 
-		function addListPresentation(presentationToAdd) {
+		const addListPresentation = function(presentationToAdd) {
 			listView.appendChild(presentationToAdd);
-		}
+		};
 
-		return Object.freeze({
-			"type" : "managedGuiItemView",
+		let out = Object.freeze({
+			type : "managedGuiItemView",
 			getSpec : getSpec,
 			getMenuView : getMenuView,
 			getWorkView : getWorkView,
@@ -127,10 +124,11 @@ var CORA = (function(cora) {
 			clearWorkView : clearWorkView,
 			hideWorkView : hideWorkView,
 			showWorkView : showWorkView,
-			removeViews : removeViews,
 			getListView : getListView,
 			addListPresentation : addListPresentation
 		});
+		start();
+		return out;
 	};
 	return cora;
 }(CORA));

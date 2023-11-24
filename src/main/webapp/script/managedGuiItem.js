@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,105 +20,117 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.managedGuiItem = function(dependencies, spec) {
-		var out;
-		var viewSpec = {
-			"activateMethod" : activate
+		let out;
+		let active = false;
+		let changed = false;
+		let viewSpec;
+		let view;
+		let sendDataToServerMethod;
+
+		const start = function() {
+			viewSpec = {
+				activateMethod : activate
+			};
+			if (spec.disableRemove !== "true") {
+				viewSpec.removeMethod = remove;
+			}
+			view = dependencies.managedGuiItemViewFactory.factor(viewSpec);
+		};
+		
+		const activate = function() {
+			spec.activateMethod(out);
 		};
 
-		if (spec.disableRemove !== "true") {
-			viewSpec.removeMethod = remove;
-		}
-
-		var view = dependencies.managedGuiItemViewFactory.factor(viewSpec);
-
-		var active = false;
-		var changed = false;
-
-		function activate() {
-			spec.activateMethod(out);
-		}
-
-		function remove() {
-			view.removeViews();
+		const remove = function() {
 			spec.removeMethod(out);
-		}
+		};
 
-		function getMenuView() {
+		const getMenuView = function() {
 			return view.getMenuView();
-		}
+		};
 
-		function getWorkView() {
+		const getWorkView = function() {
 			return view.getWorkView();
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function addMenuPresentation(presentationToAdd) {
+		const addMenuPresentation = function(presentationToAdd) {
 			view.addMenuPresentation(presentationToAdd);
-		}
+		};
 
-		function addWorkPresentation(presentationToAdd) {
+		const addWorkPresentation = function(presentationToAdd) {
 			view.addWorkPresentation(presentationToAdd);
-		}
+		};
 
-		function setChanged(changedIn) {
+		const setChanged = function(changedIn) {
 			changed = changedIn;
 			updateViewState();
-		}
+		};
 
-		function updateViewState() {
-			var state = {
-				"active" : active,
-				"changed" : changed
+		const updateViewState = function() {
+			let state = {
+				active : active,
+				changed : changed
 			};
 			view.updateMenuView(state);
 		}
-		function setActive(activeIn) {
+		const setActive = function(activeIn) {
 			active = activeIn;
 			updateViewState();
-		}
+		};
 
-		function clearMenuView() {
+		const clearMenuView = function() {
 			view.clearMenuView();
-		}
+		};
 
-		function clearWorkView() {
+		const clearWorkView = function() {
 			view.clearWorkView();
-		}
+		};
 
-		function hideWorkView() {
+		const hideWorkView = function() {
 			view.hideWorkView();
-		}
+		};
 
-		function showWorkView() {
+		const showWorkView = function() {
 			view.showWorkView();
 			if (spec.callMethodAfterShowWorkView !== undefined) {
 				spec.callMethodAfterShowWorkView();
 			}
-		}
+		};
 
-		function getListView() {
+		const getListView = function() {
 			return view.getListView();
-		}
+		};
 
-		function addListPresentation(presentationToAdd) {
+		const addListPresentation = function(presentationToAdd) {
 			view.addListPresentation(presentationToAdd);
-		}
+		};
 
-		function reloadForMetadataChanges() {
+		const reloadForMetadataChanges = function() {
 			if (spec.callOnMetadataReloadMethod !== undefined) {
 				spec.callOnMetadataReloadMethod();
 			}
-		}
+		};
+		
+		const setSendDataToServer = function(method) {
+			sendDataToServerMethod = method;
+		};
+		
+		const sendDataToServer = function() {
+			if (sendDataToServerMethod !== undefined) {
+				sendDataToServerMethod();
+			}
+		};
 
 		out = Object.freeze({
-			"type" : "managedGuiItem",
+			type : "managedGuiItem",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getMenuView : getMenuView,
@@ -134,9 +146,11 @@ var CORA = (function(cora) {
 			showWorkView : showWorkView,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
-			reloadForMetadataChanges : reloadForMetadataChanges
+			reloadForMetadataChanges : reloadForMetadataChanges,
+			setSendDataToServer : setSendDataToServer,
+			sendDataToServer : sendDataToServer
 		});
-
+		start();
 		return out;
 	};
 

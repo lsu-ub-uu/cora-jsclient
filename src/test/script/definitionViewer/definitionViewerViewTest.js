@@ -111,6 +111,20 @@ QUnit.test("testBasicMetadata", function(assert) {
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "details",  "", assert);
 });
 
+
+QUnit.test("testBasicMetadataWithFinalValue", function(assert) {
+	this.viewModel.finalValue = "someFinalValue";
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "finalValue", "{someFinalValue}", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details",  "", assert);
+});
+
 QUnit.test("testBasicMetadataOnClickOpensDefiningRecord", function(assert) {
 	let callsToOpenDefiningRecord = [];
 	const openDefiningRecordUsingEventAndId = function(event, id){

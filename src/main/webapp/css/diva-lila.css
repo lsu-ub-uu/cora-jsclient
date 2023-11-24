@@ -12,6 +12,9 @@
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.5);
+  --maincolor-10-trans: rgba(117, 89, 142, 0.1);
+  --maincolor-30-trans: rgba(117, 89, 142, 0.3);
+  --maincolor-50-trans: rgba(117, 89, 142, 0.5);
 }
 #systemOneLoading, #alvinLoading {
 	display: none;
@@ -40,14 +43,13 @@ h2 {
 height: calc(100% - 2.5rem);
 }
 
-.jsClient .text {
+.jsClient .text, .jsClient h1, .jsClient h2, .jsClient h3, .jsClient h3 {
     margin: 0;
     color: #5C4A6B;
     letter-spacing: 2px;
 }
 
 .jsClient > .header .menuView {
-	top: 0.3rem;
 	left: 20rem;
 	padding-left: 1rem;
 }
@@ -88,7 +90,7 @@ height: calc(100% - 2.5rem);
 
 .header select{
 	float:right;
-	margin-top:0.4em;
+	margin-top:1rem;
 }
 
 .workArea .workView > .workItem {
@@ -114,8 +116,8 @@ height: calc(100% - 2.5rem);
 
 .sideBar .active, .header .active {
 	font-weight: bold;
-	background-color: var(--main-loading-color) !important;
-	color: var(--color-selected-on-menu);
+/* 	background-color: var(--main-loading-color) !important; */
+/* 	color: var(--color-selected-on-menu); */
 }
 
 .workItem > .buttonView {

@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
+ * Copyright 2023 Olov McKie
  * 
  * This file is part of Cora.
  *
@@ -19,10 +20,21 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.openGuiItemHandlerSpy = function(dependencies, spec) {
-		var addedManagedGuiItem = [];
-		var getViewCalled = 0;
-		var view = CORA.gui.createSpanWithClassName("openGuiItemHandlerSpy");
+		let addedManagedGuiItem = [];
+		let getViewCalled = 0;
+		let view = CORA.gui.createSpanWithClassName("openGuiItemHandlerSpy");
+		
+		let viewRemovedList = [];
+		let showViewList = [];
+		let callsToItemList = 0;
+		let getItemListList = [];
 
+		let callsToMoveCurrentMenuViewUp = 0;
+		let callsToMoveCurrentMenuViewDown = 0;
+		let previousGuiItem;
+		let nextGuiItem;
+		let showingGuiItem;
+		
 		function getView() {
 			getViewCalled++;
 			return view;
@@ -37,11 +49,97 @@ var CORATEST = (function(coraTest) {
 			return addedManagedGuiItem[number];
 		}
 
+		function getShowingItem() {
+//			return addedManagedGuiItem;
+		}
+		function getItemList() {
+			callsToItemList++;
+			return getItemListList;
+		}
+		function setGetItemList(list) {
+			return getItemListList = list;
+		}
+		function getItemListCalled() {
+			return callsToItemList;
+		}
+
+		function viewRemoved(item) {
+			return viewRemovedList.push(item);
+		}
+		function getViewRemovedList(number) {
+			return viewRemovedList[number];
+		}
+
+		function showView(item) {
+			return showViewList.push(item);
+		}
+		function getShowViewList(number) {
+			return showViewList[number];
+		}
+
+		function moveCurrentMenuViewUp() {
+			callsToMoveCurrentMenuViewUp++;
+		}
+		function getCallsToMoveCurrentMenuViewUp() {
+			return callsToMoveCurrentMenuViewUp;
+		}
+		
+		function moveCurrentMenuViewDown() {
+			callsToMoveCurrentMenuViewDown++;
+		}
+		function getCallsToMoveCurrentMenuViewDown() {
+			return callsToMoveCurrentMenuViewDown;
+		}
+
+		function getPreviousGuiItem() {
+			return previousGuiItem;
+		}
+		function setGetPreviousGuiItem(itemToReturn) {
+			previousGuiItem = itemToReturn;
+		}
+		function getNextGuiItem() {
+			return nextGuiItem;
+		}
+		function setGetNextGuiItem(itemToReturn) {
+			nextGuiItem = itemToReturn;
+		}
+		
+		function getShowingGuiItem() {
+			return showingGuiItem;
+		}
+		function setGetShowingGuiItem(itemToReturn) {
+			showingGuiItem = itemToReturn;
+		}
+		
 		return Object.freeze({
-			"type" : "openGuiItemHandlerSpy",
+			type : "openGuiItemHandlerSpy",
 			getView : getView,
 			addManagedGuiItem : addManagedGuiItem,
-			getAddedManagedGuiItem : getAddedManagedGuiItem
+			getAddedManagedGuiItem : getAddedManagedGuiItem,
+			
+			getShowingItem : getShowingItem,
+			getItemList : getItemList,
+			setGetItemList : setGetItemList,
+			getItemListCalled: getItemListCalled,
+			viewRemoved : viewRemoved,
+			getViewRemovedList: getViewRemovedList,
+			showView : showView,
+			getShowViewList: getShowViewList,
+			
+			moveCurrentMenuViewUp: moveCurrentMenuViewUp,
+			callsToMoveCurrentMenuViewUp: callsToMoveCurrentMenuViewUp,
+			getCallsToMoveCurrentMenuViewUp: getCallsToMoveCurrentMenuViewUp,
+			moveCurrentMenuViewDown: moveCurrentMenuViewDown,
+			callsToMoveCurrentMenuViewDown: callsToMoveCurrentMenuViewDown,
+			getCallsToMoveCurrentMenuViewDown: getCallsToMoveCurrentMenuViewDown,
+			getPreviousGuiItem: getPreviousGuiItem,
+			setGetPreviousGuiItem: setGetPreviousGuiItem,
+			getNextGuiItem: getNextGuiItem,
+			setGetNextGuiItem: setGetNextGuiItem,
+			
+			getShowingGuiItem: getShowingGuiItem,
+			setGetShowingGuiItem: setGetShowingGuiItem
+			
 		});
 	};
 	return coraTest;

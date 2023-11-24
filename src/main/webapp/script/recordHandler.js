@@ -61,7 +61,7 @@ var CORA = (function(cora) {
 				activateMethod: spec.jsClient.showView,
 				removeMethod: spec.jsClient.viewRemoved,
 				callOnMetadataReloadMethod: reloadForMetadataChanges,
-				callMethodAfterShowWorkView: callMethodAfterShowWorkView
+				callMethodAfterShowWorkView: callMethodAfterShowWorkView,
 			};
 		};
 
@@ -163,7 +163,7 @@ var CORA = (function(cora) {
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
 			managedGuiItem.setChanged(dataIsChanged);
-
+			managedGuiItem.setSendDataToServer(sendNewDataToServer);
 			recordHandlerView.addButton("CREATE", sendNewDataToServer, "create");
 		};
 		
@@ -449,6 +449,7 @@ var CORA = (function(cora) {
 				recordHandlerView.addButton("DELETE", shouldRecordBeDeleted, "delete");
 			}
 			if (recordHasUpdateLink()) {
+				managedGuiItem.setSendDataToServer(sendUpdateDataToServer);
 				recordHandlerView.addButton("UPDATE", sendUpdateDataToServer, "update");
 			}
 			if (recordHasIndexLink()) {
@@ -676,6 +677,7 @@ var CORA = (function(cora) {
 			copyData: copyData,
 			showData: showData,
 			sendUpdateDataToServer: sendUpdateDataToServer,
+			sendNewDataToServer : sendNewDataToServer,
 			shouldRecordBeDeleted: shouldRecordBeDeleted,
 			getManagedGuiItem: getManagedGuiItem,
 			reloadForMetadataChanges: reloadForMetadataChanges,

@@ -18,17 +18,18 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.jsClientViewFactory = function() {
+	cora.jsClientViewFactory = function(providers) {
 
 		function factor(spec) {
-			var dependencies = {
+			let dependencies = {
 					"messageHolderFactory" : CORA.messageHolderFactory()
 			};
-			return CORA.jsClientView(dependencies, spec);
+			return CORA.jsClientView(providers, dependencies, spec);
 		}
 
 		return Object.freeze({
-			"type" : "jsClientViewFactory",
+			type : "jsClientViewFactory",
+			getProviders: providers,
 			factor : factor
 		});
 	};

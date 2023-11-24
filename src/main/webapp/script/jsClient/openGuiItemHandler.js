@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,36 +20,159 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.openGuiItemHandler = function(dependencies, spec) {
-
-		var viewSpec = {
-			"headerText" : dependencies.textProvider.getTranslation("theClient_openedText")
+		let view;
+		let viewSpec = {
+			headerText : dependencies.textProvider.getTranslation("theClient_openedText")
+		};
+		
+		let managedGuiItemShowing = undefined;
+		let managedGuiItemList = [];
+		let managedGuiItemOrderedList = [];
+		
+		const start = function() {
+			view = dependencies.openGuiItemHandlerViewFactory.factor(viewSpec);
+		};
+		
+		const addManagedGuiItem = function(managedGuiItem) {
+			managedGuiItemList.push(managedGuiItem);
+			view.addManagedGuiItem(managedGuiItem.getMenuView());
 		};
 
-		var view = dependencies.openGuiItemHandlerViewFactory.factor(viewSpec);
+		const getShowingItem = function(){
+			return managedGuiItemShowing;
+		};
 
-		function getView() {
+		const getItemList = function(){
+			return managedGuiItemList;
+		};
+		
+		const showView = function(managedGuiItem) {
+			resetLastShowingMenuItem();
+			showWorkView(managedGuiItem);
+			managedGuiItemShowing = managedGuiItem;
+		};
+
+		const resetLastShowingMenuItem = function() {
+			if (managedGuiItemShowing !== undefined) {
+				managedGuiItemShowing.setActive(false);
+				managedGuiItemShowing.hideWorkView();
+				managedGuiItemShowing = undefined;
+			}
+		};
+
+		const showWorkView = function(managedGuiItem) {
+			managedGuiItem.showWorkView();
+			managedGuiItem.setActive(true);
+
+			removeManagedGuiItemFromOrderedList(managedGuiItem);
+			managedGuiItemOrderedList.push(managedGuiItem);
+		};
+
+		const viewRemoved = function(managedGuiItem) {
+			removeManagedGuiItemFromList(managedGuiItem);
+			removeManagedGuiItemFromOrderedList(managedGuiItem);
+
+			if(managedGuiItemShowing === managedGuiItem){
+				let previous = managedGuiItemOrderedList.pop();
+				if (previous) {
+					showView(previous);
+				}else {
+					resetLastShowingMenuItem();
+				} 
+			}
+			view.removeManagedGuiItem(managedGuiItem.getMenuView());
+		};
+		
+		const removeManagedGuiItemFromList = function(managedGuiItem) {
+			if (managedGuiItemList.indexOf(managedGuiItem) > -1) {
+				managedGuiItemList.splice(managedGuiItemList.indexOf(managedGuiItem), 1);
+			}
+		};
+		
+		const removeManagedGuiItemFromOrderedList = function(managedGuiItem) {
+			if (managedGuiItemOrderedList.indexOf(managedGuiItem) > -1) {
+				managedGuiItemOrderedList.splice(managedGuiItemOrderedList.indexOf(managedGuiItem), 1);
+			} 
+		};
+		
+		const getShowingGuiItem = function(){
+			return managedGuiItemShowing;
+		};
+
+		const getNextGuiItem = function(){
+			if(managedGuiItemShowing){
+				return managedGuiItemList[managedGuiItemList.indexOf(managedGuiItemShowing)+1];
+			}
+			return undefined;
+		};
+		
+		const getPreviousGuiItem = function(){
+			if(managedGuiItemShowing){
+				return managedGuiItemList[managedGuiItemList.indexOf(managedGuiItemShowing)-1];
+			}
+			return undefined;
+		};
+
+		const moveCurrentMenuViewUp = function(){
+			if(managedGuiItemShowing){
+				moveShowingGuiItemUpInInternalList();
+				view.moveMenuViewUp(managedGuiItemShowing.getMenuView());
+			}
+		};
+		
+		const moveShowingGuiItemUpInInternalList = function(){
+			let currentIndex = managedGuiItemList.indexOf(managedGuiItemShowing);
+			if(currentIndex > 0){
+				managedGuiItemList.splice(currentIndex, 1);
+				managedGuiItemList.splice(currentIndex-1, 0, managedGuiItemShowing);
+			}
+		} 
+		
+		const moveCurrentMenuViewDown = function(menuView){
+			if(managedGuiItemShowing){
+				moveShowingGuiItemDownInInternalList();
+				view.moveMenuViewDown(managedGuiItemShowing.getMenuView());
+			}
+		};
+		
+		const moveShowingGuiItemDownInInternalList = function(){
+			let currentIndex = managedGuiItemList.indexOf(managedGuiItemShowing);
+			if(currentIndex < managedGuiItemList.length-1 ){
+				managedGuiItemList.splice(currentIndex, 1);
+				managedGuiItemList.splice(currentIndex+1, 0, managedGuiItemShowing);
+			}
+		} 
+
+		const getView = function() {
 			return view.getView();
-		}
+		};
 
-		function addManagedGuiItem(managedGuiItem) {
-			view.addManagedGuiItem(managedGuiItem);
-		}
-
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		return Object.freeze({
-			"type" : "openGuiItemHandler",
+		let out = Object.freeze({
+			type : "openGuiItemHandler",
 			getSpec : getSpec,
 			getDependencies : getDependencies,
 			getView : getView,
-			addManagedGuiItem : addManagedGuiItem
+			addManagedGuiItem : addManagedGuiItem,
+			getShowingItem : getShowingItem,
+			getItemList : getItemList,
+			viewRemoved : viewRemoved,
+			showView : showView,
+			getShowingGuiItem : getShowingGuiItem,
+			getNextGuiItem : getNextGuiItem,
+			getPreviousGuiItem : getPreviousGuiItem,
+			moveCurrentMenuViewUp : moveCurrentMenuViewUp,
+			moveCurrentMenuViewDown : moveCurrentMenuViewDown,
 		});
+		start();
+		return out;
 	};
 	return cora;
 }(CORA));

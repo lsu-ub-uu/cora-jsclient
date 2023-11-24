@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,24 +19,26 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.managedGuiItemSpy = function(dependencies, spec) {
-		var addedMenuPresentations = [];
-		var addedWorkPresentations = [];
-		var addedListPresentations = [];
-		var menuView = CORA.gui.createSpanWithClassName("menuViewSpy");
-		var workView = CORA.gui.createSpanWithClassName("menuViewSpy");
-		var listView = CORA.gui.createSpanWithClassName("listViewSpy");
-		var changed = false;
-		var active = false;
-		var menuViewCleared = 0;
-		var workViewCleared = 0;
+		let addedMenuPresentations = [];
+		let addedWorkPresentations = [];
+		let addedListPresentations = [];
+		let menuView = CORA.gui.createSpanWithClassName("menuViewSpy");
+		let workView = CORA.gui.createSpanWithClassName("menuViewSpy");
+		let listView = CORA.gui.createSpanWithClassName("listViewSpy");
+		let changed = false;
+		let active = false;
+		let menuViewCleared = 0;
+		let workViewCleared = 0;
 
-		var workViewHidden = 0;
-		var workViewShown = 0;
-		var removed = 0;
+		let workViewHidden = 0;
+		let workViewShown = 0;
+		let removed = 0;
 
-		var reloadForMetadata = 0;
+		let reloadForMetadata = 0;
 
-		var noOfChangedCalls = 0;
+		let noOfChangedCalls = 0;
+		let sendDataToServerCalls = 0;
+		let sendDataToServerMethod;
 
 		function getDependencies() {
 			return dependencies;
@@ -130,8 +132,22 @@ var CORATEST = (function(coraTest) {
 		function getReloadForMetadataChanges() {
 			return reloadForMetadata;
 		}
+		
+		function sendDataToServer() {
+			sendDataToServerCalls++;
+		}
+		const setSendDataToServer = function(method) {
+			sendDataToServerMethod = method;
+		};
+		const getSendDataToServer = function() {
+			return sendDataToServerMethod;
+		};
+		const getCallsToSendDataToServer = function() {
+			return sendDataToServerCalls;
+		};
+		
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			"type" : "managedGuiItemSpy",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
@@ -160,7 +176,12 @@ var CORATEST = (function(coraTest) {
 			getRemoved : getRemoved,
 			getListView : getListView,
 			reloadForMetadataChanges : reloadForMetadataChanges,
-			getReloadForMetadataChanges : getReloadForMetadataChanges
+			getReloadForMetadataChanges : getReloadForMetadataChanges,
+			
+			sendDataToServer : sendDataToServer,
+			setSendDataToServer : setSendDataToServer,
+			getSendDataToServer : getSendDataToServer,
+			getCallsToSendDataToServer : getCallsToSendDataToServer
 		});
 
 		return out;

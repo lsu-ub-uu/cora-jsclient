@@ -1,3 +1,21 @@
+:root {
+  --main-loading-color: #0082c8;
+  --main-darkare-color: #014d77;
+  --color-light-grey: #DCDCDC;
+  --color-white: white;
+  --color-grey: #131313;
+  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
+  --text-shadow-12-trans: rgba(0,0,0,0.12);
+  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
+  --maincolor-10-trans: rgba(0, 130, 200, 0.1);
+  --maincolor-30-trans: rgba(0, 130, 200, 0.3);
+  --maincolor-50-trans: rgba(0, 130, 200, 0.5);
+  --color-selected-on-menu: black;
+  --inbox-28-shadow: rgba(255,255,255,0.28);
+  --box-sahow-17-trans:rgba(255,255,255,0.17);
+  --menu-2n-color: rgba(167, 114, 166, 0.5);
+}
+
 .jsClient > .header {
 	display: block;
 	height: 3rem;
@@ -39,7 +57,9 @@
 	order: 3;
 	flex: 0 1 calc(50% - 1rem);
 }
-
+.sideBar .childrenView .active::before {
+	color: black;
+}
 .sideBar .active, .header .active {
 	font-weight: bold;
 	background-color: #2a88ad;

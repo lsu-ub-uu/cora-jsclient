@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 			initialize();
 			possiblyPublishDisableMessage(hasWritePermission);
 		};
-
+		
 		const initialize = function() {
 			let nameInData = getNameInDataForMetadataId(metadataId);
 			attributes = getAttributesForMetadataId(metadataId);
@@ -272,7 +272,7 @@ var CORA = (function(cora) {
 				publishDisableMessage(pathForTopLevelChild);
 			}
 		};
-
+		
 		const createNextLevelPath = function() {
 			let pathSpec = {
 				"metadataIdToAdd": metadataId,

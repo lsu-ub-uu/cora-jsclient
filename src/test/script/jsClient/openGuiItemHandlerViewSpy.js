@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
+ * Copyright 2023 Olov McKie
  * 
  * This file is part of Cora.
  *
@@ -19,9 +20,13 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.openGuiItemHandlerViewSpy = function(dependencies, spec) {
-		var addedManagedGuiItem = [];
-		var getViewCalled = 0;
-		var view = CORA.gui.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
+		let addedManagedGuiItem = [];
+		let getViewCalled = 0;
+		let view = CORA.gui.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
+		let removedMenuViews = [];
+		let upMenuViews = [];
+		let downMenuViews = [];
+		
 		function getView() {
 			getViewCalled++;
 			return view;
@@ -36,13 +41,39 @@ var CORATEST = (function(coraTest) {
 		function getAddedManagedGuiItem(number) {
 			return addedManagedGuiItem[number];
 		}
-
+		
+		function removeManagedGuiItem(menuView){
+			removedMenuViews.push(menuView);
+		}
+		function getRemovedManagedGuiItem(number){
+			return removedMenuViews[number];
+		}
+		const moveMenuViewUp = function(view){
+			upMenuViews.push(view);
+		};
+		const getMoveMenuViewUp = function(number){
+			return upMenuViews[number];
+		};
+		
+		const moveMenuViewDown = function(menuView){
+			return downMenuViews.push(menuView);
+		};
+		const getMoveMenuViewDown = function(number){
+			return downMenuViews[number];
+		};
+		
 		return Object.freeze({
 			"type" : "openGuiItemHandlerViewSpy",
 			getView : getView,
 			getGetViewCalled : getGetViewCalled,
 			addManagedGuiItem : addManagedGuiItem,
-			getAddedManagedGuiItem : getAddedManagedGuiItem
+			getRemovedManagedGuiItem : getRemovedManagedGuiItem,
+			removeManagedGuiItem : removeManagedGuiItem,
+			getAddedManagedGuiItem : getAddedManagedGuiItem,
+			getMoveMenuViewUp : getMoveMenuViewUp,
+			moveMenuViewUp : moveMenuViewUp,
+			getMoveMenuViewDown : getMoveMenuViewDown,
+			moveMenuViewDown : moveMenuViewDown
 		});
 	};
 	return coraTest;

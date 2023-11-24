@@ -66,10 +66,6 @@ var CORA = (function(cora) {
 			let iText = createElementWithTypeClassText("span", "","Index");
 			index.append(iText);
 			
-//				let constraint = createElementWithTypeClassText("span", "permission","P");
-//				details.append(constraint);
-//				let constraint = createElementWithTypeClassText("span", "index","I");
-//				details.append(constraint);
 			return legend;
 		};
 		
@@ -93,6 +89,11 @@ var CORA = (function(cora) {
 			nameInData.onclick = function(event){
 				child.methodOpenDefiningRecord(event, child.id);
 			};
+
+			if(child.finalValue){
+				let finalValue = createElementWithTypeClassText("span", "finalValue", `{${child.finalValue}}`);
+				metadataHeader.append(finalValue);
+			}
 			
 			if(child.attributes){
 				const attributeDetails =createAttributeDetails(child);

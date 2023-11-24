@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -80,17 +80,17 @@ var CORA = (function(cora) {
 		const createRemoveButton = function() {
 			let removeFunction = function() {
 				let data = {
-					"type": "remove",
-					"path": path
+					type: "remove",
+					path: path
 				};
 				jsBookkeeper.remove(data);
 			};
 			let newRemoveButton = CORA.gui.createRemoveButton(removeFunction);
 			newRemoveButton.addEventListener("mouseenter", function() {
-				view.className = "repeatingElement hoverRemove";
+				view.classList.add("hoverRemove");
 			});
 			newRemoveButton.addEventListener("mouseleave", function() {
-				view.className = "repeatingElement";
+				view.classList.remove("hoverRemove");
 			});
 			return newRemoveButton;
 		};
@@ -109,12 +109,12 @@ var CORA = (function(cora) {
 		const createAddBeforeButton = function() {
 			let addBeforeFunction = function() {
 				let data = {
-					"path": path
+					path: path
 				};
 				pChildRefHandler.sendAddBefore(data);
 			};
 			let buttonSpec = {
-				"className": "iconButton addBeforeButton",
+				className: "iconButton addBeforeButton",
 				action: {
 					method: addBeforeFunction
 				}
@@ -128,14 +128,14 @@ var CORA = (function(cora) {
 
 		const addPresentation = function(defaultPresentationIn) {
 			defaultPresentation = defaultPresentationIn.getView();
-			defaultPresentation.className = defaultPresentation.className + " default";
+			defaultPresentation.classList.add("default");
 			view.insertBefore(defaultPresentation, buttonView);
 			view.className = "repeatingElement";
 		};
 
 		const addAlternativePresentation = function(presentation, presentationSize) {
 			alternativePresentation = presentation.getView();
-			alternativePresentation.className = alternativePresentation.className + " alternative";
+			alternativePresentation.classList.add("alternative");
 			view.insertBefore(alternativePresentation, buttonView);
 			createDefaultAndAlternativeButtons(presentationSize);
 			toggleDefaultShown("true");
@@ -260,7 +260,7 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type": "pRepeatingElement",
+			type: "pRepeatingElement",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,

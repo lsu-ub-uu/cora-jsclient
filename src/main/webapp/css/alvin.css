@@ -3,6 +3,10 @@
   --alvin-color: #7fbfa7;
   --alvin-text-color: #575757;
   --alvin-alternative-text-color: #bf7125;
+  --color-white: white;
+  --maincolor-10-trans: rgba(198, 132, 68, 0.1);
+  --maincolor-30-trans: rgba(198, 132, 68, 0.3);
+  --maincolor-50-trans: rgba(198, 132, 68, 0.5);
 }
 #systemOneLoading, #divaLoading {
 	display: none;
@@ -55,10 +59,10 @@
 .infoActive {
 	background-color: rgba(127, 191, 167, 0.1);
 }
-.sideBar .active, .header .active {
-	font-weight: bold;
-	background-color: rgba(127, 191, 167, 0.5);
-}
+/* .sideBar .active, .header .active { */
+/* 	font-weight: bold; */
+/* 	background-color: rgba(127, 191, 167, 0.5); */
+/* } */
 .pVar:hover, .pCollVar:hover, .pGroup:hover, .pSurroundingContainer:hover, .repeatingElement:hover {
 	background-color: rgba(127, 191, 167, 0.1);
 }
@@ -134,6 +138,7 @@
 	float:right;
 	margin-top:0.3em;
 }
+
 input[type="button"] {
 	display: inline-block;
 	border: none;
@@ -148,6 +153,7 @@ input[type="button"] {
 	cursor: pointer;
 	text-align: center;
 	transition: background 250ms ease-in-out, transform 150ms ease;
+	transform: scale(0.99);
 }
 
 input[type="button"]:hover,
@@ -159,11 +165,10 @@ input[type="button"]:focus {
 	outline: 1px solid #fff;
 	outline-offset: -4px;
 }
-
-input[type="button"] {
-	transform: scale(0.99);
+	
+.pChildRefHandler .pChildRefHandler input[type="button"] {
+	margin-left: .5rem;
 }
-
 .infoButton::before {
 	background-position: -64px -32px;
 }

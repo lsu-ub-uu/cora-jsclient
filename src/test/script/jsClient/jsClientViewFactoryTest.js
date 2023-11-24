@@ -21,9 +21,12 @@
 QUnit.module("jsClient/jsClientViewFactoryTest.js", {
 	beforeEach : function() {
 		this.spec = {
-				"name" : "someName"
-		}
-		this.jsClientViewFactory = CORA.jsClientViewFactory();
+			"name" : "someName"
+		};
+		this.providers = {
+			textProvider : {getTranslation : ()=>{return "tramsText"}}
+		};
+		this.jsClientViewFactory = CORA.jsClientViewFactory(this.providers);
 	},
 	afterEach : function() {
 	}
@@ -32,14 +35,15 @@ QUnit.module("jsClient/jsClientViewFactoryTest.js", {
 QUnit.test("init", function(assert) {
 	assert.ok(this.jsClientViewFactory);
 	assert.strictEqual(this.jsClientViewFactory.type, "jsClientViewFactory");
+	assert.strictEqual(this.jsClientViewFactory.getProviders, this.providers);
 });
 
 QUnit.test("factor", function(assert) {
-	var jsClientView = this.jsClientViewFactory.factor(this.spec);
+	let jsClientView = this.jsClientViewFactory.factor(this.spec);
 	assert.strictEqual(jsClientView.type, "jsClientView");
 
 	assert.strictEqual(jsClientView.getSpec(), this.spec);
 	
-	var dependencies = jsClientView.getDependencies();
+	let dependencies = jsClientView.getDependencies();
 	assert.strictEqual(dependencies.messageHolderFactory.type, "messageHolderFactory");
 });

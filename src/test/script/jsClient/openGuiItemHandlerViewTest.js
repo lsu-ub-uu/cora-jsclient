@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -32,57 +32,99 @@ QUnit.module("jsClient/openGuiItemHandlerViewTest.js", {
 	}
 });
 QUnit.test("testInit", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
 	assert.strictEqual(openGuiItemHandlerView.type, "openGuiItemHandlerView");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
 	assert.strictEqual(openGuiItemHandlerView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
 	assert.strictEqual(openGuiItemHandlerView.getSpec(), this.spec);
 });
 
 QUnit.test("testGetView", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
-	var view = openGuiItemHandlerView.getView();
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let view = openGuiItemHandlerView.getView();
 	assert.strictEqual(view.className, "openGuiItemHandlerView");
 
-	var header = view.firstChild;
+	let header = view.firstChild;
 	assert.strictEqual(header.className, "header");
 	assert.strictEqual(header.textContent, "some text");
 
-	var childrenView = view.childNodes[1];
+	let childrenView = view.childNodes[1];
 	assert.strictEqual(childrenView.className, "childrenView");
 });
 
 QUnit.test("testMenuOnclick", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
-	var header = openGuiItemHandlerView.getView().firstChild;
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let header = openGuiItemHandlerView.getView().firstChild;
 	assert.strictEqual(header.onclick, this.spec.openSearchMethod);
 });
 
 QUnit.test("testAddManagedGuiItem", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
-	var managedGuiItem = CORATEST.managedGuiItemSpy();
-	var createdManagedGuiItem = openGuiItemHandlerView.addManagedGuiItem(managedGuiItem);
-	var view = openGuiItemHandlerView.getView();
-	var childrenView = view.childNodes[1];
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let managedGuiItem = CORATEST.managedGuiItemSpy();
+	let createdManagedGuiItem = openGuiItemHandlerView.addManagedGuiItem(managedGuiItem.getMenuView());
+	let view = openGuiItemHandlerView.getView();
+	let childrenView = view.childNodes[1];
 	assert.strictEqual(childrenView.childNodes[0], managedGuiItem.getMenuView());
 });
 
 QUnit.test("testRemoveManagedGuiItem", function(assert) {
-	var openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
-	var managedGuiItem = CORATEST.managedGuiItemSpy();
-	var createdManagedGuiItem = openGuiItemHandlerView.addManagedGuiItem(managedGuiItem);
-	var view = openGuiItemHandlerView.getView();
-	var childrenView = view.childNodes[1];
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let managedGuiItem = CORATEST.managedGuiItemSpy();
+	let createdManagedGuiItem = openGuiItemHandlerView.addManagedGuiItem(managedGuiItem.getMenuView());
+	let view = openGuiItemHandlerView.getView();
+	let childrenView = view.childNodes[1];
 	assert.strictEqual(childrenView.childNodes[0], managedGuiItem.getMenuView());
 
 	// remove
-	openGuiItemHandlerView.removeManagedGuiItem(managedGuiItem);
+	openGuiItemHandlerView.removeManagedGuiItem(managedGuiItem.getMenuView());
 	assert.strictEqual(childrenView.childNodes[0], undefined);
+});
+
+QUnit.test("testMoveMenuViewUp", function(assert) {
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let view = openGuiItemHandlerView.getView();
+	let childrenView = view.childNodes[1];
+	let child1 = document.createElement("SPAN");
+	let child2 = document.createElement("SPAN");
+	
+	openGuiItemHandlerView.addManagedGuiItem(child1);
+	openGuiItemHandlerView.addManagedGuiItem(child2);
+	
+	assert.strictEqual(childrenView.childNodes[0], child1);
+	
+	openGuiItemHandlerView.moveMenuViewUp(child2);
+	
+	assert.strictEqual(childrenView.childNodes[0], child2);
+	
+	openGuiItemHandlerView.moveMenuViewUp(child2);
+	
+	assert.strictEqual(childrenView.childNodes[0], child2);
+});
+
+QUnit.test("testMoveMenuViewDown", function(assert) {
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let view = openGuiItemHandlerView.getView();
+	let childrenView = view.childNodes[1];
+	let child1 = document.createElement("SPAN");
+	let child2 = document.createElement("SPAN");
+	
+	openGuiItemHandlerView.addManagedGuiItem(child1);
+	openGuiItemHandlerView.addManagedGuiItem(child2);
+	
+	assert.strictEqual(childrenView.childNodes[1], child2);
+	
+	openGuiItemHandlerView.moveMenuViewDown(child1);
+	
+	assert.strictEqual(childrenView.childNodes[1], child1);
+	
+	openGuiItemHandlerView.moveMenuViewDown(child1);
+	
+	assert.strictEqual(childrenView.childNodes[1], child1);
 });

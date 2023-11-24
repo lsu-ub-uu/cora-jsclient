@@ -216,6 +216,10 @@ body {
 	border-bottom: none;
 }
 
+.searchesView {
+	padding-bottom: 1rem;
+}
+
 .searchesViewHeadline {
 	margin-left: 1.5rem;
 }

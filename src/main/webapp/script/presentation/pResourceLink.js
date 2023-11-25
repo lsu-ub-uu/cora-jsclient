@@ -51,9 +51,16 @@ const pubSub = dependencies.pubSub;
 		};
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("*", path, undefined, handleMsgEverything);
 //		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
 //			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 //			pubSub.subscribe("disable", disablePath, undefined, disableVar);
+		};
+		
+		const handleMsgEverything = function(dataFromMsg) {
+//			setValue(dataFromMsg.data);
+//			updateView();
+			console.log("EVERYTHING: in pResourceLink, dataFromMsg:" ,dataFromMsg)
 		};
 		const handleMsg = function(dataFromMsg) {
 //			setValue(dataFromMsg.data);

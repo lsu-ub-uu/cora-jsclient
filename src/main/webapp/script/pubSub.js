@@ -30,8 +30,6 @@ var CORA = (function(cora) {
 		function publish(type, data) {
 			var convertedPath = convertPathToMsg(data.path) + type;
 			var everyThingOk = arbiter.publish(convertedPath, data);
-			//console.log(convertedPath);
-			//console.log(data);
 			if (!everyThingOk) {
 				var errorMessage = "";
 				arbiter.getErrorArray().forEach(function(error) {

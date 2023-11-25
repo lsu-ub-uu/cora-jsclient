@@ -35,6 +35,8 @@
 		<sonar.javascript.lcov.reportPaths>target/jsReportFromDocker/coverage/firefox/lcov.info,target/jsReportFromDocker/coverage/chrome/lcov.info</sonar.javascript.lcov.reportPaths>
 		<sonar.nodejs.executable>${project.build.directory}/nodeJs/node/node</sonar.nodejs.executable>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
+		
+		<jsClientContainerName>myJsClientContainer3</jsClientContainerName>
 	</properties>
 
 
@@ -139,7 +141,7 @@
 									<arguments>
 										<argument>run</argument>
 										<argument>--name</argument>
-										<argument>myJsClientContainer2</argument>
+										<argument>${jsClientContainerName}</argument>
 										<argument>${project.artifactId}:${project.version}</argument>
 									</arguments>
 								</configuration>
@@ -155,7 +157,7 @@
 									<workingDirectory>${project.basedir}</workingDirectory>
 									<arguments>
 										<argument>cp</argument>
-										<argument>myJsClientContainer2:/workspace/jsReportFromDocker</argument>
+										<argument>${jsClientContainerName}:/workspace/jsReportFromDocker</argument>
 										<argument>target</argument>
 									</arguments>
 								</configuration>
@@ -171,7 +173,7 @@
 									<workingDirectory>${project.basedir}</workingDirectory>
 									<arguments>
 										<argument>rm</argument>
-										<argument>myJsClientContainer2</argument>
+										<argument>${jsClientContainerName}</argument>
 									</arguments>
 								</configuration>
 							</execution>

@@ -29,6 +29,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 			tramas: "trams"
 		};
 		this.spec = {
+			className: "pVar somePresentationId",
 			mode: "input",
 			inputType: "input",
 			outputFormat: "text",
@@ -71,7 +72,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 				};
 				return valueView;
 			};
-			const useStandardOutput = function(){
+			const useTextOnlyOutput = function(){
 				return true;
 			};
 			const createOutputWithSetValueFunction = function(){
@@ -83,7 +84,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 			};
 			return {
 				createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-				useStandardOutput: useStandardOutput,
+				useTextOnlyOutput: useTextOnlyOutput,
 				createOutputWithSetValueFunction: createOutputWithSetValueFunction
 			};
 		};
@@ -298,7 +299,7 @@ QUnit.test("testOutputText", function(assert) {
 
 QUnit.test("testOutputNotStandard", function(assert) {
 	let child = this.createChildSpy();
-	child.useStandardOutput = function(){
+	child.useTextOnlyOutput = function(){
 		return false;
 	};
 	this.spec.mode = "output";

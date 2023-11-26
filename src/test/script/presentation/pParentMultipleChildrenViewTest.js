@@ -67,7 +67,7 @@ QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 				};
 				return valueView;
 			};
-			const useStandardOutput = function(){
+			const useTextOnlyOutput = function(){
 				return true;
 			};
 			const createOutputWithSetValueFunction = function(){
@@ -77,14 +77,10 @@ QUnit.module("presentation/pParentMultipleChildrenViewTest.js", {
 				};
 				return outputNew;
 			};
-			const getBaseClassName = function(){
-				return "fakeBaseClassName";
-			}
 			return {
 				createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-				useStandardOutput: useStandardOutput,
-				createOutputWithSetValueFunction: createOutputWithSetValueFunction,
-				getBaseClassName: getBaseClassName
+				useTextOnlyOutput: useTextOnlyOutput,
+				createOutputWithSetValueFunction: createOutputWithSetValueFunction
 			};
 		};
 	}

@@ -66,7 +66,7 @@ QUnit.test("testParentStarted", function(assert) {
 	const child = this.pParentVarViewFactory.getChild(0);
 
 	assert.notEqual(child.createInputElementWithSetValueFunction, undefined);
-	assert.notEqual(child.useStandardOutput, undefined);
+	assert.notEqual(child.useTextOnlyOutput, undefined);
 });
 
 QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
@@ -121,10 +121,10 @@ QUnit.test("createInputElementOptionsCreatedAsExpected", function(assert) {
 		
 });
 
-QUnit.test("useStandardOutput", function(assert) {
+QUnit.test("useTextOnlyOutput", function(assert) {
 	this.getpCollectionVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), true);
+	assert.strictEqual(child.useTextOnlyOutput(), true);
 });
 

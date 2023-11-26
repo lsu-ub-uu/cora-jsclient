@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,143 +20,74 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
+		const metadataProvider = dependencies.metadataProvider;
+		const pParentVarFactory = dependencies.pParentVarFactory;
+		
 		const cPresentation = spec.cPresentation;
-const pubSub = dependencies.pubSub;
-		
-		let parent;
-		let hasOutputFormat;
-		let resourceView;
-		
-		let path = spec.path;
-		
+		let pParentVar;
+
 		const start = function() {
-			initParent();
-//			hasOutputFormat = presentationHasOutputFormat();
-//			createResourceViewIfOutputFormatInMetadata();
-			subscribeToLinkedResourceMessage();
-		};
-
-		const initParent = function() {
-			console.log("spec.metadataIdUsedInData: "+spec.metadataIdUsedInData)
-			console.log("spec: ",spec)
-			let my = {
-				type: "pResourceLink",
-//				metadataId: "metadataGroupForResourceLinkGroup",
-				metadataId: spec.metadataIdUsedInData,
-				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
-			};
-
-//			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
-			subscribeToPubSub();
-		};
-		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
-			pubSub.subscribe("*", path, undefined, handleMsgEverything);
-//		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
-//			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
-//			pubSub.subscribe("disable", disablePath, undefined, disableVar);
+			pParentVar = pParentVarFactory.factor(spec, self);
 		};
 		
-		const handleMsgEverything = function(dataFromMsg) {
-//			setValue(dataFromMsg.data);
-//			updateView();
-			console.log("EVERYTHING: in pResourceLink, dataFromMsg:" ,dataFromMsg)
-		};
-		const handleMsg = function(dataFromMsg) {
-//			setValue(dataFromMsg.data);
-//			updateView();
-			console.log("in pResourceLink, dataFromMsg:" ,dataFromMsg)
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
+			pVarViewSpec.type = "pResourceLink";
+			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
 		};
 
+		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+			if (cPresentation.containsChildWithNameInData(nameInData)) {
+				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
+			}
+			return defaultValue;
+		};
 		
-		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
-			viewSpec.type = "pResourceLink";
+		const validateTypeSpecificValue = function(valueFromView) {
+			return true;
 		};
-
-		const presentationHasOutputFormat = function() {
-			return cPresentation.containsChildWithNameInData("outputFormat");
+		
+		const autoFormatEnteredValue = function(valueFromView){
+			return valueFromView;
 		};
-
-		const createResourceViewIfOutputFormatInMetadata = function() {
-			if (hasOutputFormat) {
-				createResourceViewFromOutputFormat();
-			}
+		
+		const transformValueForView = function(mode, valueForView){
+//TODO: what should happen if we have no right to view resource
+			console.log(valueForView)
+			let url = valueForView.actionLinks.read.url;
+			let newValue = url + "?" + getTokenRequestParameter();
+			return newValue;
 		};
-
-		const createResourceViewFromOutputFormat = function() {
-			let outputFormatType = cPresentation.getFirstAtomicValueByNameInData("outputFormat");
-			if (outputFormatType === "image") {
-				createImage();
-			} else {
-				createDownload();
-			}
-			setCommonAttributesOnResourceView();
-		};
-
-		const createImage = function() {
-			resourceView = document.createElement("img");
-		};
-
-		const createDownload = function() {
-			resourceView = document.createElement("a");
-			resourceView.appendChild(document.createTextNode(dependencies.textProvider
-				.getTranslation("resourceLinkDownloadText")));
-			resourceView.target = "_blank";
-		};
-
-		const setCommonAttributesOnResourceView = function() {
-			resourceView.className = "master";
-			parent.getView().appendChild(resourceView);
-		};
-
-		const setInfoInLinkedResourceView = function(dataFromMsg) {
-			if (hasOutputFormat) {
-				let url = dataFromMsg.data.actionLinks.read.url;
-				resourceView.href = url + "?" + getTokenRequestParameter();
-				resourceView.src = url + "?" + getTokenRequestParameter();
-			}
-		};
-
+		
 		const getTokenRequestParameter = function() {
 			let tokenRequestParamenter = "authToken=";
 			tokenRequestParamenter += dependencies.authTokenHolder.getCurrentAuthToken();
 			return tokenRequestParamenter;
 		};
-
-		const subscribeToLinkedResourceMessage = function() {
-			const resourceLinkPath = addResourceLinkResLinkToMasterGroupPath();
-			dependencies.pubSub.subscribe("linkedResource", resourceLinkPath, undefined, handleMsg);
-		};
 		
-		const addResourceLinkResLinkToMasterGroupPath = function (){
-			return spec.path.concat(["resourceLinkResLink"]);
-		}
-
-//		const handleMsg = function(dataFromMsg) {
-//			setInfoInLinkedResourceView(dataFromMsg);
-//		};
+		const getSpec = function() {
+			return spec;
+		};
 
 		const getDependencies = function() {
 			return dependencies;
 		};
 
-		const getSpec = function() {
-			return spec;
+		const self = {
+			type: "pResourceLink",
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+			validateTypeSpecificValue: validateTypeSpecificValue,
+			autoFormatEnteredValue: autoFormatEnteredValue,
+			transformValueForView: transformValueForView
 		};
-		const getView = function(){
-			return CORA.gui.createSpanWithClassName("fake pResourceLink")
-		}
 
 		start();
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-//			getView: parent.getView,
-			getView: getView,
-			handleMsg: handleMsg
+			getView: pParentVar.getView
 		});
-		return out;
+
 	};
 	return cora;
 }(CORA));

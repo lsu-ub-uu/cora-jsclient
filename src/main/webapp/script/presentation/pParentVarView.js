@@ -24,7 +24,7 @@ var CORA = (function(cora) {
 		let out;
 		let view;
 		let valueView;
-		let baseClassName = "pVar " + spec.presentationId;
+		let baseClassName = spec.className;
 		let info;
 		let state = "ok";
 
@@ -107,7 +107,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOutput = function() {
-			if(child.useStandardOutput()){
+			if(child.useTextOnlyOutput()){
 				return createOutputText();
 			}
 			return child.createOutputWithSetValueFunction();

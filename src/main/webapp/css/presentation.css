@@ -9,6 +9,7 @@
 
 img {
 	max-width: 100%;
+	width: fit-content;
 }
 
 .client1>.presentation {
@@ -88,7 +89,7 @@ img {
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
-	transform: scale(0.7, 0.7);
+/* 	transform: scale(0.7, 0.7); */
 }
 
 .infoButton, .openLinkedRecordButton, .showSearchButton {

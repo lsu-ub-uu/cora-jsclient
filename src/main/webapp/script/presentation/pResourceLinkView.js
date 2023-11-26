@@ -20,22 +20,15 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLinkView = function(dependencies, spec) {
-		const pParentMultipleChildrenViewFactory = dependencies.pParentMultipleChildrenViewFactory;
+		const pParentVarViewFactory = dependencies.pParentVarViewFactory;
 		let pParentVarView;
 
 		const start = function() {
-			pParentVarView = pParentMultipleChildrenViewFactory.factor(spec, self);
-		};
-		
-		const getBaseClassName = function(){
-			return "pResourceLink";
+			pParentVarView = pParentVarViewFactory.factor(spec, self);
 		};
 		
 		const createInputElementWithSetValueFunction = function() {
 			let inputNew = document.createElement(spec.inputType);
-			if (spec.inputFormat === "password") {
-				inputNew.setAttribute("type", "password");
-			}
 
 			inputNew.setValue = function(value) {
 				inputNew.value = value;
@@ -43,7 +36,7 @@ var CORA = (function(cora) {
 			return inputNew;
 		};
 
-		const useStandardOutput = function() {
+		const useTextOnlyOutput = function() {
 			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
 		};
 		
@@ -81,9 +74,8 @@ var CORA = (function(cora) {
 		
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-			useStandardOutput: useStandardOutput,
-			createOutputWithSetValueFunction: createOutputWithSetValueFunction,
-			getBaseClassName: getBaseClassName
+			useTextOnlyOutput: useTextOnlyOutput,
+			createOutputWithSetValueFunction: createOutputWithSetValueFunction
 		};
 		
 		start();
@@ -98,8 +90,7 @@ var CORA = (function(cora) {
 			disable: pParentVarView.disable,
 			addAttributesView: pParentVarView.addAttributesView,
 			hide: pParentVarView.hide,
-			show: pParentVarView.show,
-			appendChild: pParentVarView.appendChild
+			show: pParentVarView.show
 		});
 	};
 	return cora;

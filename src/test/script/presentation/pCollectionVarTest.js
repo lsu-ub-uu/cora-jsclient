@@ -66,6 +66,7 @@ QUnit.test("testParentStarted", function(assert) {
 	
 	const child = this.pParentVarFactory.getChild(0);
 
+	assert.strictEqual(child.type, "pCollectionVar");
 	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
 	assert.notEqual(child.validateTypeSpecificValue, undefined);
 	assert.notEqual(child.transformValueForView, undefined);

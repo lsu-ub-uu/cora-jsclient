@@ -98,6 +98,7 @@ var CORA = (function(cora) {
 		};
 	
 		const self = {
+			type: "pNumVar",
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 			validateTypeSpecificValue: validateTypeSpecificValue,
 			autoFormatEnteredValue: autoFormatEnteredValue,

@@ -153,3 +153,34 @@ QUnit.test("factorSetsSpecInPCollVarView", function(assert) {
 	let spec = view.getSpec();
 	assert.deepEqual(spec, this.spec);
 });
+
+
+QUnit.test("testFactorViewForpResourceLink", function(assert) {
+	this.spec.type = "pResourceLink";
+	let view = this.pVarViewFactory.factor(this.spec);
+	
+	assert.ok(view);
+	assert.strictEqual(view.type, "pResourceLinkView");
+});
+
+QUnit.test("testFactorViewForPResourceLinkDependencies", function(assert) {
+	this.spec.type = "pResourceLink";
+	
+	let view = this.pVarViewFactory.factor(this.spec);
+	let dependencies = view.getDependencies();
+	
+	assert.deepEqual(dependencies.pParentVarViewFactory.type, "genericParentFactory");
+	assert.deepEqual(dependencies.pParentVarViewFactory.getTypeToFactor(), "pParentVarView");
+	
+	let pParentDependencies = dependencies.pParentVarViewFactory.getDependencies();
+	assert.deepEqual(pParentDependencies.infoFactory.type, "infoFactory");
+	assert.strictEqual(view.type, "pResourceLinkView");
+});
+
+QUnit.test("factorSetsSpecInPResourceLinkView", function(assert) {
+	this.spec.type = "pResourceLink";
+	let view = this.pVarViewFactory.factor(this.spec);
+	
+	let spec = view.getSpec();
+	assert.deepEqual(spec, this.spec);
+});

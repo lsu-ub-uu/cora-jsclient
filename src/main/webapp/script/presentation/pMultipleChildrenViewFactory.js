@@ -33,10 +33,6 @@ var CORA = (function(cora) {
 				return CORA.pSurroundingContainerView(dependencies, spec);
 			}
 			
-			if(spec.type === "pResourceLink"){
-				return CORA.pResourceLinkView(dependencies, spec);
-			}
-			
 			return CORA.pGroupView(dependencies, spec);
 		}
 

@@ -130,7 +130,7 @@ QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(as
 });
 
 QUnit.test("testGetView", function(assert) {
-	let pSurroundingContainer = CORA.pResourceLink(this.dependencies, this.spec);
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
 	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
 	
 	assert.strictEqual(pSurroundingContainer.getView, parent.getView);

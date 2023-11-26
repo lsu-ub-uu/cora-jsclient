@@ -63,7 +63,7 @@ QUnit.test("testParentStarted", function(assert) {
 	const child = this.pParentVarViewFactory.getChild(0);
 
 	assert.notEqual(child.createInputElementWithSetValueFunction, undefined);
-	assert.notEqual(child.useStandardOutput, undefined);
+	assert.notEqual(child.useTextOnlyOutput, undefined);
 	assert.notEqual(child.createOutputWithSetValueFunction, undefined);
 });
 
@@ -125,27 +125,27 @@ QUnit.test("createInputElementWithSetValueFunctionPassword", function(assert) {
 	assert.strictEqual(inputElement.value, "trams");
 });
 
-QUnit.test("useStandardOutput", function(assert) {
+QUnit.test("useTextOnlyOutput", function(assert) {
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), true);
+	assert.strictEqual(child.useTextOnlyOutput(), true);
 });
 
-QUnit.test("useStandardOutputImageIsFalse", function(assert) {
+QUnit.test("useTextOnlyOutputImageIsFalse", function(assert) {
 	this.spec.outputFormat = "image";
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), false);
+	assert.strictEqual(child.useTextOnlyOutput(), false);
 });
 
-QUnit.test("useStandardOutputLinlIsFalse", function(assert) {
+QUnit.test("useTextOnlyOutputLinlIsFalse", function(assert) {
 	this.spec.outputFormat = "link";
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), false);
+	assert.strictEqual(child.useTextOnlyOutput(), false);
 });
 
 QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {

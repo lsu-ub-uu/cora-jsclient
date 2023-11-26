@@ -40,7 +40,13 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			cMetadataElement = getMetadataById(metadataId);
-			mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+			setPresentationIdFromCPresentation();
+			try{
+				mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+				
+			}catch(e){
+				mode="output";				
+			}
 			let pVarViewSpec = intializePVarViewSpec();
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
@@ -48,6 +54,12 @@ var CORA = (function(cora) {
 			initPAttributes();
 			if (mode === "output") {
 				pVarView.hide();
+			}
+		};
+		const setPresentationIdFromCPresentation = function() {
+			if (cPresentation.containsChildWithNameInData("recordInfo")) {
+				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			}
 		};
 
@@ -59,6 +71,7 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 
 			let pVarViewSpec = {
+				className: getClassName(),
 				id: path.join(""),
 				mode: mode,
 				info: {
@@ -88,6 +101,14 @@ var CORA = (function(cora) {
 			
 			return pVarViewSpec;
 		};
+		
+		const getClassName = function(){
+			if(presentationId){
+				return "pVar " + child.type + " " + presentationId;
+			}
+			return "pVar " + child.type;
+		};
+		
 		
 		const possiblyAddPresentationInfo = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {

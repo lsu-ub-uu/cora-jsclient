@@ -114,6 +114,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 				return lastTransformValueForViewMode;
 			};
 			return {
+				type: "fakeChildType",
 				getLastValueSentToValidateTypeSpecificValue: getLastValueSentToValidateTypeSpecificValue,
 				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 				validateTypeSpecificValue: validateTypeSpecificValue,
@@ -177,6 +178,7 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		className: "pVar fakeChildType pVarTextVariableId",
 		label: "Exempel textvariabel",
 		id: "onetwo",
 		mode: "input",
@@ -392,6 +394,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		className: "pVar fakeChildType textVariableIdTextAreaPVar",
 		label: "Exempel textvariabel",
 		id: "onetwo",
 		mode: "input",
@@ -435,6 +438,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		className: "pVar fakeChildType textVariableIdShowTextAreaFalsePVar",
 		label: "Exempel textvariabel",
 		id: "onetwo",
 		mode: "input",
@@ -483,6 +487,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		className: "pVar fakeChildType pVarTextVariableId",
 		label: "Exempel textvariabel",
 		id: "onetwo",
 		mode: "input",
@@ -533,6 +538,7 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
+		className: "pVar fakeChildType",
 		label: "Exempel textvariabel",
 		id: "onetwo",
 		mode: "input",

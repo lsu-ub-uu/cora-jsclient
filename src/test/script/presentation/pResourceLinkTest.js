@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,191 +20,239 @@
 "use strict";
 QUnit.module("presentation/pResourceLinkTest.js", {
 	beforeEach: function() {
-		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = new MetadataProviderStub();
-		this.pubSub = CORATEST.pubSubSpy();
-		this.textProvider = CORATEST.textProviderStub();
-		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
-		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
-		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
+		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		
-		this.pParentMultipleChildrenFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenSpy");
 		
 		this.dependencies = {
-			authTokenHolder: CORATEST.authTokenHolderSpy(),
 			metadataProvider: this.metadataProvider,
-			pubSub: this.pubSub,
-			textProvider: this.textProvider,
-			presentationFactory: this.presentationFactory,
-			pAttributesFactory: this.pAttributesFactory,
-			jsBookkeeper: this.jsBookkeeper,
-			recordTypeProvider: this.recordTypeProvider,
-			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
-			pMultipleChildrenViewFactory: CORATEST.standardFactorySpy("pMultipleChildrenViewSpy"),
-			pParentMultipleChildrenFactory: this.pParentMultipleChildrenFactory
+			pParentVarFactory: this.pParentVarFactory,
+			authTokenHolder: CORATEST.authTokenHolderSpy()
 		};
-		this.presentationId = "masterPResLink";
-		this.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(this.presentationId));
 		this.spec = {
-			"path": ["somePath"],
-			"cPresentation": this.cPresentation,
-			"cParentPresentation": undefined,
-			"dataDivider": "systemX"
+			path: [],
+			metadataIdUsedInData: "textVariableId",
+			cPresentation: CORA.coraData(this.metadataProvider
+				.getMetadataById("masterPResLink"))
 		};
-		this.setSpecCPresentation = function(metadataId) {
-			this.spec.cPresentation = this.getMetadataAsCoraData(metadataId);
-		};
-		this.getMetadataAsCoraData = function(metadataId) {
-			return CORA.coraData(this.dependencies.metadataProvider.getMetadataById(metadataId));
-		};
-	},
-});
-/*
-{
-	"actionLinks": {
-		"read": {
-			"requestMethod": "GET",
-			"rel": "read",
-			"url": "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/large",
-			"accept": "image/jpeg"
-		}
-	},
-	"name": "large",
-	"mimeType": "image/jpeg"
-}
-*/
-QUnit.test("testInit", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	
-	assert.strictEqual(pResourceLink.type, "pResourceLink");
+	}
 });
 
-QUnit.test("testInitParentFactoryCalled", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	
-	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);
-	let child = this.pParentMultipleChildrenFactory.getChild(0);
-	
-	assert.strictEqual(child.type, "pResourceLink");
-	assert.strictEqual(child.metadataId, "metadataGroupForResourceLinkGroup");
-});
+QUnit.test("testGetType", function(assert) {
+	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
 
-QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	
-	let child = this.pParentMultipleChildrenFactory.getChild(0);
-	assert.ok(child.addTypeSpecificInfoToViewSpec);
-	let spec = {};
-
-	child.addTypeSpecificInfoToViewSpec("input", spec);
-	
-	assert.strictEqual(spec.type, "pResourceLink");
-});
-
-QUnit.test("testGetView", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
-	
-	assert.strictEqual(pResourceLink.getView, parent.getView);
+	assert.strictEqual(pVar.type, "pResourceLink");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	assert.strictEqual(pResourceLink.getDependencies(), this.dependencies);
+	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	assert.strictEqual(pResourceLink.getSpec(), this.spec);
-	assert.equal(this.dependencies.pubSub.getSubscriptions()[0].path[0],"somePath");
-	assert.equal(this.dependencies.pubSub.getSubscriptions()[0].path[1],"resourceLinkResLink");
+	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+
+	assert.strictEqual(pVar.getSpec(), this.spec);
 });
 
-QUnit.test("testInitOneChild", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	let view = pResourceLink.getView();
-
-	assert.deepEqual(view.childNodes.length, 1);
-
-	let image = view.childNodes[0];
-	assert.equal(image.nodeName, "IMG");
-	assert.equal(image.className, "master");
-});
-
-CORATEST.resourceLinkDataFromMessage = {
-	"data": {
-		"actionLinks": {
-			"read": {
-				"requestMethod": "GET",
-				"rel": "read",
-				"url": "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master",
-				"accept": "application/octet-stream"
-			}
-		},
-		"name": "master",
-		"mimeType": "application/octet-stream"
-	}
+QUnit.test("testParentStarted", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
 	
-};
-
-QUnit.test("testOneChildHandleLinkedResource", function(assert) {
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-	let view = pResourceLink.getView();
-
-	assert.deepEqual(view.childNodes.length, 1);
-
-	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
-
-	let image = view.childNodes[0];
-	assert.equal(image.src, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
-		+ "?authToken=fitnesseAdminToken");
-});
-
-QUnit.test("testOneChildHandleLinkedResourceNoChildReferences", function(assert) {
-	this.setSpecCPresentation("masterPResLinkNoChildReferences");
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-
-	let view = pResourceLink.getView();
-
-	assert.deepEqual(view.childNodes.length, 1);
-
-	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
-
-	let image = view.childNodes[0];
-	assert.equal(image.src, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
-		+ "?authToken=fitnesseAdminToken");
-
-});
-
-QUnit.test("testOneChildMasterPResLinkNoOutputFormat", function(assert) {
-	this.setSpecCPresentation("masterPResLinkNoOutputFormat");
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
-
-	let view = pResourceLink.getView();
-
-	assert.deepEqual(view.childNodes.length, 0);
-
-	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
-
-	assert.deepEqual(view.childNodes.length, 0);
-
-});
-
-QUnit.test("testOneChildMasterPResLinkDownloadOutputFormat", function(assert) {
-	this.setSpecCPresentation("masterPResLinkDownloadOutputFormat");
-	let pResourceLink = CORA.pResourceLink(this.dependencies, this.spec);
+	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
+	assert.strictEqual(pParentVarFactory, this.spec);
 	
-	let view = pResourceLink.getView();
-	assert.deepEqual(view.childNodes.length, 1);
+	const child = this.pParentVarFactory.getChild(0);
 
-	pResourceLink.handleMsg(CORATEST.resourceLinkDataFromMessage);
+	assert.strictEqual(child.type, "pResourceLink");
+	assert.notEqual(child.addTypeSpecificInfoToViewSpec, undefined);
+	assert.notEqual(child.validateTypeSpecificValue, undefined);
+	assert.notEqual(child.transformValueForView, undefined);
+});
 
-	let link = view.childNodes[0];
-	assert.equal(link.nodeName, "A");
-	assert.equal(link.href, "http://localhost:38080/systemone/rest/record/binary/binary:5782891133352/master"
-		+ "?authToken=fitnesseAdminToken");
-	assert.equal(link.textContent, "Ladda ner");
-	assert.equal(link.target, "_blank");
+QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
+	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+	
+	assert.strictEqual(pVar.getView, pParentVar.getView);
+});
 
+QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
+	
+	let expectedSpec = {
+		type: "pResourceLink",
+//		inputType: "input",
+		outputFormat: "image",
+//		inputFormat: "text",
+		info:{
+			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
+		"textVariableIdTextAreaPVar"))
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
+	
+	let expectedSpec = {
+		type: "pResourceLink",
+//		inputType: "textarea",
+		outputFormat: "text",
+//		inputFormat: "text",
+		info:{
+			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
+		"textVariableIdShowTextAreaFalsePVar"))
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
+	
+	let expectedSpec = {
+		type: "pResourceLink",
+//		inputType: "input",
+		outputFormat: "text",
+//		inputFormat: "text",
+		info:{
+			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testInitTextInputFormatPassword", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
+		"pVarTextVariableIdInputPassword"))
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
+	
+	let expectedSpec = {
+		type: "pResourceLink",
+//		inputType: "input",
+		outputFormat: "text",
+//		inputFormat: "password",
+		info:{
+			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testInitTextOutputFormatImage", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
+		"pVarTextVariableIdOutputImage"))
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	let viewSpec = {
+		info:{
+			technicalInfo:[]
+		}
+	};
+	
+	child.addTypeSpecificInfoToViewSpec("output", viewSpec);
+	
+	let expectedSpec = {
+		type: "pResourceLink",
+//		inputType: "input",
+		outputFormat: "image",
+//		inputFormat: "text",
+		info:{
+			technicalInfo:[
+//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
+			]
+		}
+	};
+	assert.deepEqual(viewSpec, expectedSpec);
+});
+
+QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const valid = child.validateTypeSpecificValue("A Value");
+	
+	assert.true(valid);
+});
+//
+//QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
+//	CORA.pResourceLink(this.dependencies, this.spec);
+//	const child = this.pParentVarFactory.getChild(0);
+//	
+//	const valid = child.validateTypeSpecificValue("hej####/(&/%&/¤/");
+//	
+//	assert.false(valid);
+//});
+
+QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	
+	const formated = child.autoFormatEnteredValue("Hej hopp");
+	
+	assert.strictEqual(formated, "Hej hopp");
+});
+
+QUnit.test("testTransformValueForView_pickUrl", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	const value = {
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail",
+							"accept": "image/jpeg"
+						}
+					},
+					"name": "thumbnail",
+					"mimeType": "image/jpeg"
+				};
+	const transformed = child.transformValueForView("input", value);
+	
+	assert.strictEqual(transformed, "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail?authToken=fitnesseAdminToken");
 });

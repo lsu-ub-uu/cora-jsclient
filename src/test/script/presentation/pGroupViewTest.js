@@ -17,7 +17,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
+"use strict"; 
 QUnit.module("presentation/pGroupViewTest.js", {
 	beforeEach: function() {
 		this.pParentMultipleChildrenViewFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenViewSpy");
@@ -63,7 +63,7 @@ QUnit.test("testParentStarted", function(assert) {
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 
 	assert.notEqual(child.createInputElementWithSetValueFunction, undefined);
-	assert.notEqual(child.useStandardOutput, undefined);
+	assert.notEqual(child.useTextOnlyOutput, undefined);
 	assert.notEqual(child.createOutputWithSetValueFunction, undefined);
 });
 
@@ -81,13 +81,6 @@ QUnit.test("testMethodUsedFromPParentVarView", function(assert) {
 	assert.strictEqual(pGroupView.show, pParentVarView.show);
 	assert.ok(pGroupView.appendChild);
 	assert.strictEqual(pGroupView.appendChild, pParentVarView.appendChild);
-});
-
-QUnit.test("testGetBaseClassName", function(assert) {
-	let pGroupView = this.getPGroupView();
-	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
-	
-	assert.strictEqual(child.getBaseClassName(), "pGroup");
 });
 
 QUnit.test("createInputElementWithSetValueFunction", function(assert) {
@@ -134,27 +127,27 @@ QUnit.test("createInputElementWithSetValueFunctionPassword", function(assert) {
 	assert.strictEqual(inputElement.value, "trams");
 });
 
-QUnit.test("useStandardOutput", function(assert) {
+QUnit.test("useTextOnlyOutput", function(assert) {
 	this.getPGroupView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), true);
+	assert.strictEqual(child.useTextOnlyOutput(), true);
 });
 
-QUnit.test("useStandardOutputImageIsFalse", function(assert) {
+QUnit.test("useTextOnlyOutputImageIsFalse", function(assert) {
 	this.spec.outputFormat = "image";
 	this.getPGroupView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), false);
+	assert.strictEqual(child.useTextOnlyOutput(), false);
 });
 
-QUnit.test("useStandardOutputLinlIsFalse", function(assert) {
+QUnit.test("useTextOnlyOutputLinlIsFalse", function(assert) {
 	this.spec.outputFormat = "link";
 	this.getPGroupView();
 	const child = this.pParentMultipleChildrenViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useStandardOutput(), false);
+	assert.strictEqual(child.useTextOnlyOutput(), false);
 });
 
 QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {

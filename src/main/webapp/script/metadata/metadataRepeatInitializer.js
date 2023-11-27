@@ -298,15 +298,6 @@ var CORA = (function(cora) {
 			return "resourceLink" === getType();
 		};
 
-		const initializeMetadataResourceLink = function(nextLevelPath) {
-			let cMetadataGroupForResourceLinkGroup = getMetadataById("metadataGroupForResourceLinkGroup");
-			let nextLevelChildReferences = cMetadataGroupForResourceLinkGroup
-				.getFirstChildByNameInData('childReferences');
-			nextLevelChildReferences.children.forEach(function(childReference) {
-				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, spec.data);
-			});
-		};
-
 		const possiblyPublishVariableValue = function(nextLevelPath) {
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				setFinalValue(nextLevelPath);
@@ -318,13 +309,10 @@ var CORA = (function(cora) {
 		const setFinalValue = function(nextLevelPath) {
 			let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
 			publishVariableValue(finalValue, nextLevelPath);
-			//TODO: test added type
-//			pubSub.publish("disable", { path: nextLevelPath });
 			pubSub.publish("disable", {type:"disable", path: nextLevelPath });
 		};
 
 		const publishVariableValue = function(value, nextLevelPath) {
-			//TODO: test added type
 			let message = {
 				type: "setValue",
 				data: value,

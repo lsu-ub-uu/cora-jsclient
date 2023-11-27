@@ -20,7 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
-		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
 		
 		const cPresentation = spec.cPresentation;
@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 			pVarViewSpec.type = "pResourceLink";
 			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+			pVarViewSpec.downloadText = textProvider.getTranslation("resourceLinkDownloadText");
 		};
 
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
@@ -52,7 +53,7 @@ var CORA = (function(cora) {
 		
 		const transformValueForView = function(mode, valueForView){
 //TODO: what should happen if we have no right to view resource
-			console.log(valueForView)
+console.log(valueForView)
 			let url = valueForView.actionLinks.read.url;
 			let newValue = url + "?" + getTokenRequestParameter();
 			return newValue;

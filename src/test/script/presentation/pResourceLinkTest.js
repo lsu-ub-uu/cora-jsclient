@@ -21,11 +21,13 @@
 QUnit.module("presentation/pResourceLinkTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
+		this.textProvider = CORATEST.textProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		
 		
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
+			textProvider: this.textProvider,
 			pParentVarFactory: this.pParentVarFactory,
 			authTokenHolder: CORATEST.authTokenHolderSpy()
 		};
@@ -39,21 +41,21 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 });
 
 QUnit.test("testGetType", function(assert) {
-	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let resourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 
-	assert.strictEqual(pVar.type, "pResourceLink");
+	assert.strictEqual(resourceLink.type, "pResourceLink");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let resourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 
-	assert.strictEqual(pVar.getDependencies(), this.dependencies);
+	assert.strictEqual(resourceLink.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let resourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 
-	assert.strictEqual(pVar.getSpec(), this.spec);
+	assert.strictEqual(resourceLink.getSpec(), this.spec);
 });
 
 QUnit.test("testParentStarted", function(assert) {
@@ -71,10 +73,10 @@ QUnit.test("testParentStarted", function(assert) {
 });
 
 QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
-	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let resourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 	let pParentVar = this.pParentVarFactory.getFactored(0);
 	
-	assert.strictEqual(pVar.getView, pParentVar.getView);
+	assert.strictEqual(resourceLink.getView, pParentVar.getView);
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
@@ -90,12 +92,10 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	
 	let expectedSpec = {
 		type: "pResourceLink",
-//		inputType: "input",
 		outputFormat: "image",
-//		inputFormat: "text",
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
@@ -117,12 +117,10 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	
 	let expectedSpec = {
 		type: "pResourceLink",
-//		inputType: "textarea",
 		outputFormat: "text",
-//		inputFormat: "text",
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
@@ -135,7 +133,8 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[]
 		}
 	};
@@ -144,12 +143,10 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	
 	let expectedSpec = {
 		type: "pResourceLink",
-//		inputType: "input",
 		outputFormat: "text",
-//		inputFormat: "text",
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
@@ -162,7 +159,8 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[]
 		}
 	};
@@ -171,12 +169,10 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	
 	let expectedSpec = {
 		type: "pResourceLink",
-//		inputType: "input",
 		outputFormat: "text",
-//		inputFormat: "password",
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
@@ -189,7 +185,8 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[]
 		}
 	};
@@ -198,12 +195,10 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	
 	let expectedSpec = {
 		type: "pResourceLink",
-//		inputType: "input",
 		outputFormat: "image",
-//		inputFormat: "text",
-		info:{
+		downloadText: "Ladda ner",
+	  	info:{
 			technicalInfo:[
-//				{text: "regEx: ^[0-9A-Öa-ö\\s!*.]{2,50}$"}
 			]
 		}
 	};
@@ -218,15 +213,6 @@ QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	
 	assert.true(valid);
 });
-//
-//QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
-//	CORA.pResourceLink(this.dependencies, this.spec);
-//	const child = this.pParentVarFactory.getChild(0);
-//	
-//	const valid = child.validateTypeSpecificValue("hej####/(&/%&/¤/");
-//	
-//	assert.false(valid);
-//});
 
 QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);

@@ -26,7 +26,8 @@ QUnit.module("presentation/pResourceLinkViewTest.js", {
 			pParentVarViewFactory: this.pParentVarViewFactory
 		};
 		this.spec = {
-			inputType: "input"
+			inputType: "input",
+			downloadText: "someDownloadText"
 		};
 
 		this.getPVarView = function() {
@@ -114,7 +115,7 @@ QUnit.test("useTextOnlyOutput", function(assert) {
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
-	assert.strictEqual(child.useTextOnlyOutput(), true);
+	assert.strictEqual(child.useTextOnlyOutput(), false);
 });
 
 QUnit.test("useTextOnlyOutputImageIsFalse", function(assert) {
@@ -126,7 +127,7 @@ QUnit.test("useTextOnlyOutputImageIsFalse", function(assert) {
 });
 
 QUnit.test("useTextOnlyOutputLinlIsFalse", function(assert) {
-	this.spec.outputFormat = "link";
+	this.spec.outputFormat = "download";
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
@@ -147,7 +148,7 @@ QUnit.test("createOutputWithSetValueFunctionImage", function(assert) {
 });
 
 QUnit.test("createOutputWithSetValueFunctionLink", function(assert) {
-	this.spec.outputFormat = "link";
+	this.spec.outputFormat = "download";
 	this.getPVarView();
 	const child = this.pParentVarViewFactory.getChild(0);
 	
@@ -155,8 +156,9 @@ QUnit.test("createOutputWithSetValueFunctionLink", function(assert) {
 	
 	assert.strictEqual(inputElement.nodeName, "A");
 	assert.strictEqual(inputElement.href, "");
-	assert.strictEqual(inputElement.text, "");
+	assert.strictEqual(inputElement.text, "someDownloadText");
+	assert.strictEqual(inputElement.target, "_blank");
 	inputElement.setValue("http://localhost/trams");
 	assert.strictEqual(inputElement.href, "http://localhost/trams");
-	assert.strictEqual(inputElement.text, "http://localhost/trams");
+	assert.strictEqual(inputElement.text, "someDownloadText");
 });

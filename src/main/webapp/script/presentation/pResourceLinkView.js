@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLinkView = function(dependencies, spec) {
 		const pParentVarViewFactory = dependencies.pParentVarViewFactory;
+		const downloadText = spec.downloadText;
 		let pParentVarView;
 
 		const start = function() {
@@ -37,14 +38,14 @@ var CORA = (function(cora) {
 		};
 
 		const useTextOnlyOutput = function() {
-			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
+			return false;
 		};
 		
 		const createOutputWithSetValueFunction = function() {
 			if (spec.outputFormat === "image") {
 				return createOutputImage();
 			} 
-			return createOutputLink();
+			return createDownload();
 		};
 		
 		const createOutputImage = function() {
@@ -55,11 +56,13 @@ var CORA = (function(cora) {
 			return outputNew;
 		};
 
-		const createOutputLink = function() {
+		const createDownload = function() {
 			let outputNew = document.createElement("a");
+			let textNode = document.createTextNode(downloadText);
+			outputNew.appendChild(textNode);
+			outputNew.target = "_blank";
 			outputNew.setValue = function(value) {
 				outputNew.href = value;
-				outputNew.text = value;
 			};
 			return outputNew;
 		};

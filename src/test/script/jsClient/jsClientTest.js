@@ -21,6 +21,7 @@
 
 QUnit.module("jsClient/jsClientTest.js", {
 	beforeEach: function() {
+		this.fixture = document.getElementById("qunit-fixture");
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
 		this.createRecordHandlerViewFactory = function() {
 			return {
@@ -97,7 +98,7 @@ QUnit.module("jsClient/jsClientTest.js", {
 		}
 		this.oldAddEventListener = document.addEventListener;
 		document.addEventListener = this.addEvent;
-			
+	
 
 	},
 	afterEach: function() {
@@ -790,6 +791,12 @@ QUnit.test("testAddedEventListener_forKeyDown", function(assert) {
 });
 
 QUnit.test("testOnKeyDown_forKey_altKey+s_noShowingGuiItem", function(assert) {
+	let blurCalledBeforeSaveToSetValueOfCurrentSelect = false;
+	let input = document.createElement("input");
+	this.fixture.appendChild(input);
+	input.addEventListener("blur", ()=>{blurCalledBeforeSaveToSetValueOfCurrentSelect=true;});
+	input.focus();
+
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
@@ -805,6 +812,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+s_noShowingGuiItem", function(assert) {
 	
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getCallsToSendDataToServer(), 0);
+	assert.true(blurCalledBeforeSaveToSetValueOfCurrentSelect);
 });
 
 QUnit.test("testOnKeyDown_forKey_altKey+s", function(assert) {

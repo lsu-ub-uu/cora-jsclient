@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pResourceLinkTest.js", {
+QUnit.module.only("presentation/pResourceLinkTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.textProvider = CORATEST.textProviderStub();
@@ -241,4 +241,27 @@ QUnit.test("testTransformValueForView_pickUrl", function(assert) {
 	const transformed = child.transformValueForView("input", value);
 	
 	assert.strictEqual(transformed, "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail?authToken=fitnesseAdminToken");
+});
+
+QUnit.test("testTransformValueForView_noValueAtAll_occursAfterCreateBeforeMaterIsUploaded", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	const value = undefined;
+	const transformed = child.transformValueForView("input", value);
+	
+	assert.strictEqual(transformed, "valueForResourceLinkDoesNotExist");
+});
+
+QUnit.test("testTransformValueForView_noActionLink", function(assert) {
+	CORA.pResourceLink(this.dependencies, this.spec);
+	const child = this.pParentVarFactory.getChild(0);
+	const value = {
+					"actionLinks": {
+					}, 
+					"name": "thumbnail",
+					"mimeType": "image/jpeg"
+				};
+	const transformed = child.transformValueForView("input", value);
+	
+	assert.strictEqual(transformed, "valueForResourceLinkDoesNotExist");
 });

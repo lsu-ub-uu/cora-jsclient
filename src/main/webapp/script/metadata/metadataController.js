@@ -71,23 +71,40 @@ var CORA = (function(cora) {
 		};
 
 		const possiblySetAttributeValue = function(refLinkedId, cCollectionVariable) {
+			let pathSpec = {
+				metadataIdToAdd: refLinkedId,
+				parentPath: [],
+				type: "attribute"
+			};
+			let attributePath = CORA.calculatePathForNewElement(pathSpec);
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
-				let pathSpec = {
-					metadataIdToAdd: refLinkedId,
-					parentPath: [],
-					type: "attribute"
-				};
-				let attributePath = CORA.calculatePathForNewElement(pathSpec);
-				let setValueMessage = {
-					path: attributePath,
-					data: cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")
-				}
+				setValueForForAttributeWithFinalValue(attributePath, cCollectionVariable);
+			} else {
+				possiblySetValueForAttributeWithChoice(attributePath, cCollectionVariable);
+			}
+		};
+		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
+			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
+			setValueForAttributeWithPathAndValue(attributePath, value);
+			pubSub.publish("disable", { path: attributePath });
+		};
 
-				pubSub.publish("setValue", setValueMessage);
-				pubSub.publish("disable", { path: attributePath });
+		const possiblySetValueForAttributeWithChoice = function(attributePath, cCollectionVariable) {
+			if (spec.data !== undefined) {
+				let collectionVariableNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
+				let value = spec.data.attributes[collectionVariableNameInData];
+				setValueForAttributeWithPathAndValue(attributePath, value);
 			}
 		};
 
+		const setValueForAttributeWithPathAndValue = function(attributePath, value) {
+			let setValueMessage = {
+				path: attributePath,
+				data: value
+			}
+			pubSub.publish("setValue", setValueMessage);
+		};
+		///// to here
 		const initializeFirstLevel = function() {
 			let topLevelChildReferences = extractTopLevelChildReferences();
 			topLevelChildReferences.children.forEach(function(childReference) {

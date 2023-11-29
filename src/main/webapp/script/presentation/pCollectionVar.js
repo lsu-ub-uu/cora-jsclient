@@ -151,6 +151,7 @@ var CORA = (function(cora) {
 		};
 
 		const self = {
+			type: "pCollectionVar",
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 			validateTypeSpecificValue: validateTypeSpecificValue,
 			autoFormatEnteredValue: autoFormatEnteredValue,

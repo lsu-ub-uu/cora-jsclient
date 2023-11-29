@@ -26,11 +26,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			pParentVarView = pParentMultipleChildrenViewFactory.factor(spec, self);
 		};
-		
-		const getBaseClassName = function(){
-			return "pSurroundingContainer";
-		};
-		
+
 		const createInputElementWithSetValueFunction = function() {
 			let inputNew = document.createElement(spec.inputType);
 			if (spec.inputFormat === "password") {
@@ -43,7 +39,7 @@ var CORA = (function(cora) {
 			return inputNew;
 		};
 
-		const useStandardOutput = function() {
+		const useTextOnlyOutput = function() {
 			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
 		};
 		
@@ -81,9 +77,8 @@ var CORA = (function(cora) {
 		
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-			useStandardOutput: useStandardOutput,
-			createOutputWithSetValueFunction: createOutputWithSetValueFunction,
-			getBaseClassName: getBaseClassName
+			useTextOnlyOutput: useTextOnlyOutput,
+			createOutputWithSetValueFunction: createOutputWithSetValueFunction
 		};
 		
 		start();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Olov McKie
+ * Copyright 2015, 2023 Olov McKie
  * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -142,7 +142,19 @@ var CORA = (function(cora) {
 				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
 //				initializeMetadataResourceLink(nextLevelPath);
-				pubSub.publish("linkedResource", message);
+				//NOTE, value here is entire data and not a "normal" setValue which is data.value
+				message.type = "setValue";
+				pubSub.publish("setValue", message);
+//				console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
+//				console.log("in metadataRepeatInitializer, spec: ",spec )
+//				console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
+//				publishIfDataIsPresent(nextLevelPath)
+//				const publishIfDataIsPresent = function(nextLevelPath) {
+//					if (spec.data !== undefined) {
+//						publishVariableValue(spec.data.value, nextLevelPath);
+//						publishVariableValue(spec.data, nextLevelPath);
+//					}
+//				};
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);
 			}
@@ -286,15 +298,6 @@ var CORA = (function(cora) {
 			return "resourceLink" === getType();
 		};
 
-		const initializeMetadataResourceLink = function(nextLevelPath) {
-			let cMetadataGroupForResourceLinkGroup = getMetadataById("metadataGroupForResourceLinkGroup");
-			let nextLevelChildReferences = cMetadataGroupForResourceLinkGroup
-				.getFirstChildByNameInData('childReferences');
-			nextLevelChildReferences.children.forEach(function(childReference) {
-				createSpecAndInitalizeMetadataChildInitializer(childReference, nextLevelPath, spec.data);
-			});
-		};
-
 		const possiblyPublishVariableValue = function(nextLevelPath) {
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				setFinalValue(nextLevelPath);
@@ -306,11 +309,12 @@ var CORA = (function(cora) {
 		const setFinalValue = function(nextLevelPath) {
 			let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
 			publishVariableValue(finalValue, nextLevelPath);
-			pubSub.publish("disable", { path: nextLevelPath });
+			pubSub.publish("disable", {type:"disable", path: nextLevelPath });
 		};
 
 		const publishVariableValue = function(value, nextLevelPath) {
 			let message = {
+				type: "setValue",
 				data: value,
 				path: nextLevelPath
 			};

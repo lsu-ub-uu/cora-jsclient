@@ -39,7 +39,7 @@ var CORA = (function(cora) {
 			return inputNew;
 		};
 
-		const useStandardOutput = function() {
+		const useTextOnlyOutput = function() {
 			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
 		};
 		
@@ -77,7 +77,7 @@ var CORA = (function(cora) {
 		
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-			useStandardOutput: useStandardOutput,
+			useTextOnlyOutput: useTextOnlyOutput,
 			createOutputWithSetValueFunction: createOutputWithSetValueFunction
 		};
 		

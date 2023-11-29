@@ -1,5 +1,6 @@
 /*
  * Copyright 2020 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -84,7 +85,7 @@ QUnit.test("testMessagesTextVariableWithData", function(assert) {
 	let messages = this.pubSub.getMessages();
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"textVariableId","path":[],"nameInData":"textVariableId"}}');
-	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"type":"setValue","data":"A Value",'
 		+ '"path":["textVariableId"]}}');
 
 	assert.equal(messages.length, 2);
@@ -105,7 +106,7 @@ QUnit.test("testMessagesNonEmptyParentPathTextVariableWithData", function(assert
 	let messages = this.pubSub.getMessages();
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"textVariableId","path":' + (JSON.stringify(this.spec.path)) + ',"nameInData":"textVariableId"}}');
-	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"A Value",'
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"type":"setValue","data":"A Value",'
 		+ '"path":' + (JSON.stringify(expectedSetValuePath)) + '}}');
 	assert.equal(messages.length, 2);
 });
@@ -294,9 +295,9 @@ QUnit.test("testMessagesTextVariableFinalValue", function(assert) {
 	let messages = this.pubSub.getMessages();
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"textVariableWithFinalValueId","path":[],"nameInData":"textVariableWithFinalValueId"}}');
-	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"someFinalValue",'
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"type":"setValue","data":"someFinalValue",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
-	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{'
+	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{"type":"disable",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
 
 	assert.equal(messages.length, 3);
@@ -313,9 +314,9 @@ QUnit.test("testMessagesTextVariableWithWrongFinalValue", function(assert) {
 	let messages = this.pubSub.getMessages();
 	assert.deepEqual(JSON.stringify(messages[0]), '{"type":"add","message":{'
 		+ '"metadataId":"textVariableWithFinalValueId","path":[],"nameInData":"textVariableWithFinalValueId"}}');
-	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"data":"someFinalValue",'
+	assert.deepEqual(JSON.stringify(messages[1]), '{"type":"setValue","message":{"type":"setValue","data":"someFinalValue",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
-	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{'
+	assert.deepEqual(JSON.stringify(messages[2]), '{"type":"disable","message":{"type":"disable",'
 		+ '"path":["textVariableWithFinalValueId"]}}');
 
 	assert.equal(messages.length, 3);
@@ -599,9 +600,10 @@ QUnit.test("testResourceLinkMessage", function(assert) {
 	assert.stringifyEqual(messages[0], expectedAddForResourceLink);
 
 	let expectedLinkedResourceMessage = {
-		type: "linkedResource",
+		type: "setValue",
 		message: {
-			path: ["masterResLink"]
+			path: ["masterResLink"],
+			type: "setValue"
 		}
 	};
 	assert.stringifyEqual(messages[1], expectedLinkedResourceMessage);

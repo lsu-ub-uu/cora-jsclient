@@ -34,6 +34,9 @@ var CORA = (function(cora) {
 			if(spec.type === "pCollVar"){
 				return CORA.pCollectionVarView(dependencies, spec);
 			}
+			if(spec.type === "pResourceLink"){
+				return CORA.pResourceLinkView(dependencies, spec);
+			}
 			return CORA.pVarView(dependencies, spec);
 		}
 

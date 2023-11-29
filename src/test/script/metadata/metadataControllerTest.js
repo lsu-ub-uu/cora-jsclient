@@ -219,9 +219,15 @@ QUnit.test("testAddAttributes", function(assert) {
 	assert.equal(messages.length, 8);
 });
 
-QUnit.test("testAddAttributes", function(assert) {
+QUnit.test("testAddAttributes_noValue", function(assert) {
 	this.spec.metadataId = "groupIdOneTextChildOneAttributeChoice";
-
+	this.spec.data= { 
+		someData: "data",
+		attributes: {
+			type: "image"
+		}
+	};
+			
 	CORA.metadataController(this.dependencies, this.spec);
 
 	let messages = this.pubSub.getMessages();
@@ -233,15 +239,59 @@ QUnit.test("testAddAttributes", function(assert) {
 	});
 	
 	assert.deepEqual(messages[1], {
+		type: "setValue", message: {
+			path: ["@anAttributeChoice"],
+			 data: undefined
+		}
+	});
+	assert.deepEqual(messages[2], {
 		type: "newElementsAdded", message: {
 			data: "", path: []
 		}
 	});
-	assert.deepEqual(messages[2], {
+	assert.deepEqual(messages[3], {
 		type: "initComplete", message: {
 			path: [], data: ""
 		}
 	});
 
-	assert.equal(messages.length, 3);
+	assert.equal(messages.length, 4);
+});
+QUnit.test("testAddAttributes_WithValue", function(assert) {
+	this.spec.metadataId = "groupIdOneTextChildOneAttributeChoice";
+	this.spec.data= { 
+		someData: "data",
+		attributes: {
+			anAttributeChoice: "yes"
+		}
+	};
+			
+	CORA.metadataController(this.dependencies, this.spec);
+
+	let messages = this.pubSub.getMessages();
+
+	assert.deepEqual(messages[0], {
+		type: "addAttribute", message: {
+			metadataId: "anAttributeChoice", nameInData: "anAttributeChoice", path: []
+		}
+	});
+	
+	assert.deepEqual(messages[1], {
+		type: "setValue", message: {
+			path: ["@anAttributeChoice"],
+			 data: "yes"
+		}
+	});
+	assert.deepEqual(messages[2], {
+		type: "newElementsAdded", message: {
+			data: "", path: []
+		}
+	});
+	assert.deepEqual(messages[3], {
+		type: "initComplete", message: {
+			path: [], data: ""
+		}
+	});
+
+	assert.equal(messages.length, 4);
 });

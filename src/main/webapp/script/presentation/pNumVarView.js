@@ -35,7 +35,7 @@ var CORA = (function(cora) {
 			return inputNew;
 		};
 
-		const useStandardOutput = function() {
+		const useTextOnlyOutput = function() {
 			return true;
 		};
 		
@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 		
 		const self = {
 			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-			useStandardOutput: useStandardOutput,
+			useTextOnlyOutput: useTextOnlyOutput,
 		};
 		
 		start();

@@ -75,6 +75,7 @@ var CORA = (function(cora) {
 		};
 
 		const self = {
+			type: "pVar",
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
 			validateTypeSpecificValue: validateTypeSpecificValue,
 			autoFormatEnteredValue: autoFormatEnteredValue,

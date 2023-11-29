@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,113 +20,75 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pResourceLink = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
+		const pParentVarFactory = dependencies.pParentVarFactory;
+		
 		const cPresentation = spec.cPresentation;
-
-		let parent;
-		let hasOutputFormat;
-		let resourceView;
+		let pParentVar;
 
 		const start = function() {
-			initParent();
-			hasOutputFormat = presentationHasOutputFormat();
-			createResourceViewIfOutputFormatInMetadata();
-			subscribeToLinkedResourceMessage();
+			pParentVar = pParentVarFactory.factor(spec, self);
+		};
+		
+		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
+			pVarViewSpec.type = "pResourceLink";
+			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
+			pVarViewSpec.downloadText = textProvider.getTranslation("resourceLinkDownloadText");
 		};
 
-		const initParent = function() {
-			let my = {
-				type: "pResourceLink",
-				metadataId: "metadataGroupForResourceLinkGroup",
-				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
-			};
-
-			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
-		};
-
-		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
-			viewSpec.type = "pResourceLink";
-		};
-
-		const presentationHasOutputFormat = function() {
-			return cPresentation.containsChildWithNameInData("outputFormat");
-		};
-
-		const createResourceViewIfOutputFormatInMetadata = function() {
-			if (hasOutputFormat) {
-				createResourceViewFromOutputFormat();
+		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+			if (cPresentation.containsChildWithNameInData(nameInData)) {
+				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
 			}
+			return defaultValue;
 		};
-
-		const createResourceViewFromOutputFormat = function() {
-			let outputFormatType = cPresentation.getFirstAtomicValueByNameInData("outputFormat");
-			if (outputFormatType === "image") {
-				createImage();
-			} else {
-				createDownload();
-			}
-			setCommonAttributesOnResourceView();
+		
+		const validateTypeSpecificValue = function(valueFromView) {
+			return true;
 		};
-
-		const createImage = function() {
-			resourceView = document.createElement("img");
+		
+		const autoFormatEnteredValue = function(valueFromView){
+			return valueFromView;
 		};
-
-		const createDownload = function() {
-			resourceView = document.createElement("a");
-			resourceView.appendChild(document.createTextNode(dependencies.textProvider
-				.getTranslation("resourceLinkDownloadText")));
-			resourceView.target = "_blank";
+		
+		const transformValueForView = function(mode, valueForView){
+//TODO: what should happen if we have no right to view resource
+console.log(valueForView)
+			let url = valueForView.actionLinks.read.url;
+			let newValue = url + "?" + getTokenRequestParameter();
+			return newValue;
 		};
-
-		const setCommonAttributesOnResourceView = function() {
-			resourceView.className = "master";
-			parent.getView().appendChild(resourceView);
-		};
-
-		const setInfoInLinkedResourceView = function(dataFromMsg) {
-			if (hasOutputFormat) {
-				let url = dataFromMsg.data.actionLinks.read.url;
-				resourceView.href = url + "?" + getTokenRequestParameter();
-				resourceView.src = url + "?" + getTokenRequestParameter();
-			}
-		};
-
+		
 		const getTokenRequestParameter = function() {
 			let tokenRequestParamenter = "authToken=";
 			tokenRequestParamenter += dependencies.authTokenHolder.getCurrentAuthToken();
 			return tokenRequestParamenter;
 		};
-
-		const subscribeToLinkedResourceMessage = function() {
-			const resourceLinkPath = addResourceLinkResLinkToMasterGroupPath();
-			dependencies.pubSub.subscribe("linkedResource", resourceLinkPath, undefined, handleMsg);
-		};
 		
-		const addResourceLinkResLinkToMasterGroupPath = function (){
-			return spec.path.concat(["resourceLinkResLink"]);
-		}
-
-		const handleMsg = function(dataFromMsg) {
-			setInfoInLinkedResourceView(dataFromMsg);
+		const getSpec = function() {
+			return spec;
 		};
 
 		const getDependencies = function() {
 			return dependencies;
 		};
 
-		const getSpec = function() {
-			return spec;
+		const self = {
+			type: "pResourceLink",
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
+			validateTypeSpecificValue: validateTypeSpecificValue,
+			autoFormatEnteredValue: autoFormatEnteredValue,
+			transformValueForView: transformValueForView
 		};
 
 		start();
-		let out = Object.freeze({
+		return Object.freeze({
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: parent.getView,
-			handleMsg: handleMsg
+			getView: pParentVar.getView
 		});
-		return out;
+
 	};
 	return cora;
 }(CORA));

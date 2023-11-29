@@ -62,6 +62,7 @@ var CORA = (function(cora) {
 		const onKeyDown = function(event){
 			let keyPressed = event.key;
 			if (event.altKey && keyPressed === 's') {
+				blurCurrentActiveElementToSetValueFromSelect();
 				return save(event);
 			}
 			if (event.altKey && keyPressed === 'w') {
@@ -78,6 +79,12 @@ var CORA = (function(cora) {
 			}
 			if (event.altKey && keyPressed === 'ArrowDown') {
 				return changeToNextShowing(event);
+			}
+		};
+		
+		const blurCurrentActiveElementToSetValueFromSelect = function(){
+			if(document.activeElement){
+				document.activeElement.blur();
 			}
 		};
 		

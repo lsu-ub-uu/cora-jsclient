@@ -9,6 +9,7 @@
 
 img {
 	max-width: 100%;
+	width: fit-content;
 }
 
 .client1>.presentation {
@@ -88,7 +89,7 @@ img {
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
-	transform: scale(0.7, 0.7);
+/* 	transform: scale(0.7, 0.7); */
 }
 
 .infoButton, .openLinkedRecordButton, .showSearchButton {
@@ -268,7 +269,7 @@ img {
 .pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
-	background-color: rgba(0, 129, 198, 0.1);
+	background-color: rgba(0, 129, 198, 0.08);
 	transition: background-color 0.5s linear;
 }
 

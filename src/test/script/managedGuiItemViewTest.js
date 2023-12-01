@@ -44,6 +44,7 @@ QUnit.test("testGetMenuView", function(assert) {
 	assert.strictEqual(menuView.className, "menuView");
 });
 
+
 QUnit.test("testMenuOnclickCallsActivateMethod", function(assert) {
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
 	let menuView = managedGuiItemView.getMenuView();
@@ -135,26 +136,34 @@ QUnit.test("testUpdateMenuView", function(assert) {
 	assert.strictEqual(menuView.className, "menuView");
 
 	managedGuiItemView.updateMenuView({
-		"active" : false,
-		"changed" : false
+		active : false,
+		changed : false
 	});
 	assert.strictEqual(menuView.className, "menuView");
 
 	managedGuiItemView.updateMenuView({
-		"active" : true,
-		"changed" : false
+		active : true,
+		changed : false,
+		indicatorClassName : "someIndicatiorClassName1"
 	});
-	assert.strictEqual(menuView.className, "menuView active");
+	assert.strictEqual(menuView.className, "menuView active someIndicatiorClassName1");
 
 	managedGuiItemView.updateMenuView({
-		"active" : true,
-		"changed" : true
+		active : true,
+		changed : false,
+		indicatorClassName : "someIndicatiorClassName2"
+	});
+	assert.strictEqual(menuView.className, "menuView active someIndicatiorClassName2");
+
+	managedGuiItemView.updateMenuView({
+		active : true,
+		changed : true
 	});
 	assert.strictEqual(menuView.className, "menuView changed active");
 
 	managedGuiItemView.updateMenuView({
-		"active" : false,
-		"changed" : true
+		active : false,
+		changed : true
 	});
 	assert.strictEqual(menuView.className, "menuView changed");
 });

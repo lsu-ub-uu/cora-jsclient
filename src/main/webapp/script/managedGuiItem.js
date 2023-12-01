@@ -26,7 +26,9 @@ var CORA = (function(cora) {
 		let viewSpec;
 		let view;
 		let sendDataToServerMethod;
-
+		let currentIndicatorNo = 0;
+		const maxNumberIndicators = 9;
+		
 		const start = function() {
 			viewSpec = {
 				activateMethod : activate
@@ -77,12 +79,26 @@ var CORA = (function(cora) {
 		const updateViewState = function() {
 			let state = {
 				active : active,
-				changed : changed
+				changed : changed,
 			};
+			if(currentIndicatorNo>0){
+				state.indicatorClassName = "indicatorClassName" + currentIndicatorNo;
+			}
 			view.updateMenuView(state);
-		}
+		};
+		
 		const setActive = function(activeIn) {
 			active = activeIn;
+			updateViewState();
+		};
+		
+		const toggleNextIndicator = function() {
+			currentIndicatorNo = (currentIndicatorNo+1) % maxNumberIndicators;
+			updateViewState();
+		};
+		
+		const togglePreviousIndicator = function() {
+			currentIndicatorNo = (currentIndicatorNo - 1 + maxNumberIndicators) % maxNumberIndicators;
 			updateViewState();
 		};
 
@@ -140,6 +156,8 @@ var CORA = (function(cora) {
 			addWorkPresentation : addWorkPresentation,
 			setChanged : setChanged,
 			setActive : setActive,
+			toggleNextIndicator : toggleNextIndicator,
+			togglePreviousIndicator : togglePreviousIndicator,
 			clearMenuView : clearMenuView,
 			clearWorkView : clearWorkView,
 			hideWorkView : hideWorkView,

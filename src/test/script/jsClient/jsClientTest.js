@@ -851,6 +851,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+w_noShowingGuiItem", function(assert) {
 	assert.strictEqual(openGuiItemHandler.getViewRemovedList(0), undefined);
 	assert.strictEqual(jsClientView.getRemovedWorkView(0),undefined);
 });
+
 QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
@@ -870,9 +871,83 @@ QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
 	assert.strictEqual(jsClientView.getRemovedWorkView(0), aView.getWorkView());
 });
 
-//recordHandler sendUpdateDataToServer
-//sendDataToServer : sendDataToServer,
-//			getSendDataToServer : getSendDataToServer
+QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "ArrowRight";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(undefined);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
+	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
+});
+
+QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "ArrowRight";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(aView);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 1);
+	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
+});
+
+QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "ArrowLeft";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(undefined);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
+	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
+});
+
+QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowLeft_showingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "ArrowLeft";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(aView);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
+	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 1);
+});
+
+
 
 QUnit.test("testOnKeyDown_forKey_ctrlKey+altKey+ArrowUp", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);

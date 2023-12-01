@@ -39,6 +39,9 @@ var CORATEST = (function(coraTest) {
 		let noOfChangedCalls = 0;
 		let sendDataToServerCalls = 0;
 		let sendDataToServerMethod;
+		
+		let toggleNextIndicatorCalls = 0;
+		let togglePreviousIndicatorCalls = 0;
 
 		function getDependencies() {
 			return dependencies;
@@ -145,6 +148,22 @@ var CORATEST = (function(coraTest) {
 		const getCallsToSendDataToServer = function() {
 			return sendDataToServerCalls;
 		};
+
+		const toggleNextIndicator = function() {
+			toggleNextIndicatorCalls++;
+		};
+
+		const getNoCallsToToggleNextIndicator = function(){
+			return toggleNextIndicatorCalls;
+		}
+
+		const togglePreviousIndicator = function() {
+			 togglePreviousIndicatorCalls++;
+		};
+
+		const getNoCallsToTogglePreviousIndicator = function(){
+			return togglePreviousIndicatorCalls;
+		}
 		
 
 		let out = Object.freeze({
@@ -181,10 +200,17 @@ var CORATEST = (function(coraTest) {
 			sendDataToServer : sendDataToServer,
 			setSendDataToServer : setSendDataToServer,
 			getSendDataToServer : getSendDataToServer,
-			getCallsToSendDataToServer : getCallsToSendDataToServer
+			getCallsToSendDataToServer : getCallsToSendDataToServer,
+			
+			toggleNextIndicator : toggleNextIndicator,
+			togglePreviousIndicator : togglePreviousIndicator,
+			getNoCallsToToggleNextIndicator : getNoCallsToToggleNextIndicator,
+			getNoCallsToTogglePreviousIndicator : getNoCallsToTogglePreviousIndicator,
+			
 		});
 
 		return out;
 	};
 	return coraTest;
 }(CORATEST || {}));
+;

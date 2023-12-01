@@ -80,6 +80,12 @@ var CORA = (function(cora) {
 			if (event.altKey && keyPressed === 'ArrowDown') {
 				return changeToNextShowing(event);
 			}
+			if (event.altKey && keyPressed === 'ArrowRight') {
+				return changeToNextIndicator(event);
+			}
+			if (event.altKey && keyPressed === 'ArrowLeft') {
+				return changeToPreviousIndicator(event);
+			}
 		};
 		
 		const blurCurrentActiveElementToSetValueFromSelect = function(){
@@ -125,6 +131,20 @@ var CORA = (function(cora) {
 			let switchToItem = openGuiItemHandler.getNextGuiItem();
 			if(switchToItem){
 				showView(switchToItem);
+			}
+		};
+		
+		const changeToNextIndicator = function(event){
+			event.preventDefault();
+			if(openGuiItemHandler.getShowingGuiItem()){
+				openGuiItemHandler.getShowingGuiItem().toggleNextIndicator();
+			}
+		};
+		
+		const changeToPreviousIndicator = function(event){
+			event.preventDefault();
+			if(openGuiItemHandler.getShowingGuiItem()){
+				openGuiItemHandler.getShowingGuiItem().togglePreviousIndicator();
 			}
 		};
 		

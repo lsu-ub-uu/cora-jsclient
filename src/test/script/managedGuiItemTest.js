@@ -191,6 +191,79 @@ QUnit.test("testSetActivePassedOnToView", function(assert) {
 	});
 });
 
+QUnit.test("testToggleNextColor", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let factoredViewSpy = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+
+	assert.strictEqual(factoredViewSpy.getState(), undefined);
+	
+	managedGuiItem.toggleNextIndicator();
+	
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false,
+		indicatorClassName : "indicatorClassName1"
+	});
+	
+	managedGuiItem.togglePreviousIndicator();
+	
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false
+	});
+
+	managedGuiItem.togglePreviousIndicator();
+	
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false,
+		indicatorClassName : "indicatorClassName8"
+	});
+	
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false,
+		indicatorClassName : "indicatorClassName4"
+	});
+	
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false
+	});
+
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false,
+		indicatorClassName : "indicatorClassName8"
+	});
+	
+	managedGuiItem.toggleNextIndicator();
+	assert.stringifyEqual(factoredViewSpy.getState(), {
+		active : false,
+		changed : false
+	});
+	
+
+});
+
 QUnit.test("testClearMenuViewPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);

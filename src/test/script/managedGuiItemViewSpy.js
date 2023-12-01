@@ -19,21 +19,21 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.managedGuiItemViewSpy = function(dependencies, spec) {
-		var addedChildren = [];
-		var removedChildren = [];
-		var movedChildren = [];
-		var menuView = CORA.gui.createSpanWithClassName("managedGuiItemMenuViewSpyView");
-		var workView = CORA.gui.createSpanWithClassName("managedGuiItemWorkViewSpyView");
-		var listView = CORA.gui.createSpanWithClassName("managedGuiItemListViewSpyView");
-		var addedMenuPresentations = [];
-		var addedWorkPresentations = [];
-		var addedListPresentations = [];
-		var menuViewCleared = 0;
-		var workViewCleared = 0;
-		var hidden = 0;
-		var shown = 0;
-		var removed = 0;
-		var state;
+		let addedChildren = [];
+		let removedChildren = [];
+		let movedChildren = [];
+		let menuView = CORA.gui.createSpanWithClassName("managedGuiItemMenuViewSpyView");
+		let workView = CORA.gui.createSpanWithClassName("managedGuiItemWorkViewSpyView");
+		let listView = CORA.gui.createSpanWithClassName("managedGuiItemListViewSpyView");
+		let addedMenuPresentations = [];
+		let addedWorkPresentations = [];
+		let addedListPresentations = [];
+		let menuViewCleared = 0;
+		let workViewCleared = 0;
+		let hidden = 0;
+		let shown = 0;
+		let removed = 0;
+		let state;
 
 		function getMenuView() {
 			return menuView;
@@ -108,7 +108,7 @@ var CORATEST = (function(coraTest) {
 		function getAddedListPresentation(number) {
 			return addedListPresentations[number];
 		}
-		var out = Object.freeze({
+		let out = Object.freeze({
 			"type" : "managedGuiItemViewSpy",
 			getDependencies : getDependencies,
 			getSpec : getSpec,

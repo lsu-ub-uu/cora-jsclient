@@ -77,6 +77,9 @@ var CORA = (function(cora) {
 			if (state.active) {
 				className += " active";
 			}
+			if (state.indicatorClassName){
+				className += " "+state.indicatorClassName;
+			}
 			menuView.className = className;
 		};
 

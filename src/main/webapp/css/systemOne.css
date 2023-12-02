@@ -8,7 +8,7 @@
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --maincolor-10-trans: rgba(0, 130, 200, 0.1);
+  --maincolor-10-trans: rgba(0, 130, 200, 0.08);
   --maincolor-30-trans: rgba(0, 130, 200, 0.3);
   --maincolor-50-trans: rgba(0, 130, 200, 0.5);
   --color-selected-on-menu: black;
@@ -63,8 +63,12 @@
 }
 .sideBar .active, .header .active {
 	font-weight: bold;
-	background-color: #2a88ad;
-	color: white;
+}
+
+.jsClient .sideBar .menuView, .jsClient .sideBar .menuView:nth-child(2n) {
+	border-bottom: dashed 1px;
+	border-color: inherit;
+	background-color: var(--color-white);
 }
 
 .jsClient .workItem > .buttonView {
@@ -103,7 +107,7 @@
 	box-shadow: 0 0 10px rgba(0,0,0,0.13);
 }
 
-.presentation .text.h1TextStyle {
+.presentation .text.h1TextStyle, .presentation h1 {
 	font-size: 2rem;
 	color: white;
 	background-color: #2a88ad;
@@ -117,7 +121,7 @@
 	z-index: 3;
 }
 
-.presentation .text.h2TextStyle {
+.presentation .text.h2TextStyle, .presentation h2 {
 	color: #2a88ad;
 	position: sticky;
 	top: 2.5rem;

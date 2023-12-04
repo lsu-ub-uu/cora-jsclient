@@ -31,7 +31,8 @@ var CORA = (function(cora) {
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
-				metadataProvider : dependencies.providers.metadataProvider
+				metadataProvider : dependencies.providers.metadataProvider,
+				textProvider : dependencies.providers.textProvider
 			};
 
 			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);

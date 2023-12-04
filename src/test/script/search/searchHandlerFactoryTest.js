@@ -112,8 +112,8 @@ QUnit.test("testFactorAddedDependenciesRecordHandlerFactory", function(assert) {
 	assert.strictEqual(depRecordHandler.recordGuiFactory, this.globalFactories.recordGuiFactory);
 	assert.strictEqual(depRecordHandler.managedGuiItemFactory,
 		this.globalFactories.managedGuiItemFactory);
-	assert.strictEqual(depRecordHandler.metadataProvider,
-		this.providers.metadataProvider);
+	assert.strictEqual(depRecordHandler.metadataProvider, this.providers.metadataProvider);
+	assert.strictEqual(depRecordHandler.textProvider, this.providers.textProvider);
 });
 
 QUnit.test("testRecordPartPermissionCalculatorFactoryDependencies",

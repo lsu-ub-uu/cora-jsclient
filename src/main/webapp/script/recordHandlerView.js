@@ -20,6 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordHandlerView = function(dependencies, spec) {
+		const texts = spec.texts;
 		let showIncomingLinksButton;
 		let incomingLinksView;
 		let view;
@@ -30,7 +31,9 @@ var CORA = (function(cora) {
 		let incomingLinksHolder;
 		let reloadButton;
 		let definitionViewerButton;
-
+		let definitionViewerButtonValidationType;
+		let definitionViewerButtonRecordType;
+		
 		const start = function() {
 			let workItemViewSpec = {
 				"extraClassName": spec.extraClassName
@@ -136,9 +139,37 @@ var CORA = (function(cora) {
 		};
 
 		const createNewDefinitionViewerButton = function(functionToCall) {
-			definitionViewerButton = createButton("Show definition viewer", functionToCall,
+			definitionViewerButton = createButton(texts.showDefinitionViewer, functionToCall,
 				"definitionViewer");
 			workItemView.addToolViewToToolHolder(definitionViewerButton);
+		};
+		
+		const addDefinitionViewerOpenFunctionValidationType = function(functionToCall) {
+			if (undefined === definitionViewerButtonValidationType) {
+				createNewDefinitionViewerOpenFunctionValidationType(functionToCall);
+			} else {
+				definitionViewerButtonValidationType.onclick = functionToCall;
+			}
+		};
+		
+		const createNewDefinitionViewerOpenFunctionValidationType = function(functionToCall) {
+			definitionViewerButtonValidationType = createButton(texts.showDefinitionViewerValidationType, 
+				functionToCall, "definitionViewer");
+			workItemView.addToolViewToToolHolder(definitionViewerButtonValidationType);
+		};
+		
+		const addDefinitionViewerOpenFunctionRecordType = function(functionToCall) {
+			if (undefined === definitionViewerButtonRecordType) {
+				createNewDefinitionViewerOpenFunctionRecordType(functionToCall);
+			} else {
+				definitionViewerButtonRecordType.onclick = functionToCall;
+			}
+		};
+		
+		const createNewDefinitionViewerOpenFunctionRecordType = function(functionToCall) {
+			definitionViewerButtonRecordType = createButton(texts.showDefinitionViewerRecordType, 
+				functionToCall, "definitionViewer");
+			workItemView.addToolViewToToolHolder(definitionViewerButtonRecordType);
 		};
 
 		const addObjectToEditView = function(objectToAdd) {
@@ -184,7 +215,9 @@ var CORA = (function(cora) {
 			showShowIncomingLinksButton: showShowIncomingLinksButton,
 			hideShowIncomingLinksButton: hideShowIncomingLinksButton,
 			addReloadRecordUsingFunction: addReloadRecordFunction,
-			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction
+			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction,
+			addDefinitionViewerOpenFunctionValidationType: addDefinitionViewerOpenFunctionValidationType,
+			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType
 		});
 	};
 	return cora;

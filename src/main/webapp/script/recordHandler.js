@@ -20,6 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordHandler = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
 		let createNewRecord = spec.createNewRecord;
 		let fetchLatestDataFromServer = spec.fetchLatestDataFromServer;
 		let managedGuiItem;
@@ -76,7 +77,16 @@ var CORA = (function(cora) {
 				showDataMethod: showData,
 				copyDataMethod: copyData,
 				showIncomingLinksMethod: showIncomingLinks,
+				texts : {
+					showDefinitionViewer : getTranslation("showDefinitionViewerButton"),	
+					showDefinitionViewerValidationType : getTranslation("showDefinitionViewerValidationTypeButton"),	
+					showDefinitionViewerRecordType : getTranslation("showDefinitionViewerRecordTypeButton")	
+				}
 			};
+		};
+		
+		const getTranslation = function(textId){
+			return textProvider.getTranslation(`theClient_${textId}Text`);
 		};
 
 		const createNewOrFetchDataFromServerForExistingRecord = function() {
@@ -138,9 +148,9 @@ var CORA = (function(cora) {
 				text: "Välj validation type för posten!",
 				buttons: []
 			};
-			for(const x of Object.keys(metadataForRecordType.validationTypes)){
-				spec.buttons.push({text: x, onclickFunction: function(){
-					chosenValidationType(x);
+			for(const validationType of Object.keys(metadataForRecordType.validationTypes)){
+				spec.buttons.push({text: validationType, onclickFunction: function(){
+					chosenValidationType(validationType);
 				}});
 			}
 			return spec;
@@ -165,6 +175,8 @@ var CORA = (function(cora) {
 			managedGuiItem.setChanged(dataIsChanged);
 			managedGuiItem.setSendDataToServer(sendNewDataToServer);
 			recordHandlerView.addButton("CREATE", sendNewDataToServer, "create");
+			recordHandlerView.addDefinitionViewerOpenFunctionValidationType(showDefinitionViewerValidationType);
+			recordHandlerView.addDefinitionViewerOpenFunctionRecordType(showDefinitionViewerRecordType);
 		};
 		
 		const createAndAddViewsForNew = function(recordGuiIn, createDefinitionId, definitionId) {
@@ -420,20 +432,17 @@ var CORA = (function(cora) {
 
 		const getDataDividerFromData = function(cData) {
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let cDataDivider = CORA.coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
-			return cDataDivider.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("dataDivider");
 		};
 
 		const getRecordTypeIdFromData = function(cData) {
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let cTypeGroup = CORA.coraData(cRecordInfo.getFirstChildByNameInData("type"));
-			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("type");
 		};
 
 		const getValidationTypeIdFromData = function(cData) {
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let cTypeGroup = CORA.coraData(cRecordInfo.getFirstChildByNameInData("validationType"));
-			return cTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("validationType");
 		};
 
 		const addEditPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
@@ -472,6 +481,8 @@ var CORA = (function(cora) {
 			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
 				recordHandlerView.addDefinitionViewerOpenFunction(showDefinitionViewer);
 			}
+			recordHandlerView.addDefinitionViewerOpenFunctionValidationType(showDefinitionViewerValidationType);
+			recordHandlerView.addDefinitionViewerOpenFunctionRecordType(showDefinitionViewerRecordType);
 		};
 
 		const recordHandlesMetadata = function() {
@@ -484,6 +495,18 @@ var CORA = (function(cora) {
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
 			spec.jsClient.openDefinitionViewerForId(id);
+		};
+		
+		const showDefinitionViewerValidationType = function() {
+			if(createDefinitionId){
+				spec.jsClient.openDefinitionViewerForId(createDefinitionId);
+			}else{
+				spec.jsClient.openDefinitionViewerForId(updateDefinitionId);
+			}
+		};
+		
+		const showDefinitionViewerRecordType = function() {
+			spec.jsClient.openDefinitionViewerForId(definitionId);
 		};
 
 		const showData = function() {
@@ -686,6 +709,8 @@ var CORA = (function(cora) {
 			showTimeoutMessage: showTimeoutMessage,
 			callMethodAfterShowWorkView: callMethodAfterShowWorkView,
 			showDefinitionViewer: showDefinitionViewer,
+			showDefinitionViewerValidationType: showDefinitionViewerValidationType,
+			showDefinitionViewerRecordType: showDefinitionViewerRecordType,
 			sendDeleteDataToServer: sendDeleteDataToServer
 		});
 	};

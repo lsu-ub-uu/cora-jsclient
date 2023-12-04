@@ -74,7 +74,9 @@ QUnit.test("getDependencies", function(assert) {
 
 QUnit.test("factorTestDependencies", function(assert) {
 	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	
 	let recordHandler = recordHandlerFactory.factor(this.spec);
+	
 	let factoredDependencies = recordHandler.getDependencies();
 	assert.strictEqual(factoredDependencies.globalFactories, this.dependencies.globalFactories);
 	assert.strictEqual(factoredDependencies.recordHandlerFactory, recordHandlerFactory);
@@ -90,6 +92,7 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDependencies.questionFactory.type, "genericFactory");
 	assert.strictEqual(factoredDependencies.questionFactory.getTypeToFactor(), "question");
 	assert.strictEqual(factoredDependencies.questionFactory.getDependencies(), undefined);
+	assert.strictEqual(factoredDependencies.textProvider, this.dependencies.textProvider);
 });
 
 QUnit.test("factorTestType", function(assert) {

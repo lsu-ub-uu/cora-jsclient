@@ -22,6 +22,7 @@
 QUnit.module("recordHandlerTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
+		this.textProvider = CORATEST.textProviderSpy();
 		this.record = CORATEST.recordWithAllLinks;
 		this.recordWithoutUpdateOrDeleteLink = CORATEST.recordWithoutUpdateOrDeleteLink;
 		this.recordWithoutDeleteLink = CORATEST.recordWithoutDeleteLink;
@@ -41,6 +42,7 @@ QUnit.module("recordHandlerTest.js", {
 				incomingLinksListHandlerFactory: CORATEST
 					.standardFactorySpy("incomingLinksListHandlerSpy")
 			},
+			textProvider : this.textProvider,
 			recordHandlerFactory: CORATEST.standardFactorySpy("recordHandlerSpy"),
 			ajaxCallFactory: this.ajaxCallFactorySpy,
 			recordGuiFactory: this.recordGuiFactorySpy,
@@ -193,6 +195,14 @@ QUnit.test("testInitRecordHandlerViewSpec", function(assert) {
 	assert.strictEqual(usedSpec.showDataMethod, recordHandler.showData);
 	assert.strictEqual(usedSpec.copyDataMethod, recordHandler.copyData);
 	assert.strictEqual(usedSpec.showIncomingLinksMethod, recordHandler.showIncomingLinks);
+	
+	let texts = {
+		showDefinitionViewer : "translated_theClient_showDefinitionViewerButtonText",	
+		showDefinitionViewerValidationType : "translated_theClient_showDefinitionViewerValidationTypeButtonText",	
+		showDefinitionViewerRecordType : "translated_theClient_showDefinitionViewerRecordTypeButtonText"	
+	};
+	assert.deepEqual(usedSpec.texts, texts);
+	
 });
 
 QUnit.test("testInitRecordHandlerViewFormFactoredAndAdded", function(assert) {
@@ -1113,6 +1123,14 @@ QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadataNotReloaded", functio
 	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0), 
 		recordHandler.showDefinitionViewer);
+		
+	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionValidationType(0));
+	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionValidationType(0), 
+		recordHandler.showDefinitionViewerValidationType);
+
+	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0));
+	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0), 
+		recordHandler.showDefinitionViewerRecordType);
 });
 
 QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
@@ -1128,7 +1146,6 @@ QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
 	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0), 
 		recordHandler.showDefinitionViewer);
 	
-
 	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 });
 
@@ -1143,6 +1160,44 @@ QUnit.test("testShowDefinitionViewer", function(assert) {
 	
 	assert.ok(this.spec.jsClient.getOpenDefinitionIds(0));
 	assert.equal(this.spec.jsClient.getOpenDefinitionIds(0), "textPartEnGroup");
+});
+
+QUnit.test("testShowDefinitionViewerValidationType_create", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.specForNew);
+
+	recordHandler.showDefinitionViewerValidationType();
+	
+	assert.ok(this.specForNew.jsClient.getOpenDefinitionIds(0));
+	assert.equal(this.specForNew.jsClient.getOpenDefinitionIds(0), "recordTypeNewGroup");
+});
+
+QUnit.test("testShowDefinitionViewerValidationType_update", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	recordHandler.showDefinitionViewerValidationType();
+	
+	assert.ok(this.spec.jsClient.getOpenDefinitionIds(0));
+	assert.equal(this.spec.jsClient.getOpenDefinitionIds(0), "textSystemOneGroup");
+});
+
+QUnit.test("testShowDefinitionViewerRecordType", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	recordHandler.showDefinitionViewerRecordType();
+	
+	assert.ok(this.spec.jsClient.getOpenDefinitionIds(0));
+	assert.equal(this.spec.jsClient.getOpenDefinitionIds(0), "textGroup");
 });
 
 QUnit.test("initRecordGuiCreatedCorrectlyBasePartOfSpec", function(assert) {

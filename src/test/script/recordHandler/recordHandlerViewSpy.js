@@ -35,6 +35,8 @@ var CORATEST = (function(coraTest) {
 		let functionsAddedAsReloadRecord = [];
 		
 		let functionsAddedAsOpenDefinitionViewer = [];
+		let functionsAddedAsOpenDefinitionViewerValidationType = [];
+		let functionsAddedAsOpenDefinitionViewerRecordType = [];
 
 		let spyView = document.createElement("span");
 		function getView() {
@@ -132,6 +134,22 @@ var CORATEST = (function(coraTest) {
 		const getAddDefinitionViewerOpenFunction = function(no){
 			return functionsAddedAsOpenDefinitionViewer[no];
 		};
+		
+		const addDefinitionViewerOpenFunctionValidationType = function(functionToAdd){
+			functionsAddedAsOpenDefinitionViewerValidationType.push(functionToAdd);
+		};
+		
+		const getAddDefinitionViewerOpenFunctionValidationType = function(no){
+			return functionsAddedAsOpenDefinitionViewerValidationType[no];
+		};
+		
+		const addDefinitionViewerOpenFunctionRecordType = function(functionToAdd){
+			functionsAddedAsOpenDefinitionViewerRecordType.push(functionToAdd);
+		};
+		
+		const getAddDefinitionViewerOpenFunctionRecordType = function(no){
+			return functionsAddedAsOpenDefinitionViewerRecordType[no];
+		};
 
 		const out = Object.freeze({
 			getView : getView,
@@ -163,7 +181,13 @@ var CORATEST = (function(coraTest) {
 			getReloadRecordUsingFunction : getReloadRecordFunction,
 			
 			addDefinitionViewerOpenFunction : addDefinitionViewerOpenFunction,
-			getAddDefinitionViewerOpenFunction : getAddDefinitionViewerOpenFunction
+			getAddDefinitionViewerOpenFunction : getAddDefinitionViewerOpenFunction,
+			
+			addDefinitionViewerOpenFunctionValidationType: addDefinitionViewerOpenFunctionValidationType,
+			getAddDefinitionViewerOpenFunctionValidationType : getAddDefinitionViewerOpenFunctionValidationType,
+			
+			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType,
+			getAddDefinitionViewerOpenFunctionRecordType : getAddDefinitionViewerOpenFunctionRecordType
 		});
 		return out;
 	};

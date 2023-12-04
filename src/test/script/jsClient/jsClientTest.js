@@ -871,7 +871,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
 	assert.strictEqual(jsClientView.getRemovedWorkView(0), aView.getWorkView());
 });
 
-QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", function(assert) {
+QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
@@ -890,7 +890,7 @@ QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", funct
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
 });
 
-QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", function(assert) {
+QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
@@ -909,7 +909,7 @@ QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", functio
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
 });
 
-QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", function(assert) {
+QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
@@ -928,7 +928,7 @@ QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", functi
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
 });
 
-QUnit.test.only("testOnKeyDown_forKey_altKey+ArrowLeft_showingGuiItem", function(assert) {
+QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_showingGuiItem", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);

@@ -24,8 +24,8 @@ QUnit.module("recordHandlerViewTest.js", {
         this.fixture = document.getElementById("qunit-fixture");
 		this.workItemViewFactory = CORATEST.workItemViewFactorySpy();
 		this.dependencies = {
-			"workItemViewFactory" : this.workItemViewFactory,
-			"holderFactory": CORATEST.standardFactorySpy("holderSpy")
+			workItemViewFactory : this.workItemViewFactory,
+			holderFactory: CORATEST.standardFactorySpy("holderSpy")
 		};
 		this.spec = {
 			"extraClassName" : "extraClassName2",
@@ -36,6 +36,11 @@ QUnit.module("recordHandlerViewTest.js", {
 			"showIncomingLinksMethod" : function() {
 			},
 			"indexMethod" : function() {
+			},
+			texts : {
+				showDefinitionViewer : "showDefinitionViewer",	
+				showDefinitionViewerValidationType : "showDefinitionViewerValidationType",	
+				showDefinitionViewerRecordType : "showDefinitionViewerRecordType"	
 			}
 		};
 		this.specWithoutShowIncomingLinks = {
@@ -141,6 +146,9 @@ QUnit.test("testAddButtonForReloadData", function(assert) {
 	assert.strictEqual(button.onclick, reloadDataMethod);
 	assert.strictEqual(button.className, "reload");
 	assert.strictEqual(button.value, "Reload record");
+	
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+	
 });
 
 QUnit.test("testAddButtonForReloadDataIsOnlyAddedOnceButUsesNewFunction", function(assert) {
@@ -159,6 +167,7 @@ QUnit.test("testAddButtonForReloadDataIsOnlyAddedOnceButUsesNewFunction", functi
 	
 	let button = this.getViewsToolAddedToView()[3];
 	assert.strictEqual(button, undefined);
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
 });
 
 
@@ -174,7 +183,8 @@ QUnit.test("testAddButtonForDefinitionViewer", function(assert) {
 	assert.strictEqual(button.type, "button");
 	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
 	assert.strictEqual(button.className, "definitionViewer");
-	assert.strictEqual(button.value, "Show definition viewer");
+	assert.strictEqual(button.value, "showDefinitionViewer");
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
 });
 
 QUnit.test("testAddButtonForDefinitionViewerIsOnlyAddedOnceButUsesNewFunction", function(assert) {
@@ -185,21 +195,95 @@ QUnit.test("testAddButtonForDefinitionViewerIsOnlyAddedOnceButUsesNewFunction", 
 	let openDefinitionViewerDataMethod2= function() {
 		//empty method
 	};
-	this.recordHandlerView.addReloadRecordUsingFunction(openDefinitionViewerDataMethod);
-	let reloadButton = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(reloadButton.onclick, openDefinitionViewerDataMethod);
-	this.recordHandlerView.addReloadRecordUsingFunction(openDefinitionViewerDataMethod2);
-	assert.strictEqual(reloadButton.onclick, openDefinitionViewerDataMethod2);
 	
-	let button = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button, undefined);
+	this.recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod);
+	
+	let button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+
+	this.recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod2);
+
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+	let button2 = this.getViewsToolAddedToView()[3];
+	assert.strictEqual(button2, undefined);
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
 });
 
+QUnit.test("testAddButtonForDefinitionViewerValidationType", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	const openDefinitionViewerDataMethod= function() {
+		//empty method
+	};
+	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
+	
+	const button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.nodeName, "INPUT");
+	assert.strictEqual(button.type, "button");
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+	assert.strictEqual(button.className, "definitionViewer");
+	assert.strictEqual(button.value, "showDefinitionViewerValidationType");
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
 
+QUnit.test("testAddButtonForDefinitionViewerValidationType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	let openDefinitionViewerDataMethod= function() {
+		//empty method
+	};
+	let openDefinitionViewerDataMethod2= function() {
+		//empty method
+	};
+	
+	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
+	
+	let button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
 
+	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod2);
 
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+	let button2 = this.getViewsToolAddedToView()[3];
+	assert.strictEqual(button2, undefined);
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
 
+QUnit.test("testAddButtonForDefinitionViewerRecordType", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	const openDefinitionViewerDataMethod= function() {
+		//empty method
+	};
+	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
+	
+	const button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.nodeName, "INPUT");
+	assert.strictEqual(button.type, "button");
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+	assert.strictEqual(button.className, "definitionViewer");
+	assert.strictEqual(button.value, "showDefinitionViewerRecordType");
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
 
+QUnit.test("testAddButtonForDefinitionViewerRecordType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	let openDefinitionViewerDataMethod= function() {
+		//empty method
+	};
+	let openDefinitionViewerDataMethod2= function() {
+		//empty method
+	};
+	
+	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
+	
+	let button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+
+	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod2);
+
+	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+	let button2 = this.getViewsToolAddedToView()[3];
+	assert.strictEqual(button2, undefined);
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
 
 QUnit.test("testAddToEditView", function(assert) {
 	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);

@@ -35,7 +35,8 @@ var CORA = (function(cora) {
 			managedGuiItemFactory: dependencies.managedGuiItemFactory,
 			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
 			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep),
-			questionFactory: CORA.genericFactory("question", undefined)
+			questionFactory: CORA.genericFactory("question", undefined),
+			textProvider : dependencies.textProvider
 		};
 		const factor = function(recordHandlerSpec) {
 			dep.recordHandlerFactory = out;
@@ -47,7 +48,7 @@ var CORA = (function(cora) {
 		};
 
 		out = Object.freeze({
-			"type": "recordHandlerFactory",
+			type: "recordHandlerFactory",
 			getDependencies: getDependencies,
 			factor: factor
 		});

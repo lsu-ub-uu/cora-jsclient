@@ -26,6 +26,7 @@ var CORA = (function(cora) {
 		let presentationFactory = dependencies.presentationFactory;
 		let path = spec.path;
 		let mode = spec.mode;
+//		let toShow = spec.attributesToShow;
 		let attributes = [];
 		let addedToParent = false;
 		let addViewToParent = spec.addViewToParent;

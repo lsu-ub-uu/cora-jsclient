@@ -258,6 +258,19 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 	assert.strictEqual(attributesSpec.addViewToParent, pVarViewSpy.addAttributesView);
 	assert.strictEqual(attributesSpec.path, this.spec.path);
 	assert.strictEqual(attributesSpec.mode, "input");
+	assert.strictEqual(attributesSpec.toShow, "all");
+});
+
+QUnit.test("testFactoredPAttributes_attributesToShow_sentOnToAttributesFactory", function(assert) {
+	let attributesToShow = {
+							name: "attributesToShow",
+							value: "selectable"
+						};
+	this.spec.cPresentation.getData().children.push(attributesToShow);
+	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+	assert.strictEqual(attributesSpec.toShow, "selectable");
 });
 
 QUnit.test("testMetadataIdUsedInData_IsUsedAndNot_PresentationOf", function(assert) {

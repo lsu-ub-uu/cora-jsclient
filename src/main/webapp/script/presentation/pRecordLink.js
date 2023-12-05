@@ -39,6 +39,7 @@ var CORA = (function(cora) {
 		let cMetadataElement = getMetadataById(metadataId);
 		let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 		let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+		let attributesToShow = "all";
 		let hasLinkedRepeatId = cMetadataElement.containsChildWithNameInData("linkedPath");
 
 		let recordIdPath = "";
@@ -52,6 +53,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
+			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
 			view = createBaseView();
 			createValueView();
 			possiblyCreateSearchHandler();
@@ -61,6 +63,13 @@ var CORA = (function(cora) {
 				view.hide();
 			}
 			initPAttributes();
+		};
+
+		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+			if (cPresentation.containsChildWithNameInData(nameInData)) {
+				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
+			}
+			return defaultValue;
 		};
 
 		const createBaseView = function() {
@@ -423,7 +432,8 @@ var CORA = (function(cora) {
 			let pAttributesSpec = {
 				addViewToParent: view.addAttributesView,
 				path: path,
-				mode: mode
+				mode: mode,
+				toShow: attributesToShow
 			};
 			dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};

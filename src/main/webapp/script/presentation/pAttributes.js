@@ -20,16 +20,17 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pAttributes = function(dependencies, spec) {
-
+		const metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
 		let view = dependencies.pAttributesViewFactory.factor();
 		let presentationFactory = dependencies.presentationFactory;
 		let path = spec.path;
 		let mode = spec.mode;
-//		let toShow = spec.attributesToShow;
+		const toShow = spec.toShow;
 		let attributes = [];
 		let addedToParent = false;
 		let addViewToParent = spec.addViewToParent;
+		let cMetadataElement;
 
 		const start = function() {
 			subscribeToPubSub();
@@ -52,15 +53,38 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAddAttributePresentation = function(dataFromMsg) {
-			let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
-			attributes.push(attributePVar);
-
-			let attributePresentation = {
-				view: attributePVar.getView(),
-			};
-			view.addAttributePresentation(attributePresentation);
+			let showAttribute = shouldAttributeBeShown(dataFromMsg);
+			if(showAttribute){
+				let attributePVar = createAttributePresentation(dataFromMsg.metadataId);
+				attributes.push(attributePVar);
+	
+				let attributePresentation = {
+					view: attributePVar.getView(),
+				};
+				view.addAttributePresentation(attributePresentation);
+			}
 		};
-
+		
+		const shouldAttributeBeShown = function(dataFromMsg){
+			cMetadataElement = getMetadataById(dataFromMsg.metadataId);
+			let hasFinalValue = false;
+			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
+				hasFinalValue = true;
+			}
+			return toShow=="all" || (toShow == "selectable" && !hasFinalValue);
+		}
+		
+		const getMetadataById = function(id) {
+			return CORA.coraData(metadataProvider.getMetadataById(id));
+		};
+		
+		const getValueFromMetadatanOrDefaultTo = function(nameInData, defaultValue) {
+			if (cMetadataElement.containsChildWithNameInData(nameInData)) {
+				return cMetadataElement.getFirstAtomicValueByNameInData(nameInData);
+			}
+			return defaultValue;
+		};
+		
 		const createAttributePresentation = function(attributeMetadataId) {
 			let cAttributePresentationMetadata = buildAttributePresentationMetadata(
 				attributeMetadataId, mode);

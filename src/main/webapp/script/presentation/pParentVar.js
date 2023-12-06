@@ -20,7 +20,6 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pParentVar = function(dependencies, spec, child) {
-
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;

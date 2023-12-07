@@ -710,6 +710,11 @@ body {
   color: orange;
 }
 
+.definitionViewer {
+	position: relative;
+	display: block;
+}
+
 .definitionViewer .header {
 	font-size: 2rem;
 	color: #243bb7;
@@ -748,8 +753,8 @@ body {
 	color: #243bb7;
 /* 	font-weight: bold; */
 /* 	margin-right: auto; */
-	position: fixed;
-	top: 6rem;
+	position: absolute;
+	top: 3rem;
 	right: 3rem;
 	border: 1px solid gray;
 	border-radius: 0.5rem;

@@ -170,10 +170,6 @@ const buildExpectedPresentationForAttribute = function(metadataId, mode) {
 };
 
 
-//anAttribute
-//anAttributeChoice
-//this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-//toShow: "all",selectable none
 QUnit.test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
 	this.spec.toShow = "selectable";
 	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);

@@ -20,7 +20,6 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pParentVar = function(dependencies, spec, child) {
-
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
@@ -36,12 +35,14 @@ var CORA = (function(cora) {
 		let text;
 		let defText;
 		let mode;
+		let attributesToShow;
 		let pAttributes;
 
 		const start = function() {
 			cMetadataElement = getMetadataById(metadataId);
 			setPresentationIdFromCPresentation();
 			mode = getValueFromPresentationOrDefaultTo("mode", "output");
+			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
 			let pVarViewSpec = intializePVarViewSpec();
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
@@ -179,7 +180,8 @@ var CORA = (function(cora) {
 			let pAttributesSpec = {
 				addViewToParent: pVarView.addAttributesView,
 				path: path,
-				mode: mode
+				mode: mode,
+				toShow: attributesToShow
 			};
 			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};

@@ -32,6 +32,7 @@ var CORA = (function(cora) {
 		let cMetadataElement;
 		
 		let mode = "input";
+		let attributesToShow = "all";
 		let pAttributes; 
 		let text;
 
@@ -47,7 +48,9 @@ var CORA = (function(cora) {
 			if (cPresentation.containsChildWithNameInData("mode")) {
 				mode = cPresentation.getFirstAtomicValueByNameInData("mode");
 			}
-
+			mode = getValueFromPresentationOrDefaultTo("mode", "input");
+			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
+			
 			if (cPresentation.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = cPresentation
 					.getFirstChildByNameInData("childReferences").children;
@@ -57,7 +60,14 @@ var CORA = (function(cora) {
 				initPAttributes();
 			}
 		};
-
+		
+		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+			if (cPresentation.containsChildWithNameInData(nameInData)) {
+				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
+			}
+			return defaultValue;
+		};
+		
 		const intializeViewSpec = function() {
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
@@ -410,7 +420,8 @@ var CORA = (function(cora) {
 			let pAttributesSpec = {
 				addViewToParent: view.addAttributesView,
 				path: path,
-				mode: mode
+				mode: mode,
+				toShow: attributesToShow
 			};
 			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};

@@ -706,6 +706,19 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 	assert.strictEqual(attributesSpec.addViewToParent, viewSpy.addAttributesView);
 	assert.strictEqual(attributesSpec.path, this.spec.path);
 	assert.strictEqual(attributesSpec.mode, "input");
+	assert.strictEqual(attributesSpec.toShow, "all");
+});
+
+QUnit.test("testFactoredPAttributes_attributesToShow_sentOnToAttributesFactory", function(assert) {
+	let attributesToShow = {
+							name: "attributesToShow",
+							value: "selectable"
+						};
+	this.spec.cPresentation.getData().children.push(attributesToShow);
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+
+	let attributesSpec = this.pAttributesFactory.getSpec(0);
+	assert.strictEqual(attributesSpec.toShow, "selectable");
 });
 
 QUnit.test("testSurroundingNoAttributes", function(assert) {

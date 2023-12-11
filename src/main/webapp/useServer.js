@@ -21,7 +21,7 @@ function start() {
 
 	var href = window.location.href;
 	if (href.indexOf("systemone") !== -1) {
-		enableCSS("systemOneCSS");
+		enableCSS("aClientCSS");
 		useCora();
 	} else if (href.indexOf("alvin") !== -1) {
 		enableCSS("alvinCSS");
@@ -32,34 +32,34 @@ function start() {
 		useDiva();
 		enableIcon("diva");
 	} else if (href.indexOf("localhost:38080") !== -1 ) {
-		useLocalhostWithPort("38080","38180", "SystemOne local dev", "systemone");
+		useLocalhostWithPort("38080","38180", "SystemOne utveckling", "systemone");
 	} else if (href.indexOf("localhost:38081") !== -1 ) {
 		enableCSS("alvinCSS");
-		useLocalhostWithPort("38081","38181","ALVIN local dev", "alvin");
+		useLocalhostWithPort("38081","38181","ALVIN utveckling", "alvin");
 		enableIcon("alvin");
 	} else if (href.indexOf("localhost:38082") !== -1 ) {
 		enableCSS("divaLilaCSS");
-		useLocalhostWithPort("38082","38182", "DiVA local dev", "diva");
+		useLocalhostWithPort("38082","38182", "DiVA utveckling", "diva");
 		enableIcon("diva");
 	} else if (href.indexOf("116:38080") !== -1) {
-		useDevWithPort("38080","38180", "SystemOne dev", "systemone");
+		useDevWithPort("38080","38180", "SystemOne metadata (dev dator)", "systemone");
 	} else if (href.indexOf("116:38081") !== -1) {
 		enableCSS("alvinCSS");
-		useDevWithPort("38081","38181", "ALVIN dev", "alvin");
+		useDevWithPort("38081","38181", "ALVIN metadata (dev dator)", "alvin");
 		enableIcon("alvin");
 	} else if (href.indexOf("116:38082") !== -1) {
 		enableCSS("divaLilaCSS");
-		useDevWithPort("38082","38182","DiVA dev", "diva");
+		useDevWithPort("38082","38182","DiVA metadata (dev dator)", "diva");
 		enableIcon("diva");
 	} else if (href.indexOf("238:38080") !== -1) {
-		useDevExternallyWithPort("38080","38180", "SystemOne dev", "systemone");
+		useDevExternallyWithPort("38080","38180", "SystemOne metadata (dev dator)", "systemone");
 	} else if (href.indexOf("238:38081") !== -1) {
 		enableCSS("alvinCSS");
-		useDevExternallyWithPort("38081","38181", "ALVIN dev", "alvin");
+		useDevExternallyWithPort("38081","38181", "ALVIN metadata (dev dator)", "alvin");
 		enableIcon("alvin");
 	} else if (href.indexOf("238:38082") !== -1) {
 		enableCSS("divaLilaCSS");
-		useDevExternallyWithPort("38082","38182","DiVA dev", "diva");
+		useDevExternallyWithPort("38082","38182","DiVA metadata (dev dator)", "diva");
 		enableIcon("diva");
 	}
 	else {

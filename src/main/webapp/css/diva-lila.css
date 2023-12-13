@@ -77,6 +77,10 @@ height: calc(100% - 2.5rem);
 	color: var(--color-light-grey);
 }
 
+.presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
+	color: purple;
+}
+
 .jsClient > .sideBar {
 	width: 20rem;
 	overflow: auto;

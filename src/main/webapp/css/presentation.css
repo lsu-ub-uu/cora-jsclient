@@ -311,7 +311,7 @@ textarea {
 	padding-right: 16px;
 }
 .pMap, .pVar, .pCollVar, .pNumVar {
-    margin-bottom: 0.5em;
+    margin-bottom: 1rem;
 }
 
 .pChildRefHandler {
@@ -587,6 +587,7 @@ position: relative;
 .presentation .text {
 	margin: 4px;
 	display: inline-block;
+	margin-bottom: 1rem;
 }
 
 h1, h2, h3, h4, h5, h6 {

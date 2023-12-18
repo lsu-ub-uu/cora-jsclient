@@ -33,6 +33,9 @@ var CORA = (function(cora) {
 		const reloadForMetadataChanges = function() {
 			//TODO: fix reload :)
 //			console.log("Definition viewer reloadForMetadataChanges ");
+//			getView();
+			let model = getViewModelForMetadataId(id);
+			view.updateViewForViewModel(model);
 		};
 
 		const getView = function() {

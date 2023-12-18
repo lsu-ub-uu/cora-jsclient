@@ -40,12 +40,15 @@ var CORATEST = (function(coraTest) {
 			return createdViews[no];
 		};
 		
-		
+		function updateViewForViewModel(viewModel) {
+			viewModels.push(viewModel);
+		}
 		
 		return Object.freeze({
 			createViewForViewModel : createViewForViewModel,
 			getViewModelForCallNo : getViewModelForCallNo,
-			getCreatedViewForCallNo : getCreatedViewForCallNo
+			getCreatedViewForCallNo : getCreatedViewForCallNo,
+			updateViewForViewModel: updateViewForViewModel
 		});
 	};
 	return coraTest;

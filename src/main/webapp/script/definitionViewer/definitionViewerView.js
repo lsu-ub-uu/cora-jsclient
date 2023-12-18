@@ -20,13 +20,24 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.definitionViewerView = function(dependencies, spec) {
 		let out;
-
+		let view;
 		const start = function() {
 		};
 
 		const createViewForViewModel = function(viewModel) {
 //console.log(viewModel)
-			let view = createElementWithTypeClassText("span", "definitionViewer");
+			view = createElementWithTypeClassText("span", "definitionViewer");
+			addPartsToView(viewModel, view);
+			return view;
+		};
+		
+		const updateViewForViewModel = function(viewModel) {
+			view.innerHTML = "";
+			addPartsToView(viewModel, view);
+			return view;
+		};
+		
+		const addPartsToView = function(viewModel, view){
 			let header = createElementWithTypeClassText("div", "header",
 				 `Definition of ${viewModel.id}!`);
 			view.appendChild(header);
@@ -38,8 +49,6 @@ var CORA = (function(cora) {
 			
 			let legend = createLegend();
 			view.appendChild(legend);
-			
-			return view;
 		};
 		
 		const createLegend = function(){
@@ -183,7 +192,8 @@ var CORA = (function(cora) {
 			type: "definitionViewerView",
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,
-			createViewForViewModel: createViewForViewModel
+			createViewForViewModel: createViewForViewModel,
+			updateViewForViewModel: updateViewForViewModel
 		});
 		start();
 

@@ -116,6 +116,7 @@ var CORA = (function(cora) {
 		};
 
 		const search = function() {
+//			 const activeTextarea = document.activeElement;
 			if (recordGui.validateData()) {
 				sendSearchQueryToServer();
 			}

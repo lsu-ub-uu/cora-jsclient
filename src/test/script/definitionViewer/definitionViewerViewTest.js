@@ -72,7 +72,21 @@ QUnit.test("testBasicView", function(assert) {
 
 	let header = view.childNodes[0];
 	CORATEST.assertElementHasTypeClassText(header, "DIV", "header", "Definition of minimalGroupId!", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
+
+let updateViewForViewModelAndAssertSameContent = function(assert, definitionViewerView, viewModel, view){
+	let oldChildNodes = Array.from(view.childNodes);
+	definitionViewerView.updateViewForViewModel(viewModel);
+	let newChildNodes = Array.from(view.childNodes);
+	for (let i = 0; i < oldChildNodes.length; i++) {
+  		let oldItem = oldChildNodes[i];
+  		let newItem = newChildNodes[i];
+		assert.propEqual(oldItem, newItem);
+		assert.notStrictEqual(oldItem, newItem);
+	}
+};
 
 QUnit.test("testLegend", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
@@ -96,6 +110,7 @@ QUnit.test("testLegend", function(assert) {
 	CORATEST.assertElementHasTypeClassText(index.childNodes[0], "SPAN", "index", "I", assert);
 	CORATEST.assertElementHasTypeClassText(index.childNodes[1], "SPAN", "", "Index", assert);
 	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testBasicMetadata", function(assert) {
@@ -109,6 +124,8 @@ QUnit.test("testBasicMetadata", function(assert) {
 	let childNodes = metadataHeader.childNodes;
 	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "details",  "", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 
@@ -123,6 +140,8 @@ QUnit.test("testBasicMetadataWithFinalValue", function(assert) {
 	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "finalValue", "{someFinalValue}", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details",  "", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testBasicMetadataOnClickOpensDefiningRecord", function(assert) {
@@ -140,6 +159,8 @@ QUnit.test("testBasicMetadataOnClickOpensDefiningRecord", function(assert) {
 
 	assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
 	assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
@@ -172,6 +193,8 @@ QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
 		"collectionVarName:{someFinalValue}", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testBasicWithAttributeChoice", function(assert) {
@@ -211,6 +234,8 @@ QUnit.test("testBasicWithAttributeChoice", function(assert) {
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
 		"collectionVarName:{collectionItemName, collectionItemName2}", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 QUnit.test("testBasicWithTwoAttributeChoice", function(assert) {
 	let attribute = {
@@ -250,6 +275,8 @@ QUnit.test("testBasicWithTwoAttributeChoice", function(assert) {
 	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "attributes", 
 		"collectionVarName:{collectionItemName, collectionItemName2}, collectionVarName:{collectionItemName, collectionItemName2}", assert);
 	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "details", "(group)", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testFirstChild", function(assert) {
@@ -274,6 +301,7 @@ QUnit.test("testFirstChild", function(assert) {
 	CORATEST.assertElementHasTypeClassText(details[5], "SPAN", "constraint", "noConstraint", assert);
 	CORATEST.assertElementHasTypeClassText(details[6], "#text", "", ")", assert);
 	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
 
 QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
@@ -297,4 +325,6 @@ QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
 	CORATEST.assertElementHasTypeClassText(details[10], "#text", "", ", ", assert);
 	CORATEST.assertElementHasTypeClassText(details[11], "SPAN", "index", "I", assert);
 	CORATEST.assertElementHasTypeClassText(details[12], "#text", "", ")", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });

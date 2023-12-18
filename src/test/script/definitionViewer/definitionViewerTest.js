@@ -72,26 +72,6 @@ QUnit.test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(this.definitionViewer.onlyForTestGetSpec(), this.spec);
 });
 
-//QUnit.test("initTestManagedGuiItemFactoryCalled", function(assert) {
-//	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
-//	let managedGuiItemSpec = managedGuiItemSpy.getSpec(0);
-//	assert.strictEqual(managedGuiItemSpec.activateMethod, this.dependencies.jsClient.showView);
-//	assert.strictEqual(managedGuiItemSpec.removeMethod, this.dependencies.jsClient.viewRemoved);
-//	assert.strictEqual(managedGuiItemSpec.callOnMetadataReloadMethod,
-//		this.definitionViewer.reloadForMetadataChanges);
-////
-////	assert.notStrictEqual(managedGuiItemSpec.callMethodAfterShowWorkView, undefined);
-////	assert.strictEqual(managedGuiItemSpec.callMethodAfterShowWorkView,
-////		recordHandler.callMethodAfterShowWorkView);
-////
-////	assert.ok(managedGuiItemSpy != undefined);
-//});
-
-//QUnit.test("testGetManagedGuiItem", function(assert) {
-//	let managedGuiItem = this.dependencies.managedGuiItemFactory.getFactored(0);
-//	assert.strictEqual(this.definitionViewer.getManagedGuiItem(), managedGuiItem);
-//});
-
 QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
 	this.definitionViewer.getView();
 
@@ -107,6 +87,21 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 
 QUnit.test("testViewModel", function(assert) {
 	let generatedView = this.definitionViewer.getView();
+
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId
+	};
+	assert.deepEqual(viewModel, expected);
+});
+
+QUnit.test("testReloadForMetadataChanges", function(assert) {
+	this.definitionViewer.reloadForMetadataChanges();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {

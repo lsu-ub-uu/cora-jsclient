@@ -23,10 +23,18 @@ var CORA = (function(cora) {
 		let view;
 		let topLevelMetadataIds = {};
 		let storedValuePositions = {};
-
+let metadataHelper;
+const metadataProvider = dependencies.providers.metadataProvider;
 		const start = function() {
+			metadataHelper = CORA.metadataHelper({
+//				metadataProvider: dependencies.metadataProvider
+				metadataProvider: metadataProvider
+			});
 			createView();
 			calculateHandledTopLevelMetadataIds(spec.cPresentation);
+console.log("topLevelMetadataIds", topLevelMetadataIds)
+console.log("spec.parentPath", spec.parentPath)
+console.log("spec", spec)
 			subscribeToAddMessagesForParentPath();
 			let factoredPresentation = factorPresentation(spec.cPresentation);
 			view.addChild(factoredPresentation.getView());
@@ -68,7 +76,23 @@ var CORA = (function(cora) {
 			listPresentationOf.forEach(function(child) {
 				let presentationOfId = CORA.coraData(child).getFirstAtomicValueByNameInData(
 					"linkedRecordId");
-				topLevelMetadataIds[presentationOfId] = "exists";
+//				topLevelMetadataIds[presentationOfId] = "exists";
+///ADDED HERE				
+//			let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+//				spec.cParentMetadata, metadataIdFromPresentation);
+				let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
+				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+					cParentMetadata, presentationOfId);
+				console.log("cParentMetadataChildRefPart", cParentMetadataChildRefPart)
+//				if(cParentMetadataChildRefPart.containsChildWithNameInData("ref")){
+				try{
+					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
+					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+	//				cMetadataElement = getMetadataById(metadataId);
+					topLevelMetadataIds[metadataId] = "exists";
+				}catch(e){
+					console.log("MISSING::::: ",presentationOfId);
+				}
 			});
 		};
 
@@ -88,6 +112,7 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeMsg = function(dataFromMsg) {
+console.log("dataFromMsg",dataFromMsg)			
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
@@ -122,6 +147,8 @@ var CORA = (function(cora) {
 		};
 
 		const handleNewValue = function(dataFromMsg, msgAsArray) {
+console.log(dataFromMsg)			
+console.log(msgAsArray)			
 			if (dataFromMsg.data !== "") {
 				updateViewForData();
 				findOrAddPathToStored(msgAsArray);
@@ -167,6 +194,7 @@ var CORA = (function(cora) {
 		};
 
 		const noValuesExistForPresentedData = function() {
+console.log(storedValuePositions)
 			return Object.keys(storedValuePositions).length === 0;
 		};
 

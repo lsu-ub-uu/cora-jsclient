@@ -675,7 +675,6 @@ body {
 }
 
 .jsClient .text {
-	margin: 0;
 	color: #575757;
 }
 
@@ -708,6 +707,11 @@ body {
 
 .presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
   color: orange;
+}
+
+.definitionViewer {
+	position: relative;
+	display: block;
 }
 
 .definitionViewer .header {
@@ -748,8 +752,8 @@ body {
 	color: #243bb7;
 /* 	font-weight: bold; */
 /* 	margin-right: auto; */
-	position: fixed;
-	top: 6rem;
+	position: absolute;
+	top: 3rem;
 	right: 3rem;
 	border: 1px solid gray;
 	border-radius: 0.5rem;

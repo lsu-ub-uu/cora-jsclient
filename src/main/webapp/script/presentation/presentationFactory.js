@@ -74,6 +74,7 @@ var CORA = (function(cora) {
 		const pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
 
 		const pAttributesDependencies = {
+			metadataProvider: dependencies.providers.metadataProvider,
 			pubSub: dependencies.pubSub,
 			pAttributesViewFactory : CORA.genericFactory("pAttributesView")
 	};

@@ -242,6 +242,7 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(pAttributesDependencies.pubSub, context.dependencies.pubSub);
 	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.type, "genericFactory");
 	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.getTypeToFactor(), "pAttributesView");
+	assert.strictEqual(pAttributesDependencies.metadataProvider, context.dependencies.providers.metadataProvider);
 	
 	assert.strictEqual(dependencies.pParentVarFactory.type, "genericParentFactory");
 	assert.strictEqual(dependencies.pParentVarFactory.getTypeToFactor(), "pParentVar");

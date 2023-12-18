@@ -22,6 +22,7 @@
 QUnit.module("presentation/pAttributesTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
+		
 		this.pubSub = CORATEST.pubSubSpy();
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pAttributesViewFactory = CORATEST.standardFactorySpy("pAttributesViewSpy");
@@ -36,6 +37,7 @@ QUnit.module("presentation/pAttributesTest.js", {
 		};
 
 		this.dependencies = {
+			metadataProvider : this.metadataProvider,
 			pubSub: this.pubSub,
 			presentationFactory: this.presentationFactory,
 			pAttributesViewFactory: this.pAttributesViewFactory
@@ -43,34 +45,39 @@ QUnit.module("presentation/pAttributesTest.js", {
 		this.spec = {
 			path: ["whatEverPathToPresentationUsingAttributes"],
 			mode: "input",
+			toShow: "all",
 			addViewToParent: function(viewToAdd) {
 				addViewFunctionCalled += 1;
 				addedView = viewToAdd;
 			}
 		};
-		this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	}
 });
 
 QUnit.test("testInit", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	assert.strictEqual(this.pAttributes.type, "pAttributes");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	assert.strictEqual(this.pAttributes.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	assert.strictEqual(this.pAttributes.getSpec(), this.spec);
 });
 
 QUnit.test("testViewFactored", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
 	assert.strictEqual(pAttributesViewSpy.type, "pAttributesViewSpy");
 	assert.strictEqual(this.pAttributesViewFactory.getSpec(0), undefined);
 });
 
 QUnit.test("testSubscribeToAddAttribute", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	let subscriptions = this.pubSub.getSubscriptions();
 
 	let attributeSubsription = subscriptions[0];
@@ -83,6 +90,7 @@ QUnit.test("testSubscribeToAddAttribute", function(assert) {
 });
 
 QUnit.test("testAddAttributePresentation", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	let pAttributes = this.pAttributes;
 	let metadataId = "anAttribute";
 	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
@@ -130,7 +138,7 @@ QUnit.test("testAddAttributeOutputPresentation", function(assert) {
 	let expectedAttributePresentation = {
 		view: this.presentationFactory.getFactored(0).getView(),
 	};
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(1);
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
 	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
 });
 
@@ -161,7 +169,49 @@ const buildExpectedPresentationForAttribute = function(metadataId, mode) {
 	}
 };
 
+
+QUnit.test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
+	this.spec.toShow = "selectable";
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
+	let pAttributes = this.pAttributes;
+	let metadataId = "anAttribute";
+	
+	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
+
+	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
+
+	let presentationSpec = this.presentationFactory.getSpec(0);
+	
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
+	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), undefined);
+});			
+
+QUnit.test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
+	this.spec.toShow = "selectable";
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
+	let pAttributes = this.pAttributes;
+	let metadataId = "anAttributeChoice";
+	
+	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
+
+	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
+
+	let presentationSpec = this.presentationFactory.getSpec(0);
+	
+	assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttributeChoice"]);
+	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+
+	let expectedAttributePresentation = {
+		view: this.presentationFactory.getFactored(0).getView(),
+	};
+	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
+	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+});			
+
+
 QUnit.test("testAttributesViewAddedUsingAddViewFunction", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	assert.strictEqual(this.getAddViewFunctionCalled(), 0);
 
 	this.pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
@@ -174,6 +224,7 @@ QUnit.test("testAttributesViewAddedUsingAddViewFunction", function(assert) {
 
 
 QUnit.test("testDisableAttributes", function(assert) {
+	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
 	let pAttributes = this.pAttributes;
 	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
 	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anOtherAttribute"));

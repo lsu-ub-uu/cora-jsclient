@@ -23,18 +23,14 @@ var CORA = (function(cora) {
 		let view;
 		let topLevelMetadataIds = {};
 		let storedValuePositions = {};
-let metadataHelper;
-const metadataProvider = dependencies.providers.metadataProvider;
+		let metadataHelper;
+		const metadataProvider = dependencies.providers.metadataProvider;
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
-//				metadataProvider: dependencies.metadataProvider
 				metadataProvider: metadataProvider
 			});
 			createView();
 			calculateHandledTopLevelMetadataIds(spec.cPresentation);
-console.log("topLevelMetadataIds", topLevelMetadataIds)
-console.log("spec.parentPath", spec.parentPath)
-console.log("spec", spec)
 			subscribeToAddMessagesForParentPath();
 			let factoredPresentation = factorPresentation(spec.cPresentation);
 			view.addChild(factoredPresentation.getView());
@@ -73,25 +69,16 @@ console.log("spec", spec)
 			let cPresentationsOf = CORA.coraData(cPresentation
 				.getFirstChildByNameInData("presentationsOf"));
 			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
 			listPresentationOf.forEach(function(child) {
-				let presentationOfId = CORA.coraData(child).getFirstAtomicValueByNameInData(
-					"linkedRecordId");
-//				topLevelMetadataIds[presentationOfId] = "exists";
-///ADDED HERE				
-//			let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
-//				spec.cParentMetadata, metadataIdFromPresentation);
-				let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
+				let cChild = CORA.coraData(child);
+				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
 					cParentMetadata, presentationOfId);
-				console.log("cParentMetadataChildRefPart", cParentMetadataChildRefPart)
-//				if(cParentMetadataChildRefPart.containsChildWithNameInData("ref")){
-				try{
+				if(cParentMetadataChildRefPart.getData() != undefined){
 					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-	//				cMetadataElement = getMetadataById(metadataId);
 					topLevelMetadataIds[metadataId] = "exists";
-				}catch(e){
-					console.log("MISSING::::: ",presentationOfId);
 				}
 			});
 		};
@@ -108,11 +95,10 @@ console.log("spec", spec)
 		};
 
 		const subscribeToAddMessagesForParentPath = function() {
-			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, subscribeMsg);
+			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
 		};
 
-		const subscribeMsg = function(dataFromMsg) {
-console.log("dataFromMsg",dataFromMsg)			
+		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
@@ -147,8 +133,6 @@ console.log("dataFromMsg",dataFromMsg)
 		};
 
 		const handleNewValue = function(dataFromMsg, msgAsArray) {
-console.log(dataFromMsg)			
-console.log(msgAsArray)			
 			if (dataFromMsg.data !== "") {
 				updateViewForData();
 				findOrAddPathToStored(msgAsArray);
@@ -194,7 +178,6 @@ console.log(msgAsArray)
 		};
 
 		const noValuesExistForPresentedData = function() {
-console.log(storedValuePositions)
 			return Object.keys(storedValuePositions).length === 0;
 		};
 
@@ -260,7 +243,7 @@ console.log(storedValuePositions)
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			subscribeMsg: subscribeMsg,
+			possiblySubscribeOnAddMsg: possiblySubscribeOnAddMsg,
 			handleMsgToDeterminDataState: handleMsgToDeterminDataState,
 			publishPresentationShown: publishPresentationShown
 		});

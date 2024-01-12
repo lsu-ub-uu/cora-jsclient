@@ -99,7 +99,6 @@ var CORA = (function(cora) {
 		const subscribeToMessagesFromForm = function() {
 			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			dependencies.pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-//			if (spec.minNumberOfRepeatingToShow !== undefined) {
 			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode==="input") {
 				newElementsAddedSubscriptionId = dependencies.pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);

@@ -19,80 +19,70 @@
  */
 
 function MetadataProviderStub() {
-	// function createRecordInfoJson(id) {
-	// return '{"recordInfo":{"children":[{"id":"' + id +
-	// '"},{"type":"metadata"},'
-	// + '{"createdBy":"userId"},{"updatedBy":"userId"}]}}';
-	// }
-	// function createNameInDataTextIdDefTextId(id) {
-	// return '{"nameInData":"' + id + '"},{"textId":"' + id +
-	// 'Text"},{"defTextId":"' + id
-	// + 'DeffText"}';
-	// }
 	function createRecordInfoJson(id) {
 		return {
-			"name": "recordInfo",
-			"children": [{
-				"name": "id",
-				"value": id
+			name: "recordInfo",
+			children: [{
+				name: "id",
+				value: id
 			}, {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "recordType"
+				children: [{
+					name: "linkedRecordType",
+					value: "recordType"
 				}, {
-					"name": "linkedRecordId",
-					"value": "metadataGroup"
+					name: "linkedRecordId",
+					value: "metadataGroup"
 				}],
-				"name": "type"
+				name: "type"
 			}, {
-				"name": "createdBy",
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "user"
+				name: "createdBy",
+				children: [{
+					name: "linkedRecordType",
+					value: "user"
 				}, {
-					"name": "linkedRecordId",
-					"value": "userId"
+					name: "linkedRecordId",
+					value: "userId"
 				}]
 			}, {
-				"name": "updatedBy",
-				"value": "userId"
+				name: "updatedBy",
+				value: "userId"
 			}]
 		};
 	}
 
 	function createPresentationSize(presentationSize) {
 		return {
-			"name": "presentationSize",
-			"value": presentationSize
+			name: "presentationSize",
+			value: presentationSize
 		};
 	}
 
 	function createNameInDataTextIdDefTextId2(id) {
 		return [{
-			"name": "nameInData",
-			"value": id
+			name: "nameInData",
+			value: id
 		}, {
-			"name": "textId",
-			"value": id + "Text"
+			name: "textId",
+			value: id + "Text"
 		}, {
-			"name": "defTextId",
-			"value": id + "DefText"
+			name: "defTextId",
+			value: id + "DefText"
 		}];
 	}
 
 	function createNameInDataLinkedTextIdDefTextId2(id) {
 		return [
 			{
-				"name": "nameInData",
-				"value": id
+				name: "nameInData",
+				value: id
 			},
 			{
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "text"
+				children: [{
+					name: "linkedRecordType",
+					value: "text"
 				}, {
-					"name": "linkedRecordId",
-					"value": id + "Text"
+					name: "linkedRecordId",
+					value: id + "Text"
 				}],
 				"actionLinks": {
 					"read": {
@@ -103,15 +93,15 @@ function MetadataProviderStub() {
 						"accept": "application/vnd.uub.record+json"
 					}
 				},
-				"name": "textId"
+				name: "textId"
 			},
 			{
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "text"
+				children: [{
+					name: "linkedRecordType",
+					value: "text"
 				}, {
-					"name": "linkedRecordId",
-					"value": id + "DefText"
+					name: "linkedRecordId",
+					value: id + "DefText"
 				}],
 				"actionLinks": {
 					"read": {
@@ -122,7 +112,7 @@ function MetadataProviderStub() {
 						"accept": "application/vnd.uub.record+json"
 					}
 				},
-				"name": "defTextId"
+				name: "defTextId"
 			}];
 	}
 
@@ -149,24 +139,24 @@ function MetadataProviderStub() {
 	function createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 		refRecordType, ref, attribute, repeatId, repeatMin, repeatMax) {
 		return {
-			"name": "childReference",
-			"repeatId": repeatId,
-			"children": [
+			name: "childReference",
+			repeatId: repeatId,
+			children: [
 				{
-					"name": "ref",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": refRecordType
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: refRecordType
 					}, {
-						"name": "linkedRecordId",
-						"value": ref
+						name: "linkedRecordId",
+						value: ref
 					}]
 				}, {
-					"name": "repeatMin",
-					"value": repeatMin
+					name: "repeatMin",
+					value: repeatMin
 				}, {
-					"name": "repeatMax",
-					"value": repeatMax
+					name: "repeatMax",
+					value: repeatMax
 				}]
 		};
 	}
@@ -195,46 +185,67 @@ function MetadataProviderStub() {
 	
 	this.getMetadataById = function(idToGet) {
 		requestedMetadataIds.push(idToGet);
+		 
+		if (idToGet === "someParentMetadataId") {
+			return {
+				name: "metadata",
+				attributes: {
+					type: "group"
+				},
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
+						"metadataCollectionVariable",
+						"trueFalseTrueIsFinalValueCollectionVar", "1"),
+					createChildReferenceWithRefAndRepeatId1to1(
+						"metadataTextVariable", "textVariableId", "1"),
+					createChildReferenceWithRefAndRepeatId1to1(
+						"metadataGroup", "groupWithOneCollectionVarChildGroup", "1")]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+			};
+		}
+		
 		if (idToGet === "textVariableId") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "textVariableId2") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "(^[0-9A-Za-z]{2,50}$)"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 
 			};
 		}
 		if (idToGet === "textVariableWithFinalValueId") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
 				}, {
-					"name": "finalValue",
-					"value": "someFinalValue"
+					name: "finalValue",
+					value: "someFinalValue"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
@@ -259,8 +270,8 @@ function MetadataProviderStub() {
 					}]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
@@ -285,8 +296,8 @@ function MetadataProviderStub() {
 					}]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
@@ -321,329 +332,345 @@ function MetadataProviderStub() {
 					}]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "yesNoUnknownVar") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "yesNoUnknownVar"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "yesNoUnknownVar"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "yesNoUnknownVar"
+					name: "nameInData",
+					value: "yesNoUnknownVar"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "yesNoUnknownVarText"
+						name: "linkedRecordId",
+						value: "yesNoUnknownVarText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "yesNoUnknownVarDefText"
+						name: "linkedRecordId",
+						value: "yesNoUnknownVarDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadataItemCollection"
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataItemCollection"
 					}, {
-						"name": "linkedRecordId",
-						"value": "yesNoUnknownCollection"
+						name: "linkedRecordId",
+						value: "yesNoUnknownCollection"
 					}],
-					"name": "refCollection"
+					name: "refCollection"
 				}],
-				"attributes": {
-					"type": "collectionVariable"
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "yesNoUnknownCollection") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "yesNoUnknownCollection"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "yesNoUnknownCollection"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "yesNoUnknownCollection"
+					name: "nameInData",
+					value: "yesNoUnknownCollection"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "textSystemOne"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "textSystemOne"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesNoUnknownText"
+						name: "linkedRecordId",
+						value: "itemYesNoUnknownText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "textSystemOne"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "textSystemOne"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesNoUnknownDefText"
+						name: "linkedRecordId",
+						value: "itemYesNoUnknownDefText"
 					}]
 				}, {
-					"name": "collectionItemReferences",
-					"children": [{
-						"name": "ref",
-						"repeatId": "0",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionItem"
+					name: "collectionItemReferences",
+					children: [{
+						name: "ref",
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionItem"
 						}, {
-							"name": "linkedRecordId",
-							"value": "itemYes"
+							name: "linkedRecordId",
+							value: "itemYes"
 						}]
 					}, {
-						"name": "ref",
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionItem"
+						name: "ref",
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionItem"
 						}, {
-							"name": "linkedRecordId",
-							"value": "itemNo"
+							name: "linkedRecordId",
+							value: "itemNo"
 						}]
 					}, {
-						"name": "ref",
-						"repeatId": "2",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionItem"
+						name: "ref",
+						repeatId: "2",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionItem"
 						}, {
-							"name": "linkedRecordId",
-							"value": "itemUnknown"
+							name: "linkedRecordId",
+							value: "itemUnknown"
 						}]
 					}]
 				}],
-				"attributes": {
-					"type": "itemCollection"
+				attributes: {
+					type: "itemCollection"
 				}
 			};
 		}
 		if (idToGet === "itemYes") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "itemYes"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "itemYes"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "yes"
+					name: "nameInData",
+					value: "yes"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesText"
+						name: "linkedRecordId",
+						value: "itemYesText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesDefText"
+						name: "linkedRecordId",
+						value: "itemYesDefText"
 					}]
 				}],
-				"attributes": {
-					"type": "collectionItem"
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "recordTypeTypeChoice1") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "recordTypeTypeChoice1"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "recordTypeTypeChoice1"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "aFinalValue"
+					name: "nameInData",
+					value: "aFinalValue"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesText"
+						name: "linkedRecordId",
+						value: "itemYesText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesDefText"
+						name: "linkedRecordId",
+						value: "itemYesDefText"
 					}]
 				}],
-				"attributes": {
-					"type": "collectionItem"
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "recordTypeTypeChoice2") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "recordTypeTypeChoice2"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "recordTypeTypeChoice2"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "aOtherFinalValue"
+					name: "nameInData",
+					value: "aOtherFinalValue"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesText"
+						name: "linkedRecordId",
+						value: "itemYesText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesDefText"
+						name: "linkedRecordId",
+						value: "itemYesDefText"
 					}]
 				}],
-				"attributes": {
-					"type": "collectionItem"
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "itemNo") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "itemNo"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "itemNo"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "no"
+					name: "nameInData",
+					value: "no"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemNoText"
+						name: "linkedRecordId",
+						value: "itemNoText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemNoDefText"
+						name: "linkedRecordId",
+						value: "itemNoDefText"
 					}]
 				}],
-				"attributes": {
-					"type": "collectionItem"
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "itemUnknown") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "itemUnknown"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "itemUnknown"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "unknown"
+					name: "nameInData",
+					value: "unknown"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemUnknownText"
+						name: "linkedRecordId",
+						value: "itemUnknownText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "coraText"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "coraText"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemUnknownDefText"
+						name: "linkedRecordId",
+						value: "itemUnknownDefText"
 					}]
 				}],
-				"attributes": {
-					"type": "collectionItem"
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "groupWithOneCollectionVarChildGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataCollectionVariable",
 						"userSuppliedIdCollectionVar", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
+		if (idToGet === "groupWithOneCollectionVarChildGroupOtherIdSameNameInData") {
+			return {
+				name: "metadata",
+				attributes: {
+					type: "group"
+				},
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
+						"metadataCollectionVariable",
+						"userSuppliedIdCollectionVar", "1")]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData(
+						idToGet,"groupWithOneCollectionVarChildGroup" ))
+			};
+		}
 		if (idToGet === "groupWithOneCollectionVarChildAndOneTextChildGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataCollectionVariable",
 						"trueFalseTrueIsFinalValueCollectionVar", "1"),
 					createChildReferenceWithRefAndRepeatId1to1(
@@ -654,13 +681,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupWithOneCollectionVarChildAndOneTextChildNonMandatoryGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataCollectionVariable",
 						"trueFalseTrueIsFinalValueCollectionVar", "1"),
 					createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
@@ -671,13 +698,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupWithOneGroupWithCollectionVarChildAndOneTextChildNonMandatoryGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataGroup", "groupWithOneCollectionVarChildAndOneTextChildGroup", "group", "1", "0", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -685,13 +712,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "textVariableId", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -699,13 +726,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildWithChoice") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "textVariableWithAnAttributeAndAnAttributeChoice", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -713,34 +740,34 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildWithWriteConstraints") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [{
-						"name": "childReference",
-						"repeatId": "0",
-						"children": [
+				children: [{
+					name: "childReferences",
+					children: [{
+						name: "childReference",
+						repeatId: "0",
+						children: [
 							{
-								"name": "ref",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "metadataTextVariable"
+								name: "ref",
+								children: [{
+									name: "linkedRecordType",
+									value: "metadataTextVariable"
 								}, {
-									"name": "linkedRecordId",
-									"value": "textVariableId"
+									name: "linkedRecordId",
+									value: "textVariableId"
 								}]
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}, {
-								"name": "recordPartConstraint",
-								"value": "write"
+								name: "recordPartConstraint",
+								value: "write"
 							}]
 					}]
 				}]
@@ -749,34 +776,34 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildWithReadWriteConstraints") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [{
-						"name": "childReference",
-						"repeatId": "0",
-						"children": [
+				children: [{
+					name: "childReferences",
+					children: [{
+						name: "childReference",
+						repeatId: "0",
+						children: [
 							{
-								"name": "ref",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "metadataTextVariable"
+								name: "ref",
+								children: [{
+									name: "linkedRecordType",
+									value: "metadataTextVariable"
 								}, {
-									"name": "linkedRecordId",
-									"value": "textVariableId"
+									name: "linkedRecordId",
+									value: "textVariableId"
 								}]
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}, {
-								"name": "recordPartConstraint",
-								"value": "readWrite"
+								name: "recordPartConstraint",
+								value: "readWrite"
 							}]
 					}]
 				}]
@@ -785,13 +812,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChild2") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "textVariableId", "1")]
 					// }
 					// ].concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId("groupIdOneTextChild"))
@@ -806,13 +833,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneNumberChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataNumberVariable", "numVariableId", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -820,13 +847,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneNumberNotMandatoryChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataNumberVariable", "numVariableId", "numberVariable", "1", "0", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -835,13 +862,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "groupId1toXCollectionChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataGroup", "yesNoUnknownVar", "group", "1",
 						"1", "X")]
 				}]
@@ -851,13 +878,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "groupInGroupOneTextChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "groupIdOneTextChild", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -866,13 +893,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "groupIdTwoTextChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 						createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextVariable", "textVariableId",
 							"1"),
@@ -885,13 +912,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdTwoTextChild1to1InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable", "groupIdTwoTextChild",
@@ -902,13 +929,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVariableIdRepeat1to3InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "1", "3")]
 				}]
@@ -917,13 +944,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdTwoTextChildRepeat1to5") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable", "textVariableId",
 							"textVariable", "1", "1", "5"),
@@ -936,13 +963,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat1toX") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "1", "X")]
 				}]
@@ -951,13 +978,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat0to1") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "0", "1")]
 				}]
@@ -966,13 +993,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat0toXPreviously0to1") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "0", "X")]
 				}]
@@ -981,13 +1008,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat1to3Previously0to1") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "1", "3")]
 				}]
@@ -996,13 +1023,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat3to3") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "3", "3")]
 				}]
@@ -1011,13 +1038,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildRepeat1to3") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "textVariableId",
 						"textVariable", "1", "1", "3")]
 				}]
@@ -1026,13 +1053,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneChildGroupRepeat3to3") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "groupIdOneTextChild",
 						"textVariable", "1", "3", "3")]
 				}]
@@ -1042,76 +1069,76 @@ function MetadataProviderStub() {
 
 		if (idToGet === "anAttribute") {
 			return {
-				"name": "metadata",
-				//				"children": [{
-				//					"name": "ref",
-				//					"value": "recordTypeTypeCollection"
+				name: "metadata",
+				//				children: [{
+				//					name: "ref",
+				//					value: "recordTypeTypeCollection"
 				//				}, {
-				//					"name": "finalValue",
-				//					"value": "aFinalValue"
+				//					name: "finalValue",
+				//					value: "aFinalValue"
 				//				}]
-				"children": [{
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadataItemCollection"
+				children: [{
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataItemCollection"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordTypeTypeCollection"
+						name: "linkedRecordId",
+						value: "recordTypeTypeCollection"
 					}],
-					"name": "refCollection"
+					name: "refCollection"
 				}, {
-					"name": "finalValue",
-					"value": "aFinalValue"
+					name: "finalValue",
+					value: "aFinalValue"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "collectionVariable"
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "anAttributeChoice") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadataItemCollection"
+				name: "metadata",
+				children: [{
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataItemCollection"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordTypeTypeCollection"
+						name: "linkedRecordId",
+						value: "recordTypeTypeCollection"
 					}],
-					"name": "refCollection"
+					name: "refCollection"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "collectionVariable"
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "groupIdOneTextChildOneAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anAttribute"
+								name: "linkedRecordId",
+								value: "anAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 
 							createChildReferenceWithRefAndRepeatId1to1(
 								"metadataTextVariable", "textVariableId",
@@ -1122,28 +1149,28 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextChildOneAttributeChoice") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anAttributeChoice"
+								name: "linkedRecordId",
+								value: "anAttributeChoice"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 
 							createChildReferenceWithRefAndRepeatId1to1(
 								"metadataTextVariable", "textVariableId",
@@ -1154,13 +1181,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupInGroupOneTextChildOneAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextVariable",
@@ -1171,62 +1198,62 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "anOtherAttribute") {
 			return {
-				"name": "metadata",
-				"children": [
+				name: "metadata",
+				children: [
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordTypeTypeCollection"
+							name: "linkedRecordId",
+							value: "recordTypeTypeCollection"
 						}],
-						"name": "refCollection"
+						name: "refCollection"
 					}, {
-						"name": "finalValue",
-						"value": "aOtherFinalValue"
+						name: "finalValue",
+						value: "aOtherFinalValue"
 					}
 				]
 					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "collectionVariable"
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "groupIdOneTextChildTwoAttributes") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anAttribute"
+								name: "linkedRecordId",
+								value: "anAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}, {
-							"repeatId": "2",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							repeatId: "2",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anOtherAttribute"
+								name: "linkedRecordId",
+								value: "anOtherAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [createChildReferenceWithRefAndRepeatId1to1(
+						name: "childReferences",
+						children: [createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextVariable", "textVariableId",
 							"1")]
 					}]
@@ -1236,13 +1263,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "groupInGroupOneTextChildTwoAttributes") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable",
 						"groupIdOneTextChildTwoAttributes", "1")]
 				}]
@@ -1252,13 +1279,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "groupInGroupOneTextChildRepeat1to3OneAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1271,13 +1298,13 @@ function MetadataProviderStub() {
 
 		if (idToGet === "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1289,13 +1316,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1307,28 +1334,28 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupOneAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anAttribute"
+								name: "linkedRecordId",
+								value: "anAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 
 							createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 								"metadataTextVariable", "textVar",
@@ -1339,28 +1366,28 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupParentAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordTypeParentCollectionVar"
+								name: "linkedRecordId",
+								value: "recordTypeParentCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 
 							createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 								"metadataTextVariable", "textVar",
@@ -1372,13 +1399,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1394,13 +1421,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1416,13 +1443,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupParentAttribute1toXInGroup") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 
 						createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 							"metadataTextVariable",
@@ -1434,28 +1461,28 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVarRepeat1to3InGroupOtherAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anOtherAttribute"
+								name: "linkedRecordId",
+								value: "anOtherAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 
 							createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 								"metadataTextVariable", "textVar",
@@ -1466,13 +1493,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "textVar") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "textVariable"
+				name: "metadata",
+				attributes: {
+					type: "textVariable"
 				},
-				"children": [{
-					"name": "regEx",
-					"value": "(^[0-9A-Za-z]{2,50}$)"
+				children: [{
+					name: "regEx",
+					value: "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 
@@ -1481,31 +1508,31 @@ function MetadataProviderStub() {
 
 		if (idToGet === "brokenMetadataNoNameInData") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"nameInData_NOT_HERE": "metadata"
 				}, {
 					"textId": "metadataText"
 				}, {
 					"defTextId": "metadataDeffText"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordTypeTypeCollectionVar"
+							name: "linkedRecordId",
+							value: "recordTypeTypeCollectionVar"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}, {
 					"childReferences": {
-						"children": [{
+						children: [{
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "recordInfoNew"
 								}, {
 									"repeatMin": "1"
@@ -1515,7 +1542,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "nameInData"
 								}, {
 									"repeatMin": "1"
@@ -1525,7 +1552,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "textId"
 								}, {
 									"repeatMin": "1"
@@ -1535,7 +1562,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "defTextId"
 								}, {
 									"repeatMin": "1"
@@ -1545,7 +1572,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "attributeReferences"
 								}, {
 									"repeatMin": "1"
@@ -1555,7 +1582,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "childReferences"
 								}, {
 									"repeatMin": "1"
@@ -1567,34 +1594,34 @@ function MetadataProviderStub() {
 					}
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "group"
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "metadataNew") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"nameInData": "metadata"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordTypeTypeCollectionVar"
+							name: "linkedRecordId",
+							value: "recordTypeTypeCollectionVar"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}, {
 					"childReferences": {
-						"children": [{
+						children: [{
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "recordInfoNew"
 								}, {
 									"repeatMin": "1"
@@ -1604,7 +1631,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "nameInData"
 								}, {
 									"repeatMin": "1"
@@ -1614,7 +1641,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "textId"
 								}, {
 									"repeatMin": "1"
@@ -1624,7 +1651,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "defTextId"
 								}, {
 									"repeatMin": "1"
@@ -1634,7 +1661,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "attributeReferences"
 								}, {
 									"repeatMin": "1"
@@ -1644,7 +1671,7 @@ function MetadataProviderStub() {
 							}
 						}, {
 							"childReference": {
-								"children": [{
+								children: [{
 									"ref": "childReferences"
 								}, {
 									"repeatMin": "1"
@@ -1656,20 +1683,20 @@ function MetadataProviderStub() {
 					}
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "group"
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "recordTypeOnlyMetadataIdChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataGroup", "metadataId", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -1677,25 +1704,25 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "metadataId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "recordTypeOnlyMetadataIdPresentationViewIdChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 						createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextGroup", "metadataId", "1"),
 						createChildReferenceWithRefAndRepeatId1to1(
@@ -1707,25 +1734,25 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "presentationViewId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "recordType") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 						createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextGroup", "metadataId", "1"),
 						createChildReferenceWithRefAndRepeatId1to1(
@@ -1771,235 +1798,235 @@ function MetadataProviderStub() {
 
 		if (idToGet === "recordInfo") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				name: "metadata",
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "id", "1")]
 
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "group"
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "recordInfo2") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				name: "metadata",
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "id", "1")]
 
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("recordInfo")),
-				"attributes": {
-					"type": "group"
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "recordInfoAttribute") {
 			return {
-				"name": "metadata",
-				"children": [
+				name: "metadata",
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "anAttribute"
+								name: "linkedRecordId",
+								value: "anAttribute"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [createChildReferenceWithRefAndRepeatId1to1(
+						name: "childReferences",
+						children: [createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextVariable", "id", "1")]
 
 					}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("recordInfo")),
-				"attributes": {
-					"type": "group"
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "id") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "presentationFormId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "newMetadataId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "newPresentationFormId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "listPresentationViewId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "searchMetadataId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "searchPresentationFormId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "userSuppliedId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "^true$|^false$"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "permissionKey") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[A-Z\_]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "selfPresentationViewId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "recordTypeTypeCollection") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "recordTypeTypeCollection"
+				name: "metadata",
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "recordTypeTypeCollection"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "recordTypeTypeCollection"
+					name: "nameInData",
+					value: "recordTypeTypeCollection"
 				}, {
-					"name": "textId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "textSystemOne"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "textSystemOne"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesNoUnknownText"
+						name: "linkedRecordId",
+						value: "itemYesNoUnknownText"
 					}]
 				}, {
-					"name": "defTextId",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "textSystemOne"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "textSystemOne"
 					}, {
-						"name": "linkedRecordId",
-						"value": "itemYesNoUnknownDefText"
+						name: "linkedRecordId",
+						value: "itemYesNoUnknownDefText"
 					}]
 				}, {
-					"name": "collectionItemReferences",
-					"children": [{
-						"name": "ref",
-						"repeatId": "0",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionItem"
+					name: "collectionItemReferences",
+					children: [{
+						name: "ref",
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionItem"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordTypeTypeChoice1"
+							name: "linkedRecordId",
+							value: "recordTypeTypeChoice1"
 						}]
 					}, {
-						"name": "ref",
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionItem"
+						name: "ref",
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionItem"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordTypeTypeChoice2"
+							name: "linkedRecordId",
+							value: "recordTypeTypeChoice2"
 						}]
 					}
 						// , {
@@ -2009,70 +2036,70 @@ function MetadataProviderStub() {
 						// }
 					]
 				}],
-				"attributes": {
-					"type": "itemCollection"
+				attributes: {
+					type: "itemCollection"
 				}
 			};
 		}
 		if (idToGet === "recordTypeTypeCollectionVar") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				},
-				"children": [{
-					"name": "ref",
-					"value": "recordTypeTypeCollection"
+				children: [{
+					name: "ref",
+					value: "recordTypeTypeCollection"
 				}, {
-					"name": "finalValue",
-					"value": "aFinalValue"
+					name: "finalValue",
+					value: "aFinalValue"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId(idToGet))
 			};
 		}
 		if (idToGet === "recordTypeParentCollectionVar") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				},
-				"children": [{
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadataItemCollection"
+				children: [{
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataItemCollection"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordTypeTypeCollection"
+						name: "linkedRecordId",
+						value: "recordTypeTypeCollection"
 					}],
-					"name": "refCollection"
+					name: "refCollection"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndTextIdAndDefTextId("recordTypeTypeCollectionVar"))
 			};
 		}
 		if (idToGet === "metadata") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [
+				children: [
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordTypeTypeCollectionVar"
+								name: "linkedRecordId",
+								value: "recordTypeTypeCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					},
 					{
-						"name": "childReferences",
-						"children": [
+						name: "childReferences",
+						children: [
 							createChildReferenceWithRefAndRepeatId1to1(
 								"metadataTextGroup", "recordInfo",
 								"1"),
@@ -2097,49 +2124,49 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "nameInData") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "textId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "defTextId") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "attributeReferences") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataTextVariable", "ref", "textVariable", "1",
 						"1", "X")]
 
@@ -2149,26 +2176,26 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "ref") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "textVariable"
+				name: "metadata",
+				attributes: {
+					type: "textVariable"
 				},
-				"children": [{
-					"name": "regEx",
-					"value": "(^[0-9A-Za-z]{2,50}$)"
+				children: [{
+					name: "regEx",
+					value: "(^[0-9A-Za-z]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
 		if (idToGet === "childReferences") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metdataGroup", "childReference", "group", "1",
 						"1", "X")]
 
@@ -2178,13 +2205,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "childReference") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [
+				children: [{
+					name: "childReferences",
+					children: [
 						createChildReferenceWithRefAndRepeatId1to1(
 							"metadataTextVariable", "ref", "1"),
 						createChildReferenceWithRefAndRepeatId1to1(
@@ -2209,520 +2236,520 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "repeatMin") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9\_]{1,3}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "repeatMinKey") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[A-Z\_]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "repeatMax") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[0-9|X\_]{1,3}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "secret") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "^true$|^false$"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "secretKey") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[A-Z\_]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "readOnly") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "^true$|^false$"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "readOnlyKey") {
 			return {
-				"name": "metadata",
-				"children": [{
+				name: "metadata",
+				children: [{
 					"regEx": "(^[A-Z\_]{2,50}$)"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "presentationVarGroup") {
 			return {
-				"children": [{
-					"name": "nameInData",
-					"value": "presentation"
+				children: [{
+					name: "nameInData",
+					value: "presentation"
 				}, {
-					"children": [{
-						"name": "id",
-						"value": "presentationVarGroup"
+					children: [{
+						name: "id",
+						value: "presentationVarGroup"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "metadataGroup"
+							name: "linkedRecordId",
+							value: "metadataGroup"
 						}],
-						"name": "type"
+						name: "type"
 					}, {
-						"name": "createdBy",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userId"
+							name: "linkedRecordId",
+							value: "userId"
 						}]
 					}, {
-						"name": "updatedBy",
-						"value": "userId"
+						name: "updatedBy",
+						value: "userId"
 					}],
-					"name": "recordInfo"
+					name: "recordInfo"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "presentationVarGroupText"
+						name: "linkedRecordId",
+						value: "presentationVarGroupText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "presentationVarGroupDefText"
+						name: "linkedRecordId",
+						value: "presentationVarGroupDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadata"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadata"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordInfoPVarGroup"
+								name: "linkedRecordId",
+								value: "recordInfoPVarGroup"
 							}]
 							// "value" : "recordInfo"
 						}, {
-							"name": "repeatMin",
-							"value": "1"
+							name: "repeatMin",
+							value: "1"
 						}, {
-							"name": "repeatMax",
-							"value": "1"
+							name: "repeatMax",
+							value: "1"
 						}],
-						"name": "childReference"
+						name: "childReference"
 					}],
-					"name": "childReferences"
+					name: "childReferences"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "presentationTypePVarCollectionVar"
+							name: "linkedRecordId",
+							value: "presentationTypePVarCollectionVar"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}, {
-					"name": "refParentId",
-					"value": "presentationGroup"
+					name: "refParentId",
+					value: "presentationGroup"
 				}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "presentationVarAttributeGroup") {
 			return {
-				"children": [{
-					"name": "nameInData",
-					"value": "presentation"
+				children: [{
+					name: "nameInData",
+					value: "presentation"
 				}, {
-					"children": [{
-						"name": "id",
-						"value": "presentationVarAttributeGroup"
+					children: [{
+						name: "id",
+						value: "presentationVarAttributeGroup"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "metadataGroup"
+							name: "linkedRecordId",
+							value: "metadataGroup"
 						}],
-						"name": "type"
+						name: "type"
 					}, {
-						"name": "createdBy",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userId"
+							name: "linkedRecordId",
+							value: "userId"
 						}]
 					}, {
-						"name": "updatedBy",
-						"value": "userId"
+						name: "updatedBy",
+						value: "userId"
 					}],
-					"name": "recordInfo"
+					name: "recordInfo"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "presentationVarGroupText"
+						name: "linkedRecordId",
+						value: "presentationVarGroupText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "presentationVarGroupDefText"
+						name: "linkedRecordId",
+						value: "presentationVarGroupDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadata"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadata"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordInfoPVarAttributeGroup"
+								name: "linkedRecordId",
+								value: "recordInfoPVarAttributeGroup"
 							}]
 							// "value" : "recordInfo"
 						}, {
-							"name": "repeatMin",
-							"value": "1"
+							name: "repeatMin",
+							value: "1"
 						}, {
-							"name": "repeatMax",
-							"value": "1"
+							name: "repeatMax",
+							value: "1"
 						}],
-						"name": "childReference"
+						name: "childReference"
 					}],
-					"name": "childReferences"
+					name: "childReferences"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "presentationTypePVarCollectionVar"
+							name: "linkedRecordId",
+							value: "presentationTypePVarCollectionVar"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}, {
-					"name": "refParentId",
-					"value": "presentationGroup"
+					name: "refParentId",
+					value: "presentationGroup"
 				}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "idTextVar") {
 			return {
-				"children": [{
-					"children": [{
-						"name": "id",
-						"value": "idTextVar"
+				children: [{
+					children: [{
+						name: "id",
+						value: "idTextVar"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "metadataTextVariable"
+							name: "linkedRecordId",
+							value: "metadataTextVariable"
 						}],
-						"name": "type"
+						name: "type"
 					}, {
-						"name": "createdBy",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userId"
+							name: "linkedRecordId",
+							value: "userId"
 						}]
 					}, {
-						"name": "updatedBy",
-						"value": "userId"
+						name: "updatedBy",
+						value: "userId"
 					}],
-					"name": "recordInfo"
+					name: "recordInfo"
 				}, {
-					"name": "nameInData",
-					"value": "id"
+					name: "nameInData",
+					value: "id"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "idTextVarText"
+						name: "linkedRecordId",
+						value: "idTextVarText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "idTextVarDefText"
+						name: "linkedRecordId",
+						value: "idTextVarDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"name": "regEx",
-					"value": "(^[0-9A-Za-z:-_]{2,50}$)"
+					name: "regEx",
+					value: "(^[0-9A-Za-z:-_]{2,50}$)"
 				}],
-				"name": "metadata",
-				"attributes": {
-					"type": "textVariable"
+				name: "metadata",
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "recordInfoPVarGroup") {
 			return {
-				"children": [{
-					"children": [{
-						"name": "id",
-						"value": "recordInfoPVarGroup"
+				children: [{
+					children: [{
+						name: "id",
+						value: "recordInfoPVarGroup"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "metadataGroup"
+							name: "linkedRecordId",
+							value: "metadataGroup"
 						}],
-						"name": "type"
+						name: "type"
 					}, {
-						"name": "createdBy",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userId"
+							name: "linkedRecordId",
+							value: "userId"
 						}]
 					}, {
-						"name": "updatedBy",
-						"value": "userId"
+						name: "updatedBy",
+						value: "userId"
 					}],
-					"name": "recordInfo"
+					name: "recordInfo"
 				}, {
-					"name": "nameInData",
-					"value": "recordInfo"
+					name: "nameInData",
+					value: "recordInfo"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordInfoText"
+						name: "linkedRecordId",
+						value: "recordInfoText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordInfoDefText"
+						name: "linkedRecordId",
+						value: "recordInfoDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadata"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadata"
 							}, {
-								"name": "linkedRecordId",
-								"value": "idPVarTextVar"
+								name: "linkedRecordId",
+								value: "idPVarTextVar"
 							}],
 						}, {
-							"name": "repeatMin",
-							"value": "1"
+							name: "repeatMin",
+							value: "1"
 						}, {
-							"name": "repeatMax",
-							"value": "1"
+							name: "repeatMax",
+							value: "1"
 						}],
-						"name": "childReference"
+						name: "childReference"
 					}],
-					"name": "childReferences"
+					name: "childReferences"
 				}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "recordInfoPVarAttributeGroup") {
 			return {
-				"children": [{
-					"children": [{
-						"name": "id",
-						"value": "recordInfoPVarAttributeGroup"
+				children: [{
+					children: [{
+						name: "id",
+						value: "recordInfoPVarAttributeGroup"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "metadataGroup"
+							name: "linkedRecordId",
+							value: "metadataGroup"
 						}],
-						"name": "type"
+						name: "type"
 					}, {
-						"name": "createdBy",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userId"
+							name: "linkedRecordId",
+							value: "userId"
 						}]
 					}, {
-						"name": "updatedBy",
-						"value": "userId"
+						name: "updatedBy",
+						value: "userId"
 					}],
-					"name": "recordInfo"
+					name: "recordInfo"
 				}, {
-					"name": "nameInData",
-					"value": "recordInfo"
+					name: "nameInData",
+					value: "recordInfo"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordInfoText"
+						name: "linkedRecordId",
+						value: "recordInfoText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "recordInfoDefText"
+						name: "linkedRecordId",
+						value: "recordInfoDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "anAttribute"
+							name: "linkedRecordId",
+							value: "anAttribute"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadata"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadata"
 							}, {
-								"name": "linkedRecordId",
-								"value": "idPVarTextVar"
+								name: "linkedRecordId",
+								value: "idPVarTextVar"
 							}]
 						}, {
-							"name": "repeatMin",
-							"value": "1"
+							name: "repeatMin",
+							value: "1"
 						}, {
-							"name": "repeatMax",
-							"value": "1"
+							name: "repeatMax",
+							value: "1"
 						}],
-						"name": "childReference"
+						name: "childReference"
 					}],
-					"name": "childReferences"
+					name: "childReferences"
 				}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "groupIdOneRecordLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataRecordLink", "myLink", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2730,13 +2757,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneAbstractRecordLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataRecordLink", "myAbstractLink", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2744,13 +2771,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupId0to1RecordLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataRecordLink", "myLink", "recordLink", "1",
 						"0", "1")]
 				}]
@@ -2759,82 +2786,82 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myLink"
 					}]
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "metadataTextVariable"
+						name: "linkedRecordId",
+						value: "metadataTextVariable"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}].concat(createNameInDataLinkedTextIdDefTextId2(idToGet))
 			};
 		}
 		if (idToGet === "myAbstractLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myAbstractLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myAbstractLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myAbstractLink"
+					name: "nameInData",
+					value: "myAbstractLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkText"
+						name: "linkedRecordId",
+						value: "myLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkDefText"
+						name: "linkedRecordId",
+						value: "myLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "metadata"
+						name: "linkedRecordId",
+						value: "metadata"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}]
 			};
 		}
 		if (idToGet === "groupIdOneRecordLinkWithAttributeChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataRecordLink", "myLinkWithAttribute", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2842,72 +2869,72 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myLinkWithAttribute") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myLinkWithAttribute"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myLinkWithAttribute"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myLinkWithAttribute"
+					name: "nameInData",
+					value: "myLinkWithAttribute"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkText"
+						name: "linkedRecordId",
+						value: "myLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myLinkDefText"
+						name: "linkedRecordId",
+						value: "myLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "metadataTextVariable"
+						name: "linkedRecordId",
+						value: "metadataTextVariable"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}, {
-					"children": [{
-						"repeatId": "1",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						repeatId: "1",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "binaryTypeImageCollectionVar"
+							name: "linkedRecordId",
+							value: "binaryTypeImageCollectionVar"
 						}],
-						"name": "ref"
+						name: "ref"
 					}],
-					"name": "attributeReferences"
+					name: "attributeReferences"
 				}]
 			};
 		}
 
 		if (idToGet === "groupIdOneRecordLinkChildWithFinalValue") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataRecordLink", "myFinalValueLink", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2915,61 +2942,61 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myFinalValueLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myFinalValueLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myFinalValueLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myFinalValueLink"
+					name: "nameInData",
+					value: "myFinalValueLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myFinalValueLinkText"
+						name: "linkedRecordId",
+						value: "myFinalValueLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myFinalValueLinkDefText"
+						name: "linkedRecordId",
+						value: "myFinalValueLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "metadataTextVariable"
+						name: "linkedRecordId",
+						value: "metadataTextVariable"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}, {
-					"name": "finalValue",
-					"value": "someInstance"
+					name: "finalValue",
+					value: "someInstance"
 				}]
 			};
 		}
 		if (idToGet === "groupIdOneCollectionVarChildWithFinalValue") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataCollectionVariable", "binaryTypeGenericBinaryCollectionVar", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2977,13 +3004,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneTextVarChildWithFinalValue") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataTextVariable", "textVariableWithFinalValueId", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -2991,13 +3018,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneChildOfBinaryRecordLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataRecordLink", "myChildOfBinaryLink",
 						"recordLink", "one", "0", "X")]
 				}]
@@ -3006,58 +3033,58 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myChildOfBinaryLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myChildOfBinaryLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myChildOfBinaryLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myChildOfBinaryLink"
+					name: "nameInData",
+					value: "myChildOfBinaryLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myChildOfBinaryLinkText"
+						name: "linkedRecordId",
+						value: "myChildOfBinaryLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myChildOfBinaryLinkDefText"
+						name: "linkedRecordId",
+						value: "myChildOfBinaryLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "binary"
+						name: "linkedRecordId",
+						value: "binary"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}]
 			};
 		}
 		if (idToGet === "groupIdOneChildOfBinaryRecordLinkChildRepeatMax2") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataRecordLink", "myChildOfBinaryLink",
 						"recordLink", "one", "0", "2")]
 				}]
@@ -3066,13 +3093,13 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "groupIdOneBinaryRecordLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataRecordLink", "myBinaryLink", "recordLink",
 						"one", "0", "X")]
 				}]
@@ -3081,58 +3108,58 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myBinaryLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myBinaryLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myBinaryLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myBinaryLink"
+					name: "nameInData",
+					value: "myBinaryLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myBinaryLinkText"
+						name: "linkedRecordId",
+						value: "myBinaryLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myBinaryLinkDefText"
+						name: "linkedRecordId",
+						value: "myBinaryLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "binary"
+						name: "linkedRecordId",
+						value: "binary"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}]
 			};
 		}
 		if (idToGet === "groupIdOneBinaryRecordNoDataDividerLinkChild") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatIdAndRepeatMinAndRepeatMax(
 						"metadataRecordLink", "myBinaryNoDataDividerLink",
 						"recordLink", "one", "0", "X")]
 				}]
@@ -3141,58 +3168,58 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myBinaryNoDataDividerLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myBinaryNoDataDividerLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myBinaryNoDataDividerLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myBinaryNoDataDividerLink"
+					name: "nameInData",
+					value: "myBinaryNoDataDividerLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myBinaryNoDataDividerLinkText"
+						name: "linkedRecordId",
+						value: "myBinaryNoDataDividerLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myBinaryNoDataDividerLinkDefText"
+						name: "linkedRecordId",
+						value: "myBinaryNoDataDividerLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "noDataDividerBinary"
+						name: "linkedRecordId",
+						value: "noDataDividerBinary"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}]
 			};
 		}
 		if (idToGet === "groupIdOneRecordLinkChildWithPath") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				},
-				"children": [{
-					"name": "childReferences",
-					"children": [createChildReferenceWithRefAndRepeatId1to1(
+				children: [{
+					name: "childReferences",
+					children: [createChildReferenceWithRefAndRepeatId1to1(
 						"metadataRecordLink", "myPathLink", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
@@ -3200,51 +3227,51 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "myPathLink") {
 			return {
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				},
-				"children": [{
-					"name": "recordInfo",
-					"children": [{
-						"name": "id",
-						"value": "myPathLink"
+				children: [{
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "myPathLink"
 					}]
 				}, {
-					"name": "nameInData",
-					"value": "myPathLink"
+					name: "nameInData",
+					value: "myPathLink"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myPathLinkText"
+						name: "linkedRecordId",
+						value: "myPathLinkText"
 					}],
-					"name": "textId"
+					name: "textId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "text"
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name": "linkedRecordId",
-						"value": "myPathLinkDefText"
+						name: "linkedRecordId",
+						value: "myPathLinkDefText"
 					}],
-					"name": "defTextId"
+					name: "defTextId"
 				}, {
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "recordType"
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name": "linkedRecordId",
-						"value": "metadataTextVariable"
+						name: "linkedRecordId",
+						value: "metadataTextVariable"
 					}],
-					"name": "linkedRecordType"
+					name: "linkedRecordType"
 				}, {
-					"name": "linkedPath",
-					"children": [{
-						"name": "nameInData",
-						"value": "name"
+					name: "linkedPath",
+					children: [{
+						name: "nameInData",
+						value: "name"
 					}
 
 					]
@@ -3253,125 +3280,125 @@ function MetadataProviderStub() {
 		}
 		if (idToGet === "linkedRecordTypeTextVar") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
 				}]
 					.concat([createRecordInfoJson(idToGet)]
 						.concat(createNameInDataLinkedTextIdDefTextIdWithNameInDataAndId(
 							"linkedRecordType", idToGet))),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		function createNameInDataTextIdDefTextIdWithNameInDataAndId(nameInData,
 			id) {
 			return [{
-				"name": "nameInData",
-				"value": nameInData
+				name: "nameInData",
+				value: nameInData
 			}, {
-				"name": "textId",
-				"value": id + "Text"
+				name: "textId",
+				value: id + "Text"
 			}, {
-				"name": "defTextId",
-				"value": id + "DefText"
+				name: "defTextId",
+				value: id + "DefText"
 			}];
 		}
 
 		function createNameInDataLinkedTextIdDefTextIdWithNameInDataAndId(
 			nameInData, id) {
 			return [{
-				"name": "nameInData",
-				"value": nameInData
+				name: "nameInData",
+				value: nameInData
 			}, {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "text"
+				children: [{
+					name: "linkedRecordType",
+					value: "text"
 				}, {
-					"name": "linkedRecordId",
-					"value": id + "Text"
+					name: "linkedRecordId",
+					value: id + "Text"
 				}],
-				"name": "textId"
+				name: "textId"
 			}, {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": "text"
+				children: [{
+					name: "linkedRecordType",
+					value: "text"
 				}, {
-					"name": "linkedRecordId",
-					"value": id + "DefText"
+					name: "linkedRecordId",
+					value: id + "DefText"
 				}],
-				"name": "defTextId"
+				name: "defTextId"
 			}];
 		}
 
 		if (idToGet === "linkedRecordIdTextVar") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "^[0-9A-Öa-ö\\s!*.]{2,50}$"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{2,50}$"
 				}]
 					.concat([createRecordInfoJson(idToGet)]
 						.concat(createNameInDataLinkedTextIdDefTextIdWithNameInDataAndId(
 							"linkedRecordId", idToGet))),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "linkedRepeatIdTextVar") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "regEx",
-					"value": "^[0-9A-Öa-ö\\s!*.]{1,50}$"
+				name: "metadata",
+				children: [{
+					name: "regEx",
+					value: "^[0-9A-Öa-ö\\s!*.]{1,50}$"
 				}]
 					.concat([createRecordInfoJson(idToGet)]
 						.concat(createNameInDataTextIdDefTextIdWithNameInDataAndId(
 							"linkedRepeatId", idToGet))),
-				"attributes": {
-					"type": "textVariable"
+				attributes: {
+					type: "textVariable"
 				}
 			};
 		}
 		if (idToGet === "imageNewGroup") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "imageNewGroup"
+								name: "id",
+								value: "imageNewGroup"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataGroup"
+									name: "linkedRecordId",
+									value: "metadataGroup"
 								}],
-								"name": "type"
+								name: "type"
 							},
 							{
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -3381,118 +3408,118 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "binary"
+						name: "nameInData",
+						value: "binary"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "imageNewGroupText"
+							name: "linkedRecordId",
+							value: "imageNewGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "imageNewGroupDefText"
+							name: "linkedRecordId",
+							value: "imageNewGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					},
 					{
-						"name": "refParentId",
-						"value": "imageGroup"
+						name: "refParentId",
+						value: "imageGroup"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"repeatId": "3",
-								"children": [
+								repeatId: "3",
+								children: [
 									{
-										"name": "ref",
-										"value": "recordInfoCoraAutogeneratedNewGroup"
+										name: "ref",
+										value: "recordInfoCoraAutogeneratedNewGroup"
 									}, {
-										"name": "repeatMin",
-										"value": "1"
+										name: "repeatMin",
+										value: "1"
 									}, {
-										"name": "repeatMax",
-										"value": "1"
+										name: "repeatMax",
+										value: "1"
 									}],
-								"name": "childReference"
+								name: "childReference"
 							}, {
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"value": "filenameTextVar"
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									value: "filenameTextVar"
 								}, {
-									"name": "repeatMin",
-									"value": "1"
+									name: "repeatMin",
+									value: "1"
 								}, {
-									"name": "repeatMax",
-									"value": "1"
+									name: "repeatMax",
+									value: "1"
 								}],
-								"name": "childReference"
+								name: "childReference"
 							}, {
-								"repeatId": "2",
-								"children": [{
-									"name": "ref",
-									"value": "filesizeTextVar"
+								repeatId: "2",
+								children: [{
+									name: "ref",
+									value: "filesizeTextVar"
 								}, {
-									"name": "repeatMin",
-									"value": "1"
+									name: "repeatMin",
+									value: "1"
 								}, {
-									"name": "repeatMax",
-									"value": "1"
+									name: "repeatMax",
+									value: "1"
 								}],
-								"name": "childReference"
+								name: "childReference"
 							}],
-						"name": "childReferences"
+						name: "childReferences"
 					}, {
-						"children": [{
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "binaryTypeImageCollectionVar"
+								name: "linkedRecordId",
+								value: "binaryTypeImageCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "binaryTypeImageCollectionVar") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "binaryTypeImageCollectionVar"
+								name: "id",
+								value: "binaryTypeImageCollectionVar"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -3502,89 +3529,89 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							},
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "recordType"
+										name: "linkedRecordType",
+										value: "recordType"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "metadataCollectionVariable"
+										name: "linkedRecordId",
+										value: "metadataCollectionVariable"
 									}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "type"
+						name: "nameInData",
+						value: "type"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "binaryTypeImageCollectionVarText"
+							name: "linkedRecordId",
+							value: "binaryTypeImageCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "binaryTypeImageCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "binaryTypeImageCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "binaryTypeCollection"
+							name: "linkedRecordId",
+							value: "binaryTypeCollection"
 						}],
-						"name": "refCollection"
+						name: "refCollection"
 					}, {
-						"name": "refParentId",
-						"value": "binaryTypeCollectionVar"
+						name: "refParentId",
+						value: "binaryTypeCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "image"
+						name: "finalValue",
+						value: "image"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "userSuppliedIdCollectionVar") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "userSuppliedIdCollectionVar"
+								name: "id",
+								value: "userSuppliedIdCollectionVar"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -3594,103 +3621,103 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							},
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "recordType"
+										name: "linkedRecordType",
+										value: "recordType"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "metadataCollectionVariable"
+										name: "linkedRecordId",
+										value: "metadataCollectionVariable"
 									}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "userSuppliedId"
+						name: "nameInData",
+						value: "userSuppliedId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userSuppliedIdCollectionVarText"
+							name: "linkedRecordId",
+							value: "userSuppliedIdCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userSuppliedIdCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "userSuppliedIdCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueFalseCollection"
+							name: "linkedRecordId",
+							value: "trueFalseCollection"
 						}],
-						"name": "refCollection"
+						name: "refCollection"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "genericBinaryNewGroup") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "genericBinaryNewGroup"
+								name: "id",
+								value: "genericBinaryNewGroup"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataGroup"
+									name: "linkedRecordId",
+									value: "metadataGroup"
 								}],
-								"name": "type"
+								name: "type"
 							},
 							{
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -3700,179 +3727,179 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "binary"
+						name: "nameInData",
+						value: "binary"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "genericBinaryNewGroupText"
+							name: "linkedRecordId",
+							value: "genericBinaryNewGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "genericBinaryNewGroupDefText"
+							name: "linkedRecordId",
+							value: "genericBinaryNewGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					},
 					{
-						"name": "refParentId",
-						"value": "genericBinaryGroup"
+						name: "refParentId",
+						value: "genericBinaryGroup"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"repeatId": "0",
-								"children": [
+								repeatId: "0",
+								children: [
 									{
-										"name": "ref",
-										"value": "recordInfoCoraAutogeneratedNewGroup"
+										name: "ref",
+										value: "recordInfoCoraAutogeneratedNewGroup"
 									}, {
-										"name": "repeatMin",
-										"value": "1"
+										name: "repeatMin",
+										value: "1"
 									}, {
-										"name": "repeatMax",
-										"value": "1"
+										name: "repeatMax",
+										value: "1"
 									}],
-								"name": "childReference"
+								name: "childReference"
 							}, {
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"value": "filenameTextVar"
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									value: "filenameTextVar"
 								}, {
-									"name": "repeatMin",
-									"value": "1"
+									name: "repeatMin",
+									value: "1"
 								}, {
-									"name": "repeatMax",
-									"value": "1"
+									name: "repeatMax",
+									value: "1"
 								}],
-								"name": "childReference"
+								name: "childReference"
 							}, {
-								"repeatId": "2",
-								"children": [{
-									"name": "ref",
-									"value": "filesizeTextVar"
+								repeatId: "2",
+								children: [{
+									name: "ref",
+									value: "filesizeTextVar"
 								}, {
-									"name": "repeatMin",
-									"value": "1"
+									name: "repeatMin",
+									value: "1"
 								}, {
-									"name": "repeatMax",
-									"value": "1"
+									name: "repeatMax",
+									value: "1"
 								}],
-								"name": "childReference"
+								name: "childReference"
 							}],
-						"name": "childReferences"
+						name: "childReferences"
 					},
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [
+						children: [{
+							repeatId: "1",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataCollectionVariable"
+									name: "linkedRecordType",
+									value: "metadataCollectionVariable"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "binaryTypeGenericBinaryCollectionVar"
+									name: "linkedRecordId",
+									value: "binaryTypeGenericBinaryCollectionVar"
 								}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "numVariableId") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "min",
-					"value": "0"
+				name: "metadata",
+				children: [{
+					name: "min",
+					value: "0"
 				},
 				{
-					"name": "max",
-					"value": "10"
+					name: "max",
+					value: "10"
 				},
 				{
-					"name": "warningMin",
-					"value": "2"
+					name: "warningMin",
+					value: "2"
 				},
 				{
-					"name": "warningMax",
-					"value": "8"
+					name: "warningMax",
+					value: "8"
 				},
 				{
-					"name": "numberOfDecimals",
-					"value": "0"
+					name: "numberOfDecimals",
+					value: "0"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "numberVariable"
+				attributes: {
+					type: "numberVariable"
 				}
 			};
 		}
 		if (idToGet === "numVariableWithDecimalsId") {
 			return {
-				"name": "metadata",
-				"children": [{
-					"name": "min",
-					"value": "0"
+				name: "metadata",
+				children: [{
+					name: "min",
+					value: "0"
 				},
 				{
-					"name": "max",
-					"value": "10"
+					name: "max",
+					value: "10"
 				},
 				{
-					"name": "warningMin",
-					"value": "2"
+					name: "warningMin",
+					value: "2"
 				},
 				{
-					"name": "warningMax",
-					"value": "8"
+					name: "warningMax",
+					value: "8"
 				},
 				{
-					"name": "numberOfDecimals",
-					"value": "2"
+					name: "numberOfDecimals",
+					value: "2"
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet)),
-				"attributes": {
-					"type": "numberVariable"
+				attributes: {
+					type: "numberVariable"
 				}
 			};
 		}
 		if (idToGet === "binaryTypeGenericBinaryCollectionVar") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "binaryTypeGenericBinaryCollectionVar"
+								name: "id",
+								value: "binaryTypeGenericBinaryCollectionVar"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -3882,116 +3909,116 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							},
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "recordType"
+										name: "linkedRecordType",
+										value: "recordType"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "metadataCollectionVariable"
+										name: "linkedRecordId",
+										value: "metadataCollectionVariable"
 									}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "type"
+						name: "nameInData",
+						value: "type"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "binaryTypeGenericBinaryCollectionVarText"
+								name: "linkedRecordId",
+								value: "binaryTypeGenericBinaryCollectionVarText"
 							}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "binaryTypeGenericBinaryCollectionVarDefText"
+								name: "linkedRecordId",
+								value: "binaryTypeGenericBinaryCollectionVarDefText"
 							}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "binaryTypeCollection"
+							name: "linkedRecordId",
+							value: "binaryTypeCollection"
 						}],
-						"name": "refCollection"
+						name: "refCollection"
 					}, {
-						"name": "refParentId",
-						"value": "binaryTypeCollectionVar"
+						name: "refParentId",
+						value: "binaryTypeCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "genericBinary"
+						name: "finalValue",
+						value: "genericBinary"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "noDataDividerBinaryNewGroup") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "noDataDividerBinaryNewGroup"
+								name: "id",
+								value: "noDataDividerBinaryNewGroup"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataGroup"
+									name: "linkedRecordId",
+									value: "metadataGroup"
 								}],
-								"name": "type"
+								name: "type"
 							},
 							{
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4001,94 +4028,94 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "binary"
+						name: "nameInData",
+						value: "binary"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "noDataDividerBinaryNewGroupText"
+							name: "linkedRecordId",
+							value: "noDataDividerBinaryNewGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "noDataDividerBinaryNewGroupDefText"
+							name: "linkedRecordId",
+							value: "noDataDividerBinaryNewGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					},
 					{
-						"name": "refParentId",
-						"value": "noDataDividerBinaryGroup"
+						name: "refParentId",
+						value: "noDataDividerBinaryGroup"
 					},
 					{
-						"children": [{
-							"repeatId": "0",
-							"children": [
+						children: [{
+							repeatId: "0",
+							children: [
 								{
-									"name": "ref",
-									"value": "recordInfoNoDataDividerAutogeneratedNewGroup"
+									name: "ref",
+									value: "recordInfoNoDataDividerAutogeneratedNewGroup"
 								}, {
-									"name": "repeatMin",
-									"value": "1"
+									name: "repeatMin",
+									value: "1"
 								}, {
-									"name": "repeatMax",
-									"value": "1"
+									name: "repeatMax",
+									value: "1"
 								}],
-							"name": "childReference"
+							name: "childReference"
 						}],
-						"name": "childReferences"
+						name: "childReferences"
 					},
 					{
-						"children": [{
-							"repeatId": "1",
-							"children": [
+						children: [{
+							repeatId: "1",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataCollectionVariable"
+									name: "linkedRecordType",
+									value: "metadataCollectionVariable"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "binaryTypeGenericBinaryCollectionVar"
+									name: "linkedRecordId",
+									value: "binaryTypeGenericBinaryCollectionVar"
 								}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "trueFalseTrueIsFinalValueCollectionVar") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "trueFalseTrueIsFinalValueCollectionVar"
+								name: "id",
+								value: "trueFalseTrueIsFinalValueCollectionVar"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4098,93 +4125,93 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							},
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "recordType"
+										name: "linkedRecordType",
+										value: "recordType"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "metadataCollectionVariable"
+										name: "linkedRecordId",
+										value: "metadataCollectionVariable"
 									}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "trueFalse"
+						name: "nameInData",
+						value: "trueFalse"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "binaryTypeGenericBinaryCollectionVarText"
+								name: "linkedRecordId",
+								value: "binaryTypeGenericBinaryCollectionVarText"
 							}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "binaryTypeGenericBinaryCollectionVarDefText"
+								name: "linkedRecordId",
+								value: "binaryTypeGenericBinaryCollectionVarDefText"
 							}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueFalseCollection"
+							name: "linkedRecordId",
+							value: "trueFalseCollection"
 						}],
-						"name": "refCollection"
+						name: "refCollection"
 					}, {
-						"name": "finalValue",
-						"value": "true"
+						name: "finalValue",
+						value: "true"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionVariable"
+				name: "metadata",
+				attributes: {
+					type: "collectionVariable"
 				}
 			};
 		}
 		if (idToGet === "recordInfoCoraAutogeneratedNewGroup") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "recordInfoCoraAutogeneratedNewGroup"
+								name: "id",
+								value: "recordInfoCoraAutogeneratedNewGroup"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4194,92 +4221,92 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataGroup"
+									name: "linkedRecordId",
+									value: "metadataGroup"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "recordInfo"
+						name: "nameInData",
+						value: "recordInfo"
 					},
 					{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordInfoCoraAutogeneratedNewText"
+							name: "linkedRecordId",
+							value: "recordInfoCoraAutogeneratedNewText"
 						}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "recordInfoCoraAutogeneratedNewDefText"
+								name: "linkedRecordId",
+								value: "recordInfoCoraAutogeneratedNewDefText"
 							}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"repeatId": "0",
-							"children": [{
-								"name": "ref",
-								"value": "dataDividerCoraLink"
+						children: [{
+							repeatId: "0",
+							children: [{
+								name: "ref",
+								value: "dataDividerCoraLink"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"name": "childReference"
+							name: "childReference"
 						}],
-						"name": "childReferences"
+						name: "childReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "recordInfoNoDataDividerAutogeneratedNewGroup") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "recordInfoNoDataDividerAutogeneratedNewGroup"
+								name: "id",
+								value: "recordInfoNoDataDividerAutogeneratedNewGroup"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4289,94 +4316,94 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataGroup"
+									name: "linkedRecordId",
+									value: "metadataGroup"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					},
 					{
-						"name": "nameInData",
-						"value": "recordInfo"
+						name: "nameInData",
+						value: "recordInfo"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "recordInfoCoraAutogeneratedNewDefText"
+								name: "linkedRecordId",
+								value: "recordInfoCoraAutogeneratedNewDefText"
 							}],
-						"name": "textId"
+						name: "textId"
 					},
 					{
-						"children": [
+						children: [
 							{
-								"name": "linkedRecordType",
-								"value": "text"
+								name: "linkedRecordType",
+								value: "text"
 							},
 							{
-								"name": "linkedRecordId",
-								"value": "recordInfoNoDataDividerAutogeneratedNewDefText"
+								name: "linkedRecordId",
+								value: "recordInfoNoDataDividerAutogeneratedNewDefText"
 							}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"repeatId": "0",
-							"children": [{
-								"name": "ref",
-								"value": "idTextVar"
+						children: [{
+							repeatId: "0",
+							children: [{
+								name: "ref",
+								value: "idTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"name": "childReference"
+							name: "childReference"
 						}],
-						"name": "childReferences"
+						name: "childReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "group"
+				name: "metadata",
+				attributes: {
+					type: "group"
 				}
 			};
 		}
 		if (idToGet === "dataDividerCoraLink") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "dataDividerCoraLink"
+								name: "id",
+								value: "dataDividerCoraLink"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4386,104 +4413,104 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataRecordLink"
+									name: "linkedRecordId",
+									value: "metadataRecordLink"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "dataDivider"
+						name: "nameInData",
+						value: "dataDivider"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "dataDividerCoraLinkText"
+							name: "linkedRecordId",
+							value: "dataDividerCoraLinkText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "dataDividerCoraLinkDefText"
+							name: "linkedRecordId",
+							value: "dataDividerCoraLinkDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "recordType"
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name": "linkedRecordId",
-							"value": "system"
+							name: "linkedRecordId",
+							value: "system"
 						}],
-						"name": "linkedRecordType"
+						name: "linkedRecordType"
 					}, {
-						"name": "finalValue",
-						"value": "cora"
+						name: "finalValue",
+						value: "cora"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "recordLink"
+				name: "metadata",
+				attributes: {
+					type: "recordLink"
 				}
 			};
 
 		}
 		if (idToGet === "trueFalseCollection") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "trueFalseCollection"
+								name: "id",
+								value: "trueFalseCollection"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataItemCollection"
+									name: "linkedRecordId",
+									value: "metadataItemCollection"
 								}],
-								"name": "type"
+								name: "type"
 							},
 							{
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4493,76 +4520,76 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "trueFalseCollection"
+						name: "nameInData",
+						value: "trueFalseCollection"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "textSystemOne"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "textSystemOne"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueFalseCollectionText"
+							name: "linkedRecordId",
+							value: "trueFalseCollectionText"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "textSystemOne"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "textSystemOne"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueFalseCollectionDefText"
+							name: "linkedRecordId",
+							value: "trueFalseCollectionDefText"
 						}]
 					}, {
-						"children": [{
-							"repeatId": "1",
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionItem"
+						children: [{
+							repeatId: "1",
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionItem"
 							}, {
-								"name": "linkedRecordId",
-								"value": "falseItem"
+								name: "linkedRecordId",
+								value: "falseItem"
 							}]
 						}, {
-							"repeatId": "0",
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionItem"
+							repeatId: "0",
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionItem"
 							}, {
-								"name": "linkedRecordId",
-								"value": "trueItem"
+								name: "linkedRecordId",
+								value: "trueItem"
 							}]
 						}],
-						"name": "collectionItemReferences"
+						name: "collectionItemReferences"
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "itemCollection"
+				name: "metadata",
+				attributes: {
+					type: "itemCollection"
 				}
 			};
 		}
 		if (idToGet === "falseItem") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "falseItem"
+								name: "id",
+								value: "falseItem"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4572,71 +4599,71 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataItemCollection"
+									name: "linkedRecordId",
+									value: "metadataItemCollection"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "false"
+						name: "nameInData",
+						value: "false"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "falseItemText"
+							name: "linkedRecordId",
+							value: "falseItemText"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "falseItemDefText"
+							name: "linkedRecordId",
+							value: "falseItemDefText"
 						}]
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionItem"
+				name: "metadata",
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
 		if (idToGet === "trueItem") {
 			return {
-				"children": [
+				children: [
 					{
-						"children": [
+						children: [
 							{
-								"name": "id",
-								"value": "trueItem"
+								name: "id",
+								value: "trueItem"
 							},
 							{
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
 								"actionLinks": {
 									"read": {
@@ -4646,52 +4673,52 @@ function MetadataProviderStub() {
 										"accept": "application/vnd.uub.record+json"
 									}
 								},
-								"name": "dataDivider"
+								name: "dataDivider"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "metadataCollectionItem"
+									name: "linkedRecordId",
+									value: "metadataCollectionItem"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}],
-						"name": "recordInfo"
+						name: "recordInfo"
 					}, {
-						"name": "nameInData",
-						"value": "true"
+						name: "nameInData",
+						value: "true"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueItemText"
+							name: "linkedRecordId",
+							value: "trueItemText"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "trueItemDefText"
+							name: "linkedRecordId",
+							value: "trueItemDefText"
 						}]
 					}],
-				"name": "metadata",
-				"attributes": {
-					"type": "collectionItem"
+				name: "metadata",
+				attributes: {
+					type: "collectionItem"
 				}
 			};
 		}
@@ -4700,47 +4727,47 @@ function MetadataProviderStub() {
 		switch (idToGet) {
 			case "recordInfoPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson("recordInfoPGroup")]
+					children: [createRecordInfoJson("recordInfoPGroup")]
 						.concat([{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataGroup"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataGroup"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordInfo"
+								name: "linkedRecordId",
+								value: "recordInfo"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "childReferences",
-							"children": [{
-								"name": "childReference",
-								"repeatId": "1",
-								"children": [{
-									"name": "refGroup",
-									"repeatId": "0",
-									"children": [{
-										"name": "ref",
-										"children": [{
-											"name": "linkedRecordType",
-											"value": "presentation"
+							name: "childReferences",
+							children: [{
+								name: "childReference",
+								repeatId: "1",
+								children: [{
+									name: "refGroup",
+									repeatId: "0",
+									children: [{
+										name: "ref",
+										children: [{
+											name: "linkedRecordType",
+											value: "presentation"
 										}, {
-											"name": "linkedRecordId",
-											"value": "idTextOutputPVar"
+											name: "linkedRecordId",
+											value: "idTextOutputPVar"
 										}],
-										"attributes": {
-											"type": "presentation"
+										attributes: {
+											type: "presentation"
 										}
 									}]
 								}, {
-									"name": "textStyle",
-									"value": "h2TextStyle"
+									name: "textStyle",
+									value: "h2TextStyle"
 								}, {
-									"name": "childStyle",
-									"value": "fourChildStyle"
+									name: "childStyle",
+									value: "fourChildStyle"
 								}]
 							}]
 						}])
@@ -4748,98 +4775,98 @@ function MetadataProviderStub() {
 
 			case "recordInfoAttributePGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson("recordInfoAttributePGroup")]
+					children: [createRecordInfoJson("recordInfoAttributePGroup")]
 						.concat([{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataGroup"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataGroup"
 							}, {
-								"name": "linkedRecordId",
-								"value": "recordInfoAttribute"
+								name: "linkedRecordId",
+								value: "recordInfoAttribute"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "childReferences",
-							"children": [{
-								"name": "childReference",
-								"repeatId": "1",
-								"children": [{
-									"name": "refGroup",
-									"repeatId": "0",
-									"children": [{
-										"name": "ref",
-										"children": [{
-											"name": "linkedRecordType",
-											"value": "presentation"
+							name: "childReferences",
+							children: [{
+								name: "childReference",
+								repeatId: "1",
+								children: [{
+									name: "refGroup",
+									repeatId: "0",
+									children: [{
+										name: "ref",
+										children: [{
+											name: "linkedRecordType",
+											value: "presentation"
 										}, {
-											"name": "linkedRecordId",
-											"value": "idTextOutputPVar"
+											name: "linkedRecordId",
+											value: "idTextOutputPVar"
 										}],
-										"attributes": {
-											"type": "pVar"
+										attributes: {
+											type: "pVar"
 										}
 									}]
 								}, {
-									"name": "textStyle",
-									"value": "h2TextStyle"
+									name: "textStyle",
+									value: "h2TextStyle"
 								}, {
-									"name": "childStyle",
-									"value": "fourChildStyle"
+									name: "childStyle",
+									value: "fourChildStyle"
 								}]
 							}]
 						}])
 				};
 			case "idTextOutputPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "idTextTextOutputPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "idTextTextOutputPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "pVarTextVariableId":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pVarTextVariableId"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pVarTextVariableId"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId"
+								name: "linkedRecordId",
+								value: "textVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -4850,42 +4877,42 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 //						{
-//							"name": "recordInfo",
-//							"children": [{
-//								"name": "id",
-//								"value": "pVarTextVariableId"
+//							name: "recordInfo",
+//							children: [{
+//								name: "id",
+//								value: "pVarTextVariableId"
 //							}]
 //						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId"
+								name: "linkedRecordId",
+								value: "textVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -4896,42 +4923,42 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pVarTextVariableIdShowLabelFalse":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pVarTextVariableId"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pVarTextVariableId"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId"
+								name: "linkedRecordId",
+								value: "textVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -4942,46 +4969,46 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
 						}, {
-							"name": "showLabel",
-							"value": "false"
+							name: "showLabel",
+							value: "false"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pVarTextVariableIdSpecifiedLabelText":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pVarTextVariableId"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pVarTextVariableId"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId2"
+								name: "linkedRecordId",
+								value: "textVariableId2"
 							}],
 							"actionLinks": {
 								"read": {
@@ -4992,115 +5019,115 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}, {
-							"name": "specifiedLabelText",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "specifiedLabelText",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "specifiedLabelText"
+								name: "linkedRecordId",
+								value: "specifiedLabelText"
 							}]
 						}]
 				};
 			case "userSuppliedIdCollectionVarPCollVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pCollVar"
+					name: "presentation",
+					attributes: {
+						type: "pCollVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "userSuppliedIdCollectionVarPCollVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "userSuppliedIdCollectionVarPCollVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userSuppliedIdCollectionVar"
+							name: "linkedRecordId",
+							value: "userSuppliedIdCollectionVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "emptyTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						name: "emptyTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "initialEmptyValueText"
+							name: "linkedRecordId",
+							value: "initialEmptyValueText"
 						}]
 					}]
 				};
 			case "userSuppliedIdCollectionVarPCollVarWithoutRecordInfo":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pCollVar"
+					name: "presentation",
+					attributes: {
+						type: "pCollVar"
 					},
-					"children": [{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataCollectionVariable"
+					children: [{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataCollectionVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "userSuppliedIdCollectionVar"
+							name: "linkedRecordId",
+							value: "userSuppliedIdCollectionVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "emptyTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						name: "emptyTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "initialEmptyValueText"
+							name: "linkedRecordId",
+							value: "initialEmptyValueText"
 						}]
 					}]
 				};
 			case "pNumVarNumVariableId":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pNumVar"
+					name: "presentation",
+					attributes: {
+						type: "pNumVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pNumVarNumVariableId"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pNumVarNumVariableId"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataNumberVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataNumberVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "numVariableId"
+								name: "linkedRecordId",
+								value: "numVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5111,42 +5138,42 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pNumVarNumVariableIdShowLabelFalse":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pNumVar"
+					name: "presentation",
+					attributes: {
+						type: "pNumVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pNumVarNumVariableIdShowLabelFalse"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pNumVarNumVariableIdShowLabelFalse"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataNumberVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataNumberVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "numVariableId"
+								name: "linkedRecordId",
+								value: "numVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5157,45 +5184,45 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "showLabel",
-							"value": "false"
+							name: "showLabel",
+							value: "false"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pNumVarNumVariableIdSpecifiedLabelText":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pNumVar"
+					name: "presentation",
+					attributes: {
+						type: "pNumVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pNumVarNumVariableIdSpecifiedLabelText"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pNumVarNumVariableIdSpecifiedLabelText"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataNumberVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataNumberVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "numVariableId"
+								name: "linkedRecordId",
+								value: "numVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5206,51 +5233,51 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "specifiedLabelText",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "specifiedLabelText",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "specifiedLabelText"
+								name: "linkedRecordId",
+								value: "specifiedLabelText"
 							}]
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}]
 				};
 			case "pNumVarNumVariableIdNoEmptyText":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pNumVar"
+					name: "presentation",
+					attributes: {
+						type: "pNumVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pNumVarNumVariableId"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pNumVarNumVariableId"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataNumberVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataNumberVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "numVariableId"
+								name: "linkedRecordId",
+								value: "numVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5261,33 +5288,33 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}]
 				};
 			case "pNumVarNumVariableIdOutput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pNumVar"
+					name: "presentation",
+					attributes: {
+						type: "pNumVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "pNumVarNumVariableIdOutput"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "pNumVarNumVariableIdOutput"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataNumberVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataNumberVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "numVariableId"
+								name: "linkedRecordId",
+								value: "numVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5298,33 +5325,33 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "output"
+							name: "mode",
+							value: "output"
 						}]
 				};
 			case "userSuppliedIdNoEmptyTextIdCollectionVarPCollVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pCollVar"
+					name: "presentation",
+					attributes: {
+						type: "pCollVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "userSuppliedIdNoEmptyTextIdCollectionVarPCollVar"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "userSuppliedIdNoEmptyTextIdCollectionVarPCollVar"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "userSuppliedIdCollectionVar"
+								name: "linkedRecordId",
+								value: "userSuppliedIdCollectionVar"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5334,33 +5361,33 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}]
 				};
 			case "userSuppliedIdCollectionVarOutputPCollVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pCollVar"
+					name: "presentation",
+					attributes: {
+						type: "pCollVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "userSuppliedIdCollectionVarOutputPCollVar"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "userSuppliedIdCollectionVarOutputPCollVar"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "userSuppliedIdCollectionVar"
+								name: "linkedRecordId",
+								value: "userSuppliedIdCollectionVar"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5370,33 +5397,33 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "output"
+							name: "mode",
+							value: "output"
 						}]
 				};
 			case "textVariableIdShowTextAreaFalsePVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "textVariableIdShowTextAreaFalsePVar"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "textVariableIdShowTextAreaFalsePVar"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId"
+								name: "linkedRecordId",
+								value: "textVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5406,45 +5433,45 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}, {
-							"name": "showAsTextArea",
-							"value": "false"
+							name: "showAsTextArea",
+							value: "false"
 						}]
 				};
 			case "textVariableIdTextAreaPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "textVariableIdTextAreaPVar"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "textVariableIdTextAreaPVar"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataTextVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataTextVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textVariableId"
+								name: "linkedRecordId",
+								value: "textVariableId"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5454,157 +5481,157 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enterTextHereText"
+								name: "linkedRecordId",
+								value: "enterTextHereText"
 							}]
 						}, {
-							"name": "inputType",
-							"value": "textarea"
+							name: "inputType",
+							value: "textarea"
 						}]
 				};
 
 			case "pVarTextVariableIdOutput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVariableIdOutput"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVariableIdOutput"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "pVarTextVariableWithAnAttributeChoice":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVariableWithAnAttributeChoice"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVariableWithAnAttributeChoice"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableWithAnAttributeChoice"
+							name: "linkedRecordId",
+							value: "textVariableWithAnAttributeChoice"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 			case "pVarTextVariableIdOutputImage":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVariableId"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVariableId"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}, {
-						"name": "outputFormat",
-						"value": "image"
+						name: "outputFormat",
+						value: "image"
 					}]
 				};
 			case "pVarTextVariableIdInputPassword":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVariableId"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVariableId"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "inputFormat",
-						"value": "password"
+						name: "inputFormat",
+						value: "password"
 					}]
 				};
 
 			case "yesNoUnknownPCollVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pCollVar"
+					name: "presentation",
+					attributes: {
+						type: "pCollVar"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "yesNoUnknownPCollVar"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "yesNoUnknownPCollVar"
 							}]
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "yesNoUnknownVar"
+								name: "linkedRecordId",
+								value: "yesNoUnknownVar"
 							}],
 							"actionLinks": {
 								"read": {
@@ -5614,302 +5641,302 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}, {
-							"name": "emptyTextId",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							name: "emptyTextId",
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "initialEmptyValueText"
+								name: "linkedRecordId",
+								value: "initialEmptyValueText"
 							}]
 						}]
 				};
 			case "yesNoUnknownNoEmptyTextIdPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "yesNoUnknownNoEmptyTextIdPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "yesNoUnknownNoEmptyTextIdPVar"
 						}]
 					}, {
-						"name": "presentationOf",
-						"value": "yesNoUnknownVar"
+						name: "presentationOf",
+						value: "yesNoUnknownVar"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 
 			case "yesNoUnknownOutputPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "yesNoUnknownOutputPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "yesNoUnknownOutputPVar"
 						}]
 					}, {
-						"name": "presentationOf",
-						"value": "yesNoUnknownVar"
+						name: "presentationOf",
+						value: "yesNoUnknownVar"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 
 			case "pVarTextVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVar"
+							name: "linkedRecordId",
+							value: "textVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 
 			case "pVarTextVarOutput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVarOutput"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVarOutput"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVar"
+							name: "linkedRecordId",
+							value: "textVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "myChildOfBinaryPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myChildOfBinaryPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myChildOfBinaryPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myChildOfBinaryLink"
+							name: "linkedRecordId",
+							value: "myChildOfBinaryLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 			case "myBinaryPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myBinaryPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myBinaryPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myBinaryLink"
+							name: "linkedRecordId",
+							value: "myBinaryLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 
 			case "myBinaryNoDataDividerPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myBinaryNoDataDividerPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myBinaryNoDataDividerPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myBinaryNoDataDividerLink"
+							name: "linkedRecordId",
+							value: "myBinaryNoDataDividerLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 
 			case "pgGroupIdOneTextChild":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}
 					,{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "specifiedHeadlineText"
+							name: "linkedRecordId",
+							value: "specifiedHeadlineText"
 						}],
-						"name": "specifiedHeadlineText"
+						name: "specifiedHeadlineText"
 					}, {
-							"name": "specifiedHeadlineLevel",
-							"value": "h3"
+							name: "specifiedHeadlineLevel",
+							value: "h3"
 						}
 					
 					, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgGroupIdOneTextChildWithPresentationStyle":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "presentationStyle",
-						"value": "frame"
+						name: "presentationStyle",
+						value: "frame"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -5917,92 +5944,92 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextChildOutput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "groupOneTextChildOutputImagePGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "presentation"
+										name: "linkedRecordId",
+										value: "presentation"
 									}],
-									"attributes": {
-										"type": "pVar"
+									attributes: {
+										type: "pVar"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -6010,198 +6037,198 @@ function MetadataProviderStub() {
 
 			case "pgGroupId1toXCollectionChild":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupId1toXCollectionChild"
+							name: "linkedRecordId",
+							value: "groupId1toXCollectionChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "yesNoUnknownPCollVar"
+										name: "linkedRecordId",
+										value: "yesNoUnknownPCollVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "groupWithOneCollectionVarChildPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)]
+					children: [createRecordInfoJson(idToGet)]
 						.concat([
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "metadataGroup"
+										name: "linkedRecordType",
+										value: "metadataGroup"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "groupWithOneCollectionVarChildGroup"
+										name: "linkedRecordId",
+										value: "groupWithOneCollectionVarChildGroup"
 									}],
-								"name": "presentationOf"
+								name: "presentationOf"
 							},
 							{
-								"name": "childReferences",
-								"children": [
+								name: "childReferences",
+								children: [
 									{
-										"name": "childReference",
-										"repeatId": "1",
-										"children": [{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+										name: "childReference",
+										repeatId: "1",
+										children: [{
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "textSystemOne"
+														name: "linkedRecordType",
+														value: "textSystemOne"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "aHeadlineText"
+														name: "linkedRecordId",
+														value: "aHeadlineText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}]
 									},
 									{
-										"name": "childReference",
-										"repeatId": "2",
-										"children": [
+										name: "childReference",
+										repeatId: "2",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "userSuppliedIdCollectionVarPCollVar"
+															name: "linkedRecordId",
+															value: "userSuppliedIdCollectionVarPCollVar"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									}]
 							}])
 				};
 			case "pgGroupIdOneTextOneTextChild":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -6209,98 +6236,98 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextTwoTextChildren":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "presentation"
+										name: "linkedRecordId",
+										value: "presentation"
 									}],
-									"attributes": {
-										"type": "pVar"
+									attributes: {
+										type: "pVar"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -6308,62 +6335,62 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextChildMinimized":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildRepeat1to3"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildRepeat1to3"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h1TextStyle"
+								name: "textStyle",
+								value: "h1TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "oneChildStyle"
+								name: "childStyle",
+								value: "oneChildStyle"
 							}]
 						}]
 					}])
@@ -6371,115 +6398,115 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextChildMinimizedDefault":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h5TextStyle"
+								name: "textStyle",
+								value: "h5TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "twoChildStyle"
+								name: "childStyle",
+								value: "twoChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgGroupIdOneTextChildNoOptionalRefInfo":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet), {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet), {
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [createPresentationSize("firstSmaller"), {
-								"name": "refGroup",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [createPresentationSize("firstSmaller"), {
+								name: "refGroup",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}]
@@ -6488,53 +6515,53 @@ function MetadataProviderStub() {
 				};
 			case "pgGroupIdOneTextChildMinimizedDefaultNoStyleInfo":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}]
@@ -6543,295 +6570,295 @@ function MetadataProviderStub() {
 				};
 			case "pgGroupIdOneTextChildMinimizedDefaultNoStyleInfoMinNumberOfRepeatingToShow":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "minNumberOfRepeatingToShow",
-								"value": "1"
+								name: "minNumberOfRepeatingToShow",
+								value: "1"
 							}]
 						}]
 					}])
 				};
 			case "pgGroupIdOneTextChildMinimizedDefaultModeInput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "minNumberOfRepeatingToShow",
-								"value": "1"
+								name: "minNumberOfRepeatingToShow",
+								value: "1"
 							}]
 						}]
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}])
 				};
 			case "pgGroupIdOneTextChildMinimizedDefaultModeOutput":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChild"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "minNumberOfRepeatingToShow",
-								"value": "1"
+								name: "minNumberOfRepeatingToShow",
+								value: "1"
 							}]
 						}]
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}])
 				};
 
 			case "pVarTextVariableId2":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pVarTextVariableId2"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pVarTextVariableId2"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId2"
+							name: "linkedRecordId",
+							value: "textVariableId2"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 
 			case "pgGroupIdTwoTextChild":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdTwoTextChild"
+							name: "linkedRecordId",
+							value: "groupIdTwoTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}, {
-								"name": "addText",
-								"children": [
+								name: "addText",
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "coraText"
+										name: "linkedRecordType",
+										value: "coraText"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "someTextIdForAddText"
+										name: "linkedRecordId",
+										value: "someTextIdForAddText"
 									}
 								]
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId2"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId2"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -6840,72 +6867,72 @@ function MetadataProviderStub() {
 			// groupInGroupOneTextChild
 			case "pgGroupInGroupIdOneTextOneTextChild":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupInGroupOneTextChild"
+							name: "linkedRecordId",
+							value: "groupInGroupOneTextChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pgGroupIdOneTextOneTextChild"
+										name: "linkedRecordId",
+										value: "pgGroupIdOneTextOneTextChild"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -6913,144 +6940,144 @@ function MetadataProviderStub() {
 
 			case "pgTextVarRepeat1to3InGroupOneAttribute":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupOneAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "refTextVarPVar"
+										name: "linkedRecordId",
+										value: "refTextVarPVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgTextVarRepeat1to3InGroupParentAttribute":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupParentAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupParentAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVar"
+										name: "linkedRecordId",
+										value: "pVarTextVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7058,144 +7085,144 @@ function MetadataProviderStub() {
 
 			case "pgTextVarRepeat1to3InGroupOneAttributeMinimized":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupOneAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupOneAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVarOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVarOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgTextVarRepeat1to3InGroupParentAttributeMinimized":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupParentAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupParentAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVarOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVarOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7203,160 +7230,160 @@ function MetadataProviderStub() {
 
 			case "pgTextVarRepeat1to3InGroupOtherAttribute":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupOtherAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupOtherAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVar"
+										name: "linkedRecordId",
+										value: "pVarTextVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgTextVarRepeat1to3InGroupOtherAttributeAndMinimized":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupOtherAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupOtherAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVar"
+										name: "linkedRecordId",
+										value: "pVarTextVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7364,46 +7391,46 @@ function MetadataProviderStub() {
 
 			case "pgTextVarRepeat1to3InGroupOtherAttributeMinimized":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVarRepeat1to3InGroupOtherAttribute"
+							name: "linkedRecordId",
+							value: "textVarRepeat1to3InGroupOtherAttribute"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7411,268 +7438,268 @@ function MetadataProviderStub() {
 
 			case "pgTextVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)]
+					children: [createRecordInfoJson(idToGet)]
 						.concat([
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "metadataGroup"
+										name: "linkedRecordType",
+										value: "metadataGroup"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"
+										name: "linkedRecordId",
+										value: "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"
 									}],
-								"name": "presentationOf"
+								name: "presentationOf"
 							},
 							{
-								"name": "childReferences",
-								"children": [
+								name: "childReferences",
+								children: [
 									{
-										"name": "childReference",
-										"repeatId": "1",
-										"children": [
+										name: "childReference",
+										repeatId: "1",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "textSystemOne"
+															name: "linkedRecordType",
+															value: "textSystemOne"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "aHeadlineText"
+															name: "linkedRecordId",
+															value: "aHeadlineText"
 														}],
-													"attributes": {
-														"type": "text"
+													attributes: {
+														type: "text"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									},
 									{
-										"name": "childReference",
-										"repeatId": "2",
-										"children": [
+										name: "childReference",
+										repeatId: "2",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "1",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "1",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupOneAttributeMinimized"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupOneAttributeMinimized"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupOneAttribute"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupOneAttribute"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									},
 									{
-										"name": "childReference",
-										"repeatId": "3",
-										"children": [
+										name: "childReference",
+										repeatId: "3",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupOtherAttribute"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupOtherAttribute"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "refGroup",
-												"repeatId": "1",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "1",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupOtherAttributeMinimized"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupOtherAttributeMinimized"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									}]
 							}])
 				};
 			case "pgTextVarRepeat1to3InGroupParentAttribute1toXInGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)]
+					children: [createRecordInfoJson(idToGet)]
 						.concat([
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "metadataGroup"
+										name: "linkedRecordType",
+										value: "metadataGroup"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "textVarRepeat1to3InGroupParentAttribute1toXInGroup"
+										name: "linkedRecordId",
+										value: "textVarRepeat1to3InGroupParentAttribute1toXInGroup"
 									}],
-								"name": "presentationOf"
+								name: "presentationOf"
 							},
 							{
-								"name": "childReferences",
-								"children": [
+								name: "childReferences",
+								children: [
 									{
-										"name": "childReference",
-										"repeatId": "1",
-										"children": [
+										name: "childReference",
+										repeatId: "1",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "textSystemOne"
+															name: "linkedRecordType",
+															value: "textSystemOne"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "aHeadlineText"
+															name: "linkedRecordId",
+															value: "aHeadlineText"
 														}],
-													"attributes": {
-														"type": "text"
+													attributes: {
+														type: "text"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									},
 									{
-										"name": "childReference",
-										"repeatId": "2",
-										"children": [
+										name: "childReference",
+										repeatId: "2",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "1",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "1",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupParentAttributeMinimized"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupParentAttributeMinimized"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "pgTextVarRepeat1to3InGroupParentAttribute"
+															name: "linkedRecordId",
+															value: "pgTextVarRepeat1to3InGroupParentAttribute"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									}]
 							}])
@@ -7680,147 +7707,147 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextOneTextChildTwoAttributes":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildTwoAttributes"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildTwoAttributes"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pgGroupIdOneTextOneTextChildTwoAttributesNoTextStyle":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildTwoAttributes"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildTwoAttributes"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [
 									// {
-									// "name": "textStyle",
-									// "value": "h2TextStyle"
+									// name: "textStyle",
+									// value: "h2TextStyle"
 									// },
 									// {
-									// "name": "childStyle",
-									// "value": "fourChildStyle"
+									// name: "childStyle",
+									// value: "fourChildStyle"
 									// },
 									{
-										"name": "ref",
-										"children": [{
-											"name": "linkedRecordType",
-											"value": "textSystemOne"
+										name: "ref",
+										children: [{
+											name: "linkedRecordType",
+											value: "textSystemOne"
 										}, {
-											"name": "linkedRecordId",
-											"value": "aHeadlineText"
+											name: "linkedRecordId",
+											value: "aHeadlineText"
 										}],
-										"attributes": {
-											"type": "text"
+										attributes: {
+											type: "text"
 										}
 									}]
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7828,98 +7855,98 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdOneTextTwoTextChildrenRepeat1toX":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildRepeat1toX"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildRepeat1toX"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -7927,98 +7954,98 @@ function MetadataProviderStub() {
 			// groupIdOneTextChildRepeat1to3
 			case "pgGroupIdOneTextTwoTextChildrenRepeat1to3":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildRepeat1to3"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildRepeat1to3"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -8026,98 +8053,98 @@ function MetadataProviderStub() {
 			// groupIdOneTextChildRepeat3to3
 			case "pgGroupIdOneTextTwoTextChildrenRepeat3to3":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildRepeat3to3"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildRepeat3to3"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -8126,121 +8153,121 @@ function MetadataProviderStub() {
 			// pTextVariableIdRContainer
 			case "pTextVariableIdRContainer":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "container",
+					name: "presentation",
+					attributes: {
+						type: "container",
 						"repeat": "this"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pTextVariableIdRContainer"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pTextVariableIdRContainer"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadata"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "coraText"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "coraText"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "3",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "3",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableIdOutput"
+										name: "linkedRecordId",
+										value: "pVarTextVariableIdOutput"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}]
@@ -8248,73 +8275,73 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdRepeatingContainerRepeat1to3":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneTextChildRepeat1to3"
+							name: "linkedRecordId",
+							value: "groupIdOneTextChildRepeat1to3"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "textSystemOne"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "textSystemOne"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariableIdRContainer"
+										name: "linkedRecordId",
+										value: "pTextVariableIdRContainer"
 									}],
-									"attributes": {
-										"type": "presentation",
+									attributes: {
+										type: "presentation",
 										"repeat": "this"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -8324,255 +8351,255 @@ function MetadataProviderStub() {
 			// pgGroupIdTwoTextChild
 			case "pTextVariablePlus2SContainer":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "container",
+					name: "presentation",
+					attributes: {
+						type: "container",
 						"repeat": "children"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pTextVariablePlus2SContainer"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pTextVariablePlus2SContainer"
 						}]
 					},
 					{
-						"name": "presentationsOf",
-						"children": [{
-							"repeatId": "1",
-							"children": [
+						name: "presentationsOf",
+						children: [{
+							repeatId: "1",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataTextVariable"
+									name: "linkedRecordType",
+									value: "metadataTextVariable"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId"
+									name: "linkedRecordId",
+									value: "textVariableId"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"repeatId": "2",
-							"children": [
+							repeatId: "2",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataTextVariable"
+									name: "linkedRecordType",
+									value: "metadataTextVariable"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId2"
+									name: "linkedRecordId",
+									value: "textVariableId2"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}]
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "coraText"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "coraText"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "3",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "3",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId2"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId2"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}]
 				};
 			case "pTextVariablePlus2StyleSContainer":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "container",
+					name: "presentation",
+					attributes: {
+						type: "container",
 						"repeat": "children"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pTextVariablePlus2StyleSContainer"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pTextVariablePlus2StyleSContainer"
 						}]
 					}, {
-						"name": "presentationStyle",
-						"value": "withStyle"
+						name: "presentationStyle",
+						value: "withStyle"
 					},
 					{
-						"name": "presentationsOf",
-						"children": [{
-							"repeatId": "1",
-							"children": [
+						name: "presentationsOf",
+						children: [{
+							repeatId: "1",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadata"
+									name: "linkedRecordType",
+									value: "metadata"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId"
+									name: "linkedRecordId",
+									value: "textVariableId"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"repeatId": "2",
-							"children": [
+							repeatId: "2",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadata"
+									name: "linkedRecordType",
+									value: "metadata"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId2"
+									name: "linkedRecordId",
+									value: "textVariableId2"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}]
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "coraText"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "coraText"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "3",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "3",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pVarTextVariableId2"
+										name: "linkedRecordId",
+										value: "pVarTextVariableId2"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}]
@@ -8583,302 +8610,302 @@ function MetadataProviderStub() {
 
 			case "pgGroupIdTwoTextChildSurrounding2TextPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdTwoTextChildRepeat1to5"
+							name: "linkedRecordId",
+							value: "groupIdTwoTextChildRepeat1to5"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer"
 									}],
-									"attributes": {
-										"type": "presentation",
+									attributes: {
+										type: "presentation",
 										"repeat": "children"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "groupWithSContainerPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdTwoTextChildRepeat1to5"
+							name: "linkedRecordId",
+							value: "groupIdTwoTextChildRepeat1to5"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "groupWithSContainerAndAlternativeSContainerPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdTwoTextChildRepeat1to5"
+							name: "linkedRecordId",
+							value: "groupIdTwoTextChildRepeat1to5"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [createPresentationSize("firstSmaller"), {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [createPresentationSize("firstSmaller"), {
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer2"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer2"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "pTextVariablePlus2SContainer2":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "container",
+					name: "presentation",
+					attributes: {
+						type: "container",
 						"repeat": "children"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "pTextVariablePlus2SContainer2"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "pTextVariablePlus2SContainer2"
 						}]
 					}, {
-						"name": "presentationsOf",
-						"children": [{
-							"repeatId": "1",
-							"children": [
+						name: "presentationsOf",
+						children: [{
+							repeatId: "1",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadata"
+									name: "linkedRecordType",
+									value: "metadata"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId"
+									name: "linkedRecordId",
+									value: "textVariableId"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"repeatId": "2",
-							"children": [
+							repeatId: "2",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadata"
+									name: "linkedRecordType",
+									value: "metadata"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textVariableId2"
+									name: "linkedRecordId",
+									value: "textVariableId2"
 								}
 							],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}]
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "coraText"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "coraText"
 									}, {
-										"name": "linkedRecordId",
-										"value": "aHeadlineText"
+										name: "linkedRecordId",
+										value: "aHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer"
 									}],
-									"attributes": {
-										"type": "presentation",
+									attributes: {
+										type: "presentation",
 										"repeat": "children"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}]
 				};
 			case "pgGroupIdTwoTextChildSurrounding2TextPGroup2":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdTwoTextChildRepeat1to5"
+							name: "linkedRecordId",
+							value: "groupIdTwoTextChildRepeat1to5"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "pTextVariablePlus2SContainer2"
+										name: "linkedRecordId",
+										value: "pTextVariablePlus2SContainer2"
 									}],
-									"attributes": {
-										"type": "presentation",
+									attributes: {
+										type: "presentation",
 										"repeat": "children"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
@@ -8886,145 +8913,145 @@ function MetadataProviderStub() {
 
 			case "asdfasdfsad":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myPGroup"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myPGroup"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myGroup"
+							name: "linkedRecordId",
+							value: "myGroup"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "coraText"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "coraText"
 									}, {
-										"name": "linkedRecordId",
-										"value": "myHeadlineText"
+										name: "linkedRecordId",
+										value: "myHeadlineText"
 									}],
-									"attributes": {
-										"type": "text"
+									attributes: {
+										type: "text"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "2",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "2",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "myChildPVar"
+										name: "linkedRecordId",
+										value: "myChildPVar"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}, {
-							"name": "childReference",
-							"repeatId": "3",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "1",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+							name: "childReference",
+							repeatId: "3",
+							children: [{
+								name: "refGroup",
+								repeatId: "1",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "myChildMinPGroup"
+										name: "linkedRecordId",
+										value: "myChildMinPGroup"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "myChildPGroup"
+										name: "linkedRecordId",
+										value: "myChildPGroup"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							},
 
 							{
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}]
 				};
 			case "myLinkNoPresentationOfLinkedRecordPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkNoPresentationOfLinkedRecordPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkNoPresentationOfLinkedRecordPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
 						"actionLinks": {
 								"read": {
@@ -9035,31 +9062,31 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 			case "myLinkNoLabelNoPresentationOfLinkedRecordPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkNoPresentationOfLinkedRecordPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkNoPresentationOfLinkedRecordPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
 						"actionLinks": {
 								"read": {
@@ -9070,34 +9097,34 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					},{
-						"name": "showLabel",
-						"value": "false"
+						name: "showLabel",
+						value: "false"
 					}]
 				};
 			case "myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
 						"actionLinks": {
 								"read": {
@@ -9108,1480 +9135,1480 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					},{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "specifiedLabelText"
+							name: "linkedRecordId",
+							value: "specifiedLabelText"
 						}],
-							"name": "specifiedLabelText"
+							name: "specifiedLabelText"
 					}]
 				};
 //				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData
 			case "myLinkNoPresentationOfLinkedRecordWithFinalValuePLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "myLinkNoPresentationOfLinkedRecordWithFinalValuePLink"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "myLinkNoPresentationOfLinkedRecordWithFinalValuePLink"
 							}]
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataRecordLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataRecordLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "myFinalValueLink"
+								name: "linkedRecordId",
+								value: "myFinalValueLink"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}]
 				};
 			case "myLinkNoPresentationOfLinkedRecordChildOfBinary":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "myLinkNoPresentationOfLinkedRecordChildOfBinary"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "myLinkNoPresentationOfLinkedRecordChildOfBinary"
 							}]
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataRecordLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataRecordLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "myChildOfBinaryLink"
+								name: "linkedRecordId",
+								value: "myChildOfBinaryLink"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						}]
 				};
 
 			case "myLinkNoPresentationOfLinkedRecordWithSearchPLink":
 				return {
-					"name": "presentation",
-					"children": [
+					name: "presentation",
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [
+							name: "recordInfo",
+							children: [
 								{
-									"name": "id",
-									"value": "myLinkNoPresentationOfLinkedRecordWithSearchPLink"
+									name: "id",
+									value: "myLinkNoPresentationOfLinkedRecordWithSearchPLink"
 								},
 								{
-									"name": "type",
-									"children": [
+									name: "type",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationRecordLink"
+											name: "linkedRecordId",
+											value: "presentationRecordLink"
 										}
 									]
 								},
 								{
-									"name": "dataDivider",
-									"children": [
+									name: "dataDivider",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "system"
+											name: "linkedRecordType",
+											value: "system"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "cora"
+											name: "linkedRecordId",
+											value: "cora"
 										}
 									]
 								}
 							]
 						},
 						{
-							"name": "presentationOf",
-							"children": [
+							name: "presentationOf",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataRecordLink"
+									name: "linkedRecordType",
+									value: "metadataRecordLink"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "myLink"
+									name: "linkedRecordId",
+									value: "myLink"
 								}
 							]
 						},
 						{
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						},
 						{
-							"name": "search",
-							"children": [
+							name: "search",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "search"
+									name: "linkedRecordType",
+									value: "search"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "textSearch"
+									name: "linkedRecordId",
+									value: "textSearch"
 								}
 							]
 						}
 					],
-					"attributes": {
-						"type": "pRecordLink"
+					attributes: {
+						type: "pRecordLink"
 					}
 				};
 			case "myLinkNoPresentationOfLinkedRecordWithSearchNoRightToPerformSearchPLink":
 				return {
-					"name": "presentation",
-					"children": [
+					name: "presentation",
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [
+							name: "recordInfo",
+							children: [
 								{
-									"name": "id",
-									"value": "myLinkNoPresentationOfLinkedRecordWithSearchNoRightToPerformSearchPLink"
+									name: "id",
+									value: "myLinkNoPresentationOfLinkedRecordWithSearchNoRightToPerformSearchPLink"
 								},
 								{
-									"name": "type",
-									"children": [
+									name: "type",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationRecordLink"
+											name: "linkedRecordId",
+											value: "presentationRecordLink"
 										}
 									]
 								},
 								{
-									"name": "dataDivider",
-									"children": [
+									name: "dataDivider",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "system"
+											name: "linkedRecordType",
+											value: "system"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "cora"
+											name: "linkedRecordId",
+											value: "cora"
 										}
 									]
 								}
 							]
 						},
 						{
-							"name": "presentationOf",
-							"children": [
+							name: "presentationOf",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataRecordLink"
+									name: "linkedRecordType",
+									value: "metadataRecordLink"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "myLink"
+									name: "linkedRecordId",
+									value: "myLink"
 								}
 							]
 						},
 						{
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						},
 						{
-							"name": "search",
-							"children": [
+							name: "search",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "search"
+									name: "linkedRecordType",
+									value: "search"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "searchWithoutSearchLink"
+									name: "linkedRecordId",
+									value: "searchWithoutSearchLink"
 								}
 							]
 						}
 					],
-					"attributes": {
-						"type": "pRecordLink"
+					attributes: {
+						type: "pRecordLink"
 					}
 				};
 			case "myAbstractLinkNoPresentationOfLinkedRecordWithSearchPLink":
 				return {
-					"name": "presentation",
-					"children": [
+					name: "presentation",
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [
+							name: "recordInfo",
+							children: [
 								{
-									"name": "id",
-									"value": "myAbstractLinkNoPresentationOfLinkedRecordWithSearchPLink"
+									name: "id",
+									value: "myAbstractLinkNoPresentationOfLinkedRecordWithSearchPLink"
 								},
 								{
-									"name": "type",
-									"children": [
+									name: "type",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationRecordLink"
+											name: "linkedRecordId",
+											value: "presentationRecordLink"
 										}
 									]
 								},
 								{
-									"name": "dataDivider",
-									"children": [
+									name: "dataDivider",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "system"
+											name: "linkedRecordType",
+											value: "system"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "cora"
+											name: "linkedRecordId",
+											value: "cora"
 										}
 									]
 								}
 							]
 						},
 						{
-							"name": "presentationOf",
-							"children": [
+							name: "presentationOf",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "metadataRecordLink"
+									name: "linkedRecordType",
+									value: "metadataRecordLink"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "myAbstractLink"
+									name: "linkedRecordId",
+									value: "myAbstractLink"
 								}
 							]
 						},
 						{
-							"name": "mode",
-							"value": "input"
+							name: "mode",
+							value: "input"
 						},
 						{
-							"name": "search",
-							"children": [
+							name: "search",
+							children: [
 								{
-									"name": "linkedRecordType",
-									"value": "search"
+									name: "linkedRecordType",
+									value: "search"
 								},
 								{
-									"name": "linkedRecordId",
-									"value": "metadataSearch"
+									name: "linkedRecordId",
+									value: "metadataSearch"
 								}
 							]
 						}
 					],
-					"attributes": {
-						"type": "pRecordLink"
+					attributes: {
+						type: "pRecordLink"
 					}
 				};
 			case "myPathLinkNoPresentationOfLinkedRecordPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myPathLinkNoPresentationOfLinkedRecordPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myPathLinkNoPresentationOfLinkedRecordPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myPathLink"
+							name: "linkedRecordId",
+							value: "myPathLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 			case "myChildOfBinaryLinkPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myChildOfBinaryLinkPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myChildOfBinaryLinkPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myChildOfBinaryLink"
+							name: "linkedRecordId",
+							value: "myChildOfBinaryLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}]
 				};
 			case "myLinkNoPresentationOfLinkedRecordOutputPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "myLinkNoPresentationOfLinkedRecordOutputPLink"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "myLinkNoPresentationOfLinkedRecordOutputPLink"
 							}]
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataRecordLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataRecordLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "myLink"
+								name: "linkedRecordId",
+								value: "myLink"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "output"
+							name: "mode",
+							value: "output"
 						}]
 				};
 			case "myPathLinkNoPresentationOfLinkedRecordOutputPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "myPathLinkNoPresentationOfLinkedRecordOutputPLink"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "myPathLinkNoPresentationOfLinkedRecordOutputPLink"
 							}]
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataRecordLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataRecordLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "myPathLink"
+								name: "linkedRecordId",
+								value: "myPathLink"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "output"
+							name: "mode",
+							value: "output"
 						}]
 				};
 			case "myLinkPresentationOfLinkedRecordOutputPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkPresentationOfLinkedRecordOutputPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkPresentationOfLinkedRecordOutputPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}, {
-						"children": [
+						children: [
 							{
-								"repeatId": "1",
-								"children": [
+								repeatId: "1",
+								children: [
 									{
-										"name": "presentedRecordType",
-										"children": [
+										name: "presentedRecordType",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "recordType"
+												name: "linkedRecordType",
+												value: "recordType"
 											},
 											{
-												"name": "linkedRecordId",
-												//												"value": "metadata"
-												"value": "metadataTextVariable"
+												name: "linkedRecordId",
+												//												value: "metadata"
+												value: "metadataTextVariable"
 											}]
 									},
 									{
-										"name": "presentation",
-										"children": [
+										name: "presentation",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "presentation"
+												name: "linkedRecordType",
+												value: "presentation"
 											},
 											{
-												"name": "linkedRecordId",
-												"value": "metadataTextVariableViewPGroup"
+												name: "linkedRecordId",
+												value: "metadataTextVariableViewPGroup"
 											}]
 									}],
-								"name": "linkedRecordPresentation"
+								name: "linkedRecordPresentation"
 							}
 						],
-						"name": "linkedRecordPresentations"
+						name: "linkedRecordPresentations"
 					}]
 				};
 			case "myLinkAbstractPresentationOfLinkedRecordOutputPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkPresentationOfLinkedRecordOutputPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkPresentationOfLinkedRecordOutputPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}, {
-						"children": [
+						children: [
 							{
-								"repeatId": "1",
-								"children": [
+								repeatId: "1",
+								children: [
 									{
-										"name": "presentedRecordType",
-										"children": [
+										name: "presentedRecordType",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "recordType"
+												name: "linkedRecordType",
+												value: "recordType"
 											},
 											{
-												"name": "linkedRecordId",
-												"value": "metadata"
-												//												"value": "metadataTextVariable"
+												name: "linkedRecordId",
+												value: "metadata"
+												//												value: "metadataTextVariable"
 											}]
 									},
 									{
-										"name": "presentation",
-										"children": [
+										name: "presentation",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "presentation"
+												name: "linkedRecordType",
+												value: "presentation"
 											},
 											{
-												"name": "linkedRecordId",
-												"value": "metadataTextVariableViewPGroup"
+												name: "linkedRecordId",
+												value: "metadataTextVariableViewPGroup"
 											}]
 									}],
-								"name": "linkedRecordPresentation"
+								name: "linkedRecordPresentation"
 							}
 						],
-						"name": "linkedRecordPresentations"
+						name: "linkedRecordPresentations"
 					}]
 				};
 			case "myLinkPresentationOfLinkedRecordInputPLink":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "myLinkPresentationOfLinkedRecordOutputPLink"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "myLinkPresentationOfLinkedRecordOutputPLink"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataRecordLink"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataRecordLink"
 						}, {
-							"name": "linkedRecordId",
-							"value": "myLink"
+							name: "linkedRecordId",
+							value: "myLink"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"children": [
+						children: [
 							{
-								"repeatId": "1",
-								"children": [
+								repeatId: "1",
+								children: [
 									{
-										"name": "presentedRecordType",
-										"children": [
+										name: "presentedRecordType",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "recordType"
+												name: "linkedRecordType",
+												value: "recordType"
 											},
 											{
-												"name": "linkedRecordId",
-												"value": "metadataTextVariable"
+												name: "linkedRecordId",
+												value: "metadataTextVariable"
 											}]
 									},
 									{
-										"name": "presentation",
-										"children": [
+										name: "presentation",
+										children: [
 											{
-												"name": "linkedRecordType",
-												"value": "presentation"
+												name: "linkedRecordType",
+												value: "presentation"
 											},
 											{
-												"name": "linkedRecordId",
-												"value": "metadataTextVariableViewPGroup"
+												name: "linkedRecordId",
+												value: "metadataTextVariableViewPGroup"
 											}]
 									}],
-								"name": "linkedRecordPresentation"
+								name: "linkedRecordPresentation"
 							}
 						],
-						"name": "linkedRecordPresentations"
+						name: "linkedRecordPresentations"
 					}]
 				};
 			case "myLinkPresentationOfLinkedRecordOutputPLinkWrongLinkedRecordType":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pRecordLink"
+					name: "presentation",
+					attributes: {
+						type: "pRecordLink"
 					},
-					"children": [
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "myLinkPresentationOfLinkedRecordOutputPLinkWrongLinkedRecordType"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "myLinkPresentationOfLinkedRecordOutputPLinkWrongLinkedRecordType"
 							}]
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataRecordLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataRecordLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "myLink"
+								name: "linkedRecordId",
+								value: "myLink"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "mode",
-							"value": "output"
+							name: "mode",
+							value: "output"
 						}, {
-							"children": [{
-								"repeatId": "1",
-								"children": [{
-									"name": "presentedRecordType",
-									"children": [
+							children: [{
+								repeatId: "1",
+								children: [{
+									name: "presentedRecordType",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "NOTmetadataTextVariable"
+											name: "linkedRecordId",
+											value: "NOTmetadataTextVariable"
 										}]
 								}, {
-									"name": "presentation",
-									"children": [
+									name: "presentation",
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "presentation"
+											name: "linkedRecordType",
+											value: "presentation"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "metadataTextVariableViewPGroup"
+											name: "linkedRecordId",
+											value: "metadataTextVariableViewPGroup"
 										}]
 								}],
-								"name": "linkedRecordPresentation"
+								name: "linkedRecordPresentation"
 							}],
-							"name": "linkedRecordPresentations"
+							name: "linkedRecordPresentations"
 						}]
 				};
 			case "linkedRecordTypeOutputPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRecordTypeOutputPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRecordTypeOutputPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRecordTypeTextVar"
+							name: "linkedRecordId",
+							value: "linkedRecordTypeTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "linkedRecordIdPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRecordIdPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRecordIdPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRecordIdTextVar"
+							name: "linkedRecordId",
+							value: "linkedRecordIdTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "emptyTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						name: "emptyTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "enterTextHereText"
+							name: "linkedRecordId",
+							value: "enterTextHereText"
 						}]
 					}]
 				};
 			case "linkedRecordIdOutputPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRecordIdOutputPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRecordIdOutputPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRecordIdTextVar"
+							name: "linkedRecordId",
+							value: "linkedRecordIdTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "linkedRecordTypePVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRecordTypePVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRecordTypePVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRecordTypeTextVar"
+							name: "linkedRecordId",
+							value: "linkedRecordTypeTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "emptyTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						name: "emptyTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "enterTextHereText"
+							name: "linkedRecordId",
+							value: "enterTextHereText"
 						}]
 					}]
 				};
 			case "linkedRepeatIdPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRepeatIdPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRepeatIdPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRepeatIdTextVar"
+							name: "linkedRecordId",
+							value: "linkedRepeatIdTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "input"
+						name: "mode",
+						value: "input"
 					}, {
-						"name": "emptyTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						name: "emptyTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "enterTextHereText"
+							name: "linkedRecordId",
+							value: "enterTextHereText"
 						}]
 					}]
 				};
 			case "linkedRepeatIdOutputPVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "linkedRepeatIdOutputPVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "linkedRepeatIdOutputPVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "linkedRepeatIdTextVar"
+							name: "linkedRecordId",
+							value: "linkedRepeatIdTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "groupIdOneRecordLinkChildWithPathPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)]
+					children: [createRecordInfoJson(idToGet)]
 						.concat([
 							{
-								"children": [
+								children: [
 									{
-										"name": "linkedRecordType",
-										"value": "metadataGroup"
+										name: "linkedRecordType",
+										value: "metadataGroup"
 									},
 									{
-										"name": "linkedRecordId",
-										"value": "groupIdOneRecordLinkChildWithPath"
+										name: "linkedRecordId",
+										value: "groupIdOneRecordLinkChildWithPath"
 									}],
-								"name": "presentationOf"
+								name: "presentationOf"
 							},
 							{
-								"name": "childReferences",
-								"children": [
+								name: "childReferences",
+								children: [
 									{
-										"name": "childReference",
-										"repeatId": "1",
-										"children": [
+										name: "childReference",
+										repeatId: "1",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "myPathLinkNoPresentationOfLinkedRecordPLink"
+															name: "linkedRecordId",
+															value: "myPathLinkNoPresentationOfLinkedRecordPLink"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									},
 									{
-										"name": "childReference",
-										"repeatId": "1",
-										"children": [
+										name: "childReference",
+										repeatId: "1",
+										children: [
 											{
-												"name": "refGroup",
-												"repeatId": "0",
-												"children": [{
-													"name": "ref",
-													"children": [
+												name: "refGroup",
+												repeatId: "0",
+												children: [{
+													name: "ref",
+													children: [
 														{
-															"name": "linkedRecordType",
-															"value": "presentation"
+															name: "linkedRecordType",
+															value: "presentation"
 														},
 														{
-															"name": "linkedRecordId",
-															"value": "myPathLinkNoPresentationOfLinkedRecordOutputPLink"
+															name: "linkedRecordId",
+															value: "myPathLinkNoPresentationOfLinkedRecordOutputPLink"
 														}],
-													"attributes": {
-														"type": "presentation"
+													attributes: {
+														type: "presentation"
 													}
 												}]
 											},
 											{
-												"name": "textStyle",
-												"value": "h2TextStyle"
+												name: "textStyle",
+												value: "h2TextStyle"
 											},
 											{
-												"name": "childStyle",
-												"value": "fourChildStyle"
+												name: "childStyle",
+												value: "fourChildStyle"
 											}]
 									}]
 							}])
 				};
 			case "groupIdOneChildOfBinaryRecordLinkChildPGroup":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					},
-					"children": [createRecordInfoJson(idToGet)].concat([{
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataGroup"
+					children: [createRecordInfoJson(idToGet)].concat([{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name": "linkedRecordId",
-							"value": "groupIdOneChildOfBinaryRecordLinkChild"
+							name: "linkedRecordId",
+							value: "groupIdOneChildOfBinaryRecordLinkChild"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"repeatId": "1",
-							"children": [{
-								"name": "refGroup",
-								"repeatId": "0",
-								"children": [{
-									"name": "ref",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "presentation"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							repeatId: "1",
+							children: [{
+								name: "refGroup",
+								repeatId: "0",
+								children: [{
+									name: "ref",
+									children: [{
+										name: "linkedRecordType",
+										value: "presentation"
 									}, {
-										"name": "linkedRecordId",
-										"value": "myChildOfBinaryLinkPLink"
+										name: "linkedRecordId",
+										value: "myChildOfBinaryLinkPLink"
 									}],
-									"attributes": {
-										"type": "presentation"
+									attributes: {
+										type: "presentation"
 									}
 								}]
 							}, {
-								"name": "textStyle",
-								"value": "h2TextStyle"
+								name: "textStyle",
+								value: "h2TextStyle"
 							}, {
-								"name": "childStyle",
-								"value": "fourChildStyle"
+								name: "childStyle",
+								value: "fourChildStyle"
 							}]
 						}]
 					}])
 				};
 			case "metadataTextVariableViewPGroup":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [{
-								"name": "id",
-								"value": "metadataTextVariableViewPGroup"
+							children: [{
+								name: "id",
+								value: "metadataTextVariableViewPGroup"
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "recordType"
+								children: [{
+									name: "linkedRecordType",
+									value: "recordType"
 								}, {
-									"name": "linkedRecordId",
-									"value": "presentationGroup"
+									name: "linkedRecordId",
+									value: "presentationGroup"
 								}],
-								"name": "type"
+								name: "type"
 							}, {
-								"name": "createdBy",
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name": "linkedRecordId",
-									"value": "userId"
+									name: "linkedRecordId",
+									value: "userId"
 								}]
 							}, {
-								"children": [{
-									"name": "linkedRecordType",
-									"value": "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name": "linkedRecordId",
-									"value": "cora"
+									name: "linkedRecordId",
+									value: "cora"
 								}],
-								"name": "dataDivider"
+								name: "dataDivider"
 							}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataGroup"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataGroup"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataTextVariableGroup"
+								name: "linkedRecordId",
+								value: "metadataTextVariableGroup"
 							}],
-							"name": "presentationOf"
+							name: "presentationOf"
 						},
 						{
-							"children": [
+							children: [
 								{
-									"repeatId": "0",
-									"children": [
+									repeatId: "0",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "recordInfoPGroup"
+														name: "linkedRecordId",
+														value: "recordInfoPGroup"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "1",
-									"children": [
+									repeatId: "1",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "nameInDataTextVarText"
+														name: "linkedRecordId",
+														value: "nameInDataTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "2",
-									"children": [
+									repeatId: "2",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "nameInDataTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "nameInDataTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "3",
-									"children": [
+									repeatId: "3",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "textIdTextVarText"
+														name: "linkedRecordId",
+														value: "textIdTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "4",
-									"children": [
+									repeatId: "4",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "textIdTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "textIdTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "5",
-									"children": [
+									repeatId: "5",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "defTextIdTextVarText"
+														name: "linkedRecordId",
+														value: "defTextIdTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "6",
-									"children": [
+									repeatId: "6",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "defTextIdTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "defTextIdTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "7",
-									"children": [
+									repeatId: "7",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "everythingRegExpTextVarText"
+														name: "linkedRecordId",
+														value: "everythingRegExpTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "8",
-									"children": [
+									repeatId: "8",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "everythingRegExpTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "everythingRegExpTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "9",
-									"children": [
+									repeatId: "9",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "refParentIdTextVarText"
+														name: "linkedRecordId",
+														value: "refParentIdTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "10",
-									"children": [
+									repeatId: "10",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "refParentIdTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "refParentIdTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "11",
-									"children": [
+									repeatId: "11",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "coraText"
+														name: "linkedRecordType",
+														value: "coraText"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "finalValueTextVarText"
+														name: "linkedRecordId",
+														value: "finalValueTextVarText"
 													}],
-												"attributes": {
-													"type": "text"
+												attributes: {
+													type: "text"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								},
 								{
-									"repeatId": "12",
-									"children": [
+									repeatId: "12",
+									children: [
 										{
-											"name": "refGroup",
-											"repeatId": "0",
-											"children": [{
-												"name": "ref",
-												"children": [
+											name: "refGroup",
+											repeatId: "0",
+											children: [{
+												name: "ref",
+												children: [
 													{
-														"name": "linkedRecordType",
-														"value": "presentation"
+														name: "linkedRecordType",
+														value: "presentation"
 													},
 													{
-														"name": "linkedRecordId",
-														"value": "finalValueTextVarOutputPVar"
+														name: "linkedRecordId",
+														value: "finalValueTextVarOutputPVar"
 													}],
-												"attributes": {
-													"type": "presentation"
+												attributes: {
+													type: "presentation"
 												}
 											}]
 										}, {
-											"name": "textStyle",
-											"value": "h2TextStyle"
+											name: "textStyle",
+											value: "h2TextStyle"
 										}, {
-											"name": "childStyle",
-											"value": "fourChildStyle"
+											name: "childStyle",
+											value: "fourChildStyle"
 										}],
-									"name": "childReference"
+									name: "childReference"
 								}],
-							"name": "childReferences"
+							name: "childReferences"
 						}],
-					"name": "presentation",
-					"attributes": {
-						"type": "pGroup"
+					name: "presentation",
+					attributes: {
+						type: "pGroup"
 					}
 				};
 
 			// TEXT
 			case "recordInfoText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "recordInfoText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "recordInfoText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "recordInfoText"
+						children: [{
+							name: "text",
+							value: "recordInfoText"
 						}]
 					}]
 				};
 			case "textVariableIdText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "my2Text"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "my2Text"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "Exempel textvariabel"
+						children: [{
+							name: "text",
+							value: "Exempel textvariabel"
 						}]
 					}]
 				};
 
 			case "textVariableIdDefText":
 				return {
-					"name": "text",
-					"children": [
+					name: "text",
+					children: [
 						{
-							"name": "recordInfo",
-							"children": [{
-								"name": "id",
-								"value": "my2Text"
+							name: "recordInfo",
+							children: [{
+								name: "id",
+								value: "my2Text"
 							}]
 						},
 						{
-							"name": "textPart",
-							"attributes": {
-								"type": "default",
+							name: "textPart",
+							attributes: {
+								type: "default",
 								"lang": "sv"
 							},
-							"children": [{
-								"name": "text",
-								"value": "Detta är en exempeldefinition för en textvariabel."
+							children: [{
+								name: "text",
+								value: "Detta är en exempeldefinition för en textvariabel."
 							}]
 						},
 						{
-							"name": "textPart",
-							"attributes": {
-								"type": "alternative",
+							name: "textPart",
+							attributes: {
+								type: "alternative",
 								"lang": "en"
 							},
-							"children": [{
-								"name": "text",
-								"value": "This is an example definition for a text variable."
+							children: [{
+								name: "text",
+								value: "This is an example definition for a text variable."
 							}]
 						}]
 				};
@@ -10589,304 +10616,304 @@ function MetadataProviderStub() {
 
 			case "aHeadlineText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "aHeadlineText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "aHeadlineText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "En rubrik"
+						children: [{
+							name: "text",
+							value: "En rubrik"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "alternative",
+						name: "textPart",
+						attributes: {
+							type: "alternative",
 							"lang": "en"
 						},
-						"children": [{
-							"name": "text",
-							"value": "A headline"
+						children: [{
+							name: "text",
+							value: "A headline"
 						}]
 					}]
 				};
 			case "groupIdOneTextChildText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdOneTextChildText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdOneTextChildText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdOneTextChildText"
+						children: [{
+							name: "text",
+							value: "groupIdOneTextChildText"
 						}]
 					}]
 				};
 			case "groupIdOneTextChildDefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdOneTextChildText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdOneTextChildText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdOneTextChildText"
+						children: [{
+							name: "text",
+							value: "groupIdOneTextChildText"
 						}]
 					}]
 				};
 			case "groupIdTwoTextChildRepeat1to5Text":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdTwoTextChildRepeat1to5Text"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdTwoTextChildRepeat1to5Text"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdTwoTextChildRepeat1to5Text"
+						children: [{
+							name: "text",
+							value: "groupIdTwoTextChildRepeat1to5Text"
 						}]
 					}]
 				};
 			case "groupIdTwoTextChildRepeat1to5DefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdTwoTextChildRepeat1to5DefText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdTwoTextChildRepeat1to5DefText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdTwoTextChildRepeat1to5DefText"
+						children: [{
+							name: "text",
+							value: "groupIdTwoTextChildRepeat1to5DefText"
 						}]
 					}]
 				};
 			case "groupIdOneTextChildRepeat1to3Text":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdOneTextChildRepeat1to3Text"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdOneTextChildRepeat1to3Text"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdOneTextChildRepeat1to3Text"
+						children: [{
+							name: "text",
+							value: "groupIdOneTextChildRepeat1to3Text"
 						}]
 					}]
 				};
 			case "groupIdTwoTextChildRepeat1to3DefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdTwoTextChildRepeat1to3DefText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdTwoTextChildRepeat1to3DefText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdTwoTextChildRepeat1to3DefText"
+						children: [{
+							name: "text",
+							value: "groupIdTwoTextChildRepeat1to3DefText"
 						}]
 					}]
 				};
 			case "groupIdTwoTextChildText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdTwoTextChildText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdTwoTextChildText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdTwoTextChildText"
+						children: [{
+							name: "text",
+							value: "groupIdTwoTextChildText"
 						}]
 					}]
 				};
 			case "groupIdTwoTextChildDefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupIdTwoTextChildDefText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupIdTwoTextChildDefText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupIdTwoTextChildDefText"
+						children: [{
+							name: "text",
+							value: "groupIdTwoTextChildDefText"
 						}]
 					}]
 				};
 			case "textVarRepeat1to3InGroupOneAttributeText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textVarRepeat1to3InGroupOneAttributeText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textVarRepeat1to3InGroupOneAttributeText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "textVarRepeat1to3InGroupOneAttributeText"
+						children: [{
+							name: "text",
+							value: "textVarRepeat1to3InGroupOneAttributeText"
 						}]
 					}]
 				};
 			case "textVarRepeat1to3InGroupOneAttributeDefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textVarRepeat1to3InGroupOneAttributeDefText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textVarRepeat1to3InGroupOneAttributeDefText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "textVarRepeat1to3InGroupOneAttributeDefText"
+						children: [{
+							name: "text",
+							value: "textVarRepeat1to3InGroupOneAttributeDefText"
 						}]
 					}]
 				};
 			case "groupInGroupOneTextChildText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupInGroupOneTextChildText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupInGroupOneTextChildText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupInGroupOneTextChildText"
+						children: [{
+							name: "text",
+							value: "groupInGroupOneTextChildText"
 						}]
 					}]
 				};
 			case "groupInGroupOneTextChildDefText":
 				return {
-					"name": "text",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "groupInGroupOneTextChildDefText"
+					name: "text",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "groupInGroupOneTextChildDefText"
 						}]
 					}, {
-						"name": "textPart",
-						"attributes": {
-							"type": "default",
+						name: "textPart",
+						attributes: {
+							type: "default",
 							"lang": "sv"
 						},
-						"children": [{
-							"name": "text",
-							"value": "groupInGroupOneTextChildDefText"
+						children: [{
+							name: "text",
+							value: "groupInGroupOneTextChildDefText"
 						}]
 					}]
 				};
 
 			case "masterPResLink":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [
+							children: [
 								{
-									"name": "id",
-									"value": "masterPResLink"
+									name: "id",
+									value: "masterPResLink"
 								},
 								{
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "system"
+									children: [{
+										name: "linkedRecordType",
+										value: "system"
 									}, {
-										"name": "linkedRecordId",
-										"value": "cora"
+										name: "linkedRecordId",
+										value: "cora"
 									}],
 									"actionLinks": {
 										"read": {
@@ -10896,38 +10923,38 @@ function MetadataProviderStub() {
 											"accept": "application/vnd.uub.record+json"
 										}
 									},
-									"name": "dataDivider"
+									name: "dataDivider"
 								},
 								{
-									"children": [
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationResourceLink"
+											name: "linkedRecordId",
+											value: "presentationResourceLink"
 										}],
-									"name": "type"
+									name: "type"
 								}, {
-									"name": "createdBy",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "user"
+									name: "createdBy",
+									children: [{
+										name: "linkedRecordType",
+										value: "user"
 									}, {
-										"name": "linkedRecordId",
-										"value": "userId"
+										name: "linkedRecordId",
+										value: "userId"
 									}]
 								}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataResourceLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataResourceLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLink"
+								name: "linkedRecordId",
+								value: "masterResLink"
 							}],
 							"actionLinks": {
 								"read": {
@@ -10937,65 +10964,65 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "outputFormat",
-							"value": "image"
+							name: "outputFormat",
+							value: "image"
 						},
 
 						{
-							"name": "childReferences",
-							"children": [{
-								"name": "childReference",
-								"repeatId": "1",
-								"children": [
+							name: "childReferences",
+							children: [{
+								name: "childReference",
+								repeatId: "1",
+								children: [
 
 									{
-										"name": "refGroup",
-										"repeatId": "0",
-										"children": [{
-											"name": "ref",
-											"children": [{
-												"name": "linkedRecordType",
-												"value": "presentationVar"
+										name: "refGroup",
+										repeatId: "0",
+										children: [{
+											name: "ref",
+											children: [{
+												name: "linkedRecordType",
+												value: "presentationVar"
 											}, {
-												"name": "linkedRecordId",
-												"value": "filenamePVar"
+												name: "linkedRecordId",
+												value: "filenamePVar"
 											}],
-											"attributes": {
-												"type": "pVar"
+											attributes: {
+												type: "pVar"
 											}
 										}]
 									}
 									, {
-										"name": "default",
-										"value": "ref"
+										name: "default",
+										value: "ref"
 									}]
 							}]
 						}
 
 					],
-					"name": "presentation",
-					"attributes": {
-						"type": "pResourceLink"
+					name: "presentation",
+					attributes: {
+						type: "pResourceLink"
 					}
 				};
 			case "masterPResLinkNoChildReferences":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [
+							children: [
 								{
-									"name": "id",
-									"value": "masterPResLinkNoChildReferences"
+									name: "id",
+									value: "masterPResLinkNoChildReferences"
 								},
 								{
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "system"
+									children: [{
+										name: "linkedRecordType",
+										value: "system"
 									}, {
-										"name": "linkedRecordId",
-										"value": "cora"
+										name: "linkedRecordId",
+										value: "cora"
 									}],
 									"actionLinks": {
 										"read": {
@@ -11005,38 +11032,38 @@ function MetadataProviderStub() {
 											"accept": "application/vnd.uub.record+json"
 										}
 									},
-									"name": "dataDivider"
+									name: "dataDivider"
 								},
 								{
-									"children": [
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationResourceLink"
+											name: "linkedRecordId",
+											value: "presentationResourceLink"
 										}],
-									"name": "type"
+									name: "type"
 								}, {
-									"name": "createdBy",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "user"
+									name: "createdBy",
+									children: [{
+										name: "linkedRecordType",
+										value: "user"
 									}, {
-										"name": "linkedRecordId",
-										"value": "userId"
+										name: "linkedRecordId",
+										value: "userId"
 									}]
 								}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataResourceLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataResourceLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLink"
+								name: "linkedRecordId",
+								value: "masterResLink"
 							}],
 							"actionLinks": {
 								"read": {
@@ -11046,32 +11073,32 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "outputFormat",
-							"value": "image"
+							name: "outputFormat",
+							value: "image"
 						}],
-					"name": "presentation",
-					"attributes": {
-						"type": "pResourceLink"
+					name: "presentation",
+					attributes: {
+						type: "pResourceLink"
 					}
 				};
 			case "masterPResLinkDownloadOutputFormat":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [
+							children: [
 								{
-									"name": "id",
-									"value": "masterPResLinkDownloadOutputFormat"
+									name: "id",
+									value: "masterPResLinkDownloadOutputFormat"
 								},
 								{
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "system"
+									children: [{
+										name: "linkedRecordType",
+										value: "system"
 									}, {
-										"name": "linkedRecordId",
-										"value": "cora"
+										name: "linkedRecordId",
+										value: "cora"
 									}],
 									"actionLinks": {
 										"read": {
@@ -11081,38 +11108,38 @@ function MetadataProviderStub() {
 											"accept": "application/vnd.uub.record+json"
 										}
 									},
-									"name": "dataDivider"
+									name: "dataDivider"
 								},
 								{
-									"children": [
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationResourceLink"
+											name: "linkedRecordId",
+											value: "presentationResourceLink"
 										}],
-									"name": "type"
+									name: "type"
 								}, {
-									"name": "createdBy",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "user"
+									name: "createdBy",
+									children: [{
+										name: "linkedRecordType",
+										value: "user"
 									}, {
-										"name": "linkedRecordId",
-										"value": "userId"
+										name: "linkedRecordId",
+										value: "userId"
 									}]
 								}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataResourceLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataResourceLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLink"
+								name: "linkedRecordId",
+								value: "masterResLink"
 							}],
 							"actionLinks": {
 								"read": {
@@ -11122,32 +11149,32 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "outputFormat",
-							"value": "download"
+							name: "outputFormat",
+							value: "download"
 						}],
-					"name": "presentation",
-					"attributes": {
-						"type": "pResourceLink"
+					name: "presentation",
+					attributes: {
+						type: "pResourceLink"
 					}
 				};
 			case "masterPResLinkNoOutputFormat":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [
+							children: [
 								{
-									"name": "id",
-									"value": "masterPResLinkNoOutputFormat"
+									name: "id",
+									value: "masterPResLinkNoOutputFormat"
 								},
 								{
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "system"
+									children: [{
+										name: "linkedRecordType",
+										value: "system"
 									}, {
-										"name": "linkedRecordId",
-										"value": "cora"
+										name: "linkedRecordId",
+										value: "cora"
 									}],
 									"actionLinks": {
 										"read": {
@@ -11157,38 +11184,38 @@ function MetadataProviderStub() {
 											"accept": "application/vnd.uub.record+json"
 										}
 									},
-									"name": "dataDivider"
+									name: "dataDivider"
 								},
 								{
-									"children": [
+									children: [
 										{
-											"name": "linkedRecordType",
-											"value": "recordType"
+											name: "linkedRecordType",
+											value: "recordType"
 										},
 										{
-											"name": "linkedRecordId",
-											"value": "presentationResourceLink"
+											name: "linkedRecordId",
+											value: "presentationResourceLink"
 										}],
-									"name": "type"
+									name: "type"
 								}, {
-									"name": "createdBy",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "user"
+									name: "createdBy",
+									children: [{
+										name: "linkedRecordType",
+										value: "user"
 									}, {
-										"name": "linkedRecordId",
-										"value": "userId"
+										name: "linkedRecordId",
+										value: "userId"
 									}]
 								}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						},
 						{
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataResourceLink"
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataResourceLink"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLink"
+								name: "linkedRecordId",
+								value: "masterResLink"
 							}],
 							"actionLinks": {
 								"read": {
@@ -11198,58 +11225,58 @@ function MetadataProviderStub() {
 									"accept": "application/vnd.uub.record+json"
 								}
 							},
-							"name": "presentationOf"
+							name: "presentationOf"
 						}, {
-							"name": "childReferences",
-							"children": [{
-								"name": "childReference",
-								"repeatId": "1",
-								"children": [
+							name: "childReferences",
+							children: [{
+								name: "childReference",
+								repeatId: "1",
+								children: [
 									{
-										"name": "refGroup",
-										"repeatId": "0",
-										"children": [{
-											"name": "ref",
-											"children": [{
-												"name": "linkedRecordType",
-												"value": "presentationVar"
+										name: "refGroup",
+										repeatId: "0",
+										children: [{
+											name: "ref",
+											children: [{
+												name: "linkedRecordType",
+												value: "presentationVar"
 											}, {
-												"name": "linkedRecordId",
-												"value": "filenamePVar"
+												name: "linkedRecordId",
+												value: "filenamePVar"
 											}],
-											"attributes": {
-												"type": "pVar"
+											attributes: {
+												type: "pVar"
 											}
 										}]
 									}
 
 									, {
-										"name": "default",
-										"value": "ref"
+										name: "default",
+										value: "ref"
 									}]
 							}]
 						}],
-					"name": "presentation",
-					"attributes": {
-						"type": "pResourceLink"
+					name: "presentation",
+					attributes: {
+						type: "pResourceLink"
 					}
 				};
 			case "masterResLink":
 				return {
-					"children": [
+					children: [
 						{
-							"children": [
+							children: [
 								{
-									"name": "id",
-									"value": "masterResLink"
+									name: "id",
+									value: "masterResLink"
 								},
 								{
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "system"
+									children: [{
+										name: "linkedRecordType",
+										value: "system"
 									}, {
-										"name": "linkedRecordId",
-										"value": "cora"
+										name: "linkedRecordId",
+										value: "cora"
 									}],
 									"actionLinks": {
 										"read": {
@@ -11259,63 +11286,63 @@ function MetadataProviderStub() {
 											"accept": "application/vnd.uub.record+json"
 										}
 									},
-									"name": "dataDivider"
+									name: "dataDivider"
 								}, {
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "recordType"
+									children: [{
+										name: "linkedRecordType",
+										value: "recordType"
 									}, {
-										"name": "linkedRecordId",
-										"value": "metadataResourceLink"
+										name: "linkedRecordId",
+										value: "metadataResourceLink"
 									}],
-									"name": "type"
+									name: "type"
 								}, {
-									"name": "createdBy",
-									"children": [{
-										"name": "linkedRecordType",
-										"value": "user"
+									name: "createdBy",
+									children: [{
+										name: "linkedRecordType",
+										value: "user"
 									}, {
-										"name": "linkedRecordId",
-										"value": "userId"
+										name: "linkedRecordId",
+										value: "userId"
 									}]
 								}],
-							"name": "recordInfo"
+							name: "recordInfo"
 						}, {
-							"name": "nameInData",
-							"value": "master"
+							name: "nameInData",
+							value: "master"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLinkText"
+								name: "linkedRecordId",
+								value: "masterResLinkText"
 							}],
-							"name": "textId"
+							name: "textId"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "text"
+							children: [{
+								name: "linkedRecordType",
+								value: "text"
 							}, {
-								"name": "linkedRecordId",
-								"value": "masterResLinkDefText"
+								name: "linkedRecordId",
+								value: "masterResLinkDefText"
 							}],
-							"name": "defTextId"
+							name: "defTextId"
 						}],
-					"name": "metadata",
-					"attributes": {
-						"type": "resourceLink"
+					name: "metadata",
+					attributes: {
+						type: "resourceLink"
 					}
 				};
 			case "metadataGroupForResourceLinkGroup":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "group"
+					name: "metadata",
+					attributes: {
+						type: "group"
 					},
-					"children": [{
-						"name": "childReferences",
-						"children": [
+					children: [{
+						name: "childReferences",
+						children: [
 							createChildReferenceWithRefAndRepeatId1to1(
 								"metadataTextVariable", "streamIdTextVar",
 								"1"),
@@ -11333,1108 +11360,1108 @@ function MetadataProviderStub() {
 				};
 			case "filenamePVar":
 				return {
-					"name": "presentation",
-					"attributes": {
-						"type": "pVar"
+					name: "presentation",
+					attributes: {
+						type: "pVar"
 					},
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "filenamePVar"
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "filenamePVar"
 						}]
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataTextVariable"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataTextVariable"
 						}, {
-							"name": "linkedRecordId",
-							"value": "filenameTextVar"
+							name: "linkedRecordId",
+							value: "filenameTextVar"
 						}],
-						"name": "presentationOf"
+						name: "presentationOf"
 					}, {
-						"name": "mode",
-						"value": "output"
+						name: "mode",
+						value: "output"
 					}]
 				};
 			case "streamIdTextVar":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "textVariable"
+					name: "metadata",
+					attributes: {
+						type: "textVariable"
 					},
-					"children": [{
-						"name": "regEx",
-						"value": "(^[0-9A-Za-z]{2,50}$)"
+					children: [{
+						name: "regEx",
+						value: "(^[0-9A-Za-z]{2,50}$)"
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("streamId"))
 
 				};
 			case "filenameTextVar":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "textVariable"
+					name: "metadata",
+					attributes: {
+						type: "textVariable"
 					},
-					"children": [{
-						"name": "regEx",
-						"value": "(^[0-9A-Za-z]{2,50}$)"
+					children: [{
+						name: "regEx",
+						value: "(^[0-9A-Za-z]{2,50}$)"
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("filename"))
 
 				};
 			case "filesizeTextVar":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "textVariable"
+					name: "metadata",
+					attributes: {
+						type: "textVariable"
 					},
-					"children": [{
-						"name": "regEx",
-						"value": "(^[0-9A-Za-z]{2,50}$)"
+					children: [{
+						name: "regEx",
+						value: "(^[0-9A-Za-z]{2,50}$)"
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("filesize"))
 				};
 			case "mimeTypeTextVar":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "textVariable"
+					name: "metadata",
+					attributes: {
+						type: "textVariable"
 					},
-					"children": [{
-						"name": "regEx",
-						"value": "(^[0-9A-Za-z]{2,50}$)"
+					children: [{
+						name: "regEx",
+						value: "(^[0-9A-Za-z]{2,50}$)"
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("mimeType"))
 				};
 			case "groupIdOneResourceLinkChild":
 				return {
-					"name": "metadata",
-					"attributes": {
-						"type": "group"
+					name: "metadata",
+					attributes: {
+						type: "group"
 					},
-					"children": [{
-						"name": "childReferences",
-						"children": [createChildReferenceWithRefAndRepeatId1to1(
+					children: [{
+						name: "childReferences",
+						children: [createChildReferenceWithRefAndRepeatId1to1(
 							"metadataRecordLink", "masterResLink", "1")]
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("groupIdOneResourceLinkChild"))
 				};
 			case "textPartDefaultGroup":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textPartDefaultGroup"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textPartDefaultGroup"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataGroup"
+								name: "linkedRecordId",
+								value: "metadataGroup"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "textPart"
+						name: "nameInData",
+						value: "textPart"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartDefaultGroupText"
+							name: "linkedRecordId",
+							value: "textPartDefaultGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartDefaultGroupDefText"
+							name: "linkedRecordId",
+							value: "textPartDefaultGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refParentId",
-						"value": "textPartGroup"
+						name: "refParentId",
+						value: "textPartGroup"
 					}, {
-						"children": [{
-							"repeatId": "0",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "0",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textPartTypeDefaultCollectionVar"
+								name: "linkedRecordId",
+								value: "textPartTypeDefaultCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}, {
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "systemLanguagesCollectionVar"
+								name: "linkedRecordId",
+								value: "systemLanguagesCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "textTextVar"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "textTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "1"
+							repeatId: "1"
 						}]
 					}],
-					"attributes": {
-						"type": "group"
+					attributes: {
+						type: "group"
 					}
 				};
 			case "textPartTypeDefaultCollectionVar":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textPartTypeDefaultCollectionVar"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textPartTypeDefaultCollectionVar"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionVariable"
+								name: "linkedRecordId",
+								value: "metadataCollectionVariable"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "type"
+						name: "nameInData",
+						value: "type"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeDefaultCollectionVarText"
+							name: "linkedRecordId",
+							value: "textPartTypeDefaultCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeDefaultCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "textPartTypeDefaultCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refCollection",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						name: "refCollection",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeCollection"
+							name: "linkedRecordId",
+							value: "textPartTypeCollection"
 						}]
 					}, {
-						"name": "refParentId",
-						"value": "textPartTypeCollectionVar"
+						name: "refParentId",
+						value: "textPartTypeCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "default"
+						name: "finalValue",
+						value: "default"
 					}],
-					"attributes": {
-						"type": "collectionVariable"
+					attributes: {
+						type: "collectionVariable"
 					}
 				};
 			case "systemLanguagesCollectionVar":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "systemLanguagesCollectionVar"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "systemLanguagesCollectionVar"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionVariable"
+								name: "linkedRecordId",
+								value: "metadataCollectionVariable"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "lang"
+						name: "nameInData",
+						value: "lang"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollectionVarText"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refCollection",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						name: "refCollection",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollection"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollection"
 						}]
 					}],
-					"attributes": {
-						"type": "collectionVariable"
+					attributes: {
+						type: "collectionVariable"
 					}
 				};
 			case "systemLanguagesCollection":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "systemLanguagesCollection"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "systemLanguagesCollection"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataItemCollection"
+								name: "linkedRecordId",
+								value: "metadataItemCollection"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "systemLanguagesCollection"
+						name: "nameInData",
+						value: "systemLanguagesCollection"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "textSystemOne"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "textSystemOne"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollectionTextId"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollectionTextId"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "textSystemOne"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "textSystemOne"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollectionDefTextId"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollectionDefTextId"
 						}]
 					}, {
-						"name": "collectionItemReferences",
-						"children": [{
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionItem"
+						name: "collectionItemReferences",
+						children: [{
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionItem"
 							}, {
-								"name": "linkedRecordId",
-								"value": "svItem"
+								name: "linkedRecordId",
+								value: "svItem"
 							}],
-							"repeatId": "1"
+							repeatId: "1"
 						}, {
-							"name": "ref",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionItem"
+							name: "ref",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionItem"
 							}, {
-								"name": "linkedRecordId",
-								"value": "enItem"
+								name: "linkedRecordId",
+								value: "enItem"
 							}],
-							"repeatId": "2"
+							repeatId: "2"
 						}]
 					}],
-					"attributes": {
-						"type": "itemCollection"
+					attributes: {
+						type: "itemCollection"
 					}
 				};
 			case "svItem":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "svItem"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "svItem"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionItem"
+								name: "linkedRecordId",
+								value: "metadataCollectionItem"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "sv"
+						name: "nameInData",
+						value: "sv"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "svItemText"
+							name: "linkedRecordId",
+							value: "svItemText"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "svItemDefText"
+							name: "linkedRecordId",
+							value: "svItemDefText"
 						}]
 					}],
-					"attributes": {
-						"type": "collectionItem"
+					attributes: {
+						type: "collectionItem"
 					}
 				};
 			case "enItem":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "enItem"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "enItem"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionItem"
+								name: "linkedRecordId",
+								value: "metadataCollectionItem"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "en"
+						name: "nameInData",
+						value: "en"
 					}, {
-						"name": "textId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "textId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "enItemText"
+							name: "linkedRecordId",
+							value: "enItemText"
 						}]
 					}, {
-						"name": "defTextId",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "coraText"
+						name: "defTextId",
+						children: [{
+							name: "linkedRecordType",
+							value: "coraText"
 						}, {
-							"name": "linkedRecordId",
-							"value": "enItemDefText"
+							name: "linkedRecordId",
+							value: "enItemDefText"
 						}]
 					}],
-					"attributes": {
-						"type": "collectionItem"
+					attributes: {
+						type: "collectionItem"
 					}
 				};
 			case "recordInfoTextGroup":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "recordInfoTextGroup"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "recordInfoTextGroup"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataGroup"
+								name: "linkedRecordId",
+								value: "metadataGroup"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "recordInfo"
+						name: "nameInData",
+						value: "recordInfo"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordInfoText"
+							name: "linkedRecordId",
+							value: "recordInfoText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "recordInfoDefText"
+							name: "linkedRecordId",
+							value: "recordInfoDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "idTextTextVar"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "idTextTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "1"
+							repeatId: "1"
 						}, {
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "typeTextVar"
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "typeTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "2"
+							repeatId: "2"
 						}, {
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "createdByLink"
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "createdByLink"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "3"
+							repeatId: "3"
 						}, {
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "dataDividerLink"
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "dataDividerLink"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "4"
+							repeatId: "4"
 						}]
 					}],
-					"attributes": {
-						"type": "group"
+					attributes: {
+						type: "group"
 					}
 				};
 			case "textPartSvGroup":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textPartSvGroup"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textPartSvGroup"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataGroup"
+								name: "linkedRecordId",
+								value: "metadataGroup"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "textPart"
+						name: "nameInData",
+						value: "textPart"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartSvGroupText"
+							name: "linkedRecordId",
+							value: "textPartSvGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartSvGroupDefText"
+							name: "linkedRecordId",
+							value: "textPartSvGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refParentId",
-						"value": "textPartDefaultGroup"
+						name: "refParentId",
+						value: "textPartDefaultGroup"
 					}, {
-						"children": [{
-							"repeatId": "0",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "0",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textPartTypeDefaultCollectionVar"
+								name: "linkedRecordId",
+								value: "textPartTypeDefaultCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}, {
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "systemLanguageSvCollectionVar"
+								name: "linkedRecordId",
+								value: "systemLanguageSvCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "textTextVar"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "textTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "1"
+							repeatId: "1"
 						}]
 					}],
-					"attributes": {
-						"type": "group"
+					attributes: {
+						type: "group"
 					}
 				};
 			case "systemLanguageSvCollectionVar":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "systemLanguageSvCollectionVar"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "systemLanguageSvCollectionVar"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionVariable"
+								name: "linkedRecordId",
+								value: "metadataCollectionVariable"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "lang"
+						name: "nameInData",
+						value: "lang"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguageSvCollectionVarText"
+							name: "linkedRecordId",
+							value: "systemLanguageSvCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguageSvCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "systemLanguageSvCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refCollection",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						name: "refCollection",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollection"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollection"
 						}]
 					}, {
-						"name": "refParentId",
-						"value": "systemLanguagesCollectionVar"
+						name: "refParentId",
+						value: "systemLanguagesCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "sv"
+						name: "finalValue",
+						value: "sv"
 					}],
-					"attributes": {
-						"type": "collectionVariable"
+					attributes: {
+						type: "collectionVariable"
 					}
 				};
 			case "textPartEnGroup":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textPartEnGroup"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textPartEnGroup"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataGroup"
+								name: "linkedRecordId",
+								value: "metadataGroup"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "textPart"
+						name: "nameInData",
+						value: "textPart"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartEnGroupText"
+							name: "linkedRecordId",
+							value: "textPartEnGroupText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartEnGroupDefText"
+							name: "linkedRecordId",
+							value: "textPartEnGroupDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refParentId",
-						"value": "textPartAlternativeGroup"
+						name: "refParentId",
+						value: "textPartAlternativeGroup"
 					}, {
-						"children": [{
-							"repeatId": "0",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+						children: [{
+							repeatId: "0",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "textPartTypeAlternativeCollectionVar"
+								name: "linkedRecordId",
+								value: "textPartTypeAlternativeCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}, {
-							"repeatId": "1",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "metadataCollectionVariable"
+							repeatId: "1",
+							children: [{
+								name: "linkedRecordType",
+								value: "metadataCollectionVariable"
 							}, {
-								"name": "linkedRecordId",
-								"value": "systemLanguageEnCollectionVar"
+								name: "linkedRecordId",
+								value: "systemLanguageEnCollectionVar"
 							}],
-							"name": "ref"
+							name: "ref"
 						}],
-						"name": "attributeReferences"
+						name: "attributeReferences"
 					}, {
-						"name": "childReferences",
-						"children": [{
-							"name": "childReference",
-							"children": [{
-								"name": "ref",
-								"value": "textTextVar"
+						name: "childReferences",
+						children: [{
+							name: "childReference",
+							children: [{
+								name: "ref",
+								value: "textTextVar"
 							}, {
-								"name": "repeatMin",
-								"value": "1"
+								name: "repeatMin",
+								value: "1"
 							}, {
-								"name": "repeatMax",
-								"value": "1"
+								name: "repeatMax",
+								value: "1"
 							}],
-							"repeatId": "1"
+							repeatId: "1"
 						}]
 					}],
-					"attributes": {
-						"type": "group"
+					attributes: {
+						type: "group"
 					}
 				};
 			case "textPartTypeAlternativeCollectionVar":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "textPartTypeAlternativeCollectionVar"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "textPartTypeAlternativeCollectionVar"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionVariable"
+								name: "linkedRecordId",
+								value: "metadataCollectionVariable"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "type"
+						name: "nameInData",
+						value: "type"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeAlternativeCollectionVarText"
+							name: "linkedRecordId",
+							value: "textPartTypeAlternativeCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeAlternativeCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "textPartTypeAlternativeCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refCollection",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						name: "refCollection",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textPartTypeCollection"
+							name: "linkedRecordId",
+							value: "textPartTypeCollection"
 						}]
 					}, {
-						"name": "refParentId",
-						"value": "textPartTypeCollectionVar"
+						name: "refParentId",
+						value: "textPartTypeCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "alternative"
+						name: "finalValue",
+						value: "alternative"
 					}],
-					"attributes": {
-						"type": "collectionVariable"
+					attributes: {
+						type: "collectionVariable"
 					}
 				};
 			case "systemLanguageEnCollectionVar":
 				return {
-					"name": "metadata",
-					"children": [{
-						"name": "recordInfo",
-						"children": [{
-							"name": "id",
-							"value": "systemLanguageEnCollectionVar"
+					name: "metadata",
+					children: [{
+						name: "recordInfo",
+						children: [{
+							name: "id",
+							value: "systemLanguageEnCollectionVar"
 						}, {
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "recordType"
+							children: [{
+								name: "linkedRecordType",
+								value: "recordType"
 							}, {
-								"name": "linkedRecordId",
-								"value": "metadataCollectionVariable"
+								name: "linkedRecordId",
+								value: "metadataCollectionVariable"
 							}],
-							"name": "type"
+							name: "type"
 						}, {
-							"name": "createdBy",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "user"
+							name: "createdBy",
+							children: [{
+								name: "linkedRecordType",
+								value: "user"
 							}, {
-								"name": "linkedRecordId",
-								"value": "12345"
+								name: "linkedRecordId",
+								value: "12345"
 							}]
 						}, {
-							"name": "dataDivider",
-							"children": [{
-								"name": "linkedRecordType",
-								"value": "system"
+							name: "dataDivider",
+							children: [{
+								name: "linkedRecordType",
+								value: "system"
 							}, {
-								"name": "linkedRecordId",
-								"value": "cora"
+								name: "linkedRecordId",
+								value: "cora"
 							}]
 						}]
 					}, {
-						"name": "nameInData",
-						"value": "lang"
+						name: "nameInData",
+						value: "lang"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguageEnCollectionVarText"
+							name: "linkedRecordId",
+							value: "systemLanguageEnCollectionVarText"
 						}],
-						"name": "textId"
+						name: "textId"
 					}, {
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "text"
+						children: [{
+							name: "linkedRecordType",
+							value: "text"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguageEnCollectionVarDefText"
+							name: "linkedRecordId",
+							value: "systemLanguageEnCollectionVarDefText"
 						}],
-						"name": "defTextId"
+						name: "defTextId"
 					}, {
-						"name": "refCollection",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadataItemCollection"
+						name: "refCollection",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataItemCollection"
 						}, {
-							"name": "linkedRecordId",
-							"value": "systemLanguagesCollection"
+							name: "linkedRecordId",
+							value: "systemLanguagesCollection"
 						}]
 					}, {
-						"name": "refParentId",
-						"value": "systemLanguagesCollectionVar"
+						name: "refParentId",
+						value: "systemLanguagesCollectionVar"
 					}, {
-						"name": "finalValue",
-						"value": "en"
+						name: "finalValue",
+						value: "en"
 					}],
-					"attributes": {
-						"type": "collectionVariable"
+					attributes: {
+						type: "collectionVariable"
 					}
 				};
 
@@ -12445,32 +12472,32 @@ function MetadataProviderStub() {
 
 	this.getTextById = function() {
 		return {
-			"name": "text",
-			"children": [{
-				"name": "recordInfo",
-				"children": [{
-					"name": "id",
-					"value": "my2Text"
+			name: "text",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "id",
+					value: "my2Text"
 				}]
 			}, {
-				"name": "textPart",
-				"attributes": {
-					"type": "default",
+				name: "textPart",
+				attributes: {
+					type: "default",
 					"lang": "sv"
 				},
-				"children": [{
-					"name": "text",
-					"value": "Min andra text på svenska"
+				children: [{
+					name: "text",
+					value: "Min andra text på svenska"
 				}]
 			}, {
-				"name": "textPart",
-				"attributes": {
-					"type": "alternative",
+				name: "textPart",
+				attributes: {
+					type: "alternative",
 					"lang": "en"
 				},
-				"children": [{
-					"name": "text",
-					"value": "My second text in english"
+				children: [{
+					name: "text",
+					value: "My second text in english"
 				}]
 			}]
 		};

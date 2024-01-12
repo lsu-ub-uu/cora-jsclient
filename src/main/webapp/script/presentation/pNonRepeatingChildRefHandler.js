@@ -23,8 +23,12 @@ var CORA = (function(cora) {
 		let view;
 		let topLevelMetadataIds = {};
 		let storedValuePositions = {};
-
+		let metadataHelper;
+		const metadataProvider = dependencies.providers.metadataProvider;
 		const start = function() {
+			metadataHelper = CORA.metadataHelper({
+				metadataProvider: metadataProvider
+			});
 			createView();
 			calculateHandledTopLevelMetadataIds(spec.cPresentation);
 			subscribeToAddMessagesForParentPath();
@@ -65,10 +69,17 @@ var CORA = (function(cora) {
 			let cPresentationsOf = CORA.coraData(cPresentation
 				.getFirstChildByNameInData("presentationsOf"));
 			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
 			listPresentationOf.forEach(function(child) {
-				let presentationOfId = CORA.coraData(child).getFirstAtomicValueByNameInData(
-					"linkedRecordId");
-				topLevelMetadataIds[presentationOfId] = "exists";
+				let cChild = CORA.coraData(child);
+				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
+				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+					cParentMetadata, presentationOfId);
+				if(cParentMetadataChildRefPart.getData() != undefined){
+					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
+					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+					topLevelMetadataIds[metadataId] = "exists";
+				}
 			});
 		};
 
@@ -84,10 +95,10 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToAddMessagesForParentPath = function() {
-			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, subscribeMsg);
+			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
 		};
 
-		const subscribeMsg = function(dataFromMsg) {
+		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
@@ -232,7 +243,7 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			subscribeMsg: subscribeMsg,
+			possiblySubscribeOnAddMsg: possiblySubscribeOnAddMsg,
 			handleMsgToDeterminDataState: handleMsgToDeterminDataState,
 			publishPresentationShown: publishPresentationShown
 		});

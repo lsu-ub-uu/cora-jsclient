@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -28,41 +29,41 @@ QUnit.module("metadata/metadataHelperTest.js", {
 });
 
 QUnit.test("testNoAttributes", function(assert) {
-	var attributesObject = this.metadataHelper
+	let attributesObject = this.metadataHelper
 			.collectAttributesAsObjectForMetadataId("groupIdOneTextChild");
 	assert.stringifyEqual(attributesObject, {});
 });
 
 QUnit.test("testOneAttributes", function(assert) {
-	var expectedObject = {
+	let expectedObject = {
 		"anAttribute" : [ "aFinalValue" ]
 	};
-	var attributesObject = this.metadataHelper
+	let attributesObject = this.metadataHelper
 			.collectAttributesAsObjectForMetadataId("groupIdOneTextChildOneAttribute");
 	assert.stringifyEqual(attributesObject, expectedObject);
 });
 
 QUnit.test("testTwoAttributes", function(assert) {
-	var expectedObject = {
+	let expectedObject = {
 		"anAttribute" : [ "aFinalValue" ],
 		"anOtherAttribute" : [ "aOtherFinalValue" ]
 	};
-	var attributesObject = this.metadataHelper
+	let attributesObject = this.metadataHelper
 			.collectAttributesAsObjectForMetadataId("groupIdOneTextChildTwoAttributes");
 	assert.stringifyEqual(attributesObject, expectedObject);
 });
 
 QUnit.test("testAbstractAttributes", function(assert) {
-	var expectedObject = {
+	let expectedObject = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attributesObject = this.metadataHelper
+	let attributesObject = this.metadataHelper
 			.collectAttributesAsObjectForMetadataId("textVarRepeat1to3InGroupParentAttribute");
 	assert.stringifyEqual(attributesObject, expectedObject);
 });
 
 QUnit.test("testGetChildRefPartOfMetadata", function(assert) {
-	var parentMetadata = {
+	let parentMetadata = {
 		"name" : "metadata",
 		"attributes" : {
 			"type" : "group"
@@ -141,9 +142,9 @@ QUnit.test("testGetChildRefPartOfMetadata", function(assert) {
 		} ]
 	};
 
-	var cParentMetadataChildRefPart = this.metadataHelper.getChildRefPartOfMetadata(CORA
+	let cParentMetadataChildRefPart = this.metadataHelper.getChildRefPartOfMetadata(CORA
 			.coraData(parentMetadata), "textVariableId");
-	var expectedData = {
+	let expectedData = {
 		"name" : "childReference",
 		"repeatId" : "1",
 		"children" : [ {
@@ -171,7 +172,7 @@ QUnit.test("testGetChildRefPartOfMetadata", function(assert) {
 	assert.stringifyEqual(cParentMetadataChildRefPart.getData(), expectedData);
 });
 QUnit.test("testGetChildRefPartOfMetadata2", function(assert) {
-	var parentMetadata = {
+	let parentMetadata = {
 		"children" : [ {
 			"children" : [ {
 				"name" : "id",
@@ -301,9 +302,9 @@ QUnit.test("testGetChildRefPartOfMetadata2", function(assert) {
 		}
 	};
 
-	var cParentMetadataChildRefPart = this.metadataHelper.getChildRefPartOfMetadata(CORA
+	let cParentMetadataChildRefPart = this.metadataHelper.getChildRefPartOfMetadata(CORA
 			.coraData(parentMetadata), "textPartDefaultGroup");
-	var expectedData = {
+	let expectedData = {
 		"repeatId" : "2",
 		"children" : [ {
 			"name" : "ref",
@@ -336,114 +337,114 @@ QUnit.test("testSameAttributeUndefined", function(assert) {
 });
 
 QUnit.test("testSameAttributeOneUndefined", function(assert) {
-	var attribute1 = {};
+	let attribute1 = {};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, undefined));
-	var attribute2 = {};
+	let attribute2 = {};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(undefined, attribute2));
 });
 
 QUnit.test("testSameAttributeEmpty", function(assert) {
-	var attribute1 = {};
-	var attribute2 = {};
+	let attribute1 = {};
+	let attribute2 = {};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testSameAttributeOneEmpty", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"anAttribute" : [ "aFinalValue" ]
 	};
-	var attribute2 = {};
+	let attribute2 = {};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testfirstAttributesExistsInSecondame", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testfirstAttributesExistsInSecondReversedAttributes", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testSameAttributeDifferentAttributeValues", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues2", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues3", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues4", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues5", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues6", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferent", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVarNOT" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentName", function(assert) {
-	var attribute1 = {
+	let attribute1 = {
 		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
 	};
-	var attribute2 = {
+	let attribute2 = {
 		"recordTypeTypeCollectionVarNOT" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));

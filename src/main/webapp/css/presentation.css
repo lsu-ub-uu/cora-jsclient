@@ -529,51 +529,63 @@ position: relative;
 }
 
 .workView .twelveChildStyle {
-	width: 100%;
+/* 	width: 100%; */
+	width: 96%;
 }
 
 .workView .elevenChildStyle {
-	width: 91%;
+/* 	width: 91%; */
+	width: 87%;
 }
 
 .workView .tenChildStyle {
-	width: 83%;
+/* 	width: 83%; */
+	width: 80%;
 }
 
 .workView .nineChildStyle {
-	width: 75%;
+/* 	width: 75%; */
+	width: 72%;
 }
 
 .workView .eightChildStyle {
-	width: 66%;
+/* 	width: 66%; */
+	width: 63%;
 }
 
 .workView .sevenChildStyle {
-	width: 58%;
+/* 	width: 58%; */
+	width: 55%;
 }
 
 .workView .sixChildStyle {
-	width: 50%;
+/* 	width: 50%; */
+	width: 48%;
 }
 
 .workView .fiveChildStyle {
-	width: 41%;
+/* 	width: 41%; */
+	width: 39%;
 }
 
 .workView .fourChildStyle {
-	width: 33%;
+/* 	width: 33%; */
+	width: 31%;
 }
 
 .workView .threeChildStyle {
-	width: 25%;
+/* 	width: 25%; */
+	width: 23%;
 }
 
 .workView .twoChildStyle {
-	width: 16%;
+/* 	width: 16%; */
+	width: 15%;
 }
 
 .workView .oneChildStyle {
-	width: 8%;
+/* 	width: 8%; */
+	width: 7%;
 }
 
 .workView .zeroChildStyle {

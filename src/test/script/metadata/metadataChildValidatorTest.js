@@ -23,31 +23,31 @@ QUnit.module("metadata/metadataChildValidatorTest.js", {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
-			"metadataProvider": this.metadataProvider,
-			"pubSub": this.pubSub
+			metadataProvider: this.metadataProvider,
+			pubSub: this.pubSub
 		};
 		this.spec = {
 			path: [],
 			dataHolder: CORATEST.dataHolderSpy(),
 			childReference: {
-				"name": "childReference",
-				"repeatId": "0",
-				"children": [
+				name: "childReference",
+				repeatId: "0",
+				children: [
 					{
-						"name": "ref",
-						"children": [{
-							"name": "linkedRecordType",
-							"value": "metadata"
+						name: "ref",
+						children: [{
+							name: "linkedRecordType",
+							value: "metadata"
 						}, {
-							"name": "linkedRecordId",
-							"value": "textVariableId"
+							name: "linkedRecordId",
+							value: "textVariableId"
 						}]
 					}, {
-						"name": "repeatMin",
-						"value": "1"
+						name: "repeatMin",
+						value: "1"
 					}, {
-						"name": "repeatMax",
-						"value": "1"
+						name: "repeatMax",
+						value: "1"
 					}]
 			}
 		};
@@ -99,24 +99,24 @@ CORATEST.assertValidationResultOk = function(assert, validationResult, pubSub) {
 CORATEST.createChildReference =
 	function(linkedRecordId, repeatId, repeatMin, repeatMax) {
 		return {
-			"name": "childReference",
-			"repeatId": repeatId,
-			"children": [
+			name: "childReference",
+			repeatId: repeatId,
+			children: [
 				{
-					"name": "ref",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadata"
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
 					}, {
-						"name": "linkedRecordId",
-						"value": linkedRecordId
+						name: "linkedRecordId",
+						value: linkedRecordId
 					}]
 				}, {
-					"name": "repeatMin",
-					"value": repeatMin
+					name: "repeatMin",
+					value: repeatMin
 				}, {
-					"name": "repeatMax",
-					"value": repeatMax
+					name: "repeatMax",
+					value: repeatMax
 				}]
 		};
 	};
@@ -149,10 +149,10 @@ QUnit.test("testValidateGroupIdOneTextChild1to1WithDataEmptyValue", function(ass
 CORATEST.createValidationErrorMessage =
 	function(metadataId) {
 		return {
-			"type": "validationError",
-			"message": {
-				"metadataId": metadataId,
-				"path": [metadataId]
+			type: "validationError",
+			message: {
+				metadataId: metadataId,
+				path: [metadataId]
 			}
 		};
 	};
@@ -201,26 +201,26 @@ QUnit.test("testValidateGroupIdOneCollectionChild1toXWithDataEmptyValue", functi
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerGroup = [{
-		"name": "groupIdTwoTextChild",
-		"children": [{
-			"name": "textVariableId",
-			"value": "A Value"
+		name: "groupIdTwoTextChild",
+		children: [{
+			name: "textVariableId",
+			value: "A Value"
 		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
+			name: "textVariableId2",
+			value: "AValue2"
 		}]
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerGroup);
 
 	let containerChild1 = [{
-		"name": "textVariableId",
-		"value": "A Value"
+		name: "textVariableId",
+		value: "A Value"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 
 	let containerChild2 = [{
-		"name": "textVariableId2",
-		"value": "AValue2"
+		name: "textVariableId2",
+		value: "AValue2"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -239,26 +239,26 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithData", function(assert
 QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerGroup = [{
-		"name": "groupIdTwoTextChild",
+		name: "groupIdTwoTextChild",
 		"children": [{
-			"name": "textVariableId",
-			"value": ""
+			name: "textVariableId",
+			value: ""
 		}, {
-			"name": "textVariableId2",
-			"value": "AValue2"
+			name: "textVariableId2",
+			value: "AValue2"
 		}]
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerGroup);
 
 	let containerChild1 = [{
-		"name": "textVariableId",
-		"value": ""
+		name: "textVariableId",
+		value: ""
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 
 	let containerChild2 = [{
-		"name": "textVariableId2",
-		"value": "AValue2"
+		name: "textVariableId2",
+		value: "AValue2"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -273,10 +273,10 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	let validationError = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableId",
-			"path": ["groupIdTwoTextChild", "textVariableId"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableId",
+			path: ["groupIdTwoTextChild", "textVariableId"]
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
@@ -288,10 +288,10 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 
 //QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
 //	this.spec.data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
+//		name: "groupIdOneTextChildRepeat0to1",
 //		"children": [{
-//			"name": "textVariableId",
-//			"value": "A Value"
+//			name: "textVariableId",
+//			value: "A Value"
 //		}]
 //	};
 //
@@ -305,10 +305,10 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 //
 //QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
 //	this.spec.data = {
-//		"name": "groupIdOneTextChildRepeat0to1",
+//		name: "groupIdOneTextChildRepeat0to1",
 //		"children": [{
-//			"name": "textVariableId",
-//			"value": ""
+//			name: "textVariableId",
+//			value: ""
 //		}]
 //	};
 //	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
@@ -327,10 +327,10 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 CORATEST.createRemoveMessage =
 	function(metadataId) {
 		return {
-			"type": "remove",
-			"message": {
-				"type": "remove",
-				"path": [metadataId]
+			type: "remove",
+			message: {
+				type: "remove",
+				path: [metadataId]
 			}
 		};
 	};
@@ -355,8 +355,8 @@ QUnit.test("testValidateOneChildRepeat0to1NoData", function(assert) {
 QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "A Value",
+		name: "textVariableId",
+		value: "A Value",
 		"repeatId": "one"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -373,12 +373,12 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupWithData", function(assert)
 QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "",
+		name: "textVariableId",
+		value: "",
 		"repeatId": "one"
 	}, {
-		"name": "textVariableId",
-		"value": "",
+		name: "textVariableId",
+		value: "",
 		"repeatId": "two"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -395,19 +395,19 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 	assert.strictEqual(pubSubMessages.length, 2);
 
 	let removeMessage = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["textVariableId.two"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["textVariableId.two"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
 
 	let validationError = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableId",
-			"path": ["textVariableId.one"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableId",
+			path: ["textVariableId.one"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[1], validationError);
@@ -417,16 +417,16 @@ QUnit.test("testValidateTextVariableRepeat1to3InGroupEmptyValue", function(asser
 QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "A Value",
+		name: "textVariableId",
+		value: "A Value",
 		"repeatId": "one"
 	}, {
-		"name": "textVariableId",
-		"value": "",
+		name: "textVariableId",
+		value: "",
 		"repeatId": "two"
 	}, {
-		"name": "textVariableId",
-		"value": "A Value3",
+		name: "textVariableId",
+		value: "A Value3",
 		"repeatId": "three"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -444,10 +444,10 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 
 
 	let validationError = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableId",
-			"path": ["textVariableId.two"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableId",
+			path: ["textVariableId.two"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -457,8 +457,8 @@ QUnit.test("testValidateOneChildRepeat3to3WithEmptyValueForOne", function(assert
 QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "A Value",
+		name: "textVariableId",
+		value: "A Value",
 		"repeatId": "one"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -475,12 +475,12 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForOne", function(assert) {
 QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "A Value",
+		name: "textVariableId",
+		value: "A Value",
 		"repeatId": "one"
 	}, {
-		"name": "textVariableId",
-		"value": "A Value2",
+		name: "textVariableId",
+		value: "A Value2",
 		"repeatId": "two"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -497,12 +497,12 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
-		"name": "textVariableId",
-		"value": "",
+		name: "textVariableId",
+		value: "",
 		"repeatId": "one"
 	}, {
-		"name": "textVariableId",
-		"value": "A Value2",
+		name: "textVariableId",
+		value: "A Value2",
 		"repeatId": "two"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
@@ -519,10 +519,10 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 	assert.strictEqual(pubSubMessages.length, 1);
 
 	let removeMessage = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["textVariableId.one"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["textVariableId.one"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
@@ -531,10 +531,10 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 
 //QUnit.only("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
 ////	this.spec.data = {
-////		"name": "groupIdOneTextChildOneAttribute",
+////		name: "groupIdOneTextChildOneAttribute",
 ////		"children": [{
-////			"name": "textVariableId",
-////			"value": "A Value"
+////			name: "textVariableId",
+////			value: "A Value"
 ////		}],
 ////		"attributes": {
 ////			"anAttribute": "aFinalValue"
@@ -573,8 +573,8 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", fu
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 	let containerChild2 = [{
-		"name": "textVariableId",
-		"value": "A Value2"
+		name: "textVariableId",
+		value: "A Value2"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -618,8 +618,8 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 		}];
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 		let containerChild2 = [{
-			"name": "textVariableId",
-			"value": ""
+			name: "textVariableId",
+			value: ""
 		}];
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -643,10 +643,10 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 		assert.strictEqual(pubSubMessages.length, 1);
 
 		let validationError = {
-			"type": "validationError",
-			"message": {
-				"metadataId": "textVariableId",
-				"path": ["groupIdOneTextChildOneAttribute", "textVariableId"]
+			type: "validationError",
+			message: {
+				metadataId: "textVariableId",
+				path: ["groupIdOneTextChildOneAttribute", "textVariableId"]
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -676,8 +676,8 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithData", fu
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 	let containerChild2 = [{
-		"name": "textVariableId",
-		"value": "A Value3"
+		name: "textVariableId",
+		value: "A Value3"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -737,8 +737,8 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 	let containerChild1 = containerChild0[0].children;
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 	let containerChild2 = [{
-		"name": "textVariableId",
-		"value": ""
+		name: "textVariableId",
+		value: ""
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild2);
 
@@ -769,10 +769,10 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 	assert.strictEqual(pubSubMessages.length, 1);
 
 	let validationError = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableId",
-			"path": ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes", "textVariableId"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableId",
+			path: ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes", "textVariableId"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], validationError);
@@ -896,10 +896,10 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 		assert.strictEqual(pubSubMessages.length, 2);
 
 		let validationError = {
-			"type": "validationError",
-			"message": {
-				"metadataId": "textVar",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+			type: "validationError",
+			message: {
+				metadataId: "textVar",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 
 			}
@@ -907,10 +907,10 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 		assert.stringifyEqual(pubSubMessages[0], validationError);
 
 		let removeMessage = {
-			"type": "remove",
-			"message": {
-				"type": "remove",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+			type: "remove",
+			message: {
+				type: "remove",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
@@ -1106,39 +1106,39 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		let messages = this.pubSub.getMessages();
 		assert.strictEqual(messages.length, 4);
 		let validationError = {
-			"type": "validationError",
-			"message": {
-				"metadataId": "textVar",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+			type: "validationError",
+			message: {
+				metadataId: "textVar",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
 
 		let removeMessage1 = {
-			"type": "remove",
-			"message": {
-				"type": "remove",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+			type: "remove",
+			message: {
+				type: "remove",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
 		assert.stringifyEqual(messages[1], removeMessage1);
 		let removeMessage2 = {
-			"type": "remove",
-			"message": {
-				"type": "remove",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0_2",
+			type: "remove",
+			message: {
+				type: "remove",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0_2",
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[2], removeMessage2);
 
 		let removeMessage3 = {
-			"type": "remove",
-			"message": {
-				"type": "remove",
-				"path": ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"]
+			type: "remove",
+			message: {
+				type: "remove",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"]
 			}
 		};
 		assert.stringifyEqual(messages[3], removeMessage3);
@@ -1311,45 +1311,45 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 	assert.strictEqual(messages.length, 5);
 
 	let validationError = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVar",
-			"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
+		type: "validationError",
+		message: {
+			metadataId: "textVar",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 		}
 	};
 	assert.stringifyEqual(messages[0], validationError);
 
 	let validationError2 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1"]
 		}
 	};
 	assert.stringifyEqual(messages[1], validationError2);
 	let validationError3 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVar",
-			"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1", "textVar.one22"]
+		type: "validationError",
+		message: {
+			metadataId: "textVar",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1", "textVar.one22"]
 		}
 	};
 	assert.stringifyEqual(messages[2], validationError3);
 
 	let validationError4 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1"]
 		}
 	};
 	assert.stringifyEqual(messages[3], validationError4);
 
 	let validationError5 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"]
 		}
 	};
 	assert.stringifyEqual(messages[4], validationError5);
@@ -1517,19 +1517,19 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		let messages = this.pubSub.getMessages();
 		assert.strictEqual(messages.length, 2);
 		let validationError = {
-			"type": "validationError",
-			"message": {
-				"metadataId": "textVar",
-				"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOneAttribute",
+			type: "validationError",
+			message: {
+				metadataId: "textVar",
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOneAttribute",
 					"textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
 		let validationError1 = {
-			"type": "validationError",
-			"message": {
-				"metadataId": "textVar",
-				"path": ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOtherAttribute",
+			type: "validationError",
+			message: {
+				metadataId: "textVar",
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOtherAttribute",
 					"textVar.one22"]
 			}
 		};
@@ -1611,10 +1611,10 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 	assert.strictEqual(messages.length, 1);
 
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "linkedRecordIdTextVar",
-			"path": ["groupIdOneRecordLinkChild", "myLink", "linkedRecordIdTextVar"]
+		type: "validationError",
+		message: {
+			metadataId: "linkedRecordIdTextVar",
+			path: ["groupIdOneRecordLinkChild", "myLink", "linkedRecordIdTextVar"]
 		}
 	};
 
@@ -1662,26 +1662,26 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 	assert.strictEqual(messages.length, 3);
 
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "linkedRecordIdTextVar",
-			"path": ["groupId0to1RecordLinkChild", "myLink", "linkedRecordIdTextVar"]
+		type: "validationError",
+		message: {
+			metadataId: "linkedRecordIdTextVar",
+			path: ["groupId0to1RecordLinkChild", "myLink", "linkedRecordIdTextVar"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
 	let expectedMessage2 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["groupId0to1RecordLinkChild", "myLink"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["groupId0to1RecordLinkChild", "myLink"]
 		}
 	};
 	assert.stringifyEqual(messages[1], expectedMessage2);
 	let expectedMessage3 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["groupId0to1RecordLinkChild"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["groupId0to1RecordLinkChild"]
 		}
 	};
 	assert.stringifyEqual(messages[2], expectedMessage3);
@@ -1778,10 +1778,10 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 	assert.strictEqual(messages.length, 1);
 
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "linkedRepeatIdTextVar",
-			"path": ["groupIdOneRecordLinkChildWithPath", "myPathLink", "linkedRepeatIdTextVar"]
+		type: "validationError",
+		message: {
+			metadataId: "linkedRepeatIdTextVar",
+			path: ["groupIdOneRecordLinkChildWithPath", "myPathLink", "linkedRepeatIdTextVar"]
 		}
 	};
 
@@ -1839,10 +1839,10 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "numVariableId",
-			"path": ["groupIdOneNumberChild", "numVariableId"]
+		type: "validationError",
+		message: {
+			metadataId: "numVariableId",
+			path: ["groupIdOneNumberChild", "numVariableId"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -1875,18 +1875,18 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 	assert.strictEqual(messages.length, 2);
 
 	let expectedResult = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["groupIdOneNumberNotMandatoryChild", "numVariableId"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["groupIdOneNumberNotMandatoryChild", "numVariableId"]
 		}
 	};
 	assert.deepEqual(messages[0], expectedResult);
 	let expectedResult2 = {
-		"type": "remove",
-		"message": {
-			"type": "remove",
-			"path": ["groupIdOneNumberNotMandatoryChild"]
+		type: "remove",
+		message: {
+			type: "remove",
+			path: ["groupIdOneNumberNotMandatoryChild"]
 		}
 	};
 	assert.deepEqual(messages[1], expectedResult2);
@@ -2038,10 +2038,10 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "trueFalseTrueIsFinalValueCollectionVar",
-			"path": ["trueFalseTrueIsFinalValueCollectionVar"]
+		type: "validationError",
+		message: {
+			metadataId: "trueFalseTrueIsFinalValueCollectionVar",
+			path: ["trueFalseTrueIsFinalValueCollectionVar"]
 		}
 	};
 
@@ -2130,10 +2130,10 @@ QUnit.test("testTextVariableWithAnAttributeChoiceNoAttributeValue", function(ass
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttributeChoice",
-			"path": ["textVariableWithAnAttributeChoice", "@anAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["textVariableWithAnAttributeChoice", "@anAttributeChoice"]
 		}
 	};
 
@@ -2168,18 +2168,18 @@ QUnit.test("testTextVariableWithAnAttributeChoiceNoValueAndNoAttributeValue", fu
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttributeChoice",
-			"path": ["textVariableWithAnAttributeChoice", "@anAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["textVariableWithAnAttributeChoice", "@anAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
 	let expectedMessage2 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableWithAnAttributeChoice",
-			"path": ["textVariableWithAnAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableWithAnAttributeChoice",
+			path: ["textVariableWithAnAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[1], expectedMessage2);
@@ -2264,10 +2264,10 @@ QUnit.test("testTextVariableWithOneAttributeChoiceWithoutValueAnOneFinalAttribut
 	assert.strictEqual(messages.length, 1);
 
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttributeChoice",
-			"path": ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -2312,10 +2312,10 @@ QUnit.test("testTextVariableWithOneAttributeChoiceAnOneFinalAttributeWithoutValu
 	assert.strictEqual(messages.length, 1);
 
 	let expectedMessage = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttribute",
-			"path": ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttribute",
+			path: ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
@@ -2361,28 +2361,28 @@ QUnit.test("testTextVariableWithOneAttributeChoiceAnOneFinalAttributeAllWithoutV
 	assert.strictEqual(messages.length, 3);
 
 	let expectedMessage0 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttribute",
-			"path": ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttribute",
+			path: ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage0);
 
 	let expectedMessage1 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttributeChoice",
-			"path": ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[1], expectedMessage1);
 
 	let expectedMessage2 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableWithAnAttributeAndAnAttributeChoice",
-			"path": ["textVariableWithAnAttributeAndAnAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableWithAnAttributeAndAnAttributeChoice",
+			path: ["textVariableWithAnAttributeAndAnAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[2], expectedMessage2);
@@ -2488,10 +2488,10 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 	assert.strictEqual(messages.length, 2);
 	
 	let expectedMessage0 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "textVariableWithAnAttributeAndAnAttributeChoice",
-			"path": ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "textVariableWithAnAttributeAndAnAttributeChoice",
+			path: ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage0);
@@ -2556,10 +2556,10 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 	assert.strictEqual(messages.length, 1);
 	
 	let expectedMessage0 = {
-		"type": "validationError",
-		"message": {
-			"metadataId": "anAttributeChoice",
-			"path": ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
+		type: "validationError",
+		message: {
+			metadataId: "anAttributeChoice",
+			path: ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage0);

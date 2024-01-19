@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
 		pubSub) {
-		let result = {
+		const result = {
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
@@ -112,7 +112,7 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
-
+			 
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}
@@ -142,8 +142,8 @@ var CORA = (function(cora) {
 				result.containsValuableData = true;
 			}
 			result.validationMessage = {
-				"metadataId": metadataId,
-				"path": nextLevelPath
+				metadataId: metadataId,
+				path: nextLevelPath
 			};
 			result.sendValidationMessages = false;
 		};
@@ -165,23 +165,23 @@ var CORA = (function(cora) {
 
 		const createRefWithRef = function(ref) {
 			return {
-				"name": "childReference",
-				"repeatId": 1,
-				"children": [{
-					"name": "ref",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadata"
+				name: "childReference",
+				repeatId: 1,
+				children: [{
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
 					}, {
-						"name": "linkedRecordId",
-						"value": ref
+						name: "linkedRecordId",
+						value: ref
 					}]
 				}, {
-					"name": "repeatMin",
-					"value": "1"
+					name: "repeatMin",
+					value: "1"
 				}, {
-					"name": "repeatMax",
-					"value": "1"
+					name: "repeatMax",
+					value: "1"
 				}]
 			};
 		};
@@ -268,12 +268,10 @@ var CORA = (function(cora) {
 				metadataId: metadataId,
 				path: nextLevelPath
 			};
-			result = {
-				everythingOkBelow: false,
-				containsValuableData: false,
-				validationMessage: message,
-				sendValidationMessages: true
-			};
+			result.everythingOkBelow = false;
+			result.containsValuableData = false;
+			result.validationMessage = message;
+			result.sendValidationMessages = true;
 		};
 		return start();
 	}

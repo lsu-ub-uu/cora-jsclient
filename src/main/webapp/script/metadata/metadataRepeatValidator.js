@@ -113,9 +113,19 @@ var CORA = (function(cora) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
 			 
+			//result.hasOnlyFinalValues
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
-			}
+				console.log("nextLevelPath:", nextLevelPath);
+				pubSub.publish("validationError", 
+					{
+						type: "validationError",
+						path: nextLevelPath,
+						message: "Group contains to data"
+					}
+				);
+			} 
+//			console.info("nextLevelPath:", nextLevelPath);
 		};
 
 		const validateGroupChild = function(childReference, nextLevelPath) {

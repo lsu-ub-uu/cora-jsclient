@@ -190,7 +190,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 			},{
       			"name": "adminInfo",
       			"children": [{   				
-          			"name": "visibiliy",
+          			"name": "visibility",
           			"value": "unpublished"
         		}]
     		},{
@@ -230,7 +230,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 			},{
       			"name": "adminInfo",
       			"children": [{   				
-          			"name": "visibiliy",
+          			"name": "visibility",
           			"value": "unpublished"
         		}]
     		},{
@@ -270,7 +270,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 			},{
       			"name": "adminInfo",
       			"children": [{   				
-          			"name": "visibiliy",
+          			"name": "visibility",
           			"value": "unpublished"
         		}]
     		},{

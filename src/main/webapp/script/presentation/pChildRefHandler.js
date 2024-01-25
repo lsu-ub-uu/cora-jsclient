@@ -573,7 +573,7 @@ var CORA = (function(cora) {
 				},{
 					name: "adminInfo",
 					children: [{
-						name: "visibiliy",
+						name: "visibility",
 						value: "unpublished"
 					}]
 				},{

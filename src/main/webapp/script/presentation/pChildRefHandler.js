@@ -571,6 +571,12 @@ var CORA = (function(cora) {
 						}]
 					}]
 				},{
+					name: "adminInfo",
+					children: [{
+						name: "visibiliy",
+						value: "unpublished"
+					}]
+				},{
 					name: "originalFileName",
 					value: file.name
 				},{

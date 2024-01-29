@@ -116,12 +116,12 @@ var CORA = (function(cora) {
 			//result.hasOnlyFinalValues
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
-				console.log("nextLevelPath:", nextLevelPath);
+//				console.log("nextLevelPath:", nextLevelPath);
 				pubSub.publish("validationError", 
 					{
 						type: "validationError",
 						path: nextLevelPath,
-						message: "Group contains to data"
+						message: "Group contains no data"
 					}
 				);
 			} 

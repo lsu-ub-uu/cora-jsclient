@@ -113,10 +113,8 @@ var CORA = (function(cora) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
 			 
-			//result.hasOnlyFinalValues
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
-//				console.log("nextLevelPath:", nextLevelPath);
 				pubSub.publish("validationError", 
 					{
 						type: "validationError",
@@ -125,7 +123,6 @@ var CORA = (function(cora) {
 					}
 				);
 			} 
-//			console.info("nextLevelPath:", nextLevelPath);
 		};
 
 		const validateGroupChild = function(childReference, nextLevelPath) {

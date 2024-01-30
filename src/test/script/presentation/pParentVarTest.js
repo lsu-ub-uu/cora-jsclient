@@ -155,7 +155,8 @@ QUnit.test("testInitText2", function(assert) {
 
 	assert.equal(pParentVar.getState(), "ok");
 
-	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
+	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path,
+		 assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });

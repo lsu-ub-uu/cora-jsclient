@@ -23,12 +23,7 @@ var CORA = (function(cora) {
 		let parent;
 
 		const start = function() {
-			let my = {
-				type: "pGroup",
-				metadataId: spec.metadataIdUsedInData,
-				addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
-			};
-			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, my);
+			parent = dependencies.pParentMultipleChildrenFactory.factor(spec, self);
 		};
 
 		const addTypeSpecificInfoToViewSpec = function(mode, viewSpec) {
@@ -43,6 +38,12 @@ var CORA = (function(cora) {
 			return dependencies;
 		};
 
+		const self = {
+			type: "pGroup",
+			metadataId: spec.metadataIdUsedInData,
+			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec
+		};
+		
 		start();
 
 		return Object.freeze({

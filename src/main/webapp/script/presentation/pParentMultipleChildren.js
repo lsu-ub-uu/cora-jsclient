@@ -22,6 +22,7 @@ var CORA = (function(cora) {
 	cora.pParentMultipleChildren = function(dependencies, spec, child) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
+		const pubSub = dependencies.pubSub;
 		const cPresentation = spec.cPresentation;
 		const cParentPresentation = spec.cParentPresentation;
 		const path = spec.path;
@@ -31,6 +32,7 @@ var CORA = (function(cora) {
 		let view;
 		let cMetadataElement;
 		
+		let state = "ok";
 		let mode = "input";
 		let attributesToShow = "all";
 		let pAttributes; 
@@ -59,6 +61,7 @@ var CORA = (function(cora) {
 			if ("pSurroundingContainer" !== child.type) {
 				initPAttributes();
 			}
+			subscribeToPubSub();
 		};
 		
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
@@ -425,6 +428,16 @@ var CORA = (function(cora) {
 			};
 			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
 		};
+		
+		const subscribeToPubSub = function() {
+		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
+		};
+		
+		const handleValidationError = function() {
+			state = "error";
+//			updateView();
+			view.setState(state);
+		};
 
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, view.firstChild);
@@ -472,12 +485,18 @@ var CORA = (function(cora) {
 			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
 		};
 
+		const getState = function() {
+			return state;
+		};
+
 		start();
 		return Object.freeze({
 			type: "pParentMultipleChildren",
 			getPresentationId: getPresentationId,
 			getView: view.getView,
 			addAttributesView: addAttributesView,
+			handleValidationError: handleValidationError,
+			getState: getState,
 			
 			openTextIdRecord: openTextIdRecord,
 			openDefTextIdRecord: openDefTextIdRecord,

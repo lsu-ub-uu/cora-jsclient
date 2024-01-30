@@ -17,7 +17,25 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
+var CORATEST = (function(coraTest) {
+	"use strict";
+	coraTest.testParentSubscription = function(pParentMultipleChildren, dependencies, path, assert) {
+		let subscriptions = dependencies.pubSub.getSubscriptions();
 
+		let firstSubsription = subscriptions[0];
+		assert.strictEqual(firstSubsription.type, "validationError");
+		assert.deepEqual(firstSubsription.path, path);
+		assert.ok(firstSubsription.functionToCall === pParentMultipleChildren.handleValidationError);
+
+		let secondSubsription = subscriptions[1];
+		assert.strictEqual(secondSubsription.type, "add");
+		assert.deepEqual(secondSubsription.path, path);
+		assert.ok(secondSubsription.functionToCall === pParentMultipleChildren.childAdded);
+
+		assert.deepEqual(subscriptions.length, 2);
+	};
+	return coraTest;
+}(CORATEST || {}));
 QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
@@ -61,9 +79,7 @@ QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 			return id;
 		}
 		
-		let lastInfoValueForViewMode="";
 		const addTypeSpecificInfoToViewSpec= function (mode, pVarViewSpec) {
-			lastInfoValueForViewMode = mode;
 			pVarViewSpec.childExtra = "added by child";
 		};
 		
@@ -103,6 +119,12 @@ QUnit.test("testInit", function(assert) {
 	assert.strictEqual(pParentMultipleChildren.type, "pParentMultipleChildren");
 });
 
+QUnit.test("testInit2", function(assert) {
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+
+	CORATEST.testParentSubscription(pParentMultipleChildren, this.dependencies, this.spec.path,
+		 assert);
+});
 
 QUnit.test("testGetView", function(assert) {
 	let pParentMultipleChildren = CORA.pParentMultipleChildren(this.dependencies, this.spec, this.child);
@@ -110,6 +132,43 @@ QUnit.test("testGetView", function(assert) {
 	let spyView = this.pMultipleChildrenViewFactory.getFactored(0);
 	assert.strictEqual(pParentMultipleChildren.getView(), spyView.getView());
 });
+
+QUnit.test("testHandleValidationError", function(assert) {
+	let pParentMultipleChildren = CORA.pParentMultipleChildren(this.dependencies, this.spec, this.child);
+	
+	let message = {
+		"metadataId": "textVariableId",
+		"path": []
+	};
+	
+	pParentMultipleChildren.handleValidationError(message);
+	
+	assert.equal(pParentMultipleChildren.getState(), "error");
+	let pParentMultipleChildrenViewSpy = this.pMultipleChildrenViewFactory.getFactored(0);
+	assert.equal(pParentMultipleChildrenViewSpy.getState(), "error");
+});
+
+//QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
+//	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+//
+//	let message = {
+//		"metadataId": "textVariableId",
+//		"path": []
+//	};
+//	
+//	pParentVar.handleValidationError(message);
+//	
+//	assert.equal(pParentVar.getState(), "error");
+//	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
+//	assert.equal(pVarViewSpy.getState(), "error");
+//
+//	let data = {
+//		"data": "A new value",
+//		"path": []
+//	};
+//	pParentVar.handleMsg(data);
+//	assert.equal(pVarViewSpy.getState(), "ok");
+//});
 
 
 

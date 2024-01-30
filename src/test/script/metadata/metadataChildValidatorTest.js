@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/metadataChildValidatorTest.js", {
+QUnit.module("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -640,7 +640,7 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 		assert.strictEqual(validationResult.everythingOkBelow, false);
 		assert.strictEqual(validationResult.containsValuableData, false);
 		let pubSubMessages = this.pubSub.getMessages();
-		assert.strictEqual(pubSubMessages.length, 1);
+		assert.strictEqual(pubSubMessages.length, 2);
 
 		let validationError = {
 			type: "validationError",
@@ -650,6 +650,17 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithEmptyValu
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
+		
+		let expectedMessage1 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["groupIdOneTextChildOneAttribute"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[1], expectedMessage1);
+	
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildOneAttribute", path: [] });
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableId", path: ["groupIdOneTextChildOneAttribute"] });
 		assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildOneAttribute", "@anAttribute"]);
@@ -766,16 +777,38 @@ QUnit.test("testValidateTextVarRepeat1to1InGroupTwoAttributeInGroupWithEmptyValu
 	assert.strictEqual(validationResult.everythingOkBelow, false);
 	assert.strictEqual(validationResult.containsValuableData, false);
 	let pubSubMessages = this.pubSub.getMessages();
-	assert.strictEqual(pubSubMessages.length, 1);
+	assert.strictEqual(pubSubMessages.length, 3);
 
 	let validationError = {
 		type: "validationError",
 		message: {
 			metadataId: "textVariableId",
-			path: ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes", "textVariableId"]
+			path: ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes", 
+				"textVariableId"]
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], validationError);
+	
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[1], expectedMessage1);
+	
+	let expectedMessage2 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupInGroupOneTextChildTwoAttributes"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(pubSubMessages[2], expectedMessage2);
+		
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupInGroupOneTextChildTwoAttributes", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "groupIdOneTextChildTwoAttributes", path: ["groupInGroupOneTextChildTwoAttributes"] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVariableId", path: ["groupInGroupOneTextChildTwoAttributes", "groupIdOneTextChildTwoAttributes"] });
@@ -893,28 +926,63 @@ QUnit.test("testValidateTextVarRepeat1to3InGroupOneAttribute"
 		assert.strictEqual(validationResult.everythingOkBelow, false);
 		assert.strictEqual(validationResult.containsValuableData, false);
 		let pubSubMessages = this.pubSub.getMessages();
-		assert.strictEqual(pubSubMessages.length, 2);
+		assert.strictEqual(pubSubMessages.length, 5);
 
 		let validationError = {
 			type: "validationError",
 			message: {
 				metadataId: "textVar",
-				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+				"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 
 			}
 		};
 		assert.stringifyEqual(pubSubMessages[0], validationError);
-
+		
+		let expectedMessage1 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+				"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[1], expectedMessage1);
+		
 		let removeMessage = {
 			type: "remove",
 			message: {
 				type: "remove",
-				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+					"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
-		assert.stringifyEqual(pubSubMessages[1], removeMessage);
+		assert.stringifyEqual(pubSubMessages[2], removeMessage);
+		
+		let expectedMessage3 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+					"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[3], expectedMessage3);
+
+		let expectedMessage4 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(pubSubMessages[4], expectedMessage4);
 
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", path: [] });
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup"] });
@@ -1104,27 +1172,53 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 		assert.strictEqual(validationResult.containsValuableData, true);
 
 		let messages = this.pubSub.getMessages();
-		assert.strictEqual(messages.length, 4);
+		assert.strictEqual(messages.length, 6);
 		let validationError = {
 			type: "validationError",
 			message: {
 				metadataId: "textVar",
-				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+				 "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
-
-		let removeMessage1 = {
+		
+		let expectedMessage1 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup",
+				 "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+					"textVarRepeat1to3InGroupOneAttribute.one1"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(messages[1], expectedMessage1);
+		
+		let removeMessage2 = {
 			type: "remove",
 			message: {
 				type: "remove",
-				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+					"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0",
 					"textVarRepeat1to3InGroupOneAttribute.one1"]
 			}
 		};
-		assert.stringifyEqual(messages[1], removeMessage1);
-		let removeMessage2 = {
+		assert.stringifyEqual(messages[2], removeMessage2);
+		
+		let expectedMessage3 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+					"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(messages[3], expectedMessage3);
+
+		let removeMessage4 = {
 			type: "remove",
 			message: {
 				type: "remove",
@@ -1132,17 +1226,18 @@ QUnit.test("testInitTextVarRepeat1to3InGroupOneAttribute"
 					"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 			}
 		};
-		assert.stringifyEqual(messages[2], removeMessage2);
+		assert.stringifyEqual(messages[4], removeMessage4);
 
-		let removeMessage3 = {
+		let removeMessage5 = {
 			type: "remove",
 			message: {
 				type: "remove",
-				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"]
+				path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", 
+					"textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"]
 			}
 		};
-		assert.stringifyEqual(messages[3], removeMessage3);
-
+		assert.stringifyEqual(messages[5], removeMessage5);
+		
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", path: [] });
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup", path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup"] });
 		assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVarRepeat1to3InGroupOneAttribute", path: ["textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroupRepeat1to3InGroup", "textVarRepeat1to3InGroupOneAttributeRepeat0to2InGroup.one0"] });
@@ -1308,16 +1403,28 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 5);
+	assert.strictEqual(messages.length, 8);
 
-	let validationError = {
+	let validationError1 = {
 		type: "validationError",
 		message: {
 			metadataId: "textVar",
-			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", 
+				"textVarRepeat1to3InGroupOneAttribute.one1", "textVar.one2"]
 		}
 	};
-	assert.stringifyEqual(messages[0], validationError);
+	assert.stringifyEqual(messages[0], validationError1);
+
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", 
+			"textVarRepeat1to3InGroupOneAttribute.one1"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
 
 	let validationError2 = {
 		type: "remove",
@@ -1326,25 +1433,49 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1"]
 		}
 	};
-	assert.stringifyEqual(messages[1], validationError2);
+	assert.stringifyEqual(messages[2], validationError2);
+	
 	let validationError3 = {
 		type: "validationError",
 		message: {
 			metadataId: "textVar",
-			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1", "textVar.one22"]
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", 
+				"textVarRepeat1to3InGroupOtherAttribute.one1", "textVar.one22"]
 		}
 	};
-	assert.stringifyEqual(messages[2], validationError3);
+	assert.stringifyEqual(messages[3], validationError3);
+
+	let expectedMessage4 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", 
+				"textVarRepeat1to3InGroupOtherAttribute.one1"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[4], expectedMessage4);
 
 	let validationError4 = {
 		type: "remove",
 		message: {
 			type: "remove",
-			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOtherAttribute.one1"]
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", 
+				"textVarRepeat1to3InGroupOtherAttribute.one1"]
 		}
 	};
-	assert.stringifyEqual(messages[3], validationError4);
+	assert.stringifyEqual(messages[5], validationError4);
 
+	let expectedMessage6 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[6], expectedMessage6);
+	
 	let validationError5 = {
 		type: "remove",
 		message: {
@@ -1352,9 +1483,8 @@ QUnit.test("testTwoChildrenSameNameInDataDifferentAttributesShouldOnlyHandleTheC
 			path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"]
 		}
 	};
-	assert.stringifyEqual(messages[4], validationError5);
-
-
+	assert.stringifyEqual(messages[7], validationError5);
+	
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVarRepeat1to3InGroupOneAttribute", path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup"] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVar", path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup", "textVarRepeat1to3InGroupOneAttribute.one1"] });
@@ -1515,25 +1645,59 @@ QUnit.test("testInitTextVarRepeat1to3InGroup"
 		assert.strictEqual(validationResult.containsValuableData, false);
 
 		let messages = this.pubSub.getMessages();
-		assert.strictEqual(messages.length, 2);
+		assert.strictEqual(messages.length, 5);
+
 		let validationError = {
 			type: "validationError",
 			message: {
 				metadataId: "textVar",
-				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOneAttribute",
-					"textVar.one2"]
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup"
+				, "textVarRepeat1to3InGroupOneAttribute", "textVar.one2"]
 			}
 		};
 		assert.stringifyEqual(messages[0], validationError);
-		let validationError1 = {
+
+		let expectedMessage1 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup",
+				 "textVarRepeat1to3InGroupOneAttribute", ],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(messages[1], expectedMessage1);
+
+		let validationError2 = {
 			type: "validationError",
 			message: {
 				metadataId: "textVar",
-				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", "textVarRepeat1to3InGroupOtherAttribute",
-					"textVar.one22"]
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup", 
+				"textVarRepeat1to3InGroupOtherAttribute", "textVar.one22"]
 			}
 		};
-		assert.stringifyEqual(messages[1], validationError1);
+		assert.stringifyEqual(messages[2], validationError2);
+		
+		let expectedMessage3 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup",
+				 "textVarRepeat1to3InGroupOtherAttribute", ],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(messages[3], expectedMessage3);
+		
+		let expectedMessage4 = {
+			type: "validationError",
+			message: {
+				type: "validationError",
+				path: ["textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat1to1InGroup" ],
+				message: "Group contains no data"
+			}
+		};
+		assert.stringifyEqual(messages[4], expectedMessage4);
 	});
 
 QUnit.test("testValidateGroupIdOneRecordLinkWithData", function(assert) {
@@ -1608,7 +1772,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
+	assert.strictEqual(messages.length, 2);
 
 	let expectedMessage = {
 		type: "validationError",
@@ -1617,8 +1781,18 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 			path: ["groupIdOneRecordLinkChild", "myLink", "linkedRecordIdTextVar"]
 		}
 	};
-
 	assert.stringifyEqual(messages[0], expectedMessage);
+	
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneRecordLinkChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+	
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
 		{ metadataId: "groupIdOneRecordLinkChild", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1),
@@ -1659,7 +1833,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 3);
+	assert.strictEqual(messages.length, 4);
 
 	let expectedMessage = {
 		type: "validationError",
@@ -1669,14 +1843,26 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
-	let expectedMessage2 = {
+	
+	let expectedMessage1 = {
 		type: "remove",
 		message: {
 			type: "remove",
 			path: ["groupId0to1RecordLinkChild", "myLink"]
 		}
 	};
-	assert.stringifyEqual(messages[1], expectedMessage2);
+	assert.stringifyEqual(messages[1], expectedMessage1);
+	
+	let expectedMessage2 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupId0to1RecordLinkChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[2], expectedMessage2);
+	
 	let expectedMessage3 = {
 		type: "remove",
 		message: {
@@ -1684,7 +1870,7 @@ QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(asser
 			path: ["groupId0to1RecordLinkChild"]
 		}
 	};
-	assert.stringifyEqual(messages[2], expectedMessage3);
+	assert.stringifyEqual(messages[3], expectedMessage3);
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
 		{ metadataId: "groupId0to1RecordLinkChild", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1),
@@ -1837,7 +2023,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
+	assert.strictEqual(messages.length, 2);
 	let expectedMessage = {
 		type: "validationError",
 		message: {
@@ -1846,6 +2032,16 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage);
+	
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneNumberChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
 
@@ -1872,7 +2068,7 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 2);
+	assert.strictEqual(messages.length, 3);
 
 	let expectedResult = {
 		type: "remove",
@@ -1882,6 +2078,17 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 		}
 	};
 	assert.deepEqual(messages[0], expectedResult);
+	
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneNumberNotMandatoryChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+	
 	let expectedResult2 = {
 		type: "remove",
 		message: {
@@ -1889,7 +2096,7 @@ QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(a
 			path: ["groupIdOneNumberNotMandatoryChild"]
 		}
 	};
-	assert.deepEqual(messages[1], expectedResult2);
+	assert.deepEqual(messages[2], expectedResult2);
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
 		{ metadataId: "groupIdOneNumberNotMandatoryChild", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1),
@@ -1932,7 +2139,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
+	assert.strictEqual(messages.length, 2);
 
 	let expectedResult = {
 		type: "validationError",
@@ -1941,8 +2148,18 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMaxAboveAllowed", funct
 			path: ["groupIdOneNumberChild", "numVariableId"]
 		}
 	};
-
 	assert.deepEqual(messages[0], expectedResult);
+
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneNumberChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+	
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
 
@@ -1958,7 +2175,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
+	assert.strictEqual(messages.length, 2);
 
 	let expectedResult = {
 		type: "validationError",
@@ -1967,8 +2184,18 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMinBelowAllowed", funct
 			path: ["groupIdOneNumberChild", "numVariableId"]
 		}
 	};
-
 	assert.deepEqual(messages[0], expectedResult);
+
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneNumberChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+	
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
 
@@ -1984,7 +2211,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 1);
+	assert.strictEqual(messages.length, 2);
 
 	let expectedResult = {
 		type: "validationError",
@@ -1993,8 +2220,18 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithDataMoreDecimalsThanAllowed
 			path: ["groupIdOneNumberChild", "numVariableId"]
 		}
 	};
-
 	assert.deepEqual(messages[0], expectedResult);
+
+	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneNumberChild"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
 
@@ -2485,7 +2722,7 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 	assert.strictEqual(validationResult.containsValuableData, false);
 
 	let messages = this.pubSub.getMessages();
-	assert.strictEqual(messages.length, 2);
+	assert.strictEqual(messages.length, 3);
 	
 	let expectedMessage0 = {
 		type: "validationError",
@@ -2497,13 +2734,23 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 	assert.stringifyEqual(messages[0], expectedMessage0);
 	
 	let expectedMessage1 = {
+		type: "validationError",
+		message: {
+			type: "validationError",
+			path: ["groupIdOneTextChildWithChoice"],
+			message: "Group contains no data"
+		}
+	};
+	assert.stringifyEqual(messages[1], expectedMessage1);
+
+	let expectedMessage2 = {
 		type: "remove",
 		message: {
 			type: "remove",
 			path: ["groupIdOneTextChildWithChoice"]
 		}
 	};
-	assert.stringifyEqual(messages[1], expectedMessage1);
+	assert.stringifyEqual(messages[2], expectedMessage2);
 
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildWithChoice", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableWithAnAttributeAndAnAttributeChoice", path: ["groupIdOneTextChildWithChoice"] });

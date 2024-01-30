@@ -234,7 +234,7 @@ var CORA = (function(cora) {
 
 		const validateNumberVariable = function() {
 			let validator = CORA.numberVariableValidator({
-				"metadataProvider": metadataProvider,
+				metadataProvider: metadataProvider,
 			});
 			return validator.validateData(data.value, cMetadataElement);
 		};

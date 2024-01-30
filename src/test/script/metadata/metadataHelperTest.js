@@ -359,93 +359,93 @@ QUnit.test("testSameAttributeOneEmpty", function(assert) {
 
 QUnit.test("testfirstAttributesExistsInSecondame", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testfirstAttributesExistsInSecondReversedAttributes", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 
 QUnit.test("testSameAttributeDifferentAttributeValues", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
+		"someNameInData" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues2", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues3", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
+		"someNameInData" : [ "aFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues4", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues5", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentAttributeValues6", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
+		"someNameInData" : [ "aFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVar" : [ "aOtherFinalValue", "aFinalValue" ]
+		"someNameInData" : [ "aOtherFinalValue", "aFinalValue" ]
 	};
 	assert.ok(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferent", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue", "aOtherFinalValue" ]
+		"someNameInData" : [ "aFinalValue", "aOtherFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVarNOT" : [ "aFinalValue" ]
+		"someNameInDataNOT" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });
 QUnit.test("testSameAttributeDifferentName", function(assert) {
 	let attribute1 = {
-		"recordTypeTypeCollectionVar" : [ "aFinalValue" ]
+		"someNameInData" : [ "aFinalValue" ]
 	};
 	let attribute2 = {
-		"recordTypeTypeCollectionVarNOT" : [ "aFinalValue" ]
+		"someNameInDataNOT" : [ "aFinalValue" ]
 	};
 	assert.notOk(this.metadataHelper.firstAttributesExistsInSecond(attribute1, attribute2));
 });

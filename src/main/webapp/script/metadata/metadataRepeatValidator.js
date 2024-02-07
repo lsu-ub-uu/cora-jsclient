@@ -91,7 +91,20 @@ var CORA = (function(cora) {
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
+
 		const validateForMetadata = function() {
+			//SPIKE
+			if(isResourceLink()){
+				// const handleValidData = function(hasFinalValue, result) {
+				// 	if (hasFinalValue) {
+				// 		result.containsValuableData = false;
+				// 	} else {
+				// 		result.containsValuableData = true;
+				// 	}
+				// };
+				result.containsValuableData = false;
+			}else
+			//END SPIKE
 			if (isGroup()) {
 				validateMetadataGroup(path);
 			} else if (isRecordLink()) {
@@ -101,9 +114,18 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const isResourceLink = function () {
+			let type = getTypeFromCMetadataElement();
+			return type === "resourceLink";
+		}
+
 		const isGroup = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "group";
+		};
+
+		const getTypeFromCMetadataElement = function () {
+			return cMetadataElement.getData().attributes.type;
 		};
 
 		const validateMetadataGroup = function(nextLevelPath) {
@@ -149,7 +171,7 @@ var CORA = (function(cora) {
 		};
 
 		const isRecordLink = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "recordLink";
 		};
 
@@ -207,7 +229,7 @@ var CORA = (function(cora) {
 		};
 
 		const dataIsValid = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			if (type === "textVariable") {
 				return validateTextVariable();
 			}

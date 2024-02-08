@@ -581,13 +581,25 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataFinalValue"
 
 });
 
-QUnit.test("testResourceLinkMessage", function(assert) {
+QUnit.only("testResourceLinkMessage", function(assert) {
 	this.spec.metadataId = "masterResLink";
-
+	this.spec.data = {
+		actionLinks: {
+			read: {
+				requestMethod: "GET",
+				rel: "read",
+				url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+				accept: "image/jpeg"
+			}
+		},
+		name: "large",
+		mimeType: "image/jpeg"
+	};
 	let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
 	metadataRepeatInitializer.initialize();
 
 	let messages = this.pubSub.getMessages();
+	assert.strictEqual(messages.length, 2);
 
 	let expectedAddForResourceLink = {
 		type: "add",
@@ -602,11 +614,15 @@ QUnit.test("testResourceLinkMessage", function(assert) {
 	let expectedLinkedResourceMessage = {
 		type: "setValue",
 		message: {
+			data: this.spec.data,
 			path: ["masterResLink"],
-			type: "setValue"
+			type: "setValue",
+			special: "resourceLink"
 		}
 	};
 	assert.stringifyEqual(messages[1], expectedLinkedResourceMessage);
+
+
 });
 
 //QUnit.test("testResourceLinkCorrectCallsToChildAndRepeatInitalizer", function(assert) {

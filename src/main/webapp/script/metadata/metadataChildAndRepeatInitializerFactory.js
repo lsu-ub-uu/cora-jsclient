@@ -61,7 +61,7 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type" : "metadataChildAndRepeatInitializerFactory",
+			type : "metadataChildAndRepeatInitializerFactory",
 			getDependencies : getDependencies,
 			factorChildInitializer : factorChildInitializer,
 			factorRepeatInitializer : factorRepeatInitializer,

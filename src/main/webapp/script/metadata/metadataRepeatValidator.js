@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2020 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -91,25 +91,14 @@ var CORA = (function(cora) {
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
-
 		const validateForMetadata = function() {
-			//SPIKE
-			if(isResourceLink()){
-				// const handleValidData = function(hasFinalValue, result) {
-				// 	if (hasFinalValue) {
-				// 		result.containsValuableData = false;
-				// 	} else {
-				// 		result.containsValuableData = true;
-				// 	}
-				// };
-				result.containsValuableData = false;
-			}else
-			//END SPIKE
 			if (isGroup()) {
 				validateMetadataGroup(path);
 			} else if (isRecordLink()) {
 				validateMetadataRecordLink(path);
-			} else {
+			} else if(isResourceLink()){
+				validateResourceLink();
+			}else {
 				validateVariableValue(path);
 			}
 		};
@@ -217,6 +206,10 @@ var CORA = (function(cora) {
 
 		const isLinkToRepeatingPartOfRecord = function() {
 			return cMetadataElement.containsChildWithNameInData("linkedPath");
+		};
+
+		const validateResourceLink = function () {
+			result.containsValuableData = true;
 		};
 
 		const validateVariableValue = function(nextLevelPath) {

@@ -60,7 +60,9 @@ var CORA = (function(cora) {
 
 		const addChildrenOrValueOfAtomic = function(dataContainerPart, cMetadataElement) {
 			let type = getDataType(cMetadataElement);
-			if (isChild(type)) {
+			if(isResourceLink(type)){
+				dataContainerPart.mimeType= "";
+			}else if (isChild(type)) {
 				addGroupParts(dataContainerPart);
 			} else {
 				dataContainerPart.value = "";
@@ -72,7 +74,7 @@ var CORA = (function(cora) {
 		};
 
 		const isChild = function(type) {
-			return isGroup(type) || isResourceLink(type) || isRecordLink(type);
+			return isGroup(type) || isRecordLink(type);
 		};
 
 		const isGroup = function(type) {
@@ -253,13 +255,8 @@ var CORA = (function(cora) {
 
 
 		const addChild = function(parentPath, metadataIdToAdd, repeatId) {
-			tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
-		};
-
-		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd,
-			repeatId) {
 			try {
-				addChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
+				tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
 			} catch (e) {
 				throw new Error("Add conatiner failed, with path: " + JSON.stringify(parentPath)
 					+ ", metadataId: " + JSON.stringify(metadataIdToAdd) + " and repeatId:" + repeatId
@@ -267,12 +264,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const addChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
+		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
 			let containerSpecifiedByPath = dataContainer;
 			if (pathSpecifiesMoreLevels(parentPath)) {
 				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
+				console.log("more levels")
 			}
+			console.log("more levels2")
 			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
 

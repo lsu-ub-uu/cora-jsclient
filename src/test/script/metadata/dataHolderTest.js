@@ -1255,16 +1255,34 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath
 	}, new Error(expectedErrorMessage));
 });
 
-
-QUnit.test("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
+QUnit.only("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+
 	dataHolder.addChild([], "masterResLink");
 
 	let expected = {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
 			name: "master",
-			children: []
+			mimeType: ""
+		}]
+	};
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.only("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+
+	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");
+	
+	// dataHolder.setValue([], "masterResLink");
+
+	let expected = {
+		name: "groupIdOneResourceLinkChild",
+		children: [{
+			name: "master",
+			mimeType: ""
 		}]
 	};
 	assert.deepEqual(dataHolder.getData(), expected);

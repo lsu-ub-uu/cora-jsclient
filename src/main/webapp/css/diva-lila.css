@@ -1,7 +1,7 @@
 :root {
-  --main-loading-color: #75598E;
-  --main-color: #75598E;
-  --main-darkare-color: #5C4A6B;
+  --main-loading-color: #7900dc;
+  --main-color: #7900dc;
+  --main-darkare-color: #32145a;
   --color-light-grey: #DCDCDC;
   --color-white: white;
   --color-grey: #131313;
@@ -13,9 +13,10 @@
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.1);
-  --maincolor-10-trans: rgba(117, 89, 142, 0.1);
-  --maincolor-30-trans: rgba(117, 89, 142, 0.3);
-  --maincolor-50-trans: rgba(117, 89, 142, 0.5);
+--maincolor-10-trans: rgba(121, 0, 220, 0.5);
+  --maincolor-30-trans: rgba(121, 0, 220, 0.8);
+  --maincolor-50-trans: rgb(121, 0, 220);
+  --color-contains: rgb(255, 191, 0);
 }
 #systemOneLoading, #alvinLoading {
 	display: none;
@@ -44,9 +45,15 @@ h2 {
 height: calc(100% - 2.5rem);
 }
 
-.jsClient label, .jsClient .label, .jsClient .text, .jsClient h1, .jsClient h2, .jsClient h3, .jsClient h4 {
+.jsClient label, .jsClient .label, .jsClient .text, .jsClient h1 {
 	margin: 0;
-	color: #5C4A6B;
+	color:var(--color-grey);
+	letter-spacing: 2px;
+/* 	font-weight: normal; */
+}
+.jsClient h2, .jsClient h3, .jsClient h4 {
+	margin: 0;
+	color:var(--color-white);
 	letter-spacing: 2px;
 /* 	font-weight: normal; */
 }
@@ -79,7 +86,7 @@ height: calc(100% - 2.5rem);
 }
 
 .presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
-	color: purple;
+	color: #ffbf00;
 }
 
 .jsClient > .sideBar {
@@ -136,6 +143,12 @@ height: calc(100% - 2.5rem);
 	box-shadow: 0 0 5px var(--main-loading-color);
 	right: 51.5rem;
 }
+
+.default, input[type="button"], input[type="file"] {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .jsClient .workItem > .buttonView input {
 	height: 2rem;
 	position: relative;

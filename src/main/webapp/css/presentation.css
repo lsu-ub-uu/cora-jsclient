@@ -372,7 +372,7 @@ textarea {
 }
 
 .jsClient .workView .inline span, .jsClient .workView .inline div, .inline {
-	display: block ruby;
+	display: inline;
 	position: static;
 }
 

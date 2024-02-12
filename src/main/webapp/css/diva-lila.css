@@ -4,6 +4,7 @@
   --main-darkare-color: #5C4A6B;
   --color-light-grey: #DCDCDC;
   --color-white: white;
+  --color-white-90-trans: rgba(252, 252, 252, 0.9);
   --color-grey: #131313;
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
@@ -196,21 +197,22 @@ height: calc(100% - 2.5rem);
 }
 
 input[type="button"], .form-style-10 input[type="submit"] {
-	background: var(--color-white);
+	background: var(--color-white-90-trans);
 	padding: 4px 11px 4px 11px;
 	border-radius: 5px;
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	text-shadow: 1px 1px 3px var(--text-shadow-12-trans);
 	font: normal 30px serif;
 	box-shadow: inset 0 2px 2px 0 var(--box-sahow-17-trans);
-	border: 1px solid var(--main-loading-color);
+	border: 1px solid var(--main-color);
 	font-size: 15px;
 }
 
  input[type="button"]:hover, .form-style-10 input[type="submit"]:hover {
-	background: var(--menu-2n-color);
+	background: var(--maincolor-10-trans);
 	box-shadow: inset 0 2px 2px 0 var(--inbox-28-shadow);
 	cursor: pointer;
+	color: white;
 }
 .topBar {
 	border: none;

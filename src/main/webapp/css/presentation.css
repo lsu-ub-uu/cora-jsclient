@@ -371,7 +371,12 @@ textarea {
 	padding-right: 16px;
 }
 
-.jsClient .workView .inline span, .jsClient .workView .inline div, .inline {
+.inline {
+  display: inherit;
+  position: static;
+}
+
+.jsClient .workView .inline span, .jsClient .workView .inline div {
 	display: inline;
 	position: static;
 }
@@ -707,7 +712,7 @@ label::after, .label:after {
 	border-bottom: none;
 }
 
-.recordViewer::before {
+/*.recordViewer::before {
 	background: url("../images/icons3.svg") no-repeat scroll;
 	content: "";
 	background-position: -240px -32px;
@@ -719,7 +724,7 @@ label::after, .label:after {
 	right: 5.5rem;
 	top: 5rem;
 	z-index: -1;
-}
+}*/
 
 .compactChildStyle .pGroup, .compactChildStyle .pVar, .compactChildStyle .pCollVar, .compactChildStyle .pSurroundingContainer {
 	padding-right: 0;

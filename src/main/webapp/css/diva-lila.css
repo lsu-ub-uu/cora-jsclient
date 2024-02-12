@@ -1,7 +1,7 @@
 :root {
-  --main-loading-color: #7900dc;
-  --main-color: #7900dc;
-  --main-darkare-color: #32145a;
+  --main-loading-color: #75598E;
+  --main-color: #75598E;
+  --main-darkare-color: #5C4A6B;
   --color-light-grey: #DCDCDC;
   --color-white: white;
   --color-grey: #131313;
@@ -13,9 +13,9 @@
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.1);
---maincolor-10-trans: rgba(121, 0, 220, 0.5);
-  --maincolor-30-trans: rgba(121, 0, 220, 0.8);
-  --maincolor-50-trans: rgb(121, 0, 220);
+  --maincolor-10-trans: rgba(117, 89, 142, 0.5);
+  --maincolor-30-trans: rgba(117, 89, 142, 0.8);
+  --maincolor-50-trans: rgb(117, 89, 142);
   --color-contains: rgb(255, 191, 0);
 }
 #systemOneLoading, #alvinLoading {
@@ -155,13 +155,13 @@ height: calc(100% - 2.5rem);
 	white-space: normal;
 	margin: 0px 2px 0px 2px;
 }
-.infoActive {
+/*.infoActive {
 	background-color: var(--blue-10-trans);
 	transition: background-color 0.5s linear;
-}
+}*/
 .pVar:hover, .pCollVar:hover, .pGroup:hover, 
 .pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover {
-	background-color: var(--blue-10-trans);
+/*	background-color: var(--blue-10-trans);*/
 	transition: background-color 0.5s linear;
 }
 .editView > .presentation, .showView > .presentation {

@@ -92,13 +92,13 @@
 	position: relative;
 	white-space: normal;
 }
-.infoActive {
+/*.infoActive {
 	background-color: rgb(42, 136, 173, 0.1);
 	transition: background-color 0.5s linear;
-}
+}*/
 .pVar:hover, .pCollVar:hover, .pGroup:hover, 
 .pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover {
-	background-color: rgb(42, 136, 173, 0.1);
+/*	background-color: rgb(42, 136, 173, 0.1);*/
 	transition: background-color 0.5s linear;
 }
 .workItem .presentation > .pGroup {

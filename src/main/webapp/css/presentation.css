@@ -1,3 +1,9 @@
+:root {
+  --color-presentation-grey: #868686;
+}
+
+var(--color-presentation-grey)
+
 .jsClient {
 	white-space: pre-wrap;
 }
@@ -262,14 +268,14 @@ img {
 }
 
 .infoActive {
-	background-color: rgba(0, 129, 198, 0.1);
+	background-color: rgba(60, 150, 255, 0.3);
 	transition: background-color 0.5s linear;
 }
 
 .pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
-	background-color: rgba(0, 129, 198, 0.08);
+	/*background-color: rgba(0, 129, 198, 0.08);*/
 	transition: background-color 0.5s linear;
 }
 
@@ -366,7 +372,7 @@ textarea {
 }
 
 .jsClient .workView .inline span, .jsClient .workView .inline div, .inline {
-	display: inline;
+	display: block ruby;
 	position: static;
 }
 
@@ -398,7 +404,8 @@ textarea {
 }
 
 .workView .pRecordLink.searchActive {
-	border: 1px dashed #c5c5c5;	
+	border: 1px dashed var(--color-presentation-grey);	
+	border-radius: 10px 10px;
 }
 
 .workView .pRecordLink>.infoView {
@@ -420,16 +427,17 @@ textarea {
 .workView .pRecordLink>.search {
 	flex: 10 1 80%;
 	order: -1;
-	border-bottom: 1px dashed #c5c5c5;
+	border-bottom: 1px dashed var(--color-presentation-grey);
 }
 
 .workView .pRecordLink>.search .listItem {
-	border-bottom: 1px dashed #c5c5c5;
+	border-bottom: 1px dashed var(--color-presentation-grey);
 }
 
 .jsClient .workView .recordViewer {
 	flex: 10 1 80%;
-	border: 1px dashed #c5c5c5;
+	border: 1px dashed var(--color-presentation-grey);
+	border-radius: 10px 10px;
 	position: relative;
 	overflow: hidden;
 	z-index: 0;

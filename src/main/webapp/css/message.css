@@ -27,12 +27,12 @@
 }
 
 .messageHolder .message {
-	border: 1px solid #000000;
-	border-radius: 2px;
 	margin: 4px;
 	min-height: 19px;
-	padding: 2px;
+	padding: .5rem;
 	width: auto;
+	border-radius: 10px 10px;
+	box-shadow: 10px 10px 10px var(--black-box-10-shadow);
 }
 
 .messageHolder .messageText {
@@ -44,7 +44,7 @@
 }
 
 .messageHolder .warning {
-	background-color: #FFFE66;
+	background-color: #ffb300;
 }
 
 .messageHolder .info {
@@ -52,7 +52,7 @@
 }
 
 .messageHolder .positive {
-	background-color: #6AFF69;
+	background-color: #7aff00;
 }
 
 .message {

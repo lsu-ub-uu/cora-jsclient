@@ -1,12 +1,12 @@
 :root {
   --main-color: rgba(0, 130, 200);
+  --second-color: rgba(0, 163, 251);
   --color-light-grey: #DCDCDC;
   --color-white: rgba(255, 255, 255);
   --color-grey: rgba(20,20,20);
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --color-top-border: rgba(0, 163, 251);
   --color-h1: var(--main-color);
   --color-h2: rgba(0, 130, 200, 0.9);
   --color-h3: rgba(0, 130, 200, 0.8);
@@ -15,6 +15,7 @@
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.5);
+  --color-contains: rgba(255, 166, 0);
 }
 
 @font-face {
@@ -112,18 +113,17 @@ h2, .h2TextStyle {
 .jsClient>.header {
 	display: block;
 	height: 3rem;
-	font-size: 2rem;
+	font-size: 2.5rem;
 	text-align: center;
 	font-family: 'UniversalisADFStdRegular';
 	color: white;
-	border-bottom: 1px solid;
 	border-color: inherit;
 	background-color: var(--main-color);
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top:0.5rem;
-	border-top: .5rem solid var(--color-top-border);
-	border-bottom: 1px solid var(--color-top-border);
+	border-top: .5rem solid var(--second-color);
+	border-bottom: 1px solid var(--second-color);
 }
 
 .jsClient>.header .menuView {
@@ -189,7 +189,7 @@ h2, .h2TextStyle {
 	/*Calculation of headers height*/
 	top: calc(4rem + 3px);
 	right: 0rem;
-	box-shadow: 0 10px 10px var(--black-box-10-shadow);
+	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
 	border-radius: 0px 0px 10px 10px;
 }
 .holder.loginManagerView .menuOption:hover{
@@ -204,17 +204,15 @@ h2, .h2TextStyle {
 
 .jsClient > .sideBar {
 	overflow: auto;
-/* 	scrollbar-color : var( - -main-color) var( - -color-light-grey) ; */
 	height: calc(100% - 3.5rem);
+	border-right: 1px solid;
+	border-color: inherit;
 	color: var(--color-grey);
 	background: var(--color-white);
 	display: inline-block;
 	padding: 0rem 1rem;
 	width: 20rem;
-}
-
-.sideBar span {
-	border-color: inherit;
+	border-left: 1px solid;
 }
 
 .openGuiItemHandlerView, .searchesView {
@@ -274,8 +272,6 @@ h2, .h2TextStyle {
 	.searchesView>.searchRecord {
 	display: block;
 	border-color: inherit;
-	margin-bottom: 1rem;
-	margin-top: 1rem;
 	width: 100%;
 	position: relative;
 	font-weight: normal;
@@ -304,6 +300,13 @@ h2, .h2TextStyle {
 	top: 2px;
 }
 
+.sideBar .header{
+	margin-bottom: 1rem;
+	margin-left: .5rem;
+	border-bottom: 1px dashed;
+	border-color: inherit;
+}
+
 .sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover
 	{
 	text-decoration: underline;
@@ -317,10 +320,7 @@ h2, .h2TextStyle {
 	text-decoration: inherit;
 }
 
-.sideBar .header {
-	border-bottom: 1px dashed;
-	border-color: inherit;
-}
+
 
 .sideBar .childrenView {
 	display: block;
@@ -731,7 +731,7 @@ h2, .h2TextStyle {
 }
 
 .presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
-  color: orange;
+  color: var(--color-contains);
 }
 
 .definitionViewer {

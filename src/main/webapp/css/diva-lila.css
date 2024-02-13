@@ -1,23 +1,15 @@
 :root {
   --main-color: rgba(117, 89, 142);
-  --color-light-grey: #DCDCDC;
-  --color-white: white;
+  --second-color: rgba(142, 115, 167);
   --color-white-90-trans: rgba(252, 252, 252, 0.9);
-  --color-grey: #131313;
-  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
-  --text-shadow-12-trans: rgba(0,0,0,0.12);
-  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --blue-10-trans: rgba(117, 88, 141, 0.07);
-  --color-selected-on-menu: black;
+/*   --blue-10-trans: rgba(117, 88, 141, 0.07); */
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.1);
-  --color-top-border: rgba(142, 115, 167);
   --color-h1: var(--main-color);
   --color-h2: rgba(117, 89, 142, 0.9);
   --color-h3: rgba(117, 89, 142, 0.8);
   --color-h4: rgba(117, 89, 142, 0.7);
-  --color-contains: rgb(255, 191, 0);
 }
 #systemOneLoading, #alvinLoading {
 	display: none;
@@ -61,14 +53,7 @@ height: calc(100% - 2.5rem);
 .jsClient > .header .menuView {
 	left: 20rem;
 	padding-left: 1rem;
-}
-
-.jsClient > .header .menuView {
 	color: var(--color-light-grey);
-}
-
-.presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
-	color: #ffbf00;
 }
 
 .jsClient > .sideBar {
@@ -84,9 +69,12 @@ height: calc(100% - 2.5rem);
 
 .workArea .workView > .workItem {
 	justify-content: space-between;
+	padding-right: 0.3rem;
 }
+
 .topBar {
 	order: 0;
+	border: none;
 }
 .holder.tool {
 	order: 1;
@@ -182,9 +170,7 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	cursor: pointer;
 	color: white;
 }
-.topBar {
-	border: none;
-}
+
 .editView .repeatingElement:last-child {
 	margin-bottom: 0;
 }
@@ -192,10 +178,6 @@ input[type="button"], .form-style-10 input[type="submit"] {
 .jsClient .workItem > .incomingLinksView {
 	flex: 0 0 50%;
 	order: 10;
-}
-
-.workArea .workView > .workItem {
-	padding-right: 0.3rem;
 }
 
 .sideBar .menuView:nth-child(2n) {
@@ -239,19 +221,9 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	top: 0.4rem;
 }
 
-.header.clickable {
-	padding: 3px;
-}
-
-.header.clickable:hover {
-	/*background: var(--main-color);*/
-/* 	border-radius: 5px; */
-	color: var(--main-color);
-}
 .sideBar{
 	margin-bottom: .5rem;
 }
-
 
 .openGuiItemHandlerView > .recordType, .recordTypesView .recordType, .searchesView > .searchRecord {
 	margin-top: 0px;

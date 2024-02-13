@@ -1,12 +1,12 @@
 :root {
   --main-color: rgba(127, 191, 167);
+  --second-color: rgba(210, 210, 210);
   --title-text-color: rgba(50, 50, 50);
   --alternative-text-color: rgba(191, 114, 37);
-  --color-top-border: rgba(210, 210, 210);
   --color-white: rgba(255,255,255);
   --color-black: rgba(0,0,0);
   --color-dark-grey: rgba(35,35,35);
-  --color-top-border: rgba(210, 210, 210);
+  --second-color: rgba(210, 210, 210);
   --color-h1: var(--main-color);
   --color-h2: rgba(127, 191, 167, 0.9);
   --color-h3: rgba(127, 191, 167, 0.8);

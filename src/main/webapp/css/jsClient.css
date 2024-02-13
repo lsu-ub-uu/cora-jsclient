@@ -1,21 +1,29 @@
 :root {
-  --main-loading-color: #0082c8;
-  --main-color: #0082c8;
-  --main-darkare-color: #014d77;
+  --main-color: rgba(0, 130, 200);
   --color-light-grey: #DCDCDC;
-  --color-white: white;
-  --color-grey: #131313;
+  --color-white: rgba(255, 255, 255);
+  --color-grey: rgba(20,20,20);
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --maincolor-10-trans: rgba(0, 130, 200, 0.1);
-  --maincolor-30-trans: rgba(0, 130, 200, 0.3);
-  --maincolor-50-trans: rgba(0, 130, 200, 0.5);
+  --color-top-border: rgba(0, 163, 251);
+  --color-h1: var(--main-color);
+  --color-h2: rgba(0, 130, 200, 0.9);
+  --color-h3: rgba(0, 130, 200, 0.8);
+  --color-h4: rgba(0, 130, 200, 0.7);
   --color-selected-on-menu: black;
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.5);
 }
+
+@font-face {
+    font-family: 'UniversalisADFStdRegular';
+    src: url('../fonts/UniversalisADFStd-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
 	margin: 0px;
 	height: calc(100%);
@@ -29,9 +37,18 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 
+h1, .h1TextStyle {
+	letter-spacing: 2px;
+}
+
+h2, .h2TextStyle {
+	color:var(--color-white);
+	letter-spacing: 2px;
+}
+
 .header select{
 	float:right;
-	margin-top:1rem;
+	margin-top:.4rem;
 }
 
 .holder.tool {
@@ -79,7 +96,7 @@ body {
 
 .jsClient.mainView {
 	height: 100%;
-	border-color: #0082c9;
+	border-color: var(--main-color);
 	position: relative;
 	display: block;
 	overflow: hidden;
@@ -94,23 +111,26 @@ body {
 
 .jsClient>.header {
 	display: block;
-	height: 3.5rem;
+	height: 3rem;
 	font-size: 2rem;
 	text-align: center;
+	font-family: 'UniversalisADFStdRegular';
 	color: white;
 	border-bottom: 1px solid;
 	border-color: inherit;
-	background-color: #0082c9;
+	background-color: var(--main-color);
 	padding-left: 1rem;
 	padding-right: 1rem;
-	
+	padding-top:0.5rem;
+	border-top: .5rem solid var(--color-top-border);
+	border-bottom: 1px solid var(--color-top-border);
 }
 
 .jsClient>.header .menuView {
 	display: block;
 	float: left;
 	height: auto;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	text-align: center;
 	color: white;
 	border-bottom: none;
@@ -118,7 +138,7 @@ body {
 	padding-left: 1rem;
 	cursor: pointer;
 	position: relative;
-	margin-top: .9rem;
+	margin-top: .5rem;
 	text-shadow: none;
 }
 
@@ -147,10 +167,10 @@ body {
 }
 .iconButton.loginManagerView {
 	transform: none;
-	font-size: 1.1rem;
+	font-size: 1.2rem;
 	float: right;
 	margin-right: 1rem;
-	margin-top: .9rem;
+	margin-top: .5rem;
 	cursor: pointer;
 }
 
@@ -164,24 +184,28 @@ body {
 	min-height: 10rem;
 	position: absolute;
 	z-index: 1000;
-	background: lightblue;
+	background: var(--color-white);
 	padding: 10px;
-	top: 3.2rem;
+	/*Calculation of headers height*/
+	top: calc(4rem + 3px);
 	right: 0rem;
-	box-shadow: 0 0 10px var(--black-box-10-shadow);
+	box-shadow: 0 10px 10px var(--black-box-10-shadow);
+	border-radius: 0px 0px 10px 10px;
+}
+.holder.loginManagerView .menuOption:hover{
+	color: var(--main-color);
 }
 
 .loginManagerView .menuOption {
 	display: block;
 	cursor: pointer;
+	padding: 5px;
 }
 
 .jsClient > .sideBar {
 	overflow: auto;
-	scrollbar-width: thin;
-	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
+/* 	scrollbar-color : var( - -main-color) var( - -color-light-grey) ; */
 	height: calc(100% - 3.5rem);
-	box-shadow: 0 0 10px var(--black-box-10-shadow);
 	color: var(--color-grey);
 	background: var(--color-white);
 	display: inline-block;
@@ -208,7 +232,7 @@ body {
 }
 
 .sideBar .openGuiItemHandlerView > .header, .searchesViewHeadline,  .recordTypeGroupHeadline{
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	font-size: 1.2rem;
 	font-weight: bold;
 	margin-top: 1rem;
@@ -284,6 +308,7 @@ body {
 	{
 	text-decoration: underline;
 	cursor: pointer;
+	color: var(--main-color);
 }
 
 .openGuiItemHandlerView .childrenView span, .openGuiItemHandlerView .childrenView div,
@@ -411,7 +436,7 @@ body {
 .topBar {
 	height: 2rem;
 	display: block;
-	border-bottom: 1px solid #0082c9;
+	border-bottom: 1px solid var(--main-color);
 	flex: 0 0 100%;
 }
 

@@ -293,6 +293,11 @@ img {
 	flex: 1;
 }
 
+.default, input[type="button"], input[type="file"] {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .attributes {
 	display: flex;	
 }
@@ -631,21 +636,23 @@ h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle{
 h1, .h1TextStyle {
 	font-size: 1.6rem;
 	color: var(--color-white);
-	background-color: var(--maincolor-50-trans);
+	background-color: var(--color-h1);
+	margin-bottom: 1rem;
 }
 
 h2, .h2TextStyle {
 	font-size: 1.3rem;
-	background-color: var(--maincolor-30-trans);
+	background-color: var(--color-h2);
 }
 
 h3, .h3TextStyle {
-	font-size: 1rem;
-	background-color: var(--maincolor-10-trans);
+	font-size: 1.1rem;
+	font-weight: bold
 }
 
 h4, .h4TextStyle {
-	font-size: 0.8rem;
+	font-size: 0.9rem;
+	font-weight: bold
 }
 
 h5, .h5TextStyle {
@@ -693,11 +700,11 @@ label::after, .label:after {
 }
 
 .repeatingElement:first-child {
-	border-top: 1px dashed #0082c9;
+	border-top: 1px dashed var(--main-color);
 }
 
 .repeatingElement {
-	border-bottom: 1px dashed #0082c9;
+	border-bottom: 1px dashed var(--main-color);
 	transition: background-color 0.5s linear;
 	position: relative;
 	border-bottom: 0.2rem;

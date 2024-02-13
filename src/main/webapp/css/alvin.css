@@ -1,16 +1,16 @@
 :root {
-  --main-loading-color: #bF7125;
-  --main-color: #7fbfa7;
-  --main-darkare-color: #55967d;
-  --title-text-color: #575757;
-  --alvin-alternative-text-color: #bF7125;
-  --color-white: white;
-  --color-black: black;
-  --maincolor-10-trans: rgba(127, 191, 167, 0.7);
-  --maincolor-30-trans: rgba(127, 191, 167, 0.9);
-  --maincolor-50-trans: rgba(127, 191, 167, 1);
-  
-  --alternative-color-medium-trans: rgba(215, 170, 120, 1);
+  --main-color: rgba(127, 191, 167);
+  --title-text-color: rgba(50, 50, 50);
+  --alternative-text-color: rgba(191, 114, 37);
+  --color-top-border: rgba(210, 210, 210);
+  --color-white: rgba(255,255,255);
+  --color-black: rgba(0,0,0);
+  --color-dark-grey: rgba(35,35,35);
+  --color-top-border: rgba(210, 210, 210);
+  --color-h1: var(--main-color);
+  --color-h2: rgba(127, 191, 167, 0.9);
+  --color-h3: rgba(127, 191, 167, 0.8);
+  --color-h4: rgba(127, 191, 167, 0.7);
 }
 #systemOneLoading, #divaLoading {
 	display: none;
@@ -30,7 +30,6 @@
 	font-family: "Open Sans", verdana, arial, helvetica, sans-serif;
 }
 .jsClient > .sideBar {
-	scrollbar-color: var(--main-color) var(--color-light-grey);
     border-color: inherit;
     border-right-style: none;
     border-left: 1px solid;
@@ -72,23 +71,25 @@
 /* 	font-weight: bold; */
 /* 	background-color: rgba(127, 191, 167, 0.5); */
 /* } */
-.pVar:hover, .pCollVar:hover, .pGroup:hover, .pSurroundingContainer:hover, .repeatingElement:hover {
+
+/*Nyanser av grön*/
+/*.pVar:hover, .pCollVar:hover, .pGroup:hover, .pSurroundingContainer:hover, .repeatingElement:hover {
 	background-color: rgba(127, 191, 167, 0.1);
-}
+}*/
 .jsClient>.header {
 	text-shadow: none;
 	background-color: var(--color-white);
-    font-family: 'UniversalisADFStdRegular';
-   font-weight: normal;
-   font-style: normal;
-   color:#222222;
-   padding-top:0.5rem;
-   border:none;
-   border-top: 10px solid lightgrey;
-   border-bottom: 1px solid var(--main-color);
+	font-family: 'UniversalisADFStdRegular';
+	font-weight: normal;
+	font-style: normal;
+	color:var(--color-dark-grey);
+	
+	border:none;
+	border-top: 10px solid lightgrey;
+	border-bottom: 1px solid var(--main-color);
 }
 .jsClient > .header .menuView{
-	color:#222222;
+	color:var(--color-dark-grey);
 }
 
 .jsClient .showView .h1TextStyle .text { 
@@ -100,6 +101,10 @@ h1, .h1TextStyle{
   color: var(--color-white);
   background-color: var(--color-black);
 }
+h2, h3, h4, .h2TextStyle, .h3TextStyle,.h4TextStyle{
+  color: var(--color-black);
+}
+
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
 	transform: none;
 }
@@ -115,11 +120,7 @@ h1, .h1TextStyle{
 }
 
 .jsClient .sideBar{
-	color: var(--alvin-alternative-text-color);
-}
-
-.holder.loginManagerView {
-	background: var(--main-color);
+	color: var(--alternative-text-color);
 }
 
 .topBar {
@@ -153,11 +154,6 @@ h1, .h1TextStyle{
 
 .jsClient .text.h2TextStyle, .recordTypeGroupHeadline{
 	color:var(--title-text-color);
-}
-
-.header select{
-	float:right;
-	margin-top:0.3em;
 }
 
 input[type="button"] {
@@ -207,7 +203,7 @@ input[type="button"]:focus {
 } 
 
 .listView .h1TextStyle, .listView .h1TextStyle .text {
-	color: var(--alvin-alternative-text-color);
+	color: var(--alternative-text-color);
 	font-size: 1rem;
 }
 

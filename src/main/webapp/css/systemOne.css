@@ -1,16 +1,14 @@
 :root {
-  --main-loading-color: #0082c8;
   --main-color: #0082c8;
-  --main-darkare-color: #014d77;
   --color-light-grey: #DCDCDC;
   --color-white: white;
   --color-grey: #131313;
   --black-box-10-shadow: rgba(0, 0, 0, 0.2);
   --text-shadow-12-trans: rgba(0,0,0,0.12);
   --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --maincolor-10-trans: rgba(0, 130, 200, 0.08);
-  --maincolor-30-trans: rgba(0, 130, 200, 0.3);
-  --maincolor-50-trans: rgba(0, 130, 200, 0.5);
+  --color-h3: rgba(0, 130, 200, 0.08);
+  --color-h2: rgba(0, 130, 200, 0.3);
+  --color-h1: rgba(0, 130, 200, 0.5);
   --color-selected-on-menu: black;
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
@@ -108,24 +106,23 @@
 }
 
 .presentation .text.h1TextStyle, .presentation h1 {
-	font-size: 2rem;
-	color: white;
-	background-color: #2a88ad;
-	border-radius: 10px 10px 0 0px;
-	margin: 0rem -1rem 0rem -1rem;
-	padding: 1rem 1rem 0.2rem 1rem;
-	text-shadow: 1px 1px 3px rgba(11, 248, 39, 0.1);
-	box-shadow: inset 0 2px 2px 0 rgba(255,255,255,0.17);
+	color: var(--main-color);
+	font-size: 1.2rem;
+	font-weight: bold;
+	background-color: var(--color-light-grey);
+	border-radius: 10px 0 0 0;
+	margin: 0 -1rem 0 -1rem;
+	padding: 0.4rem 1rem 0.4rem 1rem;
 	position: sticky;
-	top: -1rem;
+	top: 0rem;
 	z-index: 3;
 }
 
 .presentation .text.h2TextStyle, .presentation h2 {
-	color: #2a88ad;
+	color: var(--color-grey);
 	position: sticky;
 	top: 2.5rem;
-	background: #f2f2f2;
+	background: var(--main-color);
 	z-index: 2;
 }
 

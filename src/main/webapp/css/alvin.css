@@ -102,7 +102,7 @@ h1, .h1TextStyle{
   background-color: var(--color-black);
 }
 h2, h3, h4, .h2TextStyle, .h3TextStyle,.h4TextStyle{
-  color: var(--color-black);
+  color: var(--color-black) !important;
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {

@@ -211,9 +211,9 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	top: 0.4rem;
 }
 
-.sideBar{
-	margin-bottom: .5rem;
-}
+/* .sideBar{ */
+/* 	margin-bottom: .5rem; */
+/* } */
 
 .openGuiItemHandlerView > .recordType, .recordTypesView .recordType, .searchesView > .searchRecord {
 	margin-top: 0px;

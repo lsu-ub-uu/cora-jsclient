@@ -59,9 +59,9 @@ h2, .h2TextStyle {
 	position: absolute;
 	overflow: hidden;
 	z-index: 1000;
-	top:3em;
-	left:82%;
-	min-width:13rem;
+	top: 3rem;
+	right: 1rem;
+	min-width: 13rem;
 	flex-direction:column;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 	padding: 0.4em 0 0.4em 0;

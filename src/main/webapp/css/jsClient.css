@@ -415,7 +415,7 @@ h2, .h2TextStyle {
 
 .workArea>.workView>.workItem>.editView, .workArea>.workView>.workItem>.showView {
 	overflow-y: auto;
-	height: calc(100% - 2rem);
+	height: calc(100% - 5rem);
 }
 
 .editView>.presentation, .showView>.presentation{

@@ -43,7 +43,7 @@ h1, .h1TextStyle {
 }
 
 h2, .h2TextStyle {
-	color:var(--color-white);
+	color:var(--color-white) !important;
 	letter-spacing: 2px;
 }
 
@@ -53,7 +53,7 @@ h2, .h2TextStyle {
 }
 
 .holder.tool {
-	background-color: var(--main-color);
+	background-color: var(--second-color);
 	display: flex;
 	min-height: 5rem;
 	position: absolute;
@@ -65,7 +65,7 @@ h2, .h2TextStyle {
 	flex-direction:column;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 	padding: 0.4em 0 0.4em 0;
-	border-radius: 10px 10px;
+	border-radius: 5px 5px;
 }
 
 .holder.tool:before {
@@ -112,7 +112,7 @@ h2, .h2TextStyle {
 
 .jsClient>.header {
 	display: block;
-	height: auto;
+	height: 3rem;
 	font-size: 2.5rem;
 	text-align: center;
 	font-family: 'UniversalisADFStdRegular';
@@ -122,7 +122,7 @@ h2, .h2TextStyle {
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top:0.5rem;
-	border-top: .5rem solid var(--second-color);
+	border-top: 10px solid var(--second-color);
 	border-bottom: 1px solid var(--second-color);
 }
 
@@ -187,7 +187,7 @@ h2, .h2TextStyle {
 	background: var(--color-white);
 	padding: 10px;
 	/*Calculation of headers height*/
-	top: calc(4rem + 3px);
+	top: calc(3rem + 19px);
 	right: 0rem;
 	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
 	border-radius: 0px 0px 4px 4px;

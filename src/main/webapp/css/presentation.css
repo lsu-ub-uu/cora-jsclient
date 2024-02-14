@@ -333,8 +333,8 @@ textarea {
 	width: auto;
 }
 .workItem .presentation > .pGroup {
-  border-radius: 10px 10px;
-  padding: 1rem 1rem;
+  border-radius: 5px;
+  padding: 0rem 1rem 1rem 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
   margin: 1rem;
 }
@@ -627,14 +627,23 @@ h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle{
 	padding-left: .5rem;
 	padding-right: .5rem;
 	margin-bottom: 1rem;
+}
+
+h2, h3, .h2TextStyle, .h3TextStyle{
 	border-radius: 4px;
 }
 
 h1, .h1TextStyle {
-	font-size: 1.6rem;
+	font-size: 2rem;
 	color: var(--color-white);
 	background-color: var(--color-h1);
 	margin-bottom: 1rem;
+	margin: 0 -1rem 0 -1rem;
+	padding: 0.4rem 1rem 0.4rem 1rem;
+	position: sticky;
+	top: 0rem;
+	z-index: 40;
+	border-radius: 4px 4px 0px 0px;
 }
 
 h2, .h2TextStyle {

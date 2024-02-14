@@ -112,7 +112,7 @@ h2, .h2TextStyle {
 
 .jsClient>.header {
 	display: block;
-	height: 3rem;
+	height: auto;
 	font-size: 2.5rem;
 	text-align: center;
 	font-family: 'UniversalisADFStdRegular';
@@ -190,7 +190,7 @@ h2, .h2TextStyle {
 	top: calc(4rem + 3px);
 	right: 0rem;
 	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
-	border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 0px 4px 4px;
 }
 .holder.loginManagerView .menuOption:hover{
 	color: var(--main-color);
@@ -204,7 +204,7 @@ h2, .h2TextStyle {
 
 .jsClient > .sideBar {
 	overflow: auto;
-	height: calc(100% - 3.5rem);
+	height: calc(100% - 3.5rem - 11px);
 	border-right: 1px solid;
 	border-color: inherit;
 	color: var(--color-grey);
@@ -399,7 +399,7 @@ h2, .h2TextStyle {
 
 .jsClient>.workArea {
 	display: inline;
-	height: calc(100% - 3rem - 6px);
+	height: calc(100% - 3.5rem - 11px);
 	position: absolute;
 	margin-left: 1rem;
 	width: calc(100% - 23rem - 1px);

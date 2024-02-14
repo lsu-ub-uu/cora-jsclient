@@ -39,10 +39,6 @@ h2, .h2TextStyle {
 	color: var(--color-grey);
 }
 
-.jsClient > .workArea {
-height: calc(100% - 2.5rem);
-}
-
 .jsClient label, .jsClient .label, .jsClient .text {
 	margin: 0;
 	color:var(--color-grey);
@@ -51,18 +47,12 @@ height: calc(100% - 2.5rem);
 
 
 .jsClient > .header .menuView {
-	left: 20rem;
-	padding-left: 1rem;
 	color: var(--color-light-grey);
 }
 
 .jsClient > .sideBar {
-	width: 20rem;
-	overflow: auto;
 	scrollbar-color: var(--main-color) var(--color-light-grey);
-	height: calc(100% - 2.5rem);
 	box-shadow: 0 0 10px var(--black-box-10-shadow);
-	border: 0px;
 	color: var(--color-grey);
 	background: var(--color-white);
 }

@@ -264,15 +264,18 @@ img {
 	display: inline-block;
 }
 
-.infoActive {
-	background-color: rgba(60, 150, 255, 0.3);
-	transition: background-color 0.5s linear;
-}
-
 .pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
-	/*background-color: rgba(0, 129, 198, 0.08);*/
+	background-color: rgba(0, 129, 198, 0.08);
+	transition: background-color 0.5s linear;
+}
+
+/* .infoActive { */
+.pVar.infoActive, .pNumVar.infoActive, .pCollVar.infoActive, .pMap.infoActive, .pGroup.infoActive,
+	.pSurroundingContainer.infoActive, .repeatingElement.infoActive, .pRecordLink.infoActive,
+	.pNonRepeatingChildRefHandler.infoActive {
+	background-color: rgba(60, 150, 255, 0.3);
 	transition: background-color 0.5s linear;
 }
 
@@ -633,7 +636,7 @@ h2, h3, .h2TextStyle, .h3TextStyle{
 	border-radius: 4px;
 }
 
-h1, .h1TextStyle {
+h1, .presentation .h1TextStyle {
 	font-size: 2rem;
 	color: var(--color-white);
 	background-color: var(--color-h1);
@@ -644,29 +647,35 @@ h1, .h1TextStyle {
 	top: 0rem;
 	z-index: 3;
 	border-radius: 4px 4px 0px 0px;
+	margin-left: 0px;
 }
 
-h2, .h2TextStyle {
+h2, .presentation .h2TextStyle {
 	font-size: 1.3rem;
 	background-color: var(--color-h2);
+	margin-left: 0px;
 }
 
-h3, .h3TextStyle {
+h3, .presentation .h3TextStyle {
 	font-size: 1.1rem;
-	font-weight: bold
+	font-weight: bold;
+	margin-left: 0px;
 }
 
-h4, .h4TextStyle {
+h4, .presentation .h4TextStyle {
 	font-size: 0.9rem;
-	font-weight: bold
+	font-weight: bold;
+	margin-left: 0px;
 }
 
-h5, .h5TextStyle {
+h5, .presentation .h5TextStyle {
 	font-size: 0.7rem;
+	margin-left: 0px;
 }
 
-h6, .h6TextStyle {
+h6, .presentation .h6TextStyle {
 	font-size: 0.6rem;
+	margin-left: 0px;
 }
 
 .h7TextStyle {

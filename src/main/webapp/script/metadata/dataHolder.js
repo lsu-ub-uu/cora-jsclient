@@ -198,6 +198,7 @@ var CORA = (function(cora) {
 		};
 
 		const setValueInContainerListUsingPath = function(path, value) {
+			console.log(path)
 			let foundContainer = findContainer(path);
 			foundContainer.value = value;
 		};

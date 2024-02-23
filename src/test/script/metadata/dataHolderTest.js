@@ -1259,7 +1259,6 @@ QUnit.only("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
 
 	dataHolder.addChild([], "masterResLink");
-
 	let expected = {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
@@ -1267,15 +1266,53 @@ QUnit.only("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
 			mimeType: ""
 		}]
 	};
+
 	assert.deepEqual(dataHolder.getData(), expected);
 });
 
 QUnit.only("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
-	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
-	let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+	//let dataHolder = this.newDataHolder("groupIdOneTextChild");
 
-	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");
-	
+	//dataHolder.addChild([], "groupIdOneTextChild");
+	//dataHolder.addChild(["groupIdOneTextChild"], "textVariableId");
+
+
+	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+	dataHolder.addChild([], "masterResLink");
+
+	//let dataFromMessage = { data: "A value", path: ["groupIdOneResourceLinkChild", "masterResLink"] };
+	//dataHolder.handleMsg(dataFromMessage, "root/groupIdOneResourceLinkChild/masterResLink/setValue");
+	let message = {
+		data: {
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+					accept: "image/jpeg"
+				}
+			},
+			name: "large",
+			mimeType: "image/jpeg"
+		},
+		path:"root/groupIdOneResourceLinkChild/masterResLink"
+	};
+	/*let dataFromMessage = { "data": "A value", "path": ["groupIdOneTextChild", "textVariableId"] };
+
+	dataHolder.handleMsg(dataFromMessage, "root/textVariableId/setValue");*/
+
+	//dataHolder.handleMsg(message, "root/groupIdOneResourceLinkChild/masterResLink/setValue");
+	let expectedLinkedResourceMessage = {
+		type: "setValue",
+		message: {
+			data: message.data,
+			path: ["groupIdOneResourceLinkChild", "master"],
+			type: "setValue",
+			special: "resourceLink"
+		}
+	};
+	dataHolder.handleMsg(expectedLinkedResourceMessage.message, "root/master/setValue");
+
 	// dataHolder.setValue([], "masterResLink");
 
 	let expected = {

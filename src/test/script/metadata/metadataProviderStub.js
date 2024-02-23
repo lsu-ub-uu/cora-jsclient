@@ -11397,7 +11397,7 @@ function MetadataProviderStub() {
 					children: [{
 						name: "childReferences",
 						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatId1to1(
-							"metadataRecordLink", "masterResLink", "1")]
+							"metadata", "masterResLink", "1")]
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId("groupIdOneResourceLinkChild"))
 				};

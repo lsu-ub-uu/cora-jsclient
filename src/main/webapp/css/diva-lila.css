@@ -93,7 +93,6 @@ h2, .h2TextStyle {
 	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
 	z-index: 1000;
 	box-shadow: 0 0 5px var(--main-color);
-	right: 51.5rem;
 }
 
 .jsClient .workItem > .buttonView input {
@@ -112,7 +111,7 @@ h2, .h2TextStyle {
 	transition: background-color 0.5s linear;
 }
 .editView > .presentation, .showView > .presentation {
-	padding-bottom: 3rem;
+	padding-bottom: 2rem;
 }
 
 .editView > .presentation > .pGroup, .showView > .presentation > .pGroup {

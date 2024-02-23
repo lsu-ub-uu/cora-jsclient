@@ -25,27 +25,33 @@
     font-weight: normal;
     font-style: normal;
 }
+.jsClient > .header {
+	border-top: 10px solid var(--second-color);
+}
+
 .jsClient.mainView {
+	grid-template-columns: 1fr min-content;
+	grid-template-rows: max-content minmax(0, 1fr);
 	border-color: var(--main-color);
 	font-family: "Open Sans", verdana, arial, helvetica, sans-serif;
 }
 .jsClient > .sideBar {
+	grid-column-start: 2;
+	grid-row-start: 2;
+	overflow: auto;
+
     border-color: inherit;
     border-right-style: none;
     border-left: 1px solid;
-	height: calc(100% - 3.5rem - 11px);
-    padding: 0 0.5rem;
-	position: absolute;
-	right: 0;
+	padding: 0 0.5rem;
 }
+
 .sideBar .openGuiItemHandlerView > .header, .searchesViewHeadline, .recordTypeGroupHeadline {
 	color: var(--title-text-color);
 }
 
 .jsClient > .workArea {
-	margin-right: 0.5rem;
-	margin-left: 0.5rem;
-	height: calc(100% - 3.5rem - 11px);
+	grid-column-start: 1;
 }
 
 .workItem > .buttonView {
@@ -56,12 +62,6 @@
 	right: 1rem;
 	z-index: 1000;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-.workItem > .showView {
-	padding-bottom: 3rem;
-}
-.workItem > .editView {
-	padding-bottom: 3rem;
 }
 
 /*.infoActive {
@@ -205,8 +205,4 @@ input[type="button"]:focus {
 .listView .h1TextStyle, .listView .h1TextStyle .text {
 	color: var(--alternative-text-color);
 	font-size: 1rem;
-}
-
-.workArea>.workView>.workItem>.editView, .workArea>.workView>.workItem>.showView {
-	height: calc(100% - 5rem);
 }

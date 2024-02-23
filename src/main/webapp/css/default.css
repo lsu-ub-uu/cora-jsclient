@@ -2,7 +2,7 @@
 	position: absolute;
 	bottom: 0rem;
 	background-color: var(--main-color);
-	padding: 0.2rem 0.2rem 0rem 0.2rem;
+	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
 	right: 1rem;
 	z-index: 999;
 }

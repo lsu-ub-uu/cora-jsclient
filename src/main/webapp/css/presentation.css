@@ -291,6 +291,13 @@ img {
 
 .workView .pVar {
 	flex: 1;
+/* 	display: grid; */
+/* 	grid-template-columns: 1fr minmax(0, 1fr); */
+/* 	grid-template-rows: max-content max-content max-content; */
+/* 	grid-template-areas:  */
+/* 		"label infoButton" */
+/* 		"attributes infoButton" */
+/* 		"input infoButton"; */
 }
 
 .default, input[type="button"], input[type="file"] {
@@ -353,6 +360,7 @@ textarea {
   padding-top: 1rem;
   padding: 1rem;
 }
+
 .pGroup.recordTypeOutputPGroup {
   margin-top: .5rem;
   margin-left: .5rem;
@@ -362,7 +370,6 @@ textarea {
 }
 
 .pGroup {
-	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	column-gap: 1rem;
@@ -453,7 +460,9 @@ textarea {
 	z-index: 0;
 	order: 1;
 }
-
+.workView .presentation > .pGroup > .infoButton {
+	z-index: 1005;
+}
 .workView .infoButton {
 	z-index: 5;
 	position: absolute;

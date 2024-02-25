@@ -58,7 +58,7 @@ h2, .h2TextStyle {
 	min-height: 5rem;
 	position: absolute;
 	overflow: hidden;
-	z-index: 1000;
+	z-index: 1010;
 	top: 3rem;
 	right: 1rem;
 	min-width: 13rem;
@@ -99,6 +99,9 @@ h2, .h2TextStyle {
 	display: grid;
 	grid-template-columns: min-content 1fr;
 	grid-template-rows: max-content minmax(0, 1fr);
+	grid-template-areas: 
+		"header header"
+		"sideBar workArea";
 	height: 100%;
 	border-color: var(--main-color);
 	position: relative;
@@ -113,8 +116,7 @@ h2, .h2TextStyle {
 }
 
 .jsClient>.header {
-	grid-column-start: span 2;
-	grid-row-start: 1;
+	grid-area: header;
 	height: 3rem;
 	font-size: 2.5rem;
 	text-align: center;
@@ -205,8 +207,7 @@ h2, .h2TextStyle {
 }
 
 .jsClient > .sideBar {
-	grid-column-start: 1;
-	grid-row-start: 2;
+	grid-area: sideBar;
 	overflow: auto;
 
 	border-right: 1px solid;
@@ -320,8 +321,6 @@ h2, .h2TextStyle {
 	text-decoration: inherit;
 }
 
-
-
 .sideBar .childrenView {
 	display: block;
 	width: 100%;
@@ -398,8 +397,7 @@ h2, .h2TextStyle {
 }
 
 .jsClient>.workArea {
-	grid-column-start: 2;
-	grid-row-start: 2;
+	grid-area: workArea;
 	height: 100%;
 	width: 100%;
 }
@@ -427,7 +425,10 @@ h2, .h2TextStyle {
 .workArea .workView>.workItem.recordHandler {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: max-content minmax(0, 1fr) 2em;
+	grid-template-rows: max-content minmax(0, 1fr);
+	grid-template-areas: 
+		"topBar topBar"
+		"editView showView";
 }
 
 .workArea .workView>.workItem.search {
@@ -439,8 +440,7 @@ h2, .h2TextStyle {
 }
 
 .topBar {
-	grid-column-start: 1;
-	grid-column-end: 3;
+	grid-area: topBar;
 	height: 2rem;
 	border-bottom: 1px solid var(--main-color);
 }
@@ -464,32 +464,21 @@ h2, .h2TextStyle {
 .jsClient .editView, .jsClient .showView {
 	overflow: scroll;
 }
-	/*
-	flex: 1 1 calc(50% - 1rem);
-	margin-top: 0rem;
-	margin-right: 0.5rem;
-	margin-left: 0rem;
-	height: 100%;
-	overflow-y: auto;
-*/
-
 
 .jsClient .editView {
-	grid-column-start: 1;
-	grid-row-start: 2;
-	grid-row-end: 4;
+	grid-area: editView;
 }
 .jsClient .showView {
-	grid-column-start: 2;
-	grid-row-start: 2;
-	grid-row-end: 4;
+	grid-area: showView;
 }
 
 .jsClient .workItem>.buttonView {
-	grid-column-start: 1;
-	grid-row-start: 3;
-	display: block;
-	flex: 0 0 100%;
+	position: absolute;
+	bottom: 0rem;
+	right: 1rem;
+	background-color: var(--main-color);
+	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+	z-index: 1009;
 }
 
 

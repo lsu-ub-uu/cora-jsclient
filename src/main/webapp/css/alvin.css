@@ -15,6 +15,7 @@
 #systemOneLoading, #divaLoading {
 	display: none;
 }
+
 #alvinLoading {
 	display: block;
 }
@@ -32,14 +33,14 @@
 .jsClient.mainView {
 	grid-template-columns: 1fr min-content;
 	grid-template-rows: max-content minmax(0, 1fr);
+	grid-template-areas: 
+		"header header"
+		"workArea sideBar";
 	border-color: var(--main-color);
 	font-family: "Open Sans", verdana, arial, helvetica, sans-serif;
 }
-.jsClient > .sideBar {
-	grid-column-start: 2;
-	grid-row-start: 2;
-	overflow: auto;
 
+.jsClient > .sideBar {
     border-color: inherit;
     border-right-style: none;
     border-left: 1px solid;
@@ -50,13 +51,9 @@
 	color: var(--title-text-color);
 }
 
-.jsClient > .workArea {
-	grid-column-start: 1;
-}
-
 .workItem > .buttonView {
-	position: absolute;
-	bottom: 0;
+/* 	position: absolute; */
+/* 	bottom: 0; */
 	background-color: transparent;
 	padding: 0.2rem 0.2rem 0rem 0.2rem;
 	right: 1rem;

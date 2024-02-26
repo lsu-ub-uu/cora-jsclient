@@ -187,7 +187,7 @@ h2, .h2TextStyle {
 	min-width: 10rem;
 	min-height: 10rem;
 	position: absolute;
-	z-index: 1000;
+	z-index: 1015;
 	background: var(--color-white);
 	padding: 10px;
 	/*Calculation of headers height*/

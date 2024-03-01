@@ -85,7 +85,8 @@
 	border-top: 10px solid lightgrey;
 	border-bottom: 1px solid var(--main-color);
 }
-.jsClient > .header .menuView{
+
+.jsClient > .header .menuView {
 	color:var(--color-dark-grey);
 }
 
@@ -93,13 +94,15 @@
 	color: black;
 }
 
-h1, .h1TextStyle{
+.jsClient h1, .jsClient .h1TextStyle {
   font-size: 1.6rem;
   color: var(--color-white);
   background-color: var(--color-black);
 }
-h2, h3, h4, .h2TextStyle, .h3TextStyle,.h4TextStyle{
-  color: var(--color-black) !important;
+
+.jsClient h2, .jsClient h3, .jsClient h4, .jsClient .h2TextStyle, .jsClient .h3TextStyle, 
+	.jsClient .h4TextStyle {
+  color: var(--color-black);
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
@@ -116,7 +119,7 @@ h2, h3, h4, .h2TextStyle, .h3TextStyle,.h4TextStyle{
 	margin-top: 0;
 }
 
-.jsClient .sideBar{
+.jsClient .sideBar {
 	color: var(--alternative-text-color);
 }
 

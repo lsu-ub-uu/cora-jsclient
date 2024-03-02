@@ -1,21 +1,15 @@
 :root {
-  --main-loading-color: #75598E;
-  --main-color: #75598E;
-  --main-darkare-color: #5C4A6B;
-  --color-light-grey: #DCDCDC;
-  --color-white: white;
-  --color-grey: #131313;
-  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
-  --text-shadow-12-trans: rgba(0,0,0,0.12);
-  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --blue-10-trans: rgba(117, 88, 141, 0.07);
-  --color-selected-on-menu: black;
+  --main-color: rgba(117, 89, 142);
+  --second-color: rgba(142, 115, 167);
+  --color-white-90-trans: rgba(252, 252, 252, 0.9);
+/*   --blue-10-trans: rgba(117, 88, 141, 0.07); */
   --inbox-28-shadow: rgba(255,255,255,0.28);
   --box-sahow-17-trans:rgba(255,255,255,0.17);
   --menu-2n-color: rgba(167, 114, 166, 0.1);
-  --maincolor-10-trans: rgba(117, 89, 142, 0.1);
-  --maincolor-30-trans: rgba(117, 89, 142, 0.3);
-  --maincolor-50-trans: rgba(117, 89, 142, 0.5);
+  --color-h1: var(--main-color);
+  --color-h2: rgba(117, 89, 142, 0.9);
+  --color-h3: rgba(117, 89, 142, 0.8);
+  --color-h4: rgba(117, 89, 142, 0.7);
 }
 #systemOneLoading, #alvinLoading {
 	display: none;
@@ -24,8 +18,13 @@
 	display: block;
 }
 
-h2 {
-	color: #5C4A6B;
+h1, .h1TextStyle {
+	letter-spacing: 2px;
+}
+
+h2, .h2TextStyle {
+	color:var(--color-white);
+	letter-spacing: 2px;
 }
 
 .showView .presentation .text.color-light-grey, .showView .presentation {
@@ -33,77 +32,39 @@ h2 {
 }
 
 .workView .pVar {
-		border-radius: 10px;
+	border-radius: 5px;
 }
 
 .jsClient{
 	color: var(--color-grey);
 }
 
-.jsClient > .workArea {
-height: calc(100% - 2.5rem);
-}
-
-.jsClient label, .jsClient .label, .jsClient .text, .jsClient h1, .jsClient h2, .jsClient h3, .jsClient h4 {
+.jsClient label, .jsClient .label, .jsClient .text {
 	margin: 0;
-	color: #5C4A6B;
+	color:var(--color-grey);
 	letter-spacing: 2px;
-/* 	font-weight: normal; */
 }
 
-.jsClient > .header .menuView {
-	left: 20rem;
-	padding-left: 1rem;
-}
-
-.jsClient > .header {
-	display: block;
-	height: 2.5rem;
-	font-size: 2rem;
-	text-align: center;
-	color: var(--color-light-grey);
-	border-bottom: 1px solid;
-	border-color: inherit;
-	text-shadow: none;
-	background-color: var(--main-loading-color);
-	padding-left: 1rem;
-	padding-right: 1rem;
-	box-shadow: 0 0 10px var(--black-box-10-shadow);
-	z-index: 10;
-	position: relative;
-	border: none;
-}
 
 .jsClient > .header .menuView {
 	color: var(--color-light-grey);
-}
-
-.presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
-	color: purple;
 }
 
 .jsClient > .sideBar {
-	width: 20rem;
-	overflow: auto;
-	scrollbar-width: thin;
-	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
-	height: calc(100% - 2.5rem);
+	scrollbar-color: var(--main-color) var(--color-light-grey);
 	box-shadow: 0 0 10px var(--black-box-10-shadow);
-	border: 0px;
 	color: var(--color-grey);
 	background: var(--color-white);
 }
 
-.header select{
-	float:right;
-	margin-top:1rem;
-}
-
 .workArea .workView > .workItem {
 	justify-content: space-between;
+	padding-right: 0.3rem;
 }
+
 .topBar {
 	order: 0;
+	border: none;
 }
 .holder.tool {
 	order: 1;
@@ -122,8 +83,6 @@ height: calc(100% - 2.5rem);
 
 .sideBar .active, .header .active {
 	font-weight: bold;
-/* 	background-color: var(--main-loading-color) !important; */
-/* 	color: var(--color-selected-on-menu); */
 }
 
 .workItem > .buttonView {
@@ -133,49 +92,49 @@ height: calc(100% - 2.5rem);
 	border-radius: 10px;
 	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
 	z-index: 1000;
-	box-shadow: 0 0 5px var(--main-loading-color);
-	right: 51.5rem;
+	box-shadow: 0 0 5px var(--main-color);
 }
+
 .jsClient .workItem > .buttonView input {
 	height: 2rem;
 	position: relative;
 	white-space: normal;
 	margin: 0px 2px 0px 2px;
 }
-.infoActive {
+/*.infoActive {
 	background-color: var(--blue-10-trans);
 	transition: background-color 0.5s linear;
-}
+}*/
 .pVar:hover, .pCollVar:hover, .pGroup:hover, 
 .pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover {
-	background-color: var(--blue-10-trans);
+/*	background-color: var(--blue-10-trans);*/
 	transition: background-color 0.5s linear;
 }
 .editView > .presentation, .showView > .presentation {
-	padding-bottom: 3rem;
+	padding-bottom: 2rem;
 }
 
 .editView > .presentation > .pGroup, .showView > .presentation > .pGroup {
-	border-radius: 10px 10px;
+	border-radius: 5px;
 	padding: 0 1rem;
 	box-shadow: 0 0 10px var(--black-box-10-shadow);
 }
 
 .presentation h1, .presentation .text.h1TextStyle {
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	font-size: 1.2rem;
-  font-weight: bold;
+	font-weight: bold;
 	background-color: var(--color-light-grey);
-	border-radius: 10px 0 0 0;
+	border-radius: 5px 0 0 0;
 	margin: 0 -1rem 0 -1rem;
 	padding: 0.4rem 1rem 0.4rem 1rem;
-  position: sticky;
+	position: sticky;
 	top: 0rem;
 	z-index: 3;
 }
 
 .presentation .text.color-light-grey {
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	position: sticky;
 	top: 2.5rem;
 	background: var(--color-light-grey);
@@ -183,25 +142,24 @@ height: calc(100% - 2.5rem);
 }
 
 input[type="button"], .form-style-10 input[type="submit"] {
-	background: var(--color-white);
+	background: var(--color-white-90-trans);
 	padding: 4px 11px 4px 11px;
 	border-radius: 5px;
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	text-shadow: 1px 1px 3px var(--text-shadow-12-trans);
 	font: normal 30px serif;
 	box-shadow: inset 0 2px 2px 0 var(--box-sahow-17-trans);
-	border: 1px solid var(--main-loading-color);
+	border: 1px solid var(--main-color);
 	font-size: 15px;
 }
 
  input[type="button"]:hover, .form-style-10 input[type="submit"]:hover {
-	background: var(--menu-2n-color);
+	background: var(--color-h3);
 	box-shadow: inset 0 2px 2px 0 var(--inbox-28-shadow);
 	cursor: pointer;
+	color: white;
 }
-.topBar {
-	border: none;
-}
+
 .editView .repeatingElement:last-child {
 	margin-bottom: 0;
 }
@@ -211,57 +169,39 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	order: 10;
 }
 
-.workArea .workView > .workItem {
-	padding-right: 0.3rem;
-}
-
 .sideBar .menuView:nth-child(2n) {
 	background-color: var(--menu-2n-color);
 }
 .header .menuView:nth-child(2n) {
 	background-color: none;
 }
-.header .logoHeader {
-	background: url("../images/divaIcon2.svg") no-repeat scroll;
-	content: "";
-	background-position: -0px -0px;
-	opacity: 0.8;
-	height: 20px;
-	width: 60px;
-	transform: scale(1.2, 1.2);
-	position: absolute;
-	left: 6rem;
-	top: 0.6rem;
-	z-index: -1;
-}
-.header .menu {
-	background: url("../images/divaIcon2.svg") no-repeat scroll;
-	content: "";
-	background-position: -3px -27px;
-	height: 24px;
-	width: 26px;
-	transform: scale(1.2, 1.2);
-	position: absolute;
-	left: 1.2rem;
-	top: 0.75rem;
-	z-index: -1;
-	float: left;
-	border: 0px;
-}
+/* .header .logoHeader { */
+/* 	background: url("../images/divaIcon2.svg") no-repeat scroll; */
+/* 	content: ""; */
+/* 	background-position: -0px -0px; */
+/* 	opacity: 0.8; */
+/* 	height: 20px; */
+/* 	width: 60px; */
+/* 	transform: scale(1.2, 1.2); */
+/* 	position: absolute; */
+/* 	left: 6rem; */
+/* 	top: 0.6rem; */
+/* 	z-index: -1; */
+/* } */
 
-.header .logoHeaderLogo {
-	background: url("../images/divaIcon2.svg") no-repeat scroll;
-	content: "";
-	background-position: -60px -0px;
-	opacity: 0.4;
-	height: 28px;
-	width: 30px;
-	transform: scale(0.9, 0.9);
-	position: absolute;
-	left: 4rem;
-	top: 0.5rem;
-	z-index: -1;
-}
+/* .header .logoHeaderLogo { */
+/* 	background: url("../images/divaIcon2.svg") no-repeat scroll; */
+/* 	content: ""; */
+/* 	background-position: -60px -0px; */
+/* 	opacity: 0.4; */
+/* 	height: 28px; */
+/* 	width: 30px; */
+/* 	transform: scale(0.9, 0.9); */
+/* 	position: absolute; */
+/* 	left: 4rem; */
+/* 	top: 0.5rem; */
+/* 	z-index: -1; */
+/* } */
 
 .iconButton.loginManagerView{
 	margin-top: 0rem;
@@ -270,65 +210,21 @@ input[type="button"], .form-style-10 input[type="submit"] {
 	top: 0.4rem;
 }
 
-
-.holder.loginManagerView {
-	background: var(--color-light-grey);
-	padding: 4px;
-	top: 2.5rem;
-	right: 0rem;
-	max-height: calc(100% - 4.14rem);
-	font-size: 0.8rem;
-	padding: 0.8rem;
-	border: 1px solid var(--main-loading-color);
-	overflow: auto;
-	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
-	scrollbar-width: thin;
-	box-shadow: 0 0 10px var(--black-box-10-shadow);
-	border: 0px;
-	background: var(--color-white);
-}
-
-.menuOption {
-	padding: 5px;
-}
-
-.menuOption:hover {
-    background: var(--main-loading-color);
-	  color: var(--color-white);
-	border-radius: 5px
-}
-
-
-.header.clickable {
-    padding: 3px;
-}
-
-.header.clickable:hover {
-	background: var(--main-loading-color);
-	border-radius: 5px;
-	color: var(--color-white);
-}
+/* .sideBar{ */
+/* 	margin-bottom: .5rem; */
+/* } */
 
 .openGuiItemHandlerView > .recordType, .recordTypesView .recordType, .searchesView > .searchRecord {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
-.sideBar .header {
-    border-bottom: 0px;
-}
-
 .recordTypeGroupHeadline{
-	color: var(--main-loading-color);
+	color: var(--main-color);
 	font-size: 1.2rem;
-}
-
-.sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover{
-	text-decoration: none; 
 }
 
 .editView, .showView {
 	overflow: auto;
-	scrollbar-color: var(--main-loading-color) var(--color-light-grey);
-	scrollbar-width: thin;
+	scrollbar-color: var(--main-color) var(--color-light-grey);
 }

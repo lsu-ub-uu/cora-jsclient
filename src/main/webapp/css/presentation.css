@@ -1,3 +1,9 @@
+:root {
+  --color-presentation-grey: #868686;
+}
+
+var(--color-presentation-grey)
+
 .jsClient {
 	white-space: pre-wrap;
 }
@@ -58,6 +64,7 @@ img {
 	float: right;
 	position: relative;
 	margin-right: 2px;
+	top: 0.1rem;
 }
 
 .iconButton::before, .iconButton::after {
@@ -95,10 +102,6 @@ img {
 .infoButton, .openLinkedRecordButton, .showSearchButton {
 	height: 16px;
 	width: 16px;
-}
-
-.iconButton {
-	top: 0.1rem;
 }
 
 .openLinkedRecordButton::before {
@@ -261,15 +264,18 @@ img {
 	display: inline-block;
 }
 
-.infoActive {
-	background-color: rgba(0, 129, 198, 0.1);
-	transition: background-color 0.5s linear;
-}
-
 .pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
 	background-color: rgba(0, 129, 198, 0.08);
+	transition: background-color 0.5s linear;
+}
+
+/* .infoActive { */
+.pVar.infoActive, .pNumVar.infoActive, .pCollVar.infoActive, .pMap.infoActive, .pGroup.infoActive,
+	.pSurroundingContainer.infoActive, .repeatingElement.infoActive, .pRecordLink.infoActive,
+	.pNonRepeatingChildRefHandler.infoActive {
+	background-color: rgba(60, 150, 255, 0.3);
 	transition: background-color 0.5s linear;
 }
 
@@ -285,6 +291,18 @@ img {
 
 .workView .pVar {
 	flex: 1;
+/* 	display: grid; */
+/* 	grid-template-columns: 1fr minmax(0, 1fr); */
+/* 	grid-template-rows: max-content max-content max-content; */
+/* 	grid-template-areas:  */
+/* 		"label infoButton" */
+/* 		"attributes infoButton" */
+/* 		"input infoButton"; */
+}
+
+.default, input[type="button"], input[type="file"] {
+/*   margin-bottom: 0.5rem; */
+/*   margin-top: 0.5rem; */
 }
 
 .attributes {
@@ -325,8 +343,8 @@ textarea {
 	width: auto;
 }
 .workItem .presentation > .pGroup {
-  border-radius: 10px 10px;
-  padding: 1rem 1rem;
+  border-radius: 5px;
+  padding: 0rem 1rem 1rem 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
   margin: 1rem;
 }
@@ -342,6 +360,7 @@ textarea {
   padding-top: 1rem;
   padding: 1rem;
 }
+
 .pGroup.recordTypeOutputPGroup {
   margin-top: .5rem;
   margin-left: .5rem;
@@ -351,7 +370,6 @@ textarea {
 }
 
 .pGroup {
-	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	column-gap: 1rem;
@@ -365,7 +383,12 @@ textarea {
 	padding-right: 16px;
 }
 
-.jsClient .workView .inline span, .jsClient .workView .inline div, .inline {
+.inline {
+  display: inherit;
+  position: static;
+}
+
+.jsClient .workView .inline span, .jsClient .workView .inline div {
 	display: inline;
 	position: static;
 }
@@ -398,7 +421,8 @@ textarea {
 }
 
 .workView .pRecordLink.searchActive {
-	border: 1px dashed #c5c5c5;	
+	border: 1px dashed var(--color-presentation-grey);	
+	border-radius: 10px 10px;
 }
 
 .workView .pRecordLink>.infoView {
@@ -420,22 +444,25 @@ textarea {
 .workView .pRecordLink>.search {
 	flex: 10 1 80%;
 	order: -1;
-	border-bottom: 1px dashed #c5c5c5;
+	border-bottom: 1px dashed var(--color-presentation-grey);
 }
 
 .workView .pRecordLink>.search .listItem {
-	border-bottom: 1px dashed #c5c5c5;
+	border-bottom: 1px dashed var(--color-presentation-grey);
 }
 
 .jsClient .workView .recordViewer {
 	flex: 10 1 80%;
-	border: 1px dashed #c5c5c5;
+	border: 1px dashed var(--color-presentation-grey);
+	border-radius: 10px 10px;
 	position: relative;
 	overflow: hidden;
 	z-index: 0;
 	order: 1;
 }
-
+.workView .presentation > .pGroup > .infoButton {
+	z-index: 1005;
+}
 .workView .infoButton {
 	z-index: 5;
 	position: absolute;
@@ -503,8 +530,8 @@ position: relative;
 	width: 16px;
 	transform: scale(10, 10);
 	position: absolute;
-	right: 4.8rem;
-	top: 4.5rem;
+	right: 6.8rem;
+	top: 8.1rem;
 }
 
 .infoView .defTextView {
@@ -612,35 +639,55 @@ h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle{
 	padding-left: .5rem;
 	padding-right: .5rem;
 	margin-bottom: 1rem;
-	border-radius: 8px;
 }
 
-h1, .h1TextStyle {
+h2, h3, .h2TextStyle, .h3TextStyle{
+	border-radius: 4px;
+}
+
+h3, .h3TextStyle{
+	padding-left: 0rem;
+}
+
+
+h1, .presentation .h1TextStyle {
 	font-size: 1.6rem;
 	color: var(--color-white);
-	background-color: var(--maincolor-50-trans);
+	background-color: var(--color-h1);
+	margin: 0 -1rem 0 -1rem;
+	padding: 0.2rem 1rem 0.2rem 1rem;
+	position: sticky;
+	top: 0rem;
+	z-index: 1001;
+	border-radius: 4px 4px 0px 0px;
 }
 
-h2, .h2TextStyle {
+h2, .presentation .h2TextStyle {
 	font-size: 1.3rem;
-	background-color: var(--maincolor-30-trans);
+	background-color: var(--color-h2);
+	margin-left: 0px;
 }
 
-h3, .h3TextStyle {
-	font-size: 1rem;
-	background-color: var(--maincolor-10-trans);
+h3, .presentation .h3TextStyle {
+	font-size: 1.1rem;
+	font-weight: bold;
+	margin-left: 0px;
 }
 
-h4, .h4TextStyle {
-	font-size: 0.8rem;
+h4, .presentation .h4TextStyle {
+	font-size: 0.9rem;
+	font-weight: bold;
+	margin-left: 0px;
 }
 
-h5, .h5TextStyle {
+h5, .presentation .h5TextStyle {
 	font-size: 0.7rem;
+	margin-left: 0px;
 }
 
-h6, .h6TextStyle {
+h6, .presentation .h6TextStyle {
 	font-size: 0.6rem;
+	margin-left: 0px;
 }
 
 .h7TextStyle {
@@ -680,11 +727,11 @@ label::after, .label:after {
 }
 
 .repeatingElement:first-child {
-	border-top: 1px dashed #0082c9;
+	border-top: 1px dashed var(--main-color);
 }
 
 .repeatingElement {
-	border-bottom: 1px dashed #0082c9;
+	border-bottom: 1px dashed var(--main-color);
 	transition: background-color 0.5s linear;
 	position: relative;
 	border-bottom: 0.2rem;
@@ -699,7 +746,7 @@ label::after, .label:after {
 	border-bottom: none;
 }
 
-.recordViewer::before {
+/*.recordViewer::before {
 	background: url("../images/icons3.svg") no-repeat scroll;
 	content: "";
 	background-position: -240px -32px;
@@ -711,7 +758,7 @@ label::after, .label:after {
 	right: 5.5rem;
 	top: 5rem;
 	z-index: -1;
-}
+}*/
 
 .compactChildStyle .pGroup, .compactChildStyle .pVar, .compactChildStyle .pCollVar, .compactChildStyle .pSurroundingContainer {
 	padding-right: 0;

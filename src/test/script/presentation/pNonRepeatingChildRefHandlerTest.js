@@ -59,7 +59,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 				}, {
 					"name" : "presentationsOf",
 					"children" : [ {
-						"repeatId" : "0",
+						repeatId : "0",
 						"children" : [ {
 							"name" : "linkedRecordType",
 							"value" : "metadata"
@@ -72,7 +72,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 				}, {
 					"name" : "presentationsOf",
 					"children" : [ {
-						"repeatId" : "0",
+						repeatId : "0",
 						"children" : [ {
 							"name" : "linkedRecordType",
 							"value" : "metadata"
@@ -109,7 +109,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 		}, {
 			"name" : "presentationsOf",
 			"children" : [ {
-				"repeatId" : "0",
+				repeatId : "0",
 				"children" : [ {
 					"name" : "linkedRecordType",
 					"value" : "metadata"
@@ -128,28 +128,28 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 	assert.strictEqual(pNonRepeatingChildRefHandler.type, "pNonRepeatingChildRefHandler");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 	assert.strictEqual(pNonRepeatingChildRefHandler.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testGetSpec", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 	assert.strictEqual(pNonRepeatingChildRefHandler.getSpec(), this.spec);
 });
 
 QUnit.test("testInitCreatesPresentation",
 		function(assert) {
-			var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+			let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 					this.spec);
-			var factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(0);
+			let factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(0);
 
 			assert.strictEqual(factoredPresentationSpec.path, this.spec.parentPath);
 			assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
@@ -158,7 +158,7 @@ QUnit.test("testInitCreatesPresentation",
 			assert.strictEqual(factoredPresentationSpec.cParentPresentation,
 					this.spec.cParentPresentation);
 
-			var factoredAlternativePresentationSpec = this.dependencies.presentationFactory
+			let factoredAlternativePresentationSpec = this.dependencies.presentationFactory
 					.getSpec(1);
 			assert.strictEqual(factoredAlternativePresentationSpec, undefined);
 			assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator)
@@ -166,35 +166,35 @@ QUnit.test("testInitCreatesPresentation",
 		});
 
 QUnit.test("testInitPresentationAddedToView", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var factoredPresentation = this.dependencies.presentationFactory.getFactored(0);
+	let factoredPresentation = this.dependencies.presentationFactory.getFactored(0);
 
-	var addedView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0)
+	let addedView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0)
 			.getAddedChild(0);
 	assert.strictEqual(factoredPresentation.getView(), addedView);
 });
 
 QUnit.test("testInitOutputDefaultsHidesContent", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 });
 
 QUnit.test("testInitOutputDefaultsSetsStyleToNoContent", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 });
 
 QUnit.test("testGetView", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var view = pNonRepeatingChildRefHandler.getView();
+	let view = pNonRepeatingChildRefHandler.getView();
 	assert.strictEqual(view, this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(
 			0).getView());
 });
@@ -205,12 +205,12 @@ QUnit
 				function(assert) {
 					this.spec.textStyle = "someTextStyle";
 					this.spec.childStyle = "someChildStyle";
-					var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(
+					let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(
 							this.dependencies, this.spec);
 
-					var viewSpec = this.dependencies.pNonRepeatingChildRefHandlerViewFactory
+					let viewSpec = this.dependencies.pNonRepeatingChildRefHandlerViewFactory
 							.getSpec(0);
-					var expectedSpec = {
+					let expectedSpec = {
 						presentationId : "somePresentationId",
 						textStyle : "someTextStyle",
 						childStyle : "someChildStyle",
@@ -245,7 +245,7 @@ QUnit.test("testInitWithAlternativeCreatesPresentation",
 				}, {
 					"name" : "presentationsOf",
 					"children" : [ {
-						"repeatId" : "0",
+						repeatId : "0",
 						"children" : [ {
 							"name" : "linkedRecordType",
 							"value" : "metadata"
@@ -257,9 +257,9 @@ QUnit.test("testInitWithAlternativeCreatesPresentation",
 					} ]
 				} ]
 			});
-			var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+			let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 					this.spec);
-			var factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(1);
+			let factoredPresentationSpec = this.dependencies.presentationFactory.getSpec(1);
 
 			assert.strictEqual(factoredPresentationSpec.path, this.spec.parentPath);
 			assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
@@ -273,12 +273,12 @@ QUnit.test("testInitWithAlternativeCreatesPresentation",
 QUnit.test("testInitPresentationAlternativeAddedToView", function(assert) {
 	this.spec.cAlternativePresentation = this.cAlternativePresentation;
 	CORA.pNonRepeatingChildRefHandler(this.dependencies, this.spec);
-	var factoredPresentation = this.dependencies.presentationFactory.getFactored(1);
+	let factoredPresentation = this.dependencies.presentationFactory.getFactored(1);
 
-	var factoredView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0); 
-	var addedView = factoredView.getAddedAlternativeChild(0);
+	let factoredView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0); 
+	let addedView = factoredView.getAddedAlternativeChild(0);
 	assert.strictEqual(factoredPresentation.getView(), addedView);
-	var addedPresentationSize = factoredView.getPresentationSize();
+	let addedPresentationSize = factoredView.getPresentationSize();
 	assert.strictEqual(addedPresentationSize, "bothEqual");
 });
 
@@ -287,40 +287,40 @@ QUnit.test("testInitPresentationAlternativePresentationSize", function(assert) {
 	this.spec.presentationSize = "firstSmaller";
 	CORA.pNonRepeatingChildRefHandler(this.dependencies, this.spec);
 
-	var factoredView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0); 
-	var addedPresentationSize = factoredView.getPresentationSize();
+	let factoredView = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0); 
+	let addedPresentationSize = factoredView.getPresentationSize();
 	assert.strictEqual(addedPresentationSize, "firstSmaller");
 });
 
 QUnit.test("testInitSubscribesToAdd", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 
-	var subscriptions = this.dependencies.pubSub.getSubscriptions();
+	let subscriptions = this.dependencies.pubSub.getSubscriptions();
 	assert.strictEqual(subscriptions.length, 1)
 	assert.strictEqual(subscriptions[0].type, "add");
 	assert.stringifyEqual(subscriptions[0].path, this.spec.parentPath);
 	assert.strictEqual(subscriptions[0].context, undefined);
-	assert.strictEqual(subscriptions[0].functionToCall, pNonRepeatingChildRefHandler.subscribeMsg);
+	assert.strictEqual(subscriptions[0].functionToCall, pNonRepeatingChildRefHandler.possiblySubscribeOnAddMsg);
 });
 
-QUnit.test("testSubscribesWhenAdd", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+QUnit.test("testSubscribesWhenAdd_SameId", function(assert) {
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 
-	var msg = "root/add";
-	var dataFromMsg = {
-		"metadataId" : "groupWithOneCollectionVarChildGroup",
-		"path" : [],
-		"repeatId" : "1",
-		"nameInData" : "groupWithOneCollectionVarChildGroup"
+	let msg = "root/add";
+	let dataFromMsg = {
+		metadataId : "groupWithOneCollectionVarChildGroup",
+		path : [],
+		repeatId : "1",
+		nameInData : "groupWithOneCollectionVarChildGroup"
 	};
-	var subscriptions = this.dependencies.pubSub.getSubscriptions();
+	let subscriptions = this.dependencies.pubSub.getSubscriptions();
 	assert.strictEqual(subscriptions.length, 1)
 
-	pNonRepeatingChildRefHandler.subscribeMsg(dataFromMsg, msg);
+	pNonRepeatingChildRefHandler.possiblySubscribeOnAddMsg(dataFromMsg, msg);
 	
-	var path = ["groupWithOneCollectionVarChildGroup.1"];
+	let path = ["groupWithOneCollectionVarChildGroup.1"];
 	
 	assert.strictEqual(subscriptions.length, 2)
 	assert.strictEqual(subscriptions[1].type, "*");
@@ -330,37 +330,156 @@ QUnit.test("testSubscribesWhenAdd", function(assert) {
 			pNonRepeatingChildRefHandler.handleMsgToDeterminDataState);
 });
 
-QUnit.test("testSubscribesWhenAddNoSubscriptionForNonHandledMetdataId", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+QUnit.test("testSubscribesWhenAdd_OtherIdSameNameInDataAttributes", function(assert) {
+	this.spec.cPresentation = CORA.coraData({
+		"name" : "presentation",
+		"children" : [ {
+			"name" : "recordInfo",
+			"children" : [ {
+				"name" : "id",
+				"value" : "somePresentationId"
+			}, {
+				"name" : "type",
+				"children" : [ {
+					"name" : "linkedRecordType",
+					"value" : "recordType"
+				}, {
+					"name" : "linkedRecordId",
+					"value" : "presentationSurroundingContainer"
+				} ]
+			} ]
+		}, {
+			"name" : "presentationsOf",
+			"children" : [ {
+				repeatId : "0",
+				"children" : [ {
+					"name" : "linkedRecordType",
+					"value" : "metadata"
+				}, {
+					"name" : "linkedRecordId",
+					"value" : "groupWithOneCollectionVarChildGroupOtherIdSameNameInData"
+				} ],
+				"name" : "presentationOf"
+			} ]
+		}
+		]
+	});
+	
+	
+	
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-	var msg = "root/add";
-	var dataFromMsg = {
-		"metadataId" : "groupWithOneCollectionVarChildGroupNotHandled",
-		"path" : [],
-		"repeatId" : "1",
-		"nameInData" : "groupWithOneCollectionVarChildGroup"
+	let msg = "root/add";
+	let dataFromMsg = {
+		metadataId : "groupWithOneCollectionVarChildGroup",
+		path : [],
+		repeatId : "1",
+		nameInData : "groupWithOneCollectionVarChildGroup"
 	};
-	var subscriptions = this.dependencies.pubSub.getSubscriptions();
+	let subscriptions = this.dependencies.pubSub.getSubscriptions();
 	assert.strictEqual(subscriptions.length, 1)
 
-	pNonRepeatingChildRefHandler.subscribeMsg(dataFromMsg, msg);
+	pNonRepeatingChildRefHandler.possiblySubscribeOnAddMsg(dataFromMsg, msg);
+	
+	let path = ["groupWithOneCollectionVarChildGroup.1"];
+	
+	assert.strictEqual(subscriptions.length, 2)
+	assert.strictEqual(subscriptions[1].type, "*");
+	assert.stringifyEqual(subscriptions[1].path, path);
+	assert.strictEqual(subscriptions[1].context, undefined);
+	assert.strictEqual(subscriptions[1].functionToCall,
+			pNonRepeatingChildRefHandler.handleMsgToDeterminDataState);
+});
+QUnit.test("testSubscribesWhenAdd_OtherIdNotSameNameInDataAttributes", function(assert) {
+	this.spec.cPresentation = CORA.coraData({
+		"name" : "presentation",
+		"children" : [ {
+			"name" : "recordInfo",
+			"children" : [ {
+				"name" : "id",
+				"value" : "somePresentationId"
+			}, {
+				"name" : "type",
+				"children" : [ {
+					"name" : "linkedRecordType",
+					"value" : "recordType"
+				}, {
+					"name" : "linkedRecordId",
+					"value" : "presentationSurroundingContainer"
+				} ]
+			} ]
+		}, {
+			"name" : "presentationsOf",
+			"children" : [ {
+				repeatId : "0",
+				"children" : [ {
+					"name" : "linkedRecordType",
+					"value" : "metadata"
+				}, {
+					"name" : "linkedRecordId",
+					"value" : "groupWithOneCollectionVarChildAndOneTextChildGroup"
+				} ],
+				"name" : "presentationOf"
+			} ]
+		}
+		]
+	});
+	
+	
+	
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+			this.spec);
+
+	let msg = "root/add";
+	let dataFromMsg = {
+		metadataId : "groupWithOneCollectionVarChildGroup",
+		path : [],
+		repeatId : "1",
+		nameInData : "groupWithOneCollectionVarChildGroup"
+	};
+	let subscriptions = this.dependencies.pubSub.getSubscriptions();
+	assert.strictEqual(subscriptions.length, 1)
+
+	pNonRepeatingChildRefHandler.possiblySubscribeOnAddMsg(dataFromMsg, msg);
+	
+	let path = ["groupWithOneCollectionVarChildGroup.1"];
+	
+	assert.strictEqual(subscriptions.length, 1)
+});
+
+
+QUnit.test("testSubscribesWhenAddNoSubscriptionForNonHandledMetdataId", function(assert) {
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+			this.spec);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+	let msg = "root/add";
+	let dataFromMsg = {
+		metadataId : "groupWithOneCollectionVarChildGroupNotHandled",
+		path : [],
+		repeatId : "1",
+		nameInData : "groupWithOneCollectionVarChildGroup"
+	};
+	let subscriptions = this.dependencies.pubSub.getSubscriptions();
+	assert.strictEqual(subscriptions.length, 1)
+
+	pNonRepeatingChildRefHandler.possiblySubscribeOnAddMsg(dataFromMsg, msg);
 	assert.strictEqual(subscriptions.length, 1)
 });
 
 QUnit.test("testChangeViewOnMessage", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue",
-		"path" : []
+		path : []
 	};
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
 
@@ -369,27 +488,27 @@ QUnit.test("testChangeViewOnMessage", function(assert) {
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 	
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 1);
-	var firstMessage = this.dependencies.pubSub.getMessages()[0];
+	let firstMessage = this.dependencies.pubSub.getMessages()[0];
 	assert.strictEqual(firstMessage.type, "presentationShown");
-	var expectedMessage = {
+	let expectedMessage = {
 		"data" : "",
-		"path" : []
+		path : []
 	};
 	assert.stringifyEqual(firstMessage.message, expectedMessage);
 });
 
 QUnit.test("testChangeViewOnMessageNotShownForSetValueWithBlankValue", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "",
-		"path" : []
+		path : []
 	};
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
 
@@ -403,16 +522,16 @@ QUnit.test("testChangeViewOnMessageNotShownForSetValueWithBlankValue", function(
 
 QUnit.test("testChangeViewOnMessageRemovedOnNewBlank", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue",
-		"path" : []
+		path : []
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -426,16 +545,16 @@ QUnit.test("testChangeViewOnMessageRemovedOnNewBlank", function(assert) {
 });
 QUnit.test("testChangeViewOnMessageRemovedOnNewBlankForInput", function(assert) {
 	this.spec.mode = "input";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue",
-		"path" : []
+		path : []
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
@@ -450,72 +569,72 @@ QUnit.test("testChangeViewOnMessageRemovedOnNewBlankForInput", function(assert) 
 
 QUnit.test("testChangeViewOnMessageRemovBlock", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue",
-		"path" : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
+		path : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/remove";
-	var dataFromMsg = {
+	let msg2 = "root/groupWithOneCollectionVarChildGroup.1/remove";
+	let dataFromMsg2 = {
 		"type" : "remove",
-		"path" : ["groupWithOneCollectionVarChildGroup.1"]
+		path : ["groupWithOneCollectionVarChildGroup.1"]
 	};
 
-	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
+	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg2, msg2);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 });
 
 QUnit.test("testChangeViewOnMessageRemovBlockInput", function(assert) {
 	this.spec.mode = "input";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue",
-		"path" : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
+		path : ["groupWithOneCollectionVarChildGroup.1","someNameInData"]
 	};
 
 	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/remove";
-	var dataFromMsg = {
+	let msg2 = "root/groupWithOneCollectionVarChildGroup.1/remove";
+	let dataFromMsg2 = {
 		"type" : "remove",
-		"path" : ["groupWithOneCollectionVarChildGroup.1"]
+		path : ["groupWithOneCollectionVarChildGroup.1"]
 	};
 
-	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg, msg);
+	pNonRepeatingChildRefHandler.handleMsgToDeterminDataState(dataFromMsg2, msg2);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 });
 
 QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 	this.spec.mode = "output";
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
-	var viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+	let viewHandlerSpy = this.dependencies.pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), false);
 
-	var msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
-	var dataFromMsg = {
+	let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+	let dataFromMsg = {
 		"data" : "someValue"
 	};
 
@@ -523,8 +642,8 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg2 = "root/groupIdOneTextChild/someNameInData/setValue";
-	var dataFromMsg2 = {
+	let msg2 = "root/groupIdOneTextChild/someNameInData/setValue";
+	let dataFromMsg2 = {
 		"data" : "someValue2"
 	};
 
@@ -537,8 +656,8 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 	assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
 	assert.strictEqual(viewHandlerSpy.getIsShown(), true);
 
-	var msg3 = "root/groupIdOneTextChild/remove";
-	var dataFromMsg3 = {
+	let msg3 = "root/groupIdOneTextChild/remove";
+	let dataFromMsg3 = {
 		"type" : "remove"
 	};
 
@@ -548,18 +667,18 @@ QUnit.test("testChangeViewOnMessageTwoChildren", function(assert) {
 });
 
 QUnit.test("testpublishPresentationShownPublishMessage", function(assert) {
-	var pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
+	let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(this.dependencies,
 			this.spec);
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 0);
 	
 	pNonRepeatingChildRefHandler.publishPresentationShown();
 	
 	assert.strictEqual(this.dependencies.pubSub.getMessages().length, 1);
-	var firstMessage = this.dependencies.pubSub.getMessages()[0];
+	let firstMessage = this.dependencies.pubSub.getMessages()[0];
 	assert.strictEqual(firstMessage.type, "presentationShown");
-	var expectedMessage = {
+	let expectedMessage = {
 		"data" : "",
-		"path" : []
+		path : []
 	};
 	assert.stringifyEqual(firstMessage.message, expectedMessage);
 });

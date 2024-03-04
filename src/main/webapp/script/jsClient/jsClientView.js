@@ -79,9 +79,6 @@ var CORA = (function(cora) {
 			header.appendChild(logo);
 			logoImage = CORA.gui.createDivWithClassName("logoHeaderLogo");
 			header.appendChild(logoImage);
-			let menu = document.createElement("button");
-			menu.className = "menu";
-			header.appendChild(menu);
 		}
 
 		function setReloadingProviders(status) {

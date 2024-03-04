@@ -1,5 +1,5 @@
 :root {
-  --main-loading-color: #0082c9;
+  --main-color: #0082c9;
 }
 
 .loader {
@@ -14,7 +14,7 @@
 	font-size: 1.1em;
 	font-weight: bold;
 	letter-spacing: 3px;
-	color: var(--main-loading-color);
+	color: var(--main-color);
 }
 
 .loadingDescription {
@@ -46,10 +46,10 @@
   width: 64px;
   height: 64px;
   margin: 8px;
-  border: 8px solid var(--main-loading-color);
+  border: 8px solid var(--main-color);
   border-radius: 50%;
   animation: loadingRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: var(--main-loading-color) transparent transparent transparent;
+  border-color: var(--main-color) transparent transparent transparent;
 }
 .loadingRing div:nth-child(1) {
   animation-delay: -0.45s;

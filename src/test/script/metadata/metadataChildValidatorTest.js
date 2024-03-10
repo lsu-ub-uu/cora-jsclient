@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016 Olov McKie
-  * Copyright 2016, 2020 Uppsala University Library
+  * Copyright 2016, 2020, 2024 Uppsala University Library
   * 
   * This file is part of Cora.
   *
@@ -1801,7 +1801,31 @@ QUnit.test("testValidateGroupIdOneRecordLinkWithDataEmptyValue", function(assert
 		{ metadataId: "linkedRecordIdTextVar", path: ["groupIdOneRecordLinkChild", "myLink"] });
 });
 
-// "groupId0to1RecordLinkChild"
+QUnit.test("testValidateGroupId0to1ResourceLink", function(assert) {
+	let dataHolder = this.spec.dataHolder;
+	let containerChild0 = [{
+		name: "groupId0to1ResourceLinkChild",
+		children: [{
+			name: "myResourceLink",
+			children: []
+		}]
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild0);
+
+	let containerChild1 = [containerChild0[0].children[0]];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
+
+	this.spec.childReference = CORATEST.createChildReference("groupId0to1ResourceLinkChild", "0", "0", "1");
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	let validationResult = metadataChildValidator.validate();
+	assert.strictEqual(validationResult.everythingOkBelow, true);
+	assert.strictEqual(validationResult.containsValuableData, true);
+
+	let messages = this.pubSub.getMessages();
+	assert.strictEqual(messages.length, 0);
+});
+
 QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild0 = [{
@@ -1981,6 +2005,7 @@ QUnit.test("testValidateGroupIdOneRecordLinkChildWithPathWithDataEmptyValue", fu
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(3),
 		{ metadataId: "linkedRepeatIdTextVar", path: ["groupIdOneRecordLinkChildWithPath", "myPathLink"] });
 });
+
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	CORATEST.setUpDataHolderForTestingGroupIdOneNumberChildWithDataHolderAndValue(dataHolder, "4");
@@ -1992,6 +2017,7 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithData", function(assert) {
 	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
+
 CORATEST.setUpDataHolderForTestingGroupIdOneNumberChildWithDataHolderAndValue = function(dataHolder, value) {
 	let containerChild0 = [{
 		name: "groupIdOneNumberChild",
@@ -2005,12 +2031,14 @@ CORATEST.setUpDataHolderForTestingGroupIdOneNumberChildWithDataHolderAndValue = 
 	let containerChild1 = [containerChild0[0].children[0]];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 };
+
 CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild = function(assert, dataHolder) {
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
 		{ metadataId: "groupIdOneNumberChild", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1),
 		{ metadataId: "numVariableId", path: ["groupIdOneNumberChild"] });
 };
+
 QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	CORATEST.setUpDataHolderForTestingGroupIdOneNumberChildWithDataHolderAndValue(dataHolder, "");
@@ -2044,7 +2072,6 @@ QUnit.test("testValidateGroupIdOneNumberChild1to1WithEmptyValue", function(asser
 	assert.stringifyEqual(messages[1], expectedMessage1);
 	CORATEST.assertDataHolderCalledCorrectlyForgroupIdOneNumberChild(assert, dataHolder);
 });
-
 
 QUnit.test("testValidateGroupIdOneNumberChild0to1WithDataEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;

@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2020 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -96,14 +96,25 @@ var CORA = (function(cora) {
 				validateMetadataGroup(path);
 			} else if (isRecordLink()) {
 				validateMetadataRecordLink(path);
-			} else {
+			} else if(isResourceLink()){
+				validateResourceLink();
+			}else {
 				validateVariableValue(path);
 			}
 		};
 
+		const isResourceLink = function () {
+			let type = getTypeFromCMetadataElement();
+			return type === "resourceLink";
+		}
+
 		const isGroup = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "group";
+		};
+
+		const getTypeFromCMetadataElement = function () {
+			return cMetadataElement.getData().attributes.type;
 		};
 
 		const validateMetadataGroup = function(nextLevelPath) {
@@ -156,7 +167,7 @@ var CORA = (function(cora) {
 		};
 
 		const isRecordLink = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "recordLink";
 		};
 
@@ -204,6 +215,10 @@ var CORA = (function(cora) {
 			return cMetadataElement.containsChildWithNameInData("linkedPath");
 		};
 
+		const validateResourceLink = function () {
+			result.containsValuableData = true;
+		};
+
 		const validateVariableValue = function(nextLevelPath) {
 			let hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
 			if (dataIsValid()) {
@@ -214,7 +229,7 @@ var CORA = (function(cora) {
 		};
 
 		const dataIsValid = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			if (type === "textVariable") {
 				return validateTextVariable();
 			}

@@ -27,6 +27,10 @@ function start() {
 		enableCSS("alvinCSS");
 		useAlvin();
 		enableIcon("alvin");
+	} else if (href.indexOf("20240226/diva") !== -1) {
+		enableCSS("divaLilaCSS");
+		useDiva20240226();
+		enableIcon("diva");
 	} else if (href.indexOf("diva") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDiva();
@@ -99,6 +103,9 @@ function askForServerToUse() {
 		}, {
 			"text" : "DiVA",
 			"onclickFunction" : useDiva
+		}, {
+			"text" : "DiVA 20240226",
+			"onclickFunction" : useDiva20240226
 		} ]
 	};
 	var question = CORA.question(questionSpec);
@@ -163,5 +170,11 @@ function useDiva() {
 	name = "DiVA";
 	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
 	appTokenBaseUrl = "https://cora.epc.ub.uu.se/diva/";
+	startDependencies();
+}
+function useDiva20240226() {
+	name = "DiVA 20240226";
+	baseUrl = "https://cora.epc.ub.uu.se/20240226/diva/rest/";
+	appTokenBaseUrl = "https://cora.epc.ub.uu.se/20240226/diva/";
 	startDependencies();
 }

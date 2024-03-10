@@ -144,6 +144,7 @@ var CORA = (function(cora) {
 //				initializeMetadataResourceLink(nextLevelPath);
 				//NOTE, value here is entire data and not a "normal" setValue which is data.value
 				message.type = "setValue";
+				message.special = "resourceLink";
 				pubSub.publish("setValue", message);
 //				console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
 //				console.log("in metadataRepeatInitializer, spec: ",spec )

@@ -712,6 +712,10 @@ label::after, .label:after {
 	content: ": ";
 }
 
+.value {
+	word-break: break-word;
+}
+
 .presentation .text.labelTextStyle {
 	font-weight: bold;
 }

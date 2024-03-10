@@ -1255,19 +1255,107 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath
 	}, new Error(expectedErrorMessage));
 });
 
-
 QUnit.test("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+
 	dataHolder.addChild([], "masterResLink");
+	let expected = {
+		name: "groupIdOneResourceLinkChild",
+		children: [{
+			name: "master",
+			mimeType: ""
+		}]
+	};
+
+	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+	dataHolder.addChild([], "masterResLink");
+	let message = {
+		data: {
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+					accept: "image/jpeg"
+				}
+			},
+			name: "large",
+			mimeType: "image/jpeg"
+		},
+		path:"root/groupIdOneResourceLinkChild/masterResLink"
+	};
+
+	let expectedLinkedResourceMessage = {
+		type: "setValue",
+		message: {
+			data: message.data,
+			path: ["masterResLink"],
+			type: "setValue",
+			special: "resourceLink"
+		}
+	};
+	dataHolder.handleMsg(expectedLinkedResourceMessage.message, "root/master/setValue");
 
 	let expected = {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
 			name: "master",
-			children: []
+			mimeType: "image/jpeg"
 		}]
 	};
 	assert.deepEqual(dataHolder.getData(), expected);
+});
+
+QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild_ActionLinksStoredInternallyInDataHolder", function(assert) {
+	let dataHolder = this.newDataHolder("groupIdOneResourceLinkChild");
+	dataHolder.addChild([], "masterResLink");
+	let message = {
+		data: {
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+					accept: "image/jpeg"
+				}
+			},
+			name: "large",
+			mimeType: "image/jpeg"
+		},
+		path:"root/groupIdOneResourceLinkChild/masterResLink"
+	};
+
+	let expectedLinkedResourceMessage = {
+		type: "setValue",
+		message: {
+			data: message.data,
+			path: ["masterResLink"],
+			type: "setValue",
+			special: "resourceLink"
+		}
+	};
+	dataHolder.handleMsg(expectedLinkedResourceMessage.message, "root/master/setValue");
+
+	let expected2 = {
+		name: "groupIdOneResourceLinkChild",
+		children: [{
+			actionLinks: {
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+					accept: "image/jpeg"
+				}
+			},
+			name: "master",
+			mimeType: "image/jpeg"
+		}]
+	};
+	assert.deepEqual(dataHolder.getDataWithActionLinks(), expected2);
 });
 
 QUnit.test("testHandleMessageAdd", function(assert) {

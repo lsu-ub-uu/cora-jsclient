@@ -129,7 +129,11 @@ var CORA = (function(cora) {
 			} else if (msg.endsWith("addAttribute")) {
 				addAttribute(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.nameInData)
 			} else if (msg.endsWith("setValue")) {
-				setValue(dataFromMsg.path, dataFromMsg.data);
+				if("resourceLink"===dataFromMsg.special){
+					setMimeTypeInfo(dataFromMsg);					
+				}else{
+					setValue(dataFromMsg.path, dataFromMsg.data);
+				}
 			} else if (msg.endsWith("linkedData")) {
 				setActionLinks(dataFromMsg.path, dataFromMsg.data);
 			} else if (msg.endsWith("remove")) {
@@ -187,7 +191,14 @@ var CORA = (function(cora) {
 		const removeNonDataInfoFromContainerLeavingActionLinks = function(data) {
 			removeNonDataInfoFromContainer(data, false);
 		};
-
+		
+		const setMimeTypeInfo = function(dataFromMsg) {
+			let mimeType = dataFromMsg.data.mimeType;
+			let foundContainer = findContainer(dataFromMsg.path);
+			foundContainer.mimeType = mimeType;
+			foundContainer.actionLinks = dataFromMsg.data.actionLinks;
+		};
+		
 		const setValue = function(path, value) {
 			try {
 				setValueInContainerListUsingPath(path, value);
@@ -198,7 +209,6 @@ var CORA = (function(cora) {
 		};
 
 		const setValueInContainerListUsingPath = function(path, value) {
-			console.log(path)
 			let foundContainer = findContainer(path);
 			foundContainer.value = value;
 		};
@@ -270,9 +280,7 @@ var CORA = (function(cora) {
 			if (pathSpecifiesMoreLevels(parentPath)) {
 				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
-				console.log("more levels")
 			}
-			console.log("more levels2")
 			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
 

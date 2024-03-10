@@ -592,7 +592,7 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataFinalValue"
 
 });
 
-QUnit.only("testResourceLinkMessage", function (assert) {
+QUnit.test("testResourceLinkMessage", function (assert) {
     this.spec.metadataId = "masterResLink";
     this.spec.data = {
         actionLinks: {

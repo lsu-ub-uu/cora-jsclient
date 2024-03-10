@@ -70,8 +70,8 @@ var CORA = (function(cora) {
 
 		const createAttributes = function() {
 			return {
-				"name": "attributes",
-				"children": []
+				name: "attributes",
+				children: []
 			};
 		};
 
@@ -81,13 +81,10 @@ var CORA = (function(cora) {
 			let attributeNameInData = attributeMetadata
 				.getFirstAtomicValueByNameInData("nameInData");
 
-
-
 			let finalValue = [];
 			if (attributeMetadata.containsChildWithNameInData("finalValue")) {
 				finalValue = attributeMetadata.getFirstAtomicValueByNameInData("finalValue");
 			} else {
-
 				let possibleAttributeValues = [];
 				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
 				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
@@ -116,26 +113,24 @@ var CORA = (function(cora) {
 		const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue,
 			repeatId) {
 			return {
-				"name": "attribute",
-				"repeatId": repeatId || "1",
-				"children": [{
-					"name": "attributeName",
-					"value": attributeName
+				name: "attribute",
+				repeatId: repeatId || "1",
+				children: [{
+					name: "attributeName",
+					value: attributeName
 				}, {
-					"name": "attributeValue",
-					"value": attributeValue
+					name: "attributeValue",
+					value: attributeValue
 				}]
 			};
 		};
 
 		const getDataChildrenForMetadata = function(nameInDataIn, attributesIn) {
-			let dataChildrenForMetadataOut = [];
 			if (spec.data !== undefined
 				&& data.containsChildWithNameInDataAndAttributes(nameInDataIn, attributesIn)) {
-				dataChildrenForMetadataOut = data.getChildrenByNameInDataAndAttributes(
-					nameInDataIn, attributesIn);
+				return data.getChildrenByNameInDataAndAttributes(nameInDataIn, attributesIn);
 			}
-			return dataChildrenForMetadataOut;
+			return [];
 		};
 
 		const initializeChild = function() {
@@ -144,6 +139,13 @@ var CORA = (function(cora) {
 			} else {
 				initializeNonRepeatingChild();
 			}
+		};
+
+		const childCanRepeat = function() {
+			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
+			let repeatMax = childReference.getFirstAtomicValueByNameInData("repeatMax");
+			return repeatMax === "X" || Number(repeatMax) > 1
+				|| (Number(repeatMin) === 0 && Number(repeatMax) === 1);
 		};
 
 		const initializeRepeatingChild = function() {
@@ -245,20 +247,13 @@ var CORA = (function(cora) {
 			return data.getData() !== undefined && dataChildrenForMetadata.length > 0;
 		};
 
-		const childCanRepeat = function() {
-			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
-			let repeatMax = childReference.getFirstAtomicValueByNameInData("repeatMax");
-			return repeatMax === "X" || Number(repeatMax) > 1
-				|| (Number(repeatMin) === 0 && Number(repeatMax) === 1);
-		};
-
 		const initializeForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
 			let initializerSpec = {
-				"metadataId": metadataId,
-				"path": spec.path,
-				"data": dataChild,
-				"repeatId": repeatId,
-				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
+				metadataId: metadataId,
+				path: spec.path,
+				data: dataChild,
+				repeatId: repeatId,
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 
 			let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
@@ -275,9 +270,9 @@ var CORA = (function(cora) {
 		
 		const createNextLevelPath = function() {
 			let pathSpec = {
-				"metadataIdToAdd": metadataId,
-				"repeatId": spec.repeatId,
-				"parentPath": spec.path
+				metadataIdToAdd: metadataId,
+				repeatId: spec.repeatId,
+				parentPath: spec.path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -287,7 +282,8 @@ var CORA = (function(cora) {
 				data: "",
 				path: pathForTopLevelChild
 			});
-		}
+		};
+		
 		const getDependencies = function() {
 			return dependencies;
 		};

@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 
 		let cMetadataElement;
 		let pubSub = dependencies.pubSub;
+		
 		const start = function() {
 			cMetadataElement = getMetadataById(topLevelMetadataId);
 			if (hasAttributes()) {
@@ -83,6 +84,7 @@ var CORA = (function(cora) {
 				possiblySetValueForAttributeWithChoice(attributePath, cCollectionVariable);
 			}
 		};
+		
 		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
 			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
 			setValueForAttributeWithPathAndValue(attributePath, value);
@@ -104,7 +106,7 @@ var CORA = (function(cora) {
 			}
 			pubSub.publish("setValue", setValueMessage);
 		};
-		///// to here
+		
 		const initializeFirstLevel = function() {
 			let topLevelChildReferences = extractTopLevelChildReferences();
 			topLevelChildReferences.children.forEach(function(childReference) {

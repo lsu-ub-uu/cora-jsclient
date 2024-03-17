@@ -73,6 +73,32 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const findPresentationId = function(cPresentationToSearch) {
+			let recordInfo = cPresentationToSearch.getFirstChildByNameInData("recordInfo");
+			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		};
+
+		const getMetadataIdFromPresentation = function() {
+			let presentationGroup = spec.cPresentation.getFirstChildByNameInData("presentationOf");
+			let cPresentationGroup = CORA.coraData(presentationGroup);
+			return cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const childRefFoundInCurrentlyUsedParentMetadata = function() {
+			return cParentMetadataChildRefPart.getData() === undefined;
+		};
+
+		const createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith = function() {
+			return {
+				getView: function() {
+					let spanNew = document.createElement("span");
+					spanNew.className = "fakePChildRefHandlerViewAsNoMetadataExistsFor "
+						+ metadataIdFromPresentation;
+					return spanNew;
+				}
+			};
+		};
+				
 		const continueWithNormalStartup = function() {
 			cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 			metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -146,37 +172,12 @@ var CORA = (function(cora) {
 			return spec.hasWritePermissionsForRecordPart;
 		};
 
-		const childRefFoundInCurrentlyUsedParentMetadata = function() {
-			return cParentMetadataChildRefPart.getData() === undefined;
-		};
-
-		const createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith = function() {
-			return {
-				getView: function() {
-					let spanNew = document.createElement("span");
-					spanNew.className = "fakePChildRefHandlerViewAsNoMetadataExistsFor "
-						+ metadataIdFromPresentation;
-					return spanNew;
-				}
-			};
-		};
-
 		const getTextId = function(cMetadataElementIn) {
 			let cTextGroup = CORA.coraData(cMetadataElementIn.getFirstChildByNameInData("textId"));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const findPresentationId = function(cPresentationToSearch) {
-			let recordInfo = cPresentationToSearch.getFirstChildByNameInData("recordInfo");
-			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-		};
-
-		const getMetadataIdFromPresentation = function() {
-			let presentationGroup = spec.cPresentation.getFirstChildByNameInData("presentationOf");
-			let cPresentationGroup = CORA.coraData(presentationGroup);
-			return cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-
-		};
+		
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));

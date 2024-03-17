@@ -31,17 +31,11 @@ var CORA = (function(cora) {
 		};
 
 		const reloadForMetadataChanges = function() {
-			//TODO: fix reload :)
-//			console.log("Definition viewer reloadForMetadataChanges ");
+			let model = getViewModelForMetadataId(id);
+			view.updateViewForViewModel(model);
 		};
 
 		const getView = function() {
-			//			let texts = CORA.gui.createDivWithClassName("texts");
-			//			view.appendChild(texts);
-			//			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
-			//			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
-			//			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
-			//			
 			return getViewForMetadataId(id);
 		};
 
@@ -49,6 +43,7 @@ var CORA = (function(cora) {
 			let model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
+		
 		const getViewModelForMetadataId = function(metadataId) {
 			let cDataRecordGroup = getCMetadataById(metadataId);
 			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
@@ -122,12 +117,6 @@ var CORA = (function(cora) {
 				let cChildReference = CORA.coraData(childReference);
 				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
 				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
-				//				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
-				//					recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
-				//				}
-				//				childRefCollectTerm, type = storage
-				//				childRefCollectTerm, type = permission
-				//				childRefCollectTerm, type = index (multiple)
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 				let childRef = {
 					repeatMin: repeatMin,

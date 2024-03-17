@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2016 Olov McKie
+ * Copyright 2016, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -21,128 +21,122 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataHelper = function(spec) {
 
-		function getMetadataById(id) {
+		const getMetadataById = function(id) {
 			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
-		}
+		};
 
-		function collectAttributesAsObjectForMetadataId(metadataId) {
-			var cMetadataElement = getMetadataById(metadataId);
+		const collectAttributesAsObjectForMetadataId = function(metadataId) {
+			let cMetadataElement = getMetadataById(metadataId);
 			if (hasNoAttributes(cMetadataElement)) {
 				return {};
 			}
 			return collectAttributesFromMetadata(cMetadataElement);
 
-		}
+		};
 
-		function hasNoAttributes(cMetadataElement) {
+		const hasNoAttributes = function(cMetadataElement) {
 			return !cMetadataElement.containsChildWithNameInData("attributeReferences");
-		}
+		};
 
-		function collectAttributesFromMetadata(cMetadataElement) {
-			var collectedAttributes = {};
-			var attributeReferences = cMetadataElement
+		const collectAttributesFromMetadata = function(cMetadataElement) {
+			let collectedAttributes = {};
+			let attributeReferences = cMetadataElement
 					.getFirstChildByNameInData("attributeReferences");
 			attributeReferences.children.forEach(function(attributeReference) {
 				collectAttributesForAttributeReference(attributeReference, collectedAttributes);
 			});
 			return collectedAttributes;
-		}
+		};
 
-		function collectAttributesForAttributeReference(attributeReference, collectedAttributes) {
-			var ref = getRefValueFromAttributeRef(attributeReference);
-			var cCollectionVariable = getMetadataById(ref);
-			var attributeNameInData = cCollectionVariable
+		const collectAttributesForAttributeReference = function(attributeReference, collectedAttributes) {
+			let ref = getRefValueFromAttributeRef(attributeReference);
+			let cCollectionVariable = getMetadataById(ref);
+			let attributeNameInData = cCollectionVariable
 					.getFirstAtomicValueByNameInData("nameInData");
-			var attributeValues = collectAttributeValuesFromVariable(cCollectionVariable);
+			let attributeValues = collectAttributeValuesFromVariable(cCollectionVariable);
 			collectedAttributes[attributeNameInData] = attributeValues;
-		}
+		};
 
-		function getRefValueFromAttributeRef(attributeReference){
-			var cAttributeReference = CORA.coraData(attributeReference);
+		const getRefValueFromAttributeRef = function(attributeReference){
+			let cAttributeReference = CORA.coraData(attributeReference);
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function collectAttributeValuesFromVariable(cCollectionVariable) {
+		const collectAttributeValuesFromVariable = function(cCollectionVariable) {
 			if (variableHasFinalValue(cCollectionVariable)) {
 				return getFinalValueFromVariable(cCollectionVariable);
 			}
 			return getAllValuesFromVariable(cCollectionVariable);
-		}
+		};
 
-		function variableHasFinalValue(cCollectionVariable) {
+		const variableHasFinalValue = function(cCollectionVariable) {
 			return cCollectionVariable.containsChildWithNameInData("finalValue");
-		}
+		};
 
-		function getFinalValueFromVariable(cCollectionVariable) {
+		const getFinalValueFromVariable = function(cCollectionVariable) {
 			return [ cCollectionVariable.getFirstAtomicValueByNameInData("finalValue") ];
-		}
+		};
 
-		function getAllValuesFromVariable(cCollectionVariable) {
-			var attributeValues = [];
-			var collectionItemReferences = getCollectionItemReferencesFor(cCollectionVariable);
+		const getAllValuesFromVariable = function(cCollectionVariable) {
+			let attributeValues = [];
+			let collectionItemReferences = getCollectionItemReferencesFor(cCollectionVariable);
 			collectionItemReferences.children.forEach(function(collectionItemRef) {
 				attributeValues.push(getCollectionItemValue(collectionItemRef));
 			});
 			return attributeValues;
-		}
+		};
 
-		function getCollectionItemValue(collectionItemRef) {
-			var cItemRef = CORA.coraData(collectionItemRef);
-			var itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
-			var cCollectionItem = getMetadataById(itemRefId);
+		const getCollectionItemValue = function(collectionItemRef) {
+			let cItemRef = CORA.coraData(collectionItemRef);
+			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+			let cCollectionItem = getMetadataById(itemRefId);
 			return cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
-		}
+		};
 
-		function getCollectionItemReferencesFor(cCollectionVariable) {
-			var cAttributeRefCollection = CORA.coraData(cCollectionVariable
+		const getCollectionItemReferencesFor = function(cCollectionVariable) {
+			let cAttributeRefCollection = CORA.coraData(cCollectionVariable
 					.getFirstChildByNameInData("refCollection"));
 
-			var attributeRefCollectionId = cAttributeRefCollection
+			let attributeRefCollectionId = cAttributeRefCollection
 					.getFirstAtomicValueByNameInData("linkedRecordId");
-			var cAttributeItemCollection = getMetadataById(attributeRefCollectionId);
+			let cAttributeItemCollection = getMetadataById(attributeRefCollectionId);
 			return cAttributeItemCollection.getFirstChildByNameInData("collectionItemReferences");
-		}
+		};
 
-		function getChildRefPartOfMetadata(cMetadata, metadataIdToFind) {
-//			console.log("----- start -----")
-			var cMetadataToFind = getMetadataById(metadataIdToFind);
-			var nameInDataToFind = cMetadataToFind.getFirstAtomicValueByNameInData("nameInData");
-			var attributesToFind = collectAttributesAsObjectForMetadataId(metadataIdToFind);
+		const getChildRefPartOfMetadata = function(cMetadata, metadataIdToFind) {
+			let cMetadataToFind = getMetadataById(metadataIdToFind);
+			let nameInDataToFind = cMetadataToFind.getFirstAtomicValueByNameInData("nameInData");
+			let attributesToFind = collectAttributesAsObjectForMetadataId(metadataIdToFind);
 
-			var findFunction = function(metadataChildRef) {
-				var childMetadataId = getMetadataIdFromRef(metadataChildRef);
-				var childAttributes = collectAttributesAsObjectForMetadataId(childMetadataId);
-				var childNameInData = getNameInDataFromMetadataChildRef(metadataChildRef);
+			let findFunction = function(metadataChildRef) {
+				let childMetadataId = getMetadataIdFromRef(metadataChildRef);
+				let childAttributesToFind = collectAttributesAsObjectForMetadataId(childMetadataId);
+				let childNameInData = getNameInDataFromMetadataChildRef(metadataChildRef);
 				return childNameInData === nameInDataToFind
-						&& firstAttributesExistsInSecond(childAttributes, attributesToFind);
-//				console.log("attributesToFind: ", attributesToFind)
-//				console.log("childAttributes: ", childAttributes)
-//				return childNameInData === nameInDataToFind
-//						&& firstAttributesExistsInSecond(attributesToFind, childAttributes);
-			}; 
+						&& firstAttributesExistsInSecond(childAttributesToFind, attributesToFind);
+			};
 
-			var children = cMetadata.getFirstChildByNameInData("childReferences").children;
-			var parentMetadataChildRef = children.find(findFunction);
-//			console.log("----- end -----")
+			let children = cMetadata.getFirstChildByNameInData("childReferences").children;
+			let parentMetadataChildRef = children.find(findFunction);
 			return CORA.coraData(parentMetadataChildRef);
-		}
+		};
 
-		function getMetadataIdFromRef(metadataChildRef) {
-			var cMetadataChildRef = CORA.coraData(metadataChildRef);
-			var cRef = CORA.coraData(cMetadataChildRef.getFirstChildByNameInData("ref"));
+		const getMetadataIdFromRef = function(metadataChildRef) {
+			let cMetadataChildRef = CORA.coraData(metadataChildRef);
+			let cRef = CORA.coraData(cMetadataChildRef.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getNameInDataFromMetadataChildRef(metadataChildRef) {
-			var childMetadataId = getMetadataIdFromRef(metadataChildRef);
-			var cChildMetadata = getMetadataById(childMetadataId);
+		const getNameInDataFromMetadataChildRef = function(metadataChildRef) {
+			let childMetadataId = getMetadataIdFromRef(metadataChildRef);
+			let cChildMetadata = getMetadataById(childMetadataId);
 			return cChildMetadata.getFirstAtomicValueByNameInData("nameInData");
-		}
+		};
 
-		function firstAttributesExistsInSecond(attributes1, attributes2) {
-			var attributeKeys1 = attributes1 !== undefined ? Object.keys(attributes1) : Object
+		const firstAttributesExistsInSecond = function(attributes1, attributes2) {
+			let attributeKeys1 = attributes1 !== undefined ? Object.keys(attributes1) : Object
 					.keys({});
-			var attributeKeys2 = attributes2 !== undefined ? Object.keys(attributes2) : Object
+			let attributeKeys2 = attributes2 !== undefined ? Object.keys(attributes2) : Object
 					.keys({});
 
 			if (notSameNumberOfKeys(attributeKeys1, attributeKeys2)) {
@@ -152,41 +146,35 @@ var CORA = (function(cora) {
 				return true;
 			}
 			return existingFirstAttributesExistsInSecond(attributes1, attributes2);
-		}
+		};
 
-		function notSameNumberOfKeys(attributeKeys1, attributeKeys2) {
-			if (attributeKeys1.length !== attributeKeys2.length) {
-				return true;
-			}
-			return false;
-		}
+		const notSameNumberOfKeys = function(attributeKeys1, attributeKeys2) {
+			return attributeKeys1.length !== attributeKeys2.length;
+		};
 
-		function noAttributesToCompare(attributeKeys1) {
-			if (attributeKeys1.length === 0) {
-				return true;
-			}
-			return false;
-		}
+		const noAttributesToCompare = function(attributeKeys1) {
+			return attributeKeys1.length === 0;
+		};
 
-		function existingFirstAttributesExistsInSecond(attributes1, attributes2) {
-			var attributeKeys1 = Object.keys(attributes1);
-			var checkAttributeExistsInAttributes2 = createCheckFunction(attributes1, attributes2);
+		const existingFirstAttributesExistsInSecond = function(attributes1, attributes2) {
+			let attributeKeys1 = Object.keys(attributes1);
+			let checkAttributeExistsInAttributes2 = createCheckFunction(attributes1, attributes2);
 			return attributeKeys1.every(checkAttributeExistsInAttributes2);
-		}
+		};
 
-		function createCheckFunction(attributes1, attributes2) {
+		const createCheckFunction = function(attributes1, attributes2) {
 			return function(attributeKey) {
-				var attributeValues1 = attributes1[attributeKey];
-				var attributeValues2 = attributes2[attributeKey];
+				let attributeValues1 = attributes1[attributeKey];
+				let attributeValues2 = attributes2[attributeKey];
 				if (attributeValues2 === undefined) {
 					return false;
 				}
-				var functionAttribute2ContainsValue = createValueCheckFunction(attributeValues2);
+				let functionAttribute2ContainsValue = createValueCheckFunction(attributeValues2);
 				return attributeValues1.every(functionAttribute2ContainsValue);
 			};
-		}
+		};
 
-		function createValueCheckFunction(attributeValues2) {
+		const createValueCheckFunction = function(attributeValues2) {
 			return function(attributeValue) {
 				return attributeValues2.indexOf(attributeValue) > -1;
 			};

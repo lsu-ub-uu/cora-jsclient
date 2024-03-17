@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 
 		function createButton() {
 			var infoButtonSpec = {
-				"className" : "iconButton infoButton",
+				className : "iconButton infoButton",
 				action : {
 					method : showInfo
 				}
@@ -115,7 +115,7 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "info",
+			type : "info",
 			getSpec : getSpec,
 			getButton : getButton,
 			showInfo : showInfo,

@@ -188,6 +188,12 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 					}]
 				}]
 			},{
+      			"name": "adminInfo",
+      			"children": [{   				
+          			"name": "visibility",
+          			"value": "unpublished"
+        		}]
+    		},{
 				name: "originalFileName",
 				value: "someFile.tif"
 			},{
@@ -222,6 +228,12 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 					}]
 				}]
 			},{
+      			"name": "adminInfo",
+      			"children": [{   				
+          			"name": "visibility",
+          			"value": "unpublished"
+        		}]
+    		},{
 				name: "originalFileName",
 				value: "someFile2.tif"
 			},{
@@ -256,6 +268,12 @@ QUnit.module("presentation/pChildRefHandlerTest.js", {
 						}]
 					}]
 			},{
+      			"name": "adminInfo",
+      			"children": [{   				
+          			"name": "visibility",
+          			"value": "unpublished"
+        		}]
+    		},{
 				name: "originalFileName",
 				value: "someFile3.tif"
 			},{

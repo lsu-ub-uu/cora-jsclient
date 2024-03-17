@@ -100,7 +100,9 @@ QUnit.test("testFactoredViewCorrectlyForInputCollectionVariable", function(asser
 		info:{
 			technicalInfo:[
 				{text: `itemCollection: trueFalseCollection`,
-				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord},
+				{text: "(false) false translated - false"},
+				{text: "(true) true translated - true"}
 			]
 		}
 	};
@@ -129,7 +131,9 @@ QUnit.test("testFactoredViewCorrectlyForInputCollectionVariableNoEmptyTextId", f
 		info:{
 			technicalInfo:[
 				{text: `itemCollection: trueFalseCollection`,
-				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord},
+				{text: "(false) false translated - false"},
+				{text: "(true) true translated - true"}
 			]
 		}
 	};
@@ -152,7 +156,9 @@ QUnit.test("testFactoredViewCorrectlyForOutputNoOptions", function(assert) {
 		info:{
 			technicalInfo:[
 				{text: `itemCollection: trueFalseCollection`,
-				onclickMethod: pCollectionVar.openRefCollectionIdRecord}
+				onclickMethod: pCollectionVar.openRefCollectionIdRecord},
+				{text: "(false) false translated - false"},
+				{text: "(true) true translated - true"}
 			]
 		}
 	};

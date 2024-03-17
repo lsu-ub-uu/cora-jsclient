@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2020 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
 		pubSub) {
-		let result = {
+		const result = {
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
@@ -96,14 +96,25 @@ var CORA = (function(cora) {
 				validateMetadataGroup(path);
 			} else if (isRecordLink()) {
 				validateMetadataRecordLink(path);
-			} else {
+			} else if(isResourceLink()){
+				validateResourceLink();
+			}else {
 				validateVariableValue(path);
 			}
 		};
 
+		const isResourceLink = function () {
+			let type = getTypeFromCMetadataElement();
+			return type === "resourceLink";
+		}
+
 		const isGroup = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "group";
+		};
+
+		const getTypeFromCMetadataElement = function () {
+			return cMetadataElement.getData().attributes.type;
 		};
 
 		const validateMetadataGroup = function(nextLevelPath) {
@@ -112,7 +123,7 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
-
+			 
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}
@@ -142,14 +153,14 @@ var CORA = (function(cora) {
 				result.containsValuableData = true;
 			}
 			result.validationMessage = {
-				"metadataId": metadataId,
-				"path": nextLevelPath
+				metadataId: metadataId,
+				path: nextLevelPath
 			};
 			result.sendValidationMessages = false;
 		};
 
 		const isRecordLink = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			return type === "recordLink";
 		};
 
@@ -165,23 +176,23 @@ var CORA = (function(cora) {
 
 		const createRefWithRef = function(ref) {
 			return {
-				"name": "childReference",
-				"repeatId": 1,
-				"children": [{
-					"name": "ref",
-					"children": [{
-						"name": "linkedRecordType",
-						"value": "metadata"
+				name: "childReference",
+				repeatId: 1,
+				children: [{
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
 					}, {
-						"name": "linkedRecordId",
-						"value": ref
+						name: "linkedRecordId",
+						value: ref
 					}]
 				}, {
-					"name": "repeatMin",
-					"value": "1"
+					name: "repeatMin",
+					value: "1"
 				}, {
-					"name": "repeatMax",
-					"value": "1"
+					name: "repeatMax",
+					value: "1"
 				}]
 			};
 		};
@@ -197,6 +208,10 @@ var CORA = (function(cora) {
 			return cMetadataElement.containsChildWithNameInData("linkedPath");
 		};
 
+		const validateResourceLink = function () {
+			result.containsValuableData = true;
+		};
+
 		const validateVariableValue = function(nextLevelPath) {
 			let hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
 			if (dataIsValid()) {
@@ -207,7 +222,7 @@ var CORA = (function(cora) {
 		};
 
 		const dataIsValid = function() {
-			let type = cMetadataElement.getData().attributes.type;
+			let type = getTypeFromCMetadataElement();
 			if (type === "textVariable") {
 				return validateTextVariable();
 			}
@@ -268,12 +283,10 @@ var CORA = (function(cora) {
 				metadataId: metadataId,
 				path: nextLevelPath
 			};
-			result = {
-				everythingOkBelow: false,
-				containsValuableData: false,
-				validationMessage: message,
-				sendValidationMessages: true
-			};
+			result.everythingOkBelow = false;
+			result.containsValuableData = false;
+			result.validationMessage = message;
+			result.sendValidationMessages = true;
 		};
 		return start();
 	}

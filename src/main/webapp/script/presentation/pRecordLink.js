@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -39,8 +39,9 @@ var CORA = (function(cora) {
 		let cMetadataElement = getMetadataById(metadataId);
 		let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 		let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-		let attributesToShow = "all";
+		let attributesToShow;
 		let hasLinkedRepeatId = cMetadataElement.containsChildWithNameInData("linkedPath");
+		let presentAs;
 
 		let recordIdPath = "";
 		let recordTypePath = "";
@@ -54,8 +55,11 @@ var CORA = (function(cora) {
 		const start = function() {
 			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
 			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
+			presentAs = getValueFromPresentationOrDefaultTo("presentAs", "link");
 			view = createBaseView();
-			createValueView();
+			if(!presentAsOnlyTranslatedText()){
+				createValueView();
+			}			
 			possiblyCreateSearchHandler();
 			subscribeToSetValueIfLinkedPresentationExists();
 			subscribeToTextVarSetValue();
@@ -103,6 +107,7 @@ var CORA = (function(cora) {
 					} 
 					]
 				},
+				presentAs: presentAs,
 				pRecordLink: out
 			};
 			possiblyAddLabelToViewSpec(viewSpec);
@@ -136,7 +141,11 @@ var CORA = (function(cora) {
 				viewSpec.label = text;
 			}
 		};
-
+		
+		const presentAsOnlyTranslatedText = function() {
+			return "onlyTranslatedText"==presentAs;
+		};
+		
 		const createValueView = function() {
 			if (isInInputMode()) {
 				createAndAddInputs();
@@ -167,8 +176,14 @@ var CORA = (function(cora) {
 
 		const handleMsgWithData = function(payloadFromMsg) {
 			closeSearchIfThereIsOne();
-			createLinkedRecordPresentationView(payloadFromMsg);
-			showOrHideOpenLinkedRecordButton(payloadFromMsg);
+			if(presentAsOnlyTranslatedText()){
+				let cData = CORA.coraData(payloadFromMsg.data);
+				let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
+				addTranslatedTextNodeToView(linkedRecordId);
+			}else{
+				createLinkedRecordPresentationView(payloadFromMsg);
+				showOrHideOpenLinkedRecordButton(payloadFromMsg);
+			}
 		};
 
 		const closeSearchIfThereIsOne = function() {
@@ -236,11 +251,9 @@ var CORA = (function(cora) {
 				readLink = payloadFromMsg.data.actionLinks.read;
 				view.showOpenLinkedRecordButton();
 				openLinkShowing = true;
-			} else {
-				if (openLinkShowing) {
-					view.hideOpenLinkedRecordButton();
-					openLinkShowing = false;
-				}
+			} else if (openLinkShowing) {
+				view.hideOpenLinkedRecordButton();
+				openLinkShowing = false;
 			}
 		};
 
@@ -409,6 +422,15 @@ var CORA = (function(cora) {
 			view.removeLinkedPresentation();
 			view.hideOpenLinkedRecordButton();
 			view.hideClearLinkedRecordIdButton();
+			if(presentAsOnlyTranslatedText()){
+				addTranslatedTextNodeToView(dataFromMsg.data);
+			}
+		};
+		
+		const addTranslatedTextNodeToView = function(textId){
+			let translatedText = textProvider.getTranslation(textId);
+			let textNodeWithTranslatedText = document.createTextNode(translatedText);
+			view.addLinkedPresentation(textNodeWithTranslatedText);
 		};
 		
 		const subscribeToTextVarSetValue = function() {

@@ -1,5 +1,5 @@
 :root {
-  --main-loading-color: #2a88ad;
+  --main-color: #2a88ad;
 }
 #systemOneLoading, #alvinLoading {
 	display: none;

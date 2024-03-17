@@ -20,6 +20,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pChildRefHandler = function(dependencies, spec) {
+		const {dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub, 
+			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory, 
+			pChildRefHandlerViewFactory, pRepeatingElementFactory} = dependencies;
 		let out;
 		let userCanUploadFile = false;
 		let userCanRemove = false;
@@ -56,7 +59,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
-				"metadataProvider": dependencies.metadataProvider
+				"metadataProvider": metadataProvider
 			});
 			presentationId = findPresentationId(spec.cPresentation);
 			metadataIdFromPresentation = getMetadataIdFromPresentation();
@@ -123,14 +126,13 @@ var CORA = (function(cora) {
 			userCanAddBefore = calculateUserCanAddBefore();
 		}
 		const subscribeToMessagesFromForm = function() {
-			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
-			dependencies.pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-//			if (spec.minNumberOfRepeatingToShow !== undefined) {
+			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
+			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
 			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode==="input") {
-				newElementsAddedSubscriptionId = dependencies.pubSub.subscribe("newElementsAdded",
+				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
-			dependencies.pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined,
+			pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined,
 				newElementsAdded);
 		};
 
@@ -178,12 +180,12 @@ var CORA = (function(cora) {
 		
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getTextForAddButton = function(cMetadataElement) {
 			let textId = spec.addText !== undefined ? spec.addText : getTextId(cMetadataElement);
-			return dependencies.textProvider.getTranslation(textId);
+			return textProvider.getTranslation(textId);
 		};
 
 		const collectAttributesForMetadataId = function(metadataIdIn) {
@@ -209,7 +211,7 @@ var CORA = (function(cora) {
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
-			return dependencies.pChildRefHandlerViewFactory.factor(pChildRefHandlerViewSpec);
+			return pChildRefHandlerViewFactory.factor(pChildRefHandlerViewSpec);
 		};
 
 		const hasAttributes = function() {
@@ -344,7 +346,7 @@ var CORA = (function(cora) {
 				"userCanMove": userCanMove,
 				"userCanAddBefore": userCanAddBefore
 			};
-			return dependencies.pRepeatingElementFactory.factor(repeatingElementSpec);
+			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
 
 		const addPresentationsToRepeatingElementsView = function(repeatingElement, metadataIdToAdd) {
@@ -369,7 +371,7 @@ var CORA = (function(cora) {
 				cParentPresentation: spec.cParentPresentation,
 				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
-			return dependencies.presentationFactory.factor(presentationSpec);
+			return presentationFactory.factor(presentationSpec);
 		};
 
 		const hasAlternativePresentation = function() {
@@ -384,7 +386,7 @@ var CORA = (function(cora) {
 				let removeFunction = function() {
 					childRemoved(removeInfo);
 				};
-				removeInfo.subscribeId = dependencies.pubSub.subscribe("remove", repeatingElement
+				removeInfo.subscribeId = pubSub.subscribe("remove", repeatingElement
 					.getPath(), undefined, removeFunction);
 			}
 		};
@@ -395,7 +397,7 @@ var CORA = (function(cora) {
 
 		const childRemoved = function(removeInfo) {
 			pChildRefHandlerView.removeChild(removeInfo.repeatingElement.getView());
-			dependencies.pubSub.unsubscribe(removeInfo.subscribeId);
+			pubSub.unsubscribe(removeInfo.subscribeId);
 			noOfRepeating--;
 			updateView();
 		};
@@ -456,7 +458,7 @@ var CORA = (function(cora) {
 
 		const sendAdd = function() {
 			let data = createAddData();
-			let createdRepeatId = dependencies.jsBookkeeper.add(data);
+			let createdRepeatId = jsBookkeeper.add(data);
 			sendNewElementsAdded();
 			return createdRepeatId;
 		};
@@ -477,7 +479,7 @@ var CORA = (function(cora) {
 		};
 
 		const sendNewElementsAdded = function() {
-			dependencies.pubSub.publish("newElementsAdded", {
+			pubSub.publish("newElementsAdded", {
 				"data": "",
 				"path": []
 			});
@@ -486,7 +488,7 @@ var CORA = (function(cora) {
 		const sendAddBefore = function(dataFromPRepeatingElement) {
 			let data = createAddData();
 			data.addBeforePath = dataFromPRepeatingElement.path;
-			dependencies.jsBookkeeper.addBefore(data);
+			jsBookkeeper.addBefore(data);
 			sendNewElementsAdded();
 		};
 
@@ -498,7 +500,7 @@ var CORA = (function(cora) {
 				"basePositionOnChild": moveInfo.basePositionOnChild,
 				"newPosition": moveInfo.newPosition
 			};
-			dependencies.jsBookkeeper.move(data);
+			jsBookkeeper.move(data);
 		};
 
 		const handleFiles = function(files) {
@@ -540,11 +542,11 @@ var CORA = (function(cora) {
 				"data": JSON.stringify(data),
 				"file": localFile
 			};
-			dependencies.ajaxCallFactory.factor(callSpec);
+			ajaxCallFactory.factor(callSpec);
 		};
 
 		const createNewBinaryData = function(file) {
-			let dataDividerLinkedRecordId = dependencies.dataDivider;
+			let dataDividerLinkedRecordId = dataDivider;
 			let type = "generic";
 			return {
 				name: "binary",
@@ -570,6 +572,12 @@ var CORA = (function(cora) {
 						}]
 					}]
 				},{
+					name: "adminInfo",
+					children: [{
+						name: "visibility",
+						value: "unpublished"
+					}]
+				},{
 					name: "originalFileName",
 					value: file.name
 				},{
@@ -586,7 +594,7 @@ var CORA = (function(cora) {
 			let cRecordTypeGroup = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("linkedRecordType"));
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			return dependencies.recordTypeProvider.getRecordTypeById(recordTypeId);
+			return recordTypeProvider.getRecordTypeById(recordTypeId);
 		};
 
 		const getLinkedRecordTypeCreateLink = function() {
@@ -605,7 +613,7 @@ var CORA = (function(cora) {
 				"data": createdRecordId,
 				"path": newPath
 			};
-			dependencies.jsBookkeeper.setValue(setValueData);
+			jsBookkeeper.setValue(setValueData);
 			let formData = new FormData();
 			formData.append("file", answer.spec.file);
 			formData.append("userId", "aUserName");
@@ -616,7 +624,7 @@ var CORA = (function(cora) {
 				"uploadLink": uploadLink,
 				"file": answer.spec.file
 			};
-			dependencies.uploadManager.upload(uploadSpec);
+			uploadManager.upload(uploadSpec);
 			saveMainRecordIfRecordsAreCreatedForAllFiles();
 		};
 
@@ -633,7 +641,7 @@ var CORA = (function(cora) {
 		const saveMainRecordIfRecordsAreCreatedForAllFiles = function() {
 			numberOfRecordsForFilesCreated++;
 			if (numberOfFilesToUpload === numberOfRecordsForFilesCreated) {
-				dependencies.pubSub.publish("updateRecord", {
+				pubSub.publish("updateRecord", {
 					"data": "",
 					"path": []
 				});
@@ -657,7 +665,7 @@ var CORA = (function(cora) {
 		};
 
 		const unsubscribeFromNewElementsAdded = function() {
-			dependencies.pubSub.unsubscribe(newElementsAddedSubscriptionId);
+			pubSub.unsubscribe(newElementsAddedSubscriptionId);
 		};
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
@@ -682,18 +690,18 @@ var CORA = (function(cora) {
 		}
 
 		out = Object.freeze({
-			getView: getView,
-			add: add,
-			handleMsg: handleMsg,
-			isRepeating: isRepeating,
-			isStaticNoOfChildren: isStaticNoOfChildren,
-			sendAdd: sendAdd,
-			sendAddBefore: sendAddBefore,
-			childRemoved: childRemoved,
-			childMoved: childMoved,
-			handleFiles: handleFiles,
-			processNewBinary: processNewBinary,
-			newElementsAdded: newElementsAdded
+			getView,
+			add,
+			handleMsg,
+			isRepeating,
+			isStaticNoOfChildren,
+			sendAdd,
+			sendAddBefore,
+			childRemoved,
+			childMoved,
+			handleFiles,
+			processNewBinary,
+			newElementsAdded
 		});
 
 		pChildRefHandlerView.getView().modelObject = out;

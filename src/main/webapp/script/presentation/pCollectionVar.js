@@ -46,6 +46,9 @@ var CORA = (function(cora) {
 			pCollVarViewSpec.type = "pCollVar";
 			pCollVarViewSpec.info.technicalInfo.push({text: `itemCollection: ${refCollectionId}`,
 				onclickMethod: openRefCollectionIdRecord});
+			let optionInfo = createOptionsDefTextForCollectionItems();
+			let techInfoWithOptions = pCollVarViewSpec.info.technicalInfo.concat(optionInfo);
+			pCollVarViewSpec.info.technicalInfo = techInfoWithOptions;
 			addOptionsToSpecIfInput(mode, pCollVarViewSpec);
 		};
 		
@@ -87,7 +90,7 @@ var CORA = (function(cora) {
 				specOptions.push(option);
 			});
 		};
-		
+
 		const getCollectionItemReferencesChildren = function() {
 			let cMetadataCollection = getMetadataById(refCollectionId);
 			let collectionItemReferences = cMetadataCollection
@@ -105,6 +108,31 @@ var CORA = (function(cora) {
 			let textIdToTranslate = item.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
 			let optionText = textProvider.getTranslation(textIdToTranslate);
 			return [optionText, value];
+		};
+
+		const createOptionsDefTextForCollectionItems = function() {
+			let specOptions = [];
+			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
+
+			collectionItemReferencesChildren.forEach((ref)=> {
+				let option = createOptionDefTextForRef(ref);
+				specOptions.push(option);
+			});
+			return specOptions;
+		};
+		
+		const createOptionDefTextForRef = function(ref) {
+			let cItemRef = CORA.coraData(ref);
+			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
+
+			let item = getMetadataById(itemRefId);
+			let value = item.getFirstAtomicValueByNameInData("nameInData");
+
+			let textIdToTranslate = item.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
+			let optionText = textProvider.getTranslation(textIdToTranslate);
+			let defTextIdToTranslate = item.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
+			let defOptionText = textProvider.getTranslation(defTextIdToTranslate);
+			return {text: `(${value}) ${optionText} - ${defOptionText}`};
 		};
 		
 		const validateTypeSpecificValue = function(valueFromView) {

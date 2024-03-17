@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -360,7 +360,8 @@ QUnit.test("testViewIsFactored", function(assert) {
 				}
 			]
 		},
-		"pRecordLink": pRecordLink
+		presentAs: "link",
+		pRecordLink: pRecordLink
 	};
 	assert.deepEqual(factoredViewSpec, expectedViewSpec);
 });
@@ -383,6 +384,102 @@ QUnit.test("testViewIsFactoredWithSpecifiedLabelIfSpecifiedLabelTextIsSet", func
 
 	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
 	assert.deepEqual(factoredViewSpec.label, "specifiedLabelText_text");
+});
+
+QUnit.test("testViewIsFactoredWithoutPresentAs", function(assert) {
+	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
+		.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink"));
+
+	CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
+	assert.deepEqual(factoredViewSpec.presentAs, "link");
+});
+
+QUnit.test("testViewIsFactoredWithPresentAs_WithoutValueView", function(assert) {
+	let presentation = this.dependencies.metadataProvider
+		.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
+	presentation.children.push({
+		name: "presentAs",
+		value: "onlyTranslatedText"
+	});
+	this.spec.cPresentation = CORA.coraData(presentation);
+
+	CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.pRecordLinkViewFactory.getSpec(0);
+	assert.deepEqual(factoredViewSpec.presentAs, "onlyTranslatedText");
+	
+	let pRecordLinkView = this.dependencies.pRecordLinkViewFactory.getFactored(0);
+	let recordTypeView = pRecordLinkView.getAddedChild(0);
+	assert.strictEqual(recordTypeView, undefined);
+});
+
+QUnit.test("testInitSubscribeToSetValueOnRecordId_translatedTextSet", function(assert) {
+	this.dependencies.textProvider= CORATEST.textProviderSpy();
+	let presentation = this.dependencies.metadataProvider
+		.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
+	presentation.children.push({
+		name: "presentAs",
+		value: "onlyTranslatedText"
+	});
+	this.spec.cPresentation = CORA.coraData(presentation);
+
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredView = this.dependencies.pRecordLinkViewFactory.getFactored(0);
+	
+	let msg = {
+		"data": "A new value",
+		"path": []
+	};
+	pRecordLink.valueChangedOnInput(msg);
+
+	assert.deepEqual(factoredView.getRemoveLinkedPresentation(), 1);
+	assert.deepEqual(factoredView.getHideOpenLinkedRecord(), 1);
+	assert.deepEqual(factoredView.getHideClearLinkedRecordIdButtons(), 1);
+	assert.deepEqual(factoredView.getShowCalled(), 0);
+	
+	let addedTextNode = factoredView.getAddedLinkedPresentation(0);
+	assert.equal(addedTextNode.nodeName, "#text");
+	assert.strictEqual(addedTextNode.textContent, "translated_A new value");
+});
+
+QUnit.test("testChangedValueFor_translatedTextSet", function(assert) {
+	this.dependencies.textProvider= CORATEST.textProviderSpy();
+	let presentation = this.dependencies.metadataProvider
+		.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
+	presentation.children.push({
+		name: "presentAs",
+		value: "onlyTranslatedText"
+	});
+	this.spec.cPresentation = CORA.coraData(presentation);
+
+	let pRecordLink = CORA.pRecordLink(this.dependencies, this.spec);
+
+	let factoredView = this.dependencies.pRecordLinkViewFactory.getFactored(0);
+	
+	let msg = {
+		"data": {
+			children: [
+				{
+					name: "linkedRecordId",
+					value : "A new value"
+				}
+			]
+		},
+		"path": []
+	};
+	pRecordLink.handleMsg(msg);
+
+	assert.deepEqual(factoredView.getRemoveLinkedPresentation(), 0);
+	assert.deepEqual(factoredView.getHideOpenLinkedRecord(), 0);
+	assert.deepEqual(factoredView.getHideClearLinkedRecordIdButtons(), 0);
+	assert.deepEqual(factoredView.getShowCalled(), 0);
+	
+	let addedTextNode = factoredView.getAddedLinkedPresentation(0);
+	assert.equal(addedTextNode.nodeName, "#text");
+	assert.strictEqual(addedTextNode.textContent, "translated_A new value");
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {

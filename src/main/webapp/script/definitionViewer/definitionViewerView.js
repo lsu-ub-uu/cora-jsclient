@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Olov McKie
+ * Copyright 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -25,7 +25,6 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
-//console.log(viewModel)
 			view = createElementWithTypeClassText("span", "definitionViewer");
 			addPartsToView(viewModel, view);
 			return view;
@@ -50,34 +49,41 @@ var CORA = (function(cora) {
 			let legend = createLegend();
 			view.appendChild(legend);
 		};
-		
+
 		const createLegend = function(){
 			let legend = createElementWithTypeClassText("div", "legend", "Legend");
-				
-			let storage = createElementWithTypeClassText("div", "");
-			legend.append(storage);
-			let s = createElementWithTypeClassText("span", "storage","S");
-			storage.append(s);
-			let sText = createElementWithTypeClassText("span", "","Storage");
-			storage.append(sText);
-			
-			let permission = createElementWithTypeClassText("div", "");
-			legend.append(permission);
-			let p = createElementWithTypeClassText("span", "permission","P");
-			permission.append(p);
-			let pText = createElementWithTypeClassText("span", "","Permission");
-			permission.append(pText);
-			
-			let index = createElementWithTypeClassText("div", "");
-			legend.append(index);
-			let i = createElementWithTypeClassText("span", "index","I");
-			index.append(i);
-			let iText = createElementWithTypeClassText("span", "","Index");
-			index.append(iText);
-			
+			legend.append(createStorageLegendItem());
+			legend.append(createPermissionLegendItem());
+			legend.append(createIndexLegendItem());
+			legend.append(createFinalValueLegendItem());
 			return legend;
 		};
-		
+
+		let createStorageLegendItem = function () {
+			return createLegendItemUsingClassNameAndSymbolAndText("storage", "S", "Storage");
+		};
+
+		let createPermissionLegendItem = function () {
+			return createLegendItemUsingClassNameAndSymbolAndText("permission", "P", "Permission");
+		};
+
+		let createIndexLegendItem = function () {
+			return createLegendItemUsingClassNameAndSymbolAndText("index", "I", "Index");
+		};
+
+		let createFinalValueLegendItem = function () {
+			return createLegendItemUsingClassNameAndSymbolAndText("finalValue", "{}", "Final value");
+		};
+
+		const createLegendItemUsingClassNameAndSymbolAndText = function (className, symbol, text) {
+			let item = createElementWithTypeClassText("div", "");
+			let symbolPart = createElementWithTypeClassText("span", className, symbol);
+			item.append(symbolPart);
+			let textPart = createElementWithTypeClassText("span", "", text);
+			item.append(textPart);
+			return item;
+		};
+
 		const createElementWithTypeClassText = function(type, className, textContent){
 			let element = document.createElement(type);
 			if(className){
@@ -91,48 +97,44 @@ var CORA = (function(cora) {
 
 		const createViewForOneLevel = function(childReference) {
 			let child = childReference.child;
-			let metadataHeader = createElementWithTypeClassText("li");
+			let oneLevel = createElementWithTypeClassText("li");
+			oneLevel.append(createNameInDataDetails(child));
+			if(child.finalValue){
+				oneLevel.append(createFinalValueDetails(child));
+			}
+			if(child.attributes){
+				oneLevel.append(createAttributeDetails(child));
+			}
+			oneLevel.append(createChildReferenceDetails(childReference));
+			if (child.children) {
+				oneLevel.appendChild(createChildrenDetails(child));
+			}
+			return oneLevel;
+		};
 
+		let createNameInDataDetails = function (child) {
 			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
-			metadataHeader.append(nameInData);
-			nameInData.onclick = function(event){
+			nameInData.onclick = function (event) {
 				child.methodOpenDefiningRecord(event, child.id);
 			};
-
-			if(child.finalValue){
-				let finalValue = createElementWithTypeClassText("span", "finalValue", `{${child.finalValue}}`);
-				metadataHeader.append(finalValue);
-			}
-			
-			if(child.attributes){
-				const attributeDetails =createAttributeDetails(child);
-				metadataHeader.append(attributeDetails);
-			}
-
-			const details = createChildReferenceDetails(childReference);
-			metadataHeader.append(details);
-			if (child.children) {
-				let children = document.createElement("ul");
-				metadataHeader.appendChild(children);
-				child.children.forEach(function(mChild) {
-					let nextLevel = createViewForOneLevel(mChild);
-					children.appendChild(nextLevel);
-				});
-			}
-			return metadataHeader;
+			return nameInData;
 		};
-		
+
+		let createFinalValueDetails = function (child) {
+			return createElementWithTypeClassText("span", "finalValue", `{${child.finalValue}}`);
+		};
+
 		const createAttributeDetails = function(child){
 			let details = [];
 			child.attributes.forEach(function(mAttribute) {
 				if(mAttribute.finalValue){
-					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);	
+					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
 				}else{
 					let items = [];
 					mAttribute.collectionItems.forEach(function(collectionItem){
 						items.push(collectionItem.nameInData);
 					});
-					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);	
+					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);
 				}
 			});
 			return createElementWithTypeClassText("span", "attributes", details.join(", "));
@@ -142,10 +144,10 @@ var CORA = (function(cora) {
 			let details = createElementWithTypeClassText("span", "details");
 			let type = createElementWithTypeClassText("span", "type", `${childReference.child.type}`);
 			details.append("(", type);
-			
+
 			if (childReference.repeatMin) {
 				details.append(", ");
-				let cardinality = createElementWithTypeClassText("span", "cardinality", 
+				let cardinality = createElementWithTypeClassText("span", "cardinality",
 					`${childReference.repeatMin}-${childReference.repeatMax}`);
 				details.append(cardinality);
 			}
@@ -173,12 +175,15 @@ var CORA = (function(cora) {
 			details.append(")");
 			return details;
 		};
-		
-		//			let texts = CORA.gui.createDivWithClassName("texts");
-		//			view.appendChild(texts);
-		//			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("textId");
-		//			let defTextId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
-		//			texts.innerHTML = textId +":"+textProvider.getTranslation(textId)+"::"+ defTextId;
+
+		let createChildrenDetails = function (child) {
+			let children = document.createElement("ul");
+			child.children.forEach(function (mChild) {
+				let nextLevel = createViewForOneLevel(mChild);
+				children.appendChild(nextLevel);
+			});
+			return children;
+		};
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;

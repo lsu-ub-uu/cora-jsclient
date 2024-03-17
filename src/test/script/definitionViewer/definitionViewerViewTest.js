@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Olov McKie
+ * Copyright 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -92,7 +92,8 @@ QUnit.test("testLegend", function(assert) {
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
 
 	let legend = view.childNodes[2];
-	CORATEST.assertElementHasTypeClassText(legend, "DIV", "legend", "LegendSStoragePPermissionIIndex", assert);
+	CORATEST.assertElementHasTypeClassText(legend, "DIV", "legend", 
+		"LegendSStoragePPermissionIIndex{}Final value", assert);
 	assert.strictEqual(legend.childNodes[0].textContent, "Legend", assert);
 	
 	let storage = legend.childNodes[1];
@@ -109,6 +110,11 @@ QUnit.test("testLegend", function(assert) {
 	CORATEST.assertElementHasTypeClassText(index, "DIV", "", "", assert);
 	CORATEST.assertElementHasTypeClassText(index.childNodes[0], "SPAN", "index", "I", assert);
 	CORATEST.assertElementHasTypeClassText(index.childNodes[1], "SPAN", "", "Index", assert);
+	
+	let finalValue = legend.childNodes[4];
+	CORATEST.assertElementHasTypeClassText(finalValue, "DIV", "", "", assert);
+	CORATEST.assertElementHasTypeClassText(finalValue.childNodes[0], "SPAN", "finalValue", "{}", assert);
+	CORATEST.assertElementHasTypeClassText(finalValue.childNodes[1], "SPAN", "", "Final value", assert);
 	
 	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });

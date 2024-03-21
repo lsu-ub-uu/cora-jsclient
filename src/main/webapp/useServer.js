@@ -23,6 +23,14 @@ function start() {
 	if (href.indexOf("systemone") !== -1) {
 		enableCSS("aClientCSS");
 		useCora();
+	} else if (href.indexOf("cora.alvin-portal.org") !== -1) {
+		enableCSS("alvinCSS");
+		useAlvinCora();
+		enableIcon("alvin");
+	} else if (href.indexOf("pre.cora.diva-portal.org") !== -1) {
+		enableCSS("divaLilaCSS");
+		useDivaPre();
+		enableIcon("diva");
 	} else if (href.indexOf("alvin") !== -1) {
 		enableCSS("alvinCSS");
 		useAlvin();
@@ -160,10 +168,22 @@ function useCora() {
 	appTokenBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
 	startDependencies();
 }
+function useAlvinCora() {
+	name = "ALVIN";
+	baseUrl = "https://cora.alvin-portal.org/rest/";
+	appTokenBaseUrl = "https://cora.alvin-portal.org/";
+	startDependencies();
+}
 function useAlvin() {
 	name = "ALVIN";
 	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+	appTokenBaseUrl = "https://cora.epc.ub.uu.se/";
+	startDependencies();
+}
+function useDivaPre() {
+	name = "DiVA";
+	baseUrl = "https://pre.cora.diva-portal.org/rest/";
+	appTokenBaseUrl = "https://pre.cora.diva-portal.org/";
 	startDependencies();
 }
 function useDiva() {

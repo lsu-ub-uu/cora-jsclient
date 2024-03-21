@@ -27,7 +27,7 @@ function start() {
 		enableCSS("alvinCSS");
 		useAlvinCora();
 		enableIcon("alvin");
-	} else if (href.indexOf("pre.cora.diva-portal.org") !== -1) {
+	} else if (href.indexOf("pre.diva-portal.org") !== -1) {
 		enableCSS("divaLilaCSS");
 		useDivaPre();
 		enableIcon("diva");
@@ -182,8 +182,8 @@ function useAlvin() {
 }
 function useDivaPre() {
 	name = "DiVA";
-	baseUrl = "https://pre.cora.diva-portal.org/rest/";
-	appTokenBaseUrl = "https://pre.cora.diva-portal.org/";
+	baseUrl = "https://pre.diva-portal.org/rest/";
+	appTokenBaseUrl = "https://pre.diva-portal.org/";
 	startDependencies();
 }
 function useDiva() {

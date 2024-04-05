@@ -177,7 +177,7 @@ function useAlvinCora() {
 function useAlvin() {
 	name = "ALVIN";
 	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/";
+	appTokenBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
 	startDependencies();
 }
 function useDivaPre() {

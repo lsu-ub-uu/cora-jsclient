@@ -88,7 +88,7 @@ QUnit.module("login/loginManagerTest.js",
 					"delete": {
 						"requestMethod": "DELETE",
 						"rel": "delete",
-						"url": "http://localhost:8080/apptokenverifier/rest/apptoken/141414"
+						"url": "http://localhost:8080/login/rest/apptoken/141414"
 					}
 				}
 			};
@@ -356,7 +356,7 @@ QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 	assert.ok(factored1);
 	var spec0 = this.dependencies.appTokenLoginFactory.getSpec(0);
 	assert.strictEqual(spec0.requestMethod, "POST");
-	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/apptokenverifier/rest/apptoken/");
+	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken/");
 	assert.strictEqual(spec0.accept, "");
 	assert.strictEqual(spec0.authInfoCallback, loginManager.appTokenAuthInfoCallback);
 	assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);

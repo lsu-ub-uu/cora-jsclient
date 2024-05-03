@@ -31,7 +31,8 @@ var CORA = (function(cora) {
 		
 		const start = function() {
 			viewSpec = {
-				activateMethod : activate
+				activateMethod : activate,
+				focusinMethod: focusinMethod
 			};
 			if (spec.disableRemove !== "true") {
 				viewSpec.removeMethod = remove;
@@ -41,6 +42,13 @@ var CORA = (function(cora) {
 		
 		const activate = function() {
 			spec.activateMethod(out);
+//console.log("activate");
+//console.log(getWorkView().querySelector('input'));
+//getWorkView().querySelector('input').focus();
+		};
+		
+		const focusinMethod = function(){
+			
 		};
 
 		const remove = function() {
@@ -109,9 +117,14 @@ var CORA = (function(cora) {
 		const clearWorkView = function() {
 			view.clearWorkView();
 		};
-
+let currentFocus;
 		const hideWorkView = function() {
+//console.log(getWorkView().querySelector('input'));
+currentFocus = document.activeElement;
+console.log("hideWorkView: ",currentFocus);
+//getWorkView().querySelector('input').focus();
 			view.hideWorkView();
+
 		};
 
 		const showWorkView = function() {
@@ -119,6 +132,12 @@ var CORA = (function(cora) {
 			if (spec.callMethodAfterShowWorkView !== undefined) {
 				spec.callMethodAfterShowWorkView();
 			}
+console.log("showWorkView:" ,currentFocus);
+if(undefined != currentFocus){
+	currentFocus.focus();
+}else{
+	
+}
 		};
 
 		const getListView = function() {
@@ -151,6 +170,7 @@ var CORA = (function(cora) {
 			getSpec : getSpec,
 			getMenuView : getMenuView,
 			getWorkView : getWorkView,
+			focusinMethod: focusinMethod,
 			remove : remove,
 			addMenuPresentation : addMenuPresentation,
 			addWorkPresentation : addWorkPresentation,

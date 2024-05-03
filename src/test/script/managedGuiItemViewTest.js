@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -22,11 +22,18 @@ QUnit.module("managedGuiItemViewTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {};
+		let focusinEvent=undefined;
 		this.spec = {
-			"activateMethod" : function() {
+			activateMethod : function() {
 			},
-			"removeMethod" : function() {
+			removeMethod : function() {
 			},
+			focusinMethod : function(event){
+				focusinEvent = event;
+			}
+		};
+		this.getFocusinEvent = function(){
+			return focusinEvent;
 		};
 	},
 	afterEach : function() {
@@ -43,7 +50,6 @@ QUnit.test("testGetMenuView", function(assert) {
 	let menuView = managedGuiItemView.getMenuView();
 	assert.strictEqual(menuView.className, "menuView");
 });
-
 
 QUnit.test("testMenuOnclickCallsActivateMethod", function(assert) {
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
@@ -64,6 +70,7 @@ QUnit.test("testMenuViewHasRemoveButtonThatCallsRemoveMethods", function(assert)
 	
 	assert.ok(removeMethodHasBeenCalled);
 });
+
 QUnit.test("testMenuViewHasNoRemoveButtonIfNoRemoveMethod", function(assert) {
 	this.spec.removeMethod = undefined;
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
@@ -82,6 +89,19 @@ QUnit.test("testGetWorkView", function(assert) {
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
 	let workView = managedGuiItemView.getWorkView();
 	assert.strictEqual(workView.className, "workView");
+});
+
+QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
+	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+	let fixture = document.getElementById("qunit-fixture");
+	fixture.appendChild(workView);
+	let myInput = document.createElement("input");
+	workView.appendChild(myInput);
+	
+	CORATESTHELPER.simulateFocus(myInput);
+	
+	assert.strictEqual(this.getFocusinEvent().target, myInput);
 });
 
 QUnit.test("testAddMenuPresentation", function(assert) {

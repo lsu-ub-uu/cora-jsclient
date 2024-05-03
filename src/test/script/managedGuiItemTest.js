@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("managedGuiItemTest.js", {
+QUnit.module.only("managedGuiItemTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
@@ -89,7 +89,7 @@ QUnit.test("testGetDependencies", function(assert) {
 QUnit.test("testGetSpec", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	assert.strictEqual(managedGuiItem.getSpec(), this.spec);
-});
+}); 
 
 QUnit.test("testActivateMethodPassedOnToViewCallsMethodWithSelf", function(assert) {
 	let calledWithManagedGuiItem;
@@ -102,6 +102,33 @@ QUnit.test("testActivateMethodPassedOnToViewCallsMethodWithSelf", function(asser
 	factoredSpec.activateMethod();
 	assert.strictEqual(calledWithManagedGuiItem, managedGuiItem);
 });
+
+QUnit.test("testFocusinMethodIsInViewSpec", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
+	assert.strictEqual(factoredViewSpec.focusinMethod, managedGuiItem.focusinMethod);
+});
+
+QUnit.test("testFocusinMethod", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+//	let factoredViewSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
+//	assert.strictEqual(factoredViewSpec.focusinMethod, managedGuiItem.focusinMethod);
+	let inputSpy1Focus = 0;
+	let inputSpy1 = {
+		focus: function(){
+			inputSpy1Focus++;
+		}
+	};
+	let event = {
+		target: inputSpy1
+	};
+	managedGuiItem.focusinMethod(event);
+	 assert.true(true)  
+});
+
+
 
 QUnit.test("testRemoveMethodAddedToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);

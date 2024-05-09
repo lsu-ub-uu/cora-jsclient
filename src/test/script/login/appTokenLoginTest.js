@@ -42,7 +42,7 @@ QUnit.module("login/appTokenLoginTest.js", {
 
 		this.spec = {
 			"requestMethod" : "POST",
-			"url" : "http://localhost:8080/apptokenverifier/rest/apptoken/",
+			"url" : "http://localhost:8080/login/rest/apptoken/",
 			"accept" : "",
 			"authInfoCallback" : function(authInfoIn) {
 				authInfo = authInfoIn;
@@ -117,7 +117,7 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 			"delete" : {
 				"requestMethod" : "DELETE",
 				"rel" : "delete",
-				"url" : "http://epc.ub.uu.se/apptokenverifier/rest/apptoken/131313"
+				"url" : "http://epc.ub.uu.se/login/rest/apptoken/131313"
 			}
 		}
 	};

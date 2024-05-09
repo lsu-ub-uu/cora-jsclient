@@ -271,7 +271,7 @@ var CORA = (function(cora) {
 		function appTokenLogin(userId, appToken) {
 			var loginSpec = {
 				"requestMethod": "POST",
-				"url": spec.appTokenBaseUrl + "apptokenverifier/rest/apptoken/",
+				"url": spec.appTokenBaseUrl + "login/rest/apptoken/",
 				"accept": "",
 				"authInfoCallback": appTokenAuthInfoCallback,
 				"errorCallback": appTokenErrorCallback,

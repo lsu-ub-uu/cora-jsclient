@@ -20,6 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.managedGuiItem = function(dependencies, spec) {
+		const maxNumberIndicators = 9;
+
 		let out;
 		let active = false;
 		let changed = false;
@@ -27,7 +29,7 @@ var CORA = (function(cora) {
 		let view;
 		let sendDataToServerMethod;
 		let currentIndicatorNo = 0;
-		const maxNumberIndicators = 9;
+		let focusedId;
 		
 		const start = function() {
 			viewSpec = {
@@ -47,10 +49,6 @@ var CORA = (function(cora) {
 //getWorkView().querySelector('input').focus();
 		};
 		
-		const focusinMethod = function(){
-			
-		};
-
 		const remove = function() {
 			spec.removeMethod(out);
 		};
@@ -117,11 +115,11 @@ var CORA = (function(cora) {
 		const clearWorkView = function() {
 			view.clearWorkView();
 		};
-let currentFocus;
+//let currentFocus;
 		const hideWorkView = function() {
 //console.log(getWorkView().querySelector('input'));
-currentFocus = document.activeElement;
-console.log("hideWorkView: ",currentFocus);
+//currentFocus = document.activeElement;
+//console.log("hideWorkView: ",currentFocus);
 //getWorkView().querySelector('input').focus();
 			view.hideWorkView();
 
@@ -132,14 +130,26 @@ console.log("hideWorkView: ",currentFocus);
 			if (spec.callMethodAfterShowWorkView !== undefined) {
 				spec.callMethodAfterShowWorkView();
 			}
-console.log("showWorkView:" ,currentFocus);
-if(undefined != currentFocus){
-	currentFocus.focus();
-}else{
-	
-}
+			if(undefined !== focusedId){
+			console.log("showWorkView", focusedId)
+				view.focusToId(focusedId);
+			}
+//console.log("showWorkView:" ,currentFocus);
+//if(undefined != currentFocus){
+//	currentFocus.focus();
+//}else{
+//	
+//}
 		};
 
+		const focusinMethod = function(element){
+			console.log("focusinMethod", element)
+			if(element.id !== undefined){
+			console.log("focusinMethod", element.id)
+				focusedId = element.id;
+			}
+		};
+		
 		const getListView = function() {
 			return view.getListView();
 		};

@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("managedGuiItemViewTest.js", {
+QUnit.module.only("managedGuiItemViewTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {};
@@ -102,6 +102,24 @@ QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
 	CORATESTHELPER.simulateFocus(myInput);
 	
 	assert.strictEqual(this.getFocusinEvent().target, myInput);
+});
+
+QUnit.test("testFocusToId", function(assert) {
+	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+	let fixture = document.getElementById("qunit-fixture");
+	fixture.appendChild(workView);
+	let myInput = document.createElement("input");
+	myInput.id = "myId"
+	workView.appendChild(myInput);
+	let currentFocus = document.activeElement;
+	
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusToId("myId");
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput)
 });
 
 QUnit.test("testAddMenuPresentation", function(assert) {

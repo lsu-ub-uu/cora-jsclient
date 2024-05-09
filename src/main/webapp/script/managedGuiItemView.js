@@ -121,6 +121,16 @@ var CORA = (function(cora) {
 		const addListPresentation = function(presentationToAdd) {
 			listView.appendChild(presentationToAdd);
 		};
+		
+		const focusToId = function(id){
+//			if(element.id){
+//				focusedId = element.id;
+//			}
+//			console.log("id", id)
+			let element = document.getElementById(id);
+//			console.log("element", element)
+			element.focus();
+		};
 
 		let out = Object.freeze({
 			type : "managedGuiItemView",
@@ -135,7 +145,8 @@ var CORA = (function(cora) {
 			hideWorkView : hideWorkView,
 			showWorkView : showWorkView,
 			getListView : getListView,
-			addListPresentation : addListPresentation
+			addListPresentation : addListPresentation,
+			focusToId: focusToId
 		});
 		start();
 		return out;

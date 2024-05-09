@@ -24,14 +24,14 @@ QUnit.module.only("managedGuiItemTest.js", {
 
 		this.metadataProvider = new MetadataProviderStub();
 		this.dependencies = {
-			"managedGuiItemViewFactory" : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
+			managedGuiItemViewFactory : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
 		};
 		this.spec = {
-			"activateMethod" : function() {
+			activateMethod : function() {
 			},
-			"removeMethod" : function() {
+			removeMethod : function() {
 			},
-			"callOnMetadataReloadMethod" : function() {
+			callOnMetadataReloadMethod : function() {
 
 			}
 
@@ -110,22 +110,40 @@ QUnit.test("testFocusinMethodIsInViewSpec", function(assert) {
 	assert.strictEqual(factoredViewSpec.focusinMethod, managedGuiItem.focusinMethod);
 });
 
-QUnit.test("testFocusinMethod", function(assert) {
+QUnit.test("testFocusinMethodNotCalled", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 
-//	let factoredViewSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
-//	assert.strictEqual(factoredViewSpec.focusinMethod, managedGuiItem.focusinMethod);
-	let inputSpy1Focus = 0;
-	let inputSpy1 = {
-		focus: function(){
-			inputSpy1Focus++;
-		}
-	};
-	let event = {
-		target: inputSpy1
-	};
-	managedGuiItem.focusinMethod(event);
-	 assert.true(true)  
+	managedGuiItem.showWorkView();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedId = factoredView.getFocusedId();
+	assert.strictEqual(focusedId, "focusOnId_notCalledYet");
+});
+
+QUnit.test("testFocusinMethodCalledWithElementWithoutIdKeepsPreviousId", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {id: "someId"};
+	let fakeInputEventNoId = {NOTid: "someId"};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.focusinMethod(fakeInputEventNoId);
+	managedGuiItem.showWorkView();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedId = factoredView.getFocusedId();
+	assert.strictEqual(focusedId, "someId");
+});
+
+QUnit.test("testFocusinMethod", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInput = {id: "someId"};
+	
+	managedGuiItem.focusinMethod(fakeInput);
+	managedGuiItem.showWorkView();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedId = factoredView.getFocusedId();
+	assert.strictEqual(focusedId, "someId");
 });
 
 

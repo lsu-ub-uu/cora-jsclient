@@ -34,6 +34,7 @@ var CORATEST = (function(coraTest) {
 		let shown = 0;
 		let removed = 0;
 		let state;
+		let focusedId = "focusOnId_notCalledYet";
 
 		function getMenuView() {
 			return menuView;
@@ -108,6 +109,14 @@ var CORATEST = (function(coraTest) {
 		function getAddedListPresentation(number) {
 			return addedListPresentations[number];
 		}
+		
+		function focusToId(id){
+			focusedId = id;
+		}
+		function getFocusedId(){
+			return focusedId;
+		}
+		
 		let out = Object.freeze({
 			"type" : "managedGuiItemViewSpy",
 			getDependencies : getDependencies,
@@ -132,7 +141,10 @@ var CORATEST = (function(coraTest) {
 			getRemoved : getRemoved,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
-			getAddedListPresentation : getAddedListPresentation
+			getAddedListPresentation : getAddedListPresentation,
+			
+			focusToId: focusToId,
+			getFocusedId: getFocusedId
 		});
 		return out;
 	};

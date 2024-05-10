@@ -19,6 +19,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordGuiFactory = function(dependencies) {
+		let recordGuiCounter = 0;
 		let metadataProvider = dependencies.providers.metadataProvider;
 		let textProvider = dependencies.providers.textProvider;
 
@@ -92,8 +93,10 @@ var CORA = (function(cora) {
 			};
 
 			let metadataValidatorFactory = CORA.metadataValidatorFactory(dependenciesMV);
-
-			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory);
+			recordGuiCounter++
+			let presentationFactorySpec = {presentationFactoryCounter: recordGuiCounter};
+			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory,
+				presentationFactorySpec);
 
 			let dependenciesPHF = {
 				metadataProvider : metadataProvider,

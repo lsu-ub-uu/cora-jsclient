@@ -44,9 +44,6 @@ var CORA = (function(cora) {
 		
 		const activate = function() {
 			spec.activateMethod(out);
-//console.log("activate");
-//console.log(getWorkView().querySelector('input'));
-//getWorkView().querySelector('input').focus();
 		};
 		
 		const remove = function() {

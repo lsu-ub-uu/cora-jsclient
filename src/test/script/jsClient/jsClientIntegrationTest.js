@@ -41,7 +41,7 @@ var CORATEST = (function(coraTest) {
 			};
 			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
-			let specPresentationFactory = {
+			let dependenciesPresentationFactory = {
 				"providers": {
 					"metadataProvider": metadataProvider,
 					"textProvider": textProvider,
@@ -49,7 +49,9 @@ var CORATEST = (function(coraTest) {
 				"pubSub": pubSub,
 				"jsBookkeeper": jsBookkeeper
 			};
-			let presentationFactory = CORA.presentationFactory(specPresentationFactory);
+			let presentationFactorySpec = {presentationFactoryCounter: 333}
+			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory,
+				presentationFactorySpec);
 
 			let holderDependencies = {
 				"metadataProvider": metadataProvider,
@@ -172,7 +174,7 @@ QUnit.test("testIntegrateCoraPubSubDataHolderPresentationMetadataController", fu
 
 
 	let pVarView = childRefHandler.firstChild.firstChild.firstChild;
-	assert.deepEqual(pVarView.className, "pVar pVarTextVariableId default");
+	assert.deepEqual(pVarView.className, "textVariableId pVar pVarTextVariableId default");
 	let input = pVarView.childNodes[1];
 	assert.deepEqual(input.value, "");
 

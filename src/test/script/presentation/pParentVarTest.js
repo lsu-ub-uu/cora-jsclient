@@ -82,6 +82,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 			pAttributesFactory: this.pAttributesFactory
 		};
 		this.spec = {
+			presentationCounter: 333,
 			path: [],
 			metadataIdUsedInData: "textVariableId",
 			cPresentation: CORA.coraData(this.metadataProvider
@@ -178,9 +179,9 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		className: "pVar fakeChildType pVarTextVariableId",
+		className: "onetwo pVar fakeChildType pVarTextVariableId",
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -407,9 +408,9 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		className: "pVar fakeChildType textVariableIdTextAreaPVar",
+		className: "onetwo pVar fakeChildType textVariableIdTextAreaPVar",
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -451,9 +452,9 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		className: "pVar fakeChildType textVariableIdShowTextAreaFalsePVar",
+		className: "onetwo pVar fakeChildType textVariableIdShowTextAreaFalsePVar",
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -500,9 +501,9 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		className: "pVar fakeChildType pVarTextVariableId",
+		className: "onetwo pVar fakeChildType pVarTextVariableId",
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -551,9 +552,9 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
-		className: "pVar fakeChildType",
+		className: "onetwo pVar fakeChildType",
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",

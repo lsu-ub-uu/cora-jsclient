@@ -404,6 +404,7 @@ var CORA = (function(cora) {
 			possiblyShowShowDefinitionButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
+			managedGuiItem.showWorkView();
 		};
 
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {

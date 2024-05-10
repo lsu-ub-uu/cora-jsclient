@@ -121,6 +121,21 @@ var CORA = (function(cora) {
 		const addListPresentation = function(presentationToAdd) {
 			listView.appendChild(presentationToAdd);
 		};
+
+		const focusOnFirstInput = function(className){
+			const elements = workView.querySelectorAll('input:not([type="button"]), textarea, select');
+//			elements.forEach((element) => {
+				console.log(elements)
+			for (let i = 0; i < elements.length; i++) {
+				let element = elements[i];
+				console.log(element)
+				if(element.checkVisibility()){
+					element.focus();
+					break;
+				}
+			}
+
+		};
 		
 		const focusToClass = function(className){
 			let elements = workView.querySelectorAll("."+className);
@@ -145,6 +160,7 @@ var CORA = (function(cora) {
 			showWorkView : showWorkView,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
+			focusOnFirstInput: focusOnFirstInput,
 			focusToClass: focusToClass
 		});
 		start();

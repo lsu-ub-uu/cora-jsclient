@@ -479,7 +479,7 @@ QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 
 	var ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(2);
 	var ajaxCallSpec = ajaxCallSpy.getSpec();
-	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/apptokenverifier/"
+	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 		+ "rest/apptoken/141414");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
 	// assert.strictEqual(ajaxCallSpec.accept, "");

@@ -59,7 +59,7 @@ QUnit.module("login/appTokenLoginTest.js", {
 
 		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
 			var ajaxCallSpec = ajaxCallSpy.getSpec();
-			assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/apptokenverifier/"
+			assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 					+ "rest/apptoken/someUserId");
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
 			assert.strictEqual(ajaxCallSpec.accept, "");

@@ -104,22 +104,63 @@ QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
 	assert.strictEqual(this.getFocusinEvent().target, myInput);
 });
 
-QUnit.test("testFocusToId", function(assert) {
+QUnit.test("testfocusToClassNotFound", function(assert) {
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
 	let workView = managedGuiItemView.getWorkView();
 	let fixture = document.getElementById("qunit-fixture");
 	fixture.appendChild(workView);
 	let myInput = document.createElement("input");
-	myInput.id = "myId"
+	myInput.className = "myClass"
 	workView.appendChild(myInput);
 	let currentFocus = document.activeElement;
 	
 	assert.strictEqual(currentFocus, document.body);
 
-	managedGuiItemView.focusToId("myId");
+	managedGuiItemView.focusToClass("myOtherClass");
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, document.body)
+});
+
+QUnit.test("testfocusToClass", function(assert) {
+	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+	let fixture = document.getElementById("qunit-fixture");
+	fixture.appendChild(workView);
+	let myInput = document.createElement("input");
+	myInput.className = "myClass someOtherClass"
+	workView.appendChild(myInput);
+	let currentFocus = document.activeElement;
+	
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusToClass("myClass");
 	
 	currentFocus = document.activeElement;
 	assert.strictEqual(currentFocus, myInput)
+});
+
+QUnit.test("testfocusToClassFirstOneNotVisible", function(assert) {
+	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+	let fixture = document.getElementById("qunit-fixture");
+	fixture.appendChild(workView);
+	let myInput = document.createElement("input");
+	myInput.className = "myClass someOtherClass";
+	myInput.display = "none";
+	
+	workView.appendChild(myInput);
+	let myInput2 = document.createElement("input");
+	myInput2.className = "myClass someOtherClass";
+	workView.appendChild(myInput2);
+	let currentFocus = document.activeElement;
+	
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusToClass("myClass");
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput2)
 });
 
 QUnit.test("testAddMenuPresentation", function(assert) {

@@ -122,14 +122,13 @@ var CORA = (function(cora) {
 			listView.appendChild(presentationToAdd);
 		};
 		
-		const focusToId = function(id){
-//			if(element.id){
-//				focusedId = element.id;
-//			}
-//			console.log("id", id)
-			let element = document.getElementById(id);
-//			console.log("element", element)
-			element.focus();
+		const focusToClass = function(className){
+			let elements = workView.querySelectorAll("."+className);
+			elements.forEach((element) => {
+				if(element.checkVisibility()){
+					element.focus();
+				}
+			});
 		};
 
 		let out = Object.freeze({
@@ -146,7 +145,7 @@ var CORA = (function(cora) {
 			showWorkView : showWorkView,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
-			focusToId: focusToId
+			focusToClass: focusToClass
 		});
 		start();
 		return out;

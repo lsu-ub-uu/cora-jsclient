@@ -115,7 +115,7 @@ var CORA = (function(cora) {
 		const factor = function(spec) {
 			presentationCounter++;
 			let specNew = {
-				presentationCounter: presentationFactoryCounter + ":"+presentationCounter,
+				presentationCounter: presentationFactoryCounter + "-"+presentationCounter,
 				path: spec.path,
 				metadataIdUsedInData: spec.metadataIdUsedInData,
 				cPresentation: spec.cPresentation,

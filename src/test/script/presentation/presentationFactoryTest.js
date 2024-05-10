@@ -326,7 +326,7 @@ CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);
 }
 CORATEST.assertCorrectCommonSpec = function(assert, context, spec) {
-	assert.deepEqual(spec.presentationCounter, "555:"+context.spec.presentationCounter);
+	assert.deepEqual(spec.presentationCounter, "555-"+context.spec.presentationCounter);
 	assert.strictEqual(spec.path, context.spec.path);
 	assert.strictEqual(spec.metadataIdUsedInData, context.spec.metadataIdUsedInData);
 	assert.strictEqual(spec.cPresentation, context.spec.cPresentation);

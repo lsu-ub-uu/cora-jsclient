@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 		let view;
 		let sendDataToServerMethod;
 		let currentIndicatorNo = 0;
-		let focusedId;
+		let focusedClass;
 		
 		const start = function() {
 			viewSpec = {
@@ -122,14 +122,17 @@ var CORA = (function(cora) {
 			if (spec.callMethodAfterShowWorkView !== undefined) {
 				spec.callMethodAfterShowWorkView();
 			}
-			if(undefined !== focusedId){
-				view.focusToId(focusedId);
+			if(undefined !== focusedClass){
+				view.focusToClass(focusedClass);
 			}
 		};
 
 		const focusinMethod = function(focusinEvent){
-			if(focusinEvent.target.id !== undefined){
-				focusedId = focusinEvent.target.id;
+			let targetClassName = focusinEvent.target.className;
+			if(targetClassName !== undefined){
+				let classList = targetClassName.split(' ');
+				let firstClassInList = 0;
+				focusedClass = classList[firstClassInList];
 			}
 		};
 		

@@ -30,6 +30,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 		};
 		this.spec = {
 			className: "pVar somePresentationId",
+			valueViewClassName: "someValueViewClassName", 
 			mode: "input",
 			inputType: "input",
 			outputFormat: "text",
@@ -236,6 +237,7 @@ QUnit.test("testInput", function(assert) {
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
 	assert.strictEqual(valueView.id, "someId");
+	assert.strictEqual(valueView.className, "someValueViewClassName");
 });
 
 QUnit.test("testInputPlaceholder", function(assert) {

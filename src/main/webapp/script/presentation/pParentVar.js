@@ -75,7 +75,8 @@ var CORA = (function(cora) {
 			defText = textProvider.getTranslation(defTextId);
 
 			let pVarViewSpec = {
-				className: path.join("") +" " + getClassName(),
+				className: getClassName(),
+				valueViewClassName: path.join("").replaceAll('.','-'),
 				id: "" + spec.presentationCounter,
 				mode: mode,
 				info: {

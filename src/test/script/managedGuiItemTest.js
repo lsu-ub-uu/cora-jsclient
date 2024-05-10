@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("managedGuiItemTest.js", {
+QUnit.module("managedGuiItemTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
@@ -122,8 +122,8 @@ QUnit.test("testFocusinMethodNotCalled", function(assert) {
 
 QUnit.test("testFocusinMethodCalledWithElementWithoutIdKeepsPreviousId", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
-	let fakeInputEvent = {id: "someId"};
-	let fakeInputEventNoId = {NOTid: "someId"};
+	let fakeInputEvent = {target: {id: "someId"}};
+	let fakeInputEventNoId = {target: {NOTid: "someId"}};
 	
 	managedGuiItem.focusinMethod(fakeInputEvent);
 	managedGuiItem.focusinMethod(fakeInputEventNoId);
@@ -136,7 +136,7 @@ QUnit.test("testFocusinMethodCalledWithElementWithoutIdKeepsPreviousId", functio
 
 QUnit.test("testFocusinMethod", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
-	let fakeInput = {id: "someId"};
+	let fakeInput = {target: {id: "someId"}};
 	
 	managedGuiItem.focusinMethod(fakeInput);
 	managedGuiItem.showWorkView();
@@ -145,8 +145,6 @@ QUnit.test("testFocusinMethod", function(assert) {
 	let focusedId = factoredView.getFocusedId();
 	assert.strictEqual(focusedId, "someId");
 });
-
-
 
 QUnit.test("testRemoveMethodAddedToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);

@@ -115,14 +115,9 @@ var CORA = (function(cora) {
 		const clearWorkView = function() {
 			view.clearWorkView();
 		};
-//let currentFocus;
-		const hideWorkView = function() {
-//console.log(getWorkView().querySelector('input'));
-//currentFocus = document.activeElement;
-//console.log("hideWorkView: ",currentFocus);
-//getWorkView().querySelector('input').focus();
-			view.hideWorkView();
 
+		const hideWorkView = function() {
+			view.hideWorkView();
 		};
 
 		const showWorkView = function() {
@@ -131,22 +126,13 @@ var CORA = (function(cora) {
 				spec.callMethodAfterShowWorkView();
 			}
 			if(undefined !== focusedId){
-			console.log("showWorkView", focusedId)
 				view.focusToId(focusedId);
 			}
-//console.log("showWorkView:" ,currentFocus);
-//if(undefined != currentFocus){
-//	currentFocus.focus();
-//}else{
-//	
-//}
 		};
 
-		const focusinMethod = function(element){
-			console.log("focusinMethod", element)
-			if(element.id !== undefined){
-			console.log("focusinMethod", element.id)
-				focusedId = element.id;
+		const focusinMethod = function(focusinEvent){
+			if(focusinEvent.target.id !== undefined){
+				focusedId = focusinEvent.target.id;
 			}
 		};
 		

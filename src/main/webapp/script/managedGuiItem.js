@@ -128,10 +128,10 @@ var CORA = (function(cora) {
 		};
 
 		const focusinMethod = function(focusinEvent){
-			let targetClassName = focusinEvent.target.className;
+			const targetClassName = focusinEvent.target.className;
 			if(targetClassName !== undefined){
-				let classList = targetClassName.split(' ');
-				let firstClassInList = 0;
+				const classList = targetClassName.split(' ');
+				const firstClassInList = 0;
 				focusedClass = classList[firstClassInList];
 			}
 		};

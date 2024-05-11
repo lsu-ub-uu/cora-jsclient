@@ -91,12 +91,33 @@ QUnit.test("testGetWorkView", function(assert) {
 	assert.strictEqual(workView.className, "workView");
 });
 
-QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
-	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture = function(spec){
+	let managedGuiItemView = CORA.managedGuiItemView(spec);
 	let workView = managedGuiItemView.getWorkView();
 	let fixture = document.getElementById("qunit-fixture");
 	fixture.appendChild(workView);
-	let myInput = document.createElement("input");
+	return managedGuiItemView;	
+};
+
+CORATEST.createTagFromSpec = function(spec){
+	let myTag = document.createElement(spec.tagName);
+	if(spec.className){
+		myTag.className = spec.className;
+	}
+	if(spec.type){
+		myTag.type = spec.type;
+	}
+	if(spec.display){
+		myTag.style.display = spec.display;
+	}
+	return myTag;
+};
+
+QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+	
+	let myInput = CORATEST.createTagFromSpec({tagName: "input"});
 	workView.appendChild(myInput);
 	
 	CORATESTHELPER.simulateFocus(myInput);
@@ -105,15 +126,13 @@ QUnit.test("testFocusinCallsFocusinMethod", function(assert) {
 });
 
 QUnit.test("testfocusToClassNotFound", function(assert) {
-	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
 	let workView = managedGuiItemView.getWorkView();
-	let fixture = document.getElementById("qunit-fixture");
-	fixture.appendChild(workView);
-	let myInput = document.createElement("input");
-	myInput.className = "myClass"
-	workView.appendChild(myInput);
-	let currentFocus = document.activeElement;
 	
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", className: "myClass"});
+	workView.appendChild(myInput);
+	
+	let currentFocus = document.activeElement;
 	assert.strictEqual(currentFocus, document.body);
 
 	managedGuiItemView.focusToClass("myOtherClass");
@@ -123,17 +142,14 @@ QUnit.test("testfocusToClassNotFound", function(assert) {
 });
 
 QUnit.test("testfocusToClass", function(assert) {
-	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
 	let workView = managedGuiItemView.getWorkView();
-	let fixture = document.getElementById("qunit-fixture");
-	fixture.appendChild(workView);
-	let myInput = document.createElement("input");
-	myInput.className = "myClass someOtherClass"
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", className: "myClass someOtherClass"});
 	workView.appendChild(myInput);
 	let currentFocus = document.activeElement;
 	
 	assert.strictEqual(currentFocus, document.body);
-
 	managedGuiItemView.focusToClass("myClass");
 	
 	currentFocus = document.activeElement;
@@ -141,23 +157,97 @@ QUnit.test("testfocusToClass", function(assert) {
 });
 
 QUnit.test("testfocusToClassFirstOneNotVisible", function(assert) {
-	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
 	let workView = managedGuiItemView.getWorkView();
-	let fixture = document.getElementById("qunit-fixture");
-	fixture.appendChild(workView);
-	let myInput = document.createElement("input");
-	myInput.className = "myClass someOtherClass";
-	myInput.display = "none";
-	
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", className: "myClass someOtherClass",
+		display: "none"});
 	workView.appendChild(myInput);
-	let myInput2 = document.createElement("input");
-	myInput2.className = "myClass someOtherClass";
-	workView.appendChild(myInput2);
-	let currentFocus = document.activeElement;
 	
+	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass someOtherClass"});
+	workView.appendChild(myInput2);
+	
+	let currentFocus = document.activeElement;
 	assert.strictEqual(currentFocus, document.body);
 
 	managedGuiItemView.focusToClass("myClass");
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput2)
+});
+
+QUnit.test("testfocusOnFirstInputFirstOneNotVisible", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", className: "myClass",
+		display: "none"});
+	workView.appendChild(myInput);
+	
+	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass2"});
+	workView.appendChild(myInput2);
+	
+	let currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusOnFirstInput();
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput2)
+});
+
+QUnit.test("testfocusOnFirstInputTextarea", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "textarea", className: "myClass"});
+	workView.appendChild(myInput);
+	
+	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass2"});
+	workView.appendChild(myInput2);
+	
+	let currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusOnFirstInput();
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput)
+});
+
+QUnit.test("testfocusOnFirstInputSelect", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "select", className: "myClass"});
+	workView.appendChild(myInput);
+	
+	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass2"});
+	workView.appendChild(myInput2);
+	
+	let currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusOnFirstInput();
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput)
+});
+
+QUnit.test("testfocusOnFirstInputNotButton", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", type: "button", className: "myClass"});
+	workView.appendChild(myInput);
+	
+	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass2"});
+	workView.appendChild(myInput2);
+	
+	let currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, document.body);
+
+	managedGuiItemView.focusOnFirstInput();
 	
 	currentFocus = document.activeElement;
 	assert.strictEqual(currentFocus, myInput2)

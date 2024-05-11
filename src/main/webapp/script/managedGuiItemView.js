@@ -124,26 +124,23 @@ var CORA = (function(cora) {
 
 		const focusOnFirstInput = function(className){
 			const elements = workView.querySelectorAll('input:not([type="button"]), textarea, select');
-//			elements.forEach((element) => {
-				console.log(elements)
-			for (let i = 0; i < elements.length; i++) {
-				let element = elements[i];
-				console.log(element)
+			focusOnFirstVisibleElementInNodeList(elements);
+		};
+		
+		const focusOnFirstVisibleElementInNodeList = function(nodeList){
+//				console.log(nodeList)
+			for (const element of nodeList) {
+//				console.log(element)
 				if(element.checkVisibility()){
 					element.focus();
 					break;
 				}
 			}
-
 		};
 		
 		const focusToClass = function(className){
-			let elements = workView.querySelectorAll("."+className);
-			elements.forEach((element) => {
-				if(element.checkVisibility()){
-					element.focus();
-				}
-			});
+			const elements = workView.querySelectorAll("."+className);
+			focusOnFirstVisibleElementInNodeList(elements);
 		};
 
 		let out = Object.freeze({

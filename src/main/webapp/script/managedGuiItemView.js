@@ -128,9 +128,7 @@ var CORA = (function(cora) {
 		};
 		
 		const focusOnFirstVisibleElementInNodeList = function(nodeList){
-//				console.log(nodeList)
 			for (const element of nodeList) {
-//				console.log(element)
 				if(element.checkVisibility()){
 					element.focus();
 					break;

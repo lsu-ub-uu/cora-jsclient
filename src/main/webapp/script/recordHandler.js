@@ -337,6 +337,10 @@ var CORA = (function(cora) {
 			actionLinks = fetchedRecord.actionLinks;
 			let permissions = preparePermissionsForRecordGuiFromFetchedRecord();
 			processFetchedRecordData(data, permissions);
+				
+//console.log("after tryToProcessFetchedRecordData processFetchedRecordData")
+console.log("managedGuiItem.setFocus")
+//			managedGuiItem.setFocus();
 		};
 
 		const preparePermissionsForRecordGuiFromFetchedRecord = function() {
@@ -398,7 +402,6 @@ var CORA = (function(cora) {
 			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
-
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
 			possiblyShowShowDefinitionButton();

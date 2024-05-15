@@ -113,7 +113,7 @@ QUnit.test("testFocusinMethodIsInViewSpec", function(assert) {
 QUnit.test("testFocusinMethodNotCalled", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 
-	managedGuiItem.showWorkView();
+	managedGuiItem.setActive(true);
 	
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 	let focusedClass = factoredView.getFocusedClass();
@@ -127,7 +127,7 @@ QUnit.test("testFocusinMethodCalledWithElementWithoutIdKeepsPreviousId", functio
 	
 	managedGuiItem.focusinMethod(fakeInputEvent);
 	managedGuiItem.focusinMethod(fakeInputEventNoClass);
-	managedGuiItem.showWorkView();
+	managedGuiItem.setActive(true);
 	
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 	let focusedClass = factoredView.getFocusedClass();
@@ -139,23 +139,49 @@ QUnit.test("testFocusinMethod", function(assert) {
 	let fakeInputEvent = {target: {className: "someClass"}};
 	
 	managedGuiItem.focusinMethod(fakeInputEvent);
-	managedGuiItem.showWorkView();
+	managedGuiItem.setActive(true);
 	
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 	let focusedClass = factoredView.getFocusedClass();
 	assert.strictEqual(focusedClass, "someClass");
 });
 
-//focusOnFirstInput
-QUnit.test("testFocusOnFirstInput", function(assert) {
+QUnit.test("testFocusinMethodAndFocusToClassOnlyOnActiveTrue", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
-//	let fakeInputEvent = {target: {className: "someClass"}};
-	//TODO: change to setFocus or so, so that managedGuiItem can decide to use first och previous to focus on
-	managedGuiItem.focusOnFirstInput();
+	let fakeInputEvent = {target: {className: "someClass"}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.setActive(false);
 	
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
-	let focusedClass = factoredView.getFocusedOnFirstInput();
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
+});
+
+QUnit.test("testSetFocus", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+	managedGuiItem.setFocus();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
+	let noOfFocusedOnFirstInput = factoredView.getNoOfFocusedOnFirstInput();
+	assert.strictEqual(noOfFocusedOnFirstInput, 1)
+});
+
+QUnit.test("testSetFocusAfterFocusin", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass"}};
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	
+	managedGuiItem.setFocus();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
 	assert.strictEqual(focusedClass, "someClass");
+	let noOfFocusedOnFirstInput = factoredView.getNoOfFocusedOnFirstInput();
+	assert.strictEqual(noOfFocusedOnFirstInput, 0)
 });
 
 QUnit.test("testRemoveMethodAddedToView", function(assert) {

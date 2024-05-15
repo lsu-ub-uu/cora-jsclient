@@ -35,6 +35,7 @@ var CORATEST = (function(coraTest) {
 		let removed = 0;
 		let state;
 		let focusedClass = "focusOnId_notCalledYet";
+		let noOfFocusOnFirstInput = 0;
 
 		function getMenuView() {
 			return menuView;
@@ -116,6 +117,12 @@ var CORATEST = (function(coraTest) {
 		function getFocusedClass(){
 			return focusedClass;
 		}
+		function focusOnFirstInput() {
+			noOfFocusOnFirstInput++;
+		}
+		function getNoOfFocusedOnFirstInput() {
+			return noOfFocusOnFirstInput;
+		}
 		
 		let out = Object.freeze({
 			"type" : "managedGuiItemViewSpy",
@@ -144,7 +151,9 @@ var CORATEST = (function(coraTest) {
 			getAddedListPresentation : getAddedListPresentation,
 			
 			focusToClass: focusToClass,
-			getFocusedClass: getFocusedClass
+			getFocusedClass: getFocusedClass,
+			focusOnFirstInput: focusOnFirstInput,
+			getNoOfFocusedOnFirstInput: getNoOfFocusedOnFirstInput
 		});
 		return out;
 	};

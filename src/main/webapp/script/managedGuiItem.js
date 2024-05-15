@@ -93,6 +93,17 @@ var CORA = (function(cora) {
 		const setActive = function(activeIn) {
 			active = activeIn;
 			updateViewState();
+			if(activeIn){
+				setFocus();
+			}
+		};
+		
+		const setFocus = function() {
+			if(undefined !== focusedClass){
+				view.focusToClass(focusedClass);
+			}else{
+				view.focusOnFirstInput();
+			}
 		};
 		
 		const toggleNextIndicator = function() {
@@ -121,9 +132,6 @@ var CORA = (function(cora) {
 			view.showWorkView();
 			if (spec.callMethodAfterShowWorkView !== undefined) {
 				spec.callMethodAfterShowWorkView();
-			}
-			if(undefined !== focusedClass){
-				view.focusToClass(focusedClass);
 			}
 		};
 
@@ -172,6 +180,7 @@ var CORA = (function(cora) {
 			addWorkPresentation : addWorkPresentation,
 			setChanged : setChanged,
 			setActive : setActive,
+			setFocus: setFocus,
 			toggleNextIndicator : toggleNextIndicator,
 			togglePreviousIndicator : togglePreviousIndicator,
 			clearMenuView : clearMenuView,

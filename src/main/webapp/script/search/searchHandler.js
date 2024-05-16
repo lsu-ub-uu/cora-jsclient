@@ -124,10 +124,9 @@ var CORA = (function(cora) {
 				data: "",
 				path: []
 			});
-console.log("setFocus")	
-//			if(spec.setFocus){
-//				spec.setFocus();
-//			}		
+			if(spec.setFocus){
+				spec.setFocus();
+			}		
 		};
 
 		const sendSearchQueryToServer = function() {

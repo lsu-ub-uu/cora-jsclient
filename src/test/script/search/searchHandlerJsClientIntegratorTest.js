@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -93,6 +93,7 @@ QUnit.test("initTestManagedGuiItemShownInJsClientOnLoad", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(managedGuiItemSpy, this.dependencies.jsClient
 		.getViewShowingInWorkView(0));
+	assert.strictEqual(managedGuiItemSpy.getSetFocusCalledNoOfTimes(), 1);
 });
 
 QUnit.test("testSearchHandlerCreatedUsingFactory", function(assert) {
@@ -103,8 +104,11 @@ QUnit.test("testSearchHandlerCreatedUsingFactory", function(assert) {
 
 QUnit.test("testSearchHandlerSpec", function(assert) {
 	CORA.searchHandlerJsClientIntegrator(this.dependencies, this.spec);
+
 	let factoredSpec = this.dependencies.searchHandlerFactory.getSpec(0);
 	assert.strictEqual(factoredSpec, this.spec);
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+	assert.strictEqual(factoredSpec.setFocus, managedGuiItemSpy.setFocus);
 });
 
 QUnit.test("testSearchHandlerViewAddedToManagedGuiItemsWorkView", function(assert) {

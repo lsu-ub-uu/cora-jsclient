@@ -1,6 +1,6 @@
 /*
  * Copyright 2017 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 
 			searchHandler = createSearchHandler();
 			managedGuiItem.addWorkPresentation(searchHandler.getView());
+			managedGuiItem.setFocus();
 		}
 
 		function createMenuView() {
@@ -42,6 +43,7 @@ var CORA = (function(cora) {
 		}
 
 		function createSearchHandler() {
+			spec.setFocus = managedGuiItem.setFocus;
 			return dependencies.searchHandlerFactory.factor(spec);
 		}
 

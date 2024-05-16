@@ -176,7 +176,7 @@ QUnit.test("testfocusToClassFirstOneNotVisible", function(assert) {
 	assert.strictEqual(currentFocus, myInput2)
 });
 
-QUnit.test("testfocusOnFirstInputFirstOneNotVisible", function(assert) {
+QUnit.test("testfocusOnFirstInputFirstOneNotVisibleSecondDisabled", function(assert) {
 	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
 	let workView = managedGuiItemView.getWorkView();
 
@@ -185,7 +185,11 @@ QUnit.test("testfocusOnFirstInputFirstOneNotVisible", function(assert) {
 	workView.appendChild(myInput);
 	
 	let myInput2 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass2"});
+	myInput2.disabled = true;
 	workView.appendChild(myInput2);
+
+	let myInput3 = CORATEST.createTagFromSpec({tagName: "input", className: "myClass3"});
+	workView.appendChild(myInput3);
 	
 	let currentFocus = document.activeElement;
 	assert.strictEqual(currentFocus, document.body);
@@ -193,7 +197,7 @@ QUnit.test("testfocusOnFirstInputFirstOneNotVisible", function(assert) {
 	managedGuiItemView.focusOnFirstInput();
 	
 	currentFocus = document.activeElement;
-	assert.strictEqual(currentFocus, myInput2)
+	assert.strictEqual(currentFocus, myInput3)
 });
 
 QUnit.test("testfocusOnFirstInputTextarea", function(assert) {

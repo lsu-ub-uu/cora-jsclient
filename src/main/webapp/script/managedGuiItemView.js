@@ -129,11 +129,15 @@ var CORA = (function(cora) {
 		
 		const focusOnFirstVisibleElementInNodeList = function(nodeList){
 			for (const element of nodeList) {
-				if(element.checkVisibility()){
+				if(elementIsVisibleAndEnabled(element)){
 					element.focus();
 					break;
 				}
 			}
+		};
+		
+		const elementIsVisibleAndEnabled = function(element){
+			return element.checkVisibility() && !element.disabled;
 		};
 		
 		const focusToClass = function(className){

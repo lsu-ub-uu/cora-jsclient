@@ -137,7 +137,7 @@ var CORA = (function(cora) {
 
 		const focusinMethod = function(focusinEvent){
 			const targetClassName = focusinEvent.target.className;
-			if(targetClassName !== undefined){
+			if(targetClassName !== undefined && "" !== targetClassName){
 				const classList = targetClassName.split(' ');
 				const firstClassInList = 0;
 				focusedClass = classList[firstClassInList];

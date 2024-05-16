@@ -43,6 +43,8 @@ var CORATEST = (function(coraTest) {
 		let toggleNextIndicatorCalls = 0;
 		let togglePreviousIndicatorCalls = 0;
 
+		let setFocusCalledNoOfTimes = 0;
+		
 		function getDependencies() {
 			return dependencies;
 		}
@@ -163,7 +165,13 @@ var CORATEST = (function(coraTest) {
 
 		const getNoCallsToTogglePreviousIndicator = function(){
 			return togglePreviousIndicatorCalls;
-		}
+		};
+		const setFocus = function(){
+			setFocusCalledNoOfTimes++;
+		};
+		const getSetFocusCalledNoOfTimes = function(){
+			return setFocusCalledNoOfTimes;
+		};
 		
 
 		let out = Object.freeze({
@@ -206,6 +214,8 @@ var CORATEST = (function(coraTest) {
 			togglePreviousIndicator : togglePreviousIndicator,
 			getNoCallsToToggleNextIndicator : getNoCallsToToggleNextIndicator,
 			getNoCallsToTogglePreviousIndicator : getNoCallsToTogglePreviousIndicator,
+			setFocus: setFocus,
+			getSetFocusCalledNoOfTimes: getSetFocusCalledNoOfTimes
 			
 		});
 

@@ -337,10 +337,7 @@ var CORA = (function(cora) {
 			actionLinks = fetchedRecord.actionLinks;
 			let permissions = preparePermissionsForRecordGuiFromFetchedRecord();
 			processFetchedRecordData(data, permissions);
-				
-//console.log("after tryToProcessFetchedRecordData processFetchedRecordData")
-console.log("managedGuiItem.setFocus")
-//			managedGuiItem.setFocus();
+			managedGuiItem.setFocus();
 		};
 
 		const preparePermissionsForRecordGuiFromFetchedRecord = function() {

@@ -120,10 +120,24 @@ QUnit.test("testFocusinMethodNotCalled", function(assert) {
 	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
 });
 
-QUnit.test("testFocusinMethodCalledWithElementWithoutIdKeepsPreviousId", function(assert) {
+QUnit.test("testFocusinMethodCalledWithElementWithoutClassNameKeepsPrevious", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let fakeInputEvent = {target: {className: "someClass otherClass"}};
 	let fakeInputEventNoClass = {target: {notClassName: "someClass"}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.focusinMethod(fakeInputEventNoClass);
+	managedGuiItem.setActive(true);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "someClass");
+});
+
+QUnit.test("testFocusinMethodCalledWithElementWithEmptyClassNameKeepsPrevious", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass otherClass"}};
+	let fakeInputEventNoClass = {target: {className: ""}};
 	
 	managedGuiItem.focusinMethod(fakeInputEvent);
 	managedGuiItem.focusinMethod(fakeInputEventNoClass);

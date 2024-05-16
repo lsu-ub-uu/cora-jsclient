@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -337,6 +337,7 @@ var CORA = (function(cora) {
 			actionLinks = fetchedRecord.actionLinks;
 			let permissions = preparePermissionsForRecordGuiFromFetchedRecord();
 			processFetchedRecordData(data, permissions);
+			managedGuiItem.setFocus();
 		};
 
 		const preparePermissionsForRecordGuiFromFetchedRecord = function() {
@@ -398,12 +399,12 @@ var CORA = (function(cora) {
 			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
 			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
-
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
 			possiblyShowShowDefinitionButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			busy.hideWithEffect();
+			managedGuiItem.showWorkView();
 		};
 
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {

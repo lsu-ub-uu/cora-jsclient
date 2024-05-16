@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -34,6 +34,8 @@ var CORATEST = (function(coraTest) {
 		let shown = 0;
 		let removed = 0;
 		let state;
+		let focusedClass = "focusOnId_notCalledYet";
+		let noOfFocusOnFirstInput = 0;
 
 		function getMenuView() {
 			return menuView;
@@ -108,6 +110,20 @@ var CORATEST = (function(coraTest) {
 		function getAddedListPresentation(number) {
 			return addedListPresentations[number];
 		}
+		
+		function focusToClass(id){
+			focusedClass = id;
+		}
+		function getFocusedClass(){
+			return focusedClass;
+		}
+		function focusOnFirstInput() {
+			noOfFocusOnFirstInput++;
+		}
+		function getNoOfFocusedOnFirstInput() {
+			return noOfFocusOnFirstInput;
+		}
+		
 		let out = Object.freeze({
 			"type" : "managedGuiItemViewSpy",
 			getDependencies : getDependencies,
@@ -132,7 +148,12 @@ var CORATEST = (function(coraTest) {
 			getRemoved : getRemoved,
 			getListView : getListView,
 			addListPresentation : addListPresentation,
-			getAddedListPresentation : getAddedListPresentation
+			getAddedListPresentation : getAddedListPresentation,
+			
+			focusToClass: focusToClass,
+			getFocusedClass: getFocusedClass,
+			focusOnFirstInput: focusOnFirstInput,
+			getNoOfFocusedOnFirstInput: getNoOfFocusedOnFirstInput
 		});
 		return out;
 	};

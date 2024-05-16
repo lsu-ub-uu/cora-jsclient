@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -361,6 +361,12 @@ QUnit.test("initTestDataFetchedFromServer", function(assert) {
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 	assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.processFetchedRecord);
+	
+	
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+	assert.strictEqual(managedGuiItemSpy.getSetFocusCalledNoOfTimes(), 0);
+	this.answerCall(0);
+	assert.strictEqual(managedGuiItemSpy.getSetFocusCalledNoOfTimes(), 1);
 });
 
 QUnit.test("initTestUsePrefetchedData", function(assert) {
@@ -894,6 +900,7 @@ QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationTypeOtherButton", fun
 	let item = managedGuiItem.getAddedMenuPresentation(0);
 	assert.strictEqual(item.nodeName, "SPAN");
 });
+
 QUnit.test("testValidationTypeQuestion", function(assert) {
 	this.spec.createNewRecord = "false";
 	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);

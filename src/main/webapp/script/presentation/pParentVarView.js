@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018, 2023 Olov McKie
+ * Copyright 2016, 2018, 2023, 2024 Olov McKie
  * Copyright 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let view;
 		let valueView;
 		let baseClassName = spec.className;
+		let valueViewClassName = spec.valueViewClassName;
 		let info;
 		let state = "ok";
 
@@ -74,6 +75,7 @@ var CORA = (function(cora) {
 		const createInput = function() {
 			valueView = createInputElement();
 			valueView.id = spec.id;
+			valueView.className = valueViewClassName;
 			possiblyAddOnkeyupEvent(valueView);
 			possiblyAddOnblurEvent(valueView);
 			possiblyAddPlaceholderText(valueView);

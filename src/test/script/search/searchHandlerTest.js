@@ -26,11 +26,13 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 	let searchHandler;
 	let factoredView;
 	let factoredGui;
+	let setFocusCalledNoOfTimes = 0;
 	hooks.beforeEach(() => {
 		setupDependencies();
 		setupSpec();
 		startResultHandler();
 		setFactored();
+		setFocusCalledNoOfTimes = 0;
 	});
 	hooks.afterEach(() => {
 		//no after
@@ -55,6 +57,9 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 				rel: "search",
 				url: "http://epc.ub.uu.se/cora/rest/record/searchResult/coraTextSearch",
 				accept: "application/vnd.uub.recordList+json"
+			},
+			setFocus: function(){
+				setFocusCalledNoOfTimes++;
 			}
 		};
 		specTriggerWhenResultIsChoosen = spec;
@@ -188,6 +193,24 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 
 		let addUpToMinNumberOfRepeatingType = messages[0].type;
 		assert.strictEqual(addUpToMinNumberOfRepeatingType, "addUpToMinNumberOfRepeating");
+	});
+		
+	test("testSearchSetsFocus", function(assert) {
+		assert.strictEqual(setFocusCalledNoOfTimes, 0);
+
+		searchHandler.search();
+
+		assert.strictEqual(setFocusCalledNoOfTimes, 1);
+	});
+		
+	test("testSearchSetsFocusNotSetIfNoMethodInSpec", function(assert) {
+		spec.setFocus = undefined;
+		startResultHandler();
+		assert.strictEqual(setFocusCalledNoOfTimes, 0);
+
+		searchHandler.search();
+
+		assert.strictEqual(setFocusCalledNoOfTimes, 0);
 	});
 
 	const assertNumberOfCallsToGetDataValidated = function(assert, numberOfCalls) {

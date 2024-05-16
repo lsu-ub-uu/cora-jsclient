@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  * Copyright 2016, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -19,11 +19,11 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.presentationFactory = function(dependencies) {
+	cora.presentationFactory = function(dependencies, spec) {
+		const presentationFactoryCounter = spec.presentationFactoryCounter;
 		const infoFactory = CORA.infoFactory();
 		const pVarViewFactory = CORA.pVarViewFactory();
 		const pMultipleChildrenViewFactory = CORA.pMultipleChildrenViewFactory();
-//		const pParentMultipleChildrenViewFactory = CORA.pParentMultipleChildrenViewFactory();
 		
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,
@@ -36,6 +36,7 @@ var CORA = (function(cora) {
 		const pRecordLinkViewFactoryDependencies = {
 			infoFactory: infoFactory
 		};
+		
 		const pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
 			pRecordLinkViewFactoryDependencies);
 	
@@ -93,7 +94,6 @@ var CORA = (function(cora) {
 			recordGuiFactory: dependencies.recordGuiFactory,
 			ajaxCallFactory: dependencies.ajaxCallFactory,
 			infoFactory: infoFactory,
-//			presentationFactory: self,
 
 			pubSub: dependencies.pubSub,
 			jsBookkeeper: dependencies.jsBookkeeper,
@@ -102,7 +102,6 @@ var CORA = (function(cora) {
 
 			pVarViewFactory: pVarViewFactory,
 			pMultipleChildrenViewFactory: pMultipleChildrenViewFactory,
-//			pNumVarViewFactory: pNumVarViewFactory,
 			pRecordLinkViewFactory: pRecordLinkViewFactory,
 			pMapViewFactory: pMapViewFactory,
 			pChildRefHandlerFactory: pChildRefHandlerFactory,
@@ -111,11 +110,12 @@ var CORA = (function(cora) {
 		};
 		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
 		childDependencies.pParentMultipleChildrenFactory = CORA.genericParentFactory("pParentMultipleChildren", childDependencies);
-	
+		let presentationCounter = 0;
 	
 		const factor = function(spec) {
-
+			presentationCounter++;
 			let specNew = {
+				presentationCounter: presentationFactoryCounter + "-"+presentationCounter,
 				path: spec.path,
 				metadataIdUsedInData: spec.metadataIdUsedInData,
 				cPresentation: spec.cPresentation,
@@ -163,9 +163,14 @@ var CORA = (function(cora) {
 			return dependencies;
 		};
 
+		const getSpec = function() {
+			return spec;
+		};
+
 		const self = Object.freeze({
 			type: "presentationFactory",
 			getDependencies: getDependencies,
+			getSpec: getSpec,
 			factor: factor
 		});
 		

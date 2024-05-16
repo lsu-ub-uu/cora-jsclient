@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018, 2023 Olov McKie
+ * Copyright 2016, 2018, 2023, 2024 Olov McKie
  * Copyright 2018 , 2019, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -30,6 +30,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 		};
 		this.spec = {
 			className: "pVar somePresentationId",
+			valueViewClassName: "someValueViewClassName", 
 			mode: "input",
 			inputType: "input",
 			outputFormat: "text",
@@ -236,6 +237,7 @@ QUnit.test("testInput", function(assert) {
 	assert.strictEqual(valueView.nodeName, "INPUT");
 	assert.strictEqual(valueView.type, "text");
 	assert.strictEqual(valueView.id, "someId");
+	assert.strictEqual(valueView.className, "someValueViewClassName");
 });
 
 QUnit.test("testInputPlaceholder", function(assert) {

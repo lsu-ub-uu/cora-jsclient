@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -41,7 +41,7 @@ var CORATEST = (function(coraTest) {
 			};
 			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
 
-			let specPresentationFactory = {
+			let dependenciesPresentationFactory = {
 				"providers": {
 					"metadataProvider": metadataProvider,
 					"textProvider": textProvider,
@@ -49,7 +49,9 @@ var CORATEST = (function(coraTest) {
 				"pubSub": pubSub,
 				"jsBookkeeper": jsBookkeeper
 			};
-			let presentationFactory = CORA.presentationFactory(specPresentationFactory);
+			let presentationFactorySpec = {presentationFactoryCounter: 333}
+			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory,
+				presentationFactorySpec);
 
 			let holderDependencies = {
 				"metadataProvider": metadataProvider,

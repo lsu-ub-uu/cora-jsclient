@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Olov McKie
+ * Copyright 2018, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -45,6 +45,26 @@ var CORATESTHELPER = (function(coraTestHelper) {
 		var event = new Event("blur", {
 		});
 		object.dispatchEvent(event);
+	};
+
+	coraTestHelper.simulateFocus = function(element) {
+//		var event = new Event("focusin", {
+//		});
+//		object.dispatchEvent(event);
+		 let eventType = "onfocusin" in element ? "focusin" : "focus";
+	    let bubbles = "onfocusin" in element;
+	    let event;
+	
+	    if ("createEvent" in document) {
+	        event = document.createEvent("Event");
+	        event.initEvent(eventType, bubbles, true);
+	    }
+	    else if ("Event" in window) {
+	        event = new Event(eventType, { bubbles: bubbles, cancelable: true });
+	    }
+	
+	    element.focus();
+	    element.dispatchEvent(event);
 	};
 
 	return coraTestHelper;

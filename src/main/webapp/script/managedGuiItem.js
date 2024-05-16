@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018 Uppsala University Library
- * Copyright 2017, 2023 Olov McKie
+ * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -20,6 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.managedGuiItem = function(dependencies, spec) {
+		const maxNumberIndicators = 9;
+
 		let out;
 		let active = false;
 		let changed = false;
@@ -27,11 +29,12 @@ var CORA = (function(cora) {
 		let view;
 		let sendDataToServerMethod;
 		let currentIndicatorNo = 0;
-		const maxNumberIndicators = 9;
+		let focusedClass;
 		
 		const start = function() {
 			viewSpec = {
-				activateMethod : activate
+				activateMethod : activate,
+				focusinMethod: focusinMethod
 			};
 			if (spec.disableRemove !== "true") {
 				viewSpec.removeMethod = remove;
@@ -42,7 +45,7 @@ var CORA = (function(cora) {
 		const activate = function() {
 			spec.activateMethod(out);
 		};
-
+		
 		const remove = function() {
 			spec.removeMethod(out);
 		};
@@ -90,6 +93,17 @@ var CORA = (function(cora) {
 		const setActive = function(activeIn) {
 			active = activeIn;
 			updateViewState();
+			if(activeIn){
+				setFocus();
+			}
+		};
+		
+		const setFocus = function() {
+			if(undefined !== focusedClass){
+				view.focusToClass(focusedClass);
+			}else{
+				view.focusOnFirstInput();
+			}
 		};
 		
 		const toggleNextIndicator = function() {
@@ -121,6 +135,15 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const focusinMethod = function(focusinEvent){
+			const targetClassName = focusinEvent.target.className;
+			if(targetClassName !== undefined && "" !== targetClassName){
+				const classList = targetClassName.split(' ');
+				const firstClassInList = 0;
+				focusedClass = classList[firstClassInList];
+			}
+		};
+		
 		const getListView = function() {
 			return view.getListView();
 		};
@@ -151,11 +174,13 @@ var CORA = (function(cora) {
 			getSpec : getSpec,
 			getMenuView : getMenuView,
 			getWorkView : getWorkView,
+			focusinMethod: focusinMethod,
 			remove : remove,
 			addMenuPresentation : addMenuPresentation,
 			addWorkPresentation : addWorkPresentation,
 			setChanged : setChanged,
 			setActive : setActive,
+			setFocus: setFocus,
 			toggleNextIndicator : toggleNextIndicator,
 			togglePreviousIndicator : togglePreviousIndicator,
 			clearMenuView : clearMenuView,

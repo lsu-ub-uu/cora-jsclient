@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -28,10 +28,16 @@ var CORA = (function(cora) {
 		
 		const start = function() {
 			menuView = createMenuView();
-			workView = CORA.gui.createSpanWithClassName("workView");
+			workView = createWorkView();
 			listView = CORA.gui.createSpanWithClassName("listView");
 		};
 		
+		const createWorkView = function() {
+			let newWorkView = CORA.gui.createSpanWithClassName("workView");
+			newWorkView.addEventListener("focusin", spec.focusinMethod);
+			return newWorkView;
+		};
+
 		const createMenuView = function() {
 			let newMenuView = CORA.gui.createSpanWithClassName(originalMenuViewClassName);
 			newMenuView.onclick = spec.activateMethod;
@@ -43,7 +49,8 @@ var CORA = (function(cora) {
 			if (spec.removeMethod !== undefined) {
 				createRemoveButton(addToView);
 			}
-		}
+		};
+		
 		const createRemoveButton = function(addToView) {
 			let newButton = CORA.gui.createRemoveButton(spec.removeMethod);
 			addToView.appendChild(newButton);
@@ -115,6 +122,25 @@ var CORA = (function(cora) {
 			listView.appendChild(presentationToAdd);
 		};
 
+		const focusOnFirstInput = function(className){
+			const elements = workView.querySelectorAll('input:not([type="button"]), textarea, select');
+			focusOnFirstVisibleElementInNodeList(elements);
+		};
+		
+		const focusOnFirstVisibleElementInNodeList = function(nodeList){
+			for (const element of nodeList) {
+				if(element.checkVisibility()){
+					element.focus();
+					break;
+				}
+			}
+		};
+		
+		const focusToClass = function(className){
+			const elements = workView.querySelectorAll("."+className);
+			focusOnFirstVisibleElementInNodeList(elements);
+		};
+
 		let out = Object.freeze({
 			type : "managedGuiItemView",
 			getSpec : getSpec,
@@ -128,7 +154,9 @@ var CORA = (function(cora) {
 			hideWorkView : hideWorkView,
 			showWorkView : showWorkView,
 			getListView : getListView,
-			addListPresentation : addListPresentation
+			addListPresentation : addListPresentation,
+			focusOnFirstInput: focusOnFirstInput,
+			focusToClass: focusToClass
 		});
 		start();
 		return out;

@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018, 2023 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -82,6 +82,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 			pAttributesFactory: this.pAttributesFactory
 		};
 		this.spec = {
+			presentationCounter: 333,
 			path: [],
 			metadataIdUsedInData: "textVariableId",
 			cPresentation: CORA.coraData(this.metadataProvider
@@ -179,8 +180,9 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType pVarTextVariableId",
+		valueViewClassName: "onetwo", 
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -408,8 +410,9 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType textVariableIdTextAreaPVar",
+		valueViewClassName: "onetwo", 
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -452,8 +455,9 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType textVariableIdShowTextAreaFalsePVar",
+		valueViewClassName: "onetwo", 
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -501,8 +505,9 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType pVarTextVariableId",
+		valueViewClassName: "onetwo", 
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -543,7 +548,7 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
 		"pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes"))
 	
-	this.spec.path = ["one", "two"];
+	this.spec.path = ["one", "two.0", "three.9"];
 	let child = this.createChildSpy();
 	
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
@@ -552,8 +557,9 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType",
+		valueViewClassName: "onetwo-0three-9", 
 		label: "Exempel textvariabel",
-		id: "onetwo",
+		id: "333",
 		mode: "input",
 		info: {
 			defText: "Detta är en exempeldefinition för en textvariabel.",
@@ -563,7 +569,6 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 		onblurFunction: pParentVar.onBlur,
 		onkeyupFunction: pParentVar.onkeyup,
 		placeholderText: "Skriv din text här",
-//		presentationId: undefined
 	};
 	
 	expectedPVarViewSpec.childExtra = "added by child";

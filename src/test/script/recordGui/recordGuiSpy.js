@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2024 Olov McKie
  * Copyright 2017, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -37,6 +37,7 @@ var CORATEST = (function(coraTest) {
 			},
 			recordPartPermissionCalculator: CORATEST.recordPartPermissionCalculatorSpy
 		};
+		let setFocusCalledNoOfTimes = 0;
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -83,6 +84,7 @@ var CORATEST = (function(coraTest) {
 		const setSpec = function(specIn) {
 			spec = specIn;
 		};
+		
 		return Object.freeze({
 			type: "recordGuiSpy",
 			getDependencies: getDependencies,
@@ -98,7 +100,7 @@ var CORATEST = (function(coraTest) {
 			getPresentationIdUsed: getPresentationIdUsed,
 			getMetadataIdsUsedInData: getMetadataIdsUsedInData,
 			getReturnedPresentations: getReturnedPresentations,
-			setSpec: setSpec,
+			setSpec: setSpec
 		});
 	};
 	return coraTest;

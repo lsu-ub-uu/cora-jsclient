@@ -1,5 +1,6 @@
 /*
  * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -139,6 +140,9 @@ QUnit.test("testFactorDependencyPresentationFactory", function(assert) {
 	assert.strictEqual(dependenciesPF.ajaxCallFactory, this.dependencies.ajaxCallFactory);
 	assert.strictEqual(dependenciesPF.recordPartPermissionCalculatorFactory.type,
 	"genericFactory");
+	
+	let expectedSpec = {presentationFactoryCounter: 1};
+	assert.deepEqual(presentationFactory.getSpec(), expectedSpec);
 });
 
 QUnit.test("testRecordPartPermissionCalculatorFactory", function(assert) {

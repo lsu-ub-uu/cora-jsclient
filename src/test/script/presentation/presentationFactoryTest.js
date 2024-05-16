@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  * Copyright 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -43,10 +43,12 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
-		this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
+		this.presentationFactorySpec = {presentationFactoryCounter: 555};
+		this.newPresentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.spec = {
+			presentationCounter: 1,
 			path: [],
 			metadataIdUsedInData: "textVariableId",
 			cPresentation: CORA.coraData(this.metadataProvider.getMetadataById("pVarTextVariableId")),
@@ -66,13 +68,18 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	let presentationFactory = CORA.presentationFactory(this.dependencies);
+	let presentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 	assert.strictEqual(presentationFactory.type, "presentationFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	let presentationFactory = CORA.presentationFactory(this.dependencies);
+	let presentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 	assert.strictEqual(presentationFactory.getDependencies(), this.dependencies);
+});
+
+QUnit.test("testGetSpec", function(assert) {
+	let presentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
+	assert.strictEqual(presentationFactory.getSpec(), this.presentationFactorySpec);
 });
 
 QUnit.test("testFactorPVar", function(assert) {
@@ -133,13 +140,14 @@ QUnit.test("testFactorPGroupAsMap", function(assert) {
 	this.dependencies.providers.metadataProvider = new MetadataCoordinatesProviderStub();
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 	this.spec = {
+		presentationCounter: 1,
 		"path": [],
 		"metadataIdUsedInData": "coordinatesGroup",
 		"cPresentation": CORA.coraData(this.dependencies.providers.metadataProvider
 			.getMetadataById("coordinatesPGroup")),
 		"cParentPresentation": null
 	};
-	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
+	this.newPresentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 	let pMap = this.newPresentationFactory.factor(this.spec);
 	assert.strictEqual(pMap.type, "pMap");
 
@@ -168,7 +176,7 @@ QUnit.test("testFactorPRecordLink", function(assert) {
 
 QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
-	this.newPresentationFactory = CORA.presentationFactory(this.dependencies);
+	this.newPresentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 
 	
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
@@ -318,6 +326,7 @@ CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);
 }
 CORATEST.assertCorrectCommonSpec = function(assert, context, spec) {
+	assert.deepEqual(spec.presentationCounter, "555-"+context.spec.presentationCounter);
 	assert.strictEqual(spec.path, context.spec.path);
 	assert.strictEqual(spec.metadataIdUsedInData, context.spec.metadataIdUsedInData);
 	assert.strictEqual(spec.cPresentation, context.spec.cPresentation);

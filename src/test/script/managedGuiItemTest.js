@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -24,14 +24,14 @@ QUnit.module("managedGuiItemTest.js", {
 
 		this.metadataProvider = new MetadataProviderStub();
 		this.dependencies = {
-			"managedGuiItemViewFactory" : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
+			managedGuiItemViewFactory : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
 		};
 		this.spec = {
-			"activateMethod" : function() {
+			activateMethod : function() {
 			},
-			"removeMethod" : function() {
+			removeMethod : function() {
 			},
-			"callOnMetadataReloadMethod" : function() {
+			callOnMetadataReloadMethod : function() {
 
 			}
 
@@ -89,7 +89,7 @@ QUnit.test("testGetDependencies", function(assert) {
 QUnit.test("testGetSpec", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	assert.strictEqual(managedGuiItem.getSpec(), this.spec);
-});
+}); 
 
 QUnit.test("testActivateMethodPassedOnToViewCallsMethodWithSelf", function(assert) {
 	let calledWithManagedGuiItem;
@@ -101,6 +101,101 @@ QUnit.test("testActivateMethodPassedOnToViewCallsMethodWithSelf", function(asser
 	let factoredSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
 	factoredSpec.activateMethod();
 	assert.strictEqual(calledWithManagedGuiItem, managedGuiItem);
+});
+
+QUnit.test("testFocusinMethodIsInViewSpec", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+	let factoredViewSpec = this.dependencies.managedGuiItemViewFactory.getSpec(0);
+	assert.strictEqual(factoredViewSpec.focusinMethod, managedGuiItem.focusinMethod);
+});
+
+QUnit.test("testFocusinMethodNotCalled", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+	managedGuiItem.setActive(true);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
+});
+
+QUnit.test("testFocusinMethodCalledWithElementWithoutClassNameKeepsPrevious", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass otherClass"}};
+	let fakeInputEventNoClass = {target: {notClassName: "someClass"}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.focusinMethod(fakeInputEventNoClass);
+	managedGuiItem.setActive(true);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "someClass");
+});
+
+QUnit.test("testFocusinMethodCalledWithElementWithEmptyClassNameKeepsPrevious", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass otherClass"}};
+	let fakeInputEventNoClass = {target: {className: ""}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.focusinMethod(fakeInputEventNoClass);
+	managedGuiItem.setActive(true);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "someClass");
+});
+
+QUnit.test("testFocusinMethod", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass"}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.setActive(true);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "someClass");
+});
+
+QUnit.test("testFocusinMethodAndFocusToClassOnlyOnActiveTrue", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass"}};
+	
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	managedGuiItem.setActive(false);
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
+});
+
+QUnit.test("testSetFocus", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+
+	managedGuiItem.setFocus();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "focusOnId_notCalledYet");
+	let noOfFocusedOnFirstInput = factoredView.getNoOfFocusedOnFirstInput();
+	assert.strictEqual(noOfFocusedOnFirstInput, 1)
+});
+
+QUnit.test("testSetFocusAfterFocusin", function(assert) {
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	let fakeInputEvent = {target: {className: "someClass"}};
+	managedGuiItem.focusinMethod(fakeInputEvent);
+	
+	managedGuiItem.setFocus();
+	
+	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
+	let focusedClass = factoredView.getFocusedClass();
+	assert.strictEqual(focusedClass, "someClass");
+	let noOfFocusedOnFirstInput = factoredView.getNoOfFocusedOnFirstInput();
+	assert.strictEqual(noOfFocusedOnFirstInput, 0)
 });
 
 QUnit.test("testRemoveMethodAddedToView", function(assert) {

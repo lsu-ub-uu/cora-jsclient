@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2020, 2021 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -116,7 +116,6 @@ var CORA = (function(cora) {
 		};
 
 		const search = function() {
-//			 const activeTextarea = document.activeElement;
 			if (recordGui.validateData()) {
 				sendSearchQueryToServer();
 			}
@@ -125,6 +124,9 @@ var CORA = (function(cora) {
 				data: "",
 				path: []
 			});
+			if(spec.setFocus){
+				spec.setFocus();
+			}		
 		};
 
 		const sendSearchQueryToServer = function() {

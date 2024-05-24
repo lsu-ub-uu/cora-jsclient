@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Olov McKie
+ * Copyright 2018, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -27,7 +27,7 @@ QUnit.module("gui/buttonTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var button = CORA.gui.button({});
+	let button = CORA.gui.button({});
 	this.fixture.appendChild(button);
 
 	assert.strictEqual(button.nodeName, "SPAN");
@@ -35,7 +35,7 @@ QUnit.test("testInit", function(assert) {
 });
 
 QUnit.test("testClassNameInSpec", function(assert) {
-	var button = CORA.gui.button({
+	let button = CORA.gui.button({
 		className : "iconButton removeButton"
 	});
 	this.fixture.appendChild(button);
@@ -44,8 +44,8 @@ QUnit.test("testClassNameInSpec", function(assert) {
 });
 
 QUnit.test("testActionOnclickActiveByDefault", function(assert) {
-	var clicked = 0;
-	var button = CORA.gui.button({
+	let clicked = 0;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				clicked = clicked + 1;
@@ -59,8 +59,8 @@ QUnit.test("testActionOnclickActiveByDefault", function(assert) {
 });
 
 QUnit.test("testActionDisableOnclick", function(assert) {
-	var clicked = false;
-	var button = CORA.gui.button({
+	let clicked = false;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				clicked = true;
@@ -75,14 +75,14 @@ QUnit.test("testActionDisableOnclick", function(assert) {
 });
 
 QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
-	var clickedParent = false;
-	var parent = document.createElement("SPAN");
+	let clickedParent = false;
+	let parent = document.createElement("SPAN");
 	this.fixture.appendChild(parent);
 	parent.onclick = function() {
 		clickedParent = true;
 	}
-	var clicked = false;
-	var button = CORA.gui.button({
+	let clicked = false;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				clicked = true;
@@ -96,7 +96,7 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 });
 
 QUnit.test("testButtonWithText", function(assert) {
-	var button = CORA.gui.button({
+	let button = CORA.gui.button({
 		text : "someText"
 	});
 	this.fixture.appendChild(button);
@@ -104,8 +104,8 @@ QUnit.test("testButtonWithText", function(assert) {
 });
 
 QUnit.test("testOnkeydownInSpec", function(assert) {
-	var activated = false;
-	var button = CORA.gui.button({
+	let activated = false;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				activated = true;
@@ -124,8 +124,8 @@ QUnit.test("testOnkeydownInSpec", function(assert) {
 });
 
 QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
-	var activated = false;
-	var button = CORA.gui.button({
+	let activated = false;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				activated = true;
@@ -152,8 +152,8 @@ QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
 });
 
 QUnit.test("testOnkeydownInSpecNotCalledForWrongKey", function(assert) {
-	var activated = false;
-	var button = CORA.gui.button({
+	let activated = false;
+	let button = CORA.gui.button({
 		action : {
 			method : function() {
 				activated = true;

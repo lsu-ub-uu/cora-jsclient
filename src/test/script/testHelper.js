@@ -19,7 +19,7 @@
 var CORATESTHELPER = (function(coraTestHelper) {
 	"use strict";
 	coraTestHelper.simulateOnclick = function(object, spec) {
-		var event = document.createEvent('Event');
+		let event = document.createEvent('Event');
 		event.initEvent('click', true, true);
 		if (spec !== undefined && spec.ctrlKey) {
 			event.ctrlKey = true;
@@ -28,30 +28,27 @@ var CORATESTHELPER = (function(coraTestHelper) {
 	};
 
 	coraTestHelper.simulateKeydown = function(object, keydown) {
-		var event = new KeyboardEvent("keydown", {
+		let event = new KeyboardEvent("keydown", {
 			"key" : keydown
 		});
 		object.dispatchEvent(event);
 	};
 
 	coraTestHelper.simulateKeyup = function(object, keyup) {
-		var event = new KeyboardEvent("keyup", {
+		let event = new KeyboardEvent("keyup", {
 			"key" : keyup
 		});
 		object.dispatchEvent(event);
 	};
 
 	coraTestHelper.simulateBlur = function(object) {
-		var event = new Event("blur", {
+		let event = new Event("blur", {
 		});
 		object.dispatchEvent(event);
 	};
 
 	coraTestHelper.simulateFocus = function(element) {
-//		var event = new Event("focusin", {
-//		});
-//		object.dispatchEvent(event);
-		 let eventType = "onfocusin" in element ? "focusin" : "focus";
+		let eventType = "onfocusin" in element ? "focusin" : "focus";
 	    let bubbles = "onfocusin" in element;
 	    let event;
 	

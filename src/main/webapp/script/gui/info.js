@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,33 +19,37 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.info = function(spec) {
-		var infoLevel = cora.info.NONE;
-		var button = createButton();
-		var view;
+		let infoLevel = cora.info.NONE;
+		let button;
+		let view;
 
-		function createButton() {
-			var infoButtonSpec = {
+		const start = function() {
+			button = createButton();
+		};
+		
+		const createButton = function() {
+			let infoButtonSpec = {
 				className : "iconButton infoButton",
 				action : {
 					method : showInfo
 				}
 			};
 			return CORA.gui.button(infoButtonSpec);
-		}
+		};
 
-		function getButton() {
+		const getButton = function() {
 			return button;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function getInfoLevel() {
+		const getInfoLevel = function() {
 			return infoLevel;
-		}
+		};
 
-		function showInfo(event) {
+		const showInfo = function(event) {
 			if (infoLevel === cora.info.NONE) {
 				createAndAddBaseView();
 				createLevelView(spec.level1);
@@ -61,18 +65,18 @@ var CORA = (function(cora) {
 			if (spec.afterLevelChange !== undefined) {
 				spec.afterLevelChange(event);
 			}
-		}
+		};
 
-		function createAndAddBaseView() {
+		const createAndAddBaseView = function() {
 			createBaseView();
 			addBaseViewAccordingToSpec();
-		}
+		};
 
-		function createBaseView() {
+		const createBaseView = function() {
 			view = CORA.gui.createSpanWithClassName("infoView");
-		}
+		};
 
-		function addBaseViewAccordingToSpec() {
+		const addBaseViewAccordingToSpec = function() {
 			if (spec.appendTo !== undefined) {
 				spec.appendTo.appendChild(view);
 			}
@@ -82,38 +86,44 @@ var CORA = (function(cora) {
 			if (spec.insertBefore !== undefined) {
 				spec.insertBefore.parentNode.insertBefore(view, spec.insertBefore);
 			}
-		}
+		};
 
-		function createLevelView(levelInfos) {
+		const createLevelView = function(levelInfos) {
 			if (levelInfos !== undefined) {
 				levelInfos.forEach(createViewPart);
 			}
-		}
+		};
 
-		function createViewPart(info) {
-			var viewPart = CORA.gui.createSpanWithClassName(info.className);
+		const createViewPart = function(info) {
+			let viewPart = CORA.gui.createSpanWithClassName(info.className);
 			viewPart.innerHTML = info.text;
 			addOnClickIfSpecifiedInSpec(info.onclickMethod, viewPart);
 			view.appendChild(viewPart);
-		}
+		};
 
-		function addOnClickIfSpecifiedInSpec(onclickMethod, viewPart) {
+		const addOnClickIfSpecifiedInSpec = function(onclickMethod, viewPart) {
 			if (onclickMethod !== undefined) {
-				viewPart.onclick = onclickMethod;
+				viewPart.addEventListener('click', (event) => {
+					event.stopPropagation();
+					onclickMethod(event);
+				});
+				
 				viewPart.className = viewPart.className + " clickable";
 			}
-		}
+		};
 
-		function resetInfo() {
+		const resetInfo = function() {
 			view.parentNode.removeChild(view);
 			view = null;
 			infoLevel = 0;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
-
+		};
+		
+		start();
+		
 		return Object.freeze({
 			type : "info",
 			getSpec : getSpec,

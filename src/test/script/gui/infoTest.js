@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Olov McKie
+ * Copyright 2016, 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -32,64 +32,64 @@ QUnit.test("testConstants", function(assert) {
 });
 
 QUnit.test("initTestType", function(assert) {
-	var spec = {};
-	var info = CORA.info(spec);
+	let spec = {};
+	let info = CORA.info(spec);
 	assert.strictEqual(info.type, "info");
 });
 
 QUnit.test("initTestGetSpec", function(assert) {
-	var spec = {};
-	var info = CORA.info(spec);
+	let spec = {};
+	let info = CORA.info(spec);
 	assert.strictEqual(info.getSpec(), spec);
 });
 
 QUnit.test("initTestInitialState", function(assert) {
-	var spec = {};
-	var info = CORA.info(spec);
+	let spec = {};
+	let info = CORA.info(spec);
 	assert.strictEqual(info.getInfoLevel(), CORA.info.NONE);
 });
 
 QUnit.test("initTestInfoButton", function(assert) {
-	var spec = {};
-	var info = CORA.info(spec);
-	var infoButton = info.getButton();
+	let spec = {};
+	let info = CORA.info(spec);
+	let infoButton = info.getButton();
 	assert.equal(infoButton.nodeName, "SPAN");
 	assert.equal(infoButton.className, "iconButton infoButton");
 });
 
 QUnit.test("initTestOneButtonClickafterLevelChangeCall", function(assert) {
-	var wasCalled = false;
+	let wasCalled = false;
 	function someFunction() {
 		wasCalled = true;
 	}
-	var spec = {
+	let spec = {
 		"afterLevelChange" : someFunction,
 		"appendTo" : this.fixture
 
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 	assert.strictEqual(this.fixture.childNodes.length, 0);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
 	assert.ok(wasCalled);
 });
 
 QUnit.test("initTestInfoViewAppendToOneButtonClick", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 	assert.strictEqual(this.fixture.childNodes.length, 0);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
 	assert.strictEqual(info.getInfoLevel(), CORA.info.TEXT);
 
-	var infoView = info.getView();
-	var infoFromFixture = this.fixture.firstChild;
+	let infoView = info.getView();
+	let infoFromFixture = this.fixture.firstChild;
 	assert.strictEqual(infoView, infoFromFixture);
 
 	// base infoView
@@ -100,22 +100,22 @@ QUnit.test("initTestInfoViewAppendToOneButtonClick", function(assert) {
 });
 
 QUnit.test("initTestInfoViewInsertAfterOneButtonClick", function(assert) {
-	var fixture = this.fixture;
-	var child1 = document.createElement("span");
+	let fixture = this.fixture;
+	let child1 = document.createElement("span");
 	fixture.appendChild(child1);
-	var child2 = document.createElement("span");
+	let child2 = document.createElement("span");
 	fixture.appendChild(child2);
 
-	var spec = {
+	let spec = {
 		"insertAfter" : child1
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
-	var infoView = info.getView();
-	var infoFromFixture = this.fixture.childNodes[1];
+	let infoView = info.getView();
+	let infoFromFixture = this.fixture.childNodes[1];
 	assert.strictEqual(infoView, infoFromFixture);
 
 	// base infoView
@@ -126,22 +126,22 @@ QUnit.test("initTestInfoViewInsertAfterOneButtonClick", function(assert) {
 });
 
 QUnit.test("initTestInfoViewInsertBeforeOneButtonClick", function(assert) {
-	var fixture = this.fixture;
-	var child1 = document.createElement("span");
+	let fixture = this.fixture;
+	let child1 = document.createElement("span");
 	fixture.appendChild(child1);
-	var child2 = document.createElement("span");
+	let child2 = document.createElement("span");
 	fixture.appendChild(child2);
 
-	var spec = {
+	let spec = {
 		"insertBefore" : child2
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
-	var infoView = info.getView();
-	var infoFromFixture = this.fixture.childNodes[1];
+	let infoView = info.getView();
+	let infoFromFixture = this.fixture.childNodes[1];
 	assert.strictEqual(infoView, infoFromFixture);
 
 	// base infoView
@@ -152,19 +152,19 @@ QUnit.test("initTestInfoViewInsertBeforeOneButtonClick", function(assert) {
 });
 
 QUnit.test("initTestInfoViewWithInfoLevel1", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture,
 		"level1" : [ {
 			"className" : "textView",
 			"text" : "someText"
 		} ]
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
-	var infoView = info.getView();
+	let infoView = info.getView();
 	assert.equal(infoView.childNodes.length, 1);
 
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "textView", "someText",
@@ -172,7 +172,7 @@ QUnit.test("initTestInfoViewWithInfoLevel1", function(assert) {
 });
 
 QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture,
 		"level1" : [ {
 			"className" : "textView",
@@ -182,12 +182,12 @@ QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
 			"text" : "someDefText"
 		} ]
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 
-	var infoView = info.getView();
+	let infoView = info.getView();
 	assert.equal(infoView.childNodes.length, 2);
 
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "textView", "someText",
@@ -197,20 +197,20 @@ QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
 });
 
 QUnit.test("initTestInfoViewAppendToTwoButtonClick", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 	assert.strictEqual(this.fixture.childNodes.length, 0);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 	CORATESTHELPER.simulateOnclick(button);
 
 	assert.strictEqual(info.getInfoLevel(), CORA.info.ALL);
 
-	var infoView = info.getView();
-	var infoFromFixture = this.fixture.firstChild;
+	let infoView = info.getView();
+	let infoFromFixture = this.fixture.firstChild;
 	assert.strictEqual(infoView, infoFromFixture);
 
 	// base infoView
@@ -221,7 +221,7 @@ QUnit.test("initTestInfoViewAppendToTwoButtonClick", function(assert) {
 });
 
 QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture,
 		"level1" : [ {
 			"className" : "textView",
@@ -238,13 +238,13 @@ QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
 			"text" : "someRegEx"
 		} ]
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 	CORATESTHELPER.simulateOnclick(button);
 
-	var infoView = info.getView();
+	let infoView = info.getView();
 	assert.equal(infoView.childNodes.length, 4);
 
 	CORATEST.testSpanWithClassNameOnlyContainsText(infoView.childNodes[0], "textView", "someText",
@@ -258,40 +258,52 @@ QUnit.test("initTestInfoViewWithInfoLevel1TwoTexts", function(assert) {
 });
 
 QUnit.test("initTestInfoViewAppendToThreeButtonClick", function(assert) {
-	var spec = {
+	let spec = {
 		"appendTo" : this.fixture
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 	assert.strictEqual(this.fixture.childNodes.length, 0);
 
-	var button = info.getButton();
+	let button = info.getButton();
 	CORATESTHELPER.simulateOnclick(button);
 	CORATESTHELPER.simulateOnclick(button);
 	CORATESTHELPER.simulateOnclick(button);
 
 	assert.strictEqual(info.getInfoLevel(), CORA.info.NONE);
 
-	var infoView = info.getView();
-	var infoFromFixture = this.fixture.firstChild;
+	let infoView = info.getView();
+	let infoFromFixture = this.fixture.firstChild;
 	assert.strictEqual(infoView, infoFromFixture);
 });
 
-QUnit.test("initOnclickOnInfoPart", function(assert) {
-	var spec = {
-		"appendTo" : this.fixture,
-		"level1" : [ {
-			"className" : "textView",
-			"text" : "someText",
-			"onclickMethod" : function() {
+QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
+	let clickedParent = false;
+	let parent = document.createElement("SPAN");
+	this.fixture.appendChild(parent);
+	parent.onclick = function() {
+		clickedParent = true;
+	}
+	let clicked = false;
+
+	let spec = {
+		appendTo : parent,
+		level1 : [ {
+			className : "textView",
+			text : "someText",
+			onclickMethod : function() {
+				clicked=true;
 			}
 		} ]
 	};
-	var info = CORA.info(spec);
+	let info = CORA.info(spec);
 
-	var button = info.getButton();
+	let button = info.getButton();
+	parent.appendChild(button);
 	CORATESTHELPER.simulateOnclick(button);
+	
+	let firstInfoPart = info.getView().firstChild;
+	CORATESTHELPER.simulateOnclick(firstInfoPart);
 
-	var firstInfoPart = info.getView().firstChild;
-	assert.equal(firstInfoPart.onclick, spec.level1[0].onclickMethod);
-	assert.equal(firstInfoPart.className, "textView clickable");
+	assert.strictEqual(clicked, true);
+	assert.strictEqual(clickedParent, false);
 });

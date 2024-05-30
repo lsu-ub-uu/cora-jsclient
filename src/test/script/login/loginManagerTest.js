@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -259,7 +259,6 @@ QUnit
 				}, {
 					text: "translated_uuSystemOneLDAPLoginUnitText",
 					type: "ldap",
-					"url": "http://www.google.se",
 					"metadataId": "ldapGroup",
 					"presentationId": "ldapPGroup",
 					"loginUnitId": "uuSystemOneLDAPLoginUnit"
@@ -289,7 +288,6 @@ QUnit
 				}, {
 					text: "translated_uuSystemOneLDAPLoginUnitText",
 					type: "ldap",
-					"url": "http://www.google.se",
 					"metadataId": "ldapGroup",
 					"presentationId": "ldapPGroup",
 					"loginUnitId": "uuSystemOneLDAPLoginUnit"

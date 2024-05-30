@@ -100,10 +100,12 @@ var CORATEST = (function(coraTest) {
 										}, {
 											"name" : "loginName",
 											"value" : "Token login systemOne"
-										}, {
+										}
+										, {
 											"name" : "url",
 											"value" : "some/url"
-										} ],
+										}
+										 ],
 								"name" : "login",
 								"attributes" : {
 									"type" : "token"
@@ -543,10 +545,6 @@ var CORATEST = (function(coraTest) {
 				                  }
 				                },
 				                "name": "description"
-				              },
-				              {
-				                "name": "url",
-				                "value": "http://www.google.se"
 				              }
 				            ],
 				            "name": "login",

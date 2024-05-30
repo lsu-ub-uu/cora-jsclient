@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018, 2019 Uppsala University Library
+ * Copyright 2016, 2018, 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -145,12 +145,13 @@ var CORA = (function(cora) {
 			loginDataList.forEach(function(loginItem) {
 				var loginData = loginItem.record.data;
 				var recordId = getIdFromRecord(loginData);
-				var url = getUrlFromLoginRecord(loginData);
 				var type = getTypeFromLoginRecord(loginData);
 				logins[recordId] = {
-					"url": url,
 					type: type
 				};
+				if ("webRedirect" === type) {
+					logins[recordId].url = getUrlFromLoginRecord(loginData);
+				}
 				if ("ldap" === type) {
 					logins[recordId].metadataId = getMetadataIdFromLoginRecord(loginData);
 					logins[recordId].presentationId = getPresentationIdFromLoginRecord(loginData);

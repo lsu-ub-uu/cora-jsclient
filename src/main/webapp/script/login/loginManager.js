@@ -16,17 +16,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var addStandardAppTokensToLoginMenu = false;
+let addStandardAppTokensToLoginMenu = false;
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManager = function(dependencies, spec) {
-		var out;
-		var loginManagerView;
-		var authInfo;
-		var createdWebRedirectLogin;
-		var startedLdapLogins = {};
+		let out;
+		let loginManagerView;
+		let authInfo;
+		let createdWebRedirectLogin;
+		let startedLdapLogins = {};
 
-		var loginOptions = [];
+		let loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
 			loginOptions.push({
 				text: "appToken as 141414",
@@ -83,27 +83,27 @@ var CORA = (function(cora) {
 				appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
 			});
 		}
-		var loginOrigin;
+		let loginOrigin;
 
-		var logins = {};
-		var loginUnitDataList;
-		var loginDataList;
+		let logins = {};
+		let loginUnitDataList;
+		let loginDataList;
 
-		function start() {
+		const start = function() {
 			fetchAllLoginInfoFromServer();
-			var viewSpec = {
+			let viewSpec = {
 				"loginMethod": login,
 				"logoutMethod": logout
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
 		}
-		function fetchAllLoginInfoFromServer() {
+		const fetchAllLoginInfoFromServer = function() {
 			fetchLoginUnitFromServer();
 			fetchLoginFromServer();
-		}
+		};
 
-		function fetchLoginUnitFromServer() {
-			var callSpec = {
+		const fetchLoginUnitFromServer = function() {
+			let callSpec = {
 				"requestMethod": "GET",
 				"url": spec.baseUrl + "record/loginUnit",
 				"loadMethod": fetchLoginUnitCallback,
@@ -111,10 +111,10 @@ var CORA = (function(cora) {
 				"timeoutMethod": fetchLoginUnitTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function fetchLoginFromServer() {
-			var callSpec = {
+		const fetchLoginFromServer = function() {
+			let callSpec = {
 				"requestMethod": "GET",
 				"url": spec.baseUrl + "record/login",
 				"loadMethod": fetchLoginCallback,
@@ -122,30 +122,30 @@ var CORA = (function(cora) {
 				"timeoutMethod": fetchLoginTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function fetchLoginUnitCallback(answer) {
+		const fetchLoginUnitCallback = function(answer) {
 			loginUnitDataList = JSON.parse(answer.responseText).dataList.data;
 			possiblySetLoginOptionsInView();
-		}
+		};
 
-		function possiblySetLoginOptionsInView() {
+		const possiblySetLoginOptionsInView = function() {
 			if (bothLoginUnitAndLoginListHasBeenFullyFetched()) {
 				parseLoginData();
 				parseLoginUnitData();
 				loginManagerView.setLoginOptions(loginOptions);
 			}
-		}
+		};
 
-		function bothLoginUnitAndLoginListHasBeenFullyFetched() {
+		const bothLoginUnitAndLoginListHasBeenFullyFetched = function() {
 			return loginUnitDataList !== undefined && loginDataList !== undefined;
-		}
+		};
 
-		function parseLoginData() {
+		const parseLoginData = function() {
 			loginDataList.forEach(function(loginItem) {
-				var loginData = loginItem.record.data;
-				var recordId = getIdFromRecord(loginData);
-				var type = getTypeFromLoginRecord(loginData);
+				let loginData = loginItem.record.data;
+				let recordId = getIdFromRecord(loginData);
+				let type = getTypeFromLoginRecord(loginData);
 				logins[recordId] = {
 					type: type
 				};
@@ -157,49 +157,49 @@ var CORA = (function(cora) {
 					logins[recordId].presentationId = getPresentationIdFromLoginRecord(loginData);
 				}
 			});
-		}
+		};
 
-		function getIdFromRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+		const getIdFromRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
-		}
+		};
 
-		function getUrlFromLoginRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
+		const getUrlFromLoginRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
 			return cRecord.getFirstAtomicValueByNameInData("url");
-		}
+		};
 
-		function getTypeFromLoginRecord(recordData) {
+		const getTypeFromLoginRecord = function(recordData) {
 			return recordData.attributes.type;
-		}
+		};
 
-		function getMetadataIdFromLoginRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cMetadataIdGroup = CORA.coraData(cRecord.getFirstChildByNameInData("ldapMetadata"));
+		const getMetadataIdFromLoginRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cMetadataIdGroup = CORA.coraData(cRecord.getFirstChildByNameInData("ldapMetadata"));
 
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getPresentationIdFromLoginRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cMetadataIdGroup = CORA.coraData(cRecord
+		const getPresentationIdFromLoginRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cMetadataIdGroup = CORA.coraData(cRecord
 				.getFirstChildByNameInData("ldapPresentation"));
 
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function parseLoginUnitData() {
+		const parseLoginUnitData = function() {
 			loginUnitDataList.forEach(function(loginUnit) {
-				var loginUnitData = loginUnit.record.data;
+				let loginUnitData = loginUnit.record.data;
 
-				var textId = getTextIdFromRecord(loginUnitData);
-				var loginId = getLoginIdFromRecord(loginUnitData);
-				var cRecord = CORA.coraData(loginUnitData);
-				var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-				var loginUnitId = cRecordInfo.getFirstAtomicValueByNameInData("id");
+				let textId = getTextIdFromRecord(loginUnitData);
+				let loginId = getLoginIdFromRecord(loginUnitData);
+				let cRecord = CORA.coraData(loginUnitData);
+				let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+				let loginUnitId = cRecordInfo.getFirstAtomicValueByNameInData("id");
 
-				var loginOption = {
+				let loginOption = {
 					text: getTranslatedText(textId),
 					type: logins[loginId].type,
 					"url": logins[loginId].url
@@ -208,58 +208,58 @@ var CORA = (function(cora) {
 				loginOptions.push(loginOption);
 
 			});
-		}
+		};
 
-		function possiblyAddLdapAttributes(loginOptionIn, loginId, loginUnitId) {
-			var loginOption = loginOptionIn;
+		const possiblyAddLdapAttributes = function(loginOptionIn, loginId, loginUnitId) {
+			let loginOption = loginOptionIn;
 			if ("ldap" === logins[loginId].type) {
 				loginOption.metadataId = logins[loginId].metadataId;
 				loginOption.presentationId = logins[loginId].presentationId;
 				loginOption.loginUnitId = loginUnitId;
 			}
 			return loginOption;
-		}
+		};
 
-		function getTextIdFromRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
-			var cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("loginDescription"));
+		const getTextIdFromRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
+			let cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("loginDescription"));
 			return cLogin.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getLoginIdFromRecord(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
-			var cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("login"));
+		const getLoginIdFromRecord = function(recordData) {
+			let cRecord = CORA.coraData(recordData);
+			let cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
+			let cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("login"));
 			return cLogin.getFirstAtomicValueByNameInData("linkedRecordId");
-		}
+		};
 
-		function getTranslatedText(textId) {
+		const getTranslatedText = function(textId) {
 			return dependencies.textProvider.getTranslation(textId);
-		}
+		};
 
-		function fetchLoginUnitErrorCallback() {
+		const fetchLoginUnitErrorCallback = function() {
 			spec.setErrorMessage("Fetching of loginUnits failed!");
-		}
+		};
 
-		function fetchLoginUnitTimeoutCallback() {
+		const fetchLoginUnitTimeoutCallback = function() {
 			spec.setErrorMessage("Fetching of loginUnits timedout!");
-		}
+		};
 
-		function fetchLoginCallback(answer) {
+		const fetchLoginCallback = function(answer) {
 			loginDataList = JSON.parse(answer.responseText).dataList.data;
 			possiblySetLoginOptionsInView();
-		}
+		};
 
-		function fetchLoginErrorCallback() {
+		const fetchLoginErrorCallback = function() {
 			spec.setErrorMessage("Fetching of logins failed!");
-		}
+		};
 
-		function fetchLoginTimeoutCallback() {
+		const fetchLoginTimeoutCallback = function() {
 			spec.setErrorMessage("Fetching of logins timedout!");
-		}
+		};
 
-		function login(loginOption) {
+		const login = function(loginOption) {
 			if ("appTokenLogin" === loginOption.type) {
 				appTokenLogin(loginOption.userId, loginOption.appToken);
 			} else if ("ldap" === loginOption.type) {
@@ -267,10 +267,10 @@ var CORA = (function(cora) {
 			} else {
 				webRedirectLogin(loginOption);
 			}
-		}
+		};
 
-		function appTokenLogin(userId, appToken) {
-			var loginSpec = {
+		const appTokenLogin = function(userId, appToken) {
+			let loginSpec = {
 				"requestMethod": "POST",
 				"url": spec.appTokenBaseUrl + "login/rest/apptoken/",
 				"accept": "",
@@ -278,91 +278,91 @@ var CORA = (function(cora) {
 				"errorCallback": appTokenErrorCallback,
 				"timeoutCallback": appTokenTimeoutCallback
 			};
-			var factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
+			let factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
 			factoredAppTokenLogin.login(userId, appToken);
-		}
+		};
 
-		function webRedirectLogin(loginOption) {
+		const webRedirectLogin = function(loginOption) {
 			window.addEventListener("message", receiveMessage, false);
-			var url = loginOption.url;
-			var loginSpec = {
+			let url = loginOption.url;
+			let loginSpec = {
 				"url": url
 			};
 			loginOrigin = getIdpLoginServerPartFromUrl(url);
 			createdWebRedirectLogin = dependencies.webRedirectLoginFactory.factor(loginSpec);
-		}
+		};
 
-		function getIdpLoginServerPartFromUrl(urlToWedredirectLogin) {
-			var targetPart = urlToWedredirectLogin.substring(urlToWedredirectLogin
+		const getIdpLoginServerPartFromUrl = function(urlToWedredirectLogin) {
+			let targetPart = urlToWedredirectLogin.substring(urlToWedredirectLogin
 				.indexOf("target=") + 7);
-			var lengthOfHttps = "https://".length;
+			let lengthOfHttps = "https://".length;
 			return targetPart.substring(0, targetPart.indexOf("/", lengthOfHttps));
-		}
+		};
 
-		function ldapLogin(loginOption) {
+		const ldapLogin = function(loginOption) {
 			if (loginAlreadyStartedForLoginOption(loginOption)) {
 				showStartedLoginInJsClientForLoginOption(loginOption);
 			} else {
 				startLoginForLoginOption(loginOption);
 			}
 			loginManagerView.closeHolder();
-		}
+		};
 
-		function loginAlreadyStartedForLoginOption(loginOption) {
+		const loginAlreadyStartedForLoginOption = function(loginOption) {
 			return startedLdapLogins[loginOption.loginUnitId] !== undefined;
-		}
+		};
 
-		function showStartedLoginInJsClientForLoginOption(loginOption) {
+		const showStartedLoginInJsClientForLoginOption = function(loginOption) {
 			startedLdapLogins[loginOption.loginUnitId].showLdapLoginInJsClient();
-		}
+		};
 
-		function startLoginForLoginOption(loginOption) {
-			var ldapLoginSpec = {
+		const startLoginForLoginOption = function(loginOption) {
+			let ldapLoginSpec = {
 				"metadataId": loginOption.metadataId,
 				"presentationId": loginOption.presentationId,
 				"jsClient": spec.jsClient
 			};
-			var ldapLoginJsClientIntegrator = dependencies.ldapLoginJsClientIntegratorFactory
+			let ldapLoginJsClientIntegrator = dependencies.ldapLoginJsClientIntegratorFactory
 				.factor(ldapLoginSpec);
 			startedLdapLogins[loginOption.loginUnitId] = ldapLoginJsClientIntegrator;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getHtml() {
+		const getHtml = function() {
 			return loginManagerView.getHtml();
-		}
+		};
 
-		function appTokenAuthInfoCallback(authInfoIn) {
+		const appTokenAuthInfoCallback = function(authInfoIn) {
 			authInfo = authInfoIn;
 			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
 			loginManagerView.setUserId(authInfo.userId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
-		}
+		};
 
-		function appTokenErrorCallback(errorObject) {
+		const appTokenErrorCallback = function(errorObject) {
 			if (failedToLogout(errorObject)) {
 				logoutCallback();
 			} else {
 				spec.setErrorMessage("AppToken login failed!");
 			}
-		}
+		};
 
-		function failedToLogout(errorObject) {
+		const failedToLogout = function(errorObject) {
 			return (errorObject.status === 0 || errorObject.status === 404)
 				&& errorObject.spec.requestMethod === "DELETE";
-		}
+		};
 
-		function appTokenTimeoutCallback() {
+		const appTokenTimeoutCallback = function() {
 			spec.setErrorMessage("AppToken login timedout!");
-		}
+		};
 
-		function logout() {
-			var deleteLink = authInfo.actionLinks['delete'];
-			var callSpec = {
+		const logout = function() {
+			let deleteLink = authInfo.actionLinks['delete'];
+			let callSpec = {
 				"requestMethod": deleteLink.requestMethod,
 				"url": deleteLink.url,
 				"loadMethod": logoutCallback,
@@ -372,33 +372,33 @@ var CORA = (function(cora) {
 				"timeoutInMS": 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function logoutCallback() {
+		const logoutCallback = function() {
 			loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
 			dependencies.authTokenHolder.setCurrentAuthToken("");
 			spec.afterLogoutMethod();
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			// needed for test
 			return spec;
-		}
+		};
 
-		function receiveMessage(event) {
+		const receiveMessage = function(event) {
 			if (messageIsFromWindowOpenedFromHere(event)) {
 				handleMessagesFromOkSender(event.data);
 			}
-		}
+		};
 
-		function handleMessagesFromOkSender(data) {
+		const handleMessagesFromOkSender = function(data) {
 			appTokenAuthInfoCallback(data);
-		}
+		};
 
-		function messageIsFromWindowOpenedFromHere(event) {
+		const messageIsFromWindowOpenedFromHere = function(event) {
 			return loginOrigin === event.origin
 				&& createdWebRedirectLogin.getOpenedWindow() === event.source;
-		}
+		};
 
 		out = Object.freeze({
 			type: "loginManager",

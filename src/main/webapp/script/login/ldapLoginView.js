@@ -19,42 +19,42 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ldapLoginView = function(dependencies, spec) {
-		var view;
-		var loginFormHolder;
+		let view;
+		let loginFormHolder;
 
-		function start() {
-			var workItemView = createWorkItemView();
+		const start = function() {
+			let workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createLoginFormHolderAndAddTo(workItemView);
-		}
+		};
 
-		function createWorkItemView() {
-			var workItemViewSpec = {
+		const createWorkItemView = function() {
+			let workItemViewSpec = {
 				"extraClassName" : "ldapLogin"
 			};
 			return dependencies.workItemViewFactory.factor(workItemViewSpec);
-		}
+		};
 
-		function createLoginFormHolderAndAddTo(addTo) {
+		const createLoginFormHolderAndAddTo = function(addTo) {
 			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
 			addTo.addViewToView(loginFormHolder);
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function addPresentationToLoginFormHolder(presentationToAdd) {
+		const addPresentationToLoginFormHolder = function(presentationToAdd) {
 			loginFormHolder.insertBefore(presentationToAdd, loginFormHolder.lastChild);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		start();
 		return Object.freeze({

@@ -42,16 +42,16 @@ QUnit.test("getDependencies", function(assert) {
 });
 
 QUnit.test("factor", function(assert) {
-	var testCallHasBeenCalled = false;
+	let testCallHasBeenCalled = false;
 	function testCall() {
 		testCallHasBeenCalled = true;
 	}
-	var webRedirectSpec = {
-		"url" : "http://www.organisation.org/login/"
+	let webRedirectSpec = {
+		url : "http://www.organisation.org/login/"
 	};
-	var webRedirectLogin = this.webRedirectLoginFactory.factor(webRedirectSpec);
+	let webRedirectLogin = this.webRedirectLoginFactory.factor(webRedirectSpec);
 	assert.strictEqual(webRedirectLogin.type, "webRedirectLogin");
 
-	var webRedirectLoginDependencies = webRedirectLogin.getDependencies();
+	let webRedirectLoginDependencies = webRedirectLogin.getDependencies();
 	assert.strictEqual(webRedirectLoginDependencies.window, window);
 });

@@ -26,7 +26,7 @@ QUnit.module("login/loginManagerTest.js",
 			this.getAddedWindowEvents = function() {
 				return addedEvents;
 			};
-			var addedEvents = [];
+			let addedEvents = [];
 			this.addEvent = function(type, listener, useCapture) {
 				addedEvents.push({
 					type: type,
@@ -34,7 +34,7 @@ QUnit.module("login/loginManagerTest.js",
 					useCapture: useCapture
 				});
 			}
-			var oldAddEvent = window.addEventListener;
+			let oldAddEvent = window.addEventListener;
 			window.addEventListener = this.addEvent;
 			this.dependencies = {
 				textProvider: CORATEST.textProviderSpy(),
@@ -47,7 +47,7 @@ QUnit.module("login/loginManagerTest.js",
 				"authTokenHolder": CORATEST.authTokenHolderSpy(),
 				"ajaxCallFactory": CORATEST.ajaxCallFactorySpy()
 			};
-			var afterLoginMethodCalled = false;
+			let afterLoginMethodCalled = false;
 			this.afterLoginMethod = function() {
 				afterLoginMethodCalled = true;
 			};
@@ -55,7 +55,7 @@ QUnit.module("login/loginManagerTest.js",
 				return afterLoginMethodCalled;
 			}
 
-			var afterLogoutMethodCalled = false;
+			let afterLogoutMethodCalled = false;
 			this.afterLogoutMethod = function() {
 				afterLogoutMethodCalled = true;
 			};
@@ -63,7 +63,7 @@ QUnit.module("login/loginManagerTest.js",
 				return afterLogoutMethodCalled;
 			}
 
-			var errorMessage;
+			let errorMessage;
 			this.setErrorMessage = function(errorMessageIn) {
 				errorMessage = errorMessageIn;
 			}
@@ -102,18 +102,18 @@ QUnit.module("login/loginManagerTest.js",
 			}
 
 			this.answerListLoginUnitsCall = function(no) {
-				var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-				var jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
-				var answer = {
+				let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+				let jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
+				let answer = {
 					"spec": ajaxCallSpy0.getSpec(),
 					"responseText": jsonLoginUnitList
 				};
 				ajaxCallSpy0.getSpec().loadMethod(answer);
 			}
 			this.answerListLoginsCall = function(no) {
-				var ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-				var jsonLoginList = JSON.stringify(CORATEST.loginList);
-				var answer = {
+				let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+				let jsonLoginList = JSON.stringify(CORATEST.loginList);
+				let answer = {
 					"spec": ajaxCallSpy0.getSpec(),
 					"responseText": jsonLoginList
 				};
@@ -130,23 +130,23 @@ QUnit.test("testConstants", function(assert) {
 });
 
 QUnit.test("init", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	assert.strictEqual(loginManager.type, "loginManager");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	assert.strictEqual(loginManager.getDependencies(), this.dependencies);
 });
 QUnit.test("testGetSpec", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	assert.strictEqual(loginManager.getSpec(), this.spec);
 });
 
 QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
-	var loginManager = this.loginManager;
-	var ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(0);
-	var ajaxCallSpec = ajaxCallSpy.getSpec();
+	let loginManager = this.loginManager;
+	let ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(0);
+	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, this.spec.baseUrl + "record/loginUnit");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.fetchLoginUnitCallback);
@@ -155,8 +155,8 @@ QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.timeoutInMS, undefined);
 
-	var ajaxCallSpy1 = this.dependencies.ajaxCallFactory.getFactored(1);
-	var ajaxCallSpec1 = ajaxCallSpy1.getSpec();
+	let ajaxCallSpy1 = this.dependencies.ajaxCallFactory.getFactored(1);
+	let ajaxCallSpec1 = ajaxCallSpy1.getSpec();
 	assert.strictEqual(ajaxCallSpec1.url, this.spec.baseUrl + "record/login");
 	assert.strictEqual(ajaxCallSpec1.requestMethod, "GET");
 	assert.strictEqual(ajaxCallSpec1.loadMethod, loginManager.fetchLoginCallback);
@@ -167,8 +167,8 @@ QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
 });
 
 QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothLists", function(assert) {
-	var loginManager = this.loginManager;
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let loginManager = this.loginManager;
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getLoginOptions(), undefined);
 	this.answerListLoginUnitsCall(0);
 	assert.strictEqual(factoredView.getLoginOptions(), undefined);
@@ -178,8 +178,8 @@ QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothLists", functi
 
 QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothListsReOrdered",
 	function(assert) {
-		var loginManager = this.loginManager;
-		var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+		let loginManager = this.loginManager;
+		let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getLoginOptions(), undefined);
 		this.answerListLoginsCall(1);
 		assert.strictEqual(factoredView.getLoginOptions(), undefined);
@@ -192,11 +192,11 @@ QUnit
 		"testAnswerForLoginUnits",
 		function(assert) {
 			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-			var loginManager = this.loginManager;
-			var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+			let loginManager = this.loginManager;
+			let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 			this.answerListLoginUnitsCall(0);
 			this.answerListLoginsCall(1);
-			var expectedLoginOptions = [
+			let expectedLoginOptions = [
 				{
 					text: "appToken as 141414",
 					type: "appTokenLogin",
@@ -271,11 +271,11 @@ QUnit
 		function(assert) {
 			addStandardAppTokensToLoginMenu = false;
 			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-			var loginManager = this.loginManager;
-			var factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
+			let loginManager = this.loginManager;
+			let factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
 			this.answerListLoginUnitsCall(2);
 			this.answerListLoginsCall(3);
-			var expectedLoginOptions = [
+			let expectedLoginOptions = [
 				{
 					text: "translated_uuLoginUnitText",
 					type: "webRedirect",
@@ -296,48 +296,48 @@ QUnit
 		});
 
 QUnit.test("testLoginUnitErrorMessage", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.fetchLoginUnitErrorCallback();
 	assert.strictEqual(this.getErrorMessage(), "Fetching of loginUnits failed!");
 });
 
 QUnit.test("testLoginUnitTimeoutMessage", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.fetchLoginUnitTimeoutCallback();
 	assert.strictEqual(this.getErrorMessage(), "Fetching of loginUnits timedout!");
 });
 
 QUnit.test("testLoginErrorMessage", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.fetchLoginErrorCallback();
 	assert.strictEqual(this.getErrorMessage(), "Fetching of logins failed!");
 });
 
 QUnit.test("testLoginTimeoutMessage", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.fetchLoginTimeoutCallback();
 	assert.strictEqual(this.getErrorMessage(), "Fetching of logins timedout!");
 });
 
 QUnit.test("testInitCreatesALoginManagerView", function(assert) {
-	var loginManager = this.loginManager;
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let loginManager = this.loginManager;
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.ok(factoredView !== undefined);
 });
 
 QUnit.test("testInitCreatesALoginManagerViewsViewIsReturnedForGetHtml", function(assert) {
-	var loginManager = this.loginManager;
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	var loginManagerHtml = loginManager.getHtml();
+	let loginManager = this.loginManager;
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let loginManagerHtml = loginManager.getHtml();
 	assert.strictEqual(loginManagerHtml, factoredView.getHtml());
 });
 
 QUnit.test("testInitLoginManagerViewSpec", function(assert) {
-	var loginManager = this.loginManager;
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	var factoredSpec = factoredView.getSpec();
+	let loginManager = this.loginManager;
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredSpec = factoredView.getSpec();
 
-	var factoredLoginOptions = factoredSpec.loginOptions;
+	let factoredLoginOptions = factoredSpec.loginOptions;
 
 	assert.strictEqual(factoredLoginOptions, undefined);
 	assert.strictEqual(factoredSpec.loginMethod, loginManager.login);
@@ -345,14 +345,14 @@ QUnit.test("testInitLoginManagerViewSpec", function(assert) {
 });
 
 QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
 		type: "appTokenLogin"
 	});
-	var factored1 = this.dependencies.appTokenLoginFactory.getFactored(0);
+	let factored1 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.ok(factored1);
-	var spec0 = this.dependencies.appTokenLoginFactory.getSpec(0);
+	let spec0 = this.dependencies.appTokenLoginFactory.getSpec(0);
 	assert.strictEqual(spec0.requestMethod, "POST");
 	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken/");
 	assert.strictEqual(spec0.accept, "");
@@ -362,121 +362,121 @@ QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 });
 
 QUnit.test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
 		type: "appTokenLogin",
 		userId: "testUserId",
 		appToken: "testAppToken"
 	});
-	var factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
+	let factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
 	assert.strictEqual(factored0.getUserId(0), "testUserId");
 	assert.strictEqual(factored0.getAppToken(0), "testAppToken");
 });
 
 QUnit.test("testWebRedirectLoginListensForMessagesOnWindow", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	this.loginWithWebRedirect();
 
-	var addedEvent = this.getAddedWindowEvents()[0];
+	let addedEvent = this.getAddedWindowEvents()[0];
 	assert.strictEqual(addedEvent.type, "message");
 	assert.strictEqual(addedEvent.listener, loginManager.receiveMessage);
 	assert.strictEqual(addedEvent.useCapture, false);
 });
 
 QUnit.test("testWebRedirectLoginFactoryIsCalledOnWebRedirectLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	this.loginWithWebRedirect();
 
-	var factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
+	let factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
 	assert.strictEqual(factored.type, "webRedirectLoginSpy");
-	var spec0 = this.dependencies.webRedirectLoginFactory.getSpec(0);
+	let spec0 = this.dependencies.webRedirectLoginFactory.getSpec(0);
 
 	assert.strictEqual(spec0.url, this.loginOption.url);
 });
 
 QUnit.test("testRecieveMessageFromWebRedirectLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	this.loginWithWebRedirect();
 
-	var factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
+	let factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
 	loginManager.receiveMessage({
 		origin: "https://epc.ub.uu.se",
 		data: this.authInfo,
 		source: factored.getOpenedWindow()
 	});
-	var authTokenHolder = this.dependencies.authTokenHolder;
+	let authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), "fake authToken from here");
 });
 
 QUnit.test("testRecieveMessageFromWebRedirectLoginNotHandledIfWrongOrigin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	this.loginWithWebRedirect();
 	loginManager.receiveMessage({
 		origin: "https://epc.ub.uu.se/systemoneNOT/idplogin/login",
 		data: this.authInfo,
 		source: {}
 	});
-	var authTokenHolder = this.dependencies.authTokenHolder;
+	let authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), undefined);
 });
 
 QUnit.test("testRecieveMessageFromWebRedirectLoginOnlyHandledIfFromCorrectWindow",
 	function(assert) {
-		var loginManager = this.loginManager;
+		let loginManager = this.loginManager;
 		this.loginWithWebRedirect();
 		loginManager.receiveMessage({
 			origin: "https://epc.ub.uu.se/systemone/idplogin/login",
 			data: this.authInfo,
 			source: {}
 		});
-		var authTokenHolder = this.dependencies.authTokenHolder;
+		let authTokenHolder = this.dependencies.authTokenHolder;
 		assert.strictEqual(authTokenHolder.getToken(0), undefined);
 	});
 
 QUnit.test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
-	var authTokenHolder = this.dependencies.authTokenHolder;
+	let authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), "fake authToken from here");
 });
 
 QUnit.test("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getUserId(0), "141414");
 });
 
 QUnit.test("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	var stateSetInView = factoredView.getState();
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let stateSetInView = factoredView.getState();
 
 	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDIN);
 });
 
 QUnit.test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
 
 	assert.strictEqual(this.afterLoginMethodWasCalled(), true);
 });
 
 QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
 		type: "appTokenLogin"
 	});
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
 	loginManager.logout();
 
-	var ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(2);
-	var ajaxCallSpec = ajaxCallSpy.getSpec();
+	let ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(2);
+	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 		+ "rest/apptoken/141414");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
@@ -486,17 +486,17 @@ QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 });
 
 QUnit.test("testLoggedoutStateIsSetOnAppTokenLogoutCallback", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
 	loginManager.logoutCallback();
-	var stateSetInView = factoredView.getState();
+	let stateSetInView = factoredView.getState();
 	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
 });
 
 QUnit.test("testLoggedoutSpecAfterLogoutMethodIsCalledOnAppTokenLogoutCallback", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
 	loginManager.logoutCallback();
 
@@ -504,24 +504,24 @@ QUnit.test("testLoggedoutSpecAfterLogoutMethodIsCalledOnAppTokenLogoutCallback",
 });
 
 QUnit.test("testAuthTokenIsRemovedOnAppTokenLogoutCallback", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenAuthInfoCallback(this.authInfo);
 	loginManager.logoutCallback();
 
-	var authTokenHolder = this.dependencies.authTokenHolder;
+	let authTokenHolder = this.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(1), "");
 });
 
 QUnit.test("testErrorMessage", function(assert) {
-	var loginManager = this.loginManager;
-	var errorObject = {};
+	let loginManager = this.loginManager;
+	let errorObject = {};
 	loginManager.appTokenErrorCallback(errorObject);
 	assert.strictEqual(this.getErrorMessage(), "AppToken login failed!");
 });
 
 QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
-	var loginManager = this.loginManager;
-	var errorObject = {
+	let loginManager = this.loginManager;
+	let errorObject = {
 		status: 0,
 		spec: {
 			requestMethod: "DELETE"
@@ -534,25 +534,25 @@ QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) 
 });
 
 QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
 		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId"
 	});
-	var factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored1);
 	assert.strictEqual(factored1.type, "ldapLoginJsClientIntegratorSpy");
-	var spec0 = this.dependencies.ldapLoginJsClientIntegratorFactory.getSpec(0);
+	let spec0 = this.dependencies.ldapLoginJsClientIntegratorFactory.getSpec(0);
 	assert.strictEqual(spec0.metadataId, "someMetadataId");
 	assert.strictEqual(spec0.presentationId, "somePresentationId");
 	assert.strictEqual(spec0.jsClient, this.spec.jsClient);
 });
 
 QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(assert) {
-	var loginManager = this.loginManager;
-	var spec = {
+	let loginManager = this.loginManager;
+	let spec = {
 		text: "someText",
 		type: "ldap",
 		"metadataId": "someMetadataId",
@@ -561,18 +561,18 @@ QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(asse
 
 	};
 	loginManager.login(spec);
-	var factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
 
 	loginManager.login(spec);
 
-	var factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
+	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
 	assert.strictEqual(factored1, undefined);
 });
 
 QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function(assert) {
-	var loginManager = this.loginManager;
-	var spec = {
+	let loginManager = this.loginManager;
+	let spec = {
 		text: "someText",
 		type: "ldap",
 		"metadataId": "someMetadataId",
@@ -581,18 +581,18 @@ QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function
 
 	};
 	loginManager.login(spec);
-	var factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
 	spec.loginUnitId = "someOtherLDAPLoginUnit";
 	loginManager.login(spec);
 
-	var factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
+	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
 	assert.ok(factored1);
 });
 
 QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
-	var loginManager = this.loginManager;
-	var spec = {
+	let loginManager = this.loginManager;
+	let spec = {
 		text: "someText",
 		type: "ldap",
 		"metadataId": "someMetadataId",
@@ -600,42 +600,42 @@ QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(asse
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 	};
 	loginManager.login(spec);
-	var factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
 	assert.strictEqual(factored.getNoOfShowLdapLoginInJsClient(), 0);
 
 	loginManager.login(spec);
 	assert.strictEqual(factored.getNoOfShowLdapLoginInJsClient(), 1);
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 2);
 });
 
 QUnit.test("testCloseHolderIsCalledOnShowLdap", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
 		type: "ldap",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId"
 	});
-	var factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
 	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 1);
 });
 
 function assertLogoutPerformed(test, assert) {
-	var factoredView = test.dependencies.loginManagerViewFactory.getFactored(0);
-	var stateSetInView = factoredView.getState();
+	let factoredView = test.dependencies.loginManagerViewFactory.getFactored(0);
+	let stateSetInView = factoredView.getState();
 	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
 
 	assert.strictEqual(test.afterLogoutMethodWasCalled(), true);
 
-	var authTokenHolder = test.dependencies.authTokenHolder;
+	let authTokenHolder = test.dependencies.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getToken(0), "");
 }
 
 QUnit.test("testErrorRestartedServerOnLogoutResultsInLogout", function(assert) {
-	var loginManager = this.loginManager;
-	var errorObject = {
+	let loginManager = this.loginManager;
+	let errorObject = {
 		status: 404,
 		spec: {
 			requestMethod: "DELETE"
@@ -648,7 +648,7 @@ QUnit.test("testErrorRestartedServerOnLogoutResultsInLogout", function(assert) {
 });
 
 QUnit.test("testTimeoutMessage", function(assert) {
-	var loginManager = this.loginManager;
+	let loginManager = this.loginManager;
 	loginManager.appTokenTimeoutCallback();
 	assert.strictEqual(this.getErrorMessage(), "AppToken login timedout!");
 });

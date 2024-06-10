@@ -21,10 +21,10 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.ldapLoginSpy = function(dependencies, spec) {
 
-		var view = CORA.gui.createSpanWithClassName("ldapLoginSpy");
-		function getView() {
+		let view = CORA.gui.createSpanWithClassName("ldapLoginSpy");
+		const getView = function() {
 			return view;
-		}
+		};
 
 		return Object.freeze({
 			"type" : "ldapLoginSpy",

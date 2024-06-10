@@ -20,19 +20,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.appTokenLoginFactory = function(dependencies) {
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function factor(spec) {
-			var appTokenLoginDependencies = {
+		const factor = function(spec) {
+			let appTokenLoginDependencies = {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory
 			};
 			return CORA.appTokenLogin(appTokenLoginDependencies, spec);
-		}
+		};
 
 		return Object.freeze({
-			"type" : "appTokenLoginFactory",
+			type : "appTokenLoginFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

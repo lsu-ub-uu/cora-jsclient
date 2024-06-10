@@ -19,25 +19,26 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.webRedirectLoginFactorySpy = function(spec) {
-		var dummyDependencies = {};
-		var listOfFactored = [];
-		var listOfSpec = [];
-		function factor(factorSpec) {
+		let dummyDependencies = {};
+		let listOfFactored = [];
+		let listOfSpec = [];
+		const factor = function(factorSpec) {
 			listOfSpec.push(factorSpec);
-			var factored = CORATEST.webRedirectLoginSpy(dummyDependencies, factorSpec);
+			let factored = CORATEST.webRedirectLoginSpy(dummyDependencies, factorSpec);
 			listOfFactored.push(factored);
 			return factored;
-		}
+		};
 
-		function getFactored(number) {
+		const getFactored = function(number) {
 			return listOfFactored[number];
-		}
-		function getSpec(number) {
+		};
+		
+		const getSpec = function(number) {
 			return listOfSpec[number];
-		}
+		};
 
-		var out = Object.freeze({
-			"type" : "webRedirectLoginFactorySpy",
+		let out = Object.freeze({
+			type : "webRedirectLoginFactorySpy",
 			factor : factor,
 			getFactored : getFactored,
 			getSpec : getSpec

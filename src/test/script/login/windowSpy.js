@@ -19,42 +19,48 @@
 var CORATEST = (function(cora) {
 	"use strict";
 	cora.windowSpy = function(dependencies, spec) {
-		var url = "";
-		var name = "";
-		var postedMessages = [];
-		var fakeOpenedWindow = {
+		let url = "";
+		let name = "";
+		let postedMessages = [];
+		let fakeOpenedWindow = {
 			fake : "fakeWindow"
 		};
-		function getDependencies() {
+		
+		const getDependencies = function() {
 			return dependencies;
-		}
-		function getSpec() {
+		};
+		
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function open(urlIn, nameIn) {
+		const open = function(urlIn, nameIn) {
 			url = urlIn;
 			name = nameIn;
 			return fakeOpenedWindow;
-		}
-		function getOpenedUrl() {
+		};
+		
+		const getOpenedUrl = function() {
 			return url;
-		}
-		function getOpenedName() {
+		};
+		
+		const getOpenedName = function() {
 			return name;
-		}
+		};
 
-		function postMessage(data, origin) {
+		const postMessage = function(data, origin) {
 			postedMessages.push({
 				data : data,
 				origin : origin
 			});
-		}
-		function getPostedMessages(no) {
+		};
+		
+		const getPostedMessages = function(no) {
 			return postedMessages[no];
-		}
-		var out = Object.freeze({
-			"type" : "windowSpy",
+		};
+		
+		let out = Object.freeze({
+			type : "windowSpy",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			open : open,

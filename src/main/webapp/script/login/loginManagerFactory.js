@@ -20,29 +20,29 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.loginManagerFactory = function(dependencies) {
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function factor(loginManagerSpec) {
-			var loginManagerViewFactoryDependencies = {
-				"textProvider" : dependencies.textProvider
+		const factor = function(loginManagerSpec) {
+			let loginManagerViewFactoryDependencies = {
+				textProvider : dependencies.textProvider
 			};
-			var loginManagerDependencies = {
-				"textProvider" : dependencies.textProvider,
-				"loginManagerViewFactory" : CORA
+			let loginManagerDependencies = {
+				textProvider : dependencies.textProvider,
+				loginManagerViewFactory : CORA
 						.loginManagerViewFactory(loginManagerViewFactoryDependencies),
-				"appTokenLoginFactory" : dependencies.appTokenLoginFactory,
-				"webRedirectLoginFactory" : dependencies.webRedirectLoginFactory,
-				"ldapLoginJsClientIntegratorFactory" : dependencies.ldapLoginJsClientIntegratorFactory,
-				"authTokenHolder" : dependencies.authTokenHolder,
-				"ajaxCallFactory" : dependencies.ajaxCallFactory
+				appTokenLoginFactory : dependencies.appTokenLoginFactory,
+				webRedirectLoginFactory : dependencies.webRedirectLoginFactory,
+				ldapLoginJsClientIntegratorFactory : dependencies.ldapLoginJsClientIntegratorFactory,
+				authTokenHolder : dependencies.authTokenHolder,
+				ajaxCallFactory : dependencies.ajaxCallFactory
 			};
 			return CORA.loginManager(loginManagerDependencies, loginManagerSpec);
-		}
+		};
 
 		return Object.freeze({
-			"type" : "loginManagerFactory",
+			type : "loginManagerFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

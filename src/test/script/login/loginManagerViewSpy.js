@@ -19,53 +19,56 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.loginManagerViewSpy = function(dependencies, spec) {
-		var userIds = [];
-		var loginOptions;
-		var logoutOptions;
-		var state;
-		var noOfCallsToCloseHolder = 0;
-		var html = CORA.gui.createSpanWithClassName("loginManagerViewSpy");
-		function getHtml() {
+		let userIds = [];
+		let loginOptions;
+		let logoutOptions;
+		let state;
+		let noOfCallsToCloseHolder = 0;
+		let html = CORA.gui.createSpanWithClassName("loginManagerViewSpy");
+		const getHtml = function() {
 			return html;
-		}
+		};
 
-		function setUserId(userIdIn) {
+		const setUserId = function(userIdIn) {
 			userIds.push(userIdIn);
-		}
+		};
 
-		function getUserId(number) {
+		const getUserId = function(number) {
 			return userIds[number];
-		}
+		};
 
-		function getLoginOptions() {
+		const getLoginOptions = function() {
 			return loginOptions;
 		}
-		function setLoginOptions(loginOptionsIn) {
+		const setLoginOptions = function(loginOptionsIn) {
 			loginOptions = loginOptionsIn;
-		}
+		};
 
-		function setState(stateIn) {
+		const setState = function(stateIn) {
 			state = stateIn;
-		}
+		};
 
-		function closeHolder() {
+		const closeHolder = function() {
 			noOfCallsToCloseHolder++;
-		}
+		};
 
-		function getNoOfCallsToCloseHolder() {
+		const getNoOfCallsToCloseHolder = function() {
 			return noOfCallsToCloseHolder;
-		}
-		function getDependencies() {
+		};
+		
+		const getDependencies = function() {
 			return dependencies;
-		}
-		function getSpec() {
+		};
+		
+		const getSpec = function() {
 			return spec;
-		}
-		function getState() {
+		};
+		
+		const getState = function() {
 			return state;
-		}
+		};
 
-		var out = Object.freeze({
+		let out = Object.freeze({
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getHtml : getHtml,

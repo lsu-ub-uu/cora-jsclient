@@ -19,45 +19,45 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ldapLoginJsClientIntegrator = function(dependencies, spec) {
-		var managedGuiItem;
-		var ldapLogin;
+		let managedGuiItem;
+		let ldapLogin;
 
-		function start() {
+		const start = function() {
 			managedGuiItem = createManagedGuiItem();
 			showLdapLoginInJsClient();
 
 			ldapLogin = createLdapLogin();
 			managedGuiItem.addWorkPresentation(ldapLogin.getView());
-		}
+		};
 
-		function createLdapLogin() {
+		const createLdapLogin = function() {
 			return dependencies.ldapLoginFactory.factor(spec);
-		}
+		};
 
-		function createManagedGuiItem() {
-			var managedGuiItemSpec = {
-				"activateMethod" : spec.jsClient.showView,
-				"removeMethod" : spec.jsClient.viewRemoved
+		const createManagedGuiItem = function() {
+			let managedGuiItemSpec = {
+				activateMethod : spec.jsClient.showView,
+				removeMethod : spec.jsClient.viewRemoved
 			};
 			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
-		}
+		};
 
-		function showLdapLoginInJsClient() {
+		const showLdapLoginInJsClient = function() {
 			spec.jsClient.showView(managedGuiItem);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		start();
 		return Object.freeze({
-			"type" : "ldapLoginJsClientIntegrator",
-			"showLdapLoginInJsClient" : showLdapLoginInJsClient,
+			type : "ldapLoginJsClientIntegrator",
+			showLdapLoginInJsClient : showLdapLoginInJsClient,
 			getDependencies : getDependencies,
 			getSpec : getSpec
 		});

@@ -20,19 +20,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.loginManagerViewFactory = function(dependencies) {
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function factor(spec) {
-			var loginManagerViewDependencies = {
-				"textProvider" : dependencies.textProvider
+		const factor = function(spec) {
+			let loginManagerViewDependencies = {
+				textProvider : dependencies.textProvider
 			};
 			return CORA.loginManagerView(loginManagerViewDependencies, spec);
-		}
+		};
 
 		return Object.freeze({
-			"type" : "loginManagerViewFactory",
+			type : "loginManagerViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

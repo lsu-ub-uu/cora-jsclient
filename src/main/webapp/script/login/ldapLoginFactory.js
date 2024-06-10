@@ -20,27 +20,27 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.ldapLoginFactory = function(dependencies) {
 
-		function factor(spec) {
-			var viewDep = {
-				"textProvider" : dependencies.providers.textProvider
+		const factor = function(spec) {
+			let viewDep = {
+				textProvider : dependencies.providers.textProvider
 			};
 
-			var dep = {
-				"ldapLoginViewFactory" : CORA.ldapLoginViewFactory(viewDep),
-				"managedGuiItemFactory" : dependencies.globalFactories.managedGuiItemFactory,
-				"recordGuiFactory" : dependencies.globalFactories.recordGuiFactory,
-				"ajaxCallFactory" : dependencies.globalFactories.ajaxCallFactory,
+			let dep = {
+				ldapLoginViewFactory : CORA.ldapLoginViewFactory(viewDep),
+				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
+				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
+				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 //				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
 			return CORA.ldapLogin(dep, spec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "ldapLoginFactory",
+			type : "ldapLoginFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

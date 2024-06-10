@@ -21,23 +21,24 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.ldapLoginViewSpy = function() {
 
-		var view = CORA.gui.createSpanWithClassName("spyView");
-		var presentationsAddedToLoginForm = [];
+		let view = CORA.gui.createSpanWithClassName("spyView");
+		let presentationsAddedToLoginForm = [];
 		
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function addPresentationToLoginFormHolder(presentationToAdd) {
+		const addPresentationToLoginFormHolder = function(presentationToAdd) {
 			presentationsAddedToLoginForm.push(presentationToAdd);
-		}
-		function getPresentationsAddedToLoginForm(number) {
+		};
+		
+		const getPresentationsAddedToLoginForm = function(number) {
 			return presentationsAddedToLoginForm[number];
-		}
+		};
 
 		
 		return Object.freeze({
-			"type" : "ldapLoginViewSpy",
+			type : "ldapLoginViewSpy",
 			getView : getView,
 			addPresentationToLoginFormHolder : addPresentationToLoginFormHolder,
 			getPresentationsAddedToLoginForm : getPresentationsAddedToLoginForm,

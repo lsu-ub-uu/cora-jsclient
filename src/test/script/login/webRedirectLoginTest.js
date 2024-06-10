@@ -24,11 +24,11 @@ QUnit.module("login/webRedirectLoginTest.js", {
 		this.windowSpy = CORATEST.windowSpy();
 
 		this.dependencies = {
-			"window" : this.windowSpy
+			window : this.windowSpy
 		};
 
 		this.spec = {
-			"url" : "http://www.organisation.org/login/"
+			url : "http://www.organisation.org/login/"
 		};
 
 		this.webRedirectLogin = CORA.webRedirectLogin(this.dependencies, this.spec);

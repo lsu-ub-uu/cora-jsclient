@@ -24,33 +24,33 @@ QUnit.module("login/appTokenLoginTest.js", {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 
 		this.dependencies = {
-			"ajaxCallFactory" : this.ajaxCallFactorySpy
+			ajaxCallFactory : this.ajaxCallFactorySpy
 		};
 
-		var authInfo = {};
+		let authInfo = {};
 		this.getAuthInfo = function() {
 			return authInfo;
 		};
-		var errorInfo = {};
+		let errorInfo = {};
 		this.getErrorInfo = function() {
 			return errorInfo;
 		};
-		var timeoutInfo = {};
+		let timeoutInfo = {};
 		this.getTimeoutInfo = function() {
 			return timeoutInfo;
 		};
 
 		this.spec = {
-			"requestMethod" : "POST",
-			"url" : "http://localhost:8080/login/rest/apptoken/",
-			"accept" : "",
-			"authInfoCallback" : function(authInfoIn) {
+			requestMethod : "POST",
+			url : "http://localhost:8080/login/rest/apptoken/",
+			accept : "",
+			authInfoCallback : function(authInfoIn) {
 				authInfo = authInfoIn;
 			},
-			"errorCallback" : function(error) {
+			errorCallback : function(error) {
 				errorInfo = error;
 			},
-			"timeoutCallback" : function(timeout) {
+			timeoutCallback : function(timeout) {
 				timeoutInfo = timeout;
 			}
 		};
@@ -58,7 +58,7 @@ QUnit.module("login/appTokenLoginTest.js", {
 		this.appTokenLogin = CORA.appTokenLogin(this.dependencies, this.spec);
 
 		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
-			var ajaxCallSpec = ajaxCallSpy.getSpec();
+			let ajaxCallSpec = ajaxCallSpy.getSpec();
 			assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 					+ "rest/apptoken/someUserId");
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
@@ -87,22 +87,22 @@ QUnit.test("getSpec", function(assert) {
 });
 
 QUnit.test("testUpload", function(assert) {
-	var appTokenLogin = this.appTokenLogin;
+	let appTokenLogin = this.appTokenLogin;
 
 	appTokenLogin.login("someUserId", "someAppToken");
 
-	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
+	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
 	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
 });
 
 QUnit.test("testGetAuthTokenForAppToken", function(assert) {
-	var appTokenLogin = this.appTokenLogin;
+	let appTokenLogin = this.appTokenLogin;
 
 	appTokenLogin.login("someUserId", "someAppToken");
 
-	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	var loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-	var tokenAnswer = {
+	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
+	let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
+	let tokenAnswer = {
 		"data" : {
 			"children" : [ {
 				"name" : "id",
@@ -121,12 +121,12 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 			}
 		}
 	};
-	var answer = {
-		"status" : 201,
-		"responseText" : JSON.stringify(tokenAnswer)
+	let answer = {
+		status : 201,
+		responseText : JSON.stringify(tokenAnswer)
 	};
 	loadMethod(answer);
-	var authInfo = this.getAuthInfo();
+	let authInfo = this.getAuthInfo();
 	assert.strictEqual(authInfo.userId, "someUserId");
 	assert.strictEqual(authInfo.token, "someAuthToken");
 	assert.strictEqual(authInfo.validForNoSeconds, "278");
@@ -134,33 +134,33 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 });
 
 QUnit.test("testGetError", function(assert) {
-	var appTokenLogin = this.appTokenLogin;
+	let appTokenLogin = this.appTokenLogin;
 	appTokenLogin.login("someUserId", "someAppToken");
-	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	var errorMethod = ajaxCallSpy0.getSpec().errorMethod;
+	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
+	let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
 
-	var answer = {
-		"status" : 201,
-		"responseText" : "error"
+	let answer = {
+		status : 201,
+		responseText : "error"
 	};
 	errorMethod(answer);
-	var errorInfo = this.getErrorInfo();
+	let errorInfo = this.getErrorInfo();
 
 	assert.strictEqual(errorInfo, answer);
 });
 
 QUnit.test("testGetTimeOut", function(assert) {
-	var appTokenLogin = this.appTokenLogin;
+	let appTokenLogin = this.appTokenLogin;
 	appTokenLogin.login("someUserId", "someAppToken");
-	var ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	var timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
+	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
+	let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
 
-	var answer = {
-		"status" : 201,
-		"responseText" : "timeout"
+	let answer = {
+		status : 201,
+		responseText : "timeout"
 	};
 	timeoutMethod(answer);
-	var timeoutInfo = this.getTimeoutInfo();
+	let timeoutInfo = this.getTimeoutInfo();
 
 	assert.strictEqual(timeoutInfo, answer);
 });

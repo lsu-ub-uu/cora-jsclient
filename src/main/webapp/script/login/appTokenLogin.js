@@ -19,62 +19,62 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.appTokenLogin = function(dependencies, spec) {
-		var userId;
+		let userId;
 
-		function login(userIdIn, appToken) {
+		const login = function(userIdIn, appToken) {
 			userId = userIdIn;
-			var callSpec = createCallSpec(appToken);
+			let callSpec = createCallSpec(appToken);
 			dependencies.ajaxCallFactory.factor(callSpec);
-		}
+		};
 
-		function createCallSpec(appToken) {
+		const createCallSpec = function(appToken) {
 			return {
-				"requestMethod" : spec.requestMethod,
-				"url" : spec.url + userId,
-				"accept" : spec.accept,
-				"loadMethod" : handleResponse,
-				"errorMethod" : errorMethod,
-				"timeoutMethod" : timeoutMethod,
-				"data" : appToken,
-				"timeoutInMS" : 15000
+				requestMethod : spec.requestMethod,
+				url : spec.url + userId,
+				accept : spec.accept,
+				loadMethod : handleResponse,
+				errorMethod : errorMethod,
+				timeoutMethod : timeoutMethod,
+				data : appToken,
+				timeoutInMS : 15000
 			};
-		}
+		};
 
-		function errorMethod(answer) {
+		const errorMethod = function(answer) {
 			spec.errorCallback(answer);
-		}
+		};
 
-		function timeoutMethod(answer) {
+		const timeoutMethod = function(answer) {
 			spec.timeoutCallback(answer);
-		}
+		};
 
-		function handleResponse(answer) {
-			var everything = JSON.parse(answer.responseText);
-			var data = everything.data;
-			var cData = CORA.coraData(data);
-			var token = cData.getFirstAtomicValueByNameInData("id");
-			var validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
-			var authInfo = {
-				"userId" : userId,
-				"token" : token,
-				"validForNoSeconds" : validForNoSeconds,
-				"actionLinks" : everything.actionLinks
+		const handleResponse = function(answer) {
+			let everything = JSON.parse(answer.responseText);
+			let data = everything.data;
+			let cData = CORA.coraData(data);
+			let token = cData.getFirstAtomicValueByNameInData("id");
+			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
+			let authInfo = {
+				userId : userId,
+				token : token,
+				validForNoSeconds : validForNoSeconds,
+				actionLinks : everything.actionLinks
 			};
 			spec.authInfoCallback(authInfo);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			// needed for tests
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			// needed for tests
 			return spec;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "appTokenLogin",
+			type : "appTokenLogin",
 			login : login,
 			handleResponse : handleResponse,
 			getDependencies : getDependencies,

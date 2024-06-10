@@ -20,19 +20,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.webRedirectLoginFactory = function(dependencies) {
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function factor(loginManagerSpec) {
-			var loginManagerDependencies = {
-					"window":window
+		const factor = function(loginManagerSpec) {
+			let loginManagerDependencies = {
+					window : window
 			};
 			return CORA.webRedirectLogin(loginManagerDependencies, loginManagerSpec);
-		}
+		};
 
 		return Object.freeze({
-			"type" : "webRedirectLoginFactory",
+			type : "webRedirectLoginFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

@@ -21,21 +21,21 @@
 QUnit.module("login/ldapLoginFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
-			"textProvider" : CORATEST.textProviderSpy(),
+			textProvider : CORATEST.textProviderSpy(),
 		};
 		this.globalFactories = {
-			"ajaxCallFactory" : CORATEST.standardFactorySpy("ajaxCallSpy"),
-			"recordGuiFactory" : CORATEST.standardFactorySpy("recordGuiSpy"),
-			"managedGuiItemFactory" : CORATEST.standardFactorySpy("managedGuiItemSpy")
+			ajaxCallFactory : CORATEST.standardFactorySpy("ajaxCallSpy"),
+			recordGuiFactory : CORATEST.standardFactorySpy("recordGuiSpy"),
+			managedGuiItemFactory : CORATEST.standardFactorySpy("managedGuiItemSpy")
 		};
 		this.dependencies = {
-			"providers" : this.providers,
-			"globalFactories" : this.globalFactories
+			providers : this.providers,
+			globalFactories : this.globalFactories
 
 		};
 		this.spec = {
-			"metadataId" : "someMetadataGroup",
-			"presentationId" : "somePresentationGroup",
+			metadataId : "someMetadataGroup",
+			presentationId : "somePresentationGroup",
 		};
 	},
 	afterEach : function() {
@@ -43,18 +43,18 @@ QUnit.module("login/ldapLoginFactoryTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
+	let ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
 	assert.strictEqual(ldapLoginFactory.type, "ldapLoginFactory");
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
+	let ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
 	assert.strictEqual(ldapLoginFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
-	var ldapLogin = ldapLoginFactory.factor(this.spec);
+	let ldapLoginFactory = CORA.ldapLoginFactory(this.dependencies);
+	let ldapLogin = ldapLoginFactory.factor(this.spec);
 	assert.strictEqual(ldapLogin.type, "ldapLogin");
 });
 

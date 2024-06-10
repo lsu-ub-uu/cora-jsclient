@@ -20,26 +20,32 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.authTokenHolderSpy = function() {
-		var currentAuthTokenExists = true;
-		var tokens = [];
-		function getCurrentAuthToken() {
+		let currentAuthTokenExists = true;
+		let tokens = [];
+		
+		const getCurrentAuthToken = function() {
 			// for now hard coded to fitnesseAdminToken
 			return "fitnesseAdminToken";
-		}
-		function hasCurrentAuthToken() {
+		};
+		
+		const hasCurrentAuthToken = function() {
 			return currentAuthTokenExists;
-		}
-		function setCurrentAuthToken(authTokenIn) {
+		};
+		
+		const setCurrentAuthToken = function(authTokenIn) {
 			tokens.push(authTokenIn);
-		}
-		function setCurrentAuthTokenExists(exists) {
+		};
+		
+		const setCurrentAuthTokenExists = function(exists) {
 			currentAuthTokenExists = exists;
-		}
-		function getToken(number) {
+		};
+		
+		const getToken = function(number) {
 			return tokens[number];
-		}
-		var out = Object.freeze({
-			"type" : "authTokenHolderSpy",
+		};
+		
+		let out = Object.freeze({
+			type : "authTokenHolderSpy",
 			getCurrentAuthToken : getCurrentAuthToken,
 			hasCurrentAuthToken : hasCurrentAuthToken,
 			setCurrentAuthTokenExists : setCurrentAuthTokenExists,

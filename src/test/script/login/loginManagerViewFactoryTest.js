@@ -21,7 +21,7 @@
 QUnit.module("login/loginManagerViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
-			"textProvider" : CORATEST.textProviderSpy()
+			textProvider : CORATEST.textProviderSpy()
 		};
 		this.loginManagerViewFactory = CORA.loginManagerViewFactory(this.dependencies);
 	},
@@ -39,17 +39,17 @@ QUnit.test("getDependencies", function(assert) {
 });
 
 QUnit.test("factor", function(assert) {
-	var spec = {
-		"loginOptions" : [ {
-			"text" : "some login text",
-			"call" : function() {
+	let spec = {
+		loginOptions : [ {
+			text : "some login text",
+			call : function() {
 			}
 		} ]
 	};
-	var loginManagerView = this.loginManagerViewFactory.factor(spec);
+	let loginManagerView = this.loginManagerViewFactory.factor(spec);
 	assert.strictEqual(loginManagerView.type, "loginManagerView");
 
-	var loginManagerViewDependencies = loginManagerView.getDependencies();
+	let loginManagerViewDependencies = loginManagerView.getDependencies();
 	assert.strictEqual(loginManagerViewDependencies.textProvider, this.dependencies.textProvider);
 	assert.strictEqual(loginManagerView.getSpec(), spec);
 

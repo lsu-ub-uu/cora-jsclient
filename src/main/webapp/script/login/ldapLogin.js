@@ -19,42 +19,42 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ldapLogin = function(dependencies, spec) {
-		var view;
+		let view;
 
-		function start() {
+		const start = function() {
 			view = createView();
-			var recordGui = createRecordGui();
-			var presentationView = recordGui.getPresentationHolder(spec.presentationId,
+			let recordGui = createRecordGui();
+			let presentationView = recordGui.getPresentationHolder(spec.presentationId,
 					spec.metadataId).getView();
 			view.addPresentationToLoginFormHolder(presentationView);
 			recordGui.initMetadataControllerStartingGui();
-		}
+		};
 
-		function createView() {
+		const createView = function() {
 			return dependencies.ldapLoginViewFactory.factor();
-		}
+		};
 
-		function createRecordGui() {
-			var recordGuiSpec = {
-				"metadataId" : spec.metadataId
+		const createRecordGui = function() {
+			let recordGuiSpec = {
+				metadataId : spec.metadataId
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
 		}
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view.getView();
-		}
+		};
 
 		start();
 		return Object.freeze({
-			"type" : "ldapLogin",
+			type : "ldapLogin",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,

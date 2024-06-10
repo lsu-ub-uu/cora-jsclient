@@ -19,23 +19,23 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.authTokenHolder = function() {
-		var out;
-		var authToken = "";
+		let out;
+		let authToken = "";
 
-		function getCurrentAuthToken() {
+		const getCurrentAuthToken = function() {
 			return authToken;
-		}
+		};
 
-		function hasCurrentAuthToken() {
+		const hasCurrentAuthToken = function() {
 			return authToken !== "";
-		}
+		};
 
-		function setCurrentAuthToken(token) {
+		const setCurrentAuthToken = function(token) {
 			authToken = token;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "authTokenHolder",
+			type : "authTokenHolder",
 			getCurrentAuthToken : getCurrentAuthToken,
 			hasCurrentAuthToken : hasCurrentAuthToken,
 			setCurrentAuthToken : setCurrentAuthToken

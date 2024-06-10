@@ -19,22 +19,22 @@
 var CORATEST = (function(cora) {
 	"use strict";
 	cora.webRedirectLoginSpy = function(dependencies, spec) {
-		var fakeOpenedWindow = CORATEST.windowSpy();
-//		var fakeOpenedWindow = {
-//			fake : "fakeOpenedWindow"
-//		};
-		function getDependencies() {
-			return dependencies;
-		}
-		function getSpec() {
-			return spec;
-		}
+		let fakeOpenedWindow = CORATEST.windowSpy();
 
-		function getOpenedWindow() {
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			return spec;
+		};
+
+		const getOpenedWindow = function() {
 			return fakeOpenedWindow;
-		}
-		var out = Object.freeze({
-			"type" : "webRedirectLoginSpy",
+		};
+
+		let out = Object.freeze({
+			type : "webRedirectLoginSpy",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getOpenedWindow : getOpenedWindow,

@@ -21,8 +21,8 @@
 QUnit.module("login/ldapLoginTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
-		var textProvider = CORATEST.textProviderStub();
-		var dependencies = {
+		let textProvider = CORATEST.textProviderStub();
+		let dependencies = {
 			"ldapLoginViewFactory" : CORATEST.standardFactorySpy("ldapLoginViewSpy"),
 				
 			"ajaxCallFactory" : this.ajaxCallFactorySpy,
@@ -31,14 +31,14 @@ QUnit.module("login/ldapLoginTest.js", {
 		};
 		this.dependencies = dependencies;
 
-		var jsClient = {
+		let jsClient = {
 			showView : function() {
 			},
 			addGlobalView : function() {
 			}
 		}
 
-		var spec = {
+		let spec = {
 				"metadataId" : "someMetadataGroup",
 				"presentationId" :"somePGroup"
 		};
@@ -63,34 +63,29 @@ QUnit.test("testGetSpec", function(assert) {
 });
 
 QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
-	var factoredView = this.dependencies.ldapLoginViewFactory.getFactored(0);
+	let factoredView = this.dependencies.ldapLoginViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.type, "ldapLoginViewSpy");
 });
 
-//QUnit.test("testInitViewSpec", function(assert) {
-//	var factoredSpec = this.dependencies.ldapLoginViewFactory.getSpec(0);
-//	assert.strictEqual(factoredSpec.textProvider, this.dependencies.textProvider);
-//});
-
 QUnit.test("testGetView", function(assert) {
-	var factoredView = this.dependencies.ldapLoginViewFactory.getFactored(0);
+	let factoredView = this.dependencies.ldapLoginViewFactory.getFactored(0);
 	assert.strictEqual(this.ldapLogin.getView(), factoredView.getView());
 });
 
 
 QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
-	var factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "someMetadataGroup");
 });
 
 QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getPresentationIdUsed(0), "somePGroup");
 	assert.strictEqual(factoredGui.getMetadataIdsUsedInData(0), "someMetadataGroup");
 });
 
 QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(this.dependencies.ldapLoginViewFactory.getFactored(0)
 			.getPresentationsAddedToLoginForm(0), factoredGui.getReturnedPresentations(0)
 			.getView());
@@ -98,6 +93,6 @@ QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
 
 
 QUnit.test("testInitRecordGuiStartedGui", function(assert) {
-	var factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
+	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getInitCalled(), 1);
 });

@@ -21,20 +21,20 @@
 QUnit.module("login/loginManagerFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
-			"textProvider" : CORATEST.textProviderSpy(),
-			"appTokenLoginFactory" : {
-				"type" : "fakeAppTokenLoginFactory"
+			textProvider : CORATEST.textProviderSpy(),
+			appTokenLoginFactory : {
+				type : "fakeAppTokenLoginFactory"
 			},
-			"webRedirectLoginFactory" : {
-				"type" : "fakeWebRedirectLoginFactory"
+			webRedirectLoginFactory : {
+				type : "fakeWebRedirectLoginFactory"
 			},
-			"ldapLoginJsClientIntegratorFactory" : {
-				"type" : "fakeLdapLoginJsClientIntegratorFactory"
+			ldapLoginJsClientIntegratorFactory : {
+				type : "fakeLdapLoginJsClientIntegratorFactory"
 			},
-			"authTokenHolder" : {
-				"type" : "fakeAuthTokenHolder"
+			authTokenHolder : {
+				type : "fakeAuthTokenHolder"
 			},
-			"ajaxCallFactory" : {
+			ajaxCallFactory : {
 				type : "fakeAjaxCallFactory",
 				factor : function() {
 				}
@@ -57,20 +57,20 @@ QUnit.test("getDependencies", function(assert) {
 
 QUnit.test("factor",
 		function(assert) {
-			var testCallHasBeenCalled = false;
+			let testCallHasBeenCalled = false;
 			function testCall() {
 				testCallHasBeenCalled = true;
 			}
-			var loginManagerSpec = {
-				"afterLoginMethod" : testCall,
-				"appTokenBaseUrl" : "someAppTokenBaseUrl/"
+			let loginManagerSpec = {
+				afterLoginMethod : testCall,
+				appTokenBaseUrl : "someAppTokenBaseUrl/"
 			// "afterLogoutMethod":yy,
 			// "afterUserInactiveMethod":zz
 			};
-			var loginManager = this.loginManagerFactory.factor(loginManagerSpec);
+			let loginManager = this.loginManagerFactory.factor(loginManagerSpec);
 			assert.strictEqual(loginManager.type, "loginManager");
 
-			var loginManagerDependencies = loginManager.getDependencies();
+			let loginManagerDependencies = loginManager.getDependencies();
 			assert.strictEqual(loginManagerDependencies.textProvider,
 					this.dependencies.textProvider);
 			assert.strictEqual(loginManagerDependencies.loginManagerViewFactory.type,
@@ -86,7 +86,7 @@ QUnit.test("factor",
 			assert.strictEqual(loginManagerDependencies.ajaxCallFactory,
 					this.dependencies.ajaxCallFactory);
 
-			var loginManagerSpec = loginManager.getSpec();
+			loginManagerSpec = loginManager.getSpec();
 			assert.strictEqual(loginManagerSpec.afterLoginMethod, testCall);
 			assert.strictEqual(loginManagerSpec.appTokenBaseUrl, "someAppTokenBaseUrl/");
 		});

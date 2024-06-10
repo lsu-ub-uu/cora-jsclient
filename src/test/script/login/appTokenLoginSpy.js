@@ -19,37 +19,42 @@
 var CORATEST = (function(cora) {
 	"use strict";
 	cora.appTokenLoginSpy = function(dependencies, spec) {
-		var userId;
-		var userIds = [];
-		var appTokens = [];
-		function login(userIdIn, appToken) {
+		let userId;
+		let userIds = [];
+		let appTokens = [];
+		const login = function(userIdIn, appToken) {
 			userIds.push(userIdIn);
 			appTokens.push(appToken);
-			var authInfo = {
+			let authInfo = {
 					"userId" : userIdIn,
 					"token" : "fake authToken from appTokenLoginSpy",
 					"validForNoSeconds" : "131"
 				};
 			spec.authInfoCallback(authInfo);
-		}
+		};
 
-		function handleResponse(answer) {
-		}
-		function getDependencies() {
+		const handleResponse = function(answer) {
+			//nothing
+		};
+		
+		const getDependencies = function() {
 			return dependencies;
-		}
-		function getSpec() {
+		};
+		
+		const getSpec = function() {
 			return spec;
-		}
-		function getUserId(number) {
+		};
+		
+		const getUserId = function(number) {
 			return userIds[number];
-		}
-		function getAppToken(number) {
+		};
+		
+		const getAppToken = function(number) {
 			return appTokens[number];
-		}
+		};
 
-		var out = Object.freeze({
-			"type" : "appTokenLoginSpy",
+		let out = Object.freeze({
+			type : "appTokenLoginSpy",
 			login : login,
 			handleResponse : handleResponse,
 			getDependencies : getDependencies,

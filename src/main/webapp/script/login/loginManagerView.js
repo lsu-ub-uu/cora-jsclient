@@ -19,15 +19,15 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManagerView = function(dependencies, spec) {
-		var out;
-		var view;
-		var menu;
-		var baseClassName = "loginManagerView";
-		var holder;
-		var loginOptions;
+		let out;
+		let view;
+		let menu;
+		let baseClassName = "loginManagerView";
+		let holder;
+		let loginOptions;
 
-		function start() {
-			var holderSpec = {
+		const start = function() {
+			let holderSpec = {
 				"className" : baseClassName,
 				"buttonText" : dependencies.textProvider.getTranslation("theClient_loginMenuText"),
 				"appendTo" : document.body
@@ -35,32 +35,32 @@ var CORA = (function(cora) {
 			holder = CORA.holder(holderSpec);
 			view = holder.getButton();
 			menu = holder.getView();
-		}
+		};
 
-		function getHtml() {
+		const getHtml = function() {
 			return view;
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
-		function getMenu() {
+		const getMenu = function() {
 			return menu;
-		}
+		};
 
-		function setLoginOptions(loginOptionsIn) {
+		const setLoginOptions = function(loginOptionsIn) {
 			loginOptions = loginOptionsIn;
 			menu.innerHTML = "";
 			loginOptions.forEach(addMenuElement);
-		}
+		};
 
-		function addMenuElement(loginOption) {
-			var buttonSpec = {
+		const addMenuElement = function(loginOption) {
+			let buttonSpec = {
 				"className" : "menuOption",
 				"text" : loginOption.text,
 				action : {
@@ -69,24 +69,24 @@ var CORA = (function(cora) {
 					}
 				}
 			};
-			var optionButton = CORA.gui.button(buttonSpec);
+			let optionButton = CORA.gui.button(buttonSpec);
 			menu.appendChild(optionButton);
-		}
+		};
 
-		function setUserId(userIdIn) {
+		const setUserId = function(userIdIn) {
 			view.textContent = userIdIn;
-		}
+		};
 
-		function closeHolder() {
+		const closeHolder = function() {
 			holder.closeHolder();
 
-		}
+		};
 
-		function setState(stateIn) {
+		const setState = function(stateIn) {
 			holder.closeHolder();
 			if (CORA.loginManager.LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
-				var logoutOptions = [ {
+				let logoutOptions = [ {
 					"text" : dependencies.textProvider.getTranslation("theClient_logoutMenuText"),
 					"call" : spec.logoutMethod
 				} ];
@@ -96,17 +96,17 @@ var CORA = (function(cora) {
 				view.textContent = dependencies.textProvider
 						.getTranslation("theClient_loginMenuText");
 			}
-		}
+		};
 
-		function addLogoutMenuElement(logoutOption) {
-			var buttonSpec = {
+		const addLogoutMenuElement = function(logoutOption) {
+			let buttonSpec = {
 				"className" : "menuOption",
 				"text" : logoutOption.text,
 				action : {
 					method : logoutOption.call
 				}
 			};
-			var optionButton = CORA.gui.button(buttonSpec);
+			let optionButton = CORA.gui.button(buttonSpec);
 			menu.appendChild(optionButton);
 		}
 

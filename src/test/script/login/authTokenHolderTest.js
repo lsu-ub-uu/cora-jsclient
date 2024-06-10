@@ -27,28 +27,28 @@ QUnit.module("login/authTokenHolderTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var authTokenHolder = this.authTokenHolder;
+	let authTokenHolder = this.authTokenHolder;
 	assert.strictEqual(authTokenHolder.type, "authTokenHolder");
 });
 
 QUnit.test("testGetCurrentAuthToken", function(assert) {
-	var authTokenHolder = this.authTokenHolder;
+	let authTokenHolder = this.authTokenHolder;
 	assert.strictEqual(authTokenHolder.getCurrentAuthToken(), "");
 });
 
 QUnit.test("testHasCurrentAuthToken", function(assert) {
-	var authTokenHolder = this.authTokenHolder;
+	let authTokenHolder = this.authTokenHolder;
 	assert.notOk(authTokenHolder.hasCurrentAuthToken());
 });
 
 QUnit.test("testSetCurrentAuthToken", function(assert) { 
-	var authTokenHolder = this.authTokenHolder;
+	let authTokenHolder = this.authTokenHolder;
 	authTokenHolder.setCurrentAuthToken("someToken");
 	assert.strictEqual(authTokenHolder.getCurrentAuthToken(), "someToken");
 });
 
 QUnit.test("testSetCurrentAuthTokenResultsInHasTokenTrue", function(assert) {
-	var authTokenHolder = this.authTokenHolder;
+	let authTokenHolder = this.authTokenHolder;
 	authTokenHolder.setCurrentAuthToken("someToken");
 	assert.ok(authTokenHolder.hasCurrentAuthToken());
 });

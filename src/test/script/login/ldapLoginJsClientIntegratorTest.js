@@ -21,15 +21,13 @@
 QUnit.module("login/ldapLoginJsClientIntegratorTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
-			"ldapLoginFactory": CORATEST
-				.standardFactorySpy("ldapLoginSpy"),
-			"managedGuiItemFactory": CORATEST
-				.standardFactorySpy("managedGuiItemSpy")
+			ldapLoginFactory: CORATEST.standardFactorySpy("ldapLoginSpy"),
+			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy")
 		}
 		this.spec = {
-			"metadataId": "someMetadataGroup",
-			"presentationId": "somePresentationGroup",
-			"jsClient": CORATEST.jsClientSpy()
+			metadataId: "someMetadataGroup",
+			presentationId: "somePresentationGroup",
+			jsClient: CORATEST.jsClientSpy()
 		}
 	},
 	afterEach: function() {
@@ -37,7 +35,7 @@ QUnit.module("login/ldapLoginJsClientIntegratorTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
 	assert.strictEqual(jsClientIntegrator.type,
 		"ldapLoginJsClientIntegrator");
@@ -45,30 +43,30 @@ QUnit.test("testInit", function(assert) {
 
 QUnit.test("testGetDependencies",
 	function(assert) {
-		var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+		let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 			this.dependencies, this.spec);
 		assert.strictEqual(jsClientIntegrator.getDependencies(),
 			this.dependencies);
 	});
 
 QUnit.test("testGetSpec", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
 	assert.strictEqual(jsClientIntegrator.getSpec(), this.spec);
 });
 
 QUnit.test("testInitManagedGuiItemCreatedUsingFactory", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(factoredItem.type, "managedGuiItemSpy");
 });
 
 QUnit.test("testInitManagedGuiItemCreatedsSpec", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
-	var factoredItemSpec = this.dependencies.managedGuiItemFactory.getSpec(0);
+	let factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let factoredItemSpec = this.dependencies.managedGuiItemFactory.getSpec(0);
 	assert.strictEqual(factoredItemSpec.activateMethod,
 		this.spec.jsClient.showView);
 	assert.strictEqual(factoredItemSpec.removeMethod,
@@ -76,43 +74,43 @@ QUnit.test("testInitManagedGuiItemCreatedsSpec", function(assert) {
 });
 
 QUnit.test("initTestManagedGuiItemShownInJsClientOnLoad", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var managedGuiItemSpy = this.dependencies.managedGuiItemFactory
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory
 		.getFactored(0);
 	assert.strictEqual(managedGuiItemSpy, this.spec.jsClient
 		.getViewShowingInWorkView(0));
 });
 
 QUnit.test("testLdapLoginCreatedUsingFactory", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var factoredLdapLogin = this.dependencies.ldapLoginFactory
+	let factoredLdapLogin = this.dependencies.ldapLoginFactory
 		.getFactored(0);
 	assert.strictEqual(factoredLdapLogin.type, "ldapLoginSpy");
 });
 
 QUnit.test("testLdapLoginSpec", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var factoredSpec = this.dependencies.ldapLoginFactory.getSpec(0);
+	let factoredSpec = this.dependencies.ldapLoginFactory.getSpec(0);
 	assert.strictEqual(factoredSpec, this.spec);
 });
 
 QUnit.test("testLdapLoginViewAddedToManagedGuiItemsWorkView", function(
 	assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var factoredView = this.dependencies.ldapLoginFactory.getFactored(0)
+	let factoredView = this.dependencies.ldapLoginFactory.getFactored(0)
 		.getView();
-	var factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
+	let factoredItem = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.strictEqual(factoredItem.getAddedWorkPresentation(0), factoredView);
 });
 
 QUnit.test("testShowLdapLoginInJsClient", function(assert) {
-	var jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
+	let jsClientIntegrator = CORA.ldapLoginJsClientIntegrator(
 		this.dependencies, this.spec);
-	var managedGuiItemSpy = this.dependencies.managedGuiItemFactory
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory
 		.getFactored(0);
 	assert.strictEqual(managedGuiItemSpy, this.spec.jsClient
 		.getViewShowingInWorkView(0));

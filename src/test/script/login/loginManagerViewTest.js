@@ -24,7 +24,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 			"textProvider" : CORATEST.textProviderSpy()
 		};
 		
-		var loginMethodCalled = [];
+		let loginMethodCalled = [];
 		function loginMethod(loginOption) {
 			loginMethodCalled.push(loginOption);
 		}
@@ -32,7 +32,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 			return loginMethodCalled[number];
 		}
 		
-		var logoutMethodHasBeenCalled = false;
+		let logoutMethodHasBeenCalled = false;
 		function logoutMethod() {
 			logoutMethodHasBeenCalled = true;
 		}
@@ -40,8 +40,8 @@ QUnit.module("login/loginManagerViewTest.js", {
 			return logoutMethodHasBeenCalled;
 		}
 
-		var appTokenLoginRun = false;
-		var webRedirectLoginRun = false;
+		let appTokenLoginRun = false;
+		let webRedirectLoginRun = false;
 		function testAppTokenLogin() {
 			appTokenLoginRun = true;
 		}
@@ -54,7 +54,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 		this.getWebRedirectLoginRun = function() {
 			return webRedirectLoginRun;
 		}
-		var loginOptions = [ {
+		let loginOptions = [ {
 			"text" : "appToken",
 			"call" : testAppTokenLogin
 		}, {
@@ -63,7 +63,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 		} ];
 		this.loginOptions = loginOptions;
 		
-		var loginOptions2 = [ {
+		let loginOptions2 = [ {
 			"text" : "appToken2",
 			"call" : testAppTokenLogin
 		}, {
@@ -77,7 +77,6 @@ QUnit.module("login/loginManagerViewTest.js", {
 			"logoutMethod" : logoutMethod
 		};
 
-		this.loginManagerView;
 		this.getLoginManagerView = function() {
 			if (this.loginManagerView === undefined) {
 				this.loginManagerView = CORA.loginManagerView(this.dependencies, this.spec);
@@ -97,7 +96,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 			return this.loginManagerView.getMenu();
 		};
 		this.openMenu = function() {
-			var view = this.getHtml();
+			let view = this.getHtml();
 			CORATESTHELPER.simulateOnclick(view);
 		};
 	},
@@ -106,41 +105,41 @@ QUnit.module("login/loginManagerViewTest.js", {
 });
 
 QUnit.test("init", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	assert.strictEqual(loginManagerView.type, "loginManagerView");
 	assert.ok(this.loginManagerView);
 });
 
 QUnit.test("getDependencies", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	assert.strictEqual(loginManagerView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("getSpec", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	assert.strictEqual(loginManagerView.getSpec(), this.spec);
 });
 
 QUnit.test("getHtml", function(assert) {
-	var view = this.getHtml();
+	let view = this.getHtml();
 	assert.strictEqual(view.nodeName, "SPAN");
 });
 
 QUnit.test("testClassName", function(assert) {
-	var view = this.getHtml();
+	let view = this.getHtml();
 	assert.strictEqual(view.className, "iconButton loginManagerView");
 });
 
 QUnit.test("testText", function(assert) {
-	var view = this.getHtml();
+	let view = this.getHtml();
 	assert.strictEqual(view.textContent, "translated_theClient_loginMenuText");
 	assert.strictEqual(this.dependencies.textProvider.getFetchedTextIdNo(0),
 			"theClient_loginMenuText");
 });
 
 QUnit.test("testGetMenu", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
-	var menu = loginManagerView.getMenu();
+	let loginManagerView = this.getLoginManagerView();
+	let menu = loginManagerView.getMenu();
 	assert.strictEqual(menu.nodeName, "SPAN");
 	assert.strictEqual(menu.className, "holder loginManagerView");
 
@@ -150,15 +149,15 @@ QUnit.test("testGetMenu", function(assert) {
 });
 
 QUnit.test("testLoginOptions", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
-	var menu = this.getMenu();
+	let loginManagerView = this.getLoginManagerView();
+	let menu = this.getMenu();
 	assert.strictEqual(menu.childNodes.length, 0);
 });
 
 QUnit.test("testSetLoginOptions", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	loginManagerView.setLoginOptions(this.loginOptions2);
-	var menu = this.getMenu();
+	let menu = this.getMenu();
 	assert.strictEqual(menu.childNodes.length, 2);
 	assert.strictEqual(menu.childNodes[0].textContent, "appToken2");
 	assert.strictEqual(menu.childNodes[1].textContent, "webRedirect uu2");
@@ -171,16 +170,16 @@ QUnit.test("testSetLoginOptions", function(assert) {
 });
 
 QUnit.test("testSetUserId", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
-	var menu = this.getMenu();
-	var view = this.getHtml();
+	let loginManagerView = this.getLoginManagerView();
+	let menu = this.getMenu();
+	let view = this.getHtml();
 	loginManagerView.setUserId("someUserId");
 	assert.strictEqual(view.textContent, "someUserId");
 });
 
 QUnit.test("testSetStateLoggedin", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
-	var menu = this.getMenu();
+	let loginManagerView = this.getLoginManagerView();
+	let menu = this.getMenu();
 	this.openMenu();
 	loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 	assert.notVisible(menu);
@@ -193,14 +192,14 @@ QUnit.test("testSetStateLoggedin", function(assert) {
 });
 
 QUnit.test("testSetStateLoggedout", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	loginManagerView.setLoginOptions(this.loginOptions);
-	var menu = this.getMenu();
+	let menu = this.getMenu();
 	this.openMenu();
 	loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
 	assert.notVisible(menu);
 
-	var view = this.getHtml();
+	let view = this.getHtml();
 	assert.strictEqual(view.textContent, "translated_theClient_loginMenuText");
 
 	assert.strictEqual(menu.childNodes.length, 2);
@@ -209,9 +208,9 @@ QUnit.test("testSetStateLoggedout", function(assert) {
 });
 
 QUnit.test("testSetStateFirstLoggedinThenLoggedout", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
+	let loginManagerView = this.getLoginManagerView();
 	loginManagerView.setLoginOptions(this.loginOptions);
-	var menu = this.getMenu();
+	let menu = this.getMenu();
 
 	loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 	loginManagerView.setUserId("someUserId");
@@ -220,7 +219,7 @@ QUnit.test("testSetStateFirstLoggedinThenLoggedout", function(assert) {
 
 	loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
 
-	var view = this.getHtml();
+	let view = this.getHtml();
 	assert.strictEqual(view.textContent, "translated_theClient_loginMenuText");
 
 	assert.strictEqual(menu.childNodes.length, 2);
@@ -229,8 +228,8 @@ QUnit.test("testSetStateFirstLoggedinThenLoggedout", function(assert) {
 });
 
 QUnit.test("testCloseHolder", function(assert) {
-	var loginManagerView = this.getLoginManagerView();
-	var menu = this.getMenu();
+	let loginManagerView = this.getLoginManagerView();
+	let menu = this.getMenu();
 	this.openMenu();
 	loginManagerView.closeHolder();
 	assert.notVisible(menu);

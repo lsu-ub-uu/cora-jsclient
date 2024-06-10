@@ -23,7 +23,7 @@ QUnit.module("login/appTokenLoginFactoryTest.js", {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 
 		this.dependencies = {
-			"ajaxCallFactory" : this.ajaxCallFactorySpy
+			ajaxCallFactory : this.ajaxCallFactorySpy
 		};
 		this.appTokenLoginFactory = CORA.appTokenLoginFactory(this.dependencies);
 	},
@@ -41,13 +41,13 @@ QUnit.test("getDependencies", function(assert) {
 });
 
 QUnit.test("factor", function(assert) {
-	var spec = {};
-	var appTokenLogin = this.appTokenLoginFactory.factor(spec);
+	let spec = {};
+	let appTokenLogin = this.appTokenLoginFactory.factor(spec);
 	assert.strictEqual(appTokenLogin.type, "appTokenLogin");
 	
-	var appTokenLoginDependencies = appTokenLogin.getDependencies();
+	let appTokenLoginDependencies = appTokenLogin.getDependencies();
 	assert.strictEqual(appTokenLoginDependencies.ajaxCallFactory, this.dependencies.ajaxCallFactory);
 
-	var appTokenLoginSpec = appTokenLogin.getSpec();
+	let appTokenLoginSpec = appTokenLogin.getSpec();
 	assert.strictEqual(appTokenLoginSpec, spec);
 });

@@ -21,7 +21,7 @@
 QUnit.module("login/ldapLoginViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
-			"textProvider" : CORATEST.textProviderSpy()
+			textProvider : CORATEST.textProviderSpy()
 		};
 
 	},
@@ -30,32 +30,32 @@ QUnit.module("login/ldapLoginViewFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
+	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
 	assert.strictEqual(ldapLoginViewFactory.type, "ldapLoginViewFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	var ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
+	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
 	assert.strictEqual(ldapLoginViewFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	var ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	var ldapLoginView = ldapLoginViewFactory.factor(this.spec);
+	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
+	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
 	assert.strictEqual(ldapLoginView.type, "ldapLoginView");
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	var ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	var ldapLoginView = ldapLoginViewFactory.factor(this.spec);
+	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
+	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
 	assert.strictEqual(ldapLoginView.getDependencies().workItemViewFactory.type,
-	"workItemViewFactory");
+		"workItemViewFactory");
 	assert.strictEqual(ldapLoginView.getDependencies().textProvider,
 			this.dependencies.textProvider);
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	var ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	var ldapLoginView = ldapLoginViewFactory.factor(this.spec);
+	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
+	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
 	assert.strictEqual(ldapLoginView.getSpec(), this.spec);
 });

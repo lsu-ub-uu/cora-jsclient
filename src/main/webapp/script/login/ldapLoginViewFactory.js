@@ -20,21 +20,21 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.ldapLoginViewFactory = function(dependencies) {
 
-		var dep = {
-			"textProvider" : dependencies.textProvider,
-			"workItemViewFactory" : CORA.workItemViewFactory(),
+		let dep = {
+			textProvider : dependencies.textProvider,
+			workItemViewFactory : CORA.workItemViewFactory(),
 		};
 
-		function factor(spec) {
+		const factor = function(spec) {
 			return CORA.ldapLoginView(dep, spec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "ldapLoginViewFactory",
+			type : "ldapLoginViewFactory",
 			getDependencies : getDependencies,
 			factor : factor
 		});

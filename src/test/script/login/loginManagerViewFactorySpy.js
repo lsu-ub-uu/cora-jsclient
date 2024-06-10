@@ -19,18 +19,18 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.loginManagerViewFactorySpy = function(spec) {
-		var factoredLoginManagers = [];
-		function factor(loginManagerViewSpec) {
-			var factoredAjaxCall = CORATEST.loginManagerViewSpy({},loginManagerViewSpec);
+		let factoredLoginManagers = [];
+		const factor = function(loginManagerViewSpec) {
+			let factoredAjaxCall = CORATEST.loginManagerViewSpy({},loginManagerViewSpec);
 			factoredLoginManagers.push(factoredAjaxCall);
 			return factoredAjaxCall;
-		}
+		};
 
-		function getFactored(number) {
+		const getFactored = function(number) {
 			return factoredLoginManagers[number];
-		}
+		};
 	
-		var out = Object.freeze({
+		let out = Object.freeze({
 			factor : factor,
 			getFactored : getFactored
 		});

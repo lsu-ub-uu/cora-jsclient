@@ -115,17 +115,3 @@ QUnit.test("testFactorAddedDependenciesRecordHandlerFactory", function(assert) {
 	assert.strictEqual(depRecordHandler.metadataProvider, this.providers.metadataProvider);
 	assert.strictEqual(depRecordHandler.textProvider, this.providers.textProvider);
 });
-
-QUnit.test("testRecordPartPermissionCalculatorFactoryDependencies",
-		function(assert) {
-		let searchHandlerFactory = CORA.searchHandlerFactory(this.dependencies);
-		let searchHandler = searchHandlerFactory.factor(this.spec);
-		let factoredDependencies = searchHandler.getDependencies();
-		let recordPartPermissionCalculatorFactory = factoredDependencies.recordPartPermissionCalculatorFactory;
-		assert.strictEqual(recordPartPermissionCalculatorFactory.getTypeToFactor(), "recordPartPermissionCalculator");
-
-		let calculatorDependencies = recordPartPermissionCalculatorFactory
-				.getDependencies();
-		assert.strictEqual(calculatorDependencies.metadataProvider,
-				this.providers.metadataProvider);
-		});

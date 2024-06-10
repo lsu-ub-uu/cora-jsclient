@@ -18,48 +18,37 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.ldapLoginJsClientIntegrator = function(dependencies, spec) {
-		let managedGuiItem;
-		let ldapLogin;
+	cora.passwordLoginFactory = function(dependencies) {
 
-		const start = function() {
-			managedGuiItem = createManagedGuiItem();
-			showLdapLoginInJsClient();
-
-			ldapLogin = createLdapLogin();
-			managedGuiItem.addWorkPresentation(ldapLogin.getView());
-		};
-
-		const createLdapLogin = function() {
-			return dependencies.ldapLoginFactory.factor(spec);
-		};
-
-		const createManagedGuiItem = function() {
-			let managedGuiItemSpec = {
-				activateMethod : spec.jsClient.showView,
-				removeMethod : spec.jsClient.viewRemoved
+		const factor = function(spec) {
+			let viewDep = {
+				textProvider : dependencies.providers.textProvider
 			};
-			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
-		};
-
-		const showLdapLoginInJsClient = function() {
-			spec.jsClient.showView(managedGuiItem);
+			
+			let calculatorFactoryDep = {
+				metadataProvider : dependencies.metadataProvider
+			};
+			
+			let dep = {
+				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
+				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
+				passwordLoginViewFactory : CORA.passwordLoginViewFactory(viewDep),
+//				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
+//				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
+				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator"
+					, calculatorFactoryDep),
+			};
+			return CORA.passwordLogin(dep, spec);
 		};
 
 		const getDependencies = function() {
 			return dependencies;
 		};
 
-		const getSpec = function() {
-			return spec;
-		};
-
-		start();
 		return Object.freeze({
-			type : "ldapLoginJsClientIntegrator",
-			showLdapLoginInJsClient : showLdapLoginInJsClient,
+			type : "passwordLoginFactory",
 			getDependencies : getDependencies,
-			getSpec : getSpec
+			factor : factor
 		});
 	};
 	return cora;

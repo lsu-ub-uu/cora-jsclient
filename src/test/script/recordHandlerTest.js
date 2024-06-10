@@ -49,7 +49,6 @@ QUnit.module("recordHandlerTest.js", {
 			recordHandlerViewFactory: this.recordHandlerViewFactorySpy,
 			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy"),
 			indexHandlerFactory: CORATEST.standardFactorySpy("indexHandlerSpy"),
-			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy"),
 			questionFactory: CORATEST.standardFactorySpy("questionSpy")
 		};
 		this.dependencies = dependencies;
@@ -740,13 +739,12 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpec", function(assert) {
 	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
 	assert.strictEqual(factoredSpec.dataDivider, undefined);
-
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
-	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
+	
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initCheckRightGuiCreatedNew", function(assert) {
@@ -818,13 +816,12 @@ QUnit.test("initCheckRightGuiCreatedNewCheckSpecWithData", function(assert) {
 	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
 	assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
 	assert.strictEqual(factoredSpec.dataDivider, undefined);
-
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
-	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
+	
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initCheckRightGuiCreatedNewWithChoiceValidationType", function(assert) {
@@ -1235,11 +1232,12 @@ CORATEST.getDataDividerFromData = function(recordWeSendAsPartOfAnswer) {
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartNoPermissions", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
-
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneWritePermissions", function(assert) {
@@ -1248,11 +1246,12 @@ QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneWriteP
 		write: ["someVariable"]
 	};
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	let expectedRecordPermissions = this.record.permissions;
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, expectedRecordPermissions.write);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: this.record.permissions.write,
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoWritePermissions", function(assert) {
@@ -1261,11 +1260,12 @@ QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoWriteP
 		write: ["someVariable", "someOtherVariable"]
 	};
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	let expectedRecordPermissions = this.record.permissions;
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, expectedRecordPermissions.write);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: this.record.permissions.write,
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneReadPermissions", function(assert) {
@@ -1274,11 +1274,12 @@ QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyOneReadPe
 		read: ["someVariable"]
 	};
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	let expectedRecordPermissions = this.record.permissions;
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, expectedRecordPermissions.read);
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: [],
+				read: this.record.permissions.read
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoReadPermissions", function(assert) {
@@ -1287,11 +1288,12 @@ QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartOnlyTwoReadPe
 		read: ["someVariable", "someOtherVariable"]
 	};
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	let expectedRecordPermissions = this.record.permissions;
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, expectedRecordPermissions.read);
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: [],
+				read: this.record.permissions.read
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartBothReadAndWritePermissions", function(
@@ -1302,11 +1304,12 @@ QUnit.test("initPermissionCalculatorCreatedCorrectlyPermissionsPartBothReadAndWr
 		write: ["someWriteVariable", "someOtherWriteVariable"]
 	};
 	this.answerCall(0);
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-
-	let expectedRecordPermissions = this.record.permissions;
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, expectedRecordPermissions.read);
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, expectedRecordPermissions.write);
+	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: this.record.permissions.write,
+				read: this.record.permissions.read
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("testReloadRecordDataIsChanged", function(assert) {
@@ -1380,12 +1383,11 @@ QUnit.test("initCheckRightGuiCreatedForList", function(assert) {
 	let item = managedGuiItem.getAddedMenuPresentation(0);
 	assert.strictEqual(item, undefined);
 
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, "textGroup");
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, this.spec.record.permissions.write);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, this.spec.record.permissions.read);
-	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(recordGuiSpec.recordPartPermissionCalculator, factoredCalculator);
+	let emptyPermissions = {
+				write: this.spec.record.permissions.write,
+				read: this.spec.record.permissions.read
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
@@ -1410,13 +1412,11 @@ QUnit.test("initCheckRightGuiCreatedForNewInList", function(assert) {
 	let item = managedGuiItem.getAddedMenuPresentation(0);
 	assert.strictEqual(item, undefined);
 
-	let permissionCalculatorSpec = this.dependencies.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(permissionCalculatorSpec.metadataId, "recordTypeGroup");
-	assert.deepEqual(permissionCalculatorSpec.permissions.write, []);
-	assert.deepEqual(permissionCalculatorSpec.permissions.read, []);
-	let factoredCalculator = this.dependencies.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
-
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("testCreateNewCall", function(assert) {
@@ -1580,10 +1580,6 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 	assert.stringifyEqual(reloadedRecordGuiSpec.data, firstRecordGui.dataHolder
 		.getDataWithActionLinks());
 	assert.strictEqual(reloadedRecordGui.getInitCalled(), 1);
-
-	assert.strictEqual(reloadedRecordGuiSpec.recordPartPermissionCalculator, specFromFirstRecordGuiSpy.recordPartPermissionCalculator);
-	assert.ok(reloadedRecordGuiSpec.recordPartPermissionCalculator);
-
 });
 
 QUnit.test("testReloadRecordHandlerViewFormFactoredAndAdded", function(assert) {

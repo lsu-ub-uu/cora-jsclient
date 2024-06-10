@@ -18,34 +18,32 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.ldapLoginView = function(dependencies, spec) {
-		let view;
-		let loginFormHolder;
+	cora.passwordLoginJsClientIntegrator = function(dependencies, spec) {
+		let managedGuiItem;
+		let passwordLogin;
 
 		const start = function() {
-			let workItemView = createWorkItemView();
-			view = workItemView.getView();
-			createLoginFormHolderAndAddTo(workItemView);
+			managedGuiItem = createManagedGuiItem();
+			showPasswordLoginInJsClient();
+
+			passwordLogin = createPasswordLogin();
+			managedGuiItem.addWorkPresentation(passwordLogin.getView());
 		};
 
-		const createWorkItemView = function() {
-			let workItemViewSpec = {
-				"extraClassName" : "ldapLogin"
+		const createPasswordLogin = function() {
+			return dependencies.passwordLoginFactory.factor(spec);
+		};
+
+		const createManagedGuiItem = function() {
+			let managedGuiItemSpec = {
+				activateMethod : spec.jsClient.showView,
+				removeMethod : spec.jsClient.viewRemoved
 			};
-			return dependencies.workItemViewFactory.factor(workItemViewSpec);
+			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
 		};
 
-		const createLoginFormHolderAndAddTo = function(addTo) {
-			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
-			addTo.addViewToView(loginFormHolder);
-		};
-
-		const getView = function() {
-			return view;
-		};
-
-		const addPresentationToLoginFormHolder = function(presentationToAdd) {
-			loginFormHolder.insertBefore(presentationToAdd, loginFormHolder.lastChild);
+		const showPasswordLoginInJsClient = function() {
+			spec.jsClient.showView(managedGuiItem);
 		};
 
 		const getDependencies = function() {
@@ -58,11 +56,10 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			"type" : "ldapLoginView",
+			type : "passwordLoginJsClientIntegrator",
+			showPasswordLoginInJsClient : showPasswordLoginInJsClient,
 			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addPresentationToLoginFormHolder : addPresentationToLoginFormHolder
+			getSpec : getSpec
 		});
 	};
 	return cora;

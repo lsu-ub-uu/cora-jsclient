@@ -24,9 +24,7 @@ var CORA = (function(cora) {
 		let indexHandlerDep = {
 			ajaxCallFactory: dependencies.ajaxCallFactory
 		};
-		let calculatorFactoryDep = {
-			metadataProvider : dependencies.metadataProvider
-		}
+		
 		let dep = {
 			globalFactories: dependencies.globalFactories,
 			recordHandlerViewFactory: CORA.recordHandlerViewFactory(),
@@ -34,7 +32,6 @@ var CORA = (function(cora) {
 			recordGuiFactory: dependencies.recordGuiFactory,
 			managedGuiItemFactory: dependencies.managedGuiItemFactory,
 			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
-			recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator", calculatorFactoryDep),
 			questionFactory: CORA.genericFactory("question", undefined),
 			textProvider : dependencies.textProvider
 		};

@@ -87,8 +87,6 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDependencies.recordHandlerViewFactory.type,
 		"recordHandlerViewFactory");
 	assert.strictEqual(factoredDependencies.indexHandlerFactory.type, "genericFactory");
-	assert.strictEqual(factoredDependencies.recordPartPermissionCalculatorFactory.type,
-		"genericFactory");
 	assert.strictEqual(factoredDependencies.questionFactory.type, "genericFactory");
 	assert.strictEqual(factoredDependencies.questionFactory.getTypeToFactor(), "question");
 	assert.strictEqual(factoredDependencies.questionFactory.getDependencies(), undefined);
@@ -108,29 +106,13 @@ QUnit.test("factorTestSpec", function(assert) {
 });
 
 QUnit.test("testIndexHandlerFactoryDependencies", function(assert) {
-		let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-		let recordHandler = recordHandlerFactory.factor(this.spec);
-		let factoredDependencies = recordHandler.getDependencies();
-		let indexHandlerFactory = factoredDependencies.indexHandlerFactory;
-		assert.strictEqual(indexHandlerFactory.getTypeToFactor(), "indexHandler");
+	let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
+	let recordHandler = recordHandlerFactory.factor(this.spec);
+	let factoredDependencies = recordHandler.getDependencies();
+	let indexHandlerFactory = factoredDependencies.indexHandlerFactory;
+	assert.strictEqual(indexHandlerFactory.getTypeToFactor(), "indexHandler");
 
-		let indexHandlerDependencies = factoredDependencies.indexHandlerFactory
-			.getDependencies();
-		assert.strictEqual(indexHandlerDependencies.ajaxCallFactory,
-			this.dependencies.ajaxCallFactory);
-	});
-
-QUnit.test("testRecordPartPermissionCalculatorFactoryDependencies",
-	function(assert) {
-		let recordHandlerFactory = CORA.recordHandlerFactory(this.dependencies);
-		let recordHandler = recordHandlerFactory.factor(this.spec);
-		let factoredDependencies = recordHandler.getDependencies();
-		let recordPartPermissionCalculatorFactory = factoredDependencies.recordPartPermissionCalculatorFactory;
-		assert.strictEqual(recordPartPermissionCalculatorFactory.getTypeToFactor(), "recordPartPermissionCalculator");
-
-		let calculatorDependencies = recordPartPermissionCalculatorFactory
-			.getDependencies();
-		assert.strictEqual(calculatorDependencies.metadataProvider,
-			this.dependencies.metadataProvider);
-	});
+	let indexHandlerDependencies = factoredDependencies.indexHandlerFactory.getDependencies();
+	assert.strictEqual(indexHandlerDependencies.ajaxCallFactory, this.dependencies.ajaxCallFactory);
+});
 

@@ -138,12 +138,12 @@ QUnit.test("testloginManagerFactoryDependencies", function(assert) {
 	assert.strictEqual(factoredDep.ajaxCallFactory,
 			jsClientFactoredDep.globalFactories.ajaxCallFactory);
 	assert.strictEqual(factoredDep.textProvider, this.providers.textProvider);
-	assert.strictEqual(factoredDep.ldapLoginJsClientIntegratorFactory.type, "genericFactory");
+	assert.strictEqual(factoredDep.passwordLoginJsClientIntegratorFactory.type, "genericFactory");
 
-	let ldapLoginJsClientIntegratorFactory = factoredDep.ldapLoginJsClientIntegratorFactory;
-	let jsCIFDependencies  = ldapLoginJsClientIntegratorFactory.getDependencies();
+	let passwordLoginJsClientIntegratorFactory = factoredDep.passwordLoginJsClientIntegratorFactory;
+	let jsCIFDependencies  = passwordLoginJsClientIntegratorFactory.getDependencies();
 	
-	assert.strictEqual(jsCIFDependencies.ldapLoginFactory.type,	"ldapLoginFactory");
+	assert.strictEqual(jsCIFDependencies.passwordLoginFactory.type,	"passwordLoginFactory");
 
 });
 
@@ -179,6 +179,16 @@ QUnit.test("testRecordGuiFactoryDependencies", function(assert) {
 			jsClientFactoredDep.globalFactories.ajaxCallFactory);
 	assert.strictEqual(factoredDep.authTokenHolder, this.dependencies.authTokenHolder);
 	assert.strictEqual(factoredDep.uploadManager.type, "uploadManager");
+	
+	let recordPartPermissionCalculatorFactory = factoredDep.recordPartPermissionCalculatorFactory;
+	assert.strictEqual(recordPartPermissionCalculatorFactory.type, "genericFactory");
+	assert.strictEqual(recordPartPermissionCalculatorFactory.getTypeToFactor(), 
+		"recordPartPermissionCalculator");
+	let recordPartPermissionCalculatorDep = {
+		metadataProvider : this.providers.metadataProvider
+	};
+	assert.deepEqual(recordPartPermissionCalculatorFactory.getDependencies(), 
+		recordPartPermissionCalculatorDep);
 });
 
 QUnit.test("testsearchRecordHandlerFactoryDependencies", function(assert) {

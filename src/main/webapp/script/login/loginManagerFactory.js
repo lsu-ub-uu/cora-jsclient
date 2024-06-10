@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 						.loginManagerViewFactory(loginManagerViewFactoryDependencies),
 				appTokenLoginFactory : dependencies.appTokenLoginFactory,
 				webRedirectLoginFactory : dependencies.webRedirectLoginFactory,
-				ldapLoginJsClientIntegratorFactory : dependencies.ldapLoginJsClientIntegratorFactory,
+				passwordLoginJsClientIntegratorFactory : dependencies.passwordLoginJsClientIntegratorFactory,
 				authTokenHolder : dependencies.authTokenHolder,
 				ajaxCallFactory : dependencies.ajaxCallFactory
 			};

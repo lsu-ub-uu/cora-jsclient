@@ -21,23 +21,26 @@
 QUnit.module("recordGui/recordGuiFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
-			"providers" : {
-				"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy(),
-				"metadataProvider" : new MetadataProviderStub(),
-				"textProvider" : CORATEST.textProviderStub(),
-				"recordTypeProvider" :CORATEST.recordTypeProviderSpy()
+			providers : {
+				clientInstanceProvider : CORATEST.clientInstanceProviderSpy(),
+				metadataProvider : new MetadataProviderStub(),
+				textProvider : CORATEST.textProviderStub(),
+				recordTypeProvider :CORATEST.recordTypeProviderSpy()
 			},
-			"globalFactories" : {
-				"searchHandlerFactory" : CORATEST.standardFactorySpy("searchHandlerSpy")
+			globalFactories : {
+				searchHandlerFactory : CORATEST.standardFactorySpy("searchHandlerSpy")
 			},
-			"authTokenHolder" : CORATEST.authTokenHolderSpy(),
-			"uploadManager" : CORATEST.uploadManagerSpy(),
-			"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy()
+			authTokenHolder : CORATEST.authTokenHolderSpy(),
+			uploadManager : CORATEST.uploadManagerSpy(),
+			ajaxCallFactory : CORATEST.ajaxCallFactorySpy(),
+			recordPartPermissionCalculatorFactory : CORATEST.standardFactorySpy(
+				"recordPartPermissionCalculatorSpy")
 		};
 		this.spec = {
-			"metadataId" : "groupIdOneTextChild",
-			"data" : {},
-			"dataDivider" : "someDataDivider"
+			metadataId : "groupIdOneTextChild",
+			data : {},
+			dataDivider : "someDataDivider",
+			permissions : {some: "permission"}
 		};
 		this.recordGuiFactory = CORA.recordGuiFactory(this.dependencies);
 	},
@@ -49,6 +52,7 @@ QUnit.test("testInit", function(assert) {
 	let recordGuiFactory = CORA.recordGuiFactory(this.dependencies);
 	assert.strictEqual(recordGuiFactory.type, "recordGuiFactory");
 });
+
 QUnit.test("testGetDependencies", function(assert) {
 	let recordGuiFactory = CORA.recordGuiFactory(this.dependencies);
 	assert.strictEqual(recordGuiFactory.getDependencies(), this.dependencies);
@@ -61,7 +65,19 @@ QUnit.test("testFactor", function(assert) {
 
 QUnit.test("testFactorSpec", function(assert) {
 	let recordGui = this.recordGuiFactory.factor(this.spec);
-	assert.strictEqual(recordGui.getSpec(), this.spec);
+	const factoredSpec = recordGui.getSpec();
+	assert.strictEqual(factoredSpec, this.spec);
+	
+	let recordPartPermissionCalculator = this.dependencies.recordPartPermissionCalculatorFactory
+		.getFactored(0);
+	assert.strictEqual(factoredSpec.recordPartPermissionCalculator,	recordPartPermissionCalculator);
+	
+	let recordPartPermissionCalculatorSpec =this.dependencies.recordPartPermissionCalculatorFactory
+		.getSpec(0);
+	assert.strictEqual(recordPartPermissionCalculatorSpec.metadataId, this.spec.metadataId);
+	assert.strictEqual(recordPartPermissionCalculatorSpec.permissions, this.spec.permissions);
+	
+	////HRE
 });
 
 QUnit.test("testFactorDependencies", function(assert) {

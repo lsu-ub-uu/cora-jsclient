@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("login/ldapLoginViewTest.js", {
+QUnit.module("login/passwordLoginViewTest.js", {
 	beforeEach : function() {
 		let dependencies = {
 			workItemViewFactory : CORATEST.standardFactorySpy("workItemViewSpy"),
@@ -26,28 +26,28 @@ QUnit.module("login/ldapLoginViewTest.js", {
 			textProvider : CORATEST.textProviderSpy()
 		};
 		this.dependencies = dependencies;
-		this.ldapLoginView = CORA.ldapLoginView(dependencies);
+		this.passwordLoginView = CORA.passwordLoginView(dependencies);
 	},
 	afterEach : function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	assert.strictEqual(this.ldapLoginView.type, "ldapLoginView");
+	assert.strictEqual(this.passwordLoginView.type, "passwordLoginView");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	assert.strictEqual(this.ldapLoginView.getDependencies(), this.dependencies);
+	assert.strictEqual(this.passwordLoginView.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testInitFactoredWorkItemViewSpec", function(assert) {
 	let factoredSpec = this.dependencies.workItemViewFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.extraClassName, "ldapLogin");
+	assert.strictEqual(factoredSpec.extraClassName, "passwordLogin");
 });
 
 QUnit.test("testInitViewIsFactoredWorkItemView", function(assert) {
 	let factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0).getView();
-	let view = this.ldapLoginView.getView();
+	let view = this.passwordLoginView.getView();
 
 	assert.strictEqual(view, factoredWorkItemView);
 });
@@ -65,7 +65,7 @@ QUnit.test("testAddPresentationToLoginFormHolder", function(assert) {
 	assert.strictEqual(loginFormHolder.childNodes.length, 0);
 
 	let aPresentation = CORA.gui.createSpanWithClassName("some");
-	this.ldapLoginView.addPresentationToLoginFormHolder(aPresentation);
+	this.passwordLoginView.addPresentationToLoginFormHolder(aPresentation);
 	assert.strictEqual(loginFormHolder.childNodes.length, 1);
 	assert.strictEqual(loginFormHolder.firstChild, aPresentation);
 });

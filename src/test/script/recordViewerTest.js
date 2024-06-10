@@ -32,54 +32,49 @@ QUnit.module("recordViewerTest.js", {
 		this.pubSub = CORATEST.pubSubSpy();
 		this.recordGuiFactory = CORATEST.recordGuiFactorySpy();
 		this.recordGui = {
-			"getPresentationHolder" : function(presentationId) {
+			getPresentationHolder : function(presentationId) {
 				presentationIdUsed.push(presentationId);
 				return presentation;
 			},
-			"initMetadataControllerStartingGui" : function initMetadataControllerStartingGui() {
+			initMetadataControllerStartingGui : function initMetadataControllerStartingGui() {
 			},
-			"dataHolder" : {
-				"getData" : function() {
+			dataHolder : {
+				getData : function() {
 					return {};
 				}
 			},
-			"validateData" : function() {
+			validateData : function() {
 				return true;
 			},
-			"pubSub" : this.pubSub
+			pubSub : this.pubSub
 		};
 
 		this.metadataIdUsed = [];
 		this.dataDividerUsed = [];
 
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
-		this.recordPartPermissionCalculatorFactory = CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
-
 		
 		this.recordViewerSpec = {
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/system/cora",
-				"accept" : "application/vnd.uub.record+json"
+			read : {
+				requestMethod : "GET",
+				rel : "read",
+				url : "http://epc.ub.uu.se/cora/rest/record/system/cora",
+				accept : "application/vnd.uub.record+json"
 			},
-			"presentationId" : "somePresentationId",
-			"metadataId" : "someMetadataId",
-			"recordGuiFactory" : this.recordGuiFactory,
-			"ajaxCallFactory" : this.ajaxCallFactorySpy,
-			recordPartPermissionCalculatorFactory: this.recordPartPermissionCalculatorFactory
-			
+			presentationId : "somePresentationId",
+			metadataId : "someMetadataId",
+			recordGuiFactory : this.recordGuiFactory,
+			ajaxCallFactory : this.ajaxCallFactorySpy,
 		};
 		this.recordToReturn = CORATEST.recordTypeList.dataList.data[4].record;
 		this.answerCall = function(no) {
 			let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(no);
 			let jsonRecord = JSON.stringify({
-				// "record" : CORATEST.record
-				"record" : this.recordToReturn
+				record : this.recordToReturn
 			});
 			let answer = {
-				"spec" : ajaxCallSpy0.getSpec(),
-				"responseText" : jsonRecord
+				spec : ajaxCallSpy0.getSpec(),
+				responseText : jsonRecord
 			};
 			ajaxCallSpy0.getSpec().loadMethod(answer);
 		}
@@ -131,11 +126,13 @@ QUnit.test("testCorrectSpecToRecordGui", function(assert) {
 	assert.strictEqual(factoredSpec.dataDivider, "cora");
 	let expectedData =  CORATEST.recordTypeList.dataList.data[4].record.data;
 	assert.stringifyEqual(factoredSpec.data, expectedData);
-	let factoredCalculator = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getFactored(0);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, factoredCalculator);
-	
-	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.strictEqual(calcualatorSpec.metadataId, this.recordViewerSpec.metadataId);
+
+	let factoredGuiSpec = this.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredGuiSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("testSpecToRecordGuiEmptyPermissions", function(assert) {
@@ -144,9 +141,12 @@ QUnit.test("testSpecToRecordGuiEmptyPermissions", function(assert) {
 	this.answerCall(0);
 
 	
-	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.stringifyEqual(calcualatorSpec.permissions.read, []);
-	assert.stringifyEqual(calcualatorSpec.permissions.write, []);
+	let factoredGuiSpec = this.recordGuiFactory.getSpec(0);
+	let emptyPermissions = {
+				write: [],
+				read: []
+			};
+	assert.deepEqual(factoredGuiSpec.permissions, emptyPermissions);
 });
 
 QUnit.test("testSpecToRecordGuiOnlyReadPermissions", function(assert) {
@@ -156,9 +156,12 @@ QUnit.test("testSpecToRecordGuiOnlyReadPermissions", function(assert) {
 	CORA.recordViewer(this.recordViewerSpec);
 	this.answerCall(0);
 	
-	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.stringifyEqual(calcualatorSpec.permissions.read, this.recordToReturn.permissions.read);
-	assert.stringifyEqual(calcualatorSpec.permissions.write, []);
+	let factoredGuiSpec = this.recordGuiFactory.getSpec(0);
+	let permissions = {
+				write: [],
+				read: this.recordToReturn.permissions.read
+			};
+	assert.deepEqual(factoredGuiSpec.permissions, permissions);
 });
 
 QUnit.test("testSpecToRecordGuiOnlyWritePermissions", function(assert) {
@@ -168,9 +171,12 @@ QUnit.test("testSpecToRecordGuiOnlyWritePermissions", function(assert) {
 	CORA.recordViewer(this.recordViewerSpec);
 	this.answerCall(0);
 	
-	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.stringifyEqual(calcualatorSpec.permissions.write, this.recordToReturn.permissions.write);
-	assert.stringifyEqual(calcualatorSpec.permissions.read, []);
+	let factoredGuiSpec = this.recordGuiFactory.getSpec(0);
+	let permissions = {
+				write: this.recordToReturn.permissions.write,
+				read: []
+			};
+	assert.deepEqual(factoredGuiSpec.permissions, permissions);
 });
 
 QUnit.test("testSpecToRecordGuiReadAndWritePermissions", function(assert) {
@@ -181,9 +187,12 @@ QUnit.test("testSpecToRecordGuiReadAndWritePermissions", function(assert) {
 	CORA.recordViewer(this.recordViewerSpec);
 	this.answerCall(0);
 	
-	let calcualatorSpec = this.recordViewerSpec.recordPartPermissionCalculatorFactory.getSpec(0);
-	assert.stringifyEqual(calcualatorSpec.permissions.write, this.recordToReturn.permissions.write);
-	assert.stringifyEqual(calcualatorSpec.permissions.read, this.recordToReturn.permissions.read);
+	let factoredGuiSpec = this.recordGuiFactory.getSpec(0);
+	let permissions = {
+				write: this.recordToReturn.permissions.write,
+				read: this.recordToReturn.permissions.read
+			};
+	assert.deepEqual(factoredGuiSpec.permissions, permissions);
 });
 
 

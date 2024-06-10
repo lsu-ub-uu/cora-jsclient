@@ -43,9 +43,6 @@ var CORA = (function(cora) {
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory
 			};
-			let calculatorFactoryDep = {
-				metadataProvider : dependencies.providers.metadataProvider
-			};
 
 			let dep = {
 				searchHandlerViewFactory : CORA.searchHandlerViewFactory(viewDep),
@@ -53,10 +50,7 @@ var CORA = (function(cora) {
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				resultHandlerFactory : CORA.resultHandlerFactory(depResultHandler),
-				jsClient : dependencies.providers.clientInstanceProvider.getJsClient(),
-				recordPartPermissionCalculatorFactory : CORA.genericFactory(
-						"recordPartPermissionCalculator", calculatorFactoryDep)
-
+				jsClient : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
 			return CORA.searchHandler(dep, spec);
 		}

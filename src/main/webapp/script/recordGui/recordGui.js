@@ -19,9 +19,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordGui = function(dependencies, spec) {
-		let pubSub = dependencies.pubSub;
-		let dataHolder = dependencies.dataHolder;
-		let jsBookkeeper = dependencies.jsBookkeeper;
+		const pubSub = dependencies.pubSub;
+		const dataHolder = dependencies.dataHolder;
+		const jsBookkeeper = dependencies.jsBookkeeper;
 		let metadataController;
 
 		const getPresentationHolder = function(presentationId, metadataIdUsedInData) {

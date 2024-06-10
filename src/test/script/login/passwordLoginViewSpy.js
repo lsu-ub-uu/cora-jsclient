@@ -19,7 +19,7 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.ldapLoginViewSpy = function() {
+	coraTest.passwordLoginViewSpy = function() {
 
 		let view = CORA.gui.createSpanWithClassName("spyView");
 		let presentationsAddedToLoginForm = [];
@@ -38,7 +38,7 @@ var CORATEST = (function(coraTest) {
 
 		
 		return Object.freeze({
-			type : "ldapLoginViewSpy",
+			type : "passwordLoginViewSpy",
 			getView : getView,
 			addPresentationToLoginFormHolder : addPresentationToLoginFormHolder,
 			getPresentationsAddedToLoginForm : getPresentationsAddedToLoginForm,

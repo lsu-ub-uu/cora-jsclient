@@ -42,8 +42,8 @@ QUnit.module("login/loginManagerTest.js",
 				"appTokenLoginFactory": CORATEST.appTokenLoginFactorySpy(),
 				"webRedirectLoginFactory": CORATEST
 					.standardFactorySpy("webRedirectLoginSpy"),
-				"ldapLoginJsClientIntegratorFactory": CORATEST
-					.standardFactorySpy("ldapLoginJsClientIntegratorSpy"),
+				"passwordLoginJsClientIntegratorFactory": CORATEST
+					.standardFactorySpy("passwordLoginJsClientIntegratorSpy"),
 				"authTokenHolder": CORATEST.authTokenHolderSpy(),
 				"ajaxCallFactory": CORATEST.ajaxCallFactorySpy()
 			};
@@ -258,9 +258,9 @@ QUnit
 					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
 				}, {
 					text: "translated_uuSystemOneLDAPLoginUnitText",
-					type: "ldap",
-					"metadataId": "ldapGroup",
-					"presentationId": "ldapPGroup",
+					type: "password",
+					"metadataId": "passwordGroup",
+					"presentationId": "passwordPGroup",
 					"loginUnitId": "uuSystemOneLDAPLoginUnit"
 				}];
 			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
@@ -287,9 +287,9 @@ QUnit
 					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
 				}, {
 					text: "translated_uuSystemOneLDAPLoginUnitText",
-					type: "ldap",
-					"metadataId": "ldapGroup",
-					"presentationId": "ldapPGroup",
+					type: "password",
+					"metadataId": "passwordGroup",
+					"presentationId": "passwordPGroup",
 					"loginUnitId": "uuSystemOneLDAPLoginUnit"
 				}];
 			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
@@ -533,87 +533,87 @@ QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) 
 	assertLogoutPerformed(this, assert);
 });
 
-QUnit.test("testLdapLoginFactoryIsCalledOnLdapLogin", function(assert) {
+QUnit.test("testPasswordLoginFactoryIsCalledOnPasswordLogin", function(assert) {
 	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
-		type: "ldap",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId"
+		type: "password",
+		metadataId: "someMetadataId",
+		presentationId: "somePresentationId"
 	});
-	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored1);
-	assert.strictEqual(factored1.type, "ldapLoginJsClientIntegratorSpy");
-	let spec0 = this.dependencies.ldapLoginJsClientIntegratorFactory.getSpec(0);
+	assert.strictEqual(factored1.type, "passwordLoginJsClientIntegratorSpy");
+	let spec0 = this.dependencies.passwordLoginJsClientIntegratorFactory.getSpec(0);
 	assert.strictEqual(spec0.metadataId, "someMetadataId");
 	assert.strictEqual(spec0.presentationId, "somePresentationId");
 	assert.strictEqual(spec0.jsClient, this.spec.jsClient);
 });
 
-QUnit.test("testLdapLoginFactoryIsCalledOnlyOnceForSameLdapLogin", function(assert) {
+QUnit.test("testPasswordLoginFactoryIsCalledOnlyOnceForSamePasswordLogin", function(assert) {
 	let loginManager = this.loginManager;
 	let spec = {
 		text: "someText",
-		type: "ldap",
+		type: "password",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 
 	};
 	loginManager.login(spec);
-	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
 
 	loginManager.login(spec);
 
-	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
+	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
 	assert.strictEqual(factored1, undefined);
 });
 
-QUnit.test("testLdapLoginFactoryIsCalledOnceForEachDifferentLdapLogin", function(assert) {
+QUnit.test("testPasswordLoginFactoryIsCalledOnceForEachDifferentPasswordLogin", function(assert) {
 	let loginManager = this.loginManager;
 	let spec = {
 		text: "someText",
-		type: "ldap",
+		type: "password",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 
 	};
 	loginManager.login(spec);
-	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
+	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
 	spec.loginUnitId = "someOtherLDAPLoginUnit";
 	loginManager.login(spec);
 
-	let factored1 = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(1);
+	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
 	assert.ok(factored1);
 });
 
-QUnit.test("testLdapLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
+QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
 	let loginManager = this.loginManager;
 	let spec = {
 		text: "someText",
-		type: "ldap",
+		type: "password",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId",
 		"loginUnitId": "uuSystemOneLDAPLoginUnit"
 	};
 	loginManager.login(spec);
-	let factored = this.dependencies.ldapLoginJsClientIntegratorFactory.getFactored(0);
-	assert.strictEqual(factored.getNoOfShowLdapLoginInJsClient(), 0);
+	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 0);
 
 	loginManager.login(spec);
-	assert.strictEqual(factored.getNoOfShowLdapLoginInJsClient(), 1);
+	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 1);
 	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 2);
 });
 
-QUnit.test("testCloseHolderIsCalledOnShowLdap", function(assert) {
+QUnit.test("testCloseHolderIsCalledOnShowPassword", function(assert) {
 	let loginManager = this.loginManager;
 	loginManager.login({
 		text: "someText",
-		type: "ldap",
+		type: "password",
 		"metadataId": "someMetadataId",
 		"presentationId": "somePresentationId"
 	});

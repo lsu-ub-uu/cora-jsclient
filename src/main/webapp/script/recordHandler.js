@@ -166,9 +166,7 @@ var CORA = (function(cora) {
 			definitionId = metadataForRecordType.metadataId;
 
 			let permissions = createEmptyPermissions();
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
-				permissions);
-			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, recordPartPermissionCalculator);
+			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, permissions);
 			createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
@@ -190,12 +188,12 @@ var CORA = (function(cora) {
 		};
 
 
-		const createRecordGui = function(metadataId, data, dataDivider, recordPartPermissionCalculator) {
+		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
 				data: data,
 				dataDivider: dataDivider,
-				recordPartPermissionCalculator: recordPartPermissionCalculator
+				permissions: permissions
 			};
 
 			let createdRecordGui = dependencies.recordGuiFactory.factor(recordGuiSpec);
@@ -394,9 +392,7 @@ var CORA = (function(cora) {
 			updateDefinitionId = validationType.updateDefinitionId;
 
 			definitionId = metadataForRecordType.metadataId;
-			let recordPartPermissionCalculator = createRecordPartPermissionCalculator(definitionId,
-				permissions);
-			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, recordPartPermissionCalculator);
+			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, permissions);
 			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 			addEditButtonsToView();
@@ -406,14 +402,6 @@ var CORA = (function(cora) {
 			busy.hideWithEffect();
 			managedGuiItem.showWorkView();
 		};
-
-		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
-			let calculatorSpec = {
-				metadataId: metadataId,
-				permissions: permissions
-			}
-			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
-		}
 
 		const createAndAddViewsForExisting = function(recordGuiIn, updateDefinitionId, definitionId) {
 			if ("true" !== spec.partOfList) {

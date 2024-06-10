@@ -18,48 +18,52 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.ldapLogin = function(dependencies, spec) {
+	cora.passwordLoginView = function(dependencies, spec) {
 		let view;
+		let loginFormHolder;
 
 		const start = function() {
-			view = createView();
-			let recordGui = createRecordGui();
-			let presentationView = recordGui.getPresentationHolder(spec.presentationId,
-					spec.metadataId).getView();
-			view.addPresentationToLoginFormHolder(presentationView);
-			recordGui.initMetadataControllerStartingGui();
+			let workItemView = createWorkItemView();
+			view = workItemView.getView();
+			createLoginFormHolderAndAddTo(workItemView);
 		};
 
-		const createView = function() {
-			return dependencies.ldapLoginViewFactory.factor();
-		};
-
-		const createRecordGui = function() {
-			let recordGuiSpec = {
-				metadataId : spec.metadataId
+		const createWorkItemView = function() {
+			let workItemViewSpec = {
+				"extraClassName" : "passwordLogin"
 			};
-			return dependencies.recordGuiFactory.factor(recordGuiSpec);
+			return dependencies.workItemViewFactory.factor(workItemViewSpec);
+		};
+
+		const createLoginFormHolderAndAddTo = function(addTo) {
+			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
+			addTo.addViewToView(loginFormHolder);
+		};
+
+		const getView = function() {
+			return view;
+		};
+
+		const addPresentationToLoginFormHolder = function(presentationToAdd) {
+			loginFormHolder.insertBefore(presentationToAdd, loginFormHolder.lastChild);
 		};
 
 		const getDependencies = function() {
 			return dependencies;
-		}
+		};
+
 		const getSpec = function() {
 			return spec;
 		};
 
-		const getView = function() {
-			return view.getView();
-		};
-
 		start();
 		return Object.freeze({
-			type : "ldapLogin",
+			"type" : "passwordLoginView",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,
+			addPresentationToLoginFormHolder : addPresentationToLoginFormHolder
 		});
 	};
-
 	return cora;
 }(CORA));

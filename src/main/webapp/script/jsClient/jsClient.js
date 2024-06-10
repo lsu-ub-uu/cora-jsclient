@@ -45,7 +45,7 @@ var CORA = (function(cora) {
 				serverAddress: spec.baseUrl,
 				reloadProvidersMethod: out.reloadProviders,
 				setLanguageMethod: out.setCurrentLang,
-				showLdapLoginMethod: out.showLdapLogin
+				showPasswordLoginMethod: out.showPasswordLogin
 			};
 			jsClientView = dependencies.jsClientViewFactory.factor(jsClientViewSpec);
 

@@ -24,7 +24,7 @@ var CORA = (function(cora) {
 		let loginManagerView;
 		let authInfo;
 		let createdWebRedirectLogin;
-		let startedLdapLogins = {};
+		let startedPasswordLogins = {};
 
 		let loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
@@ -92,11 +92,12 @@ var CORA = (function(cora) {
 		const start = function() {
 			fetchAllLoginInfoFromServer();
 			let viewSpec = {
-				"loginMethod": login,
-				"logoutMethod": logout
+				loginMethod: login,
+				logoutMethod: logout
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
-		}
+		};
+		
 		const fetchAllLoginInfoFromServer = function() {
 			fetchLoginUnitFromServer();
 			fetchLoginFromServer();
@@ -104,22 +105,22 @@ var CORA = (function(cora) {
 
 		const fetchLoginUnitFromServer = function() {
 			let callSpec = {
-				"requestMethod": "GET",
-				"url": spec.baseUrl + "record/loginUnit",
-				"loadMethod": fetchLoginUnitCallback,
-				"errorMethod": fetchLoginUnitErrorCallback,
-				"timeoutMethod": fetchLoginUnitTimeoutCallback
+				requestMethod: "GET",
+				url: spec.baseUrl + "record/loginUnit",
+				loadMethod: fetchLoginUnitCallback,
+				errorMethod: fetchLoginUnitErrorCallback,
+				timeoutMethod: fetchLoginUnitTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
 		const fetchLoginFromServer = function() {
 			let callSpec = {
-				"requestMethod": "GET",
-				"url": spec.baseUrl + "record/login",
-				"loadMethod": fetchLoginCallback,
-				"errorMethod": fetchLoginErrorCallback,
-				"timeoutMethod": fetchLoginTimeoutCallback
+				requestMethod: "GET",
+				url: spec.baseUrl + "record/login",
+				loadMethod: fetchLoginCallback,
+				errorMethod: fetchLoginErrorCallback,
+				timeoutMethod: fetchLoginTimeoutCallback
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
@@ -131,8 +132,8 @@ var CORA = (function(cora) {
 
 		const possiblySetLoginOptionsInView = function() {
 			if (bothLoginUnitAndLoginListHasBeenFullyFetched()) {
-				parseLoginData();
-				parseLoginUnitData();
+				parseLoginDataList();
+				parseLoginUnitDataList();
 				loginManagerView.setLoginOptions(loginOptions);
 			}
 		};
@@ -141,22 +142,27 @@ var CORA = (function(cora) {
 			return loginUnitDataList !== undefined && loginDataList !== undefined;
 		};
 
-		const parseLoginData = function() {
+		const parseLoginDataList = function() {
 			loginDataList.forEach(function(loginItem) {
 				let loginData = loginItem.record.data;
 				let recordId = getIdFromRecord(loginData);
-				let type = getTypeFromLoginRecord(loginData);
-				logins[recordId] = {
-					type: type
-				};
-				if ("webRedirect" === type) {
-					logins[recordId].url = getUrlFromLoginRecord(loginData);
-				}
-				if ("ldap" === type) {
-					logins[recordId].metadataId = getMetadataIdFromLoginRecord(loginData);
-					logins[recordId].presentationId = getPresentationIdFromLoginRecord(loginData);
-				}
+				let login = parseLoginData2(loginData);
+				logins[recordId] = login;
 			});
+		};
+		
+		const parseLoginData2 = function(loginData) {
+			let type = getTypeFromLoginRecord(loginData);
+			let login = {};
+			login.type = type;
+			if ("webRedirect" === type) {
+				login.url = getUrlFromLoginRecord(loginData);
+			}
+			if ("password" === type) {
+				login.metadataId = getMetadataIdFromLoginRecord(loginData);
+				login.presentationId = getPresentationIdFromLoginRecord(loginData);
+			}
+			return login;
 		};
 
 		const getIdFromRecord = function(recordData) {
@@ -176,20 +182,18 @@ var CORA = (function(cora) {
 
 		const getMetadataIdFromLoginRecord = function(recordData) {
 			let cRecord = CORA.coraData(recordData);
-			let cMetadataIdGroup = CORA.coraData(cRecord.getFirstChildByNameInData("ldapMetadata"));
-
+			let cMetadataIdGroup = CORA.coraData(cRecord.getFirstChildByNameInData("viewDefinition"));
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getPresentationIdFromLoginRecord = function(recordData) {
 			let cRecord = CORA.coraData(recordData);
 			let cMetadataIdGroup = CORA.coraData(cRecord
-				.getFirstChildByNameInData("ldapPresentation"));
-
+				.getFirstChildByNameInData("viewPresentation"));
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		const parseLoginUnitData = function() {
+		const parseLoginUnitDataList = function() {
 			loginUnitDataList.forEach(function(loginUnit) {
 				let loginUnitData = loginUnit.record.data;
 
@@ -204,15 +208,15 @@ var CORA = (function(cora) {
 					type: logins[loginId].type,
 					"url": logins[loginId].url
 				}
-				loginOption = possiblyAddLdapAttributes(loginOption, loginId, loginUnitId);
+				loginOption = possiblyAddPasswordAttributes(loginOption, loginId, loginUnitId);
 				loginOptions.push(loginOption);
 
 			});
 		};
 
-		const possiblyAddLdapAttributes = function(loginOptionIn, loginId, loginUnitId) {
+		const possiblyAddPasswordAttributes = function(loginOptionIn, loginId, loginUnitId) {
 			let loginOption = loginOptionIn;
-			if ("ldap" === logins[loginId].type) {
+			if ("password" === logins[loginId].type) {
 				loginOption.metadataId = logins[loginId].metadataId;
 				loginOption.presentationId = logins[loginId].presentationId;
 				loginOption.loginUnitId = loginUnitId;
@@ -262,8 +266,8 @@ var CORA = (function(cora) {
 		const login = function(loginOption) {
 			if ("appTokenLogin" === loginOption.type) {
 				appTokenLogin(loginOption.userId, loginOption.appToken);
-			} else if ("ldap" === loginOption.type) {
-				ldapLogin(loginOption);
+			} else if ("password" === loginOption.type) {
+				passwordLogin(loginOption);
 			} else {
 				webRedirectLogin(loginOption);
 			}
@@ -299,7 +303,7 @@ var CORA = (function(cora) {
 			return targetPart.substring(0, targetPart.indexOf("/", lengthOfHttps));
 		};
 
-		const ldapLogin = function(loginOption) {
+		const passwordLogin = function(loginOption) {
 			if (loginAlreadyStartedForLoginOption(loginOption)) {
 				showStartedLoginInJsClientForLoginOption(loginOption);
 			} else {
@@ -309,22 +313,22 @@ var CORA = (function(cora) {
 		};
 
 		const loginAlreadyStartedForLoginOption = function(loginOption) {
-			return startedLdapLogins[loginOption.loginUnitId] !== undefined;
+			return startedPasswordLogins[loginOption.loginUnitId] !== undefined;
 		};
 
 		const showStartedLoginInJsClientForLoginOption = function(loginOption) {
-			startedLdapLogins[loginOption.loginUnitId].showLdapLoginInJsClient();
+			startedPasswordLogins[loginOption.loginUnitId].showPasswordLoginInJsClient();
 		};
 
 		const startLoginForLoginOption = function(loginOption) {
-			let ldapLoginSpec = {
-				"metadataId": loginOption.metadataId,
-				"presentationId": loginOption.presentationId,
-				"jsClient": spec.jsClient
+			let passwordLoginSpec = {
+				metadataId: loginOption.metadataId,
+				presentationId: loginOption.presentationId,
+				jsClient: spec.jsClient
 			};
-			let ldapLoginJsClientIntegrator = dependencies.ldapLoginJsClientIntegratorFactory
-				.factor(ldapLoginSpec);
-			startedLdapLogins[loginOption.loginUnitId] = ldapLoginJsClientIntegrator;
+			let passwordLoginJsClientIntegrator = dependencies.passwordLoginJsClientIntegratorFactory
+				.factor(passwordLoginSpec);
+			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
 
 		const getDependencies = function() {

@@ -107,19 +107,12 @@ var CORA = (function(cora) {
 		}
 
 		function createRecordGui(metadataId, data, permissions) {
-			let permissionSpec = {
-				metadataId : metadataId,
-				permissions : permissions
-			};
-			let recordPartPermissionCalculator = spec.recordPartPermissionCalculatorFactory
-					.factor(permissionSpec);
-
 			let dataDivider = getDataDividerFromData(data);
 			let recordGuiSpec = {
-				"metadataId" : metadataId,
-				"data" : data,
-				"dataDivider" : dataDivider,
-				recordPartPermissionCalculator : recordPartPermissionCalculator
+				metadataId : metadataId,
+				data : data,
+				dataDivider : dataDivider,
+				permissions : permissions
 			};
 			return spec.recordGuiFactory.factor(recordGuiSpec);
 		}

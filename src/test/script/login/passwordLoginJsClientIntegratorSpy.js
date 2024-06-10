@@ -16,34 +16,30 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
+
+var CORATEST = (function(coraTest) {
 	"use strict";
-	cora.ldapLoginFactory = function(dependencies) {
-
-		const factor = function(spec) {
-			let viewDep = {
-				textProvider : dependencies.providers.textProvider
-			};
-
-			let dep = {
-				ldapLoginViewFactory : CORA.ldapLoginViewFactory(viewDep),
-				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
-				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
-				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
-//				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
-			};
-			return CORA.ldapLogin(dep, spec);
+	coraTest.passwordLoginJsClientIntegratorSpy = function(dependencies, spec) {
+		let noOfShowPasswordLoginInJsClient = 0;
+		let view = CORA.gui.createSpanWithClassName("passwordLoginJsClientIntegratorSpy");
+		const getView = function() {
+			return view;
 		};
 
-		const getDependencies = function() {
-			return dependencies;
+		const showPasswordLoginInJsClient = function() {
+			noOfShowPasswordLoginInJsClient++;
+		};
+
+		const getNoOfShowPasswordLoginInJsClient = function() {
+			return noOfShowPasswordLoginInJsClient;
 		};
 
 		return Object.freeze({
-			type : "ldapLoginFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			type : "passwordLoginJsClientIntegratorSpy",
+			getView : getView,
+			showPasswordLoginInJsClient : showPasswordLoginInJsClient,
+			getNoOfShowPasswordLoginInJsClient : getNoOfShowPasswordLoginInJsClient
 		});
 	};
-	return cora;
-}(CORA));
+	return coraTest;
+}(CORATEST || {}));

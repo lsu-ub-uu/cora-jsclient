@@ -28,8 +28,8 @@ QUnit.module("login/loginManagerFactoryTest.js", {
 			webRedirectLoginFactory : {
 				type : "fakeWebRedirectLoginFactory"
 			},
-			ldapLoginJsClientIntegratorFactory : {
-				type : "fakeLdapLoginJsClientIntegratorFactory"
+			passwordLoginJsClientIntegratorFactory : {
+				type : "fakePasswordLoginJsClientIntegratorFactory"
 			},
 			authTokenHolder : {
 				type : "fakeAuthTokenHolder"
@@ -77,8 +77,8 @@ QUnit.test("factor",
 					"loginManagerViewFactory");
 			assert.strictEqual(loginManagerDependencies.appTokenLoginFactory,
 					this.dependencies.appTokenLoginFactory);
-			assert.strictEqual(loginManagerDependencies.ldapLoginJsClientIntegratorFactory.type,
-					"fakeLdapLoginJsClientIntegratorFactory");
+			assert.strictEqual(loginManagerDependencies.passwordLoginJsClientIntegratorFactory.type,
+					"fakePasswordLoginJsClientIntegratorFactory");
 			assert.strictEqual(loginManagerDependencies.webRedirectLoginFactory.type,
 			"fakeWebRedirectLoginFactory");
 			assert.strictEqual(loginManagerDependencies.authTokenHolder,

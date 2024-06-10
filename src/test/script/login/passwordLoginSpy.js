@@ -19,26 +19,16 @@
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.ldapLoginJsClientIntegratorSpy = function(dependencies, spec) {
-		let noOfShowLdapLoginInJsClient = 0;
-		let view = CORA.gui.createSpanWithClassName("ldapLoginJsClientIntegratorSpy");
+	coraTest.passwordLoginSpy = function(dependencies, spec) {
+
+		let view = CORA.gui.createSpanWithClassName("passwordLoginSpy");
 		const getView = function() {
 			return view;
 		};
 
-		const showLdapLoginInJsClient = function() {
-			noOfShowLdapLoginInJsClient++;
-		};
-
-		const getNoOfShowLdapLoginInJsClient = function() {
-			return noOfShowLdapLoginInJsClient;
-		};
-
 		return Object.freeze({
-			type : "ldapLoginJsClientIntegratorSpy",
-			getView : getView,
-			showLdapLoginInJsClient : showLdapLoginInJsClient,
-			getNoOfShowLdapLoginInJsClient : getNoOfShowLdapLoginInJsClient
+			"type" : "passwordLoginSpy",
+			getView : getView
 		});
 	};
 	return coraTest;

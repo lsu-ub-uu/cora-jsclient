@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module("login/ldapLoginViewFactoryTest.js", {
+QUnit.module("login/passwordLoginViewFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
 			textProvider : CORATEST.textProviderSpy()
@@ -30,32 +30,32 @@ QUnit.module("login/ldapLoginViewFactoryTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	assert.strictEqual(ldapLoginViewFactory.type, "ldapLoginViewFactory");
+	let passwordLoginViewFactory = CORA.passwordLoginViewFactory(this.dependencies);
+	assert.strictEqual(passwordLoginViewFactory.type, "passwordLoginViewFactory");
 });
 
 QUnit.test("testGetDependencies", function(assert) {
-	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	assert.strictEqual(ldapLoginViewFactory.getDependencies(), this.dependencies);
+	let passwordLoginViewFactory = CORA.passwordLoginViewFactory(this.dependencies);
+	assert.strictEqual(passwordLoginViewFactory.getDependencies(), this.dependencies);
 });
 
 QUnit.test("testFactor", function(assert) {
-	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
-	assert.strictEqual(ldapLoginView.type, "ldapLoginView");
+	let passwordLoginViewFactory = CORA.passwordLoginViewFactory(this.dependencies);
+	let passwordLoginView = passwordLoginViewFactory.factor(this.spec);
+	assert.strictEqual(passwordLoginView.type, "passwordLoginView");
 });
 
 QUnit.test("factorTestDependencies", function(assert) {
-	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
-	assert.strictEqual(ldapLoginView.getDependencies().workItemViewFactory.type,
+	let passwordLoginViewFactory = CORA.passwordLoginViewFactory(this.dependencies);
+	let passwordLoginView = passwordLoginViewFactory.factor(this.spec);
+	assert.strictEqual(passwordLoginView.getDependencies().workItemViewFactory.type,
 		"workItemViewFactory");
-	assert.strictEqual(ldapLoginView.getDependencies().textProvider,
+	assert.strictEqual(passwordLoginView.getDependencies().textProvider,
 			this.dependencies.textProvider);
 });
 
 QUnit.test("factorTestSpec", function(assert) {
-	let ldapLoginViewFactory = CORA.ldapLoginViewFactory(this.dependencies);
-	let ldapLoginView = ldapLoginViewFactory.factor(this.spec);
-	assert.strictEqual(ldapLoginView.getSpec(), this.spec);
+	let passwordLoginViewFactory = CORA.passwordLoginViewFactory(this.dependencies);
+	let passwordLoginView = passwordLoginViewFactory.factor(this.spec);
+	assert.strictEqual(passwordLoginView.getSpec(), this.spec);
 });

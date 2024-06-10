@@ -43,8 +43,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 			searchHandlerViewFactory: CORATEST.standardFactorySpy("searchHandlerViewSpy"),
 			recordGuiFactory: CORATEST.standardFactorySpy("recordGuiSpy"),
 			ajaxCallFactory: CORATEST.standardFactorySpy("ajaxCallSpy"),
-			resultHandlerFactory: CORATEST.standardFactorySpy("resultHandlerSpy"),
-			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
+			resultHandlerFactory: CORATEST.standardFactorySpy("resultHandlerSpy")
 		};
 	};
 
@@ -105,16 +104,12 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 	test("testInitRecordGuiCorrectSpecToFactory", function(assert) {
 		let factoredGuiSpec = dependencies.recordGuiFactory.getSpec(0);
 		assert.strictEqual(factoredGuiSpec.metadataId, "someMetadataId");
-
-		let calculatorFactory = dependencies.recordPartPermissionCalculatorFactory;
-		let factoredCalculator = calculatorFactory.getFactored(0);
-		assert.strictEqual(factoredGuiSpec.recordPartPermissionCalculator, factoredCalculator);
-		assert.ok(factoredCalculator);
-
-		let calculatorSpec = calculatorFactory.getSpec(0);
-		assert.strictEqual(calculatorSpec.metadataId, "someMetadataId");
-		assert.deepEqual(calculatorSpec.permissions.write, []);
-		assert.deepEqual(calculatorSpec.permissions.read, []);
+		
+		let emptyPermissions = {
+				write: [],
+				read: []
+			};
+		assert.deepEqual(factoredGuiSpec.permissions, emptyPermissions);
 	});
 
 	test("testInitRecordGuiGetPresentationCalled", function(assert) {

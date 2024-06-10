@@ -491,18 +491,18 @@ var CORATEST = (function(coraTest) {
 				                  },
 				                  {
 				                    "name": "linkedRecordId",
-				                    "value": "ldapGroup"
+				                    "value": "passwordGroup"
 				                  }
 				                ],
 				                "actionLinks": {
 				                  "read": {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
-				                    "url": "http://localhost:8080/therest/rest/record/metadataGroup/ldapGroup",
+				                    "url": "http://localhost:8080/therest/rest/record/metadataGroup/passwordGroup",
 				                    "accept": "application/vnd.uub.record+json"
 				                  }
 				                },
-				                "name": "ldapMetadata"
+				                "name": "viewDefinition"
 				              },
 				              {
 				                "children": [
@@ -512,18 +512,18 @@ var CORATEST = (function(coraTest) {
 				                  },
 				                  {
 				                    "name": "linkedRecordId",
-				                    "value": "ldapPGroup"
+				                    "value": "passwordPGroup"
 				                  }
 				                ],
 				                "actionLinks": {
 				                  "read": {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
-				                    "url": "http://localhost:8080/therest/rest/record/presentationGroup/ldapPGroup",
+				                    "url": "http://localhost:8080/therest/rest/record/presentationGroup/passwordPGroup",
 				                    "accept": "application/vnd.uub.record+json"
 				                  }
 				                },
-				                "name": "ldapPresentation"
+				                "name": "viewPresentation"
 				              },
 				              {
 				                "children": [
@@ -533,14 +533,14 @@ var CORATEST = (function(coraTest) {
 				                  },
 				                  {
 				                    "name": "linkedRecordId",
-				                    "value": "ldapGroupText"
+				                    "value": "passwordGroupText"
 				                  }
 				                ],
 				                "actionLinks": {
 				                  "read": {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
-				                    "url": "http://localhost:8080/therest/rest/record/coraText/ldapGroupText",
+				                    "url": "http://localhost:8080/therest/rest/record/coraText/passwordGroupText",
 				                    "accept": "application/vnd.uub.record+json"
 				                  }
 				                },
@@ -549,7 +549,7 @@ var CORATEST = (function(coraTest) {
 				            ],
 				            "name": "login",
 				            "attributes": {
-				              "type": "ldap"
+				              "type": "password"
 				            }
 				          },
 				          "actionLinks": {

@@ -20,9 +20,10 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recordGuiFactory = function(dependencies) {
+		const metadataProvider = dependencies.providers.metadataProvider;
+		const textProvider = dependencies.providers.textProvider;
+		const recordTypeProvider = dependencies.providers.recordTypeProvider;
 		let recordGuiCounter = 0;
-		let metadataProvider = dependencies.providers.metadataProvider;
-		let textProvider = dependencies.providers.textProvider;
 
 		let self;
 
@@ -49,8 +50,8 @@ var CORA = (function(cora) {
 			};
 
 			let metadataChildAndRepeatInitializerDep = {
-				recordTypeProvider : dependencies.providers.recordTypeProvider,
-				metadataProvider : dependencies.providers.metadataProvider,
+				recordTypeProvider : recordTypeProvider,
+				metadataProvider : metadataProvider,
 				pubSub : pubSub
 			};
 
@@ -58,7 +59,7 @@ var CORA = (function(cora) {
 					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
 
 			let depJSBookkeeper = {
-				recordTypeProvider : dependencies.providers.recordTypeProvider,
+				recordTypeProvider : recordTypeProvider,
 				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
 			};
 
@@ -84,7 +85,7 @@ var CORA = (function(cora) {
 
 			let dependenciesCF = {
 				metadataProvider : metadataProvider,
-				recordTypeProvider : dependencies.providers.recordTypeProvider,
+				recordTypeProvider : recordTypeProvider,
 				pubSub : pubSub
 			};
 
@@ -118,7 +119,18 @@ var CORA = (function(cora) {
 				metadataValidatorFactory : metadataValidatorFactory,
 				presentationHolderFactory : CORA.presentationHolderFactory(dependenciesPHF)
 			};
+			spec.recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, 
+				spec.permissions);
+			
 			return CORA.recordGui(dependenciesRG, spec);
+		};
+		
+		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
+			let calculatorSpec = {
+				metadataId: metadataId,
+				permissions: permissions
+			}
+			return dependencies.recordPartPermissionCalculatorFactory.factor(calculatorSpec);
 		};
 
 		const getDependencies = function() {

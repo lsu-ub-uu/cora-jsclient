@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -22,16 +22,16 @@ QUnit.module("login/passwordLoginFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
 			textProvider : CORATEST.textProviderSpy(),
+			metadataProvider: CORATEST.metadataProviderSpy()
 		};
 		this.globalFactories = {
-//			ajaxCallFactory : CORATEST.standardFactorySpy("ajaxCallSpy"),
+			ajaxCallFactory : CORATEST.standardFactorySpy("ajaxCallSpy"),
 			recordGuiFactory : CORATEST.standardFactorySpy("recordGuiSpy"),
 			managedGuiItemFactory : CORATEST.standardFactorySpy("managedGuiItemSpy")
 		};
 		this.dependencies = {
 			providers : this.providers,
 			globalFactories : this.globalFactories,
-			metadataProvider: CORATEST.metadataProviderSpy()
 		};
 
 		this.spec = {
@@ -65,15 +65,22 @@ QUnit.test("factorTestDependencies", function(assert) {
 	
 	
 	let factoredDependencies = passwordLogin.getDependencies();
-	assert.strictEqual(factoredDependencies.ajaxCallFactory, this.dependencies.globalFactories
-		.ajaxCallFactory);
+	assert.strictEqual(factoredDependencies.managedGuiItemFactory, this.dependencies.globalFactories
+		.managedGuiItemFactory);
 	assert.strictEqual(factoredDependencies.recordGuiFactory, this.dependencies.globalFactories
 		.recordGuiFactory);
-//	assert.strictEqual(factoredDependencies.managedGuiItemFactory,
-//		this.dependencies.globalFactories.managedGuiItemFactory);
-	
+	assert.strictEqual(factoredDependencies.ajaxCallFactory, this.dependencies.globalFactories
+		.ajaxCallFactory);
+
 	assert.strictEqual(factoredDependencies.passwordLoginViewFactory.type, "passwordLoginViewFactory");
 	let passwordLoginViewFactoryDep = factoredDependencies.passwordLoginViewFactory.getDependencies();
 	assert.strictEqual(passwordLoginViewFactoryDep.textProvider, this.providers.textProvider);
+
+	assert.strictEqual(factoredDependencies.recordPartPermissionCalculatorFactory.type, "genericFactory");
+	assert.strictEqual(factoredDependencies.recordPartPermissionCalculatorFactory.getTypeToFactor(), 
+		"recordPartPermissionCalculator");
+	let recordPartPermissionCalculatorFactoryDep = factoredDependencies.recordPartPermissionCalculatorFactory.getDependencies();
+	assert.strictEqual(recordPartPermissionCalculatorFactoryDep.metadataProvider, this.providers.metadataProvider);
+	
 });
 

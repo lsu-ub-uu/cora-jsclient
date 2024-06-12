@@ -19,6 +19,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.passwordLogin = function(dependencies, spec) {
+		
 		const recordGuiFactory = dependencies.recordGuiFactory;
 		const passwordLoginViewFactory = dependencies.passwordLoginViewFactory;
 		let view;
@@ -33,7 +34,10 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return passwordLoginViewFactory.factor();
+			let viewSpec = {
+				loginMethod: login
+			};
+			return passwordLoginViewFactory.factor(viewSpec);
 		};
 
 		const createRecordGui = function() {
@@ -50,7 +54,10 @@ var CORA = (function(cora) {
 				read: []
 			};
 		};
-		 
+		
+		const login = function() {
+		};
+
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -69,6 +76,7 @@ var CORA = (function(cora) {
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,
+			login: login
 		});
 	};
 

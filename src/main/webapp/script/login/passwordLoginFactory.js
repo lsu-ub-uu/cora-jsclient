@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,24 +19,26 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.passwordLoginFactory = function(dependencies) {
-
+		const providers = dependencies.providers;
+		const globalFactories = dependencies.globalFactories;
 		const factor = function(spec) {
+			
 			let viewDep = {
-				textProvider : dependencies.providers.textProvider
+				textProvider : providers.textProvider
 			};
 			
 			let calculatorFactoryDep = {
-				metadataProvider : dependencies.metadataProvider
+				metadataProvider : providers.metadataProvider
 			};
 			
 			let dep = {
-				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
-				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
+				managedGuiItemFactory : globalFactories.managedGuiItemFactory,
+				recordGuiFactory : globalFactories.recordGuiFactory,
+				ajaxCallFactory : globalFactories.ajaxCallFactory,
 				passwordLoginViewFactory : CORA.passwordLoginViewFactory(viewDep),
-//				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
-//				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
 				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator"
 					, calculatorFactoryDep),
+//				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
 			return CORA.passwordLogin(dep, spec);
 		};

@@ -30,7 +30,7 @@ var CORA = (function(cora) {
 
 		const createWorkItemView = function() {
 			let workItemViewSpec = {
-				"extraClassName" : "passwordLogin"
+				extraClassName : "passwordLogin"
 			};
 			return dependencies.workItemViewFactory.factor(workItemViewSpec);
 		};
@@ -58,7 +58,7 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			"type" : "passwordLoginView",
+			type : "passwordLoginView",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,

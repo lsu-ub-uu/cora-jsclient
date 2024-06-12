@@ -83,8 +83,8 @@ var CORA = (function(cora) {
 				appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
 			});
 		}
+		
 		let loginOrigin;
-
 		let logins = {};
 		let loginUnitDataList;
 		let loginDataList;
@@ -146,12 +146,12 @@ var CORA = (function(cora) {
 			loginDataList.forEach(function(loginItem) {
 				let loginData = loginItem.record.data;
 				let recordId = getIdFromRecord(loginData);
-				let login = parseLoginData2(loginData);
+				let login = parseLoginData(loginData);
 				logins[recordId] = login;
 			});
 		};
 		
-		const parseLoginData2 = function(loginData) {
+		const parseLoginData = function(loginData) {
 			let type = getTypeFromLoginRecord(loginData);
 			let login = {};
 			login.type = type;
@@ -199,29 +199,28 @@ var CORA = (function(cora) {
 
 				let textId = getTextIdFromRecord(loginUnitData);
 				let loginId = getLoginIdFromRecord(loginUnitData);
-				let cRecord = CORA.coraData(loginUnitData);
-				let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
-				let loginUnitId = cRecordInfo.getFirstAtomicValueByNameInData("id");
-
+				let loginUnitId = getIdFromRecord(loginUnitData);
+				let loginForCurrentLoginUnit = logins[loginId]; 
+				
 				let loginOption = {
 					text: getTranslatedText(textId),
-					type: logins[loginId].type,
-					"url": logins[loginId].url
+					type: loginForCurrentLoginUnit.type,
+					url: loginForCurrentLoginUnit.url
 				}
-				loginOption = possiblyAddPasswordAttributes(loginOption, loginId, loginUnitId);
+				let passwordInfo = possiblyAddPasswordInfo(loginForCurrentLoginUnit, loginUnitId);
+				Object.assign(loginOption, passwordInfo);
 				loginOptions.push(loginOption);
-
 			});
 		};
 
-		const possiblyAddPasswordAttributes = function(loginOptionIn, loginId, loginUnitId) {
-			let loginOption = loginOptionIn;
-			if ("password" === logins[loginId].type) {
-				loginOption.metadataId = logins[loginId].metadataId;
-				loginOption.presentationId = logins[loginId].presentationId;
-				loginOption.loginUnitId = loginUnitId;
+		const possiblyAddPasswordInfo = function(loginForCurrentLoginUnit, loginUnitId) {
+			let passwordInfo = {};
+			if ("password" === loginForCurrentLoginUnit.type) {
+				passwordInfo.metadataId = loginForCurrentLoginUnit.metadataId;
+				passwordInfo.presentationId = loginForCurrentLoginUnit.presentationId;
+				passwordInfo.loginUnitId = loginUnitId;
 			}
-			return loginOption;
+			return passwordInfo;
 		};
 
 		const getTextIdFromRecord = function(recordData) {
@@ -278,7 +277,7 @@ var CORA = (function(cora) {
 				"requestMethod": "POST",
 				"url": spec.appTokenBaseUrl + "login/rest/apptoken/",
 				"accept": "",
-				"authInfoCallback": appTokenAuthInfoCallback,
+				"authInfoCallback": authInfoCallback,
 				"errorCallback": appTokenErrorCallback,
 				"timeoutCallback": appTokenTimeoutCallback
 			};
@@ -307,7 +306,7 @@ var CORA = (function(cora) {
 			if (loginAlreadyStartedForLoginOption(loginOption)) {
 				showStartedLoginInJsClientForLoginOption(loginOption);
 			} else {
-				startLoginForLoginOption(loginOption);
+				startPasswordLoginForLoginOption(loginOption);
 			}
 			loginManagerView.closeHolder();
 		};
@@ -320,17 +319,35 @@ var CORA = (function(cora) {
 			startedPasswordLogins[loginOption.loginUnitId].showPasswordLoginInJsClient();
 		};
 
-		const startLoginForLoginOption = function(loginOption) {
+		const startPasswordLoginForLoginOption = function(loginOption) {
 			let passwordLoginSpec = {
 				metadataId: loginOption.metadataId,
 				presentationId: loginOption.presentationId,
-				jsClient: spec.jsClient
+				jsClient: spec.jsClient,
+				requestMethod: "POST",
+				url: spec.appTokenBaseUrl + "login/rest/password/",
+				accept: "application/vnd.uub.record+json",
+				authInfoCallback: authInfoCallback,
+				errorCallback: passwordErrorCallback,
+				timeoutCallback: passwordTimeoutCallback
 			};
 			let passwordLoginJsClientIntegrator = dependencies.passwordLoginJsClientIntegratorFactory
 				.factor(passwordLoginSpec);
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
-
+		
+		const passwordErrorCallback = function(errorObject) {
+			if (failedToLogout(errorObject)) {
+				logoutCallback();
+			} else {
+				spec.setErrorMessage("Password login failed!");
+			}
+		};
+		
+		const passwordTimeoutCallback = function() {
+			spec.setErrorMessage("Password login timedout!");
+		};
+		
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -339,7 +356,7 @@ var CORA = (function(cora) {
 			return loginManagerView.getHtml();
 		};
 
-		const appTokenAuthInfoCallback = function(authInfoIn) {
+		const authInfoCallback = function(authInfoIn) {
 			authInfo = authInfoIn;
 			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
 			loginManagerView.setUserId(authInfo.userId);
@@ -396,7 +413,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleMessagesFromOkSender = function(data) {
-			appTokenAuthInfoCallback(data);
+			authInfoCallback(data);
 		};
 
 		const messageIsFromWindowOpenedFromHere = function(event) {
@@ -410,9 +427,11 @@ var CORA = (function(cora) {
 			getHtml: getHtml,
 			login: login,
 			logout: logout,
-			appTokenAuthInfoCallback: appTokenAuthInfoCallback,
+			authInfoCallback: authInfoCallback,
 			appTokenErrorCallback: appTokenErrorCallback,
 			appTokenTimeoutCallback: appTokenTimeoutCallback,
+			passwordErrorCallback: passwordErrorCallback,
+			passwordTimeoutCallback: passwordTimeoutCallback,
 			logoutCallback: logoutCallback,
 			getSpec: getSpec,
 			receiveMessage: receiveMessage,

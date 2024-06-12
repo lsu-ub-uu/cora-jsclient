@@ -30,7 +30,7 @@ QUnit.module("login/passwordLoginTest.js", {
 			textProvider : textProvider
 		};
 		this.dependencies = dependencies;
-
+	
 		let jsClient = {
 			showView : function() {
 			},
@@ -40,7 +40,14 @@ QUnit.module("login/passwordLoginTest.js", {
 
 		let spec = {
 				metadataId : "someMetadataGroup",
-				presentationId :"somePGroup"
+				presentationId :"somePGroup",
+//				jsClient: spec.jsClient,
+//				requestMethod: "POST",
+//				url: spec.appTokenBaseUrl + "login/rest/password/",
+//				accept: "application/vnd.uub.record+json",
+//				authInfoCallback: authInfoCallback,
+//				errorCallback: passwordErrorCallback,
+//				timeoutCallback: passwordTimeoutCallback
 		};
 		this.spec = spec;
 
@@ -65,6 +72,10 @@ QUnit.test("testGetSpec", function(assert) {
 QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
 	let factoredView = this.dependencies.passwordLoginViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.type, "passwordLoginViewSpy");
+	
+	let spec = this.dependencies.passwordLoginViewFactory.getSpec(0);
+	assert.strictEqual(spec.loginMethod, this.passwordLogin.login);
+	
 });
 
 QUnit.test("testGetView", function(assert) {
@@ -96,8 +107,11 @@ QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
 			.getView());
 });
 
-
 QUnit.test("testInitRecordGuiStartedGui", function(assert) {
 	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredGui.getInitCalled(), 1);
 });
+
+//QUnit.test("testLoginMethod", function(assert) {
+//	assert.strictEqual(this.passwordLogin.login, this.dependencies);
+//});

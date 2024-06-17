@@ -21,6 +21,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.passwordLoginJsClientIntegratorSpy = function(dependencies, spec) {
 		let noOfShowPasswordLoginInJsClient = 0;
+		let noOfRemovePasswordLoginFromJsClient = 0;
 		let view = CORA.gui.createSpanWithClassName("passwordLoginJsClientIntegratorSpy");
 		const getView = function() {
 			return view;
@@ -34,11 +35,21 @@ var CORATEST = (function(coraTest) {
 			return noOfShowPasswordLoginInJsClient;
 		};
 
+		const removePasswordLoginFromJsClient = function() {
+			noOfRemovePasswordLoginFromJsClient++;
+		};
+
+		const getNoOfRemovePasswordLoginFromJsClient = function() {
+			return noOfRemovePasswordLoginFromJsClient;
+		};
+
 		return Object.freeze({
 			type : "passwordLoginJsClientIntegratorSpy",
 			getView : getView,
 			showPasswordLoginInJsClient : showPasswordLoginInJsClient,
-			getNoOfShowPasswordLoginInJsClient : getNoOfShowPasswordLoginInJsClient
+			getNoOfShowPasswordLoginInJsClient : getNoOfShowPasswordLoginInJsClient,
+			removePasswordLoginFromJsClient : removePasswordLoginFromJsClient,
+			getNoOfRemovePasswordLoginFromJsClient : getNoOfRemovePasswordLoginFromJsClient
 		});
 	};
 	return coraTest;

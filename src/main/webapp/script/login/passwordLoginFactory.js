@@ -21,8 +21,8 @@ var CORA = (function(cora) {
 	cora.passwordLoginFactory = function(dependencies) {
 		const providers = dependencies.providers;
 		const globalFactories = dependencies.globalFactories;
+		
 		const factor = function(spec) {
-			
 			let viewDep = {
 				textProvider : providers.textProvider
 			};

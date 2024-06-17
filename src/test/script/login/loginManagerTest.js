@@ -622,6 +622,31 @@ QUnit.test("testPasswordLoginFactoryIsCalledOnceForEachDifferentPasswordLogin", 
 	assert.ok(factored1);
 });
 
+QUnit.test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
+	let loginManager = this.loginManager;
+	let spec = {
+		text: "someText",
+		type: "password",
+		"metadataId": "someMetadataId",
+		"presentationId": "somePresentationId",
+		"loginUnitId": "uuSystemOneLDAPLoginUnit"
+
+	};
+	loginManager.login(spec);
+	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+	assert.ok(factored);
+	spec.loginUnitId = "someOtherLDAPLoginUnit";
+	loginManager.login(spec);
+
+	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
+	assert.ok(factored1);
+	
+	loginManager.authInfoCallback(this.authInfo);
+	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
+	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
+	
+});
+
 QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
 	let loginManager = this.loginManager;
 	let spec = {

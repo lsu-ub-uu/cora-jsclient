@@ -230,7 +230,6 @@ var CORA = (function(cora) {
 			}
 		};
 
-
 		const viewRemoved = function(managedGuiItem) {
 			openGuiItemHandler.viewRemoved(managedGuiItem);
 			jsClientView.removeFromWorkView(managedGuiItem.getWorkView());

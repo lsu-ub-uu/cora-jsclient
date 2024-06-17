@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.passwordLoginJsClientIntegrator = function(dependencies, spec) {
+		const jsClient = spec.jsClient;
 		let managedGuiItem;
 		let passwordLogin;
 
@@ -36,14 +37,18 @@ var CORA = (function(cora) {
 
 		const createManagedGuiItem = function() {
 			let managedGuiItemSpec = {
-				activateMethod : spec.jsClient.showView,
-				removeMethod : spec.jsClient.viewRemoved
+				activateMethod : jsClient.showView,
+				removeMethod : jsClient.viewRemoved
 			};
 			return dependencies.managedGuiItemFactory.factor(managedGuiItemSpec);
 		};
 
 		const showPasswordLoginInJsClient = function() {
-			spec.jsClient.showView(managedGuiItem);
+			jsClient.showView(managedGuiItem);
+		};
+
+		const removePasswordLoginFromJsClient = function() {
+			jsClient.viewRemoved(managedGuiItem);
 		};
 
 		const getDependencies = function() {
@@ -58,6 +63,7 @@ var CORA = (function(cora) {
 		return Object.freeze({
 			type : "passwordLoginJsClientIntegrator",
 			showPasswordLoginInJsClient : showPasswordLoginInJsClient,
+			removePasswordLoginFromJsClient : removePasswordLoginFromJsClient,
 			getDependencies : getDependencies,
 			getSpec : getSpec
 		});

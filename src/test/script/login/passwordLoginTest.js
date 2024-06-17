@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("login/passwordLoginTest.js", {
+QUnit.module("login/passwordLoginTest.js", {
 	beforeEach : function() {
 		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		let textProvider = CORATEST.textProviderStub();

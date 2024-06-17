@@ -21,11 +21,15 @@ var CORA = (function(cora) {
 	cora.passwordLoginView = function(dependencies, spec) {
 		let view;
 		let loginFormHolder;
-
+		let buttonView;
+		
 		const start = function() {
 			let workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createLoginFormHolderAndAddTo(workItemView);
+			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			workItemView.addViewToView(buttonView);
+			addLoginButton();
 		};
 
 		const createWorkItemView = function() {
@@ -38,6 +42,24 @@ var CORA = (function(cora) {
 		const createLoginFormHolderAndAddTo = function(addTo) {
 			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
 			addTo.addViewToView(loginFormHolder);
+		};
+		
+		const addLoginButton = function() {
+			let button = createButton();
+			buttonView.appendChild(button);
+			return button;
+		};
+
+		const createButton = function() {
+			let buttonSpec = {
+				type: "input",
+				className: "loginButton",
+				text: dependencies.textProvider.getTranslation("theClient_loginButtonText"),
+				action: {
+					method: spec.loginMethod
+				}
+			};
+			return CORA.gui.inputButton(buttonSpec);
 		};
 
 		const getView = function() {

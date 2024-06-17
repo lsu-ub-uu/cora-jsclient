@@ -274,12 +274,12 @@ var CORA = (function(cora) {
 
 		const appTokenLogin = function(userId, appToken) {
 			let loginSpec = {
-				"requestMethod": "POST",
-				"url": spec.appTokenBaseUrl + "login/rest/apptoken/",
-				"accept": "",
-				"authInfoCallback": authInfoCallback,
-				"errorCallback": appTokenErrorCallback,
-				"timeoutCallback": appTokenTimeoutCallback
+				requestMethod: "POST",
+				url: spec.appTokenBaseUrl + "login/rest/apptoken/",
+				accept: "",
+				authInfoCallback: authInfoCallback,
+				errorCallback: appTokenErrorCallback,
+				timeoutCallback: appTokenTimeoutCallback
 			};
 			let factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
 			factoredAppTokenLogin.login(userId, appToken);
@@ -362,6 +362,10 @@ var CORA = (function(cora) {
 			loginManagerView.setUserId(authInfo.userId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
+			for (let key in startedPasswordLogins) {
+//				console.log(key, startedPasswordLogins[key]);
+				startedPasswordLogins[key].removePasswordLoginFromJsClient();
+			}
 		};
 
 		const appTokenErrorCallback = function(errorObject) {

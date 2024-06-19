@@ -627,24 +627,24 @@ QUnit.test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", f
 	let spec = {
 		text: "someText",
 		type: "password",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId",
-		"loginUnitId": "uuSystemOneLDAPLoginUnit"
+		metadataId: "someMetadataId",
+		presentationId: "somePresentationId",
+		loginUnitId: "uuSystemOneLDAPLoginUnit"
 
 	};
 	loginManager.login(spec);
 	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
+	
 	spec.loginUnitId = "someOtherLDAPLoginUnit";
 	loginManager.login(spec);
-
 	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
 	assert.ok(factored1);
 	
 	loginManager.authInfoCallback(this.authInfo);
-	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
-	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
 	
+	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
+	assert.strictEqual(factored1.getNoOfRemovePasswordLoginFromJsClient(), 1);
 });
 
 QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
@@ -652,18 +652,47 @@ QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(
 	let spec = {
 		text: "someText",
 		type: "password",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId",
-		"loginUnitId": "uuSystemOneLDAPLoginUnit"
+		metadataId: "someMetadataId",
+		presentationId: "somePresentationId",
+		loginUnitId: "uuSystemOneLDAPLoginUnit"
 	};
+	
+	
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
 	loginManager.login(spec);
 	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
 	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 0);
 
 	loginManager.login(spec);
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
 	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 1);
 	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 2);
+});
+
+QUnit.test("testPasswordLoginFirstLoginRemovedOnSuccesfullLogin", function(assert) {
+	let loginManager = this.loginManager;
+	let spec = {
+		text: "someText",
+		type: "password",
+		metadataId: "someMetadataId",
+		presentationId: "somePresentationId",
+		loginUnitId: "uuSystemOneLDAPLoginUnit"
+	};
+	
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
+	
+	loginManager.login(spec);
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+
+	loginManager.login(spec);
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+
+	loginManager.authInfoCallback(this.authInfo);
+	
+	loginManager.login(spec);
+	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 2);
 });
 
 QUnit.test("testCloseHolderIsCalledOnShowPassword", function(assert) {
@@ -671,8 +700,8 @@ QUnit.test("testCloseHolderIsCalledOnShowPassword", function(assert) {
 	loginManager.login({
 		text: "someText",
 		type: "password",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId"
+		metadataId: "someMetadataId",
+		presentationId: "somePresentationId"
 	});
 	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 

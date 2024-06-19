@@ -68,6 +68,10 @@ var CORATEST = (function(coraTest) {
 			return spyDependencies;
 		};
 
+		const getNoOfFactored = function(){
+			return factoredList.length;
+		};
+
 		let out = Object.freeze({
 			type: "standardFactorySpy",
 			factor: factor,
@@ -76,7 +80,8 @@ var CORATEST = (function(coraTest) {
 			getDependencies: getDependencies,
 			setSpyDependencies: setSpyDependencies,
 			setSpySpec: setSpySpec,
-			addSpySpec: addSpySpec
+			addSpySpec: addSpySpec,
+			getNoOfFactored : getNoOfFactored
 		});
 		return out;
 	};

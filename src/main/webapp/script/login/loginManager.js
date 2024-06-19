@@ -363,8 +363,8 @@ var CORA = (function(cora) {
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
 			for (let key in startedPasswordLogins) {
-//				console.log(key, startedPasswordLogins[key]);
 				startedPasswordLogins[key].removePasswordLoginFromJsClient();
+				delete startedPasswordLogins[key];
 			}
 		};
 

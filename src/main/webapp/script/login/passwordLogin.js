@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,11 +21,15 @@ var CORA = (function(cora) {
 	cora.passwordLogin = function(dependencies, spec) {
 		const recordGuiFactory = dependencies.recordGuiFactory;
 		const passwordLoginViewFactory = dependencies.passwordLoginViewFactory;
+		const ajaxCallFactory = dependencies.ajaxCallFactory;
+		
 		let view;
-
+		let recordGui;
+		let loginId;
+		
 		const start = function() {
 			view = createView();
-			let recordGui = createRecordGui();
+			recordGui = createRecordGui();
 			let presentationView = recordGui.getPresentationHolder(spec.presentationId,
 					spec.metadataId).getView();
 			view.addPresentationToLoginFormHolder(presentationView);
@@ -33,7 +37,10 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return passwordLoginViewFactory.factor();
+			let viewSpec = {
+				loginMethod: login
+			};
+			return passwordLoginViewFactory.factor(viewSpec);
 		};
 
 		const createRecordGui = function() {
@@ -50,7 +57,43 @@ var CORA = (function(cora) {
 				read: []
 			};
 		};
-		 
+		
+		const login = function() {
+			let loginData = CORA.coraData(recordGui.dataHolder.getData());
+			loginId = loginData.getFirstAtomicValueByNameInData("loginId");
+			let password = loginData.getFirstAtomicValueByNameInData("password");
+			let callSpec = createCallSpec(loginId, password);
+			ajaxCallFactory.factor(callSpec);
+		};
+		
+		const createCallSpec = function(loginId, password) {
+			return {
+				requestMethod : spec.requestMethod,
+				url : spec.url + loginId,
+				accept : spec.accept,
+				loadMethod : handleResponse,
+				errorMethod : spec.errorCallback,
+				timeoutMethod : spec.timeoutCallback,
+				data : password, 
+				timeoutInMS : 15000
+			};
+		};
+
+		const handleResponse = function(answer) {
+			let everything = JSON.parse(answer.responseText);
+			let data = everything.data;
+			let cData = CORA.coraData(data);
+			let token = cData.getFirstAtomicValueByNameInData("id");
+			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
+			let authInfo = {
+				userId : loginId,
+				token : token,
+				validForNoSeconds : validForNoSeconds,
+				actionLinks : everything.actionLinks
+			};
+			spec.authInfoCallback(authInfo);
+		};
+		
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -69,6 +112,8 @@ var CORA = (function(cora) {
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,
+			login: login,
+			handleResponse : handleResponse
 		});
 	};
 

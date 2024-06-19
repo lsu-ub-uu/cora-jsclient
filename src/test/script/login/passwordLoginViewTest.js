@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -26,7 +26,15 @@ QUnit.module("login/passwordLoginViewTest.js", {
 			textProvider : CORATEST.textProviderSpy()
 		};
 		this.dependencies = dependencies;
-		this.passwordLoginView = CORA.passwordLoginView(dependencies);
+		this.numberOfCallsToLogin = 0;
+		let login = function(){
+			this.nuberOfCallsToLogin++;
+		};
+		let spec = {
+			loginMethod: login
+		};
+		this.spec = spec;
+		this.passwordLoginView = CORA.passwordLoginView(dependencies, spec);
 	},
 	afterEach : function() {
 	}
@@ -69,3 +77,24 @@ QUnit.test("testAddPresentationToLoginFormHolder", function(assert) {
 	assert.strictEqual(loginFormHolder.childNodes.length, 1);
 	assert.strictEqual(loginFormHolder.firstChild, aPresentation);
 });
+
+QUnit.test("testInitButtonViewCreatedAndAddedToView", function(assert) {
+	let factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
+	let buttonView = factoredWorkItemView.getViewsAddedToView(1);
+	
+	assert.strictEqual(buttonView.nodeName, "SPAN");
+	assert.strictEqual(buttonView.className, "buttonView");
+});
+
+QUnit.test("testInitSearchButtonCreatedAndAddedButtonView", function(assert) {
+	let factoredWorkItemView = this.dependencies.workItemViewFactory.getFactored(0);
+	let buttonView = factoredWorkItemView.getViewsAddedToView(1);
+	let loginButton = buttonView.lastChild;
+	assert.strictEqual(loginButton.nodeName, "INPUT");
+	assert.strictEqual(loginButton.type, "button");
+	assert.strictEqual(loginButton.value, this.dependencies.textProvider
+		.getTranslation("theClient_loginButtonText"));
+	assert.strictEqual(loginButton.className, "loginButton");
+	assert.strictEqual(loginButton.modelObject.getSpec().action.method, this.spec.loginMethod);
+});
+

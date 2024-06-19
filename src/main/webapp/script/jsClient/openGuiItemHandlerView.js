@@ -52,7 +52,9 @@ var CORA = (function(cora) {
 		};
 
 		const removeManagedGuiItem = function(menuView) {
-			childrenView.removeChild(menuView);
+			if(childrenView.contains(menuView)){
+				childrenView.removeChild(menuView);
+			}
 		};
 		
 		const moveMenuViewUp = function(menuView){

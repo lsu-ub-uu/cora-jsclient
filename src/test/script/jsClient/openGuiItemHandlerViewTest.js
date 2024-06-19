@@ -87,6 +87,16 @@ QUnit.test("testRemoveManagedGuiItem", function(assert) {
 	assert.strictEqual(childrenView.childNodes[0], undefined);
 });
 
+QUnit.test("testRemoveManagedGuiItemNotAddedShouldNotCrash", function(assert) {
+	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
+	let managedGuiItem = CORATEST.managedGuiItemSpy();
+	
+	// remove
+	openGuiItemHandlerView.removeManagedGuiItem(managedGuiItem.getMenuView());
+	
+	assert.ok(true);
+});
+
 QUnit.test("testMoveMenuViewUp", function(assert) {
 	let openGuiItemHandlerView = CORA.openGuiItemHandlerView(this.dependencies, this.spec);
 	let view = openGuiItemHandlerView.getView();

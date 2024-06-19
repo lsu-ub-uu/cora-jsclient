@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,10 +24,11 @@ QUnit.module("login/passwordLoginJsClientIntegratorTest.js", {
 			passwordLoginFactory: CORATEST.standardFactorySpy("passwordLoginSpy"),
 			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy")
 		}
+		this.jsClient = CORATEST.jsClientSpy();
 		this.spec = {
 			metadataId: "someMetadataGroup",
 			presentationId: "somePresentationGroup",
-			jsClient: CORATEST.jsClientSpy()
+			jsClient: this.jsClient
 		}
 	},
 	afterEach: function() {
@@ -117,4 +118,19 @@ QUnit.test("testShowPasswordLoginInJsClient", function(assert) {
 	jsClientIntegrator.showPasswordLoginInJsClient();
 	assert.strictEqual(managedGuiItemSpy, this.spec.jsClient
 		.getViewShowingInWorkView(1));
+});
+
+QUnit.test("testRemovePasswordLoginFromJsClient", function(assert) {
+	let jsClientIntegrator = CORA.passwordLoginJsClientIntegrator(
+		this.dependencies, this.spec);
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory
+		.getFactored(0);
+	assert.strictEqual(managedGuiItemSpy, this.spec.jsClient
+		.getViewShowingInWorkView(0));
+		
+	jsClientIntegrator.showPasswordLoginInJsClient();
+	jsClientIntegrator.removePasswordLoginFromJsClient();
+	
+	assert.strictEqual(managedGuiItemSpy, this.spec.jsClient
+		. getViewRemoved(0));
 });

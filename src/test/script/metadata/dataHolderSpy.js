@@ -37,6 +37,7 @@ var CORATEST = (function(coraTest) {
 		let pathsAndMetadataId = [];
 		let containerPathNoRepeatId = [];
 		let returnNo = 0;
+		
 		function getData() {
 			return data;
 		}
@@ -59,6 +60,7 @@ var CORATEST = (function(coraTest) {
 			let pathString = JSON.stringify(path);
 			containerPath[pathString] = dataContainer;
 		};
+		
 		const getRequestedPath = function(callNo) {
 			return paths[callNo];
 		};
@@ -69,14 +71,17 @@ var CORATEST = (function(coraTest) {
 			returnNo++;
 			return toReturn;
 		};
+		
 		const addToReturnForFindContainersUsingPathAndMetadataId = function(toAdd) {
 			containerPathNoRepeatId.push(toAdd);
 		};
+		
 		const getRequestedPathAndMetadataId = function(callNo) {
 			return pathsAndMetadataId[callNo];
 		};
+		
 		return Object.freeze({
-			"type": "dataHolderSpy",
+			type: "dataHolderSpy",
 			getData: getData,
 			getDataWithActionLinks: getDataWithActionLinks,
 			setData: setData,

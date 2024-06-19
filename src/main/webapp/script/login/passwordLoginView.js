@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,16 +21,20 @@ var CORA = (function(cora) {
 	cora.passwordLoginView = function(dependencies, spec) {
 		let view;
 		let loginFormHolder;
-
+		let buttonView;
+		
 		const start = function() {
 			let workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createLoginFormHolderAndAddTo(workItemView);
+			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			workItemView.addViewToView(buttonView);
+			addLoginButton();
 		};
 
 		const createWorkItemView = function() {
 			let workItemViewSpec = {
-				"extraClassName" : "passwordLogin"
+				extraClassName : "passwordLogin"
 			};
 			return dependencies.workItemViewFactory.factor(workItemViewSpec);
 		};
@@ -38,6 +42,24 @@ var CORA = (function(cora) {
 		const createLoginFormHolderAndAddTo = function(addTo) {
 			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
 			addTo.addViewToView(loginFormHolder);
+		};
+		
+		const addLoginButton = function() {
+			let button = createButton();
+			buttonView.appendChild(button);
+			return button;
+		};
+
+		const createButton = function() {
+			let buttonSpec = {
+				type: "input",
+				className: "loginButton",
+				text: dependencies.textProvider.getTranslation("theClient_loginButtonText"),
+				action: {
+					method: spec.loginMethod
+				}
+			};
+			return CORA.gui.inputButton(buttonSpec);
 		};
 
 		const getView = function() {
@@ -58,7 +80,7 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			"type" : "passwordLoginView",
+			type : "passwordLoginView",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getView : getView,

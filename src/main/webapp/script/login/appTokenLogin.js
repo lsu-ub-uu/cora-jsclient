@@ -19,12 +19,13 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.appTokenLogin = function(dependencies, spec) {
+		const ajaxCallFactory = dependencies.ajaxCallFactory;
 		let userId;
 
 		const login = function(userIdIn, appToken) {
 			userId = userIdIn;
 			let callSpec = createCallSpec(appToken);
-			dependencies.ajaxCallFactory.factor(callSpec);
+			ajaxCallFactory.factor(callSpec);
 		};
 
 		const createCallSpec = function(appToken) {

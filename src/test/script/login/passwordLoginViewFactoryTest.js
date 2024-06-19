@@ -23,6 +23,10 @@ QUnit.module("login/passwordLoginViewFactoryTest.js", {
 		this.dependencies = {
 			textProvider : CORATEST.textProviderSpy()
 		};
+		this.loginMethod = function(){};
+		this.spec = {
+			loginMethod: this.loginMethod
+		};
 
 	},
 	afterEach : function() {

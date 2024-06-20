@@ -53,6 +53,7 @@ var CORA = (function(cora) {
 
 		const createRecordView = function(record) {
 			let newView = CORA.gui.createSpanWithClassName("listItem");
+			newView.tabindex = "0";
 			newView.onclick = function(event) {
 				let loadInBackground = "false";
 				if (event.ctrlKey) {
@@ -62,8 +63,13 @@ var CORA = (function(cora) {
 					"record": record,
 					"loadInBackground": loadInBackground
 				};
-				spec.resultHandler.openRecord(openInfo);
+//				spec.resultHandler.openRecord(openInfo);
+				newView.focus();
 			};
+//TODO: added
+			newView.onfocus = function(event){
+				event.preventDefault();
+			}
 			return newView;
 		};
 

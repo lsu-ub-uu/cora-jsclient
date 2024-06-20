@@ -642,6 +642,10 @@ h1, .h1TextStyle {
 	padding: 0.3rem;
 }
 
+.jsClient .listItem:focus {
+	border: solid;
+}
+
 .jsClient .listItem::before {
 	content: counter(record) ".";
 	font-size: 2rem;

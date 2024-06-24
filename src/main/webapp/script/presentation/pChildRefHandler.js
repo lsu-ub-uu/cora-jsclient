@@ -124,7 +124,8 @@ var CORA = (function(cora) {
 			userCanRemove = calculateUserCanRemove();
 			userCanMove = calculateUserCanMove();
 			userCanAddBefore = calculateUserCanAddBefore();
-		}
+		};
+		
 		const subscribeToMessagesFromForm = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
@@ -176,8 +177,6 @@ var CORA = (function(cora) {
 			let cTextGroup = CORA.coraData(cMetadataElementIn.getFirstChildByNameInData("textId"));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
-
-		
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
@@ -533,14 +532,14 @@ var CORA = (function(cora) {
 			let createLink = getLinkedRecordTypeCreateLink();
 			let localFile = file;
 			let callSpec = {
-				"requestMethod": createLink.requestMethod,
-				"url": createLink.url,
-				"contentType": createLink.contentType,
-				"accept": createLink.accept,
-				"loadMethod": processNewBinary,
-				"errorMethod": callError,
-				"data": JSON.stringify(data),
-				"file": localFile
+				requestMethod: createLink.requestMethod,
+				url: createLink.url,
+				contentType: createLink.contentType,
+				accept: createLink.accept,
+				loadMethod: processNewBinary,
+				errorMethod: callError,
+				data: JSON.stringify(data),
+				file: localFile
 			};
 			ajaxCallFactory.factor(callSpec);
 		};

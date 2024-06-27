@@ -131,7 +131,7 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			"type" : "jsBookkeeper",
+			type : "jsBookkeeper",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			setValue : setValue,

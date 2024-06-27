@@ -123,7 +123,7 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
-			 
+
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}

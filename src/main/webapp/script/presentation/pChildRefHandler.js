@@ -20,8 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pChildRefHandler = function(dependencies, spec) {
-		const {dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub, 
-			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory, 
+		const {dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub,
+			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
 			pChildRefHandlerViewFactory, pRepeatingElementFactory} = dependencies;
 		let out;
 		let userCanUploadFile = false;
@@ -98,7 +98,7 @@ var CORA = (function(cora) {
 				}
 			};
 		};
-				
+
 		const continueWithNormalStartup = function() {
 			cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 			metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -125,7 +125,7 @@ var CORA = (function(cora) {
 			userCanMove = calculateUserCanMove();
 			userCanAddBefore = calculateUserCanAddBefore();
 		};
-		
+
 		const subscribeToMessagesFromForm = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
@@ -266,9 +266,9 @@ var CORA = (function(cora) {
 			let cRecordTypeGroup = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("linkedRecordType"));
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-			return "binary" == recordTypeId;
+			return "binary" === recordTypeId;
 		};
-		
+
 		const getView = function() {
 			return pChildRefHandlerView.getView();
 		};
@@ -672,7 +672,7 @@ var CORA = (function(cora) {
 			if(spec.minNumberOfRepeatingToShow){
 				mininumOfOneMinNumberToShow = Number(spec.minNumberOfRepeatingToShow);
 			}
-	
+
 //			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
 			let numberLeftToAdd = mininumOfOneMinNumberToShow - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {

@@ -130,7 +130,7 @@ var CORA = (function(cora) {
 				addAttribute(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.nameInData)
 			} else if (msg.endsWith("setValue")) {
 				if("resourceLink"===dataFromMsg.special){
-					setMimeTypeInfo(dataFromMsg);					
+					setMimeTypeInfo(dataFromMsg);
 				}else{
 					setValue(dataFromMsg.path, dataFromMsg.data);
 				}
@@ -191,14 +191,14 @@ var CORA = (function(cora) {
 		const removeNonDataInfoFromContainerLeavingActionLinks = function(data) {
 			removeNonDataInfoFromContainer(data, false);
 		};
-		
+
 		const setMimeTypeInfo = function(dataFromMsg) {
 			let mimeType = dataFromMsg.data.mimeType;
 			let foundContainer = findContainer(dataFromMsg.path);
 			foundContainer.mimeType = mimeType;
 			foundContainer.actionLinks = dataFromMsg.data.actionLinks;
 		};
-		
+
 		const setValue = function(path, value) {
 			try {
 				setValueInContainerListUsingPath(path, value);

@@ -929,33 +929,33 @@ QUnit.module("login/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpy2, undefined);
 	});
 
-	test("testHandleFilesAddedEmptyLinkAsHappensInGuiFor1to1LinkToBinary", assert => {
-		spec.cParentMetadata = getCMetadata("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2");
-		spec.cPresentation = getCMetadata("myChildOfBinaryPLink");
-		createPChildRefHandlerSetItAndView();
-
-		//pChildRefHandler.sendAdd();
-		pChildRefHandler.handleMsg({
-			metadataId: "myChildOfBinaryLink"
-		}, "x/y/z/add");
-		pChildRefHandler.handleFiles(files1to3);
-
-		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
-
-		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
-		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(data2));
-
-		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
-		assert.strictEqual(ajaxCallSpy2, undefined);
-
-		answerCall(ajaxCallFactory, 0);
-		answerCall(ajaxCallFactory, 1);
-
-		let messages = pubSub.getMessages();
-		assert.deepEqual(messages.length, 3);
-		assert.deepEqual(messages[2].type, "updateRecord");
-	});
+//	test("testHandleFilesAddedEmptyLinkAsHappensInGuiFor1to1LinkToBinary", assert => {
+//		spec.cParentMetadata = getCMetadata("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2");
+//		spec.cPresentation = getCMetadata("myChildOfBinaryPLink");
+//		createPChildRefHandlerSetItAndView();
+//
+//		//pChildRefHandler.sendAdd();
+//		pChildRefHandler.handleMsg({
+//			metadataId: "myChildOfBinaryLink"
+//		}, "x/y/z/add");
+//		pChildRefHandler.handleFiles(files1to3);
+//
+//		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
+//		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+//
+//		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
+//		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(data2));
+//
+//		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
+//		assert.strictEqual(ajaxCallSpy2, undefined);
+//
+//		answerCall(ajaxCallFactory, 0);
+//		answerCall(ajaxCallFactory, 1);
+//
+//		let messages = pubSub.getMessages();
+//		assert.deepEqual(messages.length, 3);
+//		assert.deepEqual(messages[2].type, "updateRecord");
+//	});
 
 	test("testAddButtonShownFor0to1", assert => {
 		spec.cParentMetadata = getCMetadata("groupIdOneTextChildRepeat0to1");

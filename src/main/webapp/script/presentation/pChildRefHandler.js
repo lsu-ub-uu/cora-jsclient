@@ -23,6 +23,10 @@ var CORA = (function(cora) {
 		const {dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub,
 			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
 			pChildRefHandlerViewFactory, pRepeatingElementFactory} = dependencies;
+		const {recordPartPermissionCalculator,
+			cParentPresentation, cPresentation, cAlternativePresentation, presentationSize,
+			cParentMetadata, parentPath, mode, minNumberOfRepeatingToShow,
+			hasWritePermissionsForRecordPart, addText, childStyle, textStyle} = spec;
 		let out;
 		let userCanUploadFile = false;
 		let userCanRemove = false;
@@ -59,12 +63,12 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
-				"metadataProvider": metadataProvider
+				metadataProvider: metadataProvider
 			});
-			presentationId = findPresentationId(spec.cPresentation);
+			presentationId = findPresentationId(cPresentation);
 			metadataIdFromPresentation = getMetadataIdFromPresentation();
 			cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
-				spec.cParentMetadata, metadataIdFromPresentation);
+				cParentMetadata, metadataIdFromPresentation);
 
 			if (childRefFoundInCurrentlyUsedParentMetadata()) {
 				possiblyFake = createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith();
@@ -79,7 +83,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataIdFromPresentation = function() {
-			let presentationGroup = spec.cPresentation.getFirstChildByNameInData("presentationOf");
+			let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
 			let cPresentationGroup = CORA.coraData(presentationGroup);
 			return cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
@@ -127,9 +131,9 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToMessagesFromForm = function() {
-			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
-			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode==="input") {
+			pubSub.subscribe("add", parentPath, undefined, handleMsg);
+			pubSub.subscribe("move", parentPath, undefined, handleMsg);
+			if (minNumberOfRepeatingToShow !== undefined || mode==="input") {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
@@ -138,27 +142,27 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanRemove = function() {
-			if (spec.mode !== "input") {
+			if (mode !== "input") {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
 				return false;
 			}
-			return spec.hasWritePermissionsForRecordPart;
+			return hasWritePermissionsForRecordPart;
 		};
 
 		const calculateUserCanMove = function() {
-			if (spec.mode !== "input") {
+			if (mode !== "input") {
 				return false;
 			}
 			if (!isRepeating) {
 				return false;
 			}
-			return spec.hasWritePermissionsForRecordPart;
+			return hasWritePermissionsForRecordPart;
 		};
 
 		const calculateUserCanAddBefore = function() {
-			if (spec.mode !== "input") {
+			if (mode !== "input") {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
@@ -170,7 +174,7 @@ var CORA = (function(cora) {
 			if (userCanUploadFile) {
 				return false;
 			}
-			return spec.hasWritePermissionsForRecordPart;
+			return hasWritePermissionsForRecordPart;
 		};
 
 		const getTextId = function(cMetadataElementIn) {
@@ -183,7 +187,7 @@ var CORA = (function(cora) {
 		};
 
 		const getTextForAddButton = function(cMetadataElement) {
-			let textId = spec.addText !== undefined ? spec.addText : getTextId(cMetadataElement);
+			let textId = addText !== undefined ? addText : getTextId(cMetadataElement);
 			return textProvider.getTranslation(textId);
 		};
 
@@ -192,25 +196,25 @@ var CORA = (function(cora) {
 		};
 
 		const createPChildRefHandlerView = function() {
-			let pChildRefHandlerViewSpec = {
-				"presentationId": presentationId,
-				"isRepeating": isRepeating,
-				"addText": "+ " + text,
-				"mode": spec.mode
+			let viewSpec = {
+				presentationId: presentationId,
+				isRepeating: isRepeating,
+				addText: "+ " + text,
+				mode: mode
 			};
-			if (spec.textStyle !== undefined) {
-				pChildRefHandlerViewSpec.textStyle = spec.textStyle;
+			if (textStyle !== undefined) {
+				viewSpec.textStyle = textStyle;
 			}
-			if (spec.childStyle !== undefined) {
-				pChildRefHandlerViewSpec.childStyle = spec.childStyle;
+			if (childStyle !== undefined) {
+				viewSpec.childStyle = childStyle;
 			}
 			if (showFileUpload()) {
-				pChildRefHandlerViewSpec.upload = "true";
-				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
+				viewSpec.upload = "true";
+				viewSpec.handleFilesMethod = handleFiles;
 			} else if (showAddButton()) {
-				pChildRefHandlerViewSpec.addMethod = sendAdd;
+				viewSpec.addMethod = sendAdd;
 			}
-			return pChildRefHandlerViewFactory.factor(pChildRefHandlerViewSpec);
+			return pChildRefHandlerViewFactory.factor(viewSpec);
 		};
 
 		const hasAttributes = function() {
@@ -226,8 +230,7 @@ var CORA = (function(cora) {
 		};
 
 		const showAddButton = function() {
-			return spec.hasWritePermissionsForRecordPart
-				&& additionalChildrenCanBeAdded();
+			return hasWritePermissionsForRecordPart	&& additionalChildrenCanBeAdded();
 		};
 
 		const additionalChildrenCanBeAdded = function() {
@@ -323,11 +326,11 @@ var CORA = (function(cora) {
 
 		const calculateNewPath = function(metadataIdToAdd, repeatId) {
 			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd,
-				repeatId, spec.parentPath);
+				repeatId, parentPath);
 		};
 
-		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
-			parentPath) {
+		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, 
+			repeatId, parentPath) {
 			let pathSpec = {
 				"metadataIdToAdd": metadataIdToAdd,
 				"repeatId": repeatId,
@@ -351,13 +354,13 @@ var CORA = (function(cora) {
 		const addPresentationsToRepeatingElementsView = function(repeatingElement, metadataIdToAdd) {
 			let path = repeatingElement.getPath();
 
-			let presentation = factorPresentation(path, spec.cPresentation, metadataIdToAdd);
+			let presentation = factorPresentation(path, cPresentation, metadataIdToAdd);
 			repeatingElement.addPresentation(presentation);
 
 			if (hasAlternativePresentation()) {
-				let presentationMinimized = factorPresentation(path, spec.cAlternativePresentation,
+				let presentationMinimized = factorPresentation(path, cAlternativePresentation,
 					metadataIdToAdd);
-				repeatingElement.addAlternativePresentation(presentationMinimized, spec.presentationSize);
+				repeatingElement.addAlternativePresentation(presentationMinimized, presentationSize);
 			}
 		};
 
@@ -367,14 +370,14 @@ var CORA = (function(cora) {
 				path: path,
 				metadataIdUsedInData: metadataIdUsedInData,
 				cPresentation: cPresentation,
-				cParentPresentation: spec.cParentPresentation,
-				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
+				cParentPresentation: cParentPresentation,
+				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
 			return presentationFactory.factor(presentationSpec);
 		};
 
 		const hasAlternativePresentation = function() {
-			return spec.cAlternativePresentation !== undefined;
+			return cAlternativePresentation !== undefined;
 		};
 
 		const subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView = function(repeatingElement) {
@@ -402,7 +405,7 @@ var CORA = (function(cora) {
 		};
 
 		const updateView = function() {
-			if (spec.mode === "input") {
+			if (mode === "input") {
 				if (showAddButton()) {
 					updateButtonViewAndAddBeforeButtonVisibility();
 					updateChildrenRemoveButtonVisibility();
@@ -465,10 +468,10 @@ var CORA = (function(cora) {
 		const createAddData = function() {
 			let data = {
 				"metadataId": metadataId,
-				"path": spec.parentPath,
+				"path": parentPath,
 				"childReference": cParentMetadataChildRefPart.getData(),
 				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
-				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
+				"recordPartPermissionCalculator": recordPartPermissionCalculator
 			};
 
 			if (metadataHasAttributes) {
@@ -493,7 +496,7 @@ var CORA = (function(cora) {
 
 		const childMoved = function(moveInfo) {
 			let data = {
-				"path": spec.parentPath,
+				"path": parentPath,
 				"metadataId": metadataId,
 				"moveChild": moveInfo.moveChild,
 				"basePositionOnChild": moveInfo.basePositionOnChild,
@@ -669,15 +672,15 @@ var CORA = (function(cora) {
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
 			let mininumOfOneMinNumberToShow = 1;
-			if(spec.minNumberOfRepeatingToShow){
-				mininumOfOneMinNumberToShow = Number(spec.minNumberOfRepeatingToShow);
+			if(minNumberOfRepeatingToShow){
+				mininumOfOneMinNumberToShow = Number(minNumberOfRepeatingToShow);
 			}
 
-//			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
+//			let numberLeftToAdd = Number(minNumberOfRepeatingToShow) - noOfRepeating;
 			let numberLeftToAdd = mininumOfOneMinNumberToShow - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {
 				if (!maxLimitOfChildrenReached()) {
-//					console.log("SEND ADD: "+d, spec.cPresentation.getData())
+//					console.log("SEND ADD: "+d, cPresentation.getData())
 					sendAdd();
 				}
 			}

@@ -63,10 +63,7 @@ var CORA = (function(cora) {
 			var filter = createNameInDataFilter(nameInDataIn);
 			var attributesFilter = createAttributesFilter(attributes);
 			return function(child) {
-				if (filter(child) && attributesFilter(child)) {
-					return true;
-				}
-				return false;
+				return filter(child) && attributesFilter(child);
 			};
 		}
 
@@ -119,10 +116,7 @@ var CORA = (function(cora) {
 			if (containerAndPathHasAttributes(container, attributes)) {
 				return containerHasSameAttributesAsPath(container, attributes);
 			}
-			if (containerAndPathDoesNotHaveAttributes(container, attributes)) {
-				return true;
-			}
-			return false;
+			return containerAndPathDoesNotHaveAttributes(container, attributes);
 		}
 
 		function containerAndPathHasAttributes(container, attributes) {
@@ -263,10 +257,7 @@ var CORA = (function(cora) {
 			var filter = createNameInDataFilter(nameInDataIn);
 			var repeatIdFilter = createRepeatIdFilter(repeatId);
 			return function(child) {
-				if (filter(child) && repeatIdFilter(child)) {
-					return true;
-				}
-				return false;
+				return (filter(child) && repeatIdFilter(child));
 			};
 		}
 
@@ -298,10 +289,7 @@ var CORA = (function(cora) {
 			var attributesFilter = createAttributesFilter(attributes);
 			var repeatIdFilter = createRepeatIdFilter(repeatId);
 			return function(child) {
-				if (filter(child) && attributesFilter(child) && repeatIdFilter(child)) {
-					return true;
-				}
-				return false;
+				return filter(child) && attributesFilter(child) && repeatIdFilter(child);
 			};
 		}
 
@@ -323,26 +311,25 @@ var CORA = (function(cora) {
 			return linkedRecordId[0].value;
 		}
 
-		return Object
-			.freeze({
-				getData: getData,
-				containsChildWithNameInData: containsChildWithNameInData,
-				getFirstChildByNameInData: getFirstChildByNameInData,
-				getFirstAtomicValueByNameInData: getFirstAtomicValueByNameInData,
-				getNoOfChildrenWithNameInData: getNoOfChildrenWithNameInData,
-				containsChildWithNameInDataAndAttributes: containsChildWithNameInDataAndAttributes,
-				getChildrenByNameInData: getChildrenByNameInData,
-				getChildrenByNameInDataAndAttributes: getChildrenByNameInDataAndAttributes,
-				getFirstChildByNameInDataAndAttributes: getFirstChildByNameInDataAndAttributes,
-				containsChildWithNameInDataAndIndex: containsChildWithNameInDataAndIndex,
-				getChildByNameInDataAndIndex: getChildByNameInDataAndIndex,
-				getAtomicValueByNameInDataAndIndex: getAtomicValueByNameInDataAndIndex,
-				containsChildWithNameInDataAndRepeatId: containsChildWithNameInDataAndRepeatId,
-				getFirstChildByNameInDataAndRepeatId: getFirstChildByNameInDataAndRepeatId,
-				containsChildWithNameInDataAndAttributesAndRepeatId: containsChildWithNameInDataAndAttributesAndRepeatId,
-				getFirstChildByNameInDataAndAttributesAndRepeatId: getFirstChildByNameInDataAndAttributesAndRepeatId,
-				getLinkedRecordIdFromFirstChildLinkWithNameInData: getLinkedRecordIdFromFirstChildLinkWithNameInData
-			});
+		return Object.freeze({
+			getData: getData,
+			containsChildWithNameInData: containsChildWithNameInData,
+			getFirstChildByNameInData: getFirstChildByNameInData,
+			getFirstAtomicValueByNameInData: getFirstAtomicValueByNameInData,
+			getNoOfChildrenWithNameInData: getNoOfChildrenWithNameInData,
+			containsChildWithNameInDataAndAttributes: containsChildWithNameInDataAndAttributes,
+			getChildrenByNameInData: getChildrenByNameInData,
+			getChildrenByNameInDataAndAttributes: getChildrenByNameInDataAndAttributes,
+			getFirstChildByNameInDataAndAttributes: getFirstChildByNameInDataAndAttributes,
+			containsChildWithNameInDataAndIndex: containsChildWithNameInDataAndIndex,
+			getChildByNameInDataAndIndex: getChildByNameInDataAndIndex,
+			getAtomicValueByNameInDataAndIndex: getAtomicValueByNameInDataAndIndex,
+			containsChildWithNameInDataAndRepeatId: containsChildWithNameInDataAndRepeatId,
+			getFirstChildByNameInDataAndRepeatId: getFirstChildByNameInDataAndRepeatId,
+			containsChildWithNameInDataAndAttributesAndRepeatId: containsChildWithNameInDataAndAttributesAndRepeatId,
+			getFirstChildByNameInDataAndAttributesAndRepeatId: getFirstChildByNameInDataAndAttributesAndRepeatId,
+			getLinkedRecordIdFromFirstChildLinkWithNameInData: getLinkedRecordIdFromFirstChildLinkWithNameInData
+		});
 	};
 
 	return cora;

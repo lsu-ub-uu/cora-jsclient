@@ -83,7 +83,7 @@ var CORA = (function(cora) {
 				appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
 			});
 		}
-		
+
 		let loginOrigin;
 		let logins = {};
 		let loginUnitDataList;
@@ -97,7 +97,7 @@ var CORA = (function(cora) {
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
 		};
-		
+
 		const fetchAllLoginInfoFromServer = function() {
 			fetchLoginUnitFromServer();
 			fetchLoginFromServer();
@@ -150,11 +150,12 @@ var CORA = (function(cora) {
 				logins[recordId] = login;
 			});
 		};
-		
+
 		const parseLoginData = function(loginData) {
 			let type = getTypeFromLoginRecord(loginData);
-			let login = {};
-			login.type = type;
+			let login = {
+				type: type
+			};
 			if ("webRedirect" === type) {
 				login.url = getUrlFromLoginRecord(loginData);
 			}
@@ -200,8 +201,8 @@ var CORA = (function(cora) {
 				let textId = getTextIdFromRecord(loginUnitData);
 				let loginId = getLoginIdFromRecord(loginUnitData);
 				let loginUnitId = getIdFromRecord(loginUnitData);
-				let loginForCurrentLoginUnit = logins[loginId]; 
-				
+				let loginForCurrentLoginUnit = logins[loginId];
+
 				let loginOption = {
 					text: getTranslatedText(textId),
 					type: loginForCurrentLoginUnit.type,
@@ -335,7 +336,7 @@ var CORA = (function(cora) {
 				.factor(passwordLoginSpec);
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
-		
+
 		const passwordErrorCallback = function(errorObject) {
 			if (failedToLogout(errorObject)) {
 				logoutCallback();
@@ -343,11 +344,11 @@ var CORA = (function(cora) {
 				spec.setErrorMessage("Password login failed!");
 			}
 		};
-		
+
 		const passwordTimeoutCallback = function() {
 			spec.setErrorMessage("Password login timedout!");
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};

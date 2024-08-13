@@ -31,56 +31,56 @@ var CORA = (function(cora) {
 			loginOptions.push({
 				text: "appToken as 141414",
 				type: "appTokenLogin",
-				userId: "141414",
-				appToken: "63e6bd34-02a1-4c82-8001-158c104cae0e"
+				userId: "jsClientUser@system.cora.uu.se",
+				appToken: "5d3f3ed4-4931-4924-9faa-8eaf5ac6457e"
 			});
 			loginOptions.push({
 				text: "appToken as 151515 alvin",
 				type: "appTokenLogin",
-				userId: "151515",
-				appToken: "63ef81cd-1d88-4a6a-aff0-f0d809a74d34"
+				userId: "alvinAdmin@cora.epc.ub.uu.se",
+				appToken: "a50ca087-a3f5-4393-b2bb-315436d3c3be"
 			});
 			loginOptions.push({
 				text: "alvin user",
 				type: "appTokenLogin",
-				userId: "coraUser:4412566252284358",
-				appToken: "935ae709-4056-4b3d-85d2-469b304acfae"
+				userId: "alvinUser@cora.epc.ub.uu.se",
+				appToken: "39291112-aff2-4929-b201-515720693722"
 			});
 			loginOptions.push({
 				text: "appToken as 161616 diva",
 				type: "appTokenLogin",
-				userId: "161616",
-				appToken: "f7973be9-02e0-4c42-979b-09e42372a02a"
+				userId: "divaAdmin@cora.epc.ub.uu.se",
+				appToken: "49ce00fb-68b5-4089-a5f7-1c225d3cf156"
 			});
 			loginOptions.push({
 				text: "diva user",
 				type: "appTokenLogin",
-				userId: "coraUser:4412982402853626",
-				appToken: "b27039e1-593d-4d95-a69a-b33aa8c0924a"
+				userId: "divaUser@cora.epc.ub.uu.se",
+				appToken: "2dc75984-bde0-4131-bec9-a830670c2732"
 			});
 			loginOptions.push({
 				text: "divaEverything",
 				type: "appTokenLogin",
-				userId: "coraUser:490742519075086",
-				appToken: "2e57eb36-55b9-4820-8c44-8271baab4e8e"
+				userId: "divaEverything@diva.cora.uu.se",
+				appToken: "77edfec1-e1f1-45d4-a452-411668eba0f0"
 			});
 			loginOptions.push({
 				text: "divaSystemAdmin",
 				type: "appTokenLogin",
-				userId: "coraUser:491055276494310",
-				appToken: "0c240296-0315-4e48-a991-4e6350e73413"
+				userId: "systemAdmin@diva.cora.uu.se",
+				appToken: "b5ec82bb-9492-4d9f-9069-c2fac3b49493"
 			});
 			loginOptions.push({
 				text: "divaDomainAdminUU",
 				type: "appTokenLogin",
-				userId: "coraUser:491144693381458",
-				appToken: "89ad2b42-785a-4421-a647-f959cdb85f4a"
+				userId: "dominAdminUU@diva.cora.uu.se",
+				appToken: "4808c689-48f1-4fe9-81e1-1888795933cf"
 			});
 			loginOptions.push({
 				text: "divaDomainAdminKTH",
 				type: "appTokenLogin",
-				userId: "coraUser:491201365536105",
-				appToken: "765b4fcd-43b4-433a-bf7f-8e929f94d3fe"
+				userId: "domainAdminKTH@diva.cora.uu.se",
+				appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
 			});
 		}
 		

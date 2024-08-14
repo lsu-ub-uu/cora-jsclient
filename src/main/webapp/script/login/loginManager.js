@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 			loginOptions.push({
 				text: "appToken as 141414",
 				type: "appTokenLogin",
-				userId: "jsClientUser@system.cora.uu.se",
+				userId: "systemoneAdmin@system.cora.uu.se",
 				appToken: "5d3f3ed4-4931-4924-9faa-8eaf5ac6457e"
 			});
 			loginOptions.push({

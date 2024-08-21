@@ -56,7 +56,9 @@ var CORA = (function(cora) {
 			createAndAddOpenGuiItemHandlerToSideBar();
 			addMainSearchesUserIsAuthorizedToUseToSideBar();
 			createAndAddGroupOfRecordTypesToSideBar();
-			
+//SPIKE			
+			createStartPage();
+//END SPIKE			
 		};
 		
 		const onKeyDown = function(event){
@@ -103,8 +105,13 @@ var CORA = (function(cora) {
 		
 		const close = function(event) {
 			event.preventDefault();
-			if(openGuiItemHandler.getShowingGuiItem()){
-				viewRemoved(openGuiItemHandler.getShowingGuiItem());
+			let showingGuiItem = openGuiItemHandler.getShowingGuiItem();
+			if(showingGuiItem){
+// SPIKE		
+				if(showingGuiItem.getSpec().disableRemove !== "true"){
+					viewRemoved(showingGuiItem);
+				}		
+//END SPIKE				
 			}
 		};
 		
@@ -307,6 +314,29 @@ var CORA = (function(cora) {
 				callOnMetadataReloadMethod: reloadForMetadataChanges
 			};
 		};
+//SPIKE
+		const createStartPage = function() {
+			let startManagedGuiItemSpec = {
+				activateMethod: showView,
+				disableRemove: "true"
+//				removeMethod: viewRemoved,
+//				callOnMetadataReloadMethod: reloadForMetadataChanges
+			};
+			let startManagedGuiItem = managedGuiItemFactory.factor(startManagedGuiItemSpec);
+			
+			let startMenuView = CORA.gui.createSpanWithClassName("start");
+			startMenuView.innerHTML = "START!";
+			startManagedGuiItem.addMenuPresentation(startMenuView);
+
+			let startView = CORA.gui.createSpanWithClassName("start");
+			startView.innerHTML = "START!";
+			startManagedGuiItem.addWorkPresentation(startView);
+			
+			
+			addGuiItem(startManagedGuiItem);
+			showView(startManagedGuiItem);
+		};
+//END SPIKE
 		
 		const reloadProviders = function() {
 			if (reloadingProvidersInProgress === false) {

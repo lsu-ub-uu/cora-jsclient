@@ -147,6 +147,7 @@ QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, this.spec.baseUrl + "record/loginUnit");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.fetchLoginUnitCallback);
 	assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.fetchLoginUnitErrorCallback);
 	assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.fetchLoginUnitTimeoutCallback);
@@ -157,6 +158,7 @@ QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
 	let ajaxCallSpec1 = ajaxCallSpy1.getSpec();
 	assert.strictEqual(ajaxCallSpec1.url, this.spec.baseUrl + "record/login");
 	assert.strictEqual(ajaxCallSpec1.requestMethod, "GET");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 	assert.strictEqual(ajaxCallSpec1.loadMethod, loginManager.fetchLoginCallback);
 	assert.strictEqual(ajaxCallSpec1.errorMethod, loginManager.fetchLoginErrorCallback);
 	assert.strictEqual(ajaxCallSpec1.timeoutMethod, loginManager.fetchLoginTimeoutCallback);

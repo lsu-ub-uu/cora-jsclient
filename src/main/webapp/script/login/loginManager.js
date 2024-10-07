@@ -107,6 +107,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/loginUnit",
+				accept: "application/vnd.uub.recordList+json",
 				loadMethod: fetchLoginUnitCallback,
 				errorMethod: fetchLoginUnitErrorCallback,
 				timeoutMethod: fetchLoginUnitTimeoutCallback
@@ -118,6 +119,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/login",
+				accept: "application/vnd.uub.recordList+json",
 				loadMethod: fetchLoginCallback,
 				errorMethod: fetchLoginErrorCallback,
 				timeoutMethod: fetchLoginTimeoutCallback

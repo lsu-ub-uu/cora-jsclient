@@ -69,12 +69,13 @@ var CORA = (function(cora) {
 		const createCallSpec = function(loginId, password) {
 			return {
 				requestMethod : spec.requestMethod,
-				url : spec.url + loginId,
+				url : spec.url,
+				contentType : spec.contentType,
 				accept : spec.accept,
 				loadMethod : handleResponse,
 				errorMethod : spec.errorCallback,
 				timeoutMethod : spec.timeoutCallback,
-				data : password, 
+				data : loginId+'\n'+password, 
 				timeoutInMS : 15000
 			};
 		};
@@ -83,7 +84,7 @@ var CORA = (function(cora) {
 			let everything = JSON.parse(answer.responseText);
 			let data = everything.data;
 			let cData = CORA.coraData(data);
-			let token = cData.getFirstAtomicValueByNameInData("id");
+			let token = cData.getFirstAtomicValueByNameInData("token");
 			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
 			let authInfo = {
 				userId : loginId,

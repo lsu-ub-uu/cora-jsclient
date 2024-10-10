@@ -20,23 +20,25 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.appTokenLogin = function(dependencies, spec) {
 		const ajaxCallFactory = dependencies.ajaxCallFactory;
-		let userId;
+		let loginId;
 
-		const login = function(userIdIn, appToken) {
-			userId = userIdIn;
-			let callSpec = createCallSpec(appToken);
+		const login = function(loginIdIn, appToken) {
+			loginId = loginIdIn;
+			let callSpec = createCallSpec(loginId,appToken);
 			ajaxCallFactory.factor(callSpec);
 		};
 
-		const createCallSpec = function(appToken) {
+		const createCallSpec = function(loginId,appToken) {
 			return {
 				requestMethod : spec.requestMethod,
-				url : spec.url + userId,
+				url : spec.url,
+				loginId: loginId,
+				contentType : spec.contentType,
 				accept : spec.accept,
 				loadMethod : handleResponse,
 				errorMethod : errorMethod,
 				timeoutMethod : timeoutMethod,
-				data : appToken,
+				data : loginId+'\n'+appToken,
 				timeoutInMS : 15000
 			};
 		};
@@ -53,10 +55,10 @@ var CORA = (function(cora) {
 			let everything = JSON.parse(answer.responseText);
 			let data = everything.data;
 			let cData = CORA.coraData(data);
-			let token = cData.getFirstAtomicValueByNameInData("id");
+			let token = cData.getFirstAtomicValueByNameInData("token");
 			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
 			let authInfo = {
-				userId : userId,
+				userId : loginId,
 				token : token,
 				validForNoSeconds : validForNoSeconds,
 				actionLinks : everything.actionLinks

@@ -354,8 +354,9 @@ QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
 	assert.ok(factored1);
 	let spec0 = this.dependencies.appTokenLoginFactory.getSpec(0);
 	assert.strictEqual(spec0.requestMethod, "POST");
-	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken/");
-	assert.strictEqual(spec0.accept, "");
+	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
+	assert.strictEqual(spec0.contentType,  "application/vnd.uub.login");
+	assert.strictEqual(spec0.accept,  "application/vnd.uub.record+json");
 	assert.strictEqual(spec0.authInfoCallback, loginManager.authInfoCallback);
 	assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
 	assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
@@ -480,9 +481,7 @@ QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 		+ "rest/apptoken/141414");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
-	// assert.strictEqual(ajaxCallSpec.accept, "");
 	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.logoutCallback);
-	assert.strictEqual(ajaxCallSpec.data, "fake authToken from here");
 });
 
 QUnit.test("testLoggedoutStateIsSetOnAppTokenLogoutCallback", function(assert) {

@@ -32,7 +32,6 @@ var CORA = (function(cora) {
 			return {
 				requestMethod : spec.requestMethod,
 				url : spec.url,
-				loginId: loginId,
 				contentType : spec.contentType,
 				accept : spec.accept,
 				loadMethod : handleResponse,

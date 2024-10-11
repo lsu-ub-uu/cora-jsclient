@@ -277,8 +277,9 @@ var CORA = (function(cora) {
 		const appTokenLogin = function(userId, appToken) {
 			let loginSpec = {
 				requestMethod: "POST",
-				url: spec.appTokenBaseUrl + "login/rest/apptoken/",
-				accept: "",
+				url: spec.appTokenBaseUrl + "login/rest/apptoken",
+				contentType : "application/vnd.uub.login",
+				accept: "application/vnd.uub.record+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
@@ -328,6 +329,7 @@ var CORA = (function(cora) {
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
+				contentType : "application/vnd.uub.login",
 				accept: "application/vnd.uub.record+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: passwordErrorCallback,
@@ -395,7 +397,6 @@ var CORA = (function(cora) {
 				"loadMethod": logoutCallback,
 				"errorMethod": appTokenErrorCallback,
 				"timeoutMethod": appTokenTimeoutCallback,
-				"data": authInfo.token,
 				"timeoutInMS": 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);

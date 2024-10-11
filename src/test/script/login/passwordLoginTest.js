@@ -53,13 +53,10 @@ QUnit.module("login/passwordLoginTest.js", {
 		let spec = {
 			metadataId : "someMetadataGroup",
 			presentationId :"somePGroup",
-//			jsClient: spec.jsClient,
 			requestMethod: "POST",
-			url: "someAppTokenBaseUrl/" + "login/rest/password/",
+			url: "someAppTokenBaseUrl/" + "login/rest/password",
+			contentType: "application/vnd.uub.login",
 			accept: "application/vnd.uub.record+json",
-//			authInfoCallback: authInfoCallback,
-//			errorCallback: passwordErrorCallback,
-//			timeoutCallback: passwordTimeoutCallback
 			authInfoCallback : function(authInfoIn) {
 				authInfo = authInfoIn;
 			},
@@ -77,13 +74,14 @@ QUnit.module("login/passwordLoginTest.js", {
 		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
 			let ajaxCallSpec = ajaxCallSpy.getSpec();
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-			assert.strictEqual(ajaxCallSpec.url, spec.url + "someLoginId");
+			assert.strictEqual(ajaxCallSpec.url, spec.url);
+			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
 			assert.strictEqual(ajaxCallSpec.accept, spec.accept);
 			assert.strictEqual(ajaxCallSpec.loadMethod, this.passwordLogin.handleResponse);
 			assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutMethod, spec.timeoutCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutInMS, 15000);
-			assert.strictEqual(ajaxCallSpec.data, "somePassword");
+			assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomePassword");
 		};
 		this.loginData = {
 			name: "password",
@@ -180,7 +178,7 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 	let tokenAnswer = {
 		data : {
 			children : [ {
-				name : "id",
+				name : "token",
 				value : "someAuthToken"
 			}, {
 				name : "validForNoSeconds",
@@ -192,7 +190,7 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 			delete : {
 				requestMethod : "DELETE",
 				rel : "delete",
-				url : "http://epc.ub.uu.se/login/rest/apptoken/131313"
+				url : "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
 			}
 		}
 	};

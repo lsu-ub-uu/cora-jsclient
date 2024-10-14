@@ -56,7 +56,7 @@ var CORA = (function(cora) {
 				text: "diva user",
 				type: "appTokenLogin",
 				userId: "divaUser@cora.epc.ub.uu.se",
-				appToken: "2dc75984-bde0-4131-bec9-a830670c2732"
+				appToken: "fa98bc21-830b-4dc7-b952-ebe4cf02e921"
 			});
 			loginOptions.push({
 				text: "divaEverything",

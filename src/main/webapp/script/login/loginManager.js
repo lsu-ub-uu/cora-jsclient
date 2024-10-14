@@ -17,6 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 let addStandardAppTokensToLoginMenu = false;
+let appTokenOptions = [];
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManager = function(dependencies, spec) {
@@ -26,62 +27,10 @@ var CORA = (function(cora) {
 		let createdWebRedirectLogin;
 		let startedPasswordLogins = {};
 
+		
 		let loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
-			loginOptions.push({
-				text: "appToken as 141414",
-				type: "appTokenLogin",
-				userId: "systemoneAdmin@system.cora.uu.se",
-				appToken: "5d3f3ed4-4931-4924-9faa-8eaf5ac6457e"
-			});
-			loginOptions.push({
-				text: "appToken as 151515 alvin",
-				type: "appTokenLogin",
-				userId: "alvinAdmin@cora.epc.ub.uu.se",
-				appToken: "a50ca087-a3f5-4393-b2bb-315436d3c3be"
-			});
-			loginOptions.push({
-				text: "alvin user",
-				type: "appTokenLogin",
-				userId: "alvinUser@cora.epc.ub.uu.se",
-				appToken: "39291112-aff2-4929-b201-515720693722"
-			});
-			loginOptions.push({
-				text: "appToken as 161616 diva",
-				type: "appTokenLogin",
-				userId: "divaAdmin@cora.epc.ub.uu.se",
-				appToken: "49ce00fb-68b5-4089-a5f7-1c225d3cf156"
-			});
-			loginOptions.push({
-				text: "diva user",
-				type: "appTokenLogin",
-				userId: "divaUser@cora.epc.ub.uu.se",
-				appToken: "fa98bc21-830b-4dc7-b952-ebe4cf02e921"
-			});
-			loginOptions.push({
-				text: "divaEverything",
-				type: "appTokenLogin",
-				userId: "divaEverything@diva.cora.uu.se",
-				appToken: "77edfec1-e1f1-45d4-a452-411668eba0f0"
-			});
-			loginOptions.push({
-				text: "divaSystemAdmin",
-				type: "appTokenLogin",
-				userId: "systemAdmin@diva.cora.uu.se",
-				appToken: "b5ec82bb-9492-4d9f-9069-c2fac3b49493"
-			});
-			loginOptions.push({
-				text: "divaDomainAdminUU",
-				type: "appTokenLogin",
-				userId: "dominAdminUU@diva.cora.uu.se",
-				appToken: "4808c689-48f1-4fe9-81e1-1888795933cf"
-			});
-			loginOptions.push({
-				text: "divaDomainAdminKTH",
-				type: "appTokenLogin",
-				userId: "domainAdminKTH@diva.cora.uu.se",
-				appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
-			});
+			loginOptions = loginOptions.concat(appTokenOptions);
 		}
 		
 		let loginOrigin;

@@ -27,12 +27,11 @@ var CORA = (function(cora) {
 		let createdWebRedirectLogin;
 		let startedPasswordLogins = {};
 
-		
 		let loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
 			loginOptions = loginOptions.concat(appTokenOptions);
 		}
-		
+
 		let loginOrigin;
 		let logins = {};
 		let loginUnitDataList;
@@ -46,7 +45,7 @@ var CORA = (function(cora) {
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
 		};
-		
+
 		const fetchAllLoginInfoFromServer = function() {
 			fetchLoginUnitFromServer();
 			fetchLoginFromServer();
@@ -101,7 +100,7 @@ var CORA = (function(cora) {
 				logins[recordId] = login;
 			});
 		};
-		
+
 		const parseLoginData = function(loginData) {
 			let type = getTypeFromLoginRecord(loginData);
 			let login = {};
@@ -151,8 +150,8 @@ var CORA = (function(cora) {
 				let textId = getTextIdFromRecord(loginUnitData);
 				let loginId = getLoginIdFromRecord(loginUnitData);
 				let loginUnitId = getIdFromRecord(loginUnitData);
-				let loginForCurrentLoginUnit = logins[loginId]; 
-				
+				let loginForCurrentLoginUnit = logins[loginId];
+
 				let loginOption = {
 					text: getTranslatedText(textId),
 					type: loginForCurrentLoginUnit.type,
@@ -215,7 +214,7 @@ var CORA = (function(cora) {
 
 		const login = function(loginOption) {
 			if ("appTokenLogin" === loginOption.type) {
-				appTokenLogin(loginOption.userId, loginOption.appToken);
+				appTokenLogin(loginOption.loginId, loginOption.appToken);
 			} else if ("password" === loginOption.type) {
 				passwordLogin(loginOption);
 			} else {
@@ -223,7 +222,7 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const appTokenLogin = function(userId, appToken) {
+		const appTokenLogin = function(loginId, appToken) {
 			let loginSpec = {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
@@ -234,7 +233,7 @@ var CORA = (function(cora) {
 				timeoutCallback: appTokenTimeoutCallback
 			};
 			let factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
-			factoredAppTokenLogin.login(userId, appToken);
+			factoredAppTokenLogin.login(loginId, appToken);
 		};
 
 		const webRedirectLogin = function(loginOption) {
@@ -288,7 +287,7 @@ var CORA = (function(cora) {
 				.factor(passwordLoginSpec);
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
-		
+
 		const passwordErrorCallback = function(errorObject) {
 			if (failedToLogout(errorObject)) {
 				logoutCallback();
@@ -296,11 +295,11 @@ var CORA = (function(cora) {
 				spec.setErrorMessage("Password login failed!");
 			}
 		};
-		
+
 		const passwordTimeoutCallback = function() {
 			spec.setErrorMessage("Password login timedout!");
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -312,7 +311,7 @@ var CORA = (function(cora) {
 		const authInfoCallback = function(authInfoIn) {
 			authInfo = authInfoIn;
 			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
-			loginManagerView.setUserId(authInfo.userId);
+			loginManagerView.setLoginId(authInfo.loginId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
 			for (let key in startedPasswordLogins) {
@@ -341,12 +340,12 @@ var CORA = (function(cora) {
 		const logout = function() {
 			let deleteLink = authInfo.actionLinks['delete'];
 			let callSpec = {
-				"requestMethod": deleteLink.requestMethod,
-				"url": deleteLink.url,
-				"loadMethod": logoutCallback,
-				"errorMethod": appTokenErrorCallback,
-				"timeoutMethod": appTokenTimeoutCallback,
-				"timeoutInMS": 15000
+				requestMethod: deleteLink.requestMethod,
+				url: deleteLink.url,
+				loadMethod: logoutCallback,
+				errorMethod: appTokenErrorCallback,
+				timeoutMethod: appTokenTimeoutCallback,
+				timeoutInMS: 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};

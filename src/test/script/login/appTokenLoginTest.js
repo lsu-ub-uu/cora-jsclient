@@ -105,21 +105,25 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
 	let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
 	let tokenAnswer = {
-		"data" : {
-			"children" : [ {
-				"name" : "token",
-				"value" : "someAuthToken"
-			}, {
-				"name" : "validForNoSeconds",
-				"value" : "278"
-			} ],
-			"name" : "authToken"
-		}, 
-		"actionLinks" : {
-			"delete" : {
-				"requestMethod" : "DELETE",
-				"rel" : "delete",
-				"url" : "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
+		data : {
+			children : [ {
+					name : "token",
+					value : "someAuthToken"
+				}, {
+					name : "userId",
+					value : "someUserId"
+				}, {
+					name : "validForNoSeconds",
+					value : "278"
+				} 
+			],
+			name : "authToken"
+		},
+		actionLinks : {
+			delete : {
+				requestMethod : "DELETE",
+				rel : "delete",
+				url : "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
 			}
 		}
 	};
@@ -129,7 +133,8 @@ QUnit.test("testGetAuthTokenForAppToken", function(assert) {
 	};
 	loadMethod(answer);
 	let authInfo = this.getAuthInfo();
-	assert.strictEqual(authInfo.userId, "someLoginId");
+	assert.strictEqual(authInfo.userId, "someUserId");
+	assert.strictEqual(authInfo.loginId, "someLoginId");
 	assert.strictEqual(authInfo.token, "someAuthToken");
 	assert.strictEqual(authInfo.validForNoSeconds, "278");
 	assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);

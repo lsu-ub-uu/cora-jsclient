@@ -23,7 +23,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 		this.dependencies = {
 			"textProvider" : CORATEST.textProviderSpy()
 		};
-		
+
 		let loginMethodCalled = [];
 		function loginMethod(loginOption) {
 			loginMethodCalled.push(loginOption);
@@ -31,7 +31,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 		this.getLoginMethodCalled = function(number) {
 			return loginMethodCalled[number];
 		}
-		
+
 		let logoutMethodHasBeenCalled = false;
 		function logoutMethod() {
 			logoutMethodHasBeenCalled = true;
@@ -62,7 +62,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 			"call" : testWebRedirectLogin
 		} ];
 		this.loginOptions = loginOptions;
-		
+
 		let loginOptions2 = [ {
 			"text" : "appToken2",
 			"call" : testAppTokenLogin
@@ -71,7 +71,7 @@ QUnit.module("login/loginManagerViewTest.js", {
 			"call" : testWebRedirectLogin
 		} ];
 		this.loginOptions2 = loginOptions2;
-		
+
 		this.spec = {
 			"loginMethod" : loginMethod,
 			"logoutMethod" : logoutMethod
@@ -169,12 +169,12 @@ QUnit.test("testSetLoginOptions", function(assert) {
 	assert.strictEqual(this.getLoginMethodCalled(1), this.loginOptions2[1]);
 });
 
-QUnit.test("testSetUserId", function(assert) {
+QUnit.test("testSetLoginId", function(assert) {
 	let loginManagerView = this.getLoginManagerView();
 	let menu = this.getMenu();
 	let view = this.getHtml();
-	loginManagerView.setUserId("someUserId");
-	assert.strictEqual(view.textContent, "someUserId");
+	loginManagerView.setLoginId("someLoginId");
+	assert.strictEqual(view.textContent, "someLoginId");
 });
 
 QUnit.test("testSetStateLoggedin", function(assert) {
@@ -213,7 +213,7 @@ QUnit.test("testSetStateFirstLoggedinThenLoggedout", function(assert) {
 	let menu = this.getMenu();
 
 	loginManagerView.setState(CORA.loginManager.LOGGEDIN);
-	loginManagerView.setUserId("someUserId");
+	loginManagerView.setLoginId("someLoginId");
 	assert.strictEqual(menu.childNodes.length, 1);
 	assert.strictEqual(menu.childNodes[0].textContent, "translated_theClient_logoutMenuText");
 

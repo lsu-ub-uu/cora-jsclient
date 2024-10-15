@@ -19,7 +19,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.loginManagerViewSpy = function(dependencies, spec) {
-		let userIds = [];
+		let LoginIds = [];
 		let loginOptions;
 		let logoutOptions;
 		let state;
@@ -29,12 +29,12 @@ var CORATEST = (function(coraTest) {
 			return html;
 		};
 
-		const setUserId = function(userIdIn) {
-			userIds.push(userIdIn);
+		const setLoginId = function(LoginIdIn) {
+			LoginIds.push(LoginIdIn);
 		};
 
-		const getUserId = function(number) {
-			return userIds[number];
+		const getLoginId = function(number) {
+			return LoginIds[number];
 		};
 
 		const getLoginOptions = function() {
@@ -55,15 +55,15 @@ var CORATEST = (function(coraTest) {
 		const getNoOfCallsToCloseHolder = function() {
 			return noOfCallsToCloseHolder;
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
-		
+
 		const getState = function() {
 			return state;
 		};
@@ -75,8 +75,8 @@ var CORATEST = (function(coraTest) {
 			setState : setState,
 			getState : getState,
 			getLoginOptions : getLoginOptions,
-			setUserId : setUserId,
-			getUserId : getUserId,
+			setLoginId : setLoginId,
+			getLoginId : getLoginId,
 			setLoginOptions : setLoginOptions,
 			closeHolder : closeHolder,
 			getNoOfCallsToCloseHolder : getNoOfCallsToCloseHolder

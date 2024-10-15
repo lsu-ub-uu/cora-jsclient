@@ -55,9 +55,11 @@ var CORA = (function(cora) {
 			let data = everything.data;
 			let cData = CORA.coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
+			let userId = cData.getFirstAtomicValueByNameInData("userId");
 			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
 			let authInfo = {
-				userId : loginId,
+				userId : userId,
+				loginId : loginId,
 				token : token,
 				validForNoSeconds : validForNoSeconds,
 				actionLinks : everything.actionLinks

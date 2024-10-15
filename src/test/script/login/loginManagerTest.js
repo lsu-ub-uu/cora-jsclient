@@ -18,109 +18,109 @@
  */
 "use strict";
 
-QUnit.module("login/loginManagerTest.js",
-	{
-		beforeEach: function() {
-			addStandardAppTokensToLoginMenu = true;
-			this.getAddedWindowEvents = function() {
-				return addedEvents;
-			};
-			let addedEvents = [];
-			this.addEvent = function(type, listener, useCapture) {
-				addedEvents.push({
-					type: type,
-					listener: listener,
-					useCapture: useCapture
-				});
-			}
-			let oldAddEvent = window.addEventListener;
-			window.addEventListener = this.addEvent;
-			this.dependencies = {
-				textProvider: CORATEST.textProviderSpy(),
-				loginManagerViewFactory: CORATEST.loginManagerViewFactorySpy(),
-				appTokenLoginFactory: CORATEST.appTokenLoginFactorySpy(),
-				webRedirectLoginFactory: CORATEST.standardFactorySpy("webRedirectLoginSpy"),
-				passwordLoginJsClientIntegratorFactory: CORATEST
-					.standardFactorySpy("passwordLoginJsClientIntegratorSpy"),
-				authTokenHolder: CORATEST.authTokenHolderSpy(),
-				ajaxCallFactory: CORATEST.ajaxCallFactorySpy()
-			};
-			let afterLoginMethodCalled = false;
-			this.afterLoginMethod = function() {
-				afterLoginMethodCalled = true;
-			};
-			this.afterLoginMethodWasCalled = function() {
-				return afterLoginMethodCalled;
-			}
-
-			let afterLogoutMethodCalled = false;
-			this.afterLogoutMethod = function() {
-				afterLogoutMethodCalled = true;
-			};
-			this.afterLogoutMethodWasCalled = function() {
-				return afterLogoutMethodCalled;
-			}
-
-			let errorMessage;
-			this.setErrorMessage = function(errorMessageIn) {
-				errorMessage = errorMessageIn;
-			}
-			this.getErrorMessage = function() {
-				return errorMessage;
-			}
-			this.spec = {
-				"afterLoginMethod": this.afterLoginMethod,
-				"afterLogoutMethod": this.afterLogoutMethod,
-				"setErrorMessage": this.setErrorMessage,
-				"appTokenBaseUrl": "someAppTokenBaseUrl/",
-				baseUrl: "http://epc.ub.uu.se/cora/rest/",
-				"jsClient": CORATEST.jsClientSpy()
-			};
-			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-
-			this.authInfo = {
-				userId: "141414",
-				"token": "fake authToken from here",
-				"validForNoSeconds": "131",
-				"actionLinks": {
-					"delete": {
-						"requestMethod": "DELETE",
-						"rel": "delete",
-						"url": "http://localhost:8080/login/rest/apptoken/141414"
-					}
-				}
-			};
-			this.loginWithWebRedirect = function() {
-				this.loginOption = {
-					text: "Uppsala webredirect",
-					type: "webRedirectLogin",
-					"url": "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
-				};
-				this.loginManager.login(this.loginOption);
-			}
-
-			this.answerListLoginUnitsCall = function(no) {
-				let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-				let jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
-				let answer = {
-					"spec": ajaxCallSpy0.getSpec(),
-					"responseText": jsonLoginUnitList
-				};
-				ajaxCallSpy0.getSpec().loadMethod(answer);
-			}
-			this.answerListLoginsCall = function(no) {
-				let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-				let jsonLoginList = JSON.stringify(CORATEST.loginList);
-				let answer = {
-					"spec": ajaxCallSpy0.getSpec(),
-					"responseText": jsonLoginList
-				};
-				ajaxCallSpy0.getSpec().loadMethod(answer);
-			}
-		},
-		afterEach: function() {
+QUnit.module("login/loginManagerTest.js", {
+	beforeEach: function() {
+		addStandardAppTokensToLoginMenu = true;
+		this.getAddedWindowEvents = function() {
+			return addedEvents;
+		};
+		let addedEvents = [];
+		this.addEvent = function(type, listener, useCapture) {
+			addedEvents.push({
+				type: type,
+				listener: listener,
+				useCapture: useCapture
+			});
 		}
-	});
+		let oldAddEvent = window.addEventListener;
+		window.addEventListener = this.addEvent;
+		this.dependencies = {
+			textProvider: CORATEST.textProviderSpy(),
+			loginManagerViewFactory: CORATEST.loginManagerViewFactorySpy(),
+			appTokenLoginFactory: CORATEST.appTokenLoginFactorySpy(),
+			webRedirectLoginFactory: CORATEST.standardFactorySpy("webRedirectLoginSpy"),
+			passwordLoginJsClientIntegratorFactory: CORATEST
+				.standardFactorySpy("passwordLoginJsClientIntegratorSpy"),
+			authTokenHolder: CORATEST.authTokenHolderSpy(),
+			ajaxCallFactory: CORATEST.ajaxCallFactorySpy()
+		};
+		let afterLoginMethodCalled = false;
+		this.afterLoginMethod = function() {
+			afterLoginMethodCalled = true;
+		};
+		this.afterLoginMethodWasCalled = function() {
+			return afterLoginMethodCalled;
+		}
+
+		let afterLogoutMethodCalled = false;
+		this.afterLogoutMethod = function() {
+			afterLogoutMethodCalled = true;
+		};
+		this.afterLogoutMethodWasCalled = function() {
+			return afterLogoutMethodCalled;
+		}
+
+		let errorMessage;
+		this.setErrorMessage = function(errorMessageIn) {
+			errorMessage = errorMessageIn;
+		}
+		this.getErrorMessage = function() {
+			return errorMessage;
+		}
+		this.spec = {
+			"afterLoginMethod": this.afterLoginMethod,
+			"afterLogoutMethod": this.afterLogoutMethod,
+			"setErrorMessage": this.setErrorMessage,
+			"appTokenBaseUrl": "someAppTokenBaseUrl/",
+			baseUrl: "http://epc.ub.uu.se/cora/rest/",
+			"jsClient": CORATEST.jsClientSpy()
+		};
+		this.loginManager = CORA.loginManager(this.dependencies, this.spec);
+
+		this.authInfo = {
+			userId: "141414",
+			loginId: "someLoginId",
+			token: "fake authToken from here",
+			validForNoSeconds: "131",
+			actionLinks: {
+				delete: {
+					requestMethod: "DELETE",
+					rel: "delete",
+					url: "http://localhost:8080/login/rest/apptoken/141414"
+				}
+			}
+		};
+		this.loginWithWebRedirect = function() {
+			this.loginOption = {
+				text: "Uppsala webredirect",
+				type: "webRedirectLogin",
+				"url": "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
+			};
+			this.loginManager.login(this.loginOption);
+		}
+
+		this.answerListLoginUnitsCall = function(no) {
+			let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+			let jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
+			let answer = {
+				"spec": ajaxCallSpy0.getSpec(),
+				"responseText": jsonLoginUnitList
+			};
+			ajaxCallSpy0.getSpec().loadMethod(answer);
+		}
+		this.answerListLoginsCall = function(no) {
+			let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
+			let jsonLoginList = JSON.stringify(CORATEST.loginList);
+			let answer = {
+				"spec": ajaxCallSpy0.getSpec(),
+				"responseText": jsonLoginList
+			};
+			ajaxCallSpy0.getSpec().loadMethod(answer);
+		}
+	},
+	afterEach: function() {
+	}
+});
 
 QUnit.test("testConstants", function(assert) {
 	assert.strictEqual(CORA.loginManager.LOGGEDOUT, 0);
@@ -195,12 +195,12 @@ QUnit.test("testAnswerForLoginUnits", function(assert) {
 					userId: "someLoginId",
 					appToken: "someAppToken"
 				});
-				
+
 			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
 			let factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
 			this.answerListLoginUnitsCall(2);
 			this.answerListLoginsCall(3);
-			
+
 			let expectedLoginOptions = [
 				{
 					text: "someText",
@@ -226,7 +226,7 @@ QUnit.test("testAnswerForLoginUnits", function(assert) {
 				}];
 			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
 		});
-		
+
 QUnit.test("testAnswerForLoginUnitsWithoutStandardApptokenLogins", function(assert) {
 			addStandardAppTokensToLoginMenu = false;
 			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
@@ -325,11 +325,11 @@ QUnit.test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
 	loginManager.login({
 		text: "someText",
 		type: "appTokenLogin",
-		userId: "testUserId",
+		loginId: "testLoginId",
 		appToken: "testAppToken"
 	});
 	let factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
-	assert.strictEqual(factored0.getUserId(0), "testUserId");
+	assert.strictEqual(factored0.getLoginId(0), "testLoginId");
 	assert.strictEqual(factored0.getAppToken(0), "testAppToken");
 });
 
@@ -404,7 +404,7 @@ QUnit.test("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
 	let loginManager = this.loginManager;
 	loginManager.authInfoCallback(this.authInfo);
 	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.getUserId(0), "141414");
+	assert.strictEqual(factoredView.getLoginId(0), "someLoginId");
 });
 
 QUnit.test("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
@@ -594,14 +594,14 @@ QUnit.test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", f
 	loginManager.login(spec);
 	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 	assert.ok(factored);
-	
+
 	spec.loginUnitId = "someOtherLDAPLoginUnit";
 	loginManager.login(spec);
 	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
 	assert.ok(factored1);
-	
+
 	loginManager.authInfoCallback(this.authInfo);
-	
+
 	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
 	assert.strictEqual(factored1.getNoOfRemovePasswordLoginFromJsClient(), 1);
 });
@@ -615,8 +615,7 @@ QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(
 		presentationId: "somePresentationId",
 		loginUnitId: "uuSystemOneLDAPLoginUnit"
 	};
-	
-	
+
 	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
 	loginManager.login(spec);
 	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
@@ -639,9 +638,9 @@ QUnit.test("testPasswordLoginFirstLoginRemovedOnSuccesfullLogin", function(asser
 		presentationId: "somePresentationId",
 		loginUnitId: "uuSystemOneLDAPLoginUnit"
 	};
-	
+
 	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
-	
+
 	loginManager.login(spec);
 	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
 
@@ -649,7 +648,7 @@ QUnit.test("testPasswordLoginFirstLoginRemovedOnSuccesfullLogin", function(asser
 	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
 
 	loginManager.authInfoCallback(this.authInfo);
-	
+
 	loginManager.login(spec);
 	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 2);
 });

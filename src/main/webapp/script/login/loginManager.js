@@ -17,6 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 let addStandardAppTokensToLoginMenu = false;
+let appTokenOptions = [];
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManager = function(dependencies, spec) {
@@ -28,62 +29,9 @@ var CORA = (function(cora) {
 
 		let loginOptions = [];
 		if (addStandardAppTokensToLoginMenu) {
-			loginOptions.push({
-				text: "appToken as 141414",
-				type: "appTokenLogin",
-				userId: "systemoneAdmin@system.cora.uu.se",
-				appToken: "5d3f3ed4-4931-4924-9faa-8eaf5ac6457e"
-			});
-			loginOptions.push({
-				text: "appToken as 151515 alvin",
-				type: "appTokenLogin",
-				userId: "alvinAdmin@cora.epc.ub.uu.se",
-				appToken: "a50ca087-a3f5-4393-b2bb-315436d3c3be"
-			});
-			loginOptions.push({
-				text: "alvin user",
-				type: "appTokenLogin",
-				userId: "alvinUser@cora.epc.ub.uu.se",
-				appToken: "39291112-aff2-4929-b201-515720693722"
-			});
-			loginOptions.push({
-				text: "appToken as 161616 diva",
-				type: "appTokenLogin",
-				userId: "divaAdmin@cora.epc.ub.uu.se",
-				appToken: "49ce00fb-68b5-4089-a5f7-1c225d3cf156"
-			});
-			loginOptions.push({
-				text: "diva user",
-				type: "appTokenLogin",
-				userId: "divaUser@cora.epc.ub.uu.se",
-				appToken: "2dc75984-bde0-4131-bec9-a830670c2732"
-			});
-			loginOptions.push({
-				text: "divaEverything",
-				type: "appTokenLogin",
-				userId: "divaEverything@diva.cora.uu.se",
-				appToken: "77edfec1-e1f1-45d4-a452-411668eba0f0"
-			});
-			loginOptions.push({
-				text: "divaSystemAdmin",
-				type: "appTokenLogin",
-				userId: "systemAdmin@diva.cora.uu.se",
-				appToken: "b5ec82bb-9492-4d9f-9069-c2fac3b49493"
-			});
-			loginOptions.push({
-				text: "divaDomainAdminUU",
-				type: "appTokenLogin",
-				userId: "dominAdminUU@diva.cora.uu.se",
-				appToken: "4808c689-48f1-4fe9-81e1-1888795933cf"
-			});
-			loginOptions.push({
-				text: "divaDomainAdminKTH",
-				type: "appTokenLogin",
-				userId: "domainAdminKTH@diva.cora.uu.se",
-				appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
-			});
+			loginOptions = loginOptions.concat(appTokenOptions);
 		}
-		
+
 		let loginOrigin;
 		let logins = {};
 		let loginUnitDataList;
@@ -97,7 +45,7 @@ var CORA = (function(cora) {
 			};
 			loginManagerView = dependencies.loginManagerViewFactory.factor(viewSpec);
 		};
-		
+
 		const fetchAllLoginInfoFromServer = function() {
 			fetchLoginUnitFromServer();
 			fetchLoginFromServer();
@@ -107,6 +55,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/loginUnit",
+				accept: "application/vnd.uub.recordList+json",
 				loadMethod: fetchLoginUnitCallback,
 				errorMethod: fetchLoginUnitErrorCallback,
 				timeoutMethod: fetchLoginUnitTimeoutCallback
@@ -118,6 +67,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/login",
+				accept: "application/vnd.uub.recordList+json",
 				loadMethod: fetchLoginCallback,
 				errorMethod: fetchLoginErrorCallback,
 				timeoutMethod: fetchLoginTimeoutCallback
@@ -150,7 +100,7 @@ var CORA = (function(cora) {
 				logins[recordId] = login;
 			});
 		};
-		
+
 		const parseLoginData = function(loginData) {
 			let type = getTypeFromLoginRecord(loginData);
 			let login = {};
@@ -200,8 +150,8 @@ var CORA = (function(cora) {
 				let textId = getTextIdFromRecord(loginUnitData);
 				let loginId = getLoginIdFromRecord(loginUnitData);
 				let loginUnitId = getIdFromRecord(loginUnitData);
-				let loginForCurrentLoginUnit = logins[loginId]; 
-				
+				let loginForCurrentLoginUnit = logins[loginId];
+
 				let loginOption = {
 					text: getTranslatedText(textId),
 					type: loginForCurrentLoginUnit.type,
@@ -264,7 +214,7 @@ var CORA = (function(cora) {
 
 		const login = function(loginOption) {
 			if ("appTokenLogin" === loginOption.type) {
-				appTokenLogin(loginOption.userId, loginOption.appToken);
+				appTokenLogin(loginOption.loginId, loginOption.appToken);
 			} else if ("password" === loginOption.type) {
 				passwordLogin(loginOption);
 			} else {
@@ -272,17 +222,18 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const appTokenLogin = function(userId, appToken) {
+		const appTokenLogin = function(loginId, appToken) {
 			let loginSpec = {
 				requestMethod: "POST",
-				url: spec.appTokenBaseUrl + "login/rest/apptoken/",
-				accept: "",
+				url: spec.appTokenBaseUrl + "login/rest/apptoken",
+				contentType : "application/vnd.uub.login",
+				accept: "application/vnd.uub.record+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
 			};
 			let factoredAppTokenLogin = dependencies.appTokenLoginFactory.factor(loginSpec);
-			factoredAppTokenLogin.login(userId, appToken);
+			factoredAppTokenLogin.login(loginId, appToken);
 		};
 
 		const webRedirectLogin = function(loginOption) {
@@ -326,6 +277,7 @@ var CORA = (function(cora) {
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
+				contentType : "application/vnd.uub.login",
 				accept: "application/vnd.uub.record+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: passwordErrorCallback,
@@ -335,7 +287,7 @@ var CORA = (function(cora) {
 				.factor(passwordLoginSpec);
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
-		
+
 		const passwordErrorCallback = function(errorObject) {
 			if (failedToLogout(errorObject)) {
 				logoutCallback();
@@ -343,11 +295,11 @@ var CORA = (function(cora) {
 				spec.setErrorMessage("Password login failed!");
 			}
 		};
-		
+
 		const passwordTimeoutCallback = function() {
 			spec.setErrorMessage("Password login timedout!");
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
@@ -359,7 +311,7 @@ var CORA = (function(cora) {
 		const authInfoCallback = function(authInfoIn) {
 			authInfo = authInfoIn;
 			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
-			loginManagerView.setUserId(authInfo.userId);
+			loginManagerView.setLoginId(authInfo.loginId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
 			for (let key in startedPasswordLogins) {
@@ -388,13 +340,12 @@ var CORA = (function(cora) {
 		const logout = function() {
 			let deleteLink = authInfo.actionLinks['delete'];
 			let callSpec = {
-				"requestMethod": deleteLink.requestMethod,
-				"url": deleteLink.url,
-				"loadMethod": logoutCallback,
-				"errorMethod": appTokenErrorCallback,
-				"timeoutMethod": appTokenTimeoutCallback,
-				"data": authInfo.token,
-				"timeoutInMS": 15000
+				requestMethod: deleteLink.requestMethod,
+				url: deleteLink.url,
+				loadMethod: logoutCallback,
+				errorMethod: appTokenErrorCallback,
+				timeoutMethod: appTokenTimeoutCallback,
+				timeoutInMS: 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};

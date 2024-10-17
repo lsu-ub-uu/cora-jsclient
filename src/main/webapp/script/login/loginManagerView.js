@@ -28,9 +28,9 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			let holderSpec = {
-				"className" : baseClassName,
-				"buttonText" : dependencies.textProvider.getTranslation("theClient_loginMenuText"),
-				"appendTo" : document.body
+				className : baseClassName,
+				buttonText : dependencies.textProvider.getTranslation("theClient_loginMenuText"),
+				appendTo : document.body
 			};
 			holder = CORA.holder(holderSpec);
 			view = holder.getButton();
@@ -61,8 +61,8 @@ var CORA = (function(cora) {
 
 		const addMenuElement = function(loginOption) {
 			let buttonSpec = {
-				"className" : "menuOption",
-				"text" : loginOption.text,
+				className : "menuOption",
+				text : loginOption.text,
 				action : {
 					method : function() {
 						spec.loginMethod(loginOption);
@@ -73,8 +73,8 @@ var CORA = (function(cora) {
 			menu.appendChild(optionButton);
 		};
 
-		const setUserId = function(userIdIn) {
-			view.textContent = userIdIn;
+		const setLoginId = function(loginIdIn) {
+			view.textContent = loginIdIn;
 		};
 
 		const closeHolder = function() {
@@ -87,8 +87,8 @@ var CORA = (function(cora) {
 			if (CORA.loginManager.LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
 				let logoutOptions = [ {
-					"text" : dependencies.textProvider.getTranslation("theClient_logoutMenuText"),
-					"call" : spec.logoutMethod
+					text : dependencies.textProvider.getTranslation("theClient_logoutMenuText"),
+					call : spec.logoutMethod
 				} ];
 				logoutOptions.forEach(addLogoutMenuElement);
 			} else {
@@ -100,8 +100,8 @@ var CORA = (function(cora) {
 
 		const addLogoutMenuElement = function(logoutOption) {
 			let buttonSpec = {
-				"className" : "menuOption",
-				"text" : logoutOption.text,
+				className : "menuOption",
+				text : logoutOption.text,
 				action : {
 					method : logoutOption.call
 				}
@@ -111,13 +111,13 @@ var CORA = (function(cora) {
 		}
 
 		out = Object.freeze({
-			"type" : "loginManagerView",
+			type : "loginManagerView",
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getHtml : getHtml,
 			getMenu : getMenu,
 			setState : setState,
-			setUserId : setUserId,
+			setLoginId : setLoginId,
 			setLoginOptions : setLoginOptions,
 			closeHolder : closeHolder
 		});

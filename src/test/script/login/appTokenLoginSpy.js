@@ -19,16 +19,16 @@
 var CORATEST = (function(cora) {
 	"use strict";
 	cora.appTokenLoginSpy = function(dependencies, spec) {
-		let userId;
-		let userIds = [];
+		let loginIds = [];
 		let appTokens = [];
-		const login = function(userIdIn, appToken) {
-			userIds.push(userIdIn);
+		const login = function(loginIdIn, appToken) {
+			loginIds.push(loginIdIn);
 			appTokens.push(appToken);
 			let authInfo = {
-					"userId" : userIdIn,
-					"token" : "fake authToken from appTokenLoginSpy",
-					"validForNoSeconds" : "131"
+					userId : "fakeUserId",
+					loginId : loginIdIn,
+					token : "fake authToken from appTokenLoginSpy",
+					validForNoSeconds : "131"
 				};
 			spec.authInfoCallback(authInfo);
 		};
@@ -36,33 +36,32 @@ var CORATEST = (function(cora) {
 		const handleResponse = function(answer) {
 			//nothing
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
-		
-		const getUserId = function(number) {
-			return userIds[number];
+
+		const getLoginId = function(number) {
+			return loginIds[number];
 		};
-		
+
 		const getAppToken = function(number) {
 			return appTokens[number];
 		};
 
-		let out = Object.freeze({
+		return Object.freeze({
 			type : "appTokenLoginSpy",
 			login : login,
 			handleResponse : handleResponse,
 			getDependencies : getDependencies,
 			getSpec : getSpec,
-			getUserId : getUserId,
+			getLoginId : getLoginId,
 			getAppToken : getAppToken
 		});
-		return out;
 	};
 
 	return cora;

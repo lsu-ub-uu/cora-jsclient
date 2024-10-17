@@ -22,11 +22,11 @@ var CORA = (function(cora) {
 		const recordGuiFactory = dependencies.recordGuiFactory;
 		const passwordLoginViewFactory = dependencies.passwordLoginViewFactory;
 		const ajaxCallFactory = dependencies.ajaxCallFactory;
-		
+
 		let view;
 		let recordGui;
 		let loginId;
-		
+
 		const start = function() {
 			view = createView();
 			recordGui = createRecordGui();
@@ -50,14 +50,14 @@ var CORA = (function(cora) {
 			};
 			return recordGuiFactory.factor(recordGuiSpec);
 		};
-		
+
 		const createEmptyPermissions = function() {
 			return {
 				write: [],
 				read: []
 			};
 		};
-		
+
 		const login = function() {
 			let loginData = CORA.coraData(recordGui.dataHolder.getData());
 			loginId = loginData.getFirstAtomicValueByNameInData("loginId");
@@ -65,16 +65,17 @@ var CORA = (function(cora) {
 			let callSpec = createCallSpec(loginId, password);
 			ajaxCallFactory.factor(callSpec);
 		};
-		
+
 		const createCallSpec = function(loginId, password) {
 			return {
 				requestMethod : spec.requestMethod,
-				url : spec.url + loginId,
+				url : spec.url,
+				contentType : spec.contentType,
 				accept : spec.accept,
 				loadMethod : handleResponse,
 				errorMethod : spec.errorCallback,
 				timeoutMethod : spec.timeoutCallback,
-				data : password, 
+				data : loginId+'\n'+password,
 				timeoutInMS : 15000
 			};
 		};
@@ -83,21 +84,23 @@ var CORA = (function(cora) {
 			let everything = JSON.parse(answer.responseText);
 			let data = everything.data;
 			let cData = CORA.coraData(data);
-			let token = cData.getFirstAtomicValueByNameInData("id");
+			let token = cData.getFirstAtomicValueByNameInData("token");
+			let userId = cData.getFirstAtomicValueByNameInData("userId");
 			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
 			let authInfo = {
-				userId : loginId,
+				userId : userId,
+				loginId : loginId,
 				token : token,
 				validForNoSeconds : validForNoSeconds,
 				actionLinks : everything.actionLinks
 			};
 			spec.authInfoCallback(authInfo);
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};

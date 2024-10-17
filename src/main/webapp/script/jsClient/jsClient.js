@@ -329,7 +329,7 @@ var CORA = (function(cora) {
 			startManagedGuiItem.addMenuPresentation(startMenuView);
 
 			let startView = CORA.gui.createSpanWithClassName("start");
-			startView.innerHTML = "START!";
+			startView.innerHTML = "Some nice info!";
 			startManagedGuiItem.addWorkPresentation(startView);
 			
 			

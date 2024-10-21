@@ -194,21 +194,25 @@ const askForServerToUse = function() {
 			"onclickFunction" : useLocalhost3
 		}, {
 			"text" : "SystemOne",
-			"onclickFunction" : useCora
+			"onclickFunction" : useSysteOnePreview
 		}, {
 			"text" : "Alvin",
-			"onclickFunction" : useAlvin
+			"onclickFunction" : useAlvinPreview
 		}, {
 			"text" : "DiVA",
-			"onclickFunction" : useDiva
-		}, {
-			"text" : "DiVA 20240226",
-			"onclickFunction" : useDiva20240226
+			"onclickFunction" : useDivaPreview
 		} ]
 	};
 	var question = CORA.question(questionSpec);
 	var questionView = question.getView();
 	document.body.appendChild(questionView);
+};
+
+const useBaseUrlAndLoginUrl = function(baseUrlIn, loginUrlIn) {
+	name = baseUrlIn;
+	baseUrl = baseUrlIn;
+	appTokenBaseUrl = loginUrlIn;
+	startDependencies();
 };
 
 const useUb = function() {

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("metadata/dataHolderTest.js", {
+QUnit.module.only("metadata/dataHolderTest.js", {
 	beforeEach: function() {
 		this.spec = {
 			metadataId: "recordTypeOnlyMetadataIdChild",
@@ -65,12 +65,13 @@ QUnit.test("testInit2", function(assert) {
 
 QUnit.test("testFindContainerTopLevelPath", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
+	let path = [];
 
 	let expected = {
 		name: "groupIdOneTextChild",
 		children: []
 	};
-	let foundContainer = dataHolder.findContainer([]);
+	let foundContainer = dataHolder.findContainer(path);
 	assert.deepEqual(foundContainer, expected);
 });
 QUnit.test("testFindContainerTwoChildrenWithSameMetadataIdDifferentRepeatId", function(assert) {
@@ -88,9 +89,9 @@ QUnit.test("testFindContainerTwoChildrenWithSameMetadataIdDifferentRepeatId", fu
 			name: "textVariableId",
 			value: "",
 			repeatId: "two"
-		}]
-		;
+		}];
 	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+	assert.deepEqual(dataHolder.findContainer(["textVariableId.two"]), expected[1]);
 });
 QUnit.test("testFindContainerTwoChildrenWithDifferentMetadataIdDifferentRepeatId", function(assert) {
 	let dataHolder = this.newDataHolder("groupIdOneTextChild");
@@ -106,6 +107,7 @@ QUnit.test("testFindContainerTwoChildrenWithDifferentMetadataIdDifferentRepeatId
 		}]
 		;
 	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+	assert.deepEqual(dataHolder.findContainer(["textVariableId.one"]), expected[0]);
 });
 QUnit.test("testFindContainerDeeperChild", function(assert) {
 	let path = ["groupIdOneTextChild"];
@@ -120,6 +122,7 @@ QUnit.test("testFindContainerDeeperChild", function(assert) {
 		value: "Value 2"
 	}];
 	assert.deepEqual(dataHolder.findContainersUsingPathAndMetadataId(path, "textVariableId"), expected);
+	assert.deepEqual(dataHolder.findContainer(["groupIdOneTextChild", "textVariableId"]), expected[0]);
 });
 
 QUnit.test("testFindContainerDeeperChildRepeatId", function(assert) {

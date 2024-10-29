@@ -130,7 +130,7 @@ var CORA = (function(cora) {
 				addAttribute(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.nameInData)
 			} else if (msg.endsWith("setValue")) {
 				if("resourceLink"===dataFromMsg.special){
-					setMimeTypeInfo(dataFromMsg);					
+					setMimeTypeInfo(dataFromMsg);
 				}else{
 					setValue(dataFromMsg.path, dataFromMsg.data);
 				}
@@ -191,14 +191,14 @@ var CORA = (function(cora) {
 		const removeNonDataInfoFromContainerLeavingActionLinks = function(data) {
 			removeNonDataInfoFromContainer(data, false);
 		};
-		
+
 		const setMimeTypeInfo = function(dataFromMsg) {
 			let mimeType = dataFromMsg.data.mimeType;
 			let foundContainer = findContainer(dataFromMsg.path);
 			foundContainer.mimeType = mimeType;
 			foundContainer.actionLinks = dataFromMsg.data.actionLinks;
 		};
-		
+
 		const setValue = function(path, value) {
 			try {
 				setValueInContainerListUsingPath(path, value);
@@ -276,6 +276,7 @@ var CORA = (function(cora) {
 		};
 
 		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
+			//TODO:new method: add to dataContainer
 			let containerSpecifiedByPath = dataContainer;
 			if (pathSpecifiesMoreLevels(parentPath)) {
 				let foundContainer = findContainer(parentPath);
@@ -284,10 +285,12 @@ var CORA = (function(cora) {
 			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
 
+			//TODO:new method: add to containerPath
 			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let pathString = JSON.stringify(newPath);
 			containerPath[pathString] = newChild;
 
+			//TODO:new method: add to containerPathNoRepeatId
 			let newPathNoRepeatId = createNextLevelPath(parentPath, metadataIdToAdd);
 			let pathStringNoRepeatId = JSON.stringify(newPathNoRepeatId);
 			if (undefined === containerPathNoRepeatId[pathStringNoRepeatId]) {

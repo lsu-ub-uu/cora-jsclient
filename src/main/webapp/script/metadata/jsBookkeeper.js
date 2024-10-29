@@ -82,6 +82,7 @@ var CORA = (function(cora) {
 		};
 
 		const remove = function(data) {
+			console.log("remove book",data)
 			pubSub.publish("remove", data);
 			pubSub.unsubscribePathBelow(data.path);
 		};

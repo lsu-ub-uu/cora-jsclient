@@ -40,22 +40,26 @@ var CORA = (function(cora) {
 
 		const validate = function() {
 			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
+			console.log("dataChildrenForMetadata",dataChildrenForMetadata)
 			noOfRepeatsForThisChild = calculateMinRepeat();
 			validateAndCategorizeChildInstances();
 			return result;
 		};
 
-		const createNextLevelPath = function(repeatId) {
-			let pathSpec = {
-				metadataIdToAdd: ref,
-				repeatId: repeatId,
-				parentPath: path
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
+		const getDataChildrenForMetadata = function(metadataId) {
+			console.log("dataholder data", dataHolder.getData())
+			console.log("path",path)
+			console.log("metadataId",metadataId)
+			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
 		};
 
-		const getDataChildrenForMetadata = function(metadataId) {
-			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
+		const calculateMinRepeat = function() {
+			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
+			let noOfData = dataChildrenForMetadata.length;
+			if (noOfData > repeatMin) {
+				repeatMin = noOfData;
+			}
+			return repeatMin;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -72,6 +76,27 @@ var CORA = (function(cora) {
 			setValuableDataInResult(childInstanceValidationResult);
 			updateNumberOfChildrenOk(childInstanceValidationResult);
 			categorizeChildInstance(childInstanceValidationResult);
+		};
+
+		const validateRepeatingChildInstanceWithData = function(index) {
+			let dataChild = dataChildrenForMetadata[index];
+			let repeatId = dataChild.repeatId;
+			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
+		};
+
+		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
+			let nextPath = createNextLevelPath(repeatId);
+			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
+				pubSub);
+		};
+
+		const createNextLevelPath = function(repeatId) {
+			let pathSpec = {
+				metadataIdToAdd: ref,
+				repeatId: repeatId,
+				parentPath: path
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const setValuableDataInResult = function(childInstanceValidationResult) {
@@ -137,15 +162,24 @@ var CORA = (function(cora) {
 
 		const removeAllEmptyChildren = function(childrenCanBeRemoved) {
 			childrenCanBeRemoved.forEach(function(errorMessage) {
+				console.log("remove call from 1")
 				sendRemoveForEmptyChild(errorMessage);
 				childrenCanBeRemoved.shift();
 			});
 		};
 
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {
+			console.log("removeExceedingEmptyChildren 1", childrenCanBeRemoved)
+			console.log("childrenCanBeRemovedLength 1", childrenCanBeRemoved.length)
+			console.log("removeExceedingEmptyChildren 2", noChildrenNeededForRepeatMin)
 			let noToRemove = childrenCanBeRemoved.length - noChildrenNeededForRepeatMin;
+			console.log("noToRemove", noToRemove)
 			for (let i = 0; i < noToRemove; i++) {
-				sendRemoveForEmptyChild(childrenCanBeRemoved.pop());
+				console.log("remove call from 2: "+i)
+				console.log("childrenCanBeRemovedLength 1", childrenCanBeRemoved.length)
+				let popped = childrenCanBeRemoved.pop();
+				console.log("popped", popped)
+				sendRemoveForEmptyChild(popped);
 			}
 		};
 
@@ -154,6 +188,7 @@ var CORA = (function(cora) {
 				type: "remove",
 				path: errorMessage.validationMessage.path
 			};
+			console.log("remove empty",removeMessage)
 			pubSub.publish("remove", removeMessage);
 		};
 
@@ -167,27 +202,6 @@ var CORA = (function(cora) {
 
 		const sendValidationErrorToEmptyChild = function(errorMessage) {
 			pubSub.publish("validationError", errorMessage);
-		};
-
-		const calculateMinRepeat = function() {
-			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
-			let noOfData = dataChildrenForMetadata.length;
-			if (noOfData > repeatMin) {
-				repeatMin = noOfData;
-			}
-			return repeatMin;
-		};
-
-		const validateRepeatingChildInstanceWithData = function(index) {
-			let dataChild = dataChildrenForMetadata[index];
-			let repeatId = dataChild.repeatId;
-			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-		};
-
-		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
-			let nextPath = createNextLevelPath(repeatId);
-			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
-				pubSub);
 		};
 
 		const getDependencies = function() {

@@ -245,6 +245,10 @@ var CORA = (function(cora) {
 		const findContainersUsingPathAndMetadataId = function(path, metadataIdIn) {
 			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataIdIn);
 			let pathToFind = JSON.stringify(nextLevelPathNoRepeatId);
+//			console.log("pathToFindJson",pathToFind)
+//			console.log("pathToFind",nextLevelPathNoRepeatId)
+//			console.log("containerPathNoRepeatId",containerPathNoRepeatId)
+//			console.log("containerPathNoRepeatIdJSON",JSON.stringify(containerPathNoRepeatId))
 			let foundContainer = containerPathNoRepeatId[pathToFind];
 			if (undefined === foundContainer) {
 				return [];
@@ -327,13 +331,27 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerPath = function(path) {
+			//remove from dataContainer
 			let containerAndParent = findContainerAndParent(path);
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
 			containerParent.children.splice(index, 1);
+			
+			//remove from containerPath
+//			console.log("before remove path",path)
+//			console.log("before remove containerPath",containerPath)
 			let pathAsString = JSON.stringify(path);
 			delete containerPath[pathAsString];
+//	Object.keys(containerPath).filter((key) => {
+//				console.log("KEY!",key)
+//				console.log("pathAsString!",pathAsString.slice(0,-1))
+//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
+//				return key.startsWith(pathAsString.slice(0,-1))})
+//					.forEach(key => delete containerPath[key]);		
+//			console.log("after remove path",path)
+//			console.log("after remove containerPath",containerPath)
+			
 		};
 
 		const removeContainerPathNoRepeatId = function(path) {
@@ -341,7 +359,21 @@ var CORA = (function(cora) {
 			if (lastElementOfPathHasRepeatId(path)) {
 				removeContainerWithRepeatId(pathAsString);
 			} else {
+//				console.log("before remove path",path)
+//				console.log("before remove containerPathNoRepeatId",containerPathNoRepeatId)
 				containerPathNoRepeatId[pathAsString] = [];
+//				Object.keys(containerPathNoRepeatId).filter((key) => {
+//				console.log("KEY!",key)
+//				console.log("pathAsString!",pathAsString.slice(0,-1))
+//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
+//				return key.startsWith(pathAsString.slice(0,-1))})
+////					.forEach(key => delete containerPathNoRepeatId[key]);
+//					.forEach(key => containerPathNoRepeatId[key]=[]);
+//				 console.log("kalle1")
+////				 console.log("object2", object2)
+//				 console.log("kalle2")
+//				console.log("after remove path",path)
+//				console.log("after remove containerPathNoRepeatId",containerPathNoRepeatId)
 			}
 		};
 
@@ -355,7 +387,22 @@ var CORA = (function(cora) {
 			let lastPartRepeatId = pathAsString.substring(pathAsString.lastIndexOf(".") + 1, pathAsString.length - 2);
 			let noRepeatIdContainers = containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart];
 			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId !== lastPartRepeatId);
+//			console.log("before remove path",pathAsString)
+//				console.log("before remove containerPathNoRepeatId",containerPathNoRepeatId)
 			containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart] = containersToKeep;
+			
+//			Object.keys(containerPathNoRepeatId).filter((key) => {
+//				console.log("KEY!",key)
+//				console.log("pathAsString!",pathAsString.slice(0,-1))
+//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
+//				return key.startsWith(pathAsString.slice(0,-1))})
+////					.forEach(key => delete containerPathNoRepeatId[key]);
+//					.forEach(key =>  containerPathNoRepeatId[key]=containersToKeep);
+//				 console.log("anka1")
+////				 console.log("object2", object2)
+//				 console.log("anka2")
+//			console.log("after remove path",pathAsString)
+//				console.log("after remove containerPathNoRepeatId",containerPathNoRepeatId)
 		};
 
 		const move = function(dataFromMessage) {
@@ -391,6 +438,12 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
+		const onlyForTestGetContainerPath = function() {
+			return containerPath;
+		};
+		const onlyForTestGetContainerPathNoRepeatId = function() {
+			return containerPathNoRepeatId;
+		};
 
 		start();
 
@@ -404,7 +457,9 @@ var CORA = (function(cora) {
 			addChild: addChild,
 			remove: remove,
 			findContainer: findContainer,
-			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId
+			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId,
+			onlyForTestGetContainerPath: onlyForTestGetContainerPath,
+			onlyForTestGetContainerPathNoRepeatId: onlyForTestGetContainerPathNoRepeatId
 		});
 	};
 	return cora;

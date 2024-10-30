@@ -103,14 +103,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const isResourceLink = function () {
-			let type = getTypeFromCMetadataElement();
-			return type === "resourceLink";
-		}
-
 		const isGroup = function() {
 			let type = getTypeFromCMetadataElement();
 			return type === "group";
+		};
+
+		const isResourceLink = function () {
+			let type = getTypeFromCMetadataElement();
+			return type === "resourceLink";
 		};
 
 		const getTypeFromCMetadataElement = function () {

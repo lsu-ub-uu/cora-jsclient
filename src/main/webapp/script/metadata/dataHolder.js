@@ -1,6 +1,6 @@
 /*
- * Copyright 2015, 2016, 2017 Olov McKie
- * Copyright 2015, 2016, 2020 Uppsala University Library
+ * Copyright 2015, 2016, 2017, 2024 Olov McKie
+ * Copyright 2015, 2016, 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -342,13 +342,13 @@ var CORA = (function(cora) {
 //			console.log("before remove path",path)
 //			console.log("before remove containerPath",containerPath)
 			let pathAsString = JSON.stringify(path);
-			delete containerPath[pathAsString];
-//	Object.keys(containerPath).filter((key) => {
+//			delete containerPath[pathAsString];
+	Object.keys(containerPath).filter((key) => {
 //				console.log("KEY!",key)
 //				console.log("pathAsString!",pathAsString.slice(0,-1))
 //				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
-//				return key.startsWith(pathAsString.slice(0,-1))})
-//					.forEach(key => delete containerPath[key]);		
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPath[key]);		
 //			console.log("after remove path",path)
 //			console.log("after remove containerPath",containerPath)
 			
@@ -361,13 +361,13 @@ var CORA = (function(cora) {
 			} else {
 //				console.log("before remove path",path)
 //				console.log("before remove containerPathNoRepeatId",containerPathNoRepeatId)
-				containerPathNoRepeatId[pathAsString] = [];
-//				Object.keys(containerPathNoRepeatId).filter((key) => {
+//				containerPathNoRepeatId[pathAsString] = [];
+				Object.keys(containerPathNoRepeatId).filter((key) => {
 //				console.log("KEY!",key)
 //				console.log("pathAsString!",pathAsString.slice(0,-1))
 //				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
-//				return key.startsWith(pathAsString.slice(0,-1))})
-////					.forEach(key => delete containerPathNoRepeatId[key]);
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPathNoRepeatId[key]);
 //					.forEach(key => containerPathNoRepeatId[key]=[]);
 //				 console.log("kalle1")
 ////				 console.log("object2", object2)

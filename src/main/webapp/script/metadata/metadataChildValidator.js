@@ -39,6 +39,9 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
+			
+			console.log("path",path)
+			console.log("ref",ref)
 			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
 			console.log("dataChildrenForMetadata",dataChildrenForMetadata)
 			noOfRepeatsForThisChild = calculateMinRepeat();
@@ -48,6 +51,7 @@ var CORA = (function(cora) {
 
 		const getDataChildrenForMetadata = function(metadataId) {
 			console.log("dataholder data", dataHolder.getData())
+			console.log("dataholder onlyForTestGetContainerPathNoRepeatId", dataHolder.onlyForTestGetContainerPathNoRepeatId())
 			console.log("path",path)
 			console.log("metadataId",metadataId)
 			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);

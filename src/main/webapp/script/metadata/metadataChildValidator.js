@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Olov McKie
+ * Copyright 2015, 2016, 2024 Olov McKie
  * Copyright 2016, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -45,17 +45,17 @@ var CORA = (function(cora) {
 			return result;
 		};
 
-		const createNextLevelPath = function(repeatId) {
-			let pathSpec = {
-				metadataIdToAdd: ref,
-				repeatId: repeatId,
-				parentPath: path
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
-
 		const getDataChildrenForMetadata = function(metadataId) {
 			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
+		};
+
+		const calculateMinRepeat = function() {
+			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
+			let noOfData = dataChildrenForMetadata.length;
+			if (noOfData > repeatMin) {
+				repeatMin = noOfData;
+			}
+			return repeatMin;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -72,6 +72,27 @@ var CORA = (function(cora) {
 			setValuableDataInResult(childInstanceValidationResult);
 			updateNumberOfChildrenOk(childInstanceValidationResult);
 			categorizeChildInstance(childInstanceValidationResult);
+		};
+
+		const validateRepeatingChildInstanceWithData = function(index) {
+			let dataChild = dataChildrenForMetadata[index];
+			let repeatId = dataChild.repeatId;
+			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
+		};
+
+		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
+			let nextPath = createNextLevelPath(repeatId);
+			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
+				pubSub);
+		};
+
+		const createNextLevelPath = function(repeatId) {
+			let pathSpec = {
+				metadataIdToAdd: ref,
+				repeatId: repeatId,
+				parentPath: path
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const setValuableDataInResult = function(childInstanceValidationResult) {
@@ -117,6 +138,7 @@ var CORA = (function(cora) {
 		const removeEmptyChildren = function() {
 			let childrenNotRemovable = numberOfChildrenOk + childInstancesCanNotBeRemoved.length;
 			let noChildrenNeededForRepeatMin = calculateNeededNoChildrenForRepeatMin(childrenNotRemovable);
+			
 			sendRemoveForEmptyChildren(childInstancesCanBeRemoved, noChildrenNeededForRepeatMin);
 		};
 
@@ -145,7 +167,8 @@ var CORA = (function(cora) {
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {
 			let noToRemove = childrenCanBeRemoved.length - noChildrenNeededForRepeatMin;
 			for (let i = 0; i < noToRemove; i++) {
-				sendRemoveForEmptyChild(childrenCanBeRemoved.pop());
+				let popped = childrenCanBeRemoved.pop();
+				sendRemoveForEmptyChild(popped);
 			}
 		};
 
@@ -167,27 +190,6 @@ var CORA = (function(cora) {
 
 		const sendValidationErrorToEmptyChild = function(errorMessage) {
 			pubSub.publish("validationError", errorMessage);
-		};
-
-		const calculateMinRepeat = function() {
-			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
-			let noOfData = dataChildrenForMetadata.length;
-			if (noOfData > repeatMin) {
-				repeatMin = noOfData;
-			}
-			return repeatMin;
-		};
-
-		const validateRepeatingChildInstanceWithData = function(index) {
-			let dataChild = dataChildrenForMetadata[index];
-			let repeatId = dataChild.repeatId;
-			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-		};
-
-		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
-			let nextPath = createNextLevelPath(repeatId);
-			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
-				pubSub);
 		};
 
 		const getDependencies = function() {

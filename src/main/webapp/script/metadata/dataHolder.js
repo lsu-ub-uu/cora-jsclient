@@ -1,6 +1,6 @@
 /*
- * Copyright 2015, 2016, 2017 Olov McKie
- * Copyright 2015, 2016, 2020 Uppsala University Library
+ * Copyright 2015, 2016, 2017, 2024 Olov McKie
+ * Copyright 2015, 2016, 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -43,9 +43,7 @@ var CORA = (function(cora) {
 			if (undefined !== repeatIdIn) {
 				dataContainerPart.repeatId = repeatIdIn;
 			}
-
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
-
 			return dataContainerPart;
 		};
 
@@ -130,7 +128,7 @@ var CORA = (function(cora) {
 				addAttribute(dataFromMsg.path, dataFromMsg.metadataId, dataFromMsg.nameInData)
 			} else if (msg.endsWith("setValue")) {
 				if("resourceLink"===dataFromMsg.special){
-					setMimeTypeInfo(dataFromMsg);					
+					setMimeTypeInfo(dataFromMsg);
 				}else{
 					setValue(dataFromMsg.path, dataFromMsg.data);
 				}
@@ -191,14 +189,14 @@ var CORA = (function(cora) {
 		const removeNonDataInfoFromContainerLeavingActionLinks = function(data) {
 			removeNonDataInfoFromContainer(data, false);
 		};
-		
+
 		const setMimeTypeInfo = function(dataFromMsg) {
 			let mimeType = dataFromMsg.data.mimeType;
 			let foundContainer = findContainer(dataFromMsg.path);
 			foundContainer.mimeType = mimeType;
 			foundContainer.actionLinks = dataFromMsg.data.actionLinks;
 		};
-		
+
 		const setValue = function(path, value) {
 			try {
 				setValueInContainerListUsingPath(path, value);
@@ -264,7 +262,6 @@ var CORA = (function(cora) {
 			};
 		};
 
-
 		const addChild = function(parentPath, metadataIdToAdd, repeatId) {
 			try {
 				tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
@@ -276,25 +273,35 @@ var CORA = (function(cora) {
 		};
 
 		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
+			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
+			addToDataContainer(newChild, parentPath, repeatId);
+			addToContainerPath(newChild, parentPath, metadataIdToAdd, repeatId);
+			addToContainerPathNoRepeatId(newChild, parentPath, metadataIdToAdd);
+		};
+		
+		const addToDataContainer = function(newChild, parentPath, repeatId) {
 			let containerSpecifiedByPath = dataContainer;
 			if (pathSpecifiesMoreLevels(parentPath)) {
 				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
 			}
-			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
-
+		};
+	
+		const addToContainerPath = function(newChild, parentPath, metadataIdToAdd, repeatId) {
 			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let pathString = JSON.stringify(newPath);
 			containerPath[pathString] = newChild;
+		};		
 
+		const addToContainerPathNoRepeatId = function(newChild, parentPath, metadataIdToAdd) {
 			let newPathNoRepeatId = createNextLevelPath(parentPath, metadataIdToAdd);
 			let pathStringNoRepeatId = JSON.stringify(newPathNoRepeatId);
 			if (undefined === containerPathNoRepeatId[pathStringNoRepeatId]) {
 				containerPathNoRepeatId[pathStringNoRepeatId] = [];
 			}
 			containerPathNoRepeatId[pathStringNoRepeatId].push(newChild);
-		};
+		};		
 
 		const pathSpecifiesMoreLevels = function(path) {
 			return path.length > 0;
@@ -319,26 +326,34 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerWithPath = function(path) {
-			removeContainerPath(path);
-			removeContainerPathNoRepeatId(path);
+			removeFromDataContainer(path);
+			removeFromContainerPath(path);
+			removeFromContainerPathNoRepeatId(path);
 		};
 
-		const removeContainerPath = function(path) {
+		const removeFromDataContainer = function(path) {
 			let containerAndParent = findContainerAndParent(path);
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
 			containerParent.children.splice(index, 1);
+		};
+		
+		const removeFromContainerPath = function(path) {
 			let pathAsString = JSON.stringify(path);
-			delete containerPath[pathAsString];
+			Object.keys(containerPath).filter((key) => {
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPath[key]);		
 		};
 
-		const removeContainerPathNoRepeatId = function(path) {
+		const removeFromContainerPathNoRepeatId = function(path) {
 			let pathAsString = JSON.stringify(path);
 			if (lastElementOfPathHasRepeatId(path)) {
 				removeContainerWithRepeatId(pathAsString);
 			} else {
-				containerPathNoRepeatId[pathAsString] = [];
+				Object.keys(containerPathNoRepeatId).filter((key) => {
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPathNoRepeatId[key]);
 			}
 		};
 
@@ -353,6 +368,10 @@ var CORA = (function(cora) {
 			let noRepeatIdContainers = containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart];
 			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId !== lastPartRepeatId);
 			containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart] = containersToKeep;
+			
+			Object.keys(containerPathNoRepeatId).filter((key) => {
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPathNoRepeatId[key]);
 		};
 
 		const move = function(dataFromMessage) {
@@ -388,6 +407,14 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
+		
+		const onlyForTestGetContainerPath = function() {
+			return containerPath;
+		};
+		
+		const onlyForTestGetContainerPathNoRepeatId = function() {
+			return containerPathNoRepeatId;
+		};
 
 		start();
 
@@ -401,7 +428,9 @@ var CORA = (function(cora) {
 			addChild: addChild,
 			remove: remove,
 			findContainer: findContainer,
-			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId
+			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId,
+			onlyForTestGetContainerPath: onlyForTestGetContainerPath,
+			onlyForTestGetContainerPathNoRepeatId: onlyForTestGetContainerPathNoRepeatId
 		});
 	};
 	return cora;

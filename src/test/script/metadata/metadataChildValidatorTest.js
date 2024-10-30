@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Olov McKie
+ * Copyright 2015, 2016, 2024 Olov McKie
   * Copyright 2016, 2020, 2024 Uppsala University Library
   * 
   * This file is part of Cora.
@@ -286,44 +286,6 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVariableId2", path: ["groupIdTwoTextChild"] });
 });
 
-//QUnit.test("testValidateOneChildRepeat0to1WithData", function(assert) {
-//	this.spec.data = {
-//		name: "groupIdOneTextChildRepeat0to1",
-//		"children": [{
-//			name: "textVariableId",
-//			value: "A Value"
-//		}]
-//	};
-//
-//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
-//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-//
-//	let validationResult = metadataChildValidator.validate();
-//
-//	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
-//});
-//
-//QUnit.test("testValidateOneChildRepeat0to1WithEmptyValue", function(assert) {
-//	this.spec.data = {
-//		name: "groupIdOneTextChildRepeat0to1",
-//		"children": [{
-//			name: "textVariableId",
-//			value: ""
-//		}]
-//	};
-//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "0", "1");
-//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-//
-//	let validationResult = metadataChildValidator.validate();
-//
-//	assert.strictEqual(validationResult.everythingOkBelow, true);
-//	assert.strictEqual(validationResult.containsValuableData, false);
-//
-//	let pubSubMessages = this.pubSub.getMessages();
-//	assert.strictEqual(pubSubMessages.length, 1);
-//	assert.stringifyEqual(pubSubMessages[0], CORATEST.createRemoveMessage("textVariableId"));
-//});
-
 CORATEST.createRemoveMessage =
 	function(metadataId) {
 		return {
@@ -529,32 +491,6 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
-//QUnit.only("testValidateOneChildOneAttributeWithDataForOne", function(assert) {
-////	this.spec.data = {
-////		name: "groupIdOneTextChildOneAttribute",
-////		"children": [{
-////			name: "textVariableId",
-////			value: "A Value"
-////		}],
-////		"attributes": {
-////			"anAttribute": "aFinalValue"
-////		}
-////	};
-//	
-//	let dataHolder = this.spec.dataHolder;
-//	let containerChild = [{
-//			name: "textVariableId",
-//			value: "A Value"
-//		}];
-//	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
-//
-//	this.spec.childReference = CORATEST.createChildReference("textVariableId", "0", "1", "1");
-//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-//
-//	let validationResult = metadataChildValidator.validate();
-//
-//	CORATEST.assertValidationResultOk(assert, validationResult, this.pubSub);
-//});
 
 QUnit.test("testValidateTextVarRepeat1to1InGroupOneAttributeInGroupWithData", function(assert) {
 	let dataHolder = this.spec.dataHolder;

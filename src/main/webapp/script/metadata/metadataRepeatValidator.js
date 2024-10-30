@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2020 Olov McKie
+ * Copyright 2015, 2020, 2024 Olov McKie
  * Copyright 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
@@ -103,14 +103,14 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const isResourceLink = function () {
-			let type = getTypeFromCMetadataElement();
-			return type === "resourceLink";
-		}
-
 		const isGroup = function() {
 			let type = getTypeFromCMetadataElement();
 			return type === "group";
+		};
+
+		const isResourceLink = function () {
+			let type = getTypeFromCMetadataElement();
+			return type === "resourceLink";
 		};
 
 		const getTypeFromCMetadataElement = function () {
@@ -123,7 +123,7 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
-			 
+
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}

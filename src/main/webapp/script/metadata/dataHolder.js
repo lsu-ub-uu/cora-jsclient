@@ -43,9 +43,7 @@ var CORA = (function(cora) {
 			if (undefined !== repeatIdIn) {
 				dataContainerPart.repeatId = repeatIdIn;
 			}
-
 			addContainerContentFromElement(dataContainerPart, cMetadataElement);
-
 			return dataContainerPart;
 		};
 
@@ -245,10 +243,6 @@ var CORA = (function(cora) {
 		const findContainersUsingPathAndMetadataId = function(path, metadataIdIn) {
 			let nextLevelPathNoRepeatId = createNextLevelPath(path, metadataIdIn);
 			let pathToFind = JSON.stringify(nextLevelPathNoRepeatId);
-//			console.log("pathToFindJson",pathToFind)
-//			console.log("pathToFind",nextLevelPathNoRepeatId)
-//			console.log("containerPathNoRepeatId",containerPathNoRepeatId)
-//			console.log("containerPathNoRepeatIdJSON",JSON.stringify(containerPathNoRepeatId))
 			let foundContainer = containerPathNoRepeatId[pathToFind];
 			if (undefined === foundContainer) {
 				return [];
@@ -268,7 +262,6 @@ var CORA = (function(cora) {
 			};
 		};
 
-
 		const addChild = function(parentPath, metadataIdToAdd, repeatId) {
 			try {
 				tryToAddChildInContainerListUsingPath(parentPath, metadataIdToAdd, repeatId);
@@ -280,28 +273,35 @@ var CORA = (function(cora) {
 		};
 
 		const tryToAddChildInContainerListUsingPath = function(parentPath, metadataIdToAdd, repeatId) {
-			//TODO:new method: add to dataContainer
+			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
+			addToDataContainer(newChild, parentPath, repeatId);
+			addToContainerPath(newChild, parentPath, metadataIdToAdd, repeatId);
+			addToContainerPathNoRepeatId(newChild, parentPath, metadataIdToAdd);
+		};
+		
+		const addToDataContainer = function(newChild, parentPath, repeatId) {
 			let containerSpecifiedByPath = dataContainer;
 			if (pathSpecifiesMoreLevels(parentPath)) {
 				let foundContainer = findContainer(parentPath);
 				containerSpecifiedByPath = foundContainer;
 			}
-			let newChild = createDataContainerForElementWithId(metadataIdToAdd, repeatId);
 			containerSpecifiedByPath.children.push(newChild);
-
-			//TODO:new method: add to containerPath
+		};
+	
+		const addToContainerPath = function(newChild, parentPath, metadataIdToAdd, repeatId) {
 			let newPath = createNextLevelPath(parentPath, metadataIdToAdd, repeatId);
 			let pathString = JSON.stringify(newPath);
 			containerPath[pathString] = newChild;
+		};		
 
-			//TODO:new method: add to containerPathNoRepeatId
+		const addToContainerPathNoRepeatId = function(newChild, parentPath, metadataIdToAdd) {
 			let newPathNoRepeatId = createNextLevelPath(parentPath, metadataIdToAdd);
 			let pathStringNoRepeatId = JSON.stringify(newPathNoRepeatId);
 			if (undefined === containerPathNoRepeatId[pathStringNoRepeatId]) {
 				containerPathNoRepeatId[pathStringNoRepeatId] = [];
 			}
 			containerPathNoRepeatId[pathStringNoRepeatId].push(newChild);
-		};
+		};		
 
 		const pathSpecifiesMoreLevels = function(path) {
 			return path.length > 0;
@@ -326,54 +326,34 @@ var CORA = (function(cora) {
 		};
 
 		const removeContainerWithPath = function(path) {
-			removeContainerPath(path);
-			removeContainerPathNoRepeatId(path);
+			removeFromDataContainer(path);
+			removeFromContainerPath(path);
+			removeFromContainerPathNoRepeatId(path);
 		};
 
-		const removeContainerPath = function(path) {
-			//remove from dataContainer
+		const removeFromDataContainer = function(path) {
 			let containerAndParent = findContainerAndParent(path);
 			let foundContainer = containerAndParent.container;
 			let containerParent = containerAndParent.parent;
 			const index = containerParent.children.indexOf(foundContainer);
 			containerParent.children.splice(index, 1);
-			
-			//remove from containerPath
-//			console.log("before remove path",path)
-//			console.log("before remove containerPath",containerPath)
+		};
+		
+		const removeFromContainerPath = function(path) {
 			let pathAsString = JSON.stringify(path);
-//			delete containerPath[pathAsString];
-	Object.keys(containerPath).filter((key) => {
-//				console.log("KEY!",key)
-//				console.log("pathAsString!",pathAsString.slice(0,-1))
-//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
+			Object.keys(containerPath).filter((key) => {
 				return key.startsWith(pathAsString.slice(0,-1))})
 					.forEach(key => delete containerPath[key]);		
-//			console.log("after remove path",path)
-//			console.log("after remove containerPath",containerPath)
-			
 		};
 
-		const removeContainerPathNoRepeatId = function(path) {
+		const removeFromContainerPathNoRepeatId = function(path) {
 			let pathAsString = JSON.stringify(path);
 			if (lastElementOfPathHasRepeatId(path)) {
 				removeContainerWithRepeatId(pathAsString);
 			} else {
-//				console.log("before remove path",path)
-//				console.log("before remove containerPathNoRepeatId",containerPathNoRepeatId)
-//				containerPathNoRepeatId[pathAsString] = [];
 				Object.keys(containerPathNoRepeatId).filter((key) => {
-//				console.log("KEY!",key)
-//				console.log("pathAsString!",pathAsString.slice(0,-1))
-//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
 				return key.startsWith(pathAsString.slice(0,-1))})
 					.forEach(key => delete containerPathNoRepeatId[key]);
-//					.forEach(key => containerPathNoRepeatId[key]=[]);
-//				 console.log("kalle1")
-////				 console.log("object2", object2)
-//				 console.log("kalle2")
-//				console.log("after remove path",path)
-//				console.log("after remove containerPathNoRepeatId",containerPathNoRepeatId)
 			}
 		};
 
@@ -387,22 +367,11 @@ var CORA = (function(cora) {
 			let lastPartRepeatId = pathAsString.substring(pathAsString.lastIndexOf(".") + 1, pathAsString.length - 2);
 			let noRepeatIdContainers = containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart];
 			let containersToKeep = noRepeatIdContainers.filter(container => container.repeatId !== lastPartRepeatId);
-//			console.log("before remove path",pathAsString)
-//				console.log("before remove containerPathNoRepeatId",containerPathNoRepeatId)
 			containerPathNoRepeatId[pathWithoutRepeatIdOnLastPart] = containersToKeep;
 			
-//			Object.keys(containerPathNoRepeatId).filter((key) => {
-//				console.log("KEY!",key)
-//				console.log("pathAsString!",pathAsString.slice(0,-1))
-//				console.log("return!",key.startsWith(pathAsString.slice(0,-1)))
-//				return key.startsWith(pathAsString.slice(0,-1))})
-////					.forEach(key => delete containerPathNoRepeatId[key]);
-//					.forEach(key =>  containerPathNoRepeatId[key]=containersToKeep);
-//				 console.log("anka1")
-////				 console.log("object2", object2)
-//				 console.log("anka2")
-//			console.log("after remove path",pathAsString)
-//				console.log("after remove containerPathNoRepeatId",containerPathNoRepeatId)
+			Object.keys(containerPathNoRepeatId).filter((key) => {
+				return key.startsWith(pathAsString.slice(0,-1))})
+					.forEach(key => delete containerPathNoRepeatId[key]);
 		};
 
 		const move = function(dataFromMessage) {
@@ -438,9 +407,11 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
+		
 		const onlyForTestGetContainerPath = function() {
 			return containerPath;
 		};
+		
 		const onlyForTestGetContainerPathNoRepeatId = function() {
 			return containerPathNoRepeatId;
 		};

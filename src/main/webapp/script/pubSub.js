@@ -28,7 +28,6 @@ var CORA = (function(cora) {
 		}
 
 		function publish(type, data) {
-			console.log(type, data);
 			var convertedPath = convertPathToMsg(data.path) + type;
 			var everyThingOk = arbiter.publish(convertedPath, data);
 			if (!everyThingOk) {

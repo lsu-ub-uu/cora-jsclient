@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2016 Olov McKie
+ * Copyright 2015, 2016, 2024 Olov McKie
  * Copyright 2016, 2020 Uppsala University Library
  *
  * This file is part of Cora.
@@ -39,21 +39,13 @@ var CORA = (function(cora) {
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
-			
-			console.log("path",path)
-			console.log("ref",ref)
 			dataChildrenForMetadata = getDataChildrenForMetadata(ref);
-			console.log("dataChildrenForMetadata",dataChildrenForMetadata)
 			noOfRepeatsForThisChild = calculateMinRepeat();
 			validateAndCategorizeChildInstances();
 			return result;
 		};
 
 		const getDataChildrenForMetadata = function(metadataId) {
-			console.log("dataholder data", dataHolder.getData())
-			console.log("dataholder onlyForTestGetContainerPathNoRepeatId", dataHolder.onlyForTestGetContainerPathNoRepeatId())
-			console.log("path",path)
-			console.log("metadataId",metadataId)
 			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
 		};
 
@@ -146,6 +138,7 @@ var CORA = (function(cora) {
 		const removeEmptyChildren = function() {
 			let childrenNotRemovable = numberOfChildrenOk + childInstancesCanNotBeRemoved.length;
 			let noChildrenNeededForRepeatMin = calculateNeededNoChildrenForRepeatMin(childrenNotRemovable);
+			
 			sendRemoveForEmptyChildren(childInstancesCanBeRemoved, noChildrenNeededForRepeatMin);
 		};
 
@@ -166,23 +159,15 @@ var CORA = (function(cora) {
 
 		const removeAllEmptyChildren = function(childrenCanBeRemoved) {
 			childrenCanBeRemoved.forEach(function(errorMessage) {
-				console.log("remove call from 1")
 				sendRemoveForEmptyChild(errorMessage);
 				childrenCanBeRemoved.shift();
 			});
 		};
 
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {
-			console.log("removeExceedingEmptyChildren 1", childrenCanBeRemoved)
-			console.log("childrenCanBeRemovedLength 1", childrenCanBeRemoved.length)
-			console.log("removeExceedingEmptyChildren 2", noChildrenNeededForRepeatMin)
 			let noToRemove = childrenCanBeRemoved.length - noChildrenNeededForRepeatMin;
-			console.log("noToRemove", noToRemove)
 			for (let i = 0; i < noToRemove; i++) {
-				console.log("remove call from 2: "+i)
-				console.log("childrenCanBeRemovedLength 1", childrenCanBeRemoved.length)
 				let popped = childrenCanBeRemoved.pop();
-				console.log("popped", popped)
 				sendRemoveForEmptyChild(popped);
 			}
 		};
@@ -192,7 +177,6 @@ var CORA = (function(cora) {
 				type: "remove",
 				path: errorMessage.validationMessage.path
 			};
-			console.log("remove empty",removeMessage)
 			pubSub.publish("remove", removeMessage);
 		};
 

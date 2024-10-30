@@ -456,7 +456,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
-QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(assert) {
+QUnit.only("testValidateOneChildRepeat1toXWithFourWithDataForOne", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
 		name: "textVariableId",
@@ -464,8 +464,16 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 		"repeatId": "one"
 	}, {
 		name: "textVariableId",
-		value: "A Value2",
+		value: "",
 		"repeatId": "two"
+	}, {
+		name: "textVariableId",
+		value: "",
+		"repeatId": "three"
+	}, {
+		name: "textVariableId",
+		value: "A Value2",
+		"repeatId": "four"
 	}];
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
 
@@ -478,7 +486,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 	assert.strictEqual(validationResult.containsValuableData, true);
 
 	let pubSubMessages = this.pubSub.getMessages();
-	assert.strictEqual(pubSubMessages.length, 1);
+	assert.strictEqual(pubSubMessages.length, 3);
 
 	let removeMessage = {
 		type: "remove",
@@ -488,6 +496,11 @@ QUnit.test("testValidateOneChildRepeat1toXWithTwoWithDataForOne", function(asser
 		}
 	};
 	assert.stringifyEqual(pubSubMessages[0], removeMessage);
+	removeMessage.message.path = ["textVariableId.two"];
+	assert.stringifyEqual(pubSubMessages[1], removeMessage);
+	removeMessage.message.path = ["textVariableId.three"];
+	assert.stringifyEqual(pubSubMessages[2], removeMessage);
+
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 

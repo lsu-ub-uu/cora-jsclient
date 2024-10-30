@@ -160,8 +160,8 @@ var CORA = (function(cora) {
 		const removeAllEmptyChildren = function(childrenCanBeRemoved) {
 			childrenCanBeRemoved.forEach(function(errorMessage) {
 				sendRemoveForEmptyChild(errorMessage);
-				childrenCanBeRemoved.shift();
 			});
+			childrenCanBeRemoved.splice(0,childrenCanBeRemoved.length)
 		};
 
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {

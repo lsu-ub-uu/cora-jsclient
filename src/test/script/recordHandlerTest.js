@@ -1067,6 +1067,8 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	assert.notOk(recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	assert.notOk(managedGuiItemSpy.getReloadDataFromServer(0));
+	
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 	this.answerCall(0);
 
@@ -1092,6 +1094,9 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	assert.strictEqual(item.nodeName, "SPAN");
 
 	assert.ok(recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	assert.ok(managedGuiItemSpy.getReloadDataFromServer(0));
+	assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
+		recordHandlerViewSpy.getReloadRecordUsingFunction(0));
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 });
 
@@ -1316,11 +1321,18 @@ QUnit.test("testReloadRecordDataIsChanged", function(assert) {
 	this.spec.createNewRecord = "false";
 	CORA.recordHandler(this.dependencies, this.spec);
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
 	assert.notOk(recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	assert.notOk(managedGuiItemSpy.getReloadDataFromServer(0));
+	assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
+		recordHandlerViewSpy.getReloadRecordUsingFunction(0));
 	this.answerCall(0);
 	let reloadFunction = recordHandlerViewSpy.getReloadRecordUsingFunction(0);
 	assert.ok(reloadFunction);
-
+	assert.ok(managedGuiItemSpy.getReloadDataFromServer(0));
+	assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
+		recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	
 	reloadFunction();
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);
 
@@ -1461,6 +1473,8 @@ QUnit.test("testCreateNewCall", function(assert) {
 
 QUnit.test("testCreateNewCall2", function(assert) {
 	CORA.recordHandler(this.dependencies, this.specForNew);
+	let managedGuiItemSpy = this.dependencies.managedGuiItemFactory.getFactored(0);
+	
 	let factoredRecordGui = this.dependencies.recordGuiFactory.getFactored(0);
 	assert.strictEqual(factoredRecordGui.getDataValidated(), 0);
 
@@ -1472,6 +1486,10 @@ QUnit.test("testCreateNewCall2", function(assert) {
 
 	let reloadFunction = recordHandlerViewSpy.getReloadRecordUsingFunction(0);
 	assert.ok(reloadFunction);
+	assert.ok(managedGuiItemSpy.getReloadDataFromServer(0));
+	assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
+		recordHandlerViewSpy.getReloadRecordUsingFunction(0));
+	
 
 	reloadFunction();
 	let ajaxCallSpy = this.ajaxCallFactorySpy.getFactored(1);

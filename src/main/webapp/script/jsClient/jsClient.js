@@ -65,6 +65,9 @@ var CORA = (function(cora) {
 				blurCurrentActiveElementToSetValueFromSelect();
 				return save(event);
 			}
+			if (event.altKey && keyPressed === 'r') {
+				return reload(event);
+			}
 			if (event.altKey && keyPressed === 'w') {
 				return close(event);
 			}
@@ -100,7 +103,14 @@ var CORA = (function(cora) {
 				openGuiItemHandler.getShowingGuiItem().sendDataToServer();
 			}
 		};
-		
+
+		const reload = function(event) {
+			event.preventDefault();
+			if(openGuiItemHandler.getShowingGuiItem()){
+				openGuiItemHandler.getShowingGuiItem().reloadDataFromServer();
+			}
+		};
+
 		const close = function(event) {
 			event.preventDefault();
 			if(openGuiItemHandler.getShowingGuiItem()){

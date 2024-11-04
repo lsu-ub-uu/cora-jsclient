@@ -1,5 +1,6 @@
 /*
  * Copyright 2017, 2023, 2024 Olov McKie
+ * Copyright 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -39,6 +40,9 @@ var CORATEST = (function(coraTest) {
 		let noOfChangedCalls = 0;
 		let sendDataToServerCalls = 0;
 		let sendDataToServerMethod;
+
+		let reloadDataFromServerCalls = 0;
+		let reloadDataFromServerMethod;
 		
 		let toggleNextIndicatorCalls = 0;
 		let togglePreviousIndicatorCalls = 0;
@@ -140,7 +144,7 @@ var CORATEST = (function(coraTest) {
 		
 		function sendDataToServer() {
 			sendDataToServerCalls++;
-		}
+		};
 		const setSendDataToServer = function(method) {
 			sendDataToServerMethod = method;
 		};
@@ -149,6 +153,19 @@ var CORATEST = (function(coraTest) {
 		};
 		const getCallsToSendDataToServer = function() {
 			return sendDataToServerCalls;
+		};
+
+		function reloadDataFromServer() {
+			reloadDataFromServerCalls++;
+		};
+		const setReloadDataFromServer = function(method) {
+			reloadDataFromServerMethod = method;
+		};
+		const getReloadDataFromServer = function() {
+			return reloadDataFromServerMethod;
+		};
+		const getCallsToReloadDataFromServer = function() {
+			return reloadDataFromServerCalls;
 		};
 
 		const toggleNextIndicator = function() {
@@ -209,6 +226,11 @@ var CORATEST = (function(coraTest) {
 			setSendDataToServer : setSendDataToServer,
 			getSendDataToServer : getSendDataToServer,
 			getCallsToSendDataToServer : getCallsToSendDataToServer,
+			
+			reloadDataFromServer : reloadDataFromServer,
+			setReloadDataFromServer : setReloadDataFromServer,
+			getReloadDataFromServer : getReloadDataFromServer,
+			getCallsToReloadDataFromServer : getCallsToReloadDataFromServer,
 			
 			toggleNextIndicator : toggleNextIndicator,
 			togglePreviousIndicator : togglePreviousIndicator,

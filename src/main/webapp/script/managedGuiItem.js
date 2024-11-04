@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 		let viewSpec;
 		let view;
 		let sendDataToServerMethod;
+		let reloadDataFromServerMethod;
 		let currentIndicatorNo = 0;
 		let focusedClass;
 		
@@ -168,6 +169,16 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const setReloadDataFromServer = function(method) {
+			reloadDataFromServerMethod = method;
+		};
+		
+		const reloadDataFromServer = function() {
+			if (reloadDataFromServerMethod !== undefined) {
+				reloadDataFromServerMethod();
+			}
+		};
+
 		out = Object.freeze({
 			type : "managedGuiItem",
 			getDependencies : getDependencies,
@@ -191,7 +202,10 @@ var CORA = (function(cora) {
 			addListPresentation : addListPresentation,
 			reloadForMetadataChanges : reloadForMetadataChanges,
 			setSendDataToServer : setSendDataToServer,
-			sendDataToServer : sendDataToServer
+			sendDataToServer : sendDataToServer,
+			setReloadDataFromServer : setReloadDataFromServer,
+			reloadDataFromServer : reloadDataFromServer
+			
 		});
 		start();
 		return out;

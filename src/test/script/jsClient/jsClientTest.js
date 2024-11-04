@@ -833,6 +833,40 @@ QUnit.test("testOnKeyDown_forKey_altKey+s", function(assert) {
 	assert.strictEqual(aView.getCallsToSendDataToServer(), 1);
 });
 
+QUnit.test("testOnKeyDown_forKey_altKey+r_noShowingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "r";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(undefined);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getCallsToReloadDataFromServer(), 0);
+});
+
+QUnit.test("testOnKeyDown_forKey_altKey+r", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+	
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "r";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(aView);
+
+	onKeyDown(eventSpy);
+	
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getCallsToReloadDataFromServer(), 1);
+});
+
 QUnit.test("testOnKeyDown_forKey_altKey+w_noShowingGuiItem", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);

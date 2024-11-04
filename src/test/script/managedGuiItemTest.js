@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2024 Uppsala University Library
  * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -443,5 +443,24 @@ QUnit.test("testSendDataToServerNotSet", function(assert) {
 	this.spec.sendDataToServerMethod = undefined;
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	managedGuiItem.sendDataToServer();
+	assert.ok(true);
+});
+
+QUnit.test("testReloadDataFromServer", function(assert) {
+	let called = false;
+	let reloadDataFromServerMethod = function() {
+		called = true;
+	}
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	managedGuiItem.setReloadDataFromServer(reloadDataFromServerMethod);
+	managedGuiItem.reloadDataFromServer();
+
+	assert.strictEqual(called, true);
+});
+
+QUnit.test("testReloadDataFromServerNotSet", function(assert) {
+	this.spec.reloadDataFromServerMethod = undefined;
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	managedGuiItem.reloadDataFromServer();
 	assert.ok(true);
 });

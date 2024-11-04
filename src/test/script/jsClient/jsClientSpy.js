@@ -29,6 +29,7 @@ var CORATEST = (function(coraTest) {
 		let openInfos = [];
 		let setCurrentLangs = [];
 		let openDefinitionIds = [];
+		let openRecursiveDeleteIds = [];
 
 		function getRecordTypesClearedNoOfTimes() {
 			return recordTypesClearedNoOfTimes;
@@ -180,6 +181,13 @@ var CORATEST = (function(coraTest) {
 			return openDefinitionIds[number];
 		}
 		
+		function openRecursiveDeleteForId(id) {
+			openRecursiveDeleteIds.push(id);
+		}
+		function getOpenRecursiveDeleteForIds(number) {
+			return openRecursiveDeleteIds[number];
+		}
+		
 		let out = Object.freeze({
 			"type" : "jsClientSpy",
 			showView : showView,
@@ -200,7 +208,10 @@ var CORATEST = (function(coraTest) {
 			getSetCurrentLang : getSetCurrentLang,
 			
 			openDefinitionViewerForId : openDefinitionViewerForId,
-			getOpenDefinitionIds : getOpenDefinitionIds
+			getOpenDefinitionIds : getOpenDefinitionIds,
+
+			openRecursiveDeleteForId : openRecursiveDeleteForId,
+			getOpenRecursiveDeleteForIds : getOpenRecursiveDeleteForIds
 		});
 
 		return out;

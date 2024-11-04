@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2019 Uppsala University Library
+ * Copyright 2016, 2019, 2024 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -80,6 +80,7 @@ QUnit.module("jsClient/jsClientTest.js", {
 			uploadManager: CORATEST.uploadManagerSpy(),
 			recordTypeMenu: this.recordTypeMenu,
 			definitionViewerFactory: CORATEST.standardFactorySpy("definitionViewerSpy"),
+			recursiveDeleteFactory: CORATEST.standardFactorySpy("recursiveDeleteSpy")
 			
 		}
 		this.spec = {
@@ -624,6 +625,37 @@ QUnit.test("testOpenDefinitionViewerForId", function(assert) {
 
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
+});
+
+QUnit.only("testOpenRecursiveDeleteForId", function(assert) {
+	let jsClient = CORA.jsClient(this.dependencies, this.spec);
+
+	jsClient.openRecursiveDeleteForId("someId");
+
+	let recursiveDelete = this.dependencies.recursiveDeleteFactory.getFactored(0);
+	let id = this.dependencies.recursiveDeleteFactory.getSpec(0);
+	
+	assert.deepEqual(id, {id:"someId"});
+	
+	let managedGui = this.dependencies.globalFactories.managedGuiItemFactory.getFactored(0);
+	let managedGuiSpec = managedGui.getSpec();
+	
+	assert.strictEqual(managedGuiSpec.activateMethod, jsClient.showView);
+	assert.strictEqual(managedGuiSpec.removeMethod, jsClient.viewRemoved);
+
+	assert.deepEqual(managedGui.getAddedWorkPresentation(0), recursiveDelete.getView());
+//	
+//	let menuPresentation = managedGui.getAddedMenuPresentation(0);
+//	assert.deepEqual(menuPresentation.tagName, "SPAN");
+//	assert.deepEqual(menuPresentation.className, "definitionViewer");
+//	assert.deepEqual(menuPresentation.innerHTML, "Definition viewer: someId");
+//	
+//	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+//	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
+//	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
+//
+//	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+//	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
 });
 
 QUnit.test("testReloadProviders", function(assert) {

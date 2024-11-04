@@ -80,7 +80,8 @@ var CORA = (function(cora) {
 				texts : {
 					showDefinitionViewer : getTranslation("showDefinitionViewerButton"),	
 					showDefinitionViewerValidationType : getTranslation("showDefinitionViewerValidationTypeButton"),	
-					showDefinitionViewerRecordType : getTranslation("showDefinitionViewerRecordTypeButton")	
+					showDefinitionViewerRecordType : getTranslation("showDefinitionViewerRecordTypeButton"),	
+					showRecursiveDelete : getTranslation("showRecursiveDeleteButton")
 				}
 			};
 		};
@@ -398,6 +399,7 @@ var CORA = (function(cora) {
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
 			possiblyShowShowDefinitionButton();
+			possiblyShowShowRecursiveDeleteButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			managedGuiItem.setReloadDataFromServer(reloadRecordFromServer);
 			busy.hideWithEffect();
@@ -481,12 +483,16 @@ var CORA = (function(cora) {
 		};
 
 		const showDefinitionViewer = function() {
-			let cData = CORA.coraData(fetchedRecord.data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
+			let id = getIdForMetadata();
 			spec.jsClient.openDefinitionViewerForId(id);
 		};
-		
+
+		const getIdForMetadata = function() {
+			let cData = CORA.coraData(fetchedRecord.data);
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
+		};
+				
 		const showDefinitionViewerValidationType = function() {
 			if(createDefinitionId){
 				spec.jsClient.openDefinitionViewerForId(createDefinitionId);
@@ -499,6 +505,17 @@ var CORA = (function(cora) {
 			spec.jsClient.openDefinitionViewerForId(definitionId);
 		};
 
+		const possiblyShowShowRecursiveDeleteButton = function() {
+			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
+				recordHandlerView.addRecursiveDeleteOpenFunction(showRecursiveDelete);
+			}
+		};
+
+		const showRecursiveDelete = function() {
+			let id = getIdForMetadata();
+			spec.jsClient.openRecursiveDeleteForId(id);
+		};
+		
 		const showData = function() {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
@@ -701,7 +718,8 @@ var CORA = (function(cora) {
 			showDefinitionViewer: showDefinitionViewer,
 			showDefinitionViewerValidationType: showDefinitionViewerValidationType,
 			showDefinitionViewerRecordType: showDefinitionViewerRecordType,
-			sendDeleteDataToServer: sendDeleteDataToServer
+			sendDeleteDataToServer: sendDeleteDataToServer,
+			showRecursiveDelete: showRecursiveDelete
 		});
 	};
 	return cora;

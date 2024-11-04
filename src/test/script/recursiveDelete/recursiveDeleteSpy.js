@@ -1,5 +1,6 @@
 /*
- * Copyright 2016, 2017, 2018 Uppsala University Library
+ * Copyright 2024 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -15,14 +16,27 @@
  *
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-var karma_config = require('./karma.core.js');
-module.exports = function(config) {
-	config.set(karma_config({
-		singleRun : true,
-		reporters : [ 'dots', 'junit', 'coverage' ],
-		browsers : [ 'FirefoxHeadless', 'ChromiumHeadless' ]
-	}));
-};
+var CORATEST = (function(coraTest) {
+	"use strict";
+	coraTest.recursiveDeleteSpy = function() {
+
+		let numberOfCalls = 0;
+		
+		const getView = function(){
+			numberOfCalls++;
+			return CORA.gui.createSpanWithClassName("definitionViewerSpy");	
+		};
+		
+		const getNumberOfCallsToGetView = function(){
+			return numberOfCalls;
+		};
+		
+		return Object.freeze({
+			getView: getView,
+			getNumberOfCallsToGetView : getNumberOfCallsToGetView
+		});
+	};
+	return coraTest;
+}(CORATEST || {}));

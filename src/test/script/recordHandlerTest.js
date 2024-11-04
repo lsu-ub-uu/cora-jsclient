@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020, 2021 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2021, 2024 Uppsala University Library
  * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -198,7 +198,8 @@ QUnit.test("testInitRecordHandlerViewSpec", function(assert) {
 	let texts = {
 		showDefinitionViewer : "translated_theClient_showDefinitionViewerButtonText",	
 		showDefinitionViewerValidationType : "translated_theClient_showDefinitionViewerValidationTypeButtonText",	
-		showDefinitionViewerRecordType : "translated_theClient_showDefinitionViewerRecordTypeButtonText"	
+		showDefinitionViewerRecordType : "translated_theClient_showDefinitionViewerRecordTypeButtonText",	
+		showRecursiveDelete : "translated_theClient_showRecursiveDeleteButtonText"	
 	};
 	assert.deepEqual(usedSpec.texts, texts);
 	
@@ -1070,6 +1071,8 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	assert.notOk(managedGuiItemSpy.getReloadDataFromServer(0));
 	
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+	
 	this.answerCall(0);
 
 	assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -1098,6 +1101,7 @@ QUnit.test("initCheckRightGuiCreatedForExisting", function(assert) {
 	assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
 		recordHandlerViewSpy.getReloadRecordUsingFunction(0));
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 });
 
 QUnit.test("initCheckAddOpenFunctionNotCalledInViewForMetadataInList", function(assert) {
@@ -1105,20 +1109,24 @@ QUnit.test("initCheckAddOpenFunctionNotCalledInViewForMetadataInList", function(
 	CORA.recordHandler(this.dependencies, this.spec);
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 	
 	this.answerCall(0);
 
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 });
 
 QUnit.test("initCheckAddOpenFunctionNotCalledInViewForNonMetadata", function(assert) {
 	CORA.recordHandler(this.dependencies, this.spec);
 	let recordHandlerViewSpy = this.recordHandlerViewFactorySpy.getFactored(0);
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 	
 	this.answerCall(0);
 
 	assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 });
 
 QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadataNotReloaded", function(assert) {
@@ -1140,6 +1148,10 @@ QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadataNotReloaded", functio
 	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0));
 	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0), 
 		recordHandler.showDefinitionViewerRecordType);
+		
+	assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+	assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0), 
+		recordHandler.showRecursiveDelete);
 });
 
 QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
@@ -1155,7 +1167,9 @@ QUnit.test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
 	assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0), 
 		recordHandler.showDefinitionViewer);
 	
-	assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+	assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+	assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0), 
+		recordHandler.showRecursiveDelete);
 });
 
 QUnit.test("testShowDefinitionViewer", function(assert) {
@@ -1207,6 +1221,19 @@ QUnit.test("testShowDefinitionViewerRecordType", function(assert) {
 	
 	assert.ok(this.spec.jsClient.getOpenDefinitionIds(0));
 	assert.equal(this.spec.jsClient.getOpenDefinitionIds(0), "textGroup");
+});
+
+QUnit.test("testShowRecursiveDelete", function(assert) {
+	this.record = this.recordWithMetadata;
+	this.spec.record = this.recordWithMetadata;
+			
+	let recordHandler = CORA.recordHandler(this.dependencies, this.spec);
+	this.answerCall(0);
+
+	recordHandler.showRecursiveDelete();
+	
+	assert.ok(this.spec.jsClient.getOpenRecursiveDeleteForIds(0));
+	assert.equal(this.spec.jsClient.getOpenRecursiveDeleteForIds(0), "textPartEnGroup");
 });
 
 QUnit.test("initRecordGuiCreatedCorrectlyBasePartOfSpec", function(assert) {

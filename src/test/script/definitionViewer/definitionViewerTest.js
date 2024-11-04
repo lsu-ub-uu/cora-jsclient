@@ -151,112 +151,6 @@ QUnit.test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
 	assert.deepEqual(openInfo, expected);
 });
 
-
-
-//QUnit.test("testViewModelAttributeReferences", function(assert) {
-//	let attributeReferences = {
-//      name: "attributeReferences",
-//      children: [
-//        {
-//          name: "ref",
-//          repeatId: "0",
-//          children: [
-//            {
-//              name: "linkedRecordType",
-//              value: "metadataCollectionVariable"
-//            },
-//            {
-//              name: "linkedRecordId",
-//              value: "someCollectionVar"
-//            }
-//          ]
-//        },{
-//          name: "ref",
-//          repeatId: "1",
-//          children: [
-//            {
-//              name: "linkedRecordType",
-//              value: "metadataCollectionVariable"
-//            },
-//            {
-//              name: "linkedRecordId",
-//              value: "otherCollectionVar"
-//            }
-//          ]
-//        }
-//      ]
-//    };
-//	this.minimalGroup.children.push(attributeReferences);
-//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
-//		
-//	let generatedView = this.definitionViewer.getViewForMetadataId("minimalGroupId");
-//	
-//	let viewModel = this.view.getViewModelForCallNo(0);
-//	let expected = {
-//		id: "minimalGroupId",
-//		type: "group",
-//		nameInData: "minimalGroup",
-//		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"}
-//	};
-//	assert.deepEqual(viewModel, expected);
-//});
-
-
-
-//{
-//              "name": "recordPartConstraint",
-//              "value": ""
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectStorageTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "storage"
-//              }
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectPermissionTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "permission"
-//              }
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "repeatId": "0",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectIndexTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "index"
-//              }
-//            }
-
 QUnit.test("testViewModelOneChild", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
@@ -298,6 +192,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 
 	assert.deepEqual(viewModel, expected);
 });
+
 QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
@@ -339,6 +234,7 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 
 	assert.deepEqual(viewModel, expected);
 });
+
 QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
@@ -396,7 +292,6 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		type: "group",
 		nameInData: "minimalGroupName",
 		attributes: ["attributeCollectionVarId"],
-		//		children : [{repeatMin: "1", repeatMax: "10", refId : "textVarId"}] 
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
 
@@ -459,4 +354,3 @@ QUnit.test("testViewModelAttributes", function(assert) {
 	
 	assert.deepEqual(viewModel, expected);
 });
-

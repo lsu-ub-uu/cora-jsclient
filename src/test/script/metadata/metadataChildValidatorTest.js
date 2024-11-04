@@ -456,7 +456,7 @@ QUnit.test("testValidateOneChildRepeat1toXWithDataForTwo", function(assert) {
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "textVariableId", path: [] });
 });
 
-QUnit.only("testValidateOneChildRepeat1toXWithFourWithDataForOne", function(assert) {
+QUnit.test("testValidateOneChildRepeat1toXWithFourWithDataForOne", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild = [{
 		name: "textVariableId",

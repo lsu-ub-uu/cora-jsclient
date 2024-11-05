@@ -627,7 +627,7 @@ QUnit.test("testOpenDefinitionViewerForId", function(assert) {
 	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
 });
 
-QUnit.only("testOpenRecursiveDeleteForId", function(assert) {
+QUnit.test("testOpenRecursiveDeleteForId", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
 
 	jsClient.openRecursiveDeleteForId("someId");
@@ -644,18 +644,18 @@ QUnit.only("testOpenRecursiveDeleteForId", function(assert) {
 	assert.strictEqual(managedGuiSpec.removeMethod, jsClient.viewRemoved);
 
 	assert.deepEqual(managedGui.getAddedWorkPresentation(0), recursiveDelete.getView());
-//	
-//	let menuPresentation = managedGui.getAddedMenuPresentation(0);
-//	assert.deepEqual(menuPresentation.tagName, "SPAN");
-//	assert.deepEqual(menuPresentation.className, "definitionViewer");
-//	assert.deepEqual(menuPresentation.innerHTML, "Definition viewer: someId");
-//	
-//	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
-//	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
-//	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
-//
-//	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
-//	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
+	
+	let menuPresentation = managedGui.getAddedMenuPresentation(0);
+	assert.deepEqual(menuPresentation.tagName, "SPAN");
+	assert.deepEqual(menuPresentation.className, "recursiveDelete");
+	assert.deepEqual(menuPresentation.innerHTML, "Recursive delete: someId");
+	
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
+
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
 });
 
 QUnit.test("testReloadProviders", function(assert) {

@@ -315,13 +315,13 @@ var CORA = (function(cora) {
 
 			let recursiveDeleteManagedGuiItem = createManagedGuiItem();
 			recursiveDeleteManagedGuiItem.addWorkPresentation(recursiveDeleteView);
-//			
-//			let definitionMenuView = CORA.gui.createSpanWithClassName("definitionViewer");
-//			definitionMenuView.innerHTML = "Definition viewer: " + id;
-//			definitionManagedGuiItem.addMenuPresentation(definitionMenuView);
-//			
-//			addGuiItem(definitionManagedGuiItem);
-//			showView(definitionManagedGuiItem);
+			
+			let recursiveDeleteMenuView = CORA.gui.createSpanWithClassName("recursiveDelete");
+			recursiveDeleteMenuView.innerHTML = "Recursive delete: " + id;
+			recursiveDeleteManagedGuiItem.addMenuPresentation(recursiveDeleteMenuView);
+			
+			addGuiItem(recursiveDeleteManagedGuiItem);
+			showView(recursiveDeleteManagedGuiItem);
 		};
 		
 		const createManagedGuiItem = function(reloadForMetadataChanges) {

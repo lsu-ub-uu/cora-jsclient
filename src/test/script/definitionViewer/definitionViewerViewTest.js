@@ -334,3 +334,17 @@ QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
 	
 	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
+
+QUnit.test("testSetTextCopierMethod", function(assert) {
+	let x = 0;
+	let method = function(){
+		x++;
+	}
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	let legend = view.childNodes[2];
+	
+	this.definitionViewerView.setTextCopierMethod(method);
+	CORATESTHELPER.simulateOnclick(legend, { altKey: true });
+	
+	assert.strictEqual(x, 1);
+});

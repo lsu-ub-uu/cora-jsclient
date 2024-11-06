@@ -24,14 +24,17 @@ var CORA = (function(cora) {
 		let textProvider = providers.textProvider;
 		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let view = dependencies.view;
+		let textView = dependencies.textView;
 		let id;
+		let model;
 
 		const start = function() {
 			id = spec.id;
+			view.setTextCopierMethod(out.copyViewToClipboard)
 		};
 
 		const reloadForMetadataChanges = function() {
-			let model = getViewModelForMetadataId(id);
+			model = getViewModelForMetadataId(id);
 			view.updateViewForViewModel(model);
 		};
 
@@ -40,7 +43,7 @@ var CORA = (function(cora) {
 		};
 
 		const getViewForMetadataId = function(metadataGroupId) {
-			let model = getViewModelForMetadataId(metadataGroupId);
+			model = getViewModelForMetadataId(metadataGroupId);
 			return view.createViewForViewModel(model);
 		};
 		
@@ -212,6 +215,20 @@ var CORA = (function(cora) {
 			jsClient.openRecordUsingReadLink(openInfo);
 		};
 		
+		const copyViewToClipboard = function() {
+			let createdTextView = textView.createViewAsText(model);
+			copyToClipboard(createdTextView);
+			return createdTextView;
+		}
+		
+		const copyToClipboard = async function(createdTextView){
+			try {
+				await navigator.clipboard.writeText(createdTextView);
+			} catch (error) {
+				
+			} 
+		}
+		
 		const onlyForTestGetProviders = function() {
 			return providers;
 		};
@@ -229,6 +246,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
 			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
+			copyViewToClipboard: copyViewToClipboard,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

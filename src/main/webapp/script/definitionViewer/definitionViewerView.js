@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	cora.definitionViewerView = function(dependencies, spec) {
 		let out;
 		let view;
+		let copyToClipboardMethod;
 		const start = function() {
 		};
 
@@ -56,9 +57,14 @@ var CORA = (function(cora) {
 			legend.append(createPermissionLegendItem());
 			legend.append(createIndexLegendItem());
 			legend.append(createFinalValueLegendItem());
+			legend.addEventListener("click", (event) =>{
+				if (event.altKey) {
+					copyToClipboardMethod();
+				}
+			});
 			return legend;
 		};
-
+		
 		let createStorageLegendItem = function () {
 			return createLegendItemUsingClassNameAndSymbolAndText("storage", "S", "Storage");
 		};
@@ -151,7 +157,7 @@ var CORA = (function(cora) {
 					`${childReference.repeatMin}-${childReference.repeatMax}`);
 				details.append(cardinality);
 			}
-			if (childReference.recordPartConstraint) {
+			if (childReference.recordPartConstraint) {spec
 				details.append(", ");
 				let constraint = createElementWithTypeClassText("span", "constraint",
 					`${childReference.recordPartConstraint}`);
@@ -192,13 +198,18 @@ var CORA = (function(cora) {
 		const onlyForTestGetSpec = function() {
 			return spec;
 		};
+		
+		const setTextCopierMethod = function(copyToClipboard){
+			copyToClipboardMethod = copyToClipboard;
+		};
 
 		out = Object.freeze({
 			type: "definitionViewerView",
-			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec,
 			createViewForViewModel: createViewForViewModel,
-			updateViewForViewModel: updateViewForViewModel
+			updateViewForViewModel: updateViewForViewModel,
+			setTextCopierMethod: setTextCopierMethod,
+			onlyForTestGetDependencies: onlyForTestGetDependencies,
+			onlyForTestGetSpec: onlyForTestGetSpec
 		});
 		start();
 

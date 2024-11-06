@@ -24,6 +24,9 @@ var CORATESTHELPER = (function(coraTestHelper) {
 		if (spec !== undefined && spec.ctrlKey) {
 			event.ctrlKey = true;
 		}
+		if (spec !== undefined && spec.altKey) {
+			event.altKey = true;
+		}
 		object.dispatchEvent(event);
 	};
 

@@ -153,7 +153,9 @@ var CORATEST = (function(coraTest) {
 						{name: "recordInfo",
 							children: [
 								{name: "id",
-								value: id}
+								value: id},
+								{name: "dataDivider",
+								value: "someDataDivider"}
 							]
 						},
 						{name : "nameInData",

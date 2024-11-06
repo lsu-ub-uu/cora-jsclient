@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
+QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"
@@ -33,8 +33,9 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 			id: "minimalGroupId",
 			type: "group",
 			nameInData: "minimalGroup",
-			text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-			defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+			dataDivider: "someDataDivider",
+			text: { id:"someTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+			defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 			methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
 			children: []
 		};
@@ -42,10 +43,11 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 		let child = {
 			repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
 				id: "textVarId",
-				type: "textVar",
+				type: "textVariable",
 				nameInData: "textVar",
-				text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-				defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+				dataDivider: "someOtherDataDivider",
+				text: { id:"someTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+				defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
 				methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId
 			}
 		};
@@ -92,7 +94,7 @@ let recursiveDeleteUpdateViewForViewModelAndAssertSameContent = function(assert,
 QUnit.test("testLegend", function(assert) {
 	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
 
-	let legend = view.childNodes[1];
+	let legend = view.childNodes[2];
 	assert.strictEqual(legend.childNodes[0].textContent, "Legend", assert);
 	
 	let storage = legend.childNodes[1];
@@ -102,18 +104,103 @@ QUnit.test("testLegend", function(assert) {
 		
 	recursiveDeleteUpdateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
 });
+QUnit.test("testBasicMetadata", function(assert) {
+	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
 
-//QUnit.test("testBasicMetadata", function(assert) {
-//	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
-//
-//	let firstLevelMetadata = view.childNodes[1];
-//	CORATEST.assertElementHasTypeClassText(firstLevelMetadata, "UL", "metadata", "", assert);
-//	
-//	let metadataHeader = firstLevelMetadata.childNodes[0];
-//	assert.strictEqual(metadataHeader.tagName, "LI");
-//	let childNodes = metadataHeader.childNodes;
-//	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "nameInData", "minimalGroup", assert);
-//	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "details",  "", assert);
-//	
-//	recursiveDeleteUpdateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
-//});
+	let firstLevelMetadata = view.childNodes[1];
+	CORATEST.assertElementHasTypeClassText(firstLevelMetadata, "UL", "metadata", "", assert);
+	
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	assert.strictEqual(metadataHeader.tagName, "LI");
+	let childNodes = metadataHeader.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "id", "minimalGroupId", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "nameInData", "minimalGroup", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "type",  "group", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[3], "SPAN", "dataDivider",  "(someDataDivider)", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
+});
+
+
+QUnit.test("testBasicMetadataOnClickOpensDefiningRecord_onId", function(assert) {
+	let callsToOpenDefiningRecord = [];
+	const openDefiningRecordUsingEventAndId = function(event, id){
+		callsToOpenDefiningRecord.push({event:event,id:id});
+	}
+	this.viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
+	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let childNodes = metadataHeader.childNodes;
+	CORATESTHELPER.simulateOnclick(childNodes[0], { ctrlKey: true });
+
+	assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
+	assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
+});
+
+QUnit.test("testBasicMetadataOnClickOpensDefiningRecord_OnNameInData", function(assert) {
+	let callsToOpenDefiningRecord = [];
+	const openDefiningRecordUsingEventAndId = function(event, id){
+		callsToOpenDefiningRecord.push({event:event,id:id});
+	}
+	this.viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
+	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let childNodes = metadataHeader.childNodes;
+	CORATESTHELPER.simulateOnclick(childNodes[1], { ctrlKey: true });
+
+	assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
+	assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
+});
+
+QUnit.test("testTextAndDefText", function(assert) {
+	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let children = metadataHeader.childNodes[4];
+	assert.strictEqual(children.tagName, "UL");
+	
+	let textLink = children.childNodes[0];
+	assert.strictEqual(textLink.tagName, "LI");
+	assert.strictEqual(textLink.className, "");
+	let textNodes = textLink.childNodes;
+	CORATEST.assertElementHasTypeClassText(textNodes[0], "SPAN", "id", "someTextId", assert);
+	CORATEST.assertElementHasTypeClassText(textNodes[1], "SPAN", "type", "text", assert);
+	CORATEST.assertElementHasTypeClassText(textNodes[2], "SPAN", "dataDivider", "(someDataDivider)", assert);
+	
+	let defTextLink = children.childNodes[1];
+	assert.strictEqual(defTextLink.tagName, "LI");
+	assert.strictEqual(defTextLink.className, "");
+	let defTtextNodes = defTextLink.childNodes;
+	CORATEST.assertElementHasTypeClassText(defTtextNodes[0], "SPAN", "id", "someDefTextId", assert);
+	CORATEST.assertElementHasTypeClassText(textNodes[1], "SPAN", "type", "text", assert);
+	CORATEST.assertElementHasTypeClassText(textNodes[2], "SPAN", "dataDivider", "(someDataDivider)", assert);
+});
+
+QUnit.test("testFirstChild", function(assert) {
+	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let children = metadataHeader.childNodes[4];
+	assert.strictEqual(children.tagName, "UL");
+
+	let childReference = children.childNodes[2];
+	assert.strictEqual(childReference.tagName, "LI");
+	assert.strictEqual(childReference.className, "");
+	let childNodes = childReference.childNodes;
+	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "id", "textVarId", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "nameInData", "textVar", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "type", "textVariable", assert);
+	CORATEST.assertElementHasTypeClassText(childNodes[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);
+	
+	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
+});

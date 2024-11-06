@@ -826,6 +826,101 @@ h1, .h1TextStyle {
 /* 	padding-right: 0.2rem; */
 }
 
+.recursiveDelete {
+	position: relative;
+	display: block;
+}
+
+.recursiveDelete .header {
+	font-size: 2rem;
+	color: #243bb7;
+}
+
+.recursiveDelete .id {
+	font-size: .9rem;
+	color: #00487C;
+	padding-right: 0.2rem;
+	cursor: pointer;
+}
+.recursiveDelete .nameInData {
+	font-size: .9rem;
+	color: #4BB3FD;
+	font-weight: bold;
+	padding-right: 0.2rem;
+	cursor: pointer;
+}
+
+.recursiveDelete .type {
+	font-size: .9rem;
+	color: #3E6680;
+	font-weight: bold;
+	padding-right: 0.2rem;
+	cursor: pointer;
+}
+
+.recursiveDelete .finalValue {
+	font-size: .8rem;
+	color: #b30b0b;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.recursiveDelete .attributes {
+	font-size: 0.8rem;
+	color: #2e7af0;
+	font-weight: bold;
+	padding-right: 0.2rem;
+	display: inline;
+}
+
+.recursiveDelete .details {
+	font-size: 0.8rem;
+	color: #188014;
+/* 	padding-right: 0.2rem; */
+}
+
+.recursiveDelete .legend {
+	color: #243bb7;
+/* 	font-weight: bold; */
+/* 	margin-right: auto; */
+	position: absolute;
+	top: 3rem;
+	right: 3rem;
+	border: 1px solid gray;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	box-shadow: 10px 5px 5px #b9b9b9;
+}
+.recursiveDelete .storage {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.recursiveDelete .permission {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.recursiveDelete .index {
+	color: #2e7af0;
+	font-weight: bold;	
+}
+
+.recursiveDelete .details .type {
+/* 	color: red; */
+/* 	padding-right: 0.2rem; */
+}
+
+.recursiveDelete .details .cardinality {
+/* 	color: gren; */
+/* 	padding-right: 0.2rem; */
+}
+
+.recursiveDelete .details .constraint {
+/* 	color: blue; */
+/* 	padding-right: 0.2rem; */
+}
+
 
 
 

@@ -42,10 +42,10 @@ var CORA = (function(cora) {
 				 `Recursive delete of ${viewModel.id}`);
 			view.appendChild(header);
 
-//			let metadata = createElementWithTypeClassText("ul", "metadata");
-//			view.appendChild(metadata);
-//			let item = createViewForOneLevel({ child: viewModel });
-//			metadata.appendChild(item);
+			let metadata = createElementWithTypeClassText("ul", "metadata");
+			view.appendChild(metadata);
+			let item = createViewForOneLevel({ child: viewModel });
+			metadata.appendChild(item);
 			
 			let legend = createLegend();
 			view.appendChild(legend);
@@ -80,96 +80,84 @@ var CORA = (function(cora) {
 			}
 			return element;
 		};
-//
-//		const createViewForOneLevel = function(childReference) {
-//			let child = childReference.child;
-//			let oneLevel = createElementWithTypeClassText("li");
-//			oneLevel.append(createNameInDataDetails(child));
-//			if(child.finalValue){
-//				oneLevel.append(createFinalValueDetails(child));
-//			}
-//			if(child.attributes){
-//				oneLevel.append(createAttributeDetails(child));
-//			}
-//			oneLevel.append(createChildReferenceDetails(childReference));
-//			if (child.children) {
-//				oneLevel.appendChild(createChildrenDetails(child));
-//			}
-//			return oneLevel;
-//		};
-//
-//		let createNameInDataDetails = function (child) {
-//			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
-//			nameInData.onclick = function (event) {
-//				child.methodOpenDefiningRecord(event, child.id);
-//			};
-//			return nameInData;
-//		};
-//
-//		let createFinalValueDetails = function (child) {
-//			return createElementWithTypeClassText("span", "finalValue", `{${child.finalValue}}`);
-//		};
-//
-//		const createAttributeDetails = function(child){
-//			let details = [];
-//			child.attributes.forEach(function(mAttribute) {
-//				if(mAttribute.finalValue){
-//					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
-//				}else{
-//					let items = [];
-//					mAttribute.collectionItems.forEach(function(collectionItem){
-//						items.push(collectionItem.nameInData);
-//					});
-//					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);
-//				}
-//			});
-//			return createElementWithTypeClassText("span", "attributes", details.join(", "));
-//		};
-//
-////		const createChildReferenceDetails = function(childReference) {
-////			let details = createElementWithTypeClassText("span", "details");
-////			let type = createElementWithTypeClassText("span", "type", `${childReference.child.type}`);
-////			details.append("(", type);
-////
-////			if (childReference.repeatMin) {
-////				details.append(", ");
-////				let cardinality = createElementWithTypeClassText("span", "cardinality",
-////					`${childReference.repeatMin}-${childReference.repeatMax}`);
-////				details.append(cardinality);
-////			}
-////			if (childReference.recordPartConstraint) {
-////				details.append(", ");
-////				let constraint = createElementWithTypeClassText("span", "constraint",
-////					`${childReference.recordPartConstraint}`);
-////				details.append(constraint);
-////			}
-////			if (childReference.collectStorageTerm) {
-////				details.append(", ");
-////				let constraint = createElementWithTypeClassText("span", "storage","S");
-////				details.append(constraint);
-////			}
-////			if (childReference.collectPermissionTerm) {
-////				details.append(", ");
-////				let constraint = createElementWithTypeClassText("span", "permission","P");
-////				details.append(constraint);
-////			}
-////			if (childReference.collectIndexTerms) {
-////				details.append(", ");
-////				let constraint = createElementWithTypeClassText("span", "index","I");
-////				details.append(constraint);
-////			}
-////			details.append(")");
-////			return details;
-////		};
-//
-//		let createChildrenDetails = function (child) {
-//			let children = document.createElement("ul");
-//			child.children.forEach(function (mChild) {
-//				let nextLevel = createViewForOneLevel(mChild);
-//				children.appendChild(nextLevel);
-//			});
-//			return children;
-//		};
+
+		const createViewForOneLevel = function(childReference) {
+			let child = childReference.child;
+			let oneLevel = createElementWithTypeClassText("li");
+			oneLevel.append(createIdDetails(child));
+			oneLevel.append(createNameInDataDetails(child));
+			oneLevel.append(createTypeDetails(child));
+			oneLevel.append(createDataDividerDetails(child));
+			if (child.children) {
+				oneLevel.appendChild(createChildrenDetails(child));
+			}
+			return oneLevel;
+		};
+
+		let createIdDetails = function (child) {
+			let id = createElementWithTypeClassText("span", "id", child.id);
+			id.onclick = function (event) {
+				child.methodOpenDefiningRecord(event, child.id);
+			};
+			return id;
+		};
+		
+		let createNameInDataDetails = function (child) {
+			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
+			nameInData.onclick = function (event) {
+				child.methodOpenDefiningRecord(event, child.id);
+			};
+			return nameInData;
+		};
+
+		const createAttributeDetails = function(child){
+			let details = [];
+			child.attributes.forEach(function(mAttribute) {
+				if(mAttribute.finalValue){
+					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
+				}else{
+					let items = [];
+					mAttribute.collectionItems.forEach(function(collectionItem){
+						items.push(collectionItem.nameInData);
+					});
+					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);
+				}
+			});
+			return createElementWithTypeClassText("span", "attributes", details.join(", "));
+		};
+
+		const createTypeDetails = function(child) {
+			let type = createElementWithTypeClassText("span", "type", `${child.type}`);
+			return type;
+		};
+		const createDataDividerDetails = function(child) {
+			let dataDivider = createElementWithTypeClassText("span", "dataDivider", `(${child.dataDivider})`);
+			return dataDivider;
+		};
+
+		let createChildrenDetails = function (child) {
+			let children = document.createElement("ul");
+			
+			let text = createText(child.text);
+			children.appendChild(text);
+			
+			let defText = createText(child.defText);
+			children.appendChild(defText);
+			
+			child.children.forEach(function (mChild) {
+				let nextLevel = createViewForOneLevel(mChild);
+				children.appendChild(nextLevel);
+			});
+			return children;
+		};
+		
+		const createText = function(text) {
+			let li = createElementWithTypeClassText("li");
+			li.append(createIdDetails(text));
+			li.append(createTypeDetails(text));
+			li.append(createDataDividerDetails(text));
+			return li;
+		};
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;

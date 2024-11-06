@@ -82,6 +82,7 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDep.searchRecordHandlerFactory.type, "searchRecordHandlerFactory");
 	assert.strictEqual(factoredDep.recordTypeHandlerFactory.type, "recordTypeHandlerFactory");
 	assert.strictEqual(factoredDep.definitionViewerFactory.type, "definitionViewerFactory");
+	assert.strictEqual(factoredDep.recursiveDeleteFactory.type, "recursiveDeleteFactory");
 
 	assert.strictEqual(factoredDep.recordTypeMenu.type, "recordTypeMenu");
 });
@@ -91,6 +92,13 @@ QUnit.test("testDefinitionViewerFactoryDependencies", function(assert) {
 	let jsClient = jsClientFactory.factor(this.spec);
 	let factoredDep = jsClient.getDependencies();
 	assert.equal(factoredDep.definitionViewerFactory.onlyForTestGetProviders(), this.providers);
+});
+
+QUnit.test("testRecursiveDeleteFactoryDependencies", function(assert) {
+	let jsClientFactory = CORA.jsClientFactory(this.providers, this.dependencies);
+	let jsClient = jsClientFactory.factor(this.spec);
+	let factoredDep = jsClient.getDependencies();
+	assert.equal(factoredDep.recursiveDeleteFactory.onlyForTestGetProviders(), this.providers);
 });
 
 QUnit.test("testSearchHandlerFactoryDependencies", function(assert) {

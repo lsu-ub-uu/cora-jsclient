@@ -195,6 +195,7 @@ var CORA = (function(cora) {
 				searchRecordHandlerFactory : searchRecordHandlerFactory,
 				recordTypeHandlerFactory : recordTypeHandlerFactory,
 				definitionViewerFactory : CORA.definitionViewerFactory(providers),
+				recursiveDeleteFactory : CORA.recursiveDeleteFactory(providers),
 				recordTypeMenu : recordTypeMenu
 			};
 

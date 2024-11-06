@@ -219,15 +219,13 @@ var CORA = (function(cora) {
 			let createdTextView = textView.createViewAsText(model);
 			copyToClipboard(createdTextView);
 			return createdTextView;
-		}
+		};
 		
 		const copyToClipboard = async function(createdTextView){
 			try {
 				await navigator.clipboard.writeText(createdTextView);
-			} catch (error) {
-				
-			} 
-		}
+			} catch (error) {} 
+		};
 		
 		const onlyForTestGetProviders = function() {
 			return providers;

@@ -31,9 +31,7 @@ var CORA = (function(cora) {
 		}
 
 		const createTextForOneLevel = function(childReference, indent) {
-			for (let i = 0; i < indent; i++) {
-   				textView = textView.concat("\t")
-			}
+			textView = textView.concat("\t".repeat(indent));
 			
 			let child = childReference.child;
 			addNameInDataDetails(child);

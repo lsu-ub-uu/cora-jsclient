@@ -21,8 +21,7 @@ var CORA = (function(cora) {
 	cora.definitionViewerTextFactory = function(dependencies) {
 
 		const factor = function (spec) {
-			let dep = {
-			};
+			let dep = {};
 
 			let definitionViewer = CORA.definitionViewerText(dep, spec);
 			return definitionViewer;

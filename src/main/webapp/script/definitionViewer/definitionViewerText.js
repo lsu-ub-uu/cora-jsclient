@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, 2024 Olov McKie
+ * Copyright 2024
  *
  * This file is part of Cora.
  *
@@ -20,19 +20,19 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.definitionViewerText = function(dependencies, spec) {
 		const SPACE = " ";
+		const COMMA_SPACE = ", ";
 		let out;
-		let viewText = "";
-		const start = function() {
-		};
+		let textView = "";
+		const start = function() {};
 
 		const createViewAsText = function(viewModel) {
 			createTextForOneLevel({ child: viewModel }, 0);
-			return viewText;
+			return textView;
 		}
 
 		const createTextForOneLevel = function(childReference, indent) {
 			for (let i = 0; i < indent; i++) {
-   				viewText = viewText.concat("\t")
+   				textView = textView.concat("\t")
 			}
 			
 			let child = childReference.child;
@@ -50,58 +50,54 @@ var CORA = (function(cora) {
 		};
 
 		let addNameInDataDetails = function (child) {
-			viewText = viewText.concat(child.nameInData);
+			textView = textView.concat(child.nameInData);
 		};
 
 		let addFinalValueDetails = function (child) {
-			viewText = viewText.concat(SPACE, `{${child.finalValue}}`);
+			textView = textView.concat(SPACE, `{${child.finalValue}}`);
 		};
 
 		const addAttributeDetails = function(child){
 			let details = [];
 			child.attributes.forEach(function(mAttribute) {
 				if(mAttribute.finalValue){
-					details.push(` ${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
-				}else{
+					details.push(SPACE + `${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
+				} else {
 					let items = [];
 					mAttribute.collectionItems.forEach(function(collectionItem){
 						items.push(collectionItem.nameInData);
 					});
-					details.push(` ${mAttribute.nameInData}:{${items.join(", ")}}`);
+					details.push(SPACE + `${mAttribute.nameInData}:{${items.join(COMMA_SPACE)}}`);
 				}
 			});
-			viewText = viewText.concat(details.join(","));
+			textView = textView.concat(details.join(","));
 		};
 
 		const addChildReferenceDetails = function(childReference) {
-			viewText = viewText.concat(" (", `${childReference.child.type}`);
-
+			textView = textView.concat(SPACE, "(");
+			
+			textView = textView.concat(`${childReference.child.type}`);
 			if (childReference.repeatMin) {
-				viewText = viewText.concat(", ");
-				viewText = viewText.concat(`${childReference.repeatMin}-${childReference.repeatMax}`);
+				textView = textView.concat(COMMA_SPACE, `${childReference.repeatMin}-${childReference.repeatMax}`);
 			}
 			if (childReference.recordPartConstraint) {
-				viewText = viewText.concat(", ");
-				viewText = viewText.concat(`${childReference.recordPartConstraint}`);
+				textView = textView.concat(COMMA_SPACE, `${childReference.recordPartConstraint}`);
 			}
 			if (childReference.collectStorageTerm) {
-				viewText = viewText.concat(", ");
-				viewText = viewText.concat("S");
+				textView = textView.concat(COMMA_SPACE, "S");
 			}
 			if (childReference.collectPermissionTerm) {
-				viewText = viewText.concat(", ");
-				viewText = viewText.concat("P");
+				textView = textView.concat(COMMA_SPACE, "P");
 			}
 			if (childReference.collectIndexTerms) {
-				viewText = viewText.concat(", ");
-				viewText = viewText.concat("I");
+				textView = textView.concat(COMMA_SPACE, "I");
 			}
-			viewText = viewText.concat(")");
+			textView = textView.concat(")");
 		};
 
 		let addChildrenDetails = function (child, indent) {
 			child.children.forEach(function (mChild) {
-				viewText = viewText.concat("\n");
+				textView = textView.concat("\n");
 				createTextForOneLevel(mChild, indent + 1);
 			});
 		};

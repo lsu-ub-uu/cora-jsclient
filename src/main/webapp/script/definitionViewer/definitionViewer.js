@@ -24,7 +24,6 @@ var CORA = (function(cora) {
 		let textProvider = providers.textProvider;
 		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let view = dependencies.view;
-		let viewText = dependencies.viewText;
 		let id;
 
 		const start = function() {
@@ -42,7 +41,6 @@ var CORA = (function(cora) {
 
 		const getViewForMetadataId = function(metadataGroupId) {
 			let model = getViewModelForMetadataId(metadataGroupId);
-			viewText.createViewAsText(model);
 			return view.createViewForViewModel(model);
 		};
 		

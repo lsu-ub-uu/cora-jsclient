@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerTextTest.js", {
+QUnit.module("definitionViewer/definitionViewerTextTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"
@@ -54,19 +54,19 @@ QUnit.module.only("definitionViewer/definitionViewerTextTest.js", {
 	}
 });
 
-QUnit.only("testInit", function(assert) {
+QUnit.test("testInit", function(assert) {
 	assert.strictEqual(this.definitionViewerText.type, "definitionViewerText");
 });
 
-QUnit.only("testOnlyForTestGetDependencies", function(assert) {
+QUnit.test("testOnlyForTestGetDependencies", function(assert) {
 	assert.strictEqual(this.definitionViewerText.onlyForTestGetDependencies(), this.dependencies);
 });
 
-QUnit.only("testOnlyForTestGetSpec", function(assert) {
+QUnit.test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(this.definitionViewerText.onlyForTestGetSpec(), this.spec);
 });
 
-QUnit.only("testBasicView", function(assert) {
+QUnit.test("testBasicView", function(assert) {
 	let text = this.definitionViewerText.createViewAsText(this.viewModel);
 	let expectedText = `minimalGroup (group)
 	textVar (textVar, 1-10, noConstraint)`;
@@ -86,7 +86,7 @@ let updateViewForTextModelAndAssertSameContent = function(assert, definitionView
 };
 
 
-QUnit.only("testBasicMetadataWithFinalValue", function(assert) {
+QUnit.test("testBasicMetadataWithFinalValue", function(assert) {
 	this.viewModel.finalValue = "someFinalValue";
 	let text = this.definitionViewerText.createViewAsText(this.viewModel);
 	let expectedText = `minimalGroup {someFinalValue} (group)
@@ -94,7 +94,7 @@ QUnit.only("testBasicMetadataWithFinalValue", function(assert) {
 	assert.deepEqual(text, expectedText);
 });
 
-QUnit.only("testBasicWithAttributeFinalValue", function(assert) {
+QUnit.test("testBasicWithAttributeFinalValue", function(assert) {
 	let attribute = {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
@@ -122,7 +122,7 @@ QUnit.only("testBasicWithAttributeFinalValue", function(assert) {
 	
 });
 
-QUnit.only("testBasicWithAttributeChoice", function(assert) {
+QUnit.test("testBasicWithAttributeChoice", function(assert) {
 	let attribute = {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
@@ -156,7 +156,7 @@ QUnit.only("testBasicWithAttributeChoice", function(assert) {
 	assert.deepEqual(text, expectedText);
 });
 
-QUnit.only("testBasicWithTwoAttributeChoice", function(assert) {
+QUnit.test("testBasicWithTwoAttributeChoice", function(assert) {
 	let attribute = {
 		id: "attributeCollectionVarId",
 		type: "collectionVariable",
@@ -191,7 +191,7 @@ QUnit.only("testBasicWithTwoAttributeChoice", function(assert) {
 	assert.deepEqual(text, expectedText);
 });
 
-QUnit.only("testChildWithStoragePermissionIndex", function(assert) {
+QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
 	this.viewModel.children[0].collectIndexTerms=["collectIndexTerm1", "collectIndexTerm2"];
 	this.viewModel.children[0].collectStorageTerm="collectStorageTerm";
 	this.viewModel.children[0].collectPermissionTerm="collectPermissionTerm";

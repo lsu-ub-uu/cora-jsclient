@@ -81,16 +81,18 @@ var CORA = (function(cora) {
 			return element;
 		};
 
-		const createViewForOneLevel = function(childReference) {
+		const createViewForOneLevel = function(childReference, attribute) {
 			let child = childReference.child;
 			let oneLevel = createElementWithTypeClassText("li");
+			if(attribute){
+				oneLevel.append(createLabelDetails(attribute));
+			}
 			oneLevel.append(createIdDetails(child));
 			oneLevel.append(createNameInDataDetails(child));
 			oneLevel.append(createTypeDetails(child));
 			oneLevel.append(createDataDividerDetails(child));
-			if (child.children) {
-				oneLevel.appendChild(createChildrenDetails(child));
-			}
+			
+			oneLevel.appendChild(createChildrenDetails(child));
 			return oneLevel;
 		};
 
@@ -103,34 +105,25 @@ var CORA = (function(cora) {
 		};
 		
 		let createNameInDataDetails = function (child) {
-			let nameInData = createElementWithTypeClassText("span", "nameInData", child.nameInData);
+			let nameInData = createElementWithTypeClassText("span", "nameInData", `[${child.nameInData}]`);
 			nameInData.onclick = function (event) {
 				child.methodOpenDefiningRecord(event, child.id);
 			};
 			return nameInData;
 		};
 
-		const createAttributeDetails = function(child){
-			let details = [];
-			child.attributes.forEach(function(mAttribute) {
-				if(mAttribute.finalValue){
-					details.push(`${mAttribute.nameInData}:{${mAttribute.finalValue}}`);
-				}else{
-					let items = [];
-					mAttribute.collectionItems.forEach(function(collectionItem){
-						items.push(collectionItem.nameInData);
-					});
-					details.push(`${mAttribute.nameInData}:{${items.join(", ")}}`);
-				}
-			});
-			return createElementWithTypeClassText("span", "attributes", details.join(", "));
+		const createLabelDetails = function(label) {
+			let type = createElementWithTypeClassText("span", "labelType", `${label}`);
+			return type;
 		};
-
 		const createTypeDetails = function(child) {
 			let type = createElementWithTypeClassText("span", "type", `${child.type}`);
 			return type;
 		};
 		const createDataDividerDetails = function(child) {
+			if (child.dataDivider === undefined){
+				child.dataDivider = "-"
+			}
 			let dataDivider = createElementWithTypeClassText("span", "dataDivider", `(${child.dataDivider})`);
 			return dataDivider;
 		};
@@ -144,17 +137,27 @@ var CORA = (function(cora) {
 			let defText = createText(child.defText);
 			children.appendChild(defText);
 			
-			child.children.forEach(function (mChild) {
-				let nextLevel = createViewForOneLevel(mChild);
-				children.appendChild(nextLevel);
-			});
+			if (child.attributes) {
+				createAndAppendGroup(children, child.attributes, "attribute")
+			}
+			
+			if (child.children) {
+				createAndAppendGroup(children, child.children)
+			}
 			return children;
+		};
+		
+		let createAndAppendGroup = function (children, child, attribute) {
+			child.forEach(function (mChild) {
+					let nextLevel = createViewForOneLevel(mChild, attribute);
+					children.appendChild(nextLevel);
+			});
 		};
 		
 		const createText = function(text) {
 			let li = createElementWithTypeClassText("li");
+			li.append(createLabelDetails(text.type));
 			li.append(createIdDetails(text));
-			li.append(createTypeDetails(text));
 			li.append(createDataDividerDetails(text));
 			return li;
 		};

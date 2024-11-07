@@ -53,7 +53,7 @@ var CORA = (function(cora) {
 				model.attributes = collectAttributes(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-				model.children = collectChildren(cDataRecordGroup);
+				model.children = collectChildrenInGroup(cDataRecordGroup, "childReferences");
 			}
 			return model;
 		};
@@ -63,23 +63,28 @@ var CORA = (function(cora) {
 			let type = cDataRecordGroup.getData().attributes["type"];
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 //			let dataDivider = getDataDividerFromCDataGroup(cDataRecordGroup);
-			let text = getTranslations(cDataRecordGroup, "textId");
-			let defText = getTranslations(cDataRecordGroup, "defTextId");
+			let text = getText(cDataRecordGroup, "textId");
+			let defText = getText(cDataRecordGroup, "defTextId");
 			
 			let basic = {
 				id: id,
 				type: type,
 				nameInData: nameInData,
-//				dataDivider: dataDivider,
 				text: text,
 				defText: defText,
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
 			
-			if (cDataRecordGroup.containsChildWithNameInData("finalValue")) {
-				basic.finalValue = cDataRecordGroup.getFirstAtomicValueByNameInData("finalValue");
-			}				
 			return basic;
+		};
+		
+		const getText = function(cDataRecordGroup, name) {
+			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
+			let textObject = textProvider.getAllTranslations(textId);
+			textObject.id = textId;
+			textObject.type = "text";
+//			textObject.methodOpenDefiningRecord = function(){console.log(`Pere ${textId}`)};
+			return textObject;
 		};
 
 		const collectAttributes = function(cDataRecordGroup) {
@@ -88,10 +93,11 @@ var CORA = (function(cora) {
 			for (let attributeReference of attributeReferences.children) {
 				let cAttributeReference = CORA.coraData(attributeReference);
 				let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-				let cAttribute = getCMetadataById(attributeId);
-				let attribute = getBasicModelFromCDataRecordGroup(cAttribute);
-				attributes.push(attribute);
-				attribute.collectionItems = collectCollectionItems(cAttribute);
+				let childRef = {
+					child: getViewModelForMetadataId(attributeId)
+				};
+
+				attributes.push(childRef);
 			}
 			return attributes;
 		};
@@ -113,74 +119,20 @@ var CORA = (function(cora) {
 			return collectionItems;
 		};
 		
-		const collectChildren = function(cDataRecordGroup) {
+		const collectChildrenInGroup = function(cDataRecordGroup, groupName) {
 			let children = [];
-			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
+			let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
 			for (let childReference of childReferences.children) {
 				let cChildReference = CORA.coraData(childReference);
-				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
-				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 				let childRef = {
-					repeatMin: repeatMin,
-					repeatMax: repeatMax,
-					recordPartConstraint: "noConstraint",
 					child: getViewModelForMetadataId(refId)
 				};
-				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
-					childRef.recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
-				}
-				let indexAttributes=createAttributesWithNameAndValueAndRepeatId("type", "index");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",indexAttributes)){
-					let indexs = cChildReference.getChildrenByNameInDataAndAttributes("childRefCollectTerm",indexAttributes);
-					let indexTerms = [];
-					for (let index of indexs) {
-						let cIndex = CORA.coraData(index);
-						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
-						indexTerms.push(collectTermId);
-					}
-					childRef.collectIndexTerms = indexTerms;
-				}
-				let storageAttributes=createAttributesWithNameAndValueAndRepeatId("type", "storage");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",storageAttributes)){
-					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",storageAttributes);
-						let cIndex = CORA.coraData(index);
-						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
-					childRef.collectStorageTerm = collectTermId;
-				}
-				let permissionAttributes=createAttributesWithNameAndValueAndRepeatId("type", "permission");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",permissionAttributes)){
-					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",permissionAttributes);
-						let cIndex = CORA.coraData(index);
-						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
-					childRef.collectPermissionTerm = collectTermId;
-				}
-
 				children.push(childRef);
 			}
 			return children;
 		};
 		
-		const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
-			let attributes = {
-				name: "attributes",
-				children: []
-			};
-			let attribute =  {
-				name: "attribute",
-				repeatId: repeatId || "1",
-				children: [{
-					name: "attributeName",
-					value: attributeName
-				}, {
-					name: "attributeValue",
-					value: attributeValue
-				}]
-			};
-			attributes.children.push(attribute);
-			return attributes;
-		};
-
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
 			return CORA.coraData(metadata);
@@ -197,11 +149,7 @@ var CORA = (function(cora) {
 //			let cRecordInfo = CORA.coraData(recordInfo);
 //			return cRecordInfo.getFirstAtomicValueByNameInData("dataDivider");
 //		};
-
-		const getTranslations = function(cDataRecordGroup, name) {
-			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
-			return textProvider.getAllTranslations(textId);
-		};
+		
 		
 		const openDefiningRecordUsingEventAndId = function(event, id) {
 			let metadataRecord = metadataProvider.getMetadataRecordById(id); 

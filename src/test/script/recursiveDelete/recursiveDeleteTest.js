@@ -95,8 +95,8 @@ QUnit.test("testViewModel", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		text: { id: "minimalGroupIdText", type: "text", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { id: "minimalGroupIdDefText", type: "text", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
 	};
 	assert.deepEqual(viewModel, expected);
@@ -110,8 +110,8 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		text: { id: "minimalGroupIdText", type: "text", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { id: "minimalGroupIdDefText", type: "text", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
 	};
 	assert.deepEqual(viewModel, expected);
@@ -175,112 +175,19 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		text: { id: "minimalGroupIdText", type: "text", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { id: "minimalGroupIdDefText", type: "text", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
 		children: []
 	};
 	let childReference = {
-		repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
+		child: {
 			id: "textVarId",
 			type: "textVariable",
 			nameInData: "textVarName",
-			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+			text: { id: "textVarIdText", type: "text", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+			defText: { id: "textVarIdDefText", type: "text", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		}
-	};
-	expected.children.push(childReference);
-
-	assert.deepEqual(viewModel, expected);
-});
-
-QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
-	let toAdd = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", refId: "textVarId"}]
-	};
-	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
-	let toAddTextVar = {
-		id: "textVarId",
-		type: "textVariable",
-		nameInData: "textVarName"
-	};
-	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
-
-	let generatedView = this.recursiveDelete.getView();
-
-	let viewModel = this.view.getViewModelForCallNo(0);
-	let expected = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		children: []
-	};
-	let childReference = {
-		repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", child: {
-			id: "textVarId",
-			type: "textVariable",
-			nameInData: "textVarName",
-			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		}
-	};
-	expected.children.push(childReference);
-
-	assert.deepEqual(viewModel, expected);
-});
-
-QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
-	let toAdd = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", 
-			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
-			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-			refId: "textVarId"}]
-	};
-	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
-	
-	let toAddTextVar = {
-		id: "textVarId",
-		type: "textVariable",
-		nameInData: "textVarName"
-	};
-	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
-
-
-	let generatedView = this.recursiveDelete.getView();
-
-	let viewModel = this.view.getViewModelForCallNo(0);
-	let expected = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		children: []
-	};
-	let childReference = {
-		repeatMin: "1", repeatMax: "10", recordPartConstraint: "read",
-			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
-			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
-			child: {
-			id: "textVarId",
-			type: "textVariable",
-			nameInData: "textVarName",
-			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-			methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
 		}
 	};
 	expected.children.push(childReference);
@@ -328,31 +235,36 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		text: { id: "minimalGroupIdText", type: "text", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { id: "minimalGroupIdDefText", type: "text", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
 		attributes: []
 	};
 	let attribute = {
-		id: "attributeCollectionVarId",
-		type: "collectionVariable",
-		nameInData: "collectionVarName",
-		finalValue: "someFinalValue",
-		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
-		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		collectionItems : []
+		child: { 
+			id: "attributeCollectionVarId",
+			type: "collectionVariable",
+			nameInData: "collectionVarName",
+			text: { id: "attributeCollectionVarIdText", type: "text", sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
+			defText: { id: "attributeCollectionVarIdDefText", type: "text", sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+			methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
+		}
 	};
+	
 	expected.attributes.push(attribute);
-	let collectionItem = {
-		id: "collectionItemId",
-		type: "collectionItem",
-		nameInData: "collectionItemName",
-		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
-		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
-		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
-	};
-	attribute.collectionItems.push(collectionItem);
+//	let collectionItem = { 
+//		child: {
+//			id: "collectionItemId",
+//			type: "collectionItem",
+//			nameInData: "collectionItemName",
+//			text: { id: "collectionItemIdText", type: "text", sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+//			defText: { id: "collectionItemIdDefText", type: "text", sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
+//			methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
+//			attributes: [],
+//			children: []
+//		}
+//	};
+//	attribute.collectionItems.push(collectionItem);
 	
 	assert.deepEqual(viewModel, expected);
 });

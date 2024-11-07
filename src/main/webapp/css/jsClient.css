@@ -833,44 +833,41 @@ h1, .h1TextStyle {
 
 .recursiveDelete .header {
 	font-size: 2rem;
-	color: #243bb7;
+	color: #c84600;
+	padding-left: 0.2rem;
+}
+
+.recursiveDelete .labelType {
+	font-size: .7rem;
+	color: #0082c8;
+	color: #001ec8;
+	padding-right: 0.2rem;
 }
 
 .recursiveDelete .id {
 	font-size: .9rem;
-	color: #00487C;
+	color: #0082c8;
+	font-weight: bold;
 	padding-right: 0.2rem;
 	cursor: pointer;
 }
 .recursiveDelete .nameInData {
 	font-size: .9rem;
-	color: #4BB3FD;
-	font-weight: bold;
+	color: #00c846;
 	padding-right: 0.2rem;
 	cursor: pointer;
 }
 
 .recursiveDelete .type {
 	font-size: .9rem;
-	color: #3E6680;
-	font-weight: bold;
+	color: #c84600;
 	padding-right: 0.2rem;
 	cursor: pointer;
 }
-
-.recursiveDelete .finalValue {
-	font-size: .8rem;
-	color: #b30b0b;
-	font-weight: bold;
+.recursiveDelete .dataDivider {
+	font-size: .7rem;
 	padding-right: 0.2rem;
-}
-
-.recursiveDelete .attributes {
-	font-size: 0.8rem;
-	color: #2e7af0;
-	font-weight: bold;
-	padding-right: 0.2rem;
-	display: inline;
+	cursor: pointer;
 }
 
 .recursiveDelete .details {

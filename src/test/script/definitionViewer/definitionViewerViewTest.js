@@ -348,3 +348,21 @@ QUnit.test("testSetTextCopierMethod", function(assert) {
 	
 	assert.strictEqual(x, 1);
 });
+
+QUnit.only("testBlink", function(assert) {
+	let method = function(){}
+	
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	let legend = view.childNodes[2];
+	
+	this.definitionViewerView.setTextCopierMethod(method);
+	CORATESTHELPER.simulateOnclick(legend, { altKey: true });
+	
+	assert.ok(legend.classList.contains("blink"));
+	const done = assert.async(); 
+	setTimeout(() => { 
+		assert.notOk(legend.classList.contains("blink")); 
+		done(); 
+		}, 300);
+	
+});

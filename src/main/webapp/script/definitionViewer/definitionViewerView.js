@@ -60,6 +60,7 @@ var CORA = (function(cora) {
 			legend.addEventListener("click", (event) =>{
 				if (event.altKey) {
 					copyToClipboardMethod();
+					blinkLegend(legend);
 				}
 			});
 			return legend;
@@ -80,6 +81,11 @@ var CORA = (function(cora) {
 		let createFinalValueLegendItem = function () {
 			return createLegendItemUsingClassNameAndSymbolAndText("finalValue", "{}", "Final value");
 		};
+		
+		const blinkLegend = function (legend){
+			legend.classList.add("blink"); 
+			setTimeout(() => legend.classList.remove("blink"), 200);
+		}
 
 		const createLegendItemUsingClassNameAndSymbolAndText = function (className, symbol, text) {
 			let item = createElementWithTypeClassText("div", "");

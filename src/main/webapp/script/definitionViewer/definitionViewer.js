@@ -220,8 +220,8 @@ var CORA = (function(cora) {
 			copyToClipboard(createdTextView);
 			return createdTextView;
 		};
-		
-		const copyToClipboard = async function(createdTextView){
+
+		const copyToClipboard = async function(createdTextView) {
 			try {
 				await navigator.clipboard.writeText(createdTextView);
 			} catch (error) {} 

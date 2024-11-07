@@ -349,7 +349,7 @@ QUnit.test("testSetTextCopierMethod", function(assert) {
 	assert.strictEqual(x, 1);
 });
 
-QUnit.only("testBlink", function(assert) {
+QUnit.test("testBlink", function(assert) {
 	let method = function(){}
 	
 	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);

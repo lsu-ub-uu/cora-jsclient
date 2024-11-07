@@ -22,10 +22,11 @@ var CORA = (function(cora) {
 		const SPACE = " ";
 		const COMMA_SPACE = ", ";
 		let out;
-		let textView = "";
+		let textView;
 		const start = function() {};
 
 		const createViewAsText = function(viewModel) {
+			textView = ""; 
 			createTextForOneLevel({ child: viewModel }, 0);
 			return textView;
 		}

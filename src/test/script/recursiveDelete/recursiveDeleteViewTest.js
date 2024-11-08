@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
+QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"
@@ -38,11 +38,14 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 			defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
 			methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
 			attributes: [],
+			refCollection: [],
+			collectionItems: [],
 			children: []
 		};
 		this.viewModel = viewModel;
 		
-		let child = { child: {
+		let child = {
+//			 child: {
 				id: "textVarId",
 				type: "textVariable",
 				nameInData: "textVar",
@@ -50,7 +53,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 				text: { id:"someTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
 				defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
 				methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId
-			}
+//			}
 		};
 		viewModel.children.push(child);
 	},
@@ -188,16 +191,15 @@ QUnit.test("testTextAndDefText", function(assert) {
 });
 
 QUnit.test("testAttributeReference", function(assert) {
-	let attributeReferenceChild = { child: {
-				id: "attributeReferenceId",
-				type: "group",
-				nameInData: "attributeReferences",
-				dataDivider: "someDataDivider",
-				text: { id:"someTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-				defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-				methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
-				attributes: []
-			}
+	let attributeReferenceChild = {
+			id: "attributeReferenceId",
+			type: "group",
+			nameInData: "attributeReferences",
+			dataDivider: "someDataDivider",
+			text: { id:"someTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+			defText: { id:"someDefTextId", type:"text", dataDivider:"someDataDivider", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+			methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
+			attributes: []
 		};
 
 	let viewWithAttributes = this.viewModel;
@@ -219,7 +221,71 @@ QUnit.test("testAttributeReference", function(assert) {
 	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[2], "SPAN", "nameInData", "[attributeReferences]", assert);
 	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[3], "SPAN", "type",  "group", assert);
 	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[4], "SPAN", "dataDivider",  "(someDataDivider)", assert);
+});
+
+QUnit.test("testRefCollection", function(assert) {
+	let refCollection = { 
+		id: "itemCollectionId",
+		type: "itemCollection",
+		nameInData: "itemCollectionName",
+		dataDivider: "someDataDivider",
+		text: { id: "itemCollectionIdText", type: "text", sv: "translated_sv_itemCollectionIdText", en: "translated_en_itemCollectionIdText" },
+		defText: { id: "itemCollectionIdDefText", type: "text", sv: "translated_sv_itemCollectionIdDefText", en: "translated_en_itemCollectionIdDefText" },
+		methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId,
+		collectionItems: []
+	};
+
+	let viewWithAttributes = this.viewModel;
+	viewWithAttributes.refCollection.push(refCollection)
 	
+	let view = this.recursiveDeleteView.createViewForViewModel(viewWithAttributes);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let children = metadataHeader.childNodes[4];
+	assert.strictEqual(children.tagName, "UL");
+	
+	let attributeReferences = children.childNodes[2];
+	assert.strictEqual(attributeReferences.tagName, "LI");
+	assert.strictEqual(attributeReferences.className, "");
+	let attributeReferencesNodes = attributeReferences.childNodes;
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[0], "SPAN", "labelType", "refCollection", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[1], "SPAN", "id", "itemCollectionId", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[2], "SPAN", "nameInData", "[itemCollectionName]", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[3], "SPAN", "type",  "itemCollection", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[4], "SPAN", "dataDivider",  "(someDataDivider)", assert);
+});
+
+QUnit.test("testCollectionItemReferences", function(assert) {
+	let collectionItem = { 
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		dataDivider: "someDataDivider",
+		text: { id: "collectionItemIdText", type: "text", sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { id: "collectionItemIdDefText", type: "text", sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
+		methodOpenDefiningRecord : this.openDefiningRecordUsingEventAndId
+	};
+
+	let viewWithAttributes = this.viewModel;
+	viewWithAttributes.collectionItems.push(collectionItem)
+	
+	let view = this.recursiveDeleteView.createViewForViewModel(viewWithAttributes);
+
+	let firstLevelMetadata = view.childNodes[1];
+	let metadataHeader = firstLevelMetadata.childNodes[0];
+	let children = metadataHeader.childNodes[4];
+	assert.strictEqual(children.tagName, "UL");
+	
+	let attributeReferences = children.childNodes[2];
+	assert.strictEqual(attributeReferences.tagName, "LI");
+	assert.strictEqual(attributeReferences.className, "");
+	let attributeReferencesNodes = attributeReferences.childNodes;
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[0], "SPAN", "labelType", "collectionItems", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[1], "SPAN", "id", "collectionItemId", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[2], "SPAN", "nameInData", "[collectionItemName]", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[3], "SPAN", "type",  "collectionItem", assert);
+	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[4], "SPAN", "dataDivider",  "(someDataDivider)", assert);
 });
 
 QUnit.test("testFirstChild", function(assert) {

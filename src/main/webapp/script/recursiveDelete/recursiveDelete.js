@@ -52,15 +52,26 @@ var CORA = (function(cora) {
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
 				model.attributes = collectAttributes(cDataRecordGroup);
 			}
+			if (cDataRecordGroup.containsChildWithNameInData("refCollection")) {
+				model.refCollection = collectRefCollection(cDataRecordGroup);
+			}
+			if (cDataRecordGroup.containsChildWithNameInData("collectionItemReferences")) {
+				model.collectionItems = collectCollectionItemReferences(cDataRecordGroup);
+			}
 			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-				model.children = collectChildrenInGroup(cDataRecordGroup, "childReferences");
+				model.children = collectChildReferences(cDataRecordGroup, "childReferences");
 			}
 			return model;
 		};
 		
+		const getCMetadataById = function(metadataId) {
+			let metadata = metadataProvider.getMetadataById(metadataId);
+			return CORA.coraData(metadata);
+		};
+		
 		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup) {
-			let id = getIdFromCDataGroup(cDataRecordGroup);
-			let type = cDataRecordGroup.getData().attributes["type"];
+			let id = getId(cDataRecordGroup);
+			let type = getType(cDataRecordGroup);
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 //			let dataDivider = getDataDividerFromCDataGroup(cDataRecordGroup);
 			let text = getText(cDataRecordGroup, "textId");
@@ -78,12 +89,21 @@ var CORA = (function(cora) {
 			return basic;
 		};
 		
+		const getId = function(cDataRecordGroup) {
+			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
+			let cRecordInfo = CORA.coraData(recordInfo);
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
+		};
+		
+		const getType = function(cDataRecordGroup) {
+			return cDataRecordGroup.getData().attributes["type"];
+		};
+		
 		const getText = function(cDataRecordGroup, name) {
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
 			let textObject = textProvider.getAllTranslations(textId);
 			textObject.id = textId;
 			textObject.type = "text";
-//			textObject.methodOpenDefiningRecord = function(){console.log(`Pere ${textId}`)};
 			return textObject;
 		};
 
@@ -91,57 +111,46 @@ var CORA = (function(cora) {
 			let attributes = [];
 			let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
 			for (let attributeReference of attributeReferences.children) {
-				let cAttributeReference = CORA.coraData(attributeReference);
-				let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
-				let childRef = {
-					child: getViewModelForMetadataId(attributeId)
-				};
-
-				attributes.push(childRef);
+				let metadataInfo = readLinkAndCreateMetadataInformation(attributeReference);
+				attributes.push(metadataInfo);
 			}
 			return attributes;
 		};
 		
-		const collectCollectionItems = function(cAttribute){
-			let collectionLink = cAttribute.getFirstChildByNameInData("refCollection");
-			let cCollectionLink = CORA.coraData(collectionLink);
-			let collectionId = cCollectionLink.getFirstAtomicValueByNameInData("linkedRecordId");
-			let cCollection = getCMetadataById(collectionId);
-			let collectionItemReferences = cCollection.getFirstChildByNameInData("collectionItemReferences");
-			let collectionItems = [];
-			for (let itemLink of collectionItemReferences.children) {
-				let cItemLink = CORA.coraData(itemLink);
-				let collectionItemId = cItemLink.getFirstAtomicValueByNameInData("linkedRecordId");
-				let cCollectionItem = getCMetadataById(collectionItemId);
-				let collectionItem = getBasicModelFromCDataRecordGroup(cCollectionItem);
-				collectionItems.push(collectionItem);
-			}
-			return collectionItems;
+		const readLinkAndCreateMetadataInformation = function(data){
+			let cData = CORA.coraData(data);
+			let linkId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
+			return getViewModelForMetadataId(linkId);
 		};
 		
-		const collectChildrenInGroup = function(cDataRecordGroup, groupName) {
+		const collectRefCollection = function(cDataRecordGroup){
+			let refCollection = [];
+			let refCollectionLink = cDataRecordGroup.getFirstChildByNameInData("refCollection");
+			let metadataInfo = readLinkAndCreateMetadataInformation(refCollectionLink);
+			refCollection.push(metadataInfo);
+			return refCollection;
+		};
+		
+		const collectCollectionItemReferences = function(cDataRecordGroup){
+			let collectionItemReferences = [];
+			let collectionItemReferencesGroup = cDataRecordGroup.getFirstChildByNameInData("collectionItemReferences");
+			for (let itemLink of collectionItemReferencesGroup.children) {
+				let metadataInfo = readLinkAndCreateMetadataInformation(itemLink);
+				collectionItemReferences.push(metadataInfo);
+			}
+			return collectionItemReferences;
+		};
+		
+		const collectChildReferences = function(cDataRecordGroup, groupName) {
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
 			for (let childReference of childReferences.children) {
 				let cChildReference = CORA.coraData(childReference);
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
-				let childRef = {
-					child: getViewModelForMetadataId(refId)
-				};
-				children.push(childRef);
+				let metadataInfo = getViewModelForMetadataId(refId);
+				children.push(metadataInfo);
 			}
 			return children;
-		};
-		
-		const getCMetadataById = function(metadataId) {
-			let metadata = metadataProvider.getMetadataById(metadataId);
-			return CORA.coraData(metadata);
-		};
-
-		const getIdFromCDataGroup = function(cDataRecordGroup) {
-			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-			let cRecordInfo = CORA.coraData(recordInfo);
-			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 		
 //		const getDataDividerFromCDataGroup = function(cDataRecordGroup) {
@@ -149,7 +158,6 @@ var CORA = (function(cora) {
 //			let cRecordInfo = CORA.coraData(recordInfo);
 //			return cRecordInfo.getFirstAtomicValueByNameInData("dataDivider");
 //		};
-		
 		
 		const openDefiningRecordUsingEventAndId = function(event, id) {
 			let metadataRecord = metadataProvider.getMetadataRecordById(id); 

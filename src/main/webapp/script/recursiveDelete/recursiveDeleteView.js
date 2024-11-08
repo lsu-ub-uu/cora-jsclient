@@ -38,19 +38,23 @@ var CORA = (function(cora) {
 		};
 		
 		const addPartsToView = function(viewModel, view){
-			let header = createElementWithTypeClassText("div", "header",
-				 `Recursive delete of ${viewModel.id}`);
+			let header = createHeader(viewModel.id);
 			view.appendChild(header);
 
-			let metadata = createElementWithTypeClassText("ul", "metadata");
-			view.appendChild(metadata);
-			let item = createViewForOneLevel({ child: viewModel });
-			metadata.appendChild(item);
+			let metadataHolder = createElementWithTypeClassText("ul", "metadata");
+			view.appendChild(metadataHolder);
+			
+			let metadataItems = createViewForOneLevel(viewModel);
+			metadataHolder.appendChild(metadataItems);
 			
 			let legend = createLegend();
 			view.appendChild(legend);
 		};
 
+		const createHeader = function(id){
+			let headerText = `Recursive delete of ${id}`;
+			return createElementWithTypeClassText("div", "header", headerText);
+		}
 		const createLegend = function(){
 			let legend = createElementWithTypeClassText("div", "legend", "Legend");
 			legend.append(createPresentationLegendItem());
@@ -81,22 +85,24 @@ var CORA = (function(cora) {
 			return element;
 		};
 
-		const createViewForOneLevel = function(childReference, attribute) {
-			let child = childReference.child;
+		const createViewForOneLevel = function(data, label) {
 			let oneLevel = createElementWithTypeClassText("li");
-			if(attribute){
-				oneLevel.append(createLabelDetails(attribute));
+			if(label){
+				oneLevel.append(createLabel(label));
 			}
-			oneLevel.append(createIdDetails(child));
-			oneLevel.append(createNameInDataDetails(child));
-			oneLevel.append(createTypeDetails(child));
-			oneLevel.append(createDataDividerDetails(child));
-			
-			oneLevel.appendChild(createChildrenDetails(child));
+			oneLevel.append(createId(data));
+			oneLevel.append(createNameInData(data));
+			oneLevel.append(createType(data));
+			oneLevel.append(createDataDivider(data));
+			oneLevel.appendChild(createChildren(data));
 			return oneLevel;
 		};
 
-		let createIdDetails = function (child) {
+		const createLabel = function(label) {
+			return createElementWithTypeClassText("span", "labelType", `${label}`);
+		};
+
+		let createId = function (child) {
 			let id = createElementWithTypeClassText("span", "id", child.id);
 			id.onclick = function (event) {
 				child.methodOpenDefiningRecord(event, child.id);
@@ -104,7 +110,7 @@ var CORA = (function(cora) {
 			return id;
 		};
 		
-		let createNameInDataDetails = function (child) {
+		let createNameInData = function (child) {
 			let nameInData = createElementWithTypeClassText("span", "nameInData", `[${child.nameInData}]`);
 			nameInData.onclick = function (event) {
 				child.methodOpenDefiningRecord(event, child.id);
@@ -112,56 +118,60 @@ var CORA = (function(cora) {
 			return nameInData;
 		};
 
-		const createLabelDetails = function(label) {
-			let type = createElementWithTypeClassText("span", "labelType", `${label}`);
-			return type;
+		const createType = function(child) {
+			return createElementWithTypeClassText("span", "type", `${child.type}`);
 		};
-		const createTypeDetails = function(child) {
-			let type = createElementWithTypeClassText("span", "type", `${child.type}`);
-			return type;
+		
+		const createDataDivider = function(child) {
+			let dataDivider = replaceIfUndefined(child.dataDivider);
+			return createElementWithTypeClassText("span", "dataDivider", `(${dataDivider})`);
 		};
-		const createDataDividerDetails = function(child) {
-			if (child.dataDivider === undefined){
-				child.dataDivider = "-"
+		
+		const replaceIfUndefined = function(value) {
+			if (value === undefined){
+				return "-";
 			}
-			let dataDivider = createElementWithTypeClassText("span", "dataDivider", `(${child.dataDivider})`);
-			return dataDivider;
+			return value;
 		};
-
-		let createChildrenDetails = function (child) {
+		
+		let createChildren = function (child) {
 			let children = document.createElement("ul");
-			
-			let text = createText(child.text);
-			children.appendChild(text);
-			
-			let defText = createText(child.defText);
-			children.appendChild(defText);
-			
+			if(child.text){
+				children.appendChild(createText(child.text));
+			}
+			if(child.defText){
+			 	children.appendChild(createText(child.defText));
+			}
 			if (child.attributes) {
 				createAndAppendGroup(children, child.attributes, "attribute")
 			}
-			
+			if (child.refCollection) {
+				createAndAppendGroup(children, child.refCollection, "refCollection")
+			}
+			if (child.collectionItems) {
+				createAndAppendGroup(children, child.collectionItems, "collectionItems")
+			}
 			if (child.children) {
 				createAndAppendGroup(children, child.children)
 			}
 			return children;
 		};
 		
-		let createAndAppendGroup = function (children, child, attribute) {
+		const createText = function(text) {
+			let li = createElementWithTypeClassText("li");
+			li.append(createLabel(text.type));
+			li.append(createId(text));
+			li.append(createDataDivider(text));
+			return li;
+		};
+		
+		let createAndAppendGroup = function (children, child, label) {
 			child.forEach(function (mChild) {
-					let nextLevel = createViewForOneLevel(mChild, attribute);
+					let nextLevel = createViewForOneLevel(mChild, label);
 					children.appendChild(nextLevel);
 			});
 		};
 		
-		const createText = function(text) {
-			let li = createElementWithTypeClassText("li");
-			li.append(createLabelDetails(text.type));
-			li.append(createIdDetails(text));
-			li.append(createDataDividerDetails(text));
-			return li;
-		};
-
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};

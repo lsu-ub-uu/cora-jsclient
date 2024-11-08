@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteTest.js", {
+QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
 		this.textProvider = CORATEST.textProviderSpy();
@@ -168,7 +168,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	let generatedView = this.recursiveDelete.getView();
+	this.recursiveDelete.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -181,14 +181,12 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		children: []
 	};
 	let childReference = {
-		child: {
-			id: "textVarId",
-			type: "textVariable",
-			nameInData: "textVarName",
-			text: { id: "textVarIdText", type: "text", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
-			defText: { id: "textVarIdDefText", type: "text", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
+		id: "textVarId",
+		type: "textVariable",
+		nameInData: "textVarName",
+		text: { id: "textVarIdText", type: "text", sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
+		defText: { id: "textVarIdDefText", type: "text", sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-		}
 	};
 	expected.children.push(childReference);
 
@@ -228,9 +226,9 @@ QUnit.test("testViewModelAttributes", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
-	let generatedView = this.recursiveDelete.getView();
-
+	this.recursiveDelete.getView();
 	let viewModel = this.view.getViewModelForCallNo(0);
+	
 	let expected = {
 		id: "minimalGroupId",
 		type: "group",
@@ -240,31 +238,38 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
 		attributes: []
 	};
-	let attribute = {
-		child: { 
-			id: "attributeCollectionVarId",
-			type: "collectionVariable",
-			nameInData: "collectionVarName",
-			text: { id: "attributeCollectionVarIdText", type: "text", sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
-			defText: { id: "attributeCollectionVarIdDefText", type: "text", sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
-			methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
-		}
-	};
 	
+	let attribute = {
+		id: "attributeCollectionVarId",
+		type: "collectionVariable",
+		nameInData: "collectionVarName",
+		text: { id: "attributeCollectionVarIdText", type: "text", sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
+		defText: { id: "attributeCollectionVarIdDefText", type: "text", sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
+		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
+		refCollection: []
+	};
 	expected.attributes.push(attribute);
-//	let collectionItem = { 
-//		child: {
-//			id: "collectionItemId",
-//			type: "collectionItem",
-//			nameInData: "collectionItemName",
-//			text: { id: "collectionItemIdText", type: "text", sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
-//			defText: { id: "collectionItemIdDefText", type: "text", sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
-//			methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
-//			attributes: [],
-//			children: []
-//		}
-//	};
-//	attribute.collectionItems.push(collectionItem);
+	
+	let refCollection = { 
+		id: "itemCollectionId",
+		type: "itemCollection",
+		nameInData: "itemCollectionName",
+		text: { id: "itemCollectionIdText", type: "text", sv: "translated_sv_itemCollectionIdText", en: "translated_en_itemCollectionIdText" },
+		defText: { id: "itemCollectionIdDefText", type: "text", sv: "translated_sv_itemCollectionIdDefText", en: "translated_en_itemCollectionIdDefText" },
+		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId,
+		collectionItems: []
+	};
+	attribute.refCollection.push(refCollection);
+	
+	let collectionItem = { 
+		id: "collectionItemId",
+		type: "collectionItem",
+		nameInData: "collectionItemName",
+		text: { id: "collectionItemIdText", type: "text", sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
+		defText: { id: "collectionItemIdDefText", type: "text", sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
+		methodOpenDefiningRecord : this.recursiveDelete.openDefiningRecordUsingEventAndId
+	};
+	refCollection.collectionItems.push(collectionItem);
 	
 	assert.deepEqual(viewModel, expected);
 });

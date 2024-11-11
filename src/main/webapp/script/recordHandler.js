@@ -36,7 +36,7 @@ var CORA = (function(cora) {
 		let validationTypeId;
 		let createDefinitionId;
 		let updateDefinitionId;
-		let	definitionId;
+		let definitionId;
 		let actionLinks;
 
 		const start = function() {
@@ -47,7 +47,7 @@ var CORA = (function(cora) {
 
 			recordHandlerView = createRecordHandlerView();
 			managedGuiItem.addWorkPresentation(recordHandlerView.getView());
-			busy = CORA.busy();
+			busy = dependencies.busyFactory.factor();
 			managedGuiItem.addWorkPresentation(busy.getView());
 			createNewOrFetchDataFromServerForExistingRecord();
 		};
@@ -77,15 +77,15 @@ var CORA = (function(cora) {
 				showDataMethod: showData,
 				copyDataMethod: copyData,
 				showIncomingLinksMethod: showIncomingLinks,
-				texts : {
-					showDefinitionViewer : getTranslation("showDefinitionViewerButton"),	
-					showDefinitionViewerValidationType : getTranslation("showDefinitionViewerValidationTypeButton"),	
-					showDefinitionViewerRecordType : getTranslation("showDefinitionViewerRecordTypeButton")	
+				texts: {
+					showDefinitionViewer: getTranslation("showDefinitionViewerButton"),
+					showDefinitionViewerValidationType: getTranslation("showDefinitionViewerValidationTypeButton"),
+					showDefinitionViewerRecordType: getTranslation("showDefinitionViewerRecordTypeButton")
 				}
 			};
 		};
-		
-		const getTranslation = function(textId){
+
+		const getTranslation = function(textId) {
 			return textProvider.getTranslation(`theClient_${textId}Text`);
 		};
 
@@ -116,26 +116,26 @@ var CORA = (function(cora) {
 			recordTypeId = spec.recordTypeRecordIdForNew;
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 
-			if(copiedDataExists(copiedData)){
+			if (copiedDataExists(copiedData)) {
 				let cCopiedData = CORA.coraData(copiedData);
 				validationTypeId = getValidationTypeIdFromData(cCopiedData);
 				tryToCreateGuiForNewWithKnownValidationType(copiedData);
-			}else if(onlyOneValiationType()) {
+			} else if (onlyOneValiationType()) {
 				validationTypeId = Object.keys(metadataForRecordType.validationTypes)[0];
 				tryToCreateGuiForNewWithKnownValidationType();
 			} else {
 				chooseValidationType();
 			}
 		};
-		
-		const copiedDataExists = function(copiedData){
+
+		const copiedDataExists = function(copiedData) {
 			return undefined != copiedData;
 		};
-		
-		const onlyOneValiationType = function(){
+
+		const onlyOneValiationType = function() {
 			return 1 == Object.keys(metadataForRecordType.validationTypes).length;
 		};
-		
+
 		const chooseValidationType = function() {
 			let questionSpec = assembleValidationQuestionSpec();
 			let question = dependencies.questionFactory.factor(questionSpec);
@@ -148,18 +148,21 @@ var CORA = (function(cora) {
 				text: "Välj validation type för posten!",
 				buttons: []
 			};
-			for(const validationType of Object.keys(metadataForRecordType.validationTypes)){
-				spec.buttons.push({text: validationType, onclickFunction: function(){
-					chosenValidationType(validationType);
-				}});
+			for (const validationType of Object.keys(metadataForRecordType.validationTypes)) {
+				spec.buttons.push({
+					text: validationType, onclickFunction: function() {
+						chosenValidationType(validationType);
+					}
+				});
 			}
 			return spec;
 		};
+
 		const chosenValidationType = function(z) {
-			validationTypeId = z; 
+			validationTypeId = z;
 			tryToCreateGuiForNewWithKnownValidationType();
 		};
-		
+
 		const tryToCreateGuiForNewWithKnownValidationType = function(copiedData) {
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
 			createDefinitionId = validationType.createDefinitionId;
@@ -176,7 +179,7 @@ var CORA = (function(cora) {
 			recordHandlerView.addDefinitionViewerOpenFunctionValidationType(showDefinitionViewerValidationType);
 			recordHandlerView.addDefinitionViewerOpenFunctionRecordType(showDefinitionViewerRecordType);
 		};
-		
+
 		const createAndAddViewsForNew = function(recordGuiIn, createDefinitionId, definitionId) {
 			if ("true" !== spec.partOfList) {
 				addNewEditPresentationToView(recordGuiIn, createDefinitionId);
@@ -268,7 +271,7 @@ var CORA = (function(cora) {
 					+ error);
 			recordHandlerView.addObjectToEditView(data);
 			recordHandlerView.addObjectToEditView(error.stack);
-			throw(error);
+			throw (error);
 		};
 
 		const sendNewDataToServer = function() {
@@ -307,7 +310,6 @@ var CORA = (function(cora) {
 		};
 
 		const resetViewsAndProcessFetchedRecord2 = function(answer) {
-			busy.hideWithEffect();
 			recordHandlerView.clearViews();
 			initComplete = false;
 			dataIsChanged = false;
@@ -401,7 +403,6 @@ var CORA = (function(cora) {
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			managedGuiItem.setReloadDataFromServer(reloadRecordFromServer);
 			busy.hideWithEffect();
-			managedGuiItem.showWorkView();
 		};
 
 		const createAndAddViewsForExisting = function(recordGuiIn, updateDefinitionId, definitionId) {
@@ -466,7 +467,7 @@ var CORA = (function(cora) {
 			let readIncomingLinks = fetchedRecord.actionLinks.read_incoming_links;
 			return readIncomingLinks !== undefined;
 		};
-		
+
 		const possiblyShowShowDefinitionButton = function() {
 			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
 				recordHandlerView.addDefinitionViewerOpenFunction(showDefinitionViewer);
@@ -486,15 +487,15 @@ var CORA = (function(cora) {
 			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
 			spec.jsClient.openDefinitionViewerForId(id);
 		};
-		
+
 		const showDefinitionViewerValidationType = function() {
-			if(createDefinitionId){
+			if (createDefinitionId) {
 				spec.jsClient.openDefinitionViewerForId(createDefinitionId);
-			}else{
+			} else {
 				spec.jsClient.openDefinitionViewerForId(updateDefinitionId);
 			}
 		};
-		
+
 		const showDefinitionViewerRecordType = function() {
 			spec.jsClient.openDefinitionViewerForId(definitionId);
 		};
@@ -690,7 +691,7 @@ var CORA = (function(cora) {
 			copyData: copyData,
 			showData: showData,
 			sendUpdateDataToServer: sendUpdateDataToServer,
-			sendNewDataToServer : sendNewDataToServer,
+			sendNewDataToServer: sendNewDataToServer,
 			shouldRecordBeDeleted: shouldRecordBeDeleted,
 			getManagedGuiItem: getManagedGuiItem,
 			reloadForMetadataChanges: reloadForMetadataChanges,

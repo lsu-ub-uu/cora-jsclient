@@ -21,35 +21,32 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.resultHandlerFactory = function(dependencies) {
 
-		function factor(spec) {
-			var viewDep = {};
-			var indexHandlerDep = {
-				"ajaxCallFactory" : dependencies.ajaxCallFactory,
-				"uploadManager" : dependencies.recordGuiFactory
-						.getDependencies().uploadManager,
-				"textProvider" : dependencies.textProvider
+		const factor = function(spec) {
+			let viewDep = {};
+			let indexHandlerDep = {
+				ajaxCallFactory: dependencies.ajaxCallFactory,
+				uploadManager: dependencies.recordGuiFactory.getDependencies().uploadManager,
+				textProvider: dependencies.textProvider
 			};
-			var dep = {
-				"resultHandlerViewFactory" : CORA
-						.resultHandlerViewFactory(viewDep),
-				"indexListHandlerFactory" : CORA
-						.indexListHandlerFactory(indexHandlerDep),
-				"textProvider" : dependencies.textProvider,
-				"recordGuiFactory" : dependencies.recordGuiFactory,
-				"jsClient" : spec.jsClient,
-				"recordHandlerFactory" : dependencies.recordHandlerFactory
+			let dep = {
+				resultHandlerViewFactory: CORA.resultHandlerViewFactory(viewDep),
+				indexListHandlerFactory: CORA.indexListHandlerFactory(indexHandlerDep),
+				textProvider: dependencies.textProvider,
+				recordGuiFactory: dependencies.recordGuiFactory,
+				jsClient: spec.jsClient,
+				recordHandlerFactory: dependencies.recordHandlerFactory
 			};
 			return CORA.resultHandler(dep, spec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "resultHandlerFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			type: "resultHandlerFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 	};
 	return cora;

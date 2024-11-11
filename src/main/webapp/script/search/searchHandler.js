@@ -59,7 +59,7 @@ var CORA = (function(cora) {
 
 		const subscribeToChangesInForm = function() {
 			let path = [];
-			let context = undefined;
+			let context;
 			let functionToCall = handleMsg;
 			recordGui.pubSub.subscribe("*", path, context, functionToCall);
 		};
@@ -84,7 +84,7 @@ var CORA = (function(cora) {
 		const createRecordGui = function(metadataId, permissionCalculator) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
-				permissions : createEmptyPermissions()
+				permissions: createEmptyPermissions()
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
 		};
@@ -115,9 +115,9 @@ var CORA = (function(cora) {
 				data: "",
 				path: []
 			});
-			if(spec.setFocus){
+			if (spec.setFocus) {
 				spec.setFocus();
-			}		
+			}
 		};
 
 		const sendSearchQueryToServer = function() {
@@ -161,7 +161,7 @@ var CORA = (function(cora) {
 		const setSearchTimeoutTime = function(time) {
 			searchTimeoutTime = time;
 		};
-		
+
 		const getSearchTimeoutTime = function(time) {
 			return searchTimeoutTime;
 		};

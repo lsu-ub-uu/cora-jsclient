@@ -47,25 +47,29 @@ var CORA = (function(cora) {
 		
 		const getViewModelForMetadataId = function(metadataId) {
 			let cDataRecordGroup = getCMetadataById(metadataId);
-			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
+			let currentModel = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
 
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
-				model.attributes = collectAttributes(cDataRecordGroup);
+				currentModel.attributes = collectAttributes(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("refCollection")) {
-				model.refCollection = collectRefCollection(cDataRecordGroup);
+				currentModel.refCollection = collectRefCollection(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("collectionItemReferences")) {
-				model.collectionItems = collectCollectionItemReferences(cDataRecordGroup);
+				currentModel.collectionItems = collectCollectionItemReferences(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-				model.children = collectChildReferences(cDataRecordGroup, "childReferences");
+				currentModel.children = collectChildReferences(cDataRecordGroup, "childReferences");
 			}
-			return model;
+			let metadataRecord = metadataProvider.getMetadataRecordById(metadataId);
+			fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, currentModel);
+			
+			return currentModel;
 		};
 		
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
+//			console.log(JSON.stringify(metadataRecord));
 			return CORA.coraData(metadata);
 		};
 		
@@ -147,11 +151,48 @@ var CORA = (function(cora) {
 			for (let childReference of childReferences.children) {
 				let cChildReference = CORA.coraData(childReference);
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
-				let metadataInfo = getViewModelForMetadataId(refId);
-				children.push(metadataInfo);
+				let childrenMetadataInfo = getViewModelForMetadataId(refId);
+				children.push(childrenMetadataInfo);
 			}
 			return children;
 		};
+		function fetchPresenetationsByUrl(url, model) {
+			let callSpec = {
+				url : url,
+				requestMethod : "GET",
+				accept : "application/vnd.uub.incomingLinksList+json",
+				loadMethod : collectPresentations,
+				errorMethod : handleErrorOnFetchPresentations,
+				model: model
+			};
+			dependencies.globalFactories.ajaxCallFactory.factor(callSpec);
+		};
+
+		function collectPresentations(answer) {
+				let response = JSON.parse(answer.responseText);
+				let data = response.dataList.data;
+				let presentations = [];
+				data.forEach((incomingLink) => filterAndAddIncomingPresentations(incomingLink, presentations));
+				answer.spec.model.presentations = presentations;
+			}
+
+			function filterAndAddIncomingPresentations(incomingLink, presentations) {
+				let cData = CORA.coraData(incomingLink);
+				let  from = cData.getFirstChildByNameInData("from");
+				let cFrom = CORA.coraData(from);
+				if(cFrom.getFirstAtomicValueByNameInData("linkedRecordType") === "presentation"){
+					let incomingLinkToAdd = {
+						id : cFrom.getFirstAtomicValueByNameInData("linkedRecordId"),
+						recordType: cFrom.getFirstAtomicValueByNameInData("linkedRecordType"),
+					};
+					presentations.push(incomingLinkToAdd);
+				}
+			};
+		
+		function handleErrorOnFetchPresentations(error) {
+				throw new Error("error fetching incoming links from server", error);
+			}
+
 		
 //		const getDataDividerFromCDataGroup = function(cDataRecordGroup) {
 //			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
@@ -194,6 +235,8 @@ var CORA = (function(cora) {
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
 			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
+			collectPresentations : collectPresentations,
+			handleErrorOnFetchPresentations : handleErrorOnFetchPresentations,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

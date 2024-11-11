@@ -51,7 +51,6 @@ var CORA = (function(cora) {
 			var data = response.dataList.data;
 
 			view.setNumberOfIncomingLinks(data.length);
-
 			data.forEach(addIncomingLinkToView);
 		}
 

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", {
+QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"
@@ -288,7 +288,7 @@ QUnit.test("testCollectionItemReferences", function(assert) {
 	CORATEST.assertElementHasTypeClassText(attributeReferencesNodes[4], "SPAN", "dataDivider",  "(someDataDivider)", assert);
 });
 
-QUnit.test("testFirstChild", function(assert) {
+QUnit.test("testChildReference", function(assert) {
 	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
 
 	let firstLevelMetadata = view.childNodes[1];
@@ -307,3 +307,23 @@ QUnit.test("testFirstChild", function(assert) {
 	
 	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
 });
+
+//QUnit.test("testChildReferenceWithCollectTerms", function(assert) {
+//	let view = this.recursiveDeleteView.createViewForViewModel(this.viewModel);
+//
+//	let firstLevelMetadata = view.childNodes[1];
+//	let metadataHeader = firstLevelMetadata.childNodes[0];
+//	let children = metadataHeader.childNodes[4];
+//	assert.strictEqual(children.tagName, "UL");
+//
+//	let childReference = children.childNodes[2];
+//	assert.strictEqual(childReference.tagName, "LI");
+//	assert.strictEqual(childReference.className, "");
+//	let childNodes = childReference.childNodes;
+//	CORATEST.assertElementHasTypeClassText(childNodes[0], "SPAN", "id", "textVarId", assert);
+//	CORATEST.assertElementHasTypeClassText(childNodes[1], "SPAN", "nameInData", "[textVar]", assert);
+//	CORATEST.assertElementHasTypeClassText(childNodes[2], "SPAN", "type", "textVariable", assert);
+//	CORATEST.assertElementHasTypeClassText(childNodes[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);
+//	
+//	updateViewForViewModelAndAssertSameContent(assert,this.recursiveDeleteView, this.viewModel, view);
+//});

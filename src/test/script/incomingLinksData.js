@@ -1,361 +1,166 @@
 CORATEST.incomingLinksAnswer={
-    "dataList":{
-        "fromNo":"1",
-        "data":[
-            {
-                "children":[
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"metadataTextVariable"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"newPresentationFormIdTextVar"
-                            },
-                            {
-                                "children":[
-                                    {
-                                        "name":"nameInData",
-                                        "value":"textId"
-                                    }
-                                ],
-                                "name":"linkedPath"
-                            }
-                        ],
-                        "actionLinks":{
-                            "read":{
-                                "requestMethod":"GET",
-                                "rel":"read",
-                                "url":"http://localhost:8080/therest/rest/record/metadataTextVariable/newPresentationFormIdTextVar",
-                                "accept":"application/vnd.uub.record+json"
-                            }
-                        },
-                        "name":"from"
-                    },
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"text"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"newPresentationFormIdTextVarText"
-                            }
-                        ],
-                        "name":"to"
-                    }
-                ],
-                "name":"recordToRecordLink"
+  "dataList": {
+    "fromNo": "1",
+    "data": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "metadataTextVariable"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "newPresentationFormIdTextVar"
+              }
+            ],
+            "actionLinks": {
+              "read": {
+                "requestMethod": "GET",
+                "rel": "read",
+                "url": "http://localhost:8080/therest/rest/record/metadataTextVariable/newPresentationFormIdTextVar",
+                "accept": "application/vnd.uub.record+json"
+              }
             },
-            {
-                "children":[
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"presentationGroup"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"recordTypeFormPGroup"
-                            },
-                            {
-                                "children":[
-                                    {
-                                        "name":"nameInData",
-                                        "value":"childReferences"
-                                    },
-                                    {
-                                        "children":[
-                                            {
-                                                "name":"nameInData",
-                                                "value":"childReference"
-                                            },
-                                            {
-                                                "name":"repeatId",
-                                                "value":"13"
-                                            },
-                                            {
-                                                "children":[
-                                                    {
-                                                        "name":"nameInData",
-                                                        "value":"refGroup"
-                                                    },
-                                                    {
-                                                        "name":"repeatId",
-                                                        "value":"0"
-                                                    },
-                                                    {
-                                                        "children":[
-                                                            {
-                                                                "name":"nameInData",
-                                                                "value":"ref"
-                                                            },
-                                                            {
-                                                                "children":[
-                                                                    {
-                                                                        "children":[
-                                                                            {
-                                                                                "name":"attributeName",
-                                                                                "value":"type"
-                                                                            },
-                                                                            {
-                                                                                "name":"attributeValue",
-                                                                                "value":"text"
-                                                                            }
-                                                                        ],
-                                                                        "name":"attribute"
-                                                                    }
-                                                                ],
-                                                                "name":"attributes"
-                                                            }
-                                                        ],
-                                                        "name":"linkedPath"
-                                                    }
-                                                ],
-                                                "name":"linkedPath"
-                                            }
-                                        ],
-                                        "name":"linkedPath"
-                                    }
-                                ],
-                                "name":"linkedPath"
-                            }
-                        ],
-                        "actionLinks":{
-                            "read":{
-                                "requestMethod":"GET",
-                                "rel":"read",
-                                "url":"http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormPGroup",
-                                "accept":"application/vnd.uub.record+json"
-                            }
-                        },
-                        "name":"from"
-                    },
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"text"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"newPresentationFormIdTextVarText"
-                            }
-                        ],
-                        "name":"to"
-                    }
-                ],
-                "name":"recordToRecordLink"
-            },
-            {
-                "children":[
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"presentationGroup"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"recordTypeFormNewPGroup"
-                            },
-                            {
-                                "children":[
-                                    {
-                                        "name":"nameInData",
-                                        "value":"childReferences"
-                                    },
-                                    {
-                                        "children":[
-                                            {
-                                                "name":"nameInData",
-                                                "value":"childReference"
-                                            },
-                                            {
-                                                "name":"repeatId",
-                                                "value":"13"
-                                            },
-                                            {
-                                                "children":[
-                                                    {
-                                                        "name":"nameInData",
-                                                        "value":"refGroup"
-                                                    },
-                                                    {
-                                                        "name":"repeatId",
-                                                        "value":"0"
-                                                    },
-                                                    {
-                                                        "children":[
-                                                            {
-                                                                "name":"nameInData",
-                                                                "value":"ref"
-                                                            },
-                                                            {
-                                                                "children":[
-                                                                    {
-                                                                        "children":[
-                                                                            {
-                                                                                "name":"attributeName",
-                                                                                "value":"type"
-                                                                            },
-                                                                            {
-                                                                                "name":"attributeValue",
-                                                                                "value":"text"
-                                                                            }
-                                                                        ],
-                                                                        "name":"attribute"
-                                                                    }
-                                                                ],
-                                                                "name":"attributes"
-                                                            }
-                                                        ],
-                                                        "name":"linkedPath"
-                                                    }
-                                                ],
-                                                "name":"linkedPath"
-                                            }
-                                        ],
-                                        "name":"linkedPath"
-                                    }
-                                ],
-                                "name":"linkedPath"
-                            }
-                        ],
-                        "actionLinks":{
-                            "read":{
-                                "requestMethod":"GET",
-                                "rel":"read",
-                                "url":"http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormNewPGroup",
-                                "accept":"application/vnd.uub.record+json"
-                            }
-                        },
-                        "name":"from"
-                    },
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"text"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"newPresentationFormIdTextVarText"
-                            }
-                        ],
-                        "name":"to"
-                    }
-                ],
-                "name":"recordToRecordLink"
-            },
-            {
-                "children":[
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"presentationGroup"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"recordTypeViewPGroup"
-                            },
-                            {
-                                "children":[
-                                    {
-                                        "name":"nameInData",
-                                        "value":"childReferences"
-                                    },
-                                    {
-                                        "children":[
-                                            {
-                                                "name":"nameInData",
-                                                "value":"childReference"
-                                            },
-                                            {
-                                                "name":"repeatId",
-                                                "value":"13"
-                                            },
-                                            {
-                                                "children":[
-                                                    {
-                                                        "name":"nameInData",
-                                                        "value":"refGroup"
-                                                    },
-                                                    {
-                                                        "name":"repeatId",
-                                                        "value":"0"
-                                                    },
-                                                    {
-                                                        "children":[
-                                                            {
-                                                                "name":"nameInData",
-                                                                "value":"ref"
-                                                            },
-                                                            {
-                                                                "children":[
-                                                                    {
-                                                                        "children":[
-                                                                            {
-                                                                                "name":"attributeName",
-                                                                                "value":"type"
-                                                                            },
-                                                                            {
-                                                                                "name":"attributeValue",
-                                                                                "value":"text"
-                                                                            }
-                                                                        ],
-                                                                        "name":"attribute"
-                                                                    }
-                                                                ],
-                                                                "name":"attributes"
-                                                            }
-                                                        ],
-                                                        "name":"linkedPath"
-                                                    }
-                                                ],
-                                                "name":"linkedPath"
-                                            }
-                                        ],
-                                        "name":"linkedPath"
-                                    }
-                                ],
-                                "name":"linkedPath"
-                            }
-                        ],
-                        "actionLinks":{
-                            "read":{
-                                "requestMethod":"GET",
-                                "rel":"read",
-                                "url":"http://localhost:8080/therest/rest/record/presentationGroup/recordTypeViewPGroup",
-                                "accept":"application/vnd.uub.record+json"
-                            }
-                        },
-                        "name":"from"
-                    },
-                    {
-                        "children":[
-                            {
-                                "name":"linkedRecordType",
-                                "value":"text"
-                            },
-                            {
-                                "name":"linkedRecordId",
-                                "value":"newPresentationFormIdTextVarText"
-                            }
-                        ],
-                        "name":"to"
-                    }
-                ],
-                "name":"recordToRecordLink"
-            }
+            "name": "from"
+          },
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "text"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "newPresentationFormIdTextVarText"
+              }
+            ],
+            "name": "to"
+          }
         ],
-        "totalNo":"4",
-        "containDataOfType":"recordToRecordLink",
-        "toNo":"4"
-    }
+        "name": "recordToRecordLink"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "presentation"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "recordTypeFormPGroup"
+              }
+            ],
+            "actionLinks": {
+              "read": {
+                "requestMethod": "GET",
+                "rel": "read",
+                "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormPGroup",
+                "accept": "application/vnd.uub.record+json"
+              }
+            },
+            "name": "from"
+          },
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "text"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "newPresentationFormIdTextVarText"
+              }
+            ],
+            "name": "to"
+          }
+        ],
+        "name": "recordToRecordLink"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "presentation"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "recordTypeFormNewPGroup"
+              }
+            ],
+            "actionLinks": {
+              "read": {
+                "requestMethod": "GET",
+                "rel": "read",
+                "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormNewPGroup",
+                "accept": "application/vnd.uub.record+json"
+              }
+            },
+            "name": "from"
+          },
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "text"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "newPresentationFormIdTextVarText"
+              }
+            ],
+            "name": "to"
+          }
+        ],
+        "name": "recordToRecordLink"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "presentation"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "recordTypeViewPGroup"
+              }
+            ],
+            "actionLinks": {
+              "read": {
+                "requestMethod": "GET",
+                "rel": "read",
+                "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeViewPGroup",
+                "accept": "application/vnd.uub.record+json"
+              }
+            },
+            "name": "from"
+          },
+          {
+            "children": [
+              {
+                "name": "linkedRecordType",
+                "value": "text"
+              },
+              {
+                "name": "linkedRecordId",
+                "value": "newPresentationFormIdTextVarText"
+              }
+            ],
+            "name": "to"
+          }
+        ],
+        "name": "recordToRecordLink"
+      }
+    ],
+    "totalNo": "4",
+    "containDataOfType": "recordToRecordLink",
+    "toNo": "4"
+  }
 };

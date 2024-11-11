@@ -22,6 +22,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.metadataProviderForDefinitionViewerSpy = function() {
 		
 		let metadataKeeper = {};
+		let metadataRecord = {};
 		
 		var fetchedMetadataIds = [];
 		var fetchedMetadata = [];
@@ -184,15 +185,15 @@ var CORATEST = (function(coraTest) {
 		function getNoOfReloads() {
 			return noOfReloads;
 		}
-		const getMetadataRecordById = function(id){
-			return {
-				actionLinks:{
-					read:{
-						fakeLinkFetchedById:id
-					}
-				}
-			}
+		
+		const addMetadataRecordById = function(id,metadataRecordValue){
+					metadataRecord[id] = metadataRecordValue;
 		};
+		
+		const getMetadataRecordById = function(id){
+			return metadataRecord[id];
+		};
+		
 		return Object.freeze({
 			getMetadataById : getMetadataById,
 			getMetadataRecordById: getMetadataRecordById,
@@ -200,6 +201,8 @@ var CORATEST = (function(coraTest) {
 
 			addMetadataById : addMetadataById,
 			addMetadataByCompactDefinition : addMetadataByCompactDefinition,
+			
+			addMetadataRecordById:addMetadataRecordById,
 			
 			getFetchedMetadataId : getFetchedMetadataId,
 			getFetchedMetadata : getFetchedMetadata,

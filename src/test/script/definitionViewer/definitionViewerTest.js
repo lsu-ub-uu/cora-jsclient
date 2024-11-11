@@ -119,6 +119,8 @@ QUnit.test("testOpenDefiningRecordUsingEventAndId", function(assert) {
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	let id = "someMetadataId";
+	let responseFromMetadataRecord = 	{	actionLinks:{ read:{	fakeLinkFetchedById:id } } };
+	this.metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
 	
 	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
 	
@@ -137,6 +139,8 @@ QUnit.test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
 	let event = document.createEvent('Event');
 	event.ctrlKey = false;
 	let id = "someMetadataId";
+	let responseFromMetadataRecord = 	{	actionLinks:{ read:{	fakeLinkFetchedById:id } } };
+	this.metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
 	
 	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
 	

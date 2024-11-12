@@ -93,8 +93,8 @@ var CORA = (function(cora) {
 			if (foundContainers.length > 0) {
 				return foundContainers;
 			}
-			throw new Error("nameInData(" + nameInData + ") and attributes ("
-				+ JSON.stringify(attributes) + ") not found in coraData");
+			throw new Error(`nameInData(${nameInData}) and attributes \
+				(${JSON.stringify(attributes)}) not found in coraData`);
 		};
 
 		const getFirstChildByNameInDataAndAttributes = function(nameInData, attributes) {
@@ -103,8 +103,8 @@ var CORA = (function(cora) {
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
-			throw new Error("nameInData(" + nameInData + ") and attributes ("
-				+ JSON.stringify(attributes) + ") not found in coraData");
+			throw new Error(`nameInData(${nameInData}) and attributes \
+				(${JSON.stringify(attributes)}) not found in coraData`);
 		};
 
 		const findContainersSpecifiedByNameInDataAndAttributes = function(nameInData, attributes) {

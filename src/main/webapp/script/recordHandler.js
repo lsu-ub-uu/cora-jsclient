@@ -190,7 +190,6 @@ var CORA = (function(cora) {
 			}
 		};
 
-
 		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
 			let recordGuiSpec = {
 				metadataId: metadataId,

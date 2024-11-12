@@ -1,7 +1,8 @@
 /*
  * Copyright 2015, 2016 Olov McKie
+ * Copyright 2024 Uppsala University Library
  *
- * This file is part of Cora.
+ * file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,566 +19,547 @@
  */
 
 "use strict";
+QUnit.module("metadata/coraDataTest.js", hooks => {
+	const test = QUnit.test;
+	let firstChild;
+	let secondChild;
+	let dataOneLevel
+	let coraData;
+	let firstChild2;
+	let groupInGroupOneTextChildOneAttribute;
+	let coraDataWithAttribute;
+	let firstChild3;
+	let secondChild3;
+	let thirdChild3;
+	let fourthChild3;
+	let fifthChild3;
+	let groupInGroupOneTextChildAllTypes;
+	let coraDataWithAllTypes;
 
-// begin workaround qunit does not report number of tests
-var testCount = 0;
-var qunitTest = QUnit.test;
-QUnit.test = window.test = function() {
-	testCount += 1;
-	qunitTest.apply(this, arguments);
-};
-QUnit.begin(function(args) {
-	args.totalTests = testCount;
-});
-// end workaround qunit does not report number of tests
+	hooks.beforeEach(() => {
+		firstChild = {
+			name: "textletiableId",
+			value: "A Value",
+			repeatId: "1"
+		};
+		secondChild = {
+			name: "textletiableId",
+			value: "A Value2",
+			repeatId: "2"
+		};
+		dataOneLevel = {
+			name: "groupIdOneTextChild",
+			children: [firstChild, secondChild]
+		};
+		coraData = CORA.coraData(dataOneLevel);
 
-QUnit.module("metadata/coraDataTest.js", {
-	beforeEach : function() {
-		this.firstChild = {
-			"name" : "textVariableId",
-			"value" : "A Value",
-			"repeatId" : "1"
-		};
-		this.secondChild = {
-			"name" : "textVariableId",
-			"value" : "A Value2",
-			"repeatId" : "2"
-		};
-		this.dataOneLevel = {
-			"name" : "groupIdOneTextChild",
-			"children" : [ this.firstChild, this.secondChild ]
-		};
-		this.coraData = CORA.coraData(this.dataOneLevel);
-
-		this.firstChild2 = {
-			"name" : "groupIdOneTextChildOneAttribute",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value1"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
+		firstChild2 = {
+			name: "groupIdOneTextChildOneAttribute",
+			children: [{
+				name: "textletiableId",
+				value: "A Value1"
+			}],
+			"attributes": {
+				"anAttribute": "aFinalValue"
 			}
 		};
-		this.secondChild2 = {
-			"name" : "groupIdOneTextChildOneAttribute",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value2"
-			} ],
-			"attributes" : {
-				"anAttribute2" : "aFinalValue2"
-			}
-		};
-		this.thirdChild2 = {
-			"name" : "groupIdOneTextChildOneAttribute",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value2"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue",
-				"anAttribute2" : "aFinalValue2"
-			}
-		};
-		this.fourthChild2 = {
-			"name" : "groupIdOneTextChildOneAttribute",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value3"
-			} ]
-		};
 
-		this.groupInGroupOneTextChildOneAttribute = {
-			"name" : "groupInGroupOneTextChildOneAttribute",
-			"children" : [ this.firstChild2 ]
+		groupInGroupOneTextChildOneAttribute = {
+			name: "groupInGroupOneTextChildOneAttribute",
+			children: [firstChild2]
 		};
-		this.coraDataWithAttribute = CORA.coraData(this.groupInGroupOneTextChildOneAttribute);
+		coraDataWithAttribute = CORA.coraData(groupInGroupOneTextChildOneAttribute);
 
-		this.firstChild3 = {
-			"name" : "groupIdOneTextChild",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value1"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
+		firstChild3 = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textletiableId",
+				value: "A Value1"
+			}],
+			"attributes": {
+				"anAttribute": "aFinalValue"
 			},
-			"repeatId" : "one"
+			repeatId: "one"
 		};
-		this.secondChild3 = {
-			"name" : "groupIdOneTextChild",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value2"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
+		secondChild3 = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textletiableId",
+				value: "A Value2"
+			}],
+			"attributes": {
+				"anAttribute": "aFinalValue"
 			}
 		};
-		this.thirdChild3 = {
-			"name" : "groupIdOneTextChild",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value1"
-			} ],
-			"repeatId" : "one"
+		thirdChild3 = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textletiableId",
+				value: "A Value1"
+			}],
+			repeatId: "one"
 		};
-		this.fourthChild3 = {
-			"name" : "groupIdOneTextChild",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value1"
-			} ]
+		fourthChild3 = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textletiableId",
+				value: "A Value1"
+			}]
 		};
-		this.fifthChild3 = {
-			"name" : "groupIdOneTextChildOther",
-			"children" : [ {
-				"name" : "textVariableId",
-				"value" : "A Value1"
-			} ]
+		fifthChild3 = {
+			name: "groupIdOneTextChildOther",
+			children: [{
+				name: "textletiableId",
+				value: "A Value1"
+			}]
 		};
-		this.groupInGroupOneTextChildAllTypes = {
-			"name" : "topGroupAll",
-			"children" : [ this.firstChild3, this.secondChild3, this.thirdChild3,
-					this.fourthChild3, this.fifthChild3 ]
+		groupInGroupOneTextChildAllTypes = {
+			name: "topGroupAll",
+			children: [firstChild3, secondChild3, thirdChild3,
+				fourthChild3, fifthChild3]
 		};
-		this.coraDataWithAllTypes = CORA.coraData(this.groupInGroupOneTextChildAllTypes);
+		coraDataWithAllTypes = CORA.coraData(groupInGroupOneTextChildAllTypes);
 
-	}
-});
+	});
 
-QUnit.test("testGetData", function(assert) {
-	var dataFound = this.coraData.getData();
-	assert.deepEqual(JSON.stringify(dataFound), JSON.stringify(this.dataOneLevel));
-});
+	test("testGetData", function(assert) {
+		let dataFound = coraData.getData();
+		assert.deepEqual(JSON.stringify(dataFound), JSON.stringify(dataOneLevel));
+	});
 
-QUnit.test("testContainsChildWithNameInData", function(assert) {
-	assert.ok(this.coraData.containsChildWithNameInData("textVariableId"));
-});
+	test("testContainsChildWithNameInData", function(assert) {
+		assert.ok(coraData.containsChildWithNameInData("textletiableId"));
+	});
 
-QUnit.test("testContainsChildWithNameInDataNotFound", function(assert) {
-	assert.notOk(this.coraData.containsChildWithNameInData("textVariableId_NOT_FOUND"));
-});
+	test("testContainsChildWithNameInDataNotFound", function(assert) {
+		assert.notOk(coraData.containsChildWithNameInData("textletiableId_NOT_FOUND"));
+	});
 
-QUnit.test("testGetFirstChildByNameInData", function(assert) {
-	var firstChildFound = this.coraData.getFirstChildByNameInData("textVariableId");
-	assert.stringifyEqual(firstChildFound, this.firstChild);
-});
+	test("testGetFirstChildByNameInData", function(assert) {
+		let firstChildFound = coraData.getFirstChildByNameInData("textletiableId");
+		assert.stringifyEqual(firstChildFound, firstChild);
+	});
 
-QUnit.test("testGetFirstChildByNameInDataNotFound", function(assert) {
-	assert.throws(function() {
-		this.coraData.getFirstChildByNameInData("textVariableId_NOT_FOUND");
-	}, "Error");
-});
+	test("testGetFirstChildByNameInDataNotFound", function(assert) {
+		assert.throws(function() {
+			coraData.getFirstChildByNameInData("textletiableId_NOT_FOUND");
+		}, "Error");
+	});
 
-QUnit.test("testGetFirstAtomicValueByNameInData", function(assert) {
-	var firstChild = "A Value";
-	var atomicValueFound = this.coraData.getFirstAtomicValueByNameInData("textVariableId");
-	assert.stringifyEqual(atomicValueFound, firstChild);
-});
+	test("testGetFirstAtomicValueByNameInData", function(assert) {
+		let firstChild = "A Value";
+		let atomicValueFound = coraData.getFirstAtomicValueByNameInData("textletiableId");
+		assert.stringifyEqual(atomicValueFound, firstChild);
+	});
 
-QUnit.test("testGetNoOfChildrenWithNameInData", function(assert) {
-	var noFound = this.coraData.getNoOfChildrenWithNameInData("textVariableId");
-	assert.deepEqual(noFound, 2);
-});
+	test("testGetNoOfChildrenWithNameInData", function(assert) {
+		let noFound = coraData.getNoOfChildrenWithNameInData("textletiableId");
+		assert.deepEqual(noFound, 2);
+	});
 
-QUnit.test("testGetNoOfChildrenWithNameInDataNotFound", function(assert) {
-	var noFound = this.coraData.getNoOfChildrenWithNameInData("textVariableId_NOT_FOUND");
-	assert.deepEqual(noFound, 0);
-});
+	test("testGetNoOfChildrenWithNameInDataNotFound", function(assert) {
+		let noFound = coraData.getNoOfChildrenWithNameInData("textletiableId_NOT_FOUND");
+		assert.deepEqual(noFound, 0);
+	});
 
-QUnit.test("testGetNoOfChildrenWithNameInDataOne", function(assert) {
-	var data = {
-		"name" : "groupIdOneTextChild",
-		"children" : [ {
-			"name" : "textVariableId",
-			"value" : "A Value",
-			"repeatId" : "1"
-		} ]
-	};
-	var coraData = CORA.coraData(data);
-	var noFound = coraData.getNoOfChildrenWithNameInData("textVariableId");
-	assert.deepEqual(noFound, 1);
-});
+	test("testGetNoOfChildrenWithNameInDataOne", function(assert) {
+		let data = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "textletiableId",
+				value: "A Value",
+				repeatId: "1"
+			}]
+		};
+		let coraData = CORA.coraData(data);
+		let noFound = coraData.getNoOfChildrenWithNameInData("textletiableId");
+		assert.deepEqual(noFound, 1);
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttribute", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildWithNameInDataAndAttribute", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.ok(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
-function createAttributes() {
-	return {
-		name: "attributes",
-		children: []
-	};
-}
+	});
 
-function createAttributeWithNameAndValueAndRepeatId(attributeName, attributeValue, repeatId) {
-	return {
-		name: "attribute",
-		repeatId: repeatId || "1",
-		children: [{
-			name: "attributeName",
-			value: attributeName
-		}, {
-			name: "attributeValue",
-			value: attributeValue
-		}]
+	const createAttributes = function() {
+		return {
+			name: "attributes",
+			children: []
+		};
 	};
-}
-QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueList", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+
+	const createAttributeWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
+		return {
+			name: "attribute",
+			repeatId: repeatId || "1",
+			children: [{
+				name: "attributeName",
+				value: attributeName
+			}, {
+				name: "attributeValue",
+				value: attributeValue
+			}]
+		};
+	};
+
+	test("testContainsChildWithNameInDataAndAttributeWithValueList", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			["aFinalValue"]));
 
-	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.ok(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
-QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesCorrect", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
-			["someOtherValue","aFinalValue"]));
+	});
 
-	assert.ok(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
-			"groupIdOneTextChildOneAttribute", attributes));
-});
-QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesWrong", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
-			["someOtherValue","aFinalValueNOT"]));
+	test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesCorrect", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue", "aFinalValue"]));
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.ok(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
-QUnit.test("testContainsChildWithNameInDataAndAttributeWithValueListEmpty", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	});
+
+	test("testContainsChildWithNameInDataAndAttributeWithValueListTwoValuesWrong", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+			["someOtherValue", "aFinalValueNOT"]));
+
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+			"groupIdOneTextChildOneAttribute", attributes));
+	});
+
+	test("testContainsChildWithNameInDataAndAttributeWithValueListEmpty", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			[]));
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeWrongAttributeName", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",
+	test("testContainsChildWithNameInDataAndAttributeWrongAttributeName", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",
 			"aFinalValue"));
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeWrongAttributeValue", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildWithNameInDataAndAttributeWrongAttributeValue", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValueNot"));
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeOneAttributeToMany", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildWithNameInDataAndAttributeOneAttributeToMany", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute2",
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute2",
 			"aFinalValue"));
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeNoAttributes", function(assert) {
-	var attributes = createAttributes();
+	test("testContainsChildWithNameInDataAndAttributeNoAttributes", function(assert) {
+		let attributes = createAttributes();
 
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeNoAttributesHolder", function(assert) {
-	assert.notOk(this.coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
+	test("testContainsChildWithNameInDataAndAttributeNoAttributesHolder", function(assert) {
+		assert.notOk(coraDataWithAttribute.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", undefined));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeButNoAttributeInMetadata", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildWithNameInDataAndAttributeButNoAttributeInMetadata", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	assert.notOk(this.coraData.containsChildWithNameInDataAndAttributes("textVariableId",
+		assert.notOk(coraData.containsChildWithNameInDataAndAttributes("textletiableId",
 			attributes));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeNoAttributeInMetadataOrParameter",
+	test("testContainsChildWithNameInDataAndAttributeNoAttributeInMetadataOrParameter",
 		function(assert) {
-			assert.ok(this.coraData.containsChildWithNameInDataAndAttributes("textVariableId",
-					undefined));
+			assert.ok(coraData.containsChildWithNameInDataAndAttributes("textletiableId",
+				undefined));
 		});
 
-QUnit.test("testContainsChildWithNameInDataAndAttributeNoAttributeInMetadataEmptyAttributesHolder",
+	test("testContainsChildWithNameInDataAndAttributeNoAttributeInMetadataEmptyAttributesHolder",
 		function(assert) {
-			var attributes = createAttributes();
+			let attributes = createAttributes();
 
-			assert.ok(this.coraData.containsChildWithNameInDataAndAttributes("textVariableId",
-					attributes));
+			assert.ok(coraData.containsChildWithNameInDataAndAttributes("textletiableId",
+				attributes));
 		});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttribute", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttribute", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	var firstChildFound = this.coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
+		let firstChildFound = coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes);
-	assert.stringifyEqual(firstChildFound, this.firstChild2);
-});
+		assert.stringifyEqual(firstChildFound, firstChild2);
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributeWrongAttributeName", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",
+	test("testGetFirstChildByNameInDataAndAttributeWrongAttributeName", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttributeNOT",
 			"aFinalValue"));
 
-	assert.throws(function() {
-		this.coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
+		assert.throws(function() {
+			coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
 				"groupIdOneTextChildOneAttribute", attributes);
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributeWrongAttributeValue", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttributeWrongAttributeValue", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValueNOT"));
 
-	assert.throws(function() {
-		this.coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
+		assert.throws(function() {
+			coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
 				"groupIdOneTextChildOneAttribute", attributes);
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributeOneAttributeToMany", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttributeOneAttributeToMany", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValueNOT"));
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute2",
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute2",
 			"aFinalValue"));
 
-	assert.throws(function() {
-		this.coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
+		assert.throws(function() {
+			coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
 				"groupIdOneTextChildOneAttribute", attributes);
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testgetFirstChildByNameInDataAndAttributeNoAttributes", function(assert) {
-	var attributes = createAttributes();
+	test("testgetFirstChildByNameInDataAndAttributeNoAttributes", function(assert) {
+		let attributes = createAttributes();
 
-	assert.throws(function() {
-		this.coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
+		assert.throws(function() {
+			coraDataWithAttribute.getFirstChildByNameInDataAndAttributes(
 				"groupIdOneTextChildOneAttribute", attributes);
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testgetChildrenByNameInDataAndAttributeNoAttributes", function(assert) {
-	var attributes = createAttributes();
+	test("testgetChildrenByNameInDataAndAttributeNoAttributes", function(assert) {
+		let attributes = createAttributes();
 
-	assert.throws(function() {
-		this.coraDataWithAttribute.getChildrenByNameInDataAndAttributes(
+		assert.throws(function() {
+			coraDataWithAttribute.getChildrenByNameInDataAndAttributes(
 				"groupIdOneTextChildOneAttribute", attributes);
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributeButNoAttributeInMetadata", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttributeButNoAttributeInMetadata", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	assert.throws(function() {
-		this.coraData.getFirstChildByNameInDataAndAttributes("textVariableId", attributes);
-	}, "Error");
-});
+		assert.throws(function() {
+			coraData.getFirstChildByNameInDataAndAttributes("textletiableId", attributes);
+		}, "Error");
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributeNoAttributeInMetadataEmptyAttributesHolder",
+	test("testGetFirstChildByNameInDataAndAttributeNoAttributeInMetadataEmptyAttributesHolder",
 		function(assert) {
-			var attributes = createAttributes();
-			var firstChildFound = this.coraData.getFirstChildByNameInDataAndAttributes(
-					"textVariableId", attributes);
-			assert.stringifyEqual(firstChildFound, this.firstChild);
+			let attributes = createAttributes();
+			let firstChildFound = coraData.getFirstChildByNameInDataAndAttributes(
+				"textletiableId", attributes);
+			assert.stringifyEqual(firstChildFound, firstChild);
 		});
 
-QUnit.test("testGetChildrenByNameInData", function(assert) {
-	var children = this.coraDataWithAttribute.getChildrenByNameInData(
+	test("testGetChildrenByNameInData", function(assert) {
+		let children = coraDataWithAttribute.getChildrenByNameInData(
 			"groupIdOneTextChildOneAttribute");
-	assert.stringifyEqual(children, [ this.firstChild2 ]);
-});
+		assert.stringifyEqual(children, [firstChild2]);
+	});
 
-QUnit.test("testGetChildrenByNameInDataNameNotFound", function(assert) {
-	assert.throws(function() {
-		this.coraDataWithAttribute.getChildrenByNameInData("groupIdOneTextChildOneAttributeNOT");
-	}, "Error");
-});
+	test("testGetChildrenByNameInDataNameNotFound", function(assert) {
+		assert.throws(function() {
+			coraDataWithAttribute.getChildrenByNameInData("groupIdOneTextChildOneAttributeNOT");
+		}, "Error");
+	});
 
-QUnit.test("testGetChildrenByNameInDataAndAttribute", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetChildrenByNameInDataAndAttribute", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	var children = this.coraDataWithAttribute.getChildrenByNameInDataAndAttributes(
+		let children = coraDataWithAttribute.getChildrenByNameInDataAndAttributes(
 			"groupIdOneTextChildOneAttribute", attributes);
-	assert.stringifyEqual(children, [ this.firstChild2 ]);
-});
+		assert.stringifyEqual(children, [firstChild2]);
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndIndex", function(assert) {
-	assert.ok(this.coraData.containsChildWithNameInDataAndIndex("textVariableId", 0));
-});
+	test("testContainsChildWithNameInDataAndIndex", function(assert) {
+		assert.ok(coraData.containsChildWithNameInDataAndIndex("textletiableId", 0));
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndIndex1", function(assert) {
-	assert.ok(this.coraData.containsChildWithNameInDataAndIndex("textVariableId", 1));
-});
+	test("testContainsChildWithNameInDataAndIndex1", function(assert) {
+		assert.ok(coraData.containsChildWithNameInDataAndIndex("textletiableId", 1));
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndIndex2", function(assert) {
-	assert.notOk(this.coraData.containsChildWithNameInDataAndIndex("textVariableId", 2));
-});
+	test("testContainsChildWithNameInDataAndIndex2", function(assert) {
+		assert.notOk(coraData.containsChildWithNameInDataAndIndex("textletiableId", 2));
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndIndexNotFound", function(assert) {
-	assert.notOk(this.coraData.containsChildWithNameInDataAndIndex("textVariableId_NOT_FOUND", 1));
-});
+	test("testContainsChildWithNameInDataAndIndexNotFound", function(assert) {
+		assert.notOk(coraData.containsChildWithNameInDataAndIndex("textletiableId_NOT_FOUND", 1));
+	});
 
-QUnit.test("testGetChildByNameInDataAndIndex", function(assert) {
-	var firstChildFound = this.coraData.getChildByNameInDataAndIndex("textVariableId", 0);
-	assert.stringifyEqual(firstChildFound, this.firstChild);
-});
+	test("testGetChildByNameInDataAndIndex", function(assert) {
+		let firstChildFound = coraData.getChildByNameInDataAndIndex("textletiableId", 0);
+		assert.stringifyEqual(firstChildFound, firstChild);
+	});
 
-QUnit.test("testGetChildByNameInDataAndIndex1", function(assert) {
-	var firstChildFound = this.coraData.getChildByNameInDataAndIndex("textVariableId", 1);
-	assert.stringifyEqual(firstChildFound, this.secondChild);
-});
+	test("testGetChildByNameInDataAndIndex1", function(assert) {
+		let firstChildFound = coraData.getChildByNameInDataAndIndex("textletiableId", 1);
+		assert.stringifyEqual(firstChildFound, secondChild);
+	});
 
-QUnit.test("testGetChildByNameInDataAndIndexNotFound", function(assert) {
-	assert.throws(function() {
-		this.coraData.getChildByNameInDataAndIndex("textVariableId_NOT_FOUND", 1);
-	}, "Error");
-});
+	test("testGetChildByNameInDataAndIndexNotFound", function(assert) {
+		assert.throws(function() {
+			coraData.getChildByNameInDataAndIndex("textletiableId_NOT_FOUND", 1);
+		}, "Error");
+	});
 
-QUnit.test("testGetAtomicValueByNameInDataAndIndex1", function(assert) {
-	assert.deepEqual("A Value", this.coraData.getAtomicValueByNameInDataAndIndex("textVariableId",
+	test("testGetAtomicValueByNameInDataAndIndex1", function(assert) {
+		assert.deepEqual("A Value", coraData.getAtomicValueByNameInDataAndIndex("textletiableId",
 			0));
-});
+	});
 
-QUnit.test("testContainsChildWithNameInDataAndRepeatId", function(assert) {
-	assert.ok(this.coraData.containsChildWithNameInDataAndRepeatId("textVariableId", "1"));
-});
+	test("testContainsChildWithNameInDataAndRepeatId", function(assert) {
+		assert.ok(coraData.containsChildWithNameInDataAndRepeatId("textletiableId", "1"));
+	});
 
-QUnit.test("testContainsChildWithNameInDataButWrongRepeatId", function(assert) {
-	assert.notOk(this.coraData.containsChildWithNameInDataAndRepeatId("textVariableId", "1NOT"));
-});
+	test("testContainsChildWithNameInDataButWrongRepeatId", function(assert) {
+		assert.notOk(coraData.containsChildWithNameInDataAndRepeatId("textletiableId", "1NOT"));
+	});
 
-QUnit.test("testGetChildByNameInDataAndRepeatId",
+	test("testGetChildByNameInDataAndRepeatId",
 		function(assert) {
-			var firstChildFound = this.coraData.getFirstChildByNameInDataAndRepeatId(
-					"textVariableId", "1");
-			assert.stringifyEqual(firstChildFound, this.firstChild);
+			let firstChildFound = coraData.getFirstChildByNameInDataAndRepeatId(
+				"textletiableId", "1");
+			assert.stringifyEqual(firstChildFound, firstChild);
 		});
 
-QUnit.test("testGetChildByNameInDataAndRepeatIdNotFound", function(assert) {
-	assert.throws(function() {
-		this.coraData.getFirstChildByNameInDataAndRepeatId("textVariableId", "1NOT");
-	}, "Error");
-});
+	test("testGetChildByNameInDataAndRepeatIdNotFound", function(assert) {
+		assert.throws(function() {
+			coraData.getFirstChildByNameInDataAndRepeatId("textletiableId", "1NOT");
+		}, "Error");
+	});
 
-QUnit.test("testGetChildByNameInDataAndRepeatIdNotFound2", function(assert) {
-	assert.throws(function() {
-		this.coraData.getFirstChildByNameInDataAndRepeatId("textVariableIdNOT", "1");
-	}, "Error");
-});
+	test("testGetChildByNameInDataAndRepeatIdNotFound2", function(assert) {
+		assert.throws(function() {
+			coraData.getFirstChildByNameInDataAndRepeatId("textletiableIdNOT", "1");
+		}, "Error");
+	});
 
-QUnit.test("testContainsChildAllTypes", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildAllTypes", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	assert.ok(this.coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
+		assert.ok(coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
 			"groupIdOneTextChild", attributes, "one"));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesWrongRepeatId", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildAllTypesWrongRepeatId", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	assert.notOk(this.coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
+		assert.notOk(coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
 			"groupIdOneTextChild", attributes, "oneNOT"));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesWrongAttribute", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildAllTypesWrongAttribute", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValueNOT"));
-	assert.notOk(this.coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
+		assert.notOk(coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
 			"groupIdOneTextChild", attributes, "one"));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesWrongNameInData", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildAllTypesWrongNameInData", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	assert.notOk(this.coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
+		assert.notOk(coraDataWithAllTypes.containsChildWithNameInDataAndAttributesAndRepeatId(
 			"groupIdOneTextChildNOT", attributes, "one"));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesNotUsingRepeatId", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testContainsChildAllTypesNotUsingRepeatId", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	assert.ok(this.coraDataWithAllTypes.containsChildWithNameInDataAndAttributes(
+		assert.ok(coraDataWithAllTypes.containsChildWithNameInDataAndAttributes(
 			"groupIdOneTextChild", attributes));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesNotUsingAttributes", function(assert) {
-	assert.ok(this.coraDataWithAllTypes.containsChildWithNameInDataAndRepeatId(
+	test("testContainsChildAllTypesNotUsingAttributes", function(assert) {
+		assert.ok(coraDataWithAllTypes.containsChildWithNameInDataAndRepeatId(
 			"groupIdOneTextChild", "one"));
-});
+	});
 
-QUnit.test("testContainsChildAllTypesOnlyNameInData", function(assert) {
-	assert.ok(this.coraDataWithAllTypes.containsChildWithNameInData("groupIdOneTextChild"));
-});
+	test("testContainsChildAllTypesOnlyNameInData", function(assert) {
+		assert.ok(coraDataWithAllTypes.containsChildWithNameInData("groupIdOneTextChild"));
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributesAndRepeatId", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttributesAndRepeatId", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
-	var firstChildFound = this.coraDataWithAllTypes
+		let firstChildFound = coraDataWithAllTypes
 			.getFirstChildByNameInDataAndAttributesAndRepeatId("groupIdOneTextChild", attributes,
-					"one");
-	assert.stringifyEqual(firstChildFound, this.firstChild3);
-});
+				"one");
+		assert.stringifyEqual(firstChildFound, firstChild3);
+	});
 
-QUnit.test("testGetFirstChildByNameInDataAndAttributesAndRepeatIdWrongSomething", function(assert) {
-	var attributes = createAttributes();
-	attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
+	test("testGetFirstChildByNameInDataAndAttributesAndRepeatIdWrongSomething", function(assert) {
+		let attributes = createAttributes();
+		attributes.children.push(createAttributeWithNameAndValueAndRepeatId("anAttribute",
 			"aFinalValue"));
 
-	assert.throws(function() {
-		this.coraDataWithAllTypes.getFirstChildByNameInDataAndAttributesAndRepeatId(
+		assert.throws(function() {
+			coraDataWithAllTypes.getFirstChildByNameInDataAndAttributesAndRepeatId(
 				"groupIdOneTextChild", attributes, "oneNOT");
-	}, "Error");
-});
+		}, "Error");
+	});
 
-QUnit.test("testGetLinkedRecordIdFromFirstChildLinkWithNameInData", function(assert) {
-	var data = {
-		name : "groupIdOneTextChild",
-		children : [ {
-				name:"someLink",
-				children:[ {
-					name:"linkedRecordType",
-					value:"someLinkedType"
-					},{
-					name:"linkedRecordId",
-					value:"someLinkedId"}
+	test("testGetLinkedRecordIdFromFirstChildLinkWithNameInData", function(assert) {
+		let data = {
+			name: "groupIdOneTextChild",
+			children: [{
+				name: "someLink",
+				children: [{
+					name: "linkedRecordType",
+					value: "someLinkedType"
+				}, {
+					name: "linkedRecordId",
+					value: "someLinkedId"
+				}
 				]
-		} ]
-	};
-	var coraData = CORA.coraData(data);
-	var linkedRecordId = coraData.getLinkedRecordIdFromFirstChildLinkWithNameInData("someLink");
-	assert.strictEqual(linkedRecordId, "someLinkedId");
+			}]
+		};
+		let coraData = CORA.coraData(data);
+		let linkedRecordId = coraData.getLinkedRecordIdFromFirstChildLinkWithNameInData("someLink");
+		assert.strictEqual(linkedRecordId, "someLinkedId");
+	});
 });

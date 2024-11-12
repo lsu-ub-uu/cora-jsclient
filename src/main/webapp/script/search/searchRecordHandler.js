@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2024 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -23,7 +23,7 @@ var CORA = (function(cora) {
 		let searchId;
 		let viewSpec;
 		let view;
-		
+
 		const start = function() {
 			searchId = getIdFromRecord(spec.searchRecord);
 
@@ -33,7 +33,7 @@ var CORA = (function(cora) {
 			};
 
 			view = dependencies.searchRecordHandlerViewFactory.factor(viewSpec);
-		}
+		};
 
 		const getHeadlineText = function(searchRecord) {
 			let cData = CORA.coraData(searchRecord.data);
@@ -65,17 +65,21 @@ var CORA = (function(cora) {
 		};
 
 		const openSearch = function() {
+			let cSearchRecordData = CORA.coraData(spec.searchRecord.data);
 			let searchHandlerSpec = {
 				headerText: viewSpec.headerText,
-				metadataId: getLinkValueFromSearchRecord("metadataId"),
-				presentationId: getLinkValueFromSearchRecord("presentationId")
+				metadataId: getLinkValueFromSearchRecord(cSearchRecordData, "metadataId"),
+				presentationId: getLinkValueFromSearchRecord(cSearchRecordData, "presentationId"),
+				searchResultPresentationId: getLinkValueFromSearchRecord(cSearchRecordData, "searchResultPresentation")
 			};
 			addSearchLinkToSpec(searchHandlerSpec);
 			dependencies.searchHandlerJSClientIntegratorFactory.factor(searchHandlerSpec);
 		};
 
-		const getLinkValueFromSearchRecord = function(id) {
-			let cSearchRecordData = CORA.coraData(spec.searchRecord.data);
+		const getLinkValueFromSearchRecord = function(cSearchRecordData, id) {
+			if (!cSearchRecordData.containsChildWithNameInData(id)) {
+				return undefined;
+			}
 			let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
 			return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
@@ -95,10 +99,10 @@ var CORA = (function(cora) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		start();
 		return Object.freeze({
-			"type": "searchRecordHandler",
+			type: "searchRecordHandler",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
 			getView: getView,

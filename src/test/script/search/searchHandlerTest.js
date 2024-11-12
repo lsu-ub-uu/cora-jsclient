@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019, 2020, 2021 Uppsala University Library
+ * Copyright 2017, 2019, 2020, 2021, 2024 Uppsala University Library
  * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
@@ -65,6 +65,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		specTriggerWhenResultIsChoosen.triggerWhenResultIsChoosen = {
 			some: "thing"
 		};
+		specTriggerWhenResultIsChoosen.searchResultPresentationId = "somePresentationId";
 	};
 
 	const startResultHandler = function() {
@@ -363,6 +364,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		let resultHandlerSpec = dependencies.resultHandlerFactory.getSpec(0);
 		assert.strictEqual(resultHandlerSpec.triggerWhenResultIsChoosen,
 			specTriggerWhenResultIsChoosen.triggerWhenResultIsChoosen);
+		assert.strictEqual(resultHandlerSpec.searchResultPresentationId, "somePresentationId");
 	});
 
 	test("testHandleSearchResultClearsPreviousResultFromView", function(assert) {

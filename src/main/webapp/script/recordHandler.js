@@ -258,7 +258,12 @@ var CORA = (function(cora) {
 		};
 
 		const addListPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let viewId = metadataForRecordType.listPresentationViewId;
+			let viewId;
+			if(spec.searchResultPresentationId){
+				viewId = spec.searchResultPresentationId;
+			}else{
+				viewId = metadataForRecordType.listPresentationViewId;
+			}
 			let presentation = currentRecordGui.getPresentationHolder(viewId, metadataIdUsedInData)
 				.getView();
 			managedGuiItem.addListPresentation(presentation);

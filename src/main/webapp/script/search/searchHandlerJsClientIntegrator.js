@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2024 Uppsala University Library
  * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -49,11 +49,11 @@ var CORA = (function(cora) {
 
 		function createManagedGuiItem() {
 			let managedGuiItemSpec = {
-				"activateMethod" : dependencies.jsClient.showView,
-				"removeMethod" : dependencies.jsClient.viewRemoved
+				activateMethod: dependencies.jsClient.showView,
+				removeMethod: dependencies.jsClient.viewRemoved
 			};
 			return dependencies.managedGuiItemFactory
-					.factor(managedGuiItemSpec);
+				.factor(managedGuiItemSpec);
 		}
 
 		function addSearchToJsClient(managedGuiItemToAdd) {
@@ -74,9 +74,9 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			"type" : "searchHandlerJsClientIntegrator",
-			getDependencies : getDependencies,
-			getSpec : getSpec
+			"type": "searchHandlerJsClientIntegrator",
+			getDependencies: getDependencies,
+			getSpec: getSpec
 		});
 	};
 	return cora;

@@ -331,9 +331,9 @@ var CORA = (function(cora) {
 			let cPresentationChild = CORA.coraData(metadataProvider
 				.getMetadataById(presentationIdToFactor));
 			let presentationSpec = {
-				"path": childParentPath,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPresentationChild
+				path: childParentPath,
+				metadataIdUsedInData: metadataIdUsedInData,
+				cPresentation: cPresentationChild
 			};
 			let pVar = dependencies.presentationFactory.factor(presentationSpec);
 			childViewNew.appendChild(pVar.getView());
@@ -386,22 +386,27 @@ var CORA = (function(cora) {
 
 		const createSearchHandler = function(searchRecord) {
 			let cSearch = CORA.coraData(searchRecord.data);
-			let metadataLink = cSearch.getFirstChildByNameInData("metadataId");
-			let searchMetadataId = getRecordIdFromLink(metadataLink);
-			let presentationLink = cSearch.getFirstChildByNameInData("presentationId");
-			let searchPresentationId = getRecordIdFromLink(presentationLink);
-
 			let searchSearchLink = searchRecord.actionLinks.search;
 
 			let searchHandlerSpec = {
-				"metadataId": searchMetadataId,
-				"presentationId": searchPresentationId,
-				"searchLink": searchSearchLink,
-				"triggerWhenResultIsChoosen": setResultFromSearch
+				metadataId: getLinkValueFromSearchRecord(cSearch, "metadataId"),
+				presentationId: getLinkValueFromSearchRecord(cSearch, "presentationId"),
+				searchResultPresentationId: getLinkValueFromSearchRecord(cSearch, "searchResultPresentation"),
+				searchLink: searchSearchLink,
+				triggerWhenResultIsChoosen: setResultFromSearch
 			};
+
 			let searchHandler = dependencies.globalFactories.searchHandlerFactory
 				.factor(searchHandlerSpec);
 			view.addSearchHandlerView(searchHandler.getView());
+		};
+
+		const getLinkValueFromSearchRecord = function(cSearchRecordData, id) {
+			if (!cSearchRecordData.containsChildWithNameInData(id)) {
+				return undefined;
+			}
+			let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+			return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getRecordIdFromLink = function(metadataLink) {
@@ -470,8 +475,8 @@ var CORA = (function(cora) {
 
 		const openLinkedRecord = function(openInfoFromView) {
 			let openInfo = {
-				"readLink": readLink,
-				"loadInBackground": openInfoFromView.loadInBackground
+				readLink: readLink,
+				loadInBackground: openInfoFromView.loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient()
 				.openRecordUsingReadLink(openInfo);
@@ -507,29 +512,29 @@ var CORA = (function(cora) {
 
 		const publishNewValueForRecordType = function(recordType) {
 			let data = {
-				"data": recordType,
-				"path": recordTypePath
+				data: recordType,
+				path: recordTypePath
 			};
 			dependencies.pubSub.publish("setValue", data);
 		};
 
 		const publishNewValueForLinkedData = function(recordId, recordType, openInfo) {
 			let linkedData = {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": recordType
+				children: [{
+					name: "linkedRecordType",
+					value: recordType
 				}, {
-					"name": "linkedRecordId",
-					"value": recordId
+					name: "linkedRecordId",
+					value: recordId
 				}],
-				"actionLinks": {
-					"read": openInfo.record.actionLinks.read
+				actionLinks: {
+					read: openInfo.record.actionLinks.read
 				},
-				"name": nameInData
+				name: nameInData
 			};
 			let message = {
-				"data": linkedData,
-				"path": path
+				data: linkedData,
+				path: path
 			};
 			dependencies.pubSub.publish("linkedData", message);
 		};

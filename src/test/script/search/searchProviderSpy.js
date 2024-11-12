@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,509 +20,510 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.searchProviderSpy = function() {
-		var searchArray = [];
-		var fetchedSearchIds = [];
-		var allSearchesNo = 0;
-		var searchesByGroupIdNo = 0;
-		var callWhenReloadedMethod;
-		var noOfReloads = 0;
+		let searchArray = {};
+		let fetchedSearchIds = [];
+		let allSearchesNo = 0;
+		let searchesByGroupIdNo = 0;
+		let noOfReloads = 0;
+		let groupId;
 
-		searchArray["coraTextSearch"] = {
-			"data" : {
-				"children" : [
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "metadataGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
-							},
-							"name" : "metadataId"
+		searchArray.coraTextSearch = {
+			data: {
+				children: [
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
+								accept: "application/vnd.uub.record+json"
+							}
 						},
-						{
-							"children" : [
-									{
-										"name" : "id",
-										"value" : "coraTextSearch"
-									},
-									{
-										"name" : "type",
-										"value" : "search"
-									},
-									{
-										"name" : "createdBy",
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "user"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "141414"
-										} ]
-									},
-									{
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "system"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "cora"
-										} ],
-										"actionLinks" : {
-											"read" : {
-												"requestMethod" : "GET",
-												"rel" : "read",
-												"url" : "http://epc.ub.uu.se/therest/rest/record/system/cora",
-												"accept" : "application/vnd.uub.record+json"
-											}
-										},
-										"name" : "dataDivider"
-									} ],
-							"name" : "recordInfo"
-						},
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "presentationGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchPGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
+						name: "metadataId"
+					},
+					{
+						children: [
+							{
+								name: "id",
+								value: "coraTextSearch"
 							},
-							"name" : "presentationId"
-						},
-						{
-							"repeatId" : "0",
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "recordType"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "coraText"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/recordType/coraText",
-									"accept" : "application/vnd.uub.record+json"
-								}
+							{
+								name: "type",
+								value: "search"
 							},
-							"name" : "recordTypeToSearchIn"
-						},{
-						"name": "searchGroup",
-						"value": "publicSearch"
-					} ],
-				"name" : "search"
+							{
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
+								}, {
+									name: "linkedRecordId",
+									value: "141414"
+								}]
+							},
+							{
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
+								}, {
+									name: "linkedRecordId",
+									value: "cora"
+								}],
+								actionLinks: {
+									read: {
+										requestMethod: "GET",
+										rel: "read",
+										url: "http://epc.ub.uu.se/therest/rest/record/system/cora",
+										accept: "application/vnd.uub.record+json"
+									}
+								},
+								name: "dataDivider"
+							}],
+						name: "recordInfo"
+					},
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "presentationGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchPGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationId"
+					},
+					{
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
+						}, {
+							name: "linkedRecordId",
+							value: "coraText"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/recordType/coraText",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "recordTypeToSearchIn"
+					}, {
+						name: "searchGroup",
+						value: "publicSearch"
+					}],
+				name: "search"
 			},
-			"actionLinks" : {
-				"search" : {
-					"requestMethod" : "GET",
-					"rel" : "search",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/searchResult/coraTextSearch",
-					"accept" : "application/vnd.uub.recordList+json"
+			actionLinks: {
+				search: {
+					requestMethod: "GET",
+					rel: "search",
+					url: "http://epc.ub.uu.se/therest/rest/record/searchResult/coraTextSearch",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"read_incoming_links" : {
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/coraTextSearch",
+					accept: "application/vnd.uub.record+json"
 				}
 			}
 		};
-		searchArray["someSearch"] = {
-			"data" : {
-				"children" : [
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "metadataGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "metadataGroupGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/metadataGroup/metadataGroupGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
-							},
-							"name" : "metadataId"
+
+		searchArray.someSearch = {
+			data: {
+				children: [
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "metadataGroupGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/metadataGroup/metadataGroupGroup",
+								accept: "application/vnd.uub.record+json"
+							}
 						},
-						{
-							"children" : [
-									{
-										"name" : "id",
-										"value" : "someSearch"
-									},
-									{
-										"name" : "type",
-										"value" : "search"
-									},
-									{
-										"name" : "createdBy",
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "user"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "141414"
-										} ]
-									},
-									{
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "system"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "cora"
-										} ],
-										"actionLinks" : {
-											"read" : {
-												"requestMethod" : "GET",
-												"rel" : "read",
-												"url" : "http://epc.ub.uu.se/therest/rest/record/system/cora",
-												"accept" : "application/vnd.uub.record+json"
-											}
-										},
-										"name" : "dataDivider"
-									} ],
-							"name" : "recordInfo"
-						},
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "presentationGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "metadataFormPGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/presentationGroup/metadataFormPGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
+						name: "metadataId"
+					},
+					{
+						children: [
+							{
+								name: "id",
+								value: "someSearch"
 							},
-							"name" : "presentationId"
-						},
-						{
-							"repeatId" : "0",
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "recordType"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "metadata"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/recordType/metadata",
-									"accept" : "application/vnd.uub.record+json"
-								}
+							{
+								name: "type",
+								value: "search"
 							},
-							"name" : "recordTypeToSearchIn"
-						} ,{
-						"name": "searchGroup",
-						"value": "publicSearch"
-					} ],
-				"name" : "search"
+							{
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
+								}, {
+									name: "linkedRecordId",
+									value: "141414"
+								}]
+							},
+							{
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
+								}, {
+									name: "linkedRecordId",
+									value: "cora"
+								}],
+								actionLinks: {
+									read: {
+										requestMethod: "GET",
+										rel: "read",
+										url: "http://epc.ub.uu.se/therest/rest/record/system/cora",
+										accept: "application/vnd.uub.record+json"
+									}
+								},
+								name: "dataDivider"
+							}],
+						name: "recordInfo"
+					},
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "presentationGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "metadataFormPGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/presentationGroup/metadataFormPGroup",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationId"
+					},
+					{
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
+						}, {
+							name: "linkedRecordId",
+							value: "metadata"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/recordType/metadata",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "recordTypeToSearchIn"
+					}, {
+						name: "searchGroup",
+						value: "publicSearch"
+					}],
+				name: "search"
 			},
-			"actionLinks" : {
-				"search" : {
-					"requestMethod" : "GET",
-					"rel" : "search",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/searchResult/someSearch",
-					"accept" : "application/vnd.uub.recordList+json"
+			actionLinks: {
+				search: {
+					requestMethod: "GET",
+					rel: "search",
+					url: "http://epc.ub.uu.se/therest/rest/record/searchResult/someSearch",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/someSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/someSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/someSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/someSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"delete" : {
-					"requestMethod" : "DELETE",
-					"rel" : "delete",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/someSearch"
+				delete: {
+					requestMethod: "DELETE",
+					rel: "delete",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/someSearch"
 				}
 			}
 		};
-		searchArray["metadataItemCollectionSearch"] = {
-			"data" : {
-				"children" : [
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "metadataGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
-							},
-							"name" : "metadataId"
+		searchArray.metadataItemCollectionSearch = {
+			data: {
+				children: [
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
+								accept: "application/vnd.uub.record+json"
+							}
 						},
-						{
-							"children" : [
-									{
-										"name" : "id",
-										"value" : "metadataItemCollectionSearch"
-									},
-									{
-										"name" : "type",
-										"value" : "search"
-									},
-									{
-										"name" : "createdBy",
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "user"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "141414"
-										} ]
-									},
-									{
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "system"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "cora"
-										} ],
-										"actionLinks" : {
-											"read" : {
-												"requestMethod" : "GET",
-												"rel" : "read",
-												"url" : "http://epc.ub.uu.se/therest/rest/record/system/cora",
-												"accept" : "application/vnd.uub.record+json"
-											}
-										},
-										"name" : "dataDivider"
-									} ],
-							"name" : "recordInfo"
-						},
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "presentationGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchPGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
+						name: "metadataId"
+					},
+					{
+						children: [
+							{
+								name: "id",
+								value: "metadataItemCollectionSearch"
 							},
-							"name" : "presentationId"
-						},
-						{
-							"repeatId" : "0",
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "recordType"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "metadataItemCollection"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/recordType/metadataItemCollection",
-									"accept" : "application/vnd.uub.record+json"
-								}
+							{
+								name: "type",
+								value: "search"
 							},
-							"name" : "recordTypeToSearchIn"
-						} ,{
-						"name": "searchGroup",
-						"value": "autocomplete"
-					} ],
-				"name" : "search"
+							{
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
+								}, {
+									name: "linkedRecordId",
+									value: "141414"
+								}]
+							},
+							{
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
+								}, {
+									name: "linkedRecordId",
+									value: "cora"
+								}],
+								actionLinks: {
+									read: {
+										requestMethod: "GET",
+										rel: "read",
+										url: "http://epc.ub.uu.se/therest/rest/record/system/cora",
+										accept: "application/vnd.uub.record+json"
+									}
+								},
+								name: "dataDivider"
+							}],
+						name: "recordInfo"
+					},
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "presentationGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchPGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationId"
+					},
+					{
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
+						}, {
+							name: "linkedRecordId",
+							value: "metadataItemCollection"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/recordType/metadataItemCollection",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "recordTypeToSearchIn"
+					}, {
+						name: "searchGroup",
+						value: "autocomplete"
+					}],
+				name: "search"
 			},
-			"actionLinks" : {
-				"search" : {
-					"requestMethod" : "GET",
-					"rel" : "search",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/searchResult/metadataItemCollectionSearch",
-					"accept" : "application/vnd.uub.recordList+json"
+			actionLinks: {
+				search: {
+					requestMethod: "GET",
+					rel: "search",
+					url: "http://epc.ub.uu.se/therest/rest/record/searchResult/metadataItemCollectionSearch",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"read_incoming_links" : {
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
+					accept: "application/vnd.uub.record+json"
 				}
 			}
 		};
-		searchArray["searchWithoutSearchLink"] = {
-			"data" : {
-				"children" : [
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "metadataGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
-							},
-							"name" : "metadataId"
+		searchArray.searchWithoutSearchLink = {
+			data: {
+				children: [
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
+								accept: "application/vnd.uub.record+json"
+							}
 						},
-						{
-							"children" : [
-									{
-										"name" : "id",
-										"value" : "searchWithoutSearchLink"
-									},
-									{
-										"name" : "type",
-										"value" : "search"
-									},
-									{
-										"name" : "createdBy",
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "user"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "141414"
-										} ]
-									},
-									{
-										"children" : [ {
-											"name" : "linkedRecordType",
-											"value" : "system"
-										}, {
-											"name" : "linkedRecordId",
-											"value" : "cora"
-										} ],
-										"actionLinks" : {
-											"read" : {
-												"requestMethod" : "GET",
-												"rel" : "read",
-												"url" : "http://epc.ub.uu.se/therest/rest/record/system/cora",
-												"accept" : "application/vnd.uub.record+json"
-											}
-										},
-										"name" : "dataDivider"
-									} ],
-							"name" : "recordInfo"
-						},
-						{
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "presentationGroup"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "autocompleteSearchPGroup"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
-									"accept" : "application/vnd.uub.record+json"
-								}
+						name: "metadataId"
+					},
+					{
+						children: [
+							{
+								name: "id",
+								value: "searchWithoutSearchLink"
 							},
-							"name" : "presentationId"
-						},
-						{
-							"repeatId" : "0",
-							"children" : [ {
-								"name" : "linkedRecordType",
-								"value" : "recordType"
-							}, {
-								"name" : "linkedRecordId",
-								"value" : "metadataItemCollection"
-							} ],
-							"actionLinks" : {
-								"read" : {
-									"requestMethod" : "GET",
-									"rel" : "read",
-									"url" : "http://epc.ub.uu.se/therest/rest/record/recordType/metadataItemCollection",
-									"accept" : "application/vnd.uub.record+json"
-								}
+							{
+								name: "type",
+								value: "search"
 							},
-							"name" : "recordTypeToSearchIn"
-						} ,{
-						"name": "searchGroup",
-						"value": "publicSearch"
-					} ],
-				"name" : "search"
+							{
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
+								}, {
+									name: "linkedRecordId",
+									value: "141414"
+								}]
+							},
+							{
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
+								}, {
+									name: "linkedRecordId",
+									value: "cora"
+								}],
+								actionLinks: {
+									read: {
+										requestMethod: "GET",
+										rel: "read",
+										url: "http://epc.ub.uu.se/therest/rest/record/system/cora",
+										accept: "application/vnd.uub.record+json"
+									}
+								},
+								name: "dataDivider"
+							}],
+						name: "recordInfo"
+					},
+					{
+						children: [{
+							name: "linkedRecordType",
+							value: "presentationGroup"
+						}, {
+							name: "linkedRecordId",
+							value: "autocompleteSearchPGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationId"
+					},
+					{
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
+						}, {
+							name: "linkedRecordId",
+							value: "metadataItemCollection"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/recordType/metadataItemCollection",
+								accept: "application/vnd.uub.record+json"
+							}
+						},
+						name: "recordTypeToSearchIn"
+					}, {
+						name: "searchGroup",
+						value: "publicSearch"
+					}],
+				name: "search"
 			},
-			"actionLinks" : {
+			actionLinks: {
 				// "search" : {
 				// "requestMethod" : "GET",
 				// "rel" : "search",
@@ -530,284 +531,299 @@ var CORATEST = (function(coraTest) {
 				// "http://epc.ub.uu.se/therest/rest/record/searchResult/metadataItemCollectionSearch",
 				// "accept" : "application/vnd.uub.recordList+json"
 				// },
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"read_incoming_links" : {
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataItemCollectionSearch",
+					accept: "application/vnd.uub.record+json"
 				}
 			}
 		};
-		searchArray["textSearch"] = {
-			"data" : {
-				"name" : "search",
-				"children" : [ {
-					"name" : "metadataId",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "metadataGroup"
+		searchArray.textSearch = {
+			data: {
+				name: "search",
+				children: [{
+					name: "metadataId",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataGroup"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "textSearchGroup"
-					} ]
+						name: "linkedRecordId",
+						value: "textSearchGroup"
+					}]
 				}, {
-					"name" : "recordInfo",
-					"children" : [ {
-						"name" : "id",
-						"value" : "textSearch"
+					name: "recordInfo",
+					children: [{
+						name: "id",
+						value: "textSearch"
 					}, {
-						"name" : "type",
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "recordType"
+						name: "type",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "search"
-						} ]
+							name: "linkedRecordId",
+							value: "search"
+						}]
 					}, {
-						"name" : "createdBy",
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "user"
+						name: "createdBy",
+						children: [{
+							name: "linkedRecordType",
+							value: "user"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "141414"
-						} ]
+							name: "linkedRecordId",
+							value: "141414"
+						}]
 					}, {
-						"name" : "dataDivider",
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "system"
+						name: "dataDivider",
+						children: [{
+							name: "linkedRecordType",
+							value: "system"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "cora"
-						} ]
-					} ]
+							name: "linkedRecordId",
+							value: "cora"
+						}]
+					}]
 				}, {
-					"name" : "presentationId",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "presentationGroup"
+					name: "presentationId",
+					children: [{
+						name: "linkedRecordType",
+						value: "presentationGroup"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "textSearchPGroup"
-					} ]
+						name: "linkedRecordId",
+						value: "textSearchPGroup"
+					}]
 				}, {
-					"name" : "recordTypeToSearchIn",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "recordType"
+					name: "recordTypeToSearchIn",
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "coraText"
-					} ],
-					"repeatId" : "0"
+						name: "linkedRecordId",
+						value: "coraText"
+					}],
+					repeatId: "0"
 				}, {
-					"name" : "recordTypeToSearchIn",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "recordType"
+					name: "recordTypeToSearchIn",
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "textSystemOne"
-					} ],
-					"repeatId" : "1"
+						name: "linkedRecordId",
+						value: "textSystemOne"
+					}],
+					repeatId: "1"
 				}, {
-					"name" : "searchGroup",
-					"value" : "autocomplete"
+					name: "searchGroup",
+					value: "autocomplete"
 				}, {
-					"name" : "textId",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "text"
+					name: "textId",
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "textSearchText"
-					} ]
+						name: "linkedRecordId",
+						value: "textSearchText"
+					}]
 				}, {
-					"name" : "defTextId",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "text"
+					name: "defTextId",
+					children: [{
+						name: "linkedRecordType",
+						value: "text"
 					}, {
-						"name" : "linkedRecordId",
-						"value" : "textSearchDefText"
-					} ]
-				} ]
+						name: "linkedRecordId",
+						value: "textSearchDefText"
+					}]
+				}]
 			},
-			"actionLinks" : {
-				"search" : {
-					"requestMethod" : "GET",
-					"rel" : "search",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/searchResult/textSearch",
-					"accept" : "application/vnd.uub.recordList+json"
+			actionLinks: {
+				search: {
+					requestMethod: "GET",
+					rel: "search",
+					url: "http://epc.ub.uu.se/therest/rest/record/searchResult/textSearch",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/textSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/textSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"read_incoming_links" : {
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/textSearch/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/textSearch/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/textSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/textSearch",
+					accept: "application/vnd.uub.record+json"
 				}
 			}
 		};
-		searchArray["metadataSearch"] = {
-			"data" : {
-				"children" : [
+
+		let textSearchWithResultPresentation = JSON.parse(JSON.stringify(searchArray.textSearch));
+		textSearchWithResultPresentation.data.children.push({
+							name: "searchResultPresentation",
+							children: [{
+								name: "linkedRecordType",
+								value: "presentationGroup"
+							}, {
+								name: "linkedRecordId",
+								value: "textSearchResultPGroup"
+							}]
+						});
+		searchArray.textSearchWithResultPresentation = textSearchWithResultPresentation;
+
+		searchArray.metadataSearch = {
+			data: {
+				children: [
 					{
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "metadataGroup"
+						children: [{
+							name: "linkedRecordType",
+							value: "metadataGroup"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "autocompleteSearchGroup"
-						} ],
-						"actionLinks" : {
-							"read" : {
-								"requestMethod" : "GET",
-								"rel" : "read",
-								"url" : "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
-								"accept" : "application/vnd.uub.record+json"
+							name: "linkedRecordId",
+							value: "autocompleteSearchGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/metadataGroup/autocompleteSearchGroup",
+								accept: "application/vnd.uub.record+json"
 							}
 						},
-						"name" : "metadataId"
+						name: "metadataId"
 					},
 					{
-						"children" : [
+						children: [
 							{
-								"name" : "id",
-								"value" : "metadataSearch"
+								name: "id",
+								value: "metadataSearch"
 							},
 							{
-								"name" : "type",
-								"value" : "search"
+								name: "type",
+								value: "search"
 							},
 							{
-								"name" : "createdBy",
-								"children" : [ {
-									"name" : "linkedRecordType",
-									"value" : "user"
+								name: "createdBy",
+								children: [{
+									name: "linkedRecordType",
+									value: "user"
 								}, {
-									"name" : "linkedRecordId",
-									"value" : "141414"
-								} ]
+									name: "linkedRecordId",
+									value: "141414"
+								}]
 							},
 							{
-								"children" : [ {
-									"name" : "linkedRecordType",
-									"value" : "system"
+								children: [{
+									name: "linkedRecordType",
+									value: "system"
 								}, {
-									"name" : "linkedRecordId",
-									"value" : "cora"
-								} ],
-								"actionLinks" : {
-									"read" : {
-										"requestMethod" : "GET",
-										"rel" : "read",
-										"url" : "http://epc.ub.uu.se/therest/rest/record/system/cora",
-										"accept" : "application/vnd.uub.record+json"
+									name: "linkedRecordId",
+									value: "cora"
+								}],
+								actionLinks: {
+									read: {
+										requestMethod: "GET",
+										rel: "read",
+										url: "http://epc.ub.uu.se/therest/rest/record/system/cora",
+										accept: "application/vnd.uub.record+json"
 									}
 								},
-								"name" : "dataDivider"
-							} ],
-						"name" : "recordInfo"
+								name: "dataDivider"
+							}],
+						name: "recordInfo"
 					},
 					{
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "presentationGroup"
+						children: [{
+							name: "linkedRecordType",
+							value: "presentationGroup"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "autocompleteSearchPGroup"
-						} ],
-						"actionLinks" : {
-							"read" : {
-								"requestMethod" : "GET",
-								"rel" : "read",
-								"url" : "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
-								"accept" : "application/vnd.uub.record+json"
+							name: "linkedRecordId",
+							value: "autocompleteSearchPGroup"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/presentationGroup/autocompleteSearchPGroup",
+								accept: "application/vnd.uub.record+json"
 							}
 						},
-						"name" : "presentationId"
+						name: "presentationId"
 					},
 					{
-						"repeatId" : "0",
-						"children" : [ {
-							"name" : "linkedRecordType",
-							"value" : "recordType"
+						repeatId: "0",
+						children: [{
+							name: "linkedRecordType",
+							value: "recordType"
 						}, {
-							"name" : "linkedRecordId",
-							"value" : "metadata"
-						} ],
-						"actionLinks" : {
-							"read" : {
-								"requestMethod" : "GET",
-								"rel" : "read",
-								"url" : "http://epc.ub.uu.se/therest/rest/record/recordType/metadata",
-								"accept" : "application/vnd.uub.record+json"
+							name: "linkedRecordId",
+							value: "metadata"
+						}],
+						actionLinks: {
+							read: {
+								requestMethod: "GET",
+								rel: "read",
+								url: "http://epc.ub.uu.se/therest/rest/record/recordType/metadata",
+								accept: "application/vnd.uub.record+json"
 							}
 						},
-						"name" : "recordTypeToSearchIn"
-					},{
-						"name": "searchGroup",
-						"value": "autocomplete"
-					}  ],
-				"name" : "search"
+						name: "recordTypeToSearchIn"
+					}, {
+						name: "searchGroup",
+						value: "autocomplete"
+					}],
+				name: "search"
 			},
-			"actionLinks" : {
-				"search" : {
-					"requestMethod" : "GET",
-					"rel" : "search",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/searchResult/metadataSearch",
-					"accept" : "application/vnd.uub.recordList+json"
+			actionLinks: {
+				search: {
+					requestMethod: "GET",
+					rel: "search",
+					url: "http://epc.ub.uu.se/therest/rest/record/searchResult/metadataSearch",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch",
-					"accept" : "application/vnd.uub.record+json"
+				read: {
+					requestMethod: "GET",
+					rel: "read",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch",
+					accept: "application/vnd.uub.record+json"
 				},
-				"read_incoming_links" : {
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				},
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
-					"url" : "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch",
-					"accept" : "application/vnd.uub.record+json"
+				update: {
+					requestMethod: "POST",
+					rel: "update",
+					contentType: "application/vnd.uub.record+json",
+					url: "http://epc.ub.uu.se/therest/rest/record/search/metadataSearch",
+					accept: "application/vnd.uub.record+json"
 				}
 			}
 		};
-		function getSearchById(searchId) {
+
+		const getSearchById = function(searchId) {
 			fetchedSearchIds.push(searchId);
 
 			if (searchArray[searchId] !== undefined) {
@@ -818,72 +834,75 @@ var CORATEST = (function(coraTest) {
 				console.log("Id(" + searchId + ") not found in searchProviderSpy");
 				throw new Error("Id(" + searchId + ") not found in searchProviderSpy");
 			}
-		}
+		};
 
-		function getAllSearches() {
+		const getAllSearches = function() {
 			allSearchesNo++;
-			var searchList = [];
+			let searchList = [];
 			Object.keys(searchArray).forEach(function(id) {
 				searchList.push(searchArray[id]);
 			});
 			return searchList;
-		}
+		};
 
-		function getFetchedSearchIdNo(no) {
+		const getFetchedSearchIdNo = function(no) {
 			return fetchedSearchIds[no];
-		}
-		function getAllSearchesFetchedNo() {
-			return allSearchesNo;
-		}
+		};
 
-		function reload(callWhenReloadedMethodIn) {
+		const getAllSearchesFetchedNo = function() {
+			return allSearchesNo;
+		};
+
+		const reload = function(callWhenReloadedMethodIn) {
 			noOfReloads++;
 			callWhenReloadedMethod = callWhenReloadedMethodIn;
-		}
-		function getCallWhenReloadedMethod() {
-			return callWhenReloadedMethod;
-		}
-		function callWhenReloadedMethod() {
-			callWhenReloadedMethod();
-		}
-		function getNoOfReloads() {
-			return noOfReloads;
-		}
+		};
 
-		var groupId;
-		function getSearchesByGroupId(groupIdIn) {
+		const getCallWhenReloadedMethod = function() {
+			return callWhenReloadedMethod;
+		};
+
+		let callWhenReloadedMethod = function() {
+			callWhenReloadedMethod();
+		};
+
+		const getNoOfReloads = function() {
+			return noOfReloads;
+		};
+
+		const getSearchesByGroupId = function(groupIdIn) {
 			searchesByGroupIdNo++;
 			groupId = groupIdIn;
-			var searchList = [];
-			searchList.push(searchArray["coraTextSearch"]);
-			searchList.push(searchArray["someSearch"]);
-			searchList.push(searchArray["metadataItemCollectionSearch"]);
-			searchList.push(searchArray["searchWithoutSearchLink"]);
+			let searchList = [];
+			searchList.push(searchArray.coraTextSearch);
+			searchList.push(searchArray.someSearch);
+			searchList.push(searchArray.metadataItemCollectionSearch);
+			searchList.push(searchArray.searchWithoutSearchLink);
 
 			return searchList;
-		}
+		};
 
-		function getSearchesByGroupIdFetchedNo() {
+		const getSearchesByGroupIdFetchedNo = function() {
 			return searchesByGroupIdNo;
-		}
+		};
 
-		function getGroupId() {
+		const getGroupId = function() {
 			return groupId;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "searchProviderSpy",
-			getSearchById : getSearchById,
-			getAllSearches : getAllSearches,
-			getSearchesByGroupId : getSearchesByGroupId,
-			getFetchedSearchIdNo : getFetchedSearchIdNo,
-			getAllSearchesFetchedNo : getAllSearchesFetchedNo,
-			getSearchesByGroupIdFetchedNo : getSearchesByGroupIdFetchedNo,
-			reload : reload,
-			getCallWhenReloadedMethod : getCallWhenReloadedMethod,
-			getNoOfReloads : getNoOfReloads,
-			callWhenReloadedMethod : callWhenReloadedMethod,
-			getGroupId : getGroupId
+			type: "searchProviderSpy",
+			getSearchById: getSearchById,
+			getAllSearches: getAllSearches,
+			getSearchesByGroupId: getSearchesByGroupId,
+			getFetchedSearchIdNo: getFetchedSearchIdNo,
+			getAllSearchesFetchedNo: getAllSearchesFetchedNo,
+			getSearchesByGroupIdFetchedNo: getSearchesByGroupIdFetchedNo,
+			reload: reload,
+			getCallWhenReloadedMethod: getCallWhenReloadedMethod,
+			getNoOfReloads: getNoOfReloads,
+			callWhenReloadedMethod: callWhenReloadedMethod,
+			getGroupId: getGroupId
 		});
 	};
 	return coraTest;

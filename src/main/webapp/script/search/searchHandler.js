@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2020, 2021 Uppsala University Library
+ * Copyright 2017, 2020, 2021, 2024 Uppsala University Library
  * Copyright 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -139,7 +139,8 @@ var CORA = (function(cora) {
 			let resultHandlerSpec = {
 				dataList: JSON.parse(answerIn.responseText).dataList,
 				jsClient: dependencies.jsClient,
-				triggerWhenResultIsChoosen: spec.triggerWhenResultIsChoosen
+				triggerWhenResultIsChoosen: spec.triggerWhenResultIsChoosen,
+				searchResultPresentationId: spec.searchResultPresentationId
 			};
 			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();

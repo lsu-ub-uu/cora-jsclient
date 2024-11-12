@@ -152,7 +152,7 @@ function MetadataProviderStub() {
 			.concat(createNameInDataTextIdDefTextId2(idToGet));
 	}
 
-	function createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(	idToGet) {
+	function createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet) {
 		return [createRecordInfoJson(idToGet)]
 			.concat(createNameInDataLinkedTextIdDefTextId2(idToGet));
 	}
@@ -161,15 +161,15 @@ function MetadataProviderStub() {
 		return [createRecordInfoJson(idToGet)]
 			.concat(createNameInDataLinkedTextIdDefTextId2(nameInData));
 	}
-	
+
 	let requestedMetadataIds = [];
-	this.getRequestedMetadataIds = function(){
+	this.getRequestedMetadataIds = function() {
 		return requestedMetadataIds;
 	}
-	
+
 	this.getMetadataById = function(idToGet) {
 		requestedMetadataIds.push(idToGet);
-		 
+
 		if (idToGet === "someParentMetadataId") {
 			return {
 				name: "metadata",
@@ -189,7 +189,7 @@ function MetadataProviderStub() {
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};
 		}
-		
+
 		if (idToGet === "textVariableId") {
 			return {
 				name: "metadata",
@@ -303,7 +303,7 @@ function MetadataProviderStub() {
 							value: "anAttribute"
 						}],
 						name: "ref"
-					},{
+					}, {
 						repeatId: "2",
 						children: [{
 							name: "linkedRecordType",
@@ -643,7 +643,7 @@ function MetadataProviderStub() {
 						"userSuppliedIdCollectionVar", "1")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData(
-						idToGet,"groupWithOneCollectionVarChildGroup" ))
+						idToGet, "groupWithOneCollectionVarChildGroup"))
 			};
 		}
 		if (idToGet === "groupWithOneCollectionVarChildAndOneTextChildGroup") {
@@ -4853,13 +4853,13 @@ function MetadataProviderStub() {
 						type: "pVar"
 					},
 					children: [
-//						{
-//							name: "recordInfo",
-//							children: [{
-//								name: "id",
-//								value: "pVarTextVariableId"
-//							}]
-//						},
+						//						{
+						//							name: "recordInfo",
+						//							children: [{
+						//								name: "id",
+						//								value: "pVarTextVariableId"
+						//							}]
+						//						},
 						{
 							children: [{
 								name: "linkedRecordType",
@@ -5801,7 +5801,7 @@ function MetadataProviderStub() {
 						}],
 						name: "presentationOf"
 					}
-					,{
+						, {
 						children: [{
 							name: "linkedRecordType",
 							value: "coraText"
@@ -5811,11 +5811,11 @@ function MetadataProviderStub() {
 						}],
 						name: "specifiedHeadlineText"
 					}, {
-							name: "specifiedHeadlineLevel",
-							value: "h3"
-						}
-					
-					, {
+						name: "specifiedHeadlineLevel",
+						value: "h3"
+					}
+
+						, {
 						name: "childReferences",
 						children: [{
 							name: "childReference",
@@ -9008,15 +9008,15 @@ function MetadataProviderStub() {
 							value: "myLink"
 						}],
 						"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "http://localhost:8080/therest/rest/record/metadata/"
-										+ "myLink",
-									"accept": "application/vnd.uub.record+json"
-								}
-							},
-							name: "presentationOf"
+							"read": {
+								"requestMethod": "GET",
+								"rel": "read",
+								"url": "http://localhost:8080/therest/rest/record/metadata/"
+									+ "myLink",
+								"accept": "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationOf"
 					}, {
 						name: "mode",
 						value: "input"
@@ -9043,19 +9043,19 @@ function MetadataProviderStub() {
 							value: "myLink"
 						}],
 						"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "http://localhost:8080/therest/rest/record/metadata/"
-										+ "myLink",
-									"accept": "application/vnd.uub.record+json"
-								}
-							},
-							name: "presentationOf"
+							"read": {
+								"requestMethod": "GET",
+								"rel": "read",
+								"url": "http://localhost:8080/therest/rest/record/metadata/"
+									+ "myLink",
+								"accept": "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationOf"
 					}, {
 						name: "mode",
 						value: "input"
-					},{
+					}, {
 						name: "showLabel",
 						value: "false"
 					}]
@@ -9081,19 +9081,19 @@ function MetadataProviderStub() {
 							value: "myLink"
 						}],
 						"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "http://localhost:8080/therest/rest/record/metadata/"
-										+ "myLink",
-									"accept": "application/vnd.uub.record+json"
-								}
-							},
-							name: "presentationOf"
+							"read": {
+								"requestMethod": "GET",
+								"rel": "read",
+								"url": "http://localhost:8080/therest/rest/record/metadata/"
+									+ "myLink",
+								"accept": "application/vnd.uub.record+json"
+							}
+						},
+						name: "presentationOf"
 					}, {
 						name: "mode",
 						value: "input"
-					},{
+					}, {
 						children: [{
 							name: "linkedRecordType",
 							value: "coraText"
@@ -9101,10 +9101,10 @@ function MetadataProviderStub() {
 							name: "linkedRecordId",
 							value: "specifiedLabelText"
 						}],
-							name: "specifiedLabelText"
+						name: "specifiedLabelText"
 					}]
 				};
-//				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData
+			//				createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextIdUsingIdAndNameInData
 			case "myLinkNoPresentationOfLinkedRecordWithFinalValuePLink":
 				return {
 					name: "presentation",
@@ -9226,6 +9226,80 @@ function MetadataProviderStub() {
 								{
 									name: "linkedRecordId",
 									value: "textSearch"
+								}
+							]
+						}
+					],
+					attributes: {
+						type: "pRecordLink"
+					}
+				};
+			case "myLinkNoPresentationOfLinkedRecordWithSearchAndResultPresentationPLink":
+				return {
+					name: "presentation",
+					children: [
+						{
+							name: "recordInfo",
+							children: [
+								{
+									name: "id",
+									value: "myLinkNoPresentationOfLinkedRecordWithSearchAndResultPresentationPLink"
+								},
+								{
+									name: "type",
+									children: [
+										{
+											name: "linkedRecordType",
+											value: "recordType"
+										},
+										{
+											name: "linkedRecordId",
+											value: "presentationRecordLink"
+										}
+									]
+								},
+								{
+									name: "dataDivider",
+									children: [
+										{
+											name: "linkedRecordType",
+											value: "system"
+										},
+										{
+											name: "linkedRecordId",
+											value: "cora"
+										}
+									]
+								}
+							]
+						},
+						{
+							name: "presentationOf",
+							children: [
+								{
+									name: "linkedRecordType",
+									value: "metadataRecordLink"
+								},
+								{
+									name: "linkedRecordId",
+									value: "myLink"
+								}
+							]
+						},
+						{
+							name: "mode",
+							value: "input"
+						},
+						{
+							name: "search",
+							children: [
+								{
+									name: "linkedRecordType",
+									value: "search"
+								},
+								{
+									name: "linkedRecordId",
+									value: "textSearchWithResultPresentation"
 								}
 							]
 						}
@@ -12456,8 +12530,8 @@ function MetadataProviderStub() {
 			}]
 		};
 	};
-	
-	this.getMetadataRecordById = function(id){
+
+	this.getMetadataRecordById = function(id) {
 		return {
 			actionLinks: {
 				read: {

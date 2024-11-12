@@ -27,8 +27,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 	let specForNewWithData;
 	let specForNewWithChoiceValidationType;
 	let specForNewList;
+	let specForListWithSearchResultPresentationId;
 
-	let fixture;
 	let textProvider;
 	let record;
 	let recordWithoutUpdateOrDeleteLink;
@@ -37,13 +37,11 @@ QUnit.module("recordHandlerTest.js", hooks => {
 	let recordWithIndexLink;
 	let recordWithoutIndexLink;
 	let recordWithMetadata;
-	let pubSub;
 	let recordGuiFactorySpy;
 	let recordHandlerViewFactorySpy;
 	let ajaxCallFactorySpy;
 
 	hooks.beforeEach(() => {
-		fixture = document.getElementById("qunit-fixture");
 		textProvider = CORATEST.textProviderSpy();
 		record = CORATEST.recordWithAllLinks;
 		recordWithoutUpdateOrDeleteLink = CORATEST.recordWithoutUpdateOrDeleteLink;
@@ -52,8 +50,6 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		recordWithIndexLink = CORATEST.recordWithIndexLink;
 		recordWithoutIndexLink = CORATEST.recordWithoutIndexLink;
 		recordWithMetadata = CORATEST.recordWithMetadata;
-
-		pubSub = CORATEST.pubSubSpy();
 
 		recordGuiFactorySpy = CORATEST.standardFactorySpy("recordGuiSpy");
 
@@ -65,6 +61,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		setupSpecForNewWithData();
 		setupSpecForNewWithChoiceValidationType();
 		setupSpecForNewList();
+		setupSpecForListWithSearchResultPresentationId();
 	});
 	hooks.afterEach(() => {
 		//no after
@@ -133,6 +130,17 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		specForNewList = {
 			fetchLatestDataFromServer: "false",
 			partOfList: "true",
+			createNewRecord: "true",
+			recordTypeRecordIdForNew: "recordType",
+			record: record.data,
+			jsClient: CORATEST.jsClientSpy()
+		};
+	};
+	const setupSpecForListWithSearchResultPresentationId = function() {
+		specForListWithSearchResultPresentationId = {
+			fetchLatestDataFromServer: "false",
+			partOfList: "true",
+			searchResultPresentationId: "somePresentationId",
 			createNewRecord: "true",
 			recordTypeRecordIdForNew: "recordType",
 			record: record.data,
@@ -1476,6 +1484,35 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let factoredRecordGui = dependencies.recordGuiFactory.getFactored(0);
 
 		assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "recordTypeListPGroup");
+		assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
+
+		let managedGuiItem = dependencies.managedGuiItemFactory.getFactored(0);
+		assert.strictEqual(managedGuiItem.getAddedListPresentation(0), factoredRecordGui
+			.getReturnedPresentations(0).getView());
+
+		let item = managedGuiItem.getAddedMenuPresentation(0);
+		assert.strictEqual(item, undefined);
+
+		let emptyPermissions = {
+			write: [],
+			read: []
+		};
+		assert.deepEqual(factoredSpec.permissions, emptyPermissions);
+	});
+	
+	test("initCheckRightGuiCreatedForListWithSearchResultPresentationId", function(assert) {
+		let recordHandler = CORA.recordHandler(dependencies, specForListWithSearchResultPresentationId);
+		let managedGuiItemSpy = dependencies.managedGuiItemFactory.getFactored(0);
+
+		assert.strictEqual(recordHandler.getDataIsChanged(), true);
+		assert.strictEqual(managedGuiItemSpy.getChanged(), true);
+
+		let factoredSpec = dependencies.recordGuiFactory.getSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
+
+		let factoredRecordGui = dependencies.recordGuiFactory.getFactored(0);
+
+		assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "somePresentationId");
 		assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "recordTypeGroup");
 
 		let managedGuiItem = dependencies.managedGuiItemFactory.getFactored(0);

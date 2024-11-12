@@ -75,18 +75,20 @@ var CORA = (function(cora) {
 		
 		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup) {
 			let id = getId(cDataRecordGroup);
+			let recordType = getRecordType(cDataRecordGroup);
 			let type = getType(cDataRecordGroup);
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 //			let dataDivider = getDataDividerFromCDataGroup(cDataRecordGroup);
-			let text = getText(cDataRecordGroup, "textId");
-			let defText = getText(cDataRecordGroup, "defTextId");
+			let texts = [];			
+			texts.push(getText(cDataRecordGroup, "textId"));
+			texts.push(getText(cDataRecordGroup, "defTextId"));
 			
 			let basic = {
 				id: id,
+				recordType: recordType,
 				type: type,
 				nameInData: nameInData,
-				text: text,
-				defText: defText,
+				texts: texts,
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
 			
@@ -99,15 +101,25 @@ var CORA = (function(cora) {
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 		
+		const getRecordType = function(cDataRecordGroup) {
+			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
+			let cRecordInfo = CORA.coraData(recordInfo);
+			let type = cRecordInfo.getFirstChildByNameInData("type");
+			let cTtype =  CORA.coraData(type);
+			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+		
 		const getType = function(cDataRecordGroup) {
 			return cDataRecordGroup.getData().attributes["type"];
 		};
 		
 		const getText = function(cDataRecordGroup, name) {
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
-			let textObject = textProvider.getAllTranslations(textId);
-			textObject.id = textId;
-			textObject.type = "text";
+//			let textObject = textProvider.getAllTranslations(textId);
+			let textObject = {
+				id : textId,
+				recordType : "text"
+			};
 			return textObject;
 		};
 

@@ -155,6 +155,9 @@ var CORATEST = (function(coraTest) {
 							children: [
 								{name: "id",
 								value: id},
+								{name: "type",
+									children:[{ name: "linkedRecordId", value: "someRecordType" }]
+								},
 								{name: "dataDivider",
 								value: "someDataDivider"}
 							]

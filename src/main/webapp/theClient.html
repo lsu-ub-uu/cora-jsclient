@@ -35,13 +35,18 @@
 <link rel="stylesheet" type="text/css" href="css/lib/minimap.css"></link>
 
 <link href="css/default.css" rel="stylesheet" type="text/css" title="A Client" id="aClientCSS">
-<link href="css/systemOne.css" rel="alternate stylesheet" type="text/css" title="System One" id="systemOneCSS">
+<link href="css/systemOne.css" rel="alternate stylesheet" type="text/css" title="System One"
+	id="systemOneCSS">
 <link href="css/alvin.css" rel="alternate stylesheet" type="text/css" title="Alvin" id="alvinCSS">
 <link href="css/diva.css" rel="alternate stylesheet" type="text/css" title="DiVA" id="divaCSS">
-<link href="css/diva-lila.css" rel="alternate stylesheet" type="text/css" title="DiVA-lila" id="divaLilaCSS">
-<link href="css/student-1.css" rel="alternate stylesheet" type="text/css" title="Student 1" id="student1CSS">
-<link href="css/student-2.css" rel="alternate stylesheet" type="text/css" title="Student 2" id="student2CSS">
-<link href="css/student-3.css" rel="alternate stylesheet" type="text/css" title="Student 3" id="student3CSS">
+<link href="css/diva-lila.css" rel="alternate stylesheet" type="text/css" title="DiVA-lila"
+	id="divaLilaCSS">
+<link href="css/student-1.css" rel="alternate stylesheet" type="text/css" title="Student 1"
+	id="student1CSS">
+<link href="css/student-2.css" rel="alternate stylesheet" type="text/css" title="Student 2"
+	id="student2CSS">
+<link href="css/student-3.css" rel="alternate stylesheet" type="text/css" title="Student 3"
+	id="student3CSS">
 
 <script type="text/javascript" src="script/aCoraNameSpace.js"></script>
 <script type="text/javascript" src="script/pubSub.js"></script>
@@ -307,11 +312,11 @@
 			"accept" : "application/vnd.uub.recordList+json"
 		};
 		var guiElementListLink = {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : baseUrl + "record/guiElement/",
-				"accept" : "application/vnd.uub.recordList+json"
-			};
+			"requestMethod" : "GET",
+			"rel" : "list",
+			"url" : baseUrl + "record/guiElement/",
+			"accept" : "application/vnd.uub.recordList+json"
+		};
 
 		var textProviderSpec = {
 			"textListLink" : textListLink,
@@ -429,12 +434,18 @@
 </head>
 <body>
 	<div class="loader">
-		<div class="loadingRing"><div></div><div></div><div></div><div></div></div>
+		<div class="loadingRing">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
 		<div class="loadingText" id="systemOneLoading">Laddar SystemOnes metadata</div>
 		<div class="loadingText" id="alvinLoading">Laddar Alvins metadata</div>
 		<div class="loadingText" id="divaLoading">Laddar DiVAs metadata</div>
 		<div class="loadingDescription">Det kan ta upp till en minut att ladda in metadatat.</div>
-		<div class="loadingUnderConstruction">(Ja, vi vet att laddningstiden är oacceptabelt lång just nu)</div>
+		<div class="loadingUnderConstruction">(Ja, vi vet att laddningstiden är oacceptabelt lång
+			just nu)</div>
 	</div>
 </body>
 </html>

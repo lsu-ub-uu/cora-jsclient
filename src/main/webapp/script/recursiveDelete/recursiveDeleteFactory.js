@@ -20,9 +20,10 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteFactory = function(providers, dependencies) {
-
+		
 		let factor = function (spec) {
 			let dep = {
+				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				view : CORA.recursiveDeleteView()
 			};
 

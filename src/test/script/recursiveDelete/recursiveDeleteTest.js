@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
+QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 	const test = QUnit.test;
 	const only = QUnit.only;
 	
@@ -69,9 +69,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 
 	const setupDependencies = function() {
 		dependencies = {
-			"globalFactories": {
-				"ajaxCallFactory": ajaxCallFactorySpy
-			},
+			ajaxCallFactory: ajaxCallFactorySpy,
 			view: view
 		};
 	};
@@ -331,7 +329,7 @@ test("testCollectPresentationsCallsIncommingLinks", function(assert) {
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://some/incomingLinks");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.incomingLinksList+json");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.loadMethod, recursiveDelete.collectPresentations);
@@ -347,15 +345,30 @@ test("testHandleCallErrorDoesNothing", function(assert) {
 	}
 });
 
-test("testCollectPresentationsCallsIncommingLinks2", function(assert) {
+test("testFetchPresentationModel", function(assert) {
+	let addPresentation1 = {
+			id: "recordTypeFormPGroup",
+			type: "group"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addPresentation1);
+	let addPresentation2= {
+			id: "recordTypeFormNewPGroup",
+			type: "group"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addPresentation2);
+	let addPresentation3 = {
+			id: "recordTypeViewPGroup",
+			type: "group"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
+		
 	let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
 	let currentModel = {
 				id: "minimalGroupId",
 				recordType: "someRecordType", 
 				type: "group", 
 				nameInData: "minimalGroupName",
-				text: { id: "minimalGroupIdText", type: "text", sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
-				defText: { id: "minimalGroupIdDefText", type: "text", sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+				texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
 				methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 			};
 	let answer = {
@@ -368,16 +381,18 @@ test("testCollectPresentationsCallsIncommingLinks2", function(assert) {
 	let expectedPresentation= 		[
 	  {
 	    id: "recordTypeFormPGroup",
-//		type: "group",
-	    recordType: "presentation"
+	    recordType: "someRecordType",
+		type: "group"
 	  },
 	  {
 	    id: "recordTypeFormNewPGroup",
-	    recordType: "presentation"
+	    recordType: "someRecordType",
+		type: "group"
 	  },
 	  {
 	    id: "recordTypeViewPGroup",
-	    recordType: "presentation"
+	    recordType: "someRecordType",
+		type: "group"
 	  }
 	];
 	

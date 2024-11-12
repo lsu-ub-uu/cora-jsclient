@@ -38,6 +38,7 @@ var CORA = (function(cora) {
 		};
 		
 		const addPartsToView = function(viewModel, view){
+			console.log(viewModel);
 			let header = createHeader(viewModel.id);
 			view.appendChild(header);
 
@@ -135,26 +136,37 @@ var CORA = (function(cora) {
 		};
 		
 		let createChildren = function (child) {
-			let children = document.createElement("ul");
+			let ul = document.createElement("ul");
+			//Start spike
+			if (child.texts) {
+				createAndAppendGroup(ul, child.texts, "text");
+			}
+			//End spike
 			if(child.text){
-				children.appendChild(createText(child.text));
+				ul.appendChild(createText(child.text));
 			}
 			if(child.defText){
-			 	children.appendChild(createText(child.defText));
+			 	ul.appendChild(createText(child.defText));
 			}
 			if (child.attributes) {
-				createAndAppendGroup(children, child.attributes, "attribute")
+				createAndAppendGroup(ul, child.attributes, "attribute");
 			}
 			if (child.refCollection) {
-				createAndAppendGroup(children, child.refCollection, "refCollection")
+				createAndAppendGroup(ul, child.refCollection, "refCollection");
 			}
 			if (child.collectionItems) {
-				createAndAppendGroup(children, child.collectionItems, "collectionItems")
+				createAndAppendGroup(ul, child.collectionItems, "collectionItems");
 			}
+			//Start spike
+			console.log(child.presentations);
+			if (child.presentations) {
+				createAndAppendGroup(ul, child.presentations, "presentations");
+			}
+			//End spike
 			if (child.children) {
-				createAndAppendGroup(children, child.children)
+				createAndAppendGroup(ul, child.children);
 			}
-			return children;
+			return ul;
 		};
 		
 		const createText = function(text) {
@@ -165,10 +177,10 @@ var CORA = (function(cora) {
 			return li;
 		};
 		
-		let createAndAppendGroup = function (children, child, label) {
-			child.forEach(function (mChild) {
-					let nextLevel = createViewForOneLevel(mChild, label);
-					children.appendChild(nextLevel);
+		let createAndAppendGroup = function (ul, listOfChilds, label) {
+			listOfChilds.forEach(function (mChild) {
+				let nextLevel = createViewForOneLevel(mChild, label);
+				ul.appendChild(nextLevel);
 			});
 		};
 		

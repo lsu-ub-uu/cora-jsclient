@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteFactoryTest.js", {
+QUnit.module.only("recursiveDelete/recursiveDeleteFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
@@ -28,7 +28,11 @@ QUnit.module("recursiveDelete/recursiveDeleteFactoryTest.js", {
 			"searchProvider" : CORATEST.searchProviderSpy(),
 			"clientInstanceProvider" : CORATEST.clientInstanceProviderSpy()
 		};
+		this.globalFactories = {
+			ajaxCallFactory: CORATEST.standardFactorySpy("ajaxCallSpy")
+		};
 		this.dependencies = {
+			globalFactories: this.globalFactories,
 			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy"),
 			someDep : "someDep"
 		};
@@ -72,6 +76,8 @@ QUnit.test("factorTestDependencies", function(assert) {
 	
 	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().view.type, 
 		CORA.recursiveDeleteView().type);
+	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().ajaxCallFactory, 
+		this.globalFactories.ajaxCallFactory);
 });
 
 QUnit.test("factorTestSpec", function(assert) {

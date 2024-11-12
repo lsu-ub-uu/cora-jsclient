@@ -178,7 +178,13 @@ var CORA = (function(cora) {
 				baseUrl : jsClientSpec.baseUrl
 			};
 			let recordTypeMenu = CORA.recordTypeMenu(providers, menuDependencies, menuSpec);
+
+			let dependenciesRD = {
+				globalFactories : globalFactories
+			};
 			
+			let recursiveDeleteFactory = CORA
+								.recursiveDeleteFactory(providers, dependenciesRD);
 			
 			let dep = {
 				providers : providers,
@@ -195,7 +201,7 @@ var CORA = (function(cora) {
 				searchRecordHandlerFactory : searchRecordHandlerFactory,
 				recordTypeHandlerFactory : recordTypeHandlerFactory,
 				definitionViewerFactory : CORA.definitionViewerFactory(providers),
-				recursiveDeleteFactory : CORA.recursiveDeleteFactory(providers),
+				recursiveDeleteFactory : recursiveDeleteFactory,
 				recordTypeMenu : recordTypeMenu
 			};
 

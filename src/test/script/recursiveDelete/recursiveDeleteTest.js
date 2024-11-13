@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks =>{
+QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 	const test = QUnit.test;
 	const only = QUnit.only;
 	
@@ -399,4 +399,47 @@ test("testFetchPresentationModel", function(assert) {
 	assert.strictEqual(answer.spec.model.presentations.length, 3);
 	assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
 });
+
+//only("testAllCallsToIncomingLinksAreReady", function(assert) {
+//	let addPresentation1 = {
+//			id: "recordTypeFormPGroup",
+//			type: "group"
+//		};
+//		metadataProvider.addMetadataByCompactDefinition(addPresentation1);
+//	let addPresentation2= {
+//			id: "recordTypeFormNewPGroup",
+//			type: "group"
+//		};
+//		metadataProvider.addMetadataByCompactDefinition(addPresentation2);
+//	let addPresentation3 = {
+//			id: "recordTypeViewPGroup",
+//			type: "group"
+//		};
+//		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
+//		
+//	let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
+//	let currentModel = {
+//				id: "minimalGroupId",
+//				recordType: "someRecordType", 
+//				type: "group", 
+//				nameInData: "minimalGroupName",
+//				texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+//				methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+//			};
+//	let answer = {
+//		spec: { model: currentModel },
+//		responseText: incomingLinksAnswer
+//	};
+//	
+//	recursiveDelete.getView();
+//	
+//	setTimeout(function(){
+//	    recursiveDelete.collectPresentations(answer);
+//	}, 500);
+//
+//	
+//	
+//	assert.strictEqual(recursiveDelete.onlyForTestGetActiveAjaxCalls.length, 0);
+//});
+
 });

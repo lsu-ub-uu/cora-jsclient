@@ -25,8 +25,11 @@ var CORA = (function(cora) {
 //		let textProvider = providers.textProvider;
 		let ajaxCallFactory = dependencies.ajaxCallFactory;
 		let jsClient = providers.clientInstanceProvider.getJsClient();
-		let view = dependencies.view;
+		let recursiveDeleteView = dependencies.view;
 		let id;
+		let model;
+		let ajaxCallId = 0;
+		let ajaxActiveCalls = [];
 
 		const start = function() {
 			id = spec.id;
@@ -34,16 +37,18 @@ var CORA = (function(cora) {
 
 		const reloadForMetadataChanges = function() {
 			let model = getViewModelForMetadataUsingId(id);
-			view.updateViewForViewModel(model);
+			recursiveDeleteView.updateViewForViewModel(model);
 		};
 
 		const getView = function() {
-			return getViewForMetadataId(id);
+			let view = getViewForMetadataId(id);
+			return view;
 		};
 
 		const getViewForMetadataId = function(metadataGroupId) {
-			let model = getViewModelForMetadataUsingId(metadataGroupId);
-			return view.createViewForViewModel(model);
+			model = getViewModelForMetadataUsingId(metadataGroupId);
+			return recursiveDeleteView.getView();
+//			return recursiveDeleteView.createViewForViewModel(model);
 		};
 		
 		const getViewModelForMetadataUsingId = function(metadataId) {
@@ -180,17 +185,27 @@ var CORA = (function(cora) {
 				accept : "application/vnd.uub.recordList+json",
 				loadMethod : collectPresentations,
 				errorMethod : handleErrorOnFetchPresentations,
-				model: model
+				model : model
 			};
+			createActiveAjaxCall();
 			ajaxCallFactory.factor(callSpec);
 		};
 
+		const createActiveAjaxCall = function() {
+			ajaxActiveCalls.push("active");
+		};
+		
 		const collectPresentations = function(answer) {
 			let response = JSON.parse(answer.responseText);
 			let data = response.dataList.data;
 			let presentations = [];
 			data.forEach((incomingLink) => filterAndAddIncomingPresentations(incomingLink, presentations));
 			answer.spec.model.presentations = presentations;
+			
+			ajaxActiveCalls.pop();
+			if(ajaxActiveCalls.length == 0){
+				recursiveDeleteView.createViewForViewModel(model);
+			}
 		};
 
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
@@ -260,6 +275,10 @@ var CORA = (function(cora) {
 		const onlyForTestGetSpec = function() {
 			return spec;
 		};
+		
+		const onlyForTestGetActiveAjaxCalls = function() {
+			return ajaxActiveCalls;
+		};
 
 		out = Object.freeze({
 			type: "recursiveDelete",
@@ -270,7 +289,8 @@ var CORA = (function(cora) {
 			handleErrorOnFetchPresentations : handleErrorOnFetchPresentations,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec
+			onlyForTestGetSpec: onlyForTestGetSpec,
+			onlyForTestGetActiveAjaxCalls: onlyForTestGetActiveAjaxCalls
 		});
 		start();
 

@@ -22,13 +22,11 @@ var CORA = (function(cora) {
 	cora.recursiveDelete = function(providers, dependencies, spec) {
 		let out;
 		let metadataProvider = providers.metadataProvider;
-//		let textProvider = providers.textProvider;
 		let ajaxCallFactory = dependencies.ajaxCallFactory;
 		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let recursiveDeleteView = dependencies.view;
 		let id;
 		let model;
-		let ajaxCallId = 0;
 		let ajaxActiveCalls = [];
 
 		const start = function() {
@@ -48,8 +46,12 @@ var CORA = (function(cora) {
 		const getViewForMetadataId = function(metadataGroupId) {
 			model = getViewModelForMetadataUsingId(metadataGroupId);
 			return recursiveDeleteView.getView();
-//			return recursiveDeleteView.createViewForViewModel(model);
 		};
+		
+		const onlyForTestGetViewModelForMetadataUsingId = function(){
+		//In order to be able to validate the model, since the async ajax calls complicates the testing
+			return getViewModelForMetadataUsingId(id);
+		}
 		
 		const getViewModelForMetadataUsingId = function(metadataId) {
 			let cDataRecordGroup = getCMetadataById(metadataId);
@@ -75,7 +77,6 @@ var CORA = (function(cora) {
 		
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-//			console.log(JSON.stringify(metadataRecord));
 			return CORA.coraData(metadata);
 		};
 		
@@ -85,7 +86,7 @@ var CORA = (function(cora) {
 			let type = getType(cDataRecordGroup);
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 //			let dataDivider = getDataDividerFromCDataGroup(cDataRecordGroup);
-			let texts = [];			
+			let texts = [];		
 			texts.push(getText(cDataRecordGroup, "textId"));
 			texts.push(getText(cDataRecordGroup, "defTextId"));
 			
@@ -211,6 +212,7 @@ var CORA = (function(cora) {
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
 			let incomingLink = getRecordTypeFromIncomingLink(incomingLinkAsJson);
 			if(incomingLinksIsAPresentation(incomingLink.type)){
+//				let presentationModel = getViewModelForPresentationUsingId(incomingLink.id);	
 				let presentationModel = getBasicModelForPresentation(incomingLink.id);	
 				presentations.push(presentationModel);
 			}
@@ -231,9 +233,24 @@ var CORA = (function(cora) {
 			return incomingLink;
 		};
 		
+//		const getViewModelForPresentationUsingId = function(metadataId) {
+//					let cDataRecordGroup = getCMetadataById(metadataId);
+//					let currentModel = getBasicModelForPresentation(cDataRecordGroup);
+//
+//					if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
+//						currentModel.children = collectChildReferencesForPresentations(cDataRecordGroup, "childReferences");
+//					}
+//					let metadataRecord = metadataProvider.getMetadataRecordById(metadataId);
+//					fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, currentModel);
+//					
+//					return currentModel;
+//				};
+		
+//		const getBasicModelForPresentation = function (cPresentation){
 		const getBasicModelForPresentation = function (id){
-			let presentation = metadataProvider.getMetadataById(id);
-			let cPresentation = CORA.coraData(presentation);
+//			let presentation = metadataProvider.getMetadataById(id);
+//			let cPresentation = CORA.coraData(presentation);
+			let cPresentation = getCMetadataById(id)
 			let presentationObject = {
 				id : id,
 				recordType: getRecordType (cPresentation),
@@ -241,6 +258,22 @@ var CORA = (function(cora) {
 			};
 			return presentationObject
 		};
+		
+		//SPIKE
+//		const collectChildReferencesForPresentations = function(cDataRecordGroup, groupName) {
+//					let children = [];
+//					let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
+//					for (let childReference of childReferences.children) {
+//						let cChildReference = CORA.coraData(childReference);
+//						for (let refGroup of cChildReference.children) {
+//							let cRefGroup = CORA.coraData(refGroup);
+//							let refId = cRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
+//							let childrenMetadataInfo = getViewModelForMetadataUsingId(refId);
+//							children.push(childrenMetadataInfo);
+//						}
+//					}
+//					return children;
+//				};
 		
 		const handleErrorOnFetchPresentations = function (error) {
 			throw new Error("error fetching incoming links from server", error);
@@ -283,14 +316,15 @@ var CORA = (function(cora) {
 		out = Object.freeze({
 			type: "recursiveDelete",
 			getView: getView,
-			reloadForMetadataChanges: reloadForMetadataChanges,
-			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
+			reloadForMetadataChanges : reloadForMetadataChanges,
+			openDefiningRecordUsingEventAndId : openDefiningRecordUsingEventAndId,
 			collectPresentations : collectPresentations,
 			handleErrorOnFetchPresentations : handleErrorOnFetchPresentations,
-			onlyForTestGetProviders: onlyForTestGetProviders,
-			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec,
-			onlyForTestGetActiveAjaxCalls: onlyForTestGetActiveAjaxCalls
+			onlyForTestGetViewModelForMetadataUsingId : onlyForTestGetViewModelForMetadataUsingId,
+			onlyForTestGetProviders : onlyForTestGetProviders,
+			onlyForTestGetDependencies : onlyForTestGetDependencies,
+			onlyForTestGetSpec : onlyForTestGetSpec,
+			onlyForTestGetActiveAjaxCalls : onlyForTestGetActiveAjaxCalls
 		});
 		start();
 

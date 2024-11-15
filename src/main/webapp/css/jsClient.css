@@ -903,20 +903,7 @@ h1, .h1TextStyle {
 	font-weight: bold;	
 }
 
-.recursiveDelete .details .type {
-/* 	color: red; */
-/* 	padding-right: 0.2rem; */
-}
 
-.recursiveDelete .details .cardinality {
-/* 	color: gren; */
-/* 	padding-right: 0.2rem; */
-}
-
-.recursiveDelete .details .constraint {
-/* 	color: blue; */
-/* 	padding-right: 0.2rem; */
-}
 
 
 

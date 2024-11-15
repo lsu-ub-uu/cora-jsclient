@@ -19,28 +19,27 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
+QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 	const test = QUnit.test;
 	const only = QUnit.only;
 	
-//	let textProvider;
-//	let searchProvider ;
-//	let recordTypeProvider ;
 	let metadataProvider;
 	let clientInstanceProvider;
 	let ajaxCallFactorySpy ;
-	let view ;
+	let recursiveDeleteView ;
 	
 	let dependencies;
 	let providers;
 	let spec;
 	let recursiveDelete;
 	
+	const waitingTimeInMs = 100;
+	
 	hooks.beforeEach(()  => {
 		metadataProvider =CORATEST.metadataProviderForDefinitionViewerSpy();
 		clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
-		view = CORATEST.recursiveDeleteViewSpy();
+		recursiveDeleteView = CORATEST.recursiveDeleteViewSpy();
 
 		providers = {
 			metadataProvider: metadataProvider,
@@ -70,7 +69,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 	const setupDependencies = function() {
 		dependencies = {
 			ajaxCallFactory: ajaxCallFactorySpy,
-			view: view
+			view: recursiveDeleteView
 		};
 	};
 	
@@ -109,24 +108,22 @@ test("testOnlyForTestGetSpec", function(assert) {
 	assert.strictEqual(recursiveDelete.onlyForTestGetSpec(), spec);
 });
 
+test("testCallToGetViewStartsFetchingOfDataButCreatesAMinimalHtmlElement", function(assert) {
+	let minimalView = recursiveDelete.getView();
+
+	assert.true(recursiveDeleteView.getViewForCallNo(0) != undefined);
+	assert.deepEqual(recursiveDeleteView.getViewForCallNo(0), minimalView);
+});
 test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
 	recursiveDelete.getView();
 
 	assert.strictEqual(metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
 });
 
-test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
-	let generatedView = recursiveDelete.getView();
-
-	assert.true(view.getViewModelForCallNo(0) != undefined);
-	assert.deepEqual(view.getCreatedViewForCallNo(0), generatedView);
-});
-
 test("testViewModel", function(assert) {
-	recursiveDelete.getView();
+	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
-	let viewModel = view.getViewModelForCallNo(0);
-	let expected = {
+		let expected = {
 		id: "minimalGroupId",
 		recordType: "someRecordType",
 		type: "group",
@@ -140,7 +137,7 @@ test("testViewModel", function(assert) {
 test("testReloadForMetadataChanges", function(assert) {
 	recursiveDelete.reloadForMetadataChanges();
 
-	let viewModel = view.getViewModelForCallNo(0);
+	let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
 	let expected = {
 		id: "minimalGroupId",
 		recordType: "someRecordType",
@@ -207,9 +204,8 @@ test("testViewModelOneChild", function(assert) {
 	};
 	metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	recursiveDelete.getView();
-
-	let viewModel = view.getViewModelForCallNo(0);
+	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+	
 	let expected = {
 		id: "minimalGroupId",
 		recordType: "someRecordType", 
@@ -265,8 +261,7 @@ test("testViewModelAttributes", function(assert) {
 	};
 	metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
-	recursiveDelete.getView();
-	let viewModel = view.getViewModelForCallNo(0);
+	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 	let expected = {
 		id: "minimalGroupId",
@@ -323,7 +318,7 @@ test("testCollectPresentationsCallsIncommingLinks", function(assert) {
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 
-	recursiveDelete.getView();
+	recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 	let ajaxCallSpy = ajaxCallFactorySpy.getFactored(0);
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
@@ -398,7 +393,28 @@ test("testFetchPresentationModel", function(assert) {
 	
 	assert.strictEqual(answer.spec.model.presentations.length, 3);
 	assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
+		
+	waitAndAssertCreateViewIsCalled();
 });
+
+
+const sleep = function() {
+    return new Promise(resolve => setTimeout(resolve, waitingTimeInMs));
+};
+
+const waitAndAssertCreateViewIsCalled = async function() {
+    await sleep();
+	assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
+	assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), "generatedView");
+};
+
+
+//only("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
+//	let generatedView = recursiveDelete.collectPresentations();
+//
+//	assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
+//	assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), generatedView);
+//});
 
 //only("testAllCallsToIncomingLinksAreReady", function(assert) {
 //	let addPresentation1 = {

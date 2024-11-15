@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", {
+QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
 			someDep: "someDep"

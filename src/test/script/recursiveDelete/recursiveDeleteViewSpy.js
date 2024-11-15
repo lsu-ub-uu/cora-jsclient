@@ -22,16 +22,27 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recursiveDeleteViewSpy = function() {
 
-		var viewModels = [];
-		var createdViews = [];
+		let basicViews = [];
+		let viewModels = [];
+		let createdViews = [];
 
-		function createViewForViewModel(viewModel) {
+		const createViewForViewModel = function(viewModel) {
 			viewModels.push(viewModel);
 			
 			let createdView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 			createdViews.push(createdView);
 			return createdView;
 		}
+		
+		const getView = function() {
+			let basicView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
+			basicViews.push(basicView);
+			return basicView;
+		}
+		
+		const getViewForCallNo = function(no){
+			return basicViews[no];
+		};
 		
 		const getViewModelForCallNo = function(no){
 			return viewModels[no];
@@ -47,6 +58,8 @@ var CORATEST = (function(coraTest) {
 		
 		return Object.freeze({
 			createViewForViewModel : createViewForViewModel,
+			getView : getView,
+			getViewForCallNo : getViewForCallNo,
 			getViewModelForCallNo : getViewModelForCallNo,
 			getCreatedViewForCallNo : getCreatedViewForCallNo,
 			updateViewForViewModel: updateViewForViewModel

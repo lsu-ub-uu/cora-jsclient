@@ -212,7 +212,6 @@ var CORA = (function(cora) {
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
 			let incomingLink = getRecordTypeFromIncomingLink(incomingLinkAsJson);
 			if(incomingLinksIsAPresentation(incomingLink.type)){
-//				let presentationModel = getViewModelForPresentationUsingId(incomingLink.id);	
 				let presentationModel = getBasicModelForPresentation(incomingLink.id);	
 				presentations.push(presentationModel);
 			}
@@ -233,23 +232,8 @@ var CORA = (function(cora) {
 			return incomingLink;
 		};
 		
-//		const getViewModelForPresentationUsingId = function(metadataId) {
-//					let cDataRecordGroup = getCMetadataById(metadataId);
-//					let currentModel = getBasicModelForPresentation(cDataRecordGroup);
-//
-//					if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-//						currentModel.children = collectChildReferencesForPresentations(cDataRecordGroup, "childReferences");
-//					}
-//					let metadataRecord = metadataProvider.getMetadataRecordById(metadataId);
-//					fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, currentModel);
-//					
-//					return currentModel;
-//				};
 		
-//		const getBasicModelForPresentation = function (cPresentation){
 		const getBasicModelForPresentation = function (id){
-//			let presentation = metadataProvider.getMetadataById(id);
-//			let cPresentation = CORA.coraData(presentation);
 			let cPresentation = getCMetadataById(id)
 			let presentationObject = {
 				id : id,
@@ -258,22 +242,6 @@ var CORA = (function(cora) {
 			};
 			return presentationObject
 		};
-		
-		//SPIKE
-//		const collectChildReferencesForPresentations = function(cDataRecordGroup, groupName) {
-//					let children = [];
-//					let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
-//					for (let childReference of childReferences.children) {
-//						let cChildReference = CORA.coraData(childReference);
-//						for (let refGroup of cChildReference.children) {
-//							let cRefGroup = CORA.coraData(refGroup);
-//							let refId = cRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
-//							let childrenMetadataInfo = getViewModelForMetadataUsingId(refId);
-//							children.push(childrenMetadataInfo);
-//						}
-//					}
-//					return children;
-//				};
 		
 		const handleErrorOnFetchPresentations = function (error) {
 			throw new Error("error fetching incoming links from server", error);

@@ -34,7 +34,7 @@ const start = function() {
 		enableCSS("alvinCSS");
 		useAlvinMigration();
 		enableIcon("alvin");
-		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, []);
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
 	} else if (hrefContains(href, "pre.diva-portal.org")) {
 		enableCSS("divaLilaCSS");
 		useDivaPre();

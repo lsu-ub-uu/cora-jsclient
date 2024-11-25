@@ -247,7 +247,7 @@ var CORA = (function(cora) {
 			throw new Error("error fetching incoming links from server", error);
 		};
 
-				const openDefiningRecordUsingEventAndId = function(event, id) {
+		const openDefiningRecordUsingEventAndId = function(event, id) {
 			let metadataRecord = metadataProvider.getMetadataRecordById(id); 
 			let readLink = metadataRecord.actionLinks.read;
 			openLinkedRecordForLink(event, readLink);

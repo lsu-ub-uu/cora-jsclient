@@ -27,6 +27,7 @@ QUnit.module("definitionViewer/definitionViewerTest.js", {
 		this.clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 
 		this.view = CORATEST.definitionViewerViewSpy()
+		this.textView = CORATEST.definitionTextViewSpy()
 
 		this.providers = {
 			metadataProvider: this.metadataProvider,
@@ -37,7 +38,8 @@ QUnit.module("definitionViewer/definitionViewerTest.js", {
 		};
 
 		this.dependencies = {
-			view: this.view
+			view: this.view,
+			textView: this.textView
 		}
 		this.spec = {
 			id: "minimalGroupId"
@@ -76,6 +78,17 @@ QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
 	this.definitionViewer.getView();
 
 	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
+});
+
+QUnit.test("testSetTextCopierMethod_setToCopyViewToClipboard", function(assert) {
+	assert.ok(this.view.getTextCopierMethods()[0]);
+	assert.strictEqual(this.view.getTextCopierMethods()[0], this.definitionViewer.copyViewToClipboard);
+	assert.notOk(this.view.getTextCopierMethods()[1]);
+});
+
+QUnit.test("testCopyViewToClipboard", function(assert) {
+	let viewAsText = this.definitionViewer.copyViewToClipboard();
+	assert.strictEqual(viewAsText, "text from definitionTextViewSpy");
 });
 
 QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {

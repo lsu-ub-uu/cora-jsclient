@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks =>{
+QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 	const test = QUnit.test;
 	const only = QUnit.only;
 	

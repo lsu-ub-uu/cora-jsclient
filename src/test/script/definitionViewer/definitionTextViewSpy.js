@@ -19,7 +19,7 @@
 
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.definitionViewerViewSpy = function() {
+	coraTest.definitionTextViewSpy = function() {
 
 		let viewModels = [];
 		let createdViews = [];
@@ -28,7 +28,7 @@ var CORATEST = (function(coraTest) {
 		function createViewForViewModel(viewModel) {
 			viewModels.push(viewModel);
 			
-			let createdView = CORA.gui.createDivWithClassName("fakeFromDefinitionViewerViewSpy");
+			let createdView = CORA.gui.createDivWithClassName("fakeFromdefinitionTextViewSpy");
 			createdViews.push(createdView);
 			return createdView;
 		}
@@ -52,6 +52,10 @@ var CORATEST = (function(coraTest) {
 		const getTextCopierMethods = function(method){
 			return textCopierMethods;
 		};
+
+		const createViewAsText = function(){
+			return "text from definitionTextViewSpy";
+		};
 		
 		return Object.freeze({
 			createViewForViewModel : createViewForViewModel,
@@ -59,7 +63,8 @@ var CORATEST = (function(coraTest) {
 			getCreatedViewForCallNo : getCreatedViewForCallNo,
 			updateViewForViewModel : updateViewForViewModel,
 			setTextCopierMethod : setTextCopierMethod,
-			getTextCopierMethods : getTextCopierMethods
+			getTextCopierMethods : getTextCopierMethods,
+			createViewAsText: createViewAsText
 		});
 	};
 	return coraTest;

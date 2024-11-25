@@ -47,7 +47,7 @@ var CORA = (function(cora) {
 
 			recordHandlerView = createRecordHandlerView();
 			managedGuiItem.addWorkPresentation(recordHandlerView.getView());
-			busy = CORA.busy();
+			busy = dependencies.busyFactory.factor();
 			managedGuiItem.addWorkPresentation(busy.getView());
 			createNewOrFetchDataFromServerForExistingRecord();
 		};
@@ -259,7 +259,12 @@ var CORA = (function(cora) {
 		};
 
 		const addListPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
-			let viewId = metadataForRecordType.listPresentationViewId;
+			let viewId;
+			if(spec.searchResultPresentationId){
+				viewId = spec.searchResultPresentationId;
+			}else{
+				viewId = metadataForRecordType.listPresentationViewId;
+			}
 			let presentation = currentRecordGui.getPresentationHolder(viewId, metadataIdUsedInData)
 				.getView();
 			managedGuiItem.addListPresentation(presentation);
@@ -310,7 +315,6 @@ var CORA = (function(cora) {
 		};
 
 		const resetViewsAndProcessFetchedRecord2 = function(answer) {
-			busy.hideWithEffect();
 			recordHandlerView.clearViews();
 			initComplete = false;
 			dataIsChanged = false;
@@ -405,7 +409,6 @@ var CORA = (function(cora) {
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			managedGuiItem.setReloadDataFromServer(reloadRecordFromServer);
 			busy.hideWithEffect();
-			managedGuiItem.showWorkView();
 		};
 
 		const createAndAddViewsForExisting = function(recordGuiIn, updateDefinitionId, definitionId) {

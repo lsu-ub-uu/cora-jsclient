@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteFactoryTest.js", {
+QUnit.module("recursiveDelete/recursiveDeleteFactoryTest.js", {
 	beforeEach : function() {
 		this.providers = {
 			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),

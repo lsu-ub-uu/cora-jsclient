@@ -796,6 +796,16 @@ h1, .h1TextStyle {
 	padding: 0.5rem;
 	box-shadow: 10px 5px 5px #b9b9b9;
 }
+
+.definitionViewer .legend.blink { 
+	animation: blink-animation 0.2s linear 1;
+} 
+@keyframes blink-animation { 
+	50% { 
+		background-color: #D3D3D3;
+	}
+}
+
 .definitionViewer .storage {
 	color: #2e7af0;
 	font-weight: bold;	

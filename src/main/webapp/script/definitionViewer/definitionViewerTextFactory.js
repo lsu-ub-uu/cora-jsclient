@@ -18,29 +18,21 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.definitionViewerFactory = function(providers, dependencies) {
+	cora.definitionViewerTextFactory = function(dependencies) {
 
-		let factor = function (spec) {
-			let dep = {
-				view : CORA.definitionViewerView(),
-				textView : CORA.definitionViewerText()
-			};
+		const factor = function (spec) {
+			let dep = {};
 
-			let definitionViewer = CORA.definitionViewer(providers, dep, spec);
+			let definitionViewer = CORA.definitionViewerText(dep, spec);
 			return definitionViewer;
 		}
-
-		const onlyForTestGetProviders = function() {
-			return providers;
-		};
-
+		
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};
 
 		return Object.freeze({
-			type : "definitionViewerFactory",
-			onlyForTestGetProviders: onlyForTestGetProviders,
+			type : "definitionViewerTextFactory",
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			factor : factor
 		});

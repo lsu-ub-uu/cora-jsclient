@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2019, 2020, 2021 Uppsala University Library
+ * Copyright 2017, 2019, 2020, 2021, 2024 Uppsala University Library
  * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
@@ -57,7 +57,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 				url: "http://epc.ub.uu.se/cora/rest/record/searchResult/coraTextSearch",
 				accept: "application/vnd.uub.recordList+json"
 			},
-			setFocus: function(){
+			setFocus: function() {
 				setFocusCalledNoOfTimes++;
 			}
 		};
@@ -65,6 +65,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		specTriggerWhenResultIsChoosen.triggerWhenResultIsChoosen = {
 			some: "thing"
 		};
+		specTriggerWhenResultIsChoosen.searchResultPresentationId = "somePresentationId";
 	};
 
 	const startResultHandler = function() {
@@ -104,11 +105,11 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 	test("testInitRecordGuiCorrectSpecToFactory", function(assert) {
 		let factoredGuiSpec = dependencies.recordGuiFactory.getSpec(0);
 		assert.strictEqual(factoredGuiSpec.metadataId, "someMetadataId");
-		
+
 		let emptyPermissions = {
-				write: [],
-				read: []
-			};
+			write: [],
+			read: []
+		};
 		assert.deepEqual(factoredGuiSpec.permissions, emptyPermissions);
 	});
 
@@ -189,7 +190,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		let addUpToMinNumberOfRepeatingType = messages[0].type;
 		assert.strictEqual(addUpToMinNumberOfRepeatingType, "addUpToMinNumberOfRepeating");
 	});
-		
+
 	test("testSearchSetsFocus", function(assert) {
 		assert.strictEqual(setFocusCalledNoOfTimes, 0);
 
@@ -197,7 +198,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 
 		assert.strictEqual(setFocusCalledNoOfTimes, 1);
 	});
-		
+
 	test("testSearchSetsFocusNotSetIfNoMethodInSpec", function(assert) {
 		spec.setFocus = undefined;
 		startResultHandler();
@@ -210,7 +211,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 
 	const assertNumberOfCallsToGetDataValidated = function(assert, numberOfCalls) {
 		assert.strictEqual(factoredGui.getDataValidated(), numberOfCalls);
-	}
+	};
 
 	test("testSearchThroughMessageSetValue", function(assert) {
 		let done = assert.async();
@@ -363,6 +364,7 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 		let resultHandlerSpec = dependencies.resultHandlerFactory.getSpec(0);
 		assert.strictEqual(resultHandlerSpec.triggerWhenResultIsChoosen,
 			specTriggerWhenResultIsChoosen.triggerWhenResultIsChoosen);
+		assert.strictEqual(resultHandlerSpec.searchResultPresentationId, "somePresentationId");
 	});
 
 	test("testHandleSearchResultClearsPreviousResultFromView", function(assert) {
@@ -373,9 +375,8 @@ QUnit.module("search/searchHandlerTest.js", hooks => {
 
 		assert.strictEqual(factoredView.getNoOfCallsToClearResultHolder(), 1);
 	});
-	
+
 	test("testInitialSearchTimeoutTime", function(assert) {
 		assert.strictEqual(searchHandler.getSearchTimeoutTime(), 800);
 	});
-	
 });

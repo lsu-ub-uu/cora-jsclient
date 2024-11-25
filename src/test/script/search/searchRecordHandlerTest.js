@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017 Uppsala University Library
+ * Copyright 2016, 2017, 2024 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -67,6 +67,7 @@ QUnit.test("testViewSpec", function(assert) {
 	assert.strictEqual(factoredSpec.headerText, "translated_coraTextSearchText");
 	assert.strictEqual(factoredSpec.openSearchMethod, searchRecordHandler.openSearch);
 });
+
 QUnit.test("testHeaderWhenNoText", function(assert) {
 	this.spec.searchRecord = CORATEST.searchRecordList.dataList.data[1].record;
 	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
@@ -92,4 +93,19 @@ QUnit.test("testOpenSearchFactorSearchHandler", function(assert) {
 	assert.strictEqual(factoredSpec.metadataId, "autocompleteSearchGroup");
 	assert.strictEqual(factoredSpec.presentationId, "autocompleteSearchPGroup");
 	assert.strictEqual(factoredSpec.searchLink, this.search.actionLinks.search);
+});
+
+QUnit.test("testOpenSearchFactorSearchHandler_withResultPresentation", function(assert) {
+	let searchRecord = CORATEST.searchProviderSpy().getSearchById("textSearchWithResultPresentation");
+	this.spec.searchRecord = searchRecord;
+	let searchRecordHandler = CORA.searchRecordHandler(this.dependencies, this.spec);
+	searchRecordHandler.openSearch();
+	let factoredSpec = this.dependencies.searchHandlerJSClientIntegratorFactory.getSpec(0);
+
+	assert.strictEqual(factoredSpec.headerText, "translated_textSearchText");
+	assert.strictEqual(factoredSpec.metadataId, "textSearchGroup");
+	assert.strictEqual(factoredSpec.presentationId, "textSearchPGroup");
+	assert.strictEqual(factoredSpec.searchResultPresentationId, "textSearchResultPGroup");
+	assert.strictEqual(factoredSpec.searchLink, searchRecord.actionLinks.search);
+				
 });

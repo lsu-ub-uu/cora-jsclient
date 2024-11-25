@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 			headerText : dependencies.textProvider.getTranslation("theClient_openedText")
 		};
 		
-		let managedGuiItemShowing = undefined;
+		let managedGuiItemShowing;
 		let managedGuiItemList = [];
 		let managedGuiItemOrderedList = [];
 		

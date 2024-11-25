@@ -19,34 +19,44 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.busySpy = function(spec) {
-		var spyView = document.createElement("span");
+		let spyView = document.createElement("span");
 		spyView.className = "busySpySpan";
-		var showIsCalledNoOfTimes = 0;
+		let showIsCalledNoOfTimes = 0;
+		let hideWithEffectCalledNoOfTimes = 0;
 
-		function getView() {
+		const getView = function(){
 			return spyView;
-		}
+		};
 
-		function show() {
+		const show = function(){
 			showIsCalledNoOfTimes++;
-		}
+		};
 
-		function hide() {
-		}
+		const hide = function(){
+		};
 
-		function hideWithEffect() {
-		}
-		function addBeforeShowFunction(func) {
-		}
-		function getShowIsCalledNoOfTimes(){
+		const hideWithEffect = function(){
+			hideWithEffectCalledNoOfTimes++;
+		};
+		
+		const getHideWithEffectCalledNoOfTimes = function(){
+			return hideWithEffectCalledNoOfTimes;
+		};
+
+		const addBeforeShowFunction = function(func){
+		};
+
+		const getShowIsCalledNoOfTimes = function(){
 			return showIsCalledNoOfTimes;
-		}
+		};
+
 		return Object.freeze({
-			"type": "busySpy",
+			type: "busySpy",
 			getView: getView,
 			show: show,
 			hide: hide,
 			hideWithEffect: hideWithEffect,
+			getHideWithEffectCalledNoOfTimes: getHideWithEffectCalledNoOfTimes,
 			addBeforeShowFunction: addBeforeShowFunction,
 			getShowIsCalledNoOfTimes: getShowIsCalledNoOfTimes
 		});

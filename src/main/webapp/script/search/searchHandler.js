@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2020, 2021 Uppsala University Library
+ * Copyright 2017, 2020, 2021, 2024 Uppsala University Library
  * Copyright 2017, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -59,7 +59,7 @@ var CORA = (function(cora) {
 
 		const subscribeToChangesInForm = function() {
 			let path = [];
-			let context = undefined;
+			let context;
 			let functionToCall = handleMsg;
 			recordGui.pubSub.subscribe("*", path, context, functionToCall);
 		};
@@ -84,7 +84,7 @@ var CORA = (function(cora) {
 		const createRecordGui = function(metadataId, permissionCalculator) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
-				permissions : createEmptyPermissions()
+				permissions: createEmptyPermissions()
 			};
 			return dependencies.recordGuiFactory.factor(recordGuiSpec);
 		};
@@ -115,9 +115,9 @@ var CORA = (function(cora) {
 				data: "",
 				path: []
 			});
-			if(spec.setFocus){
+			if (spec.setFocus) {
 				spec.setFocus();
-			}		
+			}
 		};
 
 		const sendSearchQueryToServer = function() {
@@ -139,7 +139,8 @@ var CORA = (function(cora) {
 			let resultHandlerSpec = {
 				dataList: JSON.parse(answerIn.responseText).dataList,
 				jsClient: dependencies.jsClient,
-				triggerWhenResultIsChoosen: spec.triggerWhenResultIsChoosen
+				triggerWhenResultIsChoosen: spec.triggerWhenResultIsChoosen,
+				searchResultPresentationId: spec.searchResultPresentationId
 			};
 			let resultHandler = dependencies.resultHandlerFactory.factor(resultHandlerSpec);
 			view.clearResultHolder();
@@ -161,7 +162,7 @@ var CORA = (function(cora) {
 		const setSearchTimeoutTime = function(time) {
 			searchTimeoutTime = time;
 		};
-		
+
 		const getSearchTimeoutTime = function(time) {
 			return searchTimeoutTime;
 		};

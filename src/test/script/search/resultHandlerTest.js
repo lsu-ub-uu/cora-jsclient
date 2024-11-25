@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2018 Uppsala University Library
+ * Copyright 2017, 2018, 2024 Uppsala University Library
  * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
@@ -32,7 +32,7 @@ QUnit.module("search/resultHandlerTest.js", hooks => {
 	hooks.afterEach(() => {
 		//no after
 	});
-	
+
 	const setupDependencies = function() {
 		dependencies = {
 			resultHandlerViewFactory: CORATEST.standardFactorySpy("resultHandlerViewSpy"),
@@ -43,10 +43,11 @@ QUnit.module("search/resultHandlerTest.js", hooks => {
 			indexListHandlerFactory: CORATEST.standardFactorySpy("indexListHandlerSpy")
 		};
 	};
-	
+
 	const setupSpec = function() {
 		spec = {
-			dataList: CORATEST.searchRecordList.dataList
+			dataList: CORATEST.searchRecordList.dataList,
+			searchResultPresentationId: "somePresentationId"
 		};
 	};
 
@@ -91,6 +92,7 @@ QUnit.module("search/resultHandlerTest.js", hooks => {
 		let recordHandlerSpec = dependencies.recordHandlerFactory.getSpec(resultNo);
 		assert.strictEqual(recordHandlerSpec.fetchLatestDataFromServer, "false");
 		assert.strictEqual(recordHandlerSpec.partOfList, "true");
+		assert.strictEqual(recordHandlerSpec.searchResultPresentationId, "somePresentationId");
 		assert.strictEqual(recordHandlerSpec.createNewRecord, "false");
 		assert.strictEqual(recordHandlerSpec.record, spec.dataList.data[resultNo].record);
 		assert.strictEqual(recordHandlerSpec.jsClient, dependencies.jsClient);

@@ -32,7 +32,7 @@ var CORA = (function(cora) {
 
 		let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
 		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		let	presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		let cPresentationGroup = CORA.coraData(presentationGroup);
 		let metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
@@ -57,9 +57,9 @@ var CORA = (function(cora) {
 			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
 			presentAs = getValueFromPresentationOrDefaultTo("presentAs", "link");
 			view = createBaseView();
-			if(!presentAsOnlyTranslatedText()){
+			if (!presentAsOnlyTranslatedText()) {
 				createValueView();
-			}			
+			}
 			possiblyCreateSearchHandler();
 			subscribeToSetValueIfLinkedPresentationExists();
 			subscribeToTextVarSetValue();
@@ -104,7 +104,7 @@ var CORA = (function(cora) {
 					}, {
 						text: `presentationId: ${presentationId}`,
 						onclickMethod: openPresentationIdRecord
-					} 
+					}
 					]
 				},
 				presentAs: presentAs,
@@ -118,34 +118,34 @@ var CORA = (function(cora) {
 			let cTextIdGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
 			return cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
-		
-		const possiblyAddLabelToViewSpec = function(viewSpec){
-			if(labelShouldBeShown()){
+
+		const possiblyAddLabelToViewSpec = function(viewSpec) {
+			if (labelShouldBeShown()) {
 				addLabelToViewSpec(viewSpec);
 			}
 		};
-		
-		const labelShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showLabel")){
+
+		const labelShouldBeShown = function() {
+			if (!cPresentation.containsChildWithNameInData("showLabel")) {
 				return true;
 			}
 			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
 		};
-		
-		const addLabelToViewSpec = function(viewSpec){
+
+		const addLabelToViewSpec = function(viewSpec) {
 			if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
 				let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
 				let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
 				viewSpec.label = specifiedLabelText;
-			}else{
+			} else {
 				viewSpec.label = text;
 			}
 		};
-		
+
 		const presentAsOnlyTranslatedText = function() {
-			return "onlyTranslatedText"==presentAs;
+			return "onlyTranslatedText" == presentAs;
 		};
-		
+
 		const createValueView = function() {
 			if (isInInputMode()) {
 				createAndAddInputs();
@@ -176,11 +176,11 @@ var CORA = (function(cora) {
 
 		const handleMsgWithData = function(payloadFromMsg) {
 			closeSearchIfThereIsOne();
-			if(presentAsOnlyTranslatedText()){
+			if (presentAsOnlyTranslatedText()) {
 				let cData = CORA.coraData(payloadFromMsg.data);
 				let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
 				addTranslatedTextNodeToView(linkedRecordId);
-			}else{
+			} else {
 				createLinkedRecordPresentationView(payloadFromMsg);
 				showOrHideOpenLinkedRecordButton(payloadFromMsg);
 			}
@@ -331,9 +331,9 @@ var CORA = (function(cora) {
 			let cPresentationChild = CORA.coraData(metadataProvider
 				.getMetadataById(presentationIdToFactor));
 			let presentationSpec = {
-				"path": childParentPath,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPresentationChild
+				path: childParentPath,
+				metadataIdUsedInData: metadataIdUsedInData,
+				cPresentation: cPresentationChild
 			};
 			let pVar = dependencies.presentationFactory.factor(presentationSpec);
 			childViewNew.appendChild(pVar.getView());
@@ -359,7 +359,7 @@ var CORA = (function(cora) {
 
 		const possiblyCreateSearchHandler = function() {
 			if (pRecordLinkHasLinkedSearch()) {
-				possiblyCreateSearchHandlerForPRecordLinkWithLinkedSearch();
+				createSearchHandlerForPRecordLinkWithLinkedSearch();
 			}
 		};
 
@@ -367,7 +367,7 @@ var CORA = (function(cora) {
 			return cPresentation.containsChildWithNameInData("search");
 		};
 
-		const possiblyCreateSearchHandlerForPRecordLinkWithLinkedSearch = function() {
+		const createSearchHandlerForPRecordLinkWithLinkedSearch = function() {
 			let searchRecord = getSearchFromSearchProvider();
 			if (userCanPerformSearch(searchRecord)) {
 				createSearchHandler(searchRecord);
@@ -386,22 +386,27 @@ var CORA = (function(cora) {
 
 		const createSearchHandler = function(searchRecord) {
 			let cSearch = CORA.coraData(searchRecord.data);
-			let metadataLink = cSearch.getFirstChildByNameInData("metadataId");
-			let searchMetadataId = getRecordIdFromLink(metadataLink);
-			let presentationLink = cSearch.getFirstChildByNameInData("presentationId");
-			let searchPresentationId = getRecordIdFromLink(presentationLink);
-
 			let searchSearchLink = searchRecord.actionLinks.search;
 
 			let searchHandlerSpec = {
-				"metadataId": searchMetadataId,
-				"presentationId": searchPresentationId,
-				"searchLink": searchSearchLink,
-				"triggerWhenResultIsChoosen": setResultFromSearch
+				metadataId: getLinkValueFromSearchRecord(cSearch, "metadataId"),
+				presentationId: getLinkValueFromSearchRecord(cSearch, "presentationId"),
+				searchResultPresentationId: getLinkValueFromSearchRecord(cSearch, "searchResultPresentation"),
+				searchLink: searchSearchLink,
+				triggerWhenResultIsChoosen: setResultFromSearch
 			};
+
 			let searchHandler = dependencies.globalFactories.searchHandlerFactory
 				.factor(searchHandlerSpec);
 			view.addSearchHandlerView(searchHandler.getView());
+		};
+
+		const getLinkValueFromSearchRecord = function(cSearchRecordData, id) {
+			if (!cSearchRecordData.containsChildWithNameInData(id)) {
+				return undefined;
+			}
+			let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+			return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getRecordIdFromLink = function(metadataLink) {
@@ -422,27 +427,27 @@ var CORA = (function(cora) {
 			view.removeLinkedPresentation();
 			view.hideOpenLinkedRecordButton();
 			view.hideClearLinkedRecordIdButton();
-			if(presentAsOnlyTranslatedText()){
+			if (presentAsOnlyTranslatedText()) {
 				addTranslatedTextNodeToView(dataFromMsg.data);
 			}
 		};
-		
-		const addTranslatedTextNodeToView = function(textId){
+
+		const addTranslatedTextNodeToView = function(textId) {
 			let translatedText = textProvider.getTranslation(textId);
 			let textNodeWithTranslatedText = document.createTextNode(translatedText);
 			view.addLinkedPresentation(textNodeWithTranslatedText);
 		};
-		
+
 		const subscribeToTextVarSetValue = function() {
 			dependencies.pubSub.subscribe("setValue",
 				calculateNewPath("linkedRecordIdTextVar"), undefined,
 				hideOrShowOutputPresentation);
 		};
-		
+
 		const hideOrShowOutputPresentation = function(dataFromMsg) {
 			let valueForView = dataFromMsg.data;
 			if (mode === "output") {
-				if(valueForView !== ""){
+				if (valueForView !== "") {
 					view.show();
 				} else {
 					view.hide();
@@ -470,8 +475,8 @@ var CORA = (function(cora) {
 
 		const openLinkedRecord = function(openInfoFromView) {
 			let openInfo = {
-				"readLink": readLink,
-				"loadInBackground": openInfoFromView.loadInBackground
+				readLink: readLink,
+				loadInBackground: openInfoFromView.loadInBackground
 			};
 			dependencies.clientInstanceProvider.getJsClient()
 				.openRecordUsingReadLink(openInfo);
@@ -507,29 +512,29 @@ var CORA = (function(cora) {
 
 		const publishNewValueForRecordType = function(recordType) {
 			let data = {
-				"data": recordType,
-				"path": recordTypePath
+				data: recordType,
+				path: recordTypePath
 			};
 			dependencies.pubSub.publish("setValue", data);
 		};
 
 		const publishNewValueForLinkedData = function(recordId, recordType, openInfo) {
 			let linkedData = {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": recordType
+				children: [{
+					name: "linkedRecordType",
+					value: recordType
 				}, {
-					"name": "linkedRecordId",
-					"value": recordId
+					name: "linkedRecordId",
+					value: recordId
 				}],
-				"actionLinks": {
-					"read": openInfo.record.actionLinks.read
+				actionLinks: {
+					read: openInfo.record.actionLinks.read
 				},
-				"name": nameInData
+				name: nameInData
 			};
 			let message = {
-				"data": linkedData,
-				"path": path
+				data: linkedData,
+				path: path
 			};
 			dependencies.pubSub.publish("linkedData", message);
 		};
@@ -542,7 +547,7 @@ var CORA = (function(cora) {
 		const showIdPresentations = function() {
 			view.showChildren();
 		};
-		
+
 		const openLinkedRecordForLink = function(event, link) {
 			let loadInBackground = "false";
 			if (event.ctrlKey) {

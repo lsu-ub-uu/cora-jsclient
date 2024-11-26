@@ -19,31 +19,31 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
+QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	const test = QUnit.test;
 	const only = QUnit.only;
-	
+
 	let metadataProvider;
 	let clientInstanceProvider;
-	let ajaxCallFactorySpy ;
-	let recursiveDeleteView ;
-	
+	let ajaxCallFactorySpy;
+	let recursiveDeleteView;
+
 	let dependencies;
 	let providers;
 	let spec;
 	let recursiveDelete;
-	
+
 	const waitingTimeInMs = 100;
-	
-	hooks.beforeEach(()  => {
-		metadataProvider =CORATEST.metadataProviderForDefinitionViewerSpy();
+
+	hooks.beforeEach(() => {
+		metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
 		clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		recursiveDeleteView = CORATEST.recursiveDeleteViewSpy();
 
 		providers = {
 			metadataProvider: metadataProvider,
-			textProvider:  CORATEST.textProviderSpy(),
+			textProvider: CORATEST.textProviderSpy(),
 			searchProvider: CORATEST.searchProviderSpy(),
 			recordTypeProvider: CORATEST.recordTypeProviderStub(),
 			clientInstanceProvider: clientInstanceProvider
@@ -59,7 +59,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 			nameInData: "minimalGroupName"
 		};
 		metadataProvider.addMetadataByCompactDefinition(toAdd);
-		
+
 		createIncomingLinksResponse();
 	});
 	hooks.afterEach(() => {
@@ -72,341 +72,415 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks =>{
 			view: recursiveDeleteView
 		};
 	};
-	
-	const createIncomingLinksResponse = function(){
+
+	const createIncomingLinksResponse = function() {
 		let responseFromMetadataRecord =
-			{
-				actionLinks: {
-					read_incoming_links: {
-						requestMethod: "GET",
-						rel: "read_incoming_links",
-						url: "http://some/incomingLinks",
-						accept: "application/vnd.uub.recordList+json"
-					}
+		{
+			actionLinks: {
+				read_incoming_links: {
+					requestMethod: "GET",
+					rel: "read_incoming_links",
+					url: "http://some/incomingLinks",
+					accept: "application/vnd.uub.recordList+json"
 				}
-			};	
+			}
+		};
 		metadataProvider.addMetadataRecordById("minimalGroupId", responseFromMetadataRecord);
 		metadataProvider.addMetadataRecordById("textVarId", responseFromMetadataRecord);
 		metadataProvider.addMetadataRecordById("attributeCollectionVarId", responseFromMetadataRecord);
 		metadataProvider.addMetadataRecordById("itemCollectionId", responseFromMetadataRecord);
-		metadataProvider.addMetadataRecordById("collectionItemId", responseFromMetadataRecord);	
+		metadataProvider.addMetadataRecordById("collectionItemId", responseFromMetadataRecord);
 	};
 
-test("testInit", function(assert) {
-	assert.strictEqual(recursiveDelete.type, "recursiveDelete");
-});
+	test("testInit", function(assert) {
+		assert.strictEqual(recursiveDelete.type, "recursiveDelete");
+	});
 
-test("testOnlyForTestGetProviders", function(assert) {
-	assert.strictEqual(recursiveDelete.onlyForTestGetProviders(), providers);
-});
+	test("testOnlyForTestGetProviders", function(assert) {
+		assert.strictEqual(recursiveDelete.onlyForTestGetProviders(), providers);
+	});
 
-test("testOnlyForTestGetDependencies", function(assert) {
-	assert.strictEqual(recursiveDelete.onlyForTestGetDependencies(), dependencies);
-});
+	test("testOnlyForTestGetDependencies", function(assert) {
+		assert.strictEqual(recursiveDelete.onlyForTestGetDependencies(), dependencies);
+	});
 
-test("testOnlyForTestGetSpec", function(assert) {
-	assert.strictEqual(recursiveDelete.onlyForTestGetSpec(), spec);
-});
+	test("testOnlyForTestGetSpec", function(assert) {
+		assert.strictEqual(recursiveDelete.onlyForTestGetSpec(), spec);
+	});
 
-test("testCallToGetViewStartsFetchingOfDataButCreatesAMinimalHtmlElement", function(assert) {
-	let minimalView = recursiveDelete.getView();
+	test("testCallToGetViewStartsFetchingOfDataButCreatesAMinimalHtmlElement", function(assert) {
+		let minimalView = recursiveDelete.getView();
 
-	assert.true(recursiveDeleteView.getViewForCallNo(0) != undefined);
-	assert.deepEqual(recursiveDeleteView.getViewForCallNo(0), minimalView);
-});
-test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
-	recursiveDelete.getView();
+		assert.true(recursiveDeleteView.getViewForCallNo(0) != undefined);
+		assert.deepEqual(recursiveDeleteView.getViewForCallNo(0), minimalView);
+	});
+	test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
+		recursiveDelete.getView();
 
-	assert.strictEqual(metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
-});
+		assert.strictEqual(metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
+	});
 
-test("testViewModel", function(assert) {
-	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+	test("testViewModel", function(assert) {
+		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 		let expected = {
-		id: "minimalGroupId",
-		recordType: "someRecordType",
-		type: "group",
-		nameInData: "minimalGroupName",
-		texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-	};
-	assert.deepEqual(viewModel, expected);
-});
-
-test("testReloadForMetadataChanges", function(assert) {
-	recursiveDelete.reloadForMetadataChanges();
-
-	let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
-	let expected = {
-		id: "minimalGroupId",
-		recordType: "someRecordType",
-		type: "group",
-		nameInData: "minimalGroupName",
-		texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-	};
-	assert.deepEqual(viewModel, expected);
-});
-
-test("testOpenDefiningRecordUsingEventAndId", function(assert) {
-	let event = document.createEvent('Event');
-	event.ctrlKey = true;
-	let id = "someMetadataId";
-	let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
-	metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
-
-	recursiveDelete.openDefiningRecordUsingEventAndId(event, id);
-
-	let jsClient = clientInstanceProvider.getJsClient();
-	let openInfo = jsClient.getOpenInfo(0);
-	let expected = {
-		readLink: {
-			fakeLinkFetchedById: "someMetadataId"
-		},
-		loadInBackground: "true"
-	};
-	assert.deepEqual(openInfo, expected);
-});
-
-test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
-	let event = document.createEvent('Event');
-	event.ctrlKey = false;
-	let id = "someMetadataId";
-	let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
-	metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
-
-	recursiveDelete.openDefiningRecordUsingEventAndId(event, id);
-
-	let jsClient = clientInstanceProvider.getJsClient();
-	let openInfo = jsClient.getOpenInfo(0);
-	let expected = {
-		readLink: {
-			fakeLinkFetchedById: "someMetadataId"
-		},
-		loadInBackground: "false"
-	};
-	assert.deepEqual(openInfo, expected);
-});
-
-test("testViewModelOneChild", function(assert) {
-	let toAdd = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId" }]
-	};
-	metadataProvider.addMetadataByCompactDefinition(toAdd);
-	let toAddTextVar = {
-		id: "textVarId",
-		type: "textVariable",
-		nameInData: "textVarName"
-	};
-	metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
-
-	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
-	
-	let expected = {
-		id: "minimalGroupId",
-		recordType: "someRecordType", 
-		type: "group",
-		nameInData: "minimalGroupName",
-		texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
-		children: []
-	};
-	let childReference = {
-		id: "textVarId",
-		recordType: "someRecordType", 
-		type: "textVariable",
-		nameInData: "textVarName",
-		texts: [{ id: "textVarIdText", recordType: "text" }, { id: "textVarIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
-	};
-	expected.children.push(childReference);
-
-	assert.deepEqual(viewModel, expected);
-});
-
-test("testViewModelAttributes", function(assert) {
-	let toAdd = {
-		id: "minimalGroupId",
-		type: "group",
-		nameInData: "minimalGroupName",
-		attributes: ["attributeCollectionVarId"],
-	};
-	metadataProvider.addMetadataByCompactDefinition(toAdd);
-
-	let toAddCollectionVar = {
-		id: "attributeCollectionVarId",
-		type: "collectionVariable",
-		nameInData: "collectionVarName",
-		finalValue: "someFinalValue",
-		itemCollectionId: "itemCollectionId"
-	};
-	metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
-
-	let addToItemCollection = {
-		id: "itemCollectionId",
-		type: "itemCollection",
-		nameInData: "itemCollectionName",
-		refIds: ["collectionItemId"]
-	};
-	metadataProvider.addMetadataByCompactDefinition(addToItemCollection);
-
-	let addToCollectionItem = {
-		id: "collectionItemId",
-		type: "collectionItem",
-		nameInData: "collectionItemName"
-	};
-	metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
-
-	let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
-
-	let expected = {
-		id: "minimalGroupId",
-		type: "group",
-		recordType: "someRecordType", 
-		nameInData: "minimalGroupName",
-		texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
-		attributes: []
-	};
-
-	let attribute = {
-		id: "attributeCollectionVarId",
-		recordType: "someRecordType", 
-		type: "collectionVariable",
-		nameInData: "collectionVarName",
-		texts: [{ id: "attributeCollectionVarIdText", recordType: "text" }, { id: "attributeCollectionVarIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
-		refCollection: []
-	};
-	expected.attributes.push(attribute);
-
-	let refCollection = {
-		id: "itemCollectionId",
-		recordType: "someRecordType", 
-		type: "itemCollection",
-		nameInData: "itemCollectionName",
-		texts: [{ id: "itemCollectionIdText", recordType: "text" }, { id: "itemCollectionIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
-		collectionItems: []
-	};
-	attribute.refCollection.push(refCollection);
-
-	let collectionItem = {
-		id: "collectionItemId",
-		recordType: "someRecordType", 
-		type: "collectionItem",
-		nameInData: "collectionItemName",
-		texts: [{ id: "collectionItemIdText", recordType: "text" }, { id: "collectionItemIdDefText", recordType: "text" }],
-		methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-	};
-	refCollection.collectionItems.push(collectionItem);
-
-	assert.deepEqual(viewModel, expected);
-});
-
-test("testCollectPresentationsCallsIncommingLinks", function(assert) {
-	let expectedModel = {
 			id: "minimalGroupId",
-			recordType: "someRecordType", 
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+		assert.deepEqual(viewModel, expected);
+	});
+
+	test("testReloadForMetadataChanges", function(assert) {
+		recursiveDelete.reloadForMetadataChanges();
+
+		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+		let expected = {
+			id: "minimalGroupId",
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+		assert.deepEqual(viewModel, expected);
+	});
+
+	test("testOpenDefiningRecordUsingEventAndId", function(assert) {
+		let event = document.createEvent('Event');
+		event.ctrlKey = true;
+		let id = "someMetadataId";
+		let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
+		metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
+
+		recursiveDelete.openDefiningRecordUsingEventAndId(event, id);
+
+		let jsClient = clientInstanceProvider.getJsClient();
+		let openInfo = jsClient.getOpenInfo(0);
+		let expected = {
+			readLink: {
+				fakeLinkFetchedById: "someMetadataId"
+			},
+			loadInBackground: "true"
+		};
+		assert.deepEqual(openInfo, expected);
+	});
+
+	test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
+		let event = document.createEvent('Event');
+		event.ctrlKey = false;
+		let id = "someMetadataId";
+		let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
+		metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
+
+		recursiveDelete.openDefiningRecordUsingEventAndId(event, id);
+
+		let jsClient = clientInstanceProvider.getJsClient();
+		let openInfo = jsClient.getOpenInfo(0);
+		let expected = {
+			readLink: {
+				fakeLinkFetchedById: "someMetadataId"
+			},
+			loadInBackground: "false"
+		};
+		assert.deepEqual(openInfo, expected);
+	});
+
+	test("testViewModelOneChild", function(assert) {
+		let toAdd = {
+			id: "minimalGroupId",
+			type: "group",
+			nameInData: "minimalGroupName",
+			children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId" }]
+		};
+		metadataProvider.addMetadataByCompactDefinition(toAdd);
+		let toAddTextVar = {
+			id: "textVarId",
+			type: "textVariable",
+			nameInData: "textVarName"
+		};
+		metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
+
+		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+
+		let expected = {
+			id: "minimalGroupId",
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
+			children: []
+		};
+		let childReference = {
+			id: "textVarId",
+			recordType: "someRecordType",
+			type: "textVariable",
+			nameInData: "textVarName",
+			texts: [{ id: "textVarIdText", recordType: "text" }, { id: "textVarIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
+		};
+		expected.children.push(childReference);
+
+		assert.deepEqual(viewModel, expected);
+	});
+
+	test("testViewModelAttributes", function(assert) {
+		let toAdd = {
+			id: "minimalGroupId",
+			type: "group",
+			nameInData: "minimalGroupName",
+			attributes: ["attributeCollectionVarId"],
+		};
+		metadataProvider.addMetadataByCompactDefinition(toAdd);
+
+		let toAddCollectionVar = {
+			id: "attributeCollectionVarId",
+			type: "collectionVariable",
+			nameInData: "collectionVarName",
+			finalValue: "someFinalValue",
+			itemCollectionId: "itemCollectionId"
+		};
+		metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
+
+		let addToItemCollection = {
+			id: "itemCollectionId",
+			type: "itemCollection",
+			nameInData: "itemCollectionName",
+			refIds: ["collectionItemId"]
+		};
+		metadataProvider.addMetadataByCompactDefinition(addToItemCollection);
+
+		let addToCollectionItem = {
+			id: "collectionItemId",
+			type: "collectionItem",
+			nameInData: "collectionItemName"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
+
+		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+
+		let expected = {
+			id: "minimalGroupId",
+			type: "group",
+			recordType: "someRecordType",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
+			attributes: []
+		};
+
+		let attribute = {
+			id: "attributeCollectionVarId",
+			recordType: "someRecordType",
+			type: "collectionVariable",
+			nameInData: "collectionVarName",
+			texts: [{ id: "attributeCollectionVarIdText", recordType: "text" }, { id: "attributeCollectionVarIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
+			refCollection: []
+		};
+		expected.attributes.push(attribute);
+
+		let refCollection = {
+			id: "itemCollectionId",
+			recordType: "someRecordType",
+			type: "itemCollection",
+			nameInData: "itemCollectionName",
+			texts: [{ id: "itemCollectionIdText", recordType: "text" }, { id: "itemCollectionIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
+			collectionItems: []
+		};
+		attribute.refCollection.push(refCollection);
+
+		let collectionItem = {
+			id: "collectionItemId",
+			recordType: "someRecordType",
+			type: "collectionItem",
+			nameInData: "collectionItemName",
+			texts: [{ id: "collectionItemIdText", recordType: "text" }, { id: "collectionItemIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+		refCollection.collectionItems.push(collectionItem);
+
+		assert.deepEqual(viewModel, expected);
+	});
+
+	test("testCollectPresentationsCallsIncommingLinks", function(assert) {
+		let expectedModel = {
+			id: "minimalGroupId",
+			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
 			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 
-	recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+		recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
-	let ajaxCallSpy = ajaxCallFactorySpy.getFactored(0);
-	let ajaxCallSpec = ajaxCallSpy.getSpec();
-	assert.strictEqual(ajaxCallSpec.url, "http://some/incomingLinks");
-	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
-	assert.strictEqual(ajaxCallSpec.contentType, undefined);
-	assert.strictEqual(ajaxCallSpec.data, undefined);
-	assert.strictEqual(ajaxCallSpec.loadMethod, recursiveDelete.collectPresentations);
-	assert.strictEqual(ajaxCallSpec.errorMethod, recursiveDelete.handleErrorOnFetchPresentations);
-	assert.deepEqual(ajaxCallSpec.model, expectedModel);
-});
+		let ajaxCallSpy = ajaxCallFactorySpy.getFactored(0);
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, "http://some/incomingLinks");
+		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.contentType, undefined);
+		assert.strictEqual(ajaxCallSpec.data, undefined);
+		assert.strictEqual(ajaxCallSpec.loadMethod, recursiveDelete.collectPresentations);
+		assert.strictEqual(ajaxCallSpec.errorMethod, recursiveDelete.handleErrorOnFetchPresentations);
+		assert.deepEqual(ajaxCallSpec.model, expectedModel);
+	});
 
-test("testHandleCallErrorDoesNothing", function(assert) {
-	try {
-		recursiveDelete.handleErrorOnFetchPresentations();
-	} catch (error) {
-		assert.strictEqual(error.message, "error fetching incoming links from server");
-	}
-});
+	test("testHandleCallErrorDoesNothing", function(assert) {
+		try {
+			recursiveDelete.handleErrorOnFetchPresentations();
+		} catch (error) {
+			assert.strictEqual(error.message, "error fetching incoming links from server");
+		}
+	});
 
-test("testFetchPresentationModel", function(assert) {
-	let addPresentation1 = {
+	test("testFetchPresentationModel", function(assert) {
+		let addPresentation1 = {
 			id: "recordTypeFormPGroup",
 			type: "group"
 		};
 		metadataProvider.addMetadataByCompactDefinition(addPresentation1);
-	let addPresentation2= {
+		let addPresentation2 = {
 			id: "recordTypeFormNewPGroup",
 			type: "group"
 		};
 		metadataProvider.addMetadataByCompactDefinition(addPresentation2);
-	let addPresentation3 = {
+		let addPresentation3 = {
 			id: "recordTypeViewPGroup",
 			type: "group"
 		};
 		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
-		
-	let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
-	let currentModel = {
-				id: "minimalGroupId",
-				recordType: "someRecordType", 
-				type: "group", 
-				nameInData: "minimalGroupName",
-				texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-				methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-			};
-	let answer = {
-		spec: { model: currentModel },
-		responseText: incomingLinksAnswer
+
+		let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
+		let currentModel = {
+			id: "minimalGroupId",
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+		let answer = {
+			spec: { model: currentModel },
+			responseText: incomingLinksAnswer
+		};
+
+		recursiveDelete.collectPresentations(answer);
+
+		let expectedPresentation = [
+			{
+				id: "recordTypeFormPGroup",
+				recordType: "someRecordType",
+				type: "group"
+			},
+			{
+				id: "recordTypeFormNewPGroup",
+				recordType: "someRecordType",
+				type: "group"
+			},
+			{
+				id: "recordTypeViewPGroup",
+				recordType: "someRecordType",
+				type: "group"
+			}
+		];
+
+		assert.strictEqual(answer.spec.model.presentations.length, 3);
+		assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
+
+		waitAndAssertCreateViewIsCalled();
+	});
+
+
+	const sleep = function() {
+		return new Promise(resolve => setTimeout(resolve, waitingTimeInMs));
 	};
-	
-	recursiveDelete.collectPresentations(answer);
-	
-	let expectedPresentation= 		[
-	  {
-	    id: "recordTypeFormPGroup",
-	    recordType: "someRecordType",
-		type: "group"
-	  },
-	  {
-	    id: "recordTypeFormNewPGroup",
-	    recordType: "someRecordType",
-		type: "group"
-	  },
-	  {
-	    id: "recordTypeViewPGroup",
-	    recordType: "someRecordType",
-		type: "group"
-	  }
-	];
-	
-	assert.strictEqual(answer.spec.model.presentations.length, 3);
-	assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
-		
-	waitAndAssertCreateViewIsCalled();
-});
 
+	const waitAndAssertCreateViewIsCalled = async function() {
+		await sleep();
+		assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
+		assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), "generatedView");
+	};
 
-const sleep = function() {
-    return new Promise(resolve => setTimeout(resolve, waitingTimeInMs));
-};
+	test("testPresentationWithThreeChilds_Presentation_Text_GuiElement", function(assert) {
+		metadataProvider.addMetadataById("recordTypeFormPGroup", CORATEST.recursiveDeletePresentationWithChildren);
+		let childPresentation1 = {
+			id: "childPresentation",
+			type: "pVar"
+		};
+		metadataProvider.addMetadataByCompactDefinition(childPresentation1);
+		metadataProvider.addMetadataById("textsText", CORATEST.recursiveDeleteTextChildFromPresentation);
+		metadataProvider.addMetadataById("testGuiElement", CORATEST.recursiveDeleteGuiElementChildFromPresentation);
 
-const waitAndAssertCreateViewIsCalled = async function() {
-    await sleep();
-	assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
-	assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), "generatedView");
-};
+		let addPresentation2 = {
+			id: "recordTypeFormNewPGroup",
+			type: "group"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addPresentation2);
+		let addPresentation3 = {
+			id: "recordTypeViewPGroup",
+			type: "group"
+		};
+		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
 
+		let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
+		let currentModel = {
+			id: "minimalGroupId",
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+		let answer = {
+			spec: { model: currentModel },
+			responseText: incomingLinksAnswer
+		};
 
+		recursiveDelete.collectPresentations(answer);
+
+		let expectedPresentation = [
+			{
+				id: "recordTypeFormPGroup",
+				recordType: "presentation",
+				type: "container",
+				presentations: [{
+					id: "childPresentation",
+					recordType: "someRecordType",
+					type: "pVar"
+				}],
+				texts: [{
+					id: "textsText",
+					recordType: "text",
+				}],
+				guiElements: [{
+					id: "testGuiElement",
+					recordType: "guiElement",
+					type: "guiElementLink",
+					text: { id: "minimalGroupIdText", recordType: "text" }
+				}]
+			},
+			{
+				id: "recordTypeFormNewPGroup",
+				recordType: "someRecordType",
+				type: "group"
+			},
+			{
+				id: "recordTypeViewPGroup",
+				recordType: "someRecordType",
+				type: "group"
+			}
+		];
+
+		assert.strictEqual(answer.spec.model.presentations.length, 3);
+		assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
+
+		waitAndAssertCreateViewIsCalled();
+	});
 });

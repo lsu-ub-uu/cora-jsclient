@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 		const getView = function() {
 			return view;
 		};
-		
+
 		const createViewForViewModel = function(viewModel) {
 			addPartsToView(viewModel, view);
 			return view;
@@ -95,11 +95,11 @@ var CORA = (function(cora) {
 				oneLevel.append(createLabel(label));
 			}
 			oneLevel.append(createId(data));
-			if(data.nameInData){
-			oneLevel.append(createNameInData(data));
+			if (data.nameInData) {
+				oneLevel.append(createNameInData(data));
 			}
-			if(data.type){
-			oneLevel.append(createType(data));
+			if (data.type) {
+				oneLevel.append(createType(data));
 			}
 			oneLevel.append(createDataDivider(data));
 			oneLevel.appendChild(createChildren(data));
@@ -145,7 +145,8 @@ var CORA = (function(cora) {
 		let createChildren = function(child) {
 			//TODO: change to ensure create ul
 			let ul = document.createElement("ul");
-			//Start spike
+//			let children;	
+			
 			if (child.texts) {
 				createAndAppendGroup(ul, child.texts, "text");
 			}
@@ -162,19 +163,21 @@ var CORA = (function(cora) {
 			if (child.presentations) {
 				createAndAppendGroup(ul, child.presentations, "presentation");
 			}
+			if (child.guiElements) {
+				createAndAppendGroup(ul, child.guiElements, "guiElement");
+			}
 			//End spike
 			if (child.children) {
 				createAndAppendGroup(ul, child.children);
 			}
 			return ul;
 		};
-
-//		const createText = function(text) {
-//			let li = createElementWithTypeClassText("li");
-//			li.append(createLabel(text.type));
-//			li.append(createId(text));
-//			li.append(createDataDivider(text));
-//			return li;
+		
+//		let ensureUlIsCreated = function(children) {
+//			if (children.ul === undefined){
+//				children.ul = document.createElement("ul");
+//			}
+//
 //		};
 
 		let createAndAppendGroup = function(ul, listOfChilds, label) {

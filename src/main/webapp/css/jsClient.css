@@ -913,6 +913,17 @@ h1, .h1TextStyle {
 	font-weight: bold;	
 }
 
+/* /* Animation for Hover Effects */ */
+/* .recursiveDelete li { */
+/* 	transform: scale (1); */
+/*     transition: all 0.7s ease-out; */
+/*     cursor: pointer; */
+/* } */
+
+/* .recursiveDelete li:hover { */
+/*     padding-left: 1rem; */
+/* } */
+
 
 
 

@@ -31,6 +31,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
+//			console.log("viewModel",JSON.stringify(viewModel));
 			addPartsToView(viewModel, view);
 			return view;
 		};
@@ -53,6 +54,9 @@ var CORA = (function(cora) {
 
 			let legend = createLegend();
 			view.appendChild(legend);
+			
+			let confirmationMessage = createConfirmationMessage();
+			view.appendChild(confirmationMessage);
 		};
 
 		const createHeader = function(id) {
@@ -63,6 +67,12 @@ var CORA = (function(cora) {
 			let legend = createElementWithTypeClassText("div", "legend", "Legend");
 			legend.append(createPresentationLegendItem());
 			return legend;
+		};
+		
+		const createConfirmationMessage = function() {
+			let confirmationMessage = createElementWithTypeClassText("div", "confirmationMessage", "Attention");
+//			legend.append(createPresentationLegendItem());
+			return confirmationMessage;
 		};
 
 		let createPresentationLegendItem = function() {
@@ -159,14 +169,15 @@ var CORA = (function(cora) {
 			if (child.collectionItems) {
 				createAndAppendGroup(ul, child.collectionItems, "collectionItems");
 			}
-			//Start spike
 			if (child.presentations) {
 				createAndAppendGroup(ul, child.presentations, "presentation");
 			}
 			if (child.guiElements) {
 				createAndAppendGroup(ul, child.guiElements, "guiElement");
 			}
-			//End spike
+			if (child.elementText) {
+				createAndAppendGroup(ul, child.elementText, "elementText");
+			}
 			if (child.children) {
 				createAndAppendGroup(ul, child.children);
 			}
@@ -180,7 +191,7 @@ var CORA = (function(cora) {
 //
 //		};
 
-		let createAndAppendGroup = function(ul, listOfChilds, label) {
+		const createAndAppendGroup = function(ul, listOfChilds, label) {
 			listOfChilds.forEach(function(mChild) {
 				let nextLevel = createViewForOneLevel(mChild, label);
 				ul.appendChild(nextLevel);

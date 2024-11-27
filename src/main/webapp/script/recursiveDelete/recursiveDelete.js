@@ -247,12 +247,14 @@ var CORA = (function(cora) {
 				};
 			}
 			if (recordtype === "guiElement") {
-				return {
+				let guiElement = {
 					id: getId(cPresentation),
 					recordType: recordtype,
 					type: getType(cPresentation),
-					text: getText(cPresentation, "elementText")
+					elementText: []
 				};
+				guiElement.elementText.push(getText(cPresentation, "elementText"));
+				return guiElement;
 			}
 			return {
 				id: getId(cPresentation),

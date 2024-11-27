@@ -463,7 +463,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 					id: "testGuiElement",
 					recordType: "guiElement",
 					type: "guiElementLink",
-					text: { id: "minimalGroupIdText", recordType: "text" }
+					elementText: [{ id: "minimalGroupIdText", recordType: "text" }]
 				}]
 			},
 			{

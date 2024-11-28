@@ -124,12 +124,15 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 		let expected = {
+			elementId: 1,
 			id: "minimalGroupId",
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, 
+				{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+
 		};
 		assert.deepEqual(viewModel, expected);
 	});
@@ -139,11 +142,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
 		let expected = {
+			elementId: 1,
 			id: "minimalGroupId",
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 		assert.deepEqual(viewModel, expected);
@@ -207,20 +211,22 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 		let expected = {
+			elementId: 1,
 			id: "minimalGroupId",
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
 			children: []
 		};
 		let childReference = {
+			elementId: 4,
 			id: "textVarId",
 			recordType: "someRecordType",
 			type: "textVariable",
 			nameInData: "textVarName",
-			texts: [{ id: "textVarIdText", recordType: "text" }, { id: "textVarIdDefText", recordType: "text" }],
+			texts: [{ elementId: 5, id: "textVarIdText", recordType: "text" }, { elementId: 6, id: "textVarIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
 		};
 		expected.children.push(childReference);
@@ -264,43 +270,47 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
 
 		let expected = {
+			elementId: 1,
 			id: "minimalGroupId",
 			type: "group",
 			recordType: "someRecordType",
 			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
 			attributes: []
 		};
 
 		let attribute = {
+			elementId: 4,
 			id: "attributeCollectionVarId",
 			recordType: "someRecordType",
 			type: "collectionVariable",
 			nameInData: "collectionVarName",
-			texts: [{ id: "attributeCollectionVarIdText", recordType: "text" }, { id: "attributeCollectionVarIdDefText", recordType: "text" }],
+			texts: [{ elementId: 5, id: "attributeCollectionVarIdText", recordType: "text" }, { elementId: 6, id: "attributeCollectionVarIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
 			refCollection: []
 		};
 		expected.attributes.push(attribute);
 
 		let refCollection = {
+			elementId: 7,
 			id: "itemCollectionId",
 			recordType: "someRecordType",
 			type: "itemCollection",
 			nameInData: "itemCollectionName",
-			texts: [{ id: "itemCollectionIdText", recordType: "text" }, { id: "itemCollectionIdDefText", recordType: "text" }],
+			texts: [{ elementId: 8, id: "itemCollectionIdText", recordType: "text" }, { elementId: 9, id: "itemCollectionIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId,
 			collectionItems: []
 		};
 		attribute.refCollection.push(refCollection);
 
 		let collectionItem = {
+			elementId: 10,
 			id: "collectionItemId",
 			recordType: "someRecordType",
 			type: "collectionItem",
 			nameInData: "collectionItemName",
-			texts: [{ id: "collectionItemIdText", recordType: "text" }, { id: "collectionItemIdDefText", recordType: "text" }],
+			texts: [{ elementId: 11, id: "collectionItemIdText", recordType: "text" }, { elementId: 12, id: "collectionItemIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 		refCollection.collectionItems.push(collectionItem);
@@ -310,11 +320,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 	test("testCollectPresentationsCallsIncommingLinks", function(assert) {
 		let expectedModel = {
+			elementId: 1,
 			id: "minimalGroupId",
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 
@@ -375,16 +386,19 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		let expectedPresentation = [
 			{
+				elementId: 1,
 				id: "recordTypeFormPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
+				elementId: 2,
 				id: "recordTypeFormNewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
+				elementId: 3,
 				id: "recordTypeViewPGroup",
 				recordType: "someRecordType",
 				type: "group"
@@ -447,31 +461,37 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		let expectedPresentation = [
 			{
+				elementId: 1,
 				id: "recordTypeFormPGroup",
 				recordType: "presentation",
 				type: "container",
 				presentations: [{
+					elementId: 2,
 					id: "childPresentation",
 					recordType: "someRecordType",
 					type: "pVar"
 				}],
 				texts: [{
+					elementId: 3,
 					id: "textsText",
 					recordType: "text",
 				}],
 				guiElements: [{
+					elementId: 4,
 					id: "testGuiElement",
 					recordType: "guiElement",
 					type: "guiElementLink",
-					elementText: [{ id: "minimalGroupIdText", recordType: "text" }]
+					elementText: [{ elementId: 5, id: "minimalGroupIdText", recordType: "text" }]
 				}]
 			},
 			{
+				elementId: 6,
 				id: "recordTypeFormNewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
+				elementId: 7,
 				id: "recordTypeViewPGroup",
 				recordType: "someRecordType",
 				type: "group"

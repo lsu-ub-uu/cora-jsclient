@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
-//			console.log("viewModel",JSON.stringify(viewModel));
+			//			console.log("viewModel",JSON.stringify(viewModel));
 			addPartsToView(viewModel, view);
 			return view;
 		};
@@ -54,7 +54,7 @@ var CORA = (function(cora) {
 
 			let legend = createLegend();
 			view.appendChild(legend);
-			
+
 			let confirmationMessage = createConfirmationMessage();
 			view.appendChild(confirmationMessage);
 		};
@@ -68,10 +68,10 @@ var CORA = (function(cora) {
 			legend.append(createPresentationLegendItem());
 			return legend;
 		};
-		
+
 		const createConfirmationMessage = function() {
 			let confirmationMessage = createElementWithTypeClassText("div", "confirmationMessage", "Attention");
-//			legend.append(createPresentationLegendItem());
+			//			legend.append(createPresentationLegendItem());
 			return confirmationMessage;
 		};
 
@@ -100,20 +100,36 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForOneLevel = function(data, label) {
-			let oneLevel = createElementWithTypeClassText("li");
+			let li = createElementWithTypeClassText("li");
+			let element = createElement(data, label);
+			li.append(element);
+			li.appendChild(createChildren(data));
+			return li;
+		};
+
+		const createElement = function(data, label) {
+			let element = createSpanForElementContainer(data.elementId, "toBeDeleted");
 			if (label) {
-				oneLevel.append(createLabel(label));
+				element.append(createLabel(label));
 			}
-			oneLevel.append(createId(data));
+			element.append(createId(data));
 			if (data.nameInData) {
-				oneLevel.append(createNameInData(data));
+				element.append(createNameInData(data));
 			}
 			if (data.type) {
-				oneLevel.append(createType(data));
+				element.append(createType(data));
 			}
-			oneLevel.append(createDataDivider(data));
-			oneLevel.appendChild(createChildren(data));
-			return oneLevel;
+			element.append(createDataDivider(data));
+			return element;
+		};
+
+		const createSpanForElementContainer = function(elementId, className) {
+			let element = document.createElement("span");
+			element.id = elementId;
+			if (className) {
+				element.className = className;
+			}
+			return element;
 		};
 
 		const createLabel = function(label) {
@@ -155,8 +171,8 @@ var CORA = (function(cora) {
 		let createChildren = function(child) {
 			//TODO: change to ensure create ul
 			let ul = document.createElement("ul");
-//			let children;	
-			
+			//			let children;	
+
 			if (child.texts) {
 				createAndAppendGroup(ul, child.texts, "text");
 			}
@@ -183,13 +199,13 @@ var CORA = (function(cora) {
 			}
 			return ul;
 		};
-		
-//		let ensureUlIsCreated = function(children) {
-//			if (children.ul === undefined){
-//				children.ul = document.createElement("ul");
-//			}
-//
-//		};
+
+		//		let ensureUlIsCreated = function(children) {
+		//			if (children.ul === undefined){
+		//				children.ul = document.createElement("ul");
+		//			}
+		//
+		//		};
 
 		const createAndAppendGroup = function(ul, listOfChilds, label) {
 			listOfChilds.forEach(function(mChild) {

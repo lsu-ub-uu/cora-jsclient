@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 		let id;
 		let model;
 		let ajaxActiveCalls = [];
+		let elementId = 0;
 
 		const start = function() {
 			id = spec.id;
@@ -77,41 +78,44 @@ var CORA = (function(cora) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-			//			console.log(JSON.stringify(metadata));
+//			console.log(JSON.stringify(metadata));
 			return CORA.coraData(metadata);
 		};
 
 		const getBasicModelForMetadata = function(cDataRecordGroup) {
-			let id = getId(cDataRecordGroup);
-			let recordType = getRecordType(cDataRecordGroup);
-			let type = getType(cDataRecordGroup);
-			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
-			//			let dataDivider = getDataDividerFromCDataGroup(cDataRecordGroup);
-			let texts = [];
-			texts.push(getText(cDataRecordGroup, "textId"));
-			texts.push(getText(cDataRecordGroup, "defTextId"));
-
 			let basic = {
-				id: id,
-				recordType: recordType,
-				type: type,
-				nameInData: nameInData,
-				texts: texts,
+				elementId: getNewElementId(),
+				id: getId(cDataRecordGroup),
+				recordType: getRecordType(cDataRecordGroup),
+				type: getType(cDataRecordGroup),
+				nameInData: cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData"),
+//				dataDivider: getDataDivider(cDataRecordGroup),
+				texts: [],
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
+			basic.texts.push(getText(cDataRecordGroup, "textId"));
+			basic.texts.push(getText(cDataRecordGroup, "defTextId"));
 
 			return basic;
 		};
 
+		const getNewElementId = function() {
+			elementId++;
+			return elementId;
+		};
+
 		const getId = function(cDataRecordGroup) {
-			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-			let cRecordInfo = CORA.coraData(recordInfo);
+			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
-		const getRecordType = function(cDataRecordGroup) {
+		const getCRecordInfo = function(cDataRecordGroup) {
 			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-			let cRecordInfo = CORA.coraData(recordInfo);
+			return CORA.coraData(recordInfo);
+		}
+
+		const getRecordType = function(cDataRecordGroup) {
+			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
 			let type = cRecordInfo.getFirstChildByNameInData("type");
 			let cTtype = CORA.coraData(type);
 			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -125,16 +129,20 @@ var CORA = (function(cora) {
 			return "-";
 		};
 
-		//		const getDataDividerFromCDataGroup = function(cDataRecordGroup) {
-		//			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-		//			let cRecordInfo = CORA.coraData(recordInfo);
-		//			return cRecordInfo.getFirstAtomicValueByNameInData("dataDivider");
-		//		};
+//		const getDataDivider = function(cDataRecordGroup) {
+//			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
+//			let type = cRecordInfo.getFirstChildByNameInData("dataDivider");
+//			let cTtype = CORA.coraData(type);
+//			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
+//		};
+
 
 		const getText = function(cDataRecordGroup, name) {
 			let textObject = {
+				elementId: getNewElementId(),
 				id: cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name),
-				recordType: "text"
+				recordType: "text",
+//				dataDivider: getDataDivider(cDataRecordGroup)
 			};
 			return textObject;
 		};
@@ -239,30 +247,51 @@ var CORA = (function(cora) {
 
 
 		const getBasicModelForPresentation = function(cPresentation) {
-			let recordtype = getRecordType(cPresentation);
-			if (recordtype === "text") {
-				return {
-					id: getId(cPresentation),
-					recordType: recordtype
-				};
+			if (isAText(cPresentation)) {
+				return createTextElement(cPresentation);
 			}
-			if (recordtype === "guiElement") {
-				let guiElement = {
-					id: getId(cPresentation),
-					recordType: recordtype,
-					type: getType(cPresentation),
-					elementText: []
-				};
-				guiElement.elementText.push(getText(cPresentation, "elementText"));
-				return guiElement;
+			if (isAGuiElement(cPresentation)) {
+				return createGuiElementElement(cPresentation);
 			}
+			return createPresentationElement(cPresentation);
+		};
+
+		const isAText = function(cPresentation) {
+			return getRecordType(cPresentation) === "text";
+		};
+
+		const isAGuiElement = function(cPresentation) {
+			return getRecordType(cPresentation) === "guiElement";
+		};
+
+		const createTextElement = function(cPresentation) {
 			return {
+				elementId: getNewElementId(),
 				id: getId(cPresentation),
-				recordType: recordtype,
-				type: getType(cPresentation)
+				recordType: getRecordType(cPresentation)
 			};
 		};
 
+		const createGuiElementElement = function(cPresentation) {
+			let guiElement = {
+				elementId: getNewElementId(),
+				id: getId(cPresentation),
+				recordType: getRecordType(cPresentation),
+				type: getType(cPresentation),
+				elementText: []
+			};
+			guiElement.elementText.push(getText(cPresentation, "elementText"));
+			return guiElement;
+		};
+
+		const createPresentationElement = function(cPresentation) {
+			return {
+				elementId: getNewElementId(),
+				id: getId(cPresentation),
+				recordType: getRecordType(cPresentation),
+				type: getType(cPresentation)
+			};
+		};
 
 		const getViewModelForPresentationUsingId = function(id) {
 			let cDataRecordGroup = getCMetadataById(id);
@@ -280,24 +309,32 @@ var CORA = (function(cora) {
 			let children = { presentations: [], texts: [], guiElements: [] };
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
 			for (let childReference of childReferences.children) {
-				let cChildReference = CORA.coraData(childReference);
-				let refGroup = cChildReference.getFirstChildByNameInData("refGroup");
-				for (let ref of refGroup.children) {
-					let cRef = CORA.coraData(ref);
-					let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-					let childrenMetadataInfo = getViewModelForPresentationUsingId(refId);
-					if (getType(cRef) === "presentation") {
-						children.presentations.push(childrenMetadataInfo);
-					}
-					if (getType(cRef) === "text") {
-						children.texts.push(childrenMetadataInfo);
-					}
-					if (getType(cRef) === "guiElement") {
-						children.guiElements.push(childrenMetadataInfo);
-					}
-				}
+				handleChildReference(children, childReference);
 			}
 			return children;
+		};
+
+		const handleChildReference = function(childrenArrays, childReference) {
+			let cChildReference = CORA.coraData(childReference);
+			let refGroup = cChildReference.getFirstChildByNameInData("refGroup");
+			for (let ref of refGroup.children) {
+				handleRefGroupChild(childrenArrays, ref);
+			}
+		};
+
+		const handleRefGroupChild = function(childrenArrays, ref) {
+			let cRef = CORA.coraData(ref);
+			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+			let childrenMetadataInfo = getViewModelForPresentationUsingId(refId);
+			if (getType(cRef) === "presentation") {
+				childrenArrays.presentations.push(childrenMetadataInfo);
+			}
+			if (getType(cRef) === "text") {
+				childrenArrays.texts.push(childrenMetadataInfo);
+			}
+			if (getType(cRef) === "guiElement") {
+				childrenArrays.guiElements.push(childrenMetadataInfo);
+			}
 		};
 
 		const handleErrorOnFetchPresentations = function(error) {

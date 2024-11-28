@@ -913,6 +913,30 @@ h1, .h1TextStyle {
 	font-weight: bold;	
 }
 
+.recursiveDelete .deleting {
+	animation: blink 1s infinite;
+	position: relative; 
+    will-change: opacity; 
+/*  transform: translateZ(0);  */
+}
+
+@keyframes blink {
+	0% {opacity: 1;}
+    50% {opacity: 0.2;}
+    100% {opacity: 1;}
+/*  	0%, 100% { visibility: visible; } */
+/*     50% { visibility: hidden; } */
+ }
+
+.recursiveDelete .failedToBeDeleted {
+	background-color: rgb(215, 108, 130);
+	border-radius: 0.5rem;
+}
+.recursiveDelete .deleted {
+	background-color: rgb(126, 212, 173);
+	border-radius: 0.5rem;
+}
+
 /* /* Animation for Hover Effects */ */
 /* .recursiveDelete li { */
 /* 	transform: scale (1); */
@@ -923,9 +947,3 @@ h1, .h1TextStyle {
 /* .recursiveDelete li:hover { */
 /*     padding-left: 1rem; */
 /* } */
-
-
-
-
-
-

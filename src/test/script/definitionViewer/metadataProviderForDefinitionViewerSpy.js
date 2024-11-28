@@ -20,10 +20,10 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.metadataProviderForDefinitionViewerSpy = function() {
-		
+
 		let metadataKeeper = {};
 		let metadataRecord = {};
-		
+
 		var fetchedMetadataIds = [];
 		var fetchedMetadata = [];
 		var callWhenReloadedMethod;
@@ -39,140 +39,151 @@ var CORATEST = (function(coraTest) {
 			noOfReloads++;
 			callWhenReloadedMethod = callWhenReloadedMethodIn;
 		}
-		
-		const addMetadataById = function(id, metadata){
+
+		const addMetadataById = function(id, metadata) {
 			metadataKeeper[id] = metadata;
 		};
-		
-		const addMetadataByCompactDefinition = function(def){
+
+		const addMetadataByCompactDefinition = function(def) {
 			let basic = createBasicMetadataByTypeIdAndNameInData(def.type, def.id, def.nameInData);
-			if(def.attributes){
+			if (def.attributes) {
 				let attributeReferences = {
-			      name: "attributeReferences",
-			      children: []};
-				basic.children.push(attributeReferences); 
-				def.attributes.forEach(function(attributeId){
+					name: "attributeReferences",
+					children: []
+				};
+				basic.children.push(attributeReferences);
+				def.attributes.forEach(function(attributeId) {
 					let ref = createLinkByNameInDataTypeId("ref", "metadata", attributeId);
 					attributeReferences.children.push(ref);
 				});
 			}
-			if(def.children){
+			if (def.children) {
 				let childReferences = {
-			      name: "childReferences",
-			      children: []};
-				basic.children.push(childReferences); 
-				def.children.forEach(function(child){
+					name: "childReferences",
+					children: []
+				};
+				basic.children.push(childReferences);
+				def.children.forEach(function(child) {
 					childReferences.children.push(createChildReferenceByChild(child));
 				});
 			}
-			if(def.finalValue){
+			if (def.finalValue) {
 				basic.children.push(createAtomicByNameInDataAndValue("finalValue", def.finalValue));
 			}
-			if(def.itemCollectionId){
+			if (def.itemCollectionId) {
 				let refCollection = createLinkByNameInDataTypeId("refCollection", "metadata", def.itemCollectionId);
 				basic.children.push(refCollection);
 			}
-			if(def.refIds){
+			if (def.refIds) {
 				let collectionItemReferences = {
-			      name: "collectionItemReferences",
-			      children: []};
-				basic.children.push(collectionItemReferences); 
-				def.refIds.forEach(function(refId){
+					name: "collectionItemReferences",
+					children: []
+				};
+				basic.children.push(collectionItemReferences);
+				def.refIds.forEach(function(refId) {
 					let ref = createLinkByNameInDataTypeId("ref", "metadata", refId);
 					collectionItemReferences.children.push(ref);
 				});
 			}
 			addMetadataById(def.id, basic);
 		};
-		const createAtomicByNameInDataAndValue = function(nameInData, value){
-			return {name: nameInData, value: value};
+		const createAtomicByNameInDataAndValue = function(nameInData, value) {
+			return { name: nameInData, value: value };
 		};
-		const createLinkByNameInDataTypeId = function(nameInData, type, id){
-			return	{
-	              name: nameInData,
-	              children: [
-	                {
-	                  name: "linkedRecordType",
-	                  value: type
-	                },
-	                {
-	                  name: "linkedRecordId",
-	                  value: id
-	                }
-	              ]
-	            }
+		const createLinkByNameInDataTypeId = function(nameInData, type, id) {
+			return {
+				name: nameInData,
+				children: [
+					{
+						name: "linkedRecordType",
+						value: type
+					},
+					{
+						name: "linkedRecordId",
+						value: id
+					}
+				]
+			}
 		};
-		
-		const createChildReferenceByChild = function(child){
-	        let childReference= {
-	          name: "childReference",
-	          repeatId: "0",
-	          children: [
-	            {
-	              name: "repeatMin",
-	              value: child.repeatMin
-	            },
-	            {
-	              name: "repeatMax",
-	              value: child.repeatMax
-	            }
-	          ]
-	        };
-	        let ref = createLinkByNameInDataTypeId("ref", "metadata", child.refId);
+
+		const createChildReferenceByChild = function(child) {
+			let childReference = {
+				name: "childReference",
+				repeatId: "0",
+				children: [
+					{
+						name: "repeatMin",
+						value: child.repeatMin
+					},
+					{
+						name: "repeatMax",
+						value: child.repeatMax
+					}
+				]
+			};
+			let ref = createLinkByNameInDataTypeId("ref", "metadata", child.refId);
 			childReference.children.push(ref);
-			if(child.recordPartConstraint){
-				childReference.children.push(createAtomicByNameInDataAndValue("recordPartConstraint", 
+			if (child.recordPartConstraint) {
+				childReference.children.push(createAtomicByNameInDataAndValue("recordPartConstraint",
 					child.recordPartConstraint));
 			}
-			if(child.collectIndexTerms){
+			if (child.collectIndexTerms) {
 				for (let indexTerm of child.collectIndexTerms) {
-			        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectIndexTerm",
-			        indexTerm);
-			        collectTerm.attributes = {type: "index"};
+					let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectIndexTerm",
+						indexTerm);
+					collectTerm.attributes = { type: "index" };
 					childReference.children.push(collectTerm);
 				}
 			}
-			if(child.collectStorageTerm){
-		        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectStorageTerm",
-		        child.collectStorageTerm);
-		        collectTerm.attributes = {type: "storage"};
+			if (child.collectStorageTerm) {
+				let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectStorageTerm",
+					child.collectStorageTerm);
+				collectTerm.attributes = { type: "storage" };
 				childReference.children.push(collectTerm);
 			}
-			if(child.collectPermissionTerm){
-		        let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectPermissionTerm",
-		        child.collectPermissionTerm);
-		        collectTerm.attributes = {type: "permission"};
+			if (child.collectPermissionTerm) {
+				let collectTerm = createLinkByNameInDataTypeId("childRefCollectTerm", "collectPermissionTerm",
+					child.collectPermissionTerm);
+				collectTerm.attributes = { type: "permission" };
 				childReference.children.push(collectTerm);
 			}
-			
+
 			return childReference;
 		};
-		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData){
-			let x= {
-				attributes: {type: type},
-					children:[
-						{name: "recordInfo",
-							children: [
-								{name: "id",
-								value: id},
-								{name: "type",
-									children:[{ name: "linkedRecordId", value: "someRecordType" }]
-								},
-								{name: "dataDivider",
-								value: "someDataDivider"}
-							]
-						},
-						{name : "nameInData",
-						value : nameInData}
-					]
-				};
+		const createBasicMetadataByTypeIdAndNameInData = function(type, id, nameInData) {
+			let x = {
+				attributes: { type: type },
+				children: [
+					{
+						name: "recordInfo",
+						children: [
+							{
+								name: "id",
+								value: id
+							},
+							{
+								name: "type",
+								children: [{ name: "linkedRecordId", value: "someRecordType" }]
+							},
+							{
+								name: "dataDivider",
+								children: [{ name: "linkedRecordId", value: "cora" }]
+							}
+						]
+					},
+					{
+						name: "nameInData",
+						value: nameInData
+					}
+				]
+			};
 			let textId = createLinkByNameInDataTypeId("textId", "text", id + "Text");
 			x.children.push(textId);
 			let defTextId = createLinkByNameInDataTypeId("defTextId", "text", id + "DefText");
 			x.children.push(defTextId);
 			return x;
 		}
-		
+
 		function getFetchedMetadataId(no) {
 			return fetchedMetadataIds[no];
 		}
@@ -188,30 +199,30 @@ var CORATEST = (function(coraTest) {
 		function getNoOfReloads() {
 			return noOfReloads;
 		}
-		
-		const addMetadataRecordById = function(id,metadataRecordValue){
-					metadataRecord[id] = metadataRecordValue;
+
+		const addMetadataRecordById = function(id, metadataRecordValue) {
+			metadataRecord[id] = metadataRecordValue;
 		};
-		
-		const getMetadataRecordById = function(id){
+
+		const getMetadataRecordById = function(id) {
 			return metadataRecord[id];
 		};
-		
-		return Object.freeze({
-			getMetadataById : getMetadataById,
-			getMetadataRecordById: getMetadataRecordById,
-			reload : reload,
 
-			addMetadataById : addMetadataById,
-			addMetadataByCompactDefinition : addMetadataByCompactDefinition,
-			
-			addMetadataRecordById:addMetadataRecordById,
-			
-			getFetchedMetadataId : getFetchedMetadataId,
-			getFetchedMetadata : getFetchedMetadata,
-			getCallWhenReloadedMethod : getCallWhenReloadedMethod,
-			getNoOfReloads : getNoOfReloads,
-			callWhenReloadedMethod : callWhenReloadedMethod
+		return Object.freeze({
+			getMetadataById: getMetadataById,
+			getMetadataRecordById: getMetadataRecordById,
+			reload: reload,
+
+			addMetadataById: addMetadataById,
+			addMetadataByCompactDefinition: addMetadataByCompactDefinition,
+
+			addMetadataRecordById: addMetadataRecordById,
+
+			getFetchedMetadataId: getFetchedMetadataId,
+			getFetchedMetadata: getFetchedMetadata,
+			getCallWhenReloadedMethod: getCallWhenReloadedMethod,
+			getNoOfReloads: getNoOfReloads,
+			callWhenReloadedMethod: callWhenReloadedMethod
 		});
 	};
 	return coraTest;

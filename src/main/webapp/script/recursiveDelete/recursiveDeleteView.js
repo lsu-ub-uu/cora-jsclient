@@ -200,13 +200,6 @@ var CORA = (function(cora) {
 			return ul;
 		};
 
-		//		let ensureUlIsCreated = function(children) {
-		//			if (children.ul === undefined){
-		//				children.ul = document.createElement("ul");
-		//			}
-		//
-		//		};
-
 		const createAndAppendGroup = function(ul, listOfChilds, label) {
 			listOfChilds.forEach(function(mChild) {
 				let nextLevel = createViewForOneLevel(mChild, label);

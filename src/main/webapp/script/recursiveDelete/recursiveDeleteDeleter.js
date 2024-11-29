@@ -25,40 +25,58 @@ var CORA = (function(cora) {
 		let baseRestUrl = spec.baseRestUrl;
 
 		const start = function() {
-			//			view = createElementWithTypeClassText("span", "recursiveDelete");
 		};
 
-		const startDeleting = function(viewModel) {
+		const deleteElement = function(viewModel) {
 
-			console.log(JSON.stringify(viewModel));
-			
-			callDelete(viewModel.recordType, viewModel.id);
-
-//			let callSpec = {
-//				url: `${baseRestUrl}${viewModel.recordType}/${viewModel.id}`,
-//				requestMethod: "DELETE",
-//				loadMethod: continueDeletingAllChildren,
-//				errorMethod: ""
-//			};
-//			ajaxCallFactory.factor(callSpec);
+			//todo: view.setDeletingElement(viewModel.id)
+			deleteRecord(viewModel.recordType, viewModel.id, viewModel);
 		};
 
-		const callDelete = function(recordType, id) {
+		const deleteRecord = function(recordType, id, currentViewModel) {
 			let callSpec = {
 				url: `${baseRestUrl}${recordType}/${id}`,
 				requestMethod: "DELETE",
-				loadMethod: continueDeletingAllChildren,
-				errorMethod: ""
+				loadMethod: deleteRecordCallBack,
+				errorMethod: deleteRecordFailedCallBack,
+				viewModel: currentViewModel
 			};
 			ajaxCallFactory.factor(callSpec);
 		}
 
-		const continueDeletingAllChildren = function() {
+		const deleteRecordCallBack = function(answer) {
+			//TODO: setDeletedElement(answer.spec.viewModel.elementId)
 
+			deleteAllChildren(answer.spec.viewModel);
+		};
+
+		const deleteAllChildren = function(currentViewModel) {
+			for (let childViewModel of currentViewModel.texts) {
+				deleteElement(childViewModel);
+			}
+			for (let childViewModel of currentViewModel.children) {
+				deleteElement(childViewModel);
+			}
+
+			//TODO add loops for all Children
+			//			"texts": [],
+			//			"attributes": [],
+			//			"refCollection": [],
+			//			"collectionItems": [],
+			//			"presentations": [],
+			//			"children": [
+			//			"guiElement");
+			//			"elementText");
+		};
+
+		const deleteRecordFailedCallBack = function(answer) {
+			//TODO: setDeleteFailedElement(answer.spec.viewModel.elementId, answer.textMessage)
 		};
 
 		out = Object.freeze({
-			startDeleting: startDeleting
+			deleteElement: deleteElement,
+			deleteRecordCallBack: deleteRecordCallBack,
+			deleteRecordFailedCallBack: deleteRecordFailedCallBack
 		});
 		start();
 

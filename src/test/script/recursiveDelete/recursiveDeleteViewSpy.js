@@ -25,44 +25,74 @@ var CORATEST = (function(coraTest) {
 		let basicViews = [];
 		let viewModels = [];
 		let createdViews = [];
+		let deletingElement = [];
+		let deletedElement = [];
+		let deleteFailedElement = [];
 
 		const createViewForViewModel = function(viewModel) {
 			viewModels.push(viewModel);
-			
+
 			let createdView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 			createdViews.push(createdView);
 			return createdView;
 		}
-		
+
 		const getView = function() {
 			let basicView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 			basicViews.push(basicView);
 			return basicView;
 		}
-		
-		const getViewForCallNo = function(no){
+
+		const getViewForCallNo = function(no) {
 			return basicViews[no];
 		};
-		
-		const getViewModelForCallNo = function(no){
+
+		const getViewModelForCallNo = function(no) {
 			return viewModels[no];
 		};
-		
-		const getCreatedViewForCallNo = function(no){
+
+		const getCreatedViewForCallNo = function(no) {
 			return createdViews[no];
 		};
-		
+
 		function updateViewForViewModel(viewModel) {
 			viewModels.push(viewModel);
 		}
-		
+
+		const setDeletingElement = function(elementId) {
+			deletingElement.push(elementId);
+		}
+		const setDeletedElement = function(elementId) {
+			deletedElement.push(elementId);
+
+		}
+		const setDeleteFailedElement = function(elementId, errorMessage) {
+			deleteFailedElement.push({ elementId, errorMessage });
+		}
+		const getDeletingElement = function(no) {
+			return deletingElement[no];
+		}
+		const getDeletedElement = function(no) {
+			return deletedElement[no];
+
+		}
+		const getDeleteFailedElement = function(no) {
+			return deleteFailedElement[no];
+		}
+
 		return Object.freeze({
-			createViewForViewModel : createViewForViewModel,
-			getView : getView,
-			getViewForCallNo : getViewForCallNo,
-			getViewModelForCallNo : getViewModelForCallNo,
-			getCreatedViewForCallNo : getCreatedViewForCallNo,
-			updateViewForViewModel: updateViewForViewModel
+			createViewForViewModel: createViewForViewModel,
+			getView: getView,
+			getViewForCallNo: getViewForCallNo,
+			getViewModelForCallNo: getViewModelForCallNo,
+			getCreatedViewForCallNo: getCreatedViewForCallNo,
+			updateViewForViewModel: updateViewForViewModel,
+			setDeletingElement: setDeletingElement,
+			setDeletedElement: setDeletedElement,
+			setDeleteFailedElement: setDeleteFailedElement,
+			getDeletingElement: getDeletingElement,
+			getDeletedElement: getDeletedElement,
+			getDeleteFailedElement: getDeleteFailedElement
 		});
 	};
 	return coraTest;

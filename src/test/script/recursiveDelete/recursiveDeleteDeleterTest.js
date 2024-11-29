@@ -27,6 +27,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	let someRestUrl = "http://someRestUrl/rest/record/";
 	let ajaxCallFactorySpy;
 	let viewModel;
+	let childViewModel;
 	let deleter;
 
 	hooks.beforeEach(() => {
@@ -62,7 +63,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			type: "group",
 			recordType: "metadata",
 			nameInData: "minimalGroup",
-			dataDivider: "someDataDivider",
 			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" },
 			{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" }],
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId,
@@ -73,40 +73,78 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			children: []
 		};
 
-		let child = {
+		childViewModel = {
 			elementId: 4,
 			id: "textVarId",
 			type: "textVariable",
+			recordType: "metadata",
 			nameInData: "textVar",
-			dataDivider: "someOtherDataDivider",
 			texts: [{ elementId: 5, id: "someTextId", recordType: "text" }, { elementId: 6, id: "someDefTextId", recordType: "text" }],
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId
 		};
-		viewModel.children.push(child);
+		viewModel.children.push(childViewModel);
 	};
 
 	const openDefiningRecordUsingEventAndId = function(event, id) {
 		callsToOpenDefiningRecord.push({ event: event, id: id });
 	};
 
-	only("testStartDeleting", function(assert) {
-		deleter.startDeleting(viewModel);
+	test("testDeleteElementSetDeletingAndCallsDeleteUsingAjax", function(assert) {
+		deleter.deleteElement(viewModel);
+		
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 
-//		assert.strictEqual(ajaxCallFactorySpy.callCount, 1);
-
-		assertAjaxCalls(assert, 0, someRestUrl + "metadata/minimalGroupId", "DELETE");
-//		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdText", "DELETE");
+		//todo assert call to: view.setDeletingElement(viewModel.id)
+		assertAjaxCalls(assert, 0, someRestUrl + "metadata/minimalGroupId", "DELETE", viewModel);
 
 	});
 
-	const assertAjaxCalls = function(assert, callNumber, url, requestMethod) {
+	test("testDeleteElementCallBackSetDeletingAndCallsDeleteForAllChildren", function(assert) {
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		//todo: use method from loadMethod from ajaxCall
+		deleter.deleteRecordCallBack(answer);
+
+		//todo assert call to: view.setDeletedElement(viewModel.id)
+		
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 3);
+		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
+		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
+		assertAjaxCalls(assert, 0, someRestUrl + "text/minimalGroupIdText", "DELETE", textElement);
+		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
+		assertAjaxCalls(assert, 2, someRestUrl + "metadata/textVarId", "DELETE", childViewModel);
+		
+		//todo assert call to: view.setDeletingElement(viewModel.id)
+		//todo assert call to: view.setDeletingElement(viewModel.id)
+		//todo assert call to: view.setDeletingElement(viewModel.id)
+
+	});
+	
+	test("testDeleteElementCallFailsSetFailedDeletingAndCallsDeleteForAllChildren", function(assert) {
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		deleter.deleteRecordFailedCallBack(answer);
+
+		//todo assert call to: view.setFailedDeletedElement(viewModel.id)
+		
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 0);
+	});
+
+	const assertAjaxCalls = function(assert, callNumber, url, requestMethod, viewModel) {
 		let ajaxCallSpy = ajaxCallFactorySpy.getFactored(callNumber);
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, url);
 		assert.strictEqual(ajaxCallSpec.requestMethod, requestMethod);
+		assert.strictEqual(ajaxCallSpec.loadMethod, deleter.deleteRecordCallBack);
+		assert.strictEqual(ajaxCallSpec.errorMethod, deleter.deleteRecordFailedCallBack);
 		assert.strictEqual(ajaxCallSpec.accept, undefined);
 		assert.strictEqual(ajaxCallSpec.contentType, undefined);
 		assert.strictEqual(ajaxCallSpec.data, undefined);
+		assert.deepEqual(ajaxCallSpec.viewModel, viewModel);
 	};
 
 });

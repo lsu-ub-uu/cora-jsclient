@@ -32,13 +32,14 @@ var CORATEST = (function(coraTest) {
 			return factoredAjaxCalls[number];
 		};
 		
-//		const getFactoredAjaxCalls = function(){
-//			return factoredAjaxCalls.length;
-//		};
+		const getFactoredAjaxCalls = function(){
+			return factoredAjaxCalls.length;
+		};
 
 		let out = Object.freeze({
 			factor: factor,
 			getFactored: getFactored,
+			getFactoredAjaxCalls: getFactoredAjaxCalls,
 			callCount: factoredAjaxCalls.length
 		});
 		return out;

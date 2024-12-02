@@ -20,16 +20,15 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteDeleter = function(dependencies, spec) {
 		let out;
-		//		let view;
 		let ajaxCallFactory = dependencies.ajaxCallFactory;
+		let view = dependencies.view;
 		let baseRestUrl = spec.baseRestUrl;
 
 		const start = function() {
 		};
 
 		const deleteElement = function(viewModel) {
-
-			//todo: view.setDeletingElement(viewModel.id)
+			view.setDeletingElement(viewModel.elementId);
 			deleteRecord(viewModel.recordType, viewModel.id, viewModel);
 		};
 
@@ -45,38 +44,38 @@ var CORA = (function(cora) {
 		}
 
 		const deleteRecordCallBack = function(answer) {
-			//TODO: setDeletedElement(answer.spec.viewModel.elementId)
-
-			deleteAllChildren(answer.spec.viewModel);
+			let viewModel = answer.spec.viewModel;
+			view.setDeletedElement(viewModel.elementId);
+			deleteAllChildren(viewModel);
 		};
 
 		const deleteAllChildren = function(currentViewModel) {
-			for (let childViewModel of currentViewModel.texts) {
-				deleteElement(childViewModel);
-			}
-			for (let childViewModel of currentViewModel.children) {
-				deleteElement(childViewModel);
-			}
+			deleteSubElement(currentViewModel.texts);
+			deleteSubElement(currentViewModel.children);
+			deleteSubElement(currentViewModel.attributes);
+			deleteSubElement(currentViewModel.refCollection);
+			deleteSubElement(currentViewModel.collectionItems);
+			deleteSubElement(currentViewModel.presentations);
+			deleteSubElement(currentViewModel.guiElements);
+			deleteSubElement(currentViewModel.elementText);
+		};
 
-			//TODO add loops for all Children
-			//			"texts": [],
-			//			"attributes": [],
-			//			"refCollection": [],
-			//			"collectionItems": [],
-			//			"presentations": [],
-			//			"children": [
-			//			"guiElement");
-			//			"elementText");
+		const deleteSubElement = function(subElement) {
+			if (subElement) {
+				for (let childViewModel of subElement) {
+					deleteElement(childViewModel);
+				}
+			}
 		};
 
 		const deleteRecordFailedCallBack = function(answer) {
-			//TODO: setDeleteFailedElement(answer.spec.viewModel.elementId, answer.textMessage)
+			let viewModel = answer.spec.viewModel;
+			let errorMessage = `${answer.status} : ${answer.response}`;
+			view.setDeleteFailedElement(viewModel.elementId, errorMessage);
 		};
 
 		out = Object.freeze({
-			deleteElement: deleteElement,
-			deleteRecordCallBack: deleteRecordCallBack,
-			deleteRecordFailedCallBack: deleteRecordFailedCallBack
+			deleteElement: deleteElement
 		});
 		start();
 

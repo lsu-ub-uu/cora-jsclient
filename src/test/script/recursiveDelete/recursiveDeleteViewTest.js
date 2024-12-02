@@ -476,9 +476,44 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 	});
 
-//	test("testChangeClassToDeleting", function(assert) {
-//		let view = recursiveDeleteView.createViewForViewModel(viewModel);
-//
-//		console.log(document.getElementById("1").id);
-//	});
+	test("testChangeClassToDeleting", function(assert) {
+		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+
+		recursiveDeleteView.setDeletingElement("1");
+
+		let metadataNode = view.childNodes[1];
+		let elementOne = metadataNode.firstChild.firstChild;
+		assert.strictEqual(elementOne.className, "deleting");
+	});
+
+	test("testChangeClassToDeleted", function(assert) {
+		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+
+		recursiveDeleteView.setDeletedElement("1");
+
+		let metadataNode = view.childNodes[1];
+		let elementOne = metadataNode.firstChild.firstChild;
+		assert.strictEqual(elementOne.className, "deleted");
+	});
+
+	test("testChangeClassToFailed", function(assert) {
+		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+
+		let failedMessage = {
+			elementId: 1,
+			errorMessage: "404 : someError"
+		};
+
+		recursiveDeleteView.setDeleteFailedElement(failedMessage);
+
+		let metadataNode = view.childNodes[1];
+		let elementOne = metadataNode.firstChild.firstChild;
+		assert.strictEqual(elementOne.className, "failed");
+		
+		let errorElement = elementOne.lastChild;
+		assert.strictEqual(errorElement.tagName, "SPAN");
+		assert.strictEqual(errorElement.className, "errorMessage");
+		assert.strictEqual(errorElement.textContent, failedMessage.errorMessage);
+		
+	});
 });

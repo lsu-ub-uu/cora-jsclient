@@ -29,9 +29,11 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	let viewModel;
 	let childViewModel;
 	let deleter;
+	let recursiveDeleteView;
 
 	hooks.beforeEach(() => {
 		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
+		recursiveDeleteView = CORATEST.recursiveDeleteViewSpy();
 
 		setupDependencies();
 		setupSpec();
@@ -47,7 +49,8 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 	const setupDependencies = function() {
 		dependencies = {
-			ajaxCallFactory: ajaxCallFactorySpy
+			ajaxCallFactory: ajaxCallFactorySpy,
+			view: recursiveDeleteView
 		};
 	};
 	const setupSpec = function() {
@@ -66,10 +69,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" },
 			{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" }],
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId,
-			attributes: [],
-			refCollection: [],
-			collectionItems: [],
-			presentations: [],
 			children: []
 		};
 
@@ -91,12 +90,10 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 	test("testDeleteElementSetDeletingAndCallsDeleteUsingAjax", function(assert) {
 		deleter.deleteElement(viewModel);
-		
+
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
-
-		//todo assert call to: view.setDeletingElement(viewModel.id)
 		assertAjaxCalls(assert, 0, someRestUrl + "metadata/minimalGroupId", "DELETE", viewModel);
-
 	});
 
 	test("testDeleteElementCallBackSetDeletingAndCallsDeleteForAllChildren", function(assert) {
@@ -104,34 +101,48 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			spec: { viewModel: viewModel }
 		};
 
-		//todo: use method from loadMethod from ajaxCall
-		deleter.deleteRecordCallBack(answer);
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.loadMethod(answer);
 
-		//todo assert call to: view.setDeletedElement(viewModel.id)
-		
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4);
 		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
 		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
-		assertAjaxCalls(assert, 0, someRestUrl + "text/minimalGroupIdText", "DELETE", textElement);
-		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
-		assertAjaxCalls(assert, 2, someRestUrl + "metadata/textVarId", "DELETE", childViewModel);
-		
-		//todo assert call to: view.setDeletingElement(viewModel.id)
-		//todo assert call to: view.setDeletingElement(viewModel.id)
-		//todo assert call to: view.setDeletingElement(viewModel.id)
+		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdText", "DELETE", textElement);
+		assertAjaxCalls(assert, 2, someRestUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
+		assertAjaxCalls(assert, 3, someRestUrl + "metadata/textVarId", "DELETE", childViewModel);
 
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 2);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
 	});
-	
+
+	const getCallSpecFromAjaxCall = function(callNumber) {
+		let factoredAjax = ajaxCallFactorySpy.getFactored(callNumber);
+		return factoredAjax.getSpec();
+	};
+
+
 	test("testDeleteElementCallFailsSetFailedDeletingAndCallsDeleteForAllChildren", function(assert) {
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { viewModel: viewModel },
+			status: 404,
+			response: "someError"
 		};
 
-		deleter.deleteRecordFailedCallBack(answer);
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.errorMethod(answer);
 
-		//todo assert call to: view.setFailedDeletedElement(viewModel.id)
-		
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 0);
+		let expectedFailedMessage = {
+			elementId: 1,
+			errorMessage: "404 : someError"
+		};
+		assert.deepEqual(recursiveDeleteView.getDeleteFailedElement(0), expectedFailedMessage);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 	});
 
 	const assertAjaxCalls = function(assert, callNumber, url, requestMethod, viewModel) {
@@ -139,12 +150,195 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, url);
 		assert.strictEqual(ajaxCallSpec.requestMethod, requestMethod);
-		assert.strictEqual(ajaxCallSpec.loadMethod, deleter.deleteRecordCallBack);
-		assert.strictEqual(ajaxCallSpec.errorMethod, deleter.deleteRecordFailedCallBack);
 		assert.strictEqual(ajaxCallSpec.accept, undefined);
 		assert.strictEqual(ajaxCallSpec.contentType, undefined);
 		assert.strictEqual(ajaxCallSpec.data, undefined);
 		assert.deepEqual(ajaxCallSpec.viewModel, viewModel);
 	};
 
+	test("deleteElementsWithAttributes", function(assert) {
+		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
+		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
+
+		let viewModel = {
+			elementId: 1,
+			id: "minimalGroupId",
+			type: "group",
+			recordType: "someRecordType",
+			nameInData: "minimalGroupName",
+			texts: [textElement, defTextElement],
+			attributes: []
+		};
+
+		let attribute = {
+			elementId: 4,
+			id: "attributeCollectionVarId",
+			recordType: "someRecordType",
+			type: "collectionVariable",
+			nameInData: "collectionVarName",
+			texts: [textElement, defTextElement],
+			refCollection: []
+		};
+		viewModel.attributes.push(attribute);
+
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.loadMethod(answer);
+
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 2);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
+		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4);
+		assertAjaxCalls(assert, 0, someRestUrl + "someRecordType/minimalGroupId", "DELETE", viewModel);
+		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdText", "DELETE", textElement);
+		assertAjaxCalls(assert, 2, someRestUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
+		assertAjaxCalls(assert, 3, someRestUrl + "someRecordType/attributeCollectionVarId", "DELETE", attribute);
+	});
+
+	test("deleteElementsCollections", function(assert) {
+		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
+		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
+
+		let viewModel = {
+			elementId: 4,
+			id: "attributeCollectionVarId",
+			recordType: "someRecordType",
+			type: "collectionVariable",
+			nameInData: "collectionVarName",
+			texts: [textElement, defTextElement],
+			refCollection: [],
+			collectionItems: []
+		};
+
+		let refCollection = {
+			elementId: 7,
+			id: "itemCollectionId",
+			recordType: "someRecordType",
+			type: "itemCollection",
+			nameInData: "itemCollectionName",
+			texts: [textElement, defTextElement]
+		};
+		viewModel.refCollection.push(refCollection);
+
+		let collectionItem = {
+			elementId: 10,
+			id: "collectionItemId",
+			recordType: "someRecordType",
+			type: "collectionItem",
+			nameInData: "collectionItemName",
+			texts: [textElement, defTextElement]
+		};
+		viewModel.collectionItems.push(collectionItem);
+
+
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.loadMethod(answer);
+
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 4);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 2);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 7);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(4), 10);
+		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 4);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 5);
+		assertAjaxCalls(assert, 0, someRestUrl + "someRecordType/attributeCollectionVarId", "DELETE", viewModel);
+		assertAjaxCalls(assert, 1, someRestUrl + "text/minimalGroupIdText", "DELETE", textElement);
+		assertAjaxCalls(assert, 2, someRestUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
+		assertAjaxCalls(assert, 3, someRestUrl + "someRecordType/itemCollectionId", "DELETE", refCollection);
+		assertAjaxCalls(assert, 4, someRestUrl + "someRecordType/collectionItemId", "DELETE", collectionItem);
+	});
+
+	test("deletePresentations", function(assert) {
+		let viewModel = {
+			elementId: 1,
+			id: "recordTypeFormPGroup",
+			recordType: "presentation",
+			type: "container",
+			presentations: [],
+			texts: [],
+			guiElements: [],
+			elementText: []
+		};
+
+		let childPresentation = {
+			elementId: 2,
+			id: "childPresentation",
+			recordType: "presentation",
+			type: "pVar"
+		};
+		viewModel.presentations.push(childPresentation);
+
+		let text = {
+			elementId: 3,
+			id: "textsText",
+			recordType: "text",
+		};
+		viewModel.texts.push(text);
+
+		let guiElement = {
+			elementId: 4,
+			id: "testGuiElement",
+			recordType: "guiElement",
+			type: "guiElementLink"
+		};
+		viewModel.guiElements.push(guiElement);
+
+		let elementText = { elementId: 5, id: "elementTextId", recordType: "text" };
+		viewModel.elementText.push(elementText);
+
+
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.loadMethod(answer);
+
+
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 2);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(4), 5);
+		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 5);
+		assertAjaxCalls(assert, 0, someRestUrl + "presentation/recordTypeFormPGroup", "DELETE", viewModel);
+		assertAjaxCalls(assert, 1, someRestUrl + "text/textsText", "DELETE", text);
+		assertAjaxCalls(assert, 2, someRestUrl + "presentation/childPresentation", "DELETE", childPresentation);
+		assertAjaxCalls(assert, 3, someRestUrl + "guiElement/testGuiElement", "DELETE", guiElement);
+		assertAjaxCalls(assert, 4, someRestUrl + "text/elementTextId", "DELETE", elementText);
+	});
+	test("testViewModelWithoutAnyChildren", function(assert) {
+		viewModel = {
+			elementId: 1,
+			id: "minimalGroupId",
+			type: "group",
+			recordType: "metadata",
+			nameInData: "minimalGroup"
+		};
+		let answer = {
+			spec: { viewModel: viewModel }
+		};
+
+		deleter.deleteElement(viewModel);
+		let callSpec = getCallSpecFromAjaxCall(0);
+		callSpec.loadMethod(answer);
+		
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+	});
 });

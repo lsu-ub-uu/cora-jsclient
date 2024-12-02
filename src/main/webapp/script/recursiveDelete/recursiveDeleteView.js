@@ -21,7 +21,10 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteView = function(dependencies, spec) {
 		let out;
+		let elements = [];
 		let view;
+
+
 		const start = function() {
 			view = createElementWithTypeClassText("span", "recursiveDelete");
 		};
@@ -126,6 +129,7 @@ var CORA = (function(cora) {
 		const createSpanForElementContainer = function(elementId, className) {
 			let element = document.createElement("span");
 			element.id = elementId;
+			elements[elementId] = element;
 			if (className) {
 				element.className = className;
 			}
@@ -133,7 +137,7 @@ var CORA = (function(cora) {
 		};
 
 		const createLabel = function(label) {
-			return createElementWithTypeClassText("span", "labelType", `${label}`);
+			return createElementWithTypeClassText("span", "labelType", label);
 		};
 
 		let createId = function(child) {
@@ -153,7 +157,7 @@ var CORA = (function(cora) {
 		};
 
 		const createType = function(child) {
-			return createElementWithTypeClassText("span", "type", `${child.type}`);
+			return createElementWithTypeClassText("span", "type", child.type);
 		};
 
 		const createDataDivider = function(child) {
@@ -207,6 +211,23 @@ var CORA = (function(cora) {
 			});
 		};
 
+		const setDeletingElement = function(id) {
+			let element = elements[id];
+			element.className = 'deleting';
+		};
+
+		const setDeletedElement = function(id) {
+			let element = elements[id];
+			element.className = 'deleted';
+		};
+
+		const setDeleteFailedElement = function(failed) {
+			let element = elements[failed.elementId];
+			element.className = 'failed';
+			let errorElement = createElementWithTypeClassText("span", "errorMessage", failed.errorMessage);
+			element.appendChild(errorElement);
+		};
+
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};
@@ -221,7 +242,10 @@ var CORA = (function(cora) {
 			onlyForTestGetSpec: onlyForTestGetSpec,
 			getView: getView,
 			createViewForViewModel: createViewForViewModel,
-			updateViewForViewModel: updateViewForViewModel
+			updateViewForViewModel: updateViewForViewModel,
+			setDeletingElement: setDeletingElement,
+			setDeletedElement: setDeletedElement,
+			setDeleteFailedElement: setDeleteFailedElement
 		});
 		start();
 

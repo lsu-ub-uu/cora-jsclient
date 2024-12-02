@@ -40,12 +40,7 @@ var CORA = (function(cora) {
 		};
 
 		const getView = function() {
-			let view = getViewForMetadataId(id);
-			return view;
-		};
-
-		const getViewForMetadataId = function(metadataGroupId) {
-			model = getViewModelForMetadataUsingId(metadataGroupId);
+			model = getViewModelForMetadataUsingId(id);
 			return recursiveDeleteView.getView();
 		};
 
@@ -78,7 +73,7 @@ var CORA = (function(cora) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-//			console.log(JSON.stringify(metadata));
+			//			console.log(JSON.stringify(metadata));
 			return CORA.coraData(metadata);
 		};
 
@@ -89,7 +84,7 @@ var CORA = (function(cora) {
 				recordType: getRecordType(cDataRecordGroup),
 				type: getType(cDataRecordGroup),
 				nameInData: cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData"),
-//				dataDivider: getDataDivider(cDataRecordGroup),
+				//				dataDivider: getDataDivider(cDataRecordGroup),
 				texts: [],
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
@@ -129,12 +124,12 @@ var CORA = (function(cora) {
 			return "-";
 		};
 
-//		const getDataDivider = function(cDataRecordGroup) {
-//			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
-//			let type = cRecordInfo.getFirstChildByNameInData("dataDivider");
-//			let cTtype = CORA.coraData(type);
-//			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
-//		};
+		//		const getDataDivider = function(cDataRecordGroup) {
+		//			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
+		//			let type = cRecordInfo.getFirstChildByNameInData("dataDivider");
+		//			let cTtype = CORA.coraData(type);
+		//			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
+		//		};
 
 
 		const getText = function(cDataRecordGroup, name) {
@@ -142,7 +137,7 @@ var CORA = (function(cora) {
 				elementId: getNewElementId(),
 				id: cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name),
 				recordType: "text",
-//				dataDivider: getDataDivider(cDataRecordGroup)
+				//				dataDivider: getDataDivider(cDataRecordGroup)
 			};
 			return textObject;
 		};
@@ -218,9 +213,15 @@ var CORA = (function(cora) {
 
 			ajaxActiveCalls.pop();
 			if (ajaxActiveCalls.length == 0) {
-				recursiveDeleteView.createViewForViewModel(model);
+				modelIsReady(model);
 			}
 		};
+
+		const modelIsReady = function(model) {
+			recursiveDeleteView.createViewForViewModel(model);
+//			let deleteMetod = function(){dependencies.recursiveDeleteDeleter.deleteElement(viewModel)};
+//			recursiveDeleteView.setDeleteMethod(deleteMethod);
+		}
 
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
 			let incomingLink = getRecordTypeFromIncomingLink(incomingLinkAsJson);

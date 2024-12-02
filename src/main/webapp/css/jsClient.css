@@ -928,7 +928,7 @@ h1, .h1TextStyle {
 /*     50% { visibility: hidden; } */
  }
 
-.recursiveDelete .failedToBeDeleted {
+.recursiveDelete .failed {
 	background-color: rgb(215, 108, 130);
 	border-radius: 0.5rem;
 }

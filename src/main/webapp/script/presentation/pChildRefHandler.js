@@ -20,9 +20,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pChildRefHandler = function(dependencies, spec) {
-		const {dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub, 
-			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory, 
-			pChildRefHandlerViewFactory, pRepeatingElementFactory} = dependencies;
+		const { dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub,
+			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
+			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
 		let out;
 		let userCanUploadFile = false;
 		let userCanRemove = false;
@@ -59,7 +59,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
-				"metadataProvider": metadataProvider
+				metadataProvider: metadataProvider
 			});
 			presentationId = findPresentationId(spec.cPresentation);
 			metadataIdFromPresentation = getMetadataIdFromPresentation();
@@ -98,7 +98,7 @@ var CORA = (function(cora) {
 				}
 			};
 		};
-				
+
 		const continueWithNormalStartup = function() {
 			cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 			metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -124,11 +124,12 @@ var CORA = (function(cora) {
 			userCanRemove = calculateUserCanRemove();
 			userCanMove = calculateUserCanMove();
 			userCanAddBefore = calculateUserCanAddBefore();
-		}
+		};
+
 		const subscribeToMessagesFromForm = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode==="input") {
+			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode === "input") {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
@@ -177,7 +178,7 @@ var CORA = (function(cora) {
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-		
+
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
@@ -194,10 +195,10 @@ var CORA = (function(cora) {
 
 		const createPChildRefHandlerView = function() {
 			let pChildRefHandlerViewSpec = {
-				"presentationId": presentationId,
-				"isRepeating": isRepeating,
-				"addText": "+ " + text,
-				"mode": spec.mode
+				presentationId: presentationId,
+				isRepeating: isRepeating,
+				addText: "+ " + text,
+				mode: spec.mode
 			};
 			if (spec.textStyle !== undefined) {
 				pChildRefHandlerViewSpec.textStyle = spec.textStyle;
@@ -269,7 +270,7 @@ var CORA = (function(cora) {
 			let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return "binary" == recordTypeId;
 		};
-		
+
 		const getView = function() {
 			return pChildRefHandlerView.getView();
 		};
@@ -330,21 +331,21 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
 			parentPath) {
 			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"repeatId": repeatId,
-				"parentPath": parentPath
+				metadataIdToAdd: metadataIdToAdd,
+				repeatId: repeatId,
+				parentPath: parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const createRepeatingElement = function(path) {
 			let repeatingElementSpec = {
-				"path": path,
-				"pChildRefHandlerView": pChildRefHandlerView,
-				"pChildRefHandler": out,
-				"userCanRemove": userCanRemove,
-				"userCanMove": userCanMove,
-				"userCanAddBefore": userCanAddBefore
+				path: path,
+				pChildRefHandlerView: pChildRefHandlerView,
+				pChildRefHandler: out,
+				userCanRemove: userCanRemove,
+				userCanMove: userCanMove,
+				userCanAddBefore: userCanAddBefore
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -381,7 +382,7 @@ var CORA = (function(cora) {
 		const subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView = function(repeatingElement) {
 			if (showAddButton()) {
 				let removeInfo = {
-					"repeatingElement": repeatingElement
+					repeatingElement: repeatingElement
 				};
 				let removeFunction = function() {
 					childRemoved(removeInfo);
@@ -465,11 +466,11 @@ var CORA = (function(cora) {
 
 		const createAddData = function() {
 			let data = {
-				"metadataId": metadataId,
-				"path": spec.parentPath,
-				"childReference": cParentMetadataChildRefPart.getData(),
-				"nameInData": cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
-				"recordPartPermissionCalculator": spec.recordPartPermissionCalculator
+				metadataId: metadataId,
+				path: spec.parentPath,
+				childReference: cParentMetadataChildRefPart.getData(),
+				nameInData: cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
+				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
 
 			if (metadataHasAttributes) {
@@ -480,8 +481,8 @@ var CORA = (function(cora) {
 
 		const sendNewElementsAdded = function() {
 			pubSub.publish("newElementsAdded", {
-				"data": "",
-				"path": []
+				data: "",
+				path: []
 			});
 		};
 
@@ -494,11 +495,11 @@ var CORA = (function(cora) {
 
 		const childMoved = function(moveInfo) {
 			let data = {
-				"path": spec.parentPath,
-				"metadataId": metadataId,
-				"moveChild": moveInfo.moveChild,
-				"basePositionOnChild": moveInfo.basePositionOnChild,
-				"newPosition": moveInfo.newPosition
+				path: spec.parentPath,
+				metadataId: metadataId,
+				moveChild: moveInfo.moveChild,
+				basePositionOnChild: moveInfo.basePositionOnChild,
+				newPosition: moveInfo.newPosition
 			};
 			jsBookkeeper.move(data);
 		};
@@ -533,14 +534,14 @@ var CORA = (function(cora) {
 			let createLink = getLinkedRecordTypeCreateLink();
 			let localFile = file;
 			let callSpec = {
-				"requestMethod": createLink.requestMethod,
-				"url": createLink.url,
-				"contentType": createLink.contentType,
-				"accept": createLink.accept,
-				"loadMethod": processNewBinary,
-				"errorMethod": callError,
-				"data": JSON.stringify(data),
-				"file": localFile
+				requestMethod: createLink.requestMethod,
+				url: createLink.url,
+				contentType: createLink.contentType,
+				accept: createLink.accept,
+				loadMethod: processNewBinary,
+				errorMethod: callError,
+				data: JSON.stringify(data),
+				file: localFile
 			};
 			ajaxCallFactory.factor(callSpec);
 		};
@@ -561,7 +562,7 @@ var CORA = (function(cora) {
 							name: "linkedRecordId",
 							value: dataDividerLinkedRecordId
 						}]
-					},{
+					}, {
 						name: "validationType",
 						children: [{
 							name: "linkedRecordType",
@@ -571,18 +572,18 @@ var CORA = (function(cora) {
 							value: "genericBinary"
 						}]
 					}]
-				},{
+				}, {
 					name: "adminInfo",
 					children: [{
 						name: "visibility",
 						value: "unpublished"
 					}]
-				},{
+				}, {
 					name: "originalFileName",
 					value: file.name
-				},{
+				}, {
 					name: "expectedFileSize",
-					value: ""+file.size
+					value: "" + file.size
 				}],
 				attributes: {
 					type: type
@@ -610,8 +611,8 @@ var CORA = (function(cora) {
 			let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 				"linkedRecordIdTextVar", undefined, newPath1);
 			let setValueData = {
-				"data": createdRecordId,
-				"path": newPath
+				data: createdRecordId,
+				path: newPath
 			};
 			jsBookkeeper.setValue(setValueData);
 			let formData = new FormData();
@@ -621,8 +622,8 @@ var CORA = (function(cora) {
 			let uploadLink = JSON.parse(answer.responseText).record.actionLinks.upload;
 
 			let uploadSpec = {
-				"uploadLink": uploadLink,
-				"file": answer.spec.file
+				uploadLink: uploadLink,
+				file: answer.spec.file
 			};
 			uploadManager.upload(uploadSpec);
 			saveMainRecordIfRecordsAreCreatedForAllFiles();
@@ -642,8 +643,8 @@ var CORA = (function(cora) {
 			numberOfRecordsForFilesCreated++;
 			if (numberOfFilesToUpload === numberOfRecordsForFilesCreated) {
 				pubSub.publish("updateRecord", {
-					"data": "",
-					"path": []
+					data: "",
+					path: []
 				});
 				numberOfRecordsForFilesCreated = 0;
 			}
@@ -651,8 +652,8 @@ var CORA = (function(cora) {
 
 		const callError = function(answer) {
 			let messageSpec = {
-				"message": answer.status,
-				"type": CORA.message.ERROR
+				message: answer.status,
+				type: CORA.message.ERROR
 			};
 			let errorChild = document.createElement("span");
 			errorChild.innerHTML = messageSpec.message;
@@ -670,15 +671,13 @@ var CORA = (function(cora) {
 
 		const possiblyAddUpToMinNumberOfRepeatingToShow = function() {
 			let mininumOfOneMinNumberToShow = 1;
-			if(spec.minNumberOfRepeatingToShow){
+			if (spec.minNumberOfRepeatingToShow) {
 				mininumOfOneMinNumberToShow = Number(spec.minNumberOfRepeatingToShow);
 			}
-	
-//			let numberLeftToAdd = Number(spec.minNumberOfRepeatingToShow) - noOfRepeating;
+
 			let numberLeftToAdd = mininumOfOneMinNumberToShow - noOfRepeating;
 			for (let i = 0; i < numberLeftToAdd; i++) {
 				if (!maxLimitOfChildrenReached()) {
-//					console.log("SEND ADD: "+d, spec.cPresentation.getData())
 					sendAdd();
 				}
 			}

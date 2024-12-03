@@ -28,6 +28,7 @@ var CORATEST = (function(coraTest) {
 		let deletingElement = [];
 		let deletedElement = [];
 		let deleteFailedElement = [];
+		let deleteMethods = [];
 
 		const createViewForViewModel = function(viewModel) {
 			viewModels.push(viewModel);
@@ -35,13 +36,13 @@ var CORATEST = (function(coraTest) {
 			let createdView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 			createdViews.push(createdView);
 			return createdView;
-		}
+		};
 
 		const getView = function() {
 			let basicView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 			basicViews.push(basicView);
 			return basicView;
-		}
+		};
 
 		const getViewForCallNo = function(no) {
 			return basicViews[no];
@@ -55,30 +56,41 @@ var CORATEST = (function(coraTest) {
 			return createdViews[no];
 		};
 
-		function updateViewForViewModel(viewModel) {
+		const updateViewForViewModel = function(viewModel) {
 			viewModels.push(viewModel);
-		}
+		};
 
 		const setDeletingElement = function(elementId) {
 			deletingElement.push(elementId);
-		}
+		};
+
 		const setDeletedElement = function(elementId) {
 			deletedElement.push(elementId);
+		};
 
-		}
 		const setDeleteFailedElement = function(elementId, errorMessage) {
 			deleteFailedElement.push({ elementId, errorMessage });
-		}
+		};
+
 		const getDeletingElement = function(no) {
 			return deletingElement[no];
-		}
+		};
+
 		const getDeletedElement = function(no) {
 			return deletedElement[no];
+		};
 
-		}
 		const getDeleteFailedElement = function(no) {
 			return deleteFailedElement[no];
-		}
+		};
+
+		const setDeleteMethod = function(deleteMethod) {
+			deleteMethods.push(deleteMethod);
+		};
+
+		const getDeleteMethod = function(no) {
+			return deleteMethods[no];
+		};
 
 		return Object.freeze({
 			createViewForViewModel: createViewForViewModel,
@@ -92,7 +104,9 @@ var CORATEST = (function(coraTest) {
 			setDeleteFailedElement: setDeleteFailedElement,
 			getDeletingElement: getDeletingElement,
 			getDeletedElement: getDeletedElement,
-			getDeleteFailedElement: getDeleteFailedElement
+			getDeleteFailedElement: getDeleteFailedElement,
+			setDeleteMethod: setDeleteMethod,
+			getDeleteMethod: getDeleteMethod
 		});
 	};
 	return coraTest;

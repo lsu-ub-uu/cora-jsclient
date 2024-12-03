@@ -20,10 +20,12 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteView = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
 		let out;
 		let elements = [];
-		let view;
+		let deleteMethod;
 
+		let view;
 
 		const start = function() {
 			view = createElementWithTypeClassText("span", "recursiveDelete");
@@ -58,24 +60,53 @@ var CORA = (function(cora) {
 			let legend = createLegend();
 			view.appendChild(legend);
 
-			let confirmationMessage = createConfirmationMessage();
-			view.appendChild(confirmationMessage);
+			let buttonText = textProvider.getTranslation("theClient_recursiveDeleteButtonText");
+			let deleteButton = createButton(buttonText, showDeleteConfirmation, "recursiveDeleteButton");
+			view.appendChild(deleteButton);
 		};
 
 		const createHeader = function(id) {
 			let headerText = `Recursive delete of ${id}`;
 			return createElementWithTypeClassText("div", "header", headerText);
-		}
+		};
+
 		const createLegend = function() {
 			let legend = createElementWithTypeClassText("div", "legend", "Legend");
 			legend.append(createPresentationLegendItem());
 			return legend;
 		};
 
-		const createConfirmationMessage = function() {
-			let confirmationMessage = createElementWithTypeClassText("div", "confirmationMessage", "Attention");
-			//			legend.append(createPresentationLegendItem());
-			return confirmationMessage;
+		const createButton = function(text, onclickMethod, className) {
+			let button = document.createElement("input");
+			button.type = "button";
+			button.value = text;
+			button.onclick = onclickMethod;
+			if (undefined !== className) {
+				button.className = className;
+			}
+			return button;
+		};
+
+		const shouldRecordBeDeleted = function() {
+			let questionSpec = assembleQuestionSpec();
+			let question = dependencies.questionFactory.factor(questionSpec);
+			let questionView = question.getView();
+			view.appendChild(questionView);
+		};
+
+		const assembleQuestionSpec = function() {
+			let confirmText = textProvider.getTranslation("theClient_recursiveDeleteConfirmText");
+			let confirmButtonNoText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonNoText");
+			let confirmButtonYesText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonYesText");
+			return {
+				text: confirmText,
+				buttons: [{
+					text: confirmButtonNoText
+				}, {
+					text: confirmButtonYesText,
+					onclickFunction: deleteMethod
+				}]
+			};
 		};
 
 		let createPresentationLegendItem = function() {
@@ -228,6 +259,13 @@ var CORA = (function(cora) {
 			element.appendChild(errorElement);
 		};
 
+		const showDeleteConfirmation = function() {
+			shouldRecordBeDeleted();
+		};
+		const setDeleteMethod = function(method) {
+			deleteMethod = method;
+		};
+
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};
@@ -245,7 +283,9 @@ var CORA = (function(cora) {
 			updateViewForViewModel: updateViewForViewModel,
 			setDeletingElement: setDeletingElement,
 			setDeletedElement: setDeletedElement,
-			setDeleteFailedElement: setDeleteFailedElement
+			setDeleteFailedElement: setDeleteFailedElement,
+			showDeleteConfirmation: showDeleteConfirmation,
+			setDeleteMethod: setDeleteMethod
 		});
 		start();
 

@@ -27,10 +27,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 	let spec;
 	let viewModel;
 	let recursiveDeleteView;
+	const textProvider = CORATEST.textProviderSpy();
 
 	hooks.beforeEach(() => {
 		dependencies = {
-			someDep: "someDep"
+			textProvider: textProvider,
+			questionFactory: CORATEST.standardFactorySpy("questionSpy")
 		};
 		spec = {
 			someKey: "someValue"
@@ -130,13 +132,54 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		recursiveDeleteUpdateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
-	test("testConfirmationMessageAndButton", function(assert) {
+	//	test("testConfirmationMessageAndButton", function(assert) {
+	//		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+	//
+	//		let confimationMessage = view.childNodes[3];
+	//		assert.strictEqual(confimationMessage.childNodes[0].textContent, "Attention", assert);
+	//
+	//		CORATEST.assertElementHasTypeClassText(confimationMessage, "DIV", "confirmationMessage", "Attention", assert);
+	//	});
+
+	test("testAddDeleteButton", function(assert) {
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
 
-		let confimationMessage = view.childNodes[3];
-		assert.strictEqual(confimationMessage.childNodes[0].textContent, "Attention", assert);
+		let button = view.lastChild;
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, recursiveDeleteView.showDeleteConfirmation);
+		assert.strictEqual(button.className, "recursiveDeleteButton");
+		let buttonText = textProvider.getTranslation("theClient_recursiveDeleteButtonText");
+		assert.strictEqual(button.value, buttonText);
+	});
 
-		CORATEST.assertElementHasTypeClassText(confimationMessage, "DIV", "confirmationMessage", "Attention", assert);
+	test("testShowDeleteConfirmation", function(assert) {
+		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+		let fakeDeleteMethod = function() { };
+		recursiveDeleteView.setDeleteMethod(fakeDeleteMethod);
+
+		recursiveDeleteView.showDeleteConfirmation();
+
+		let confirmText = textProvider.getTranslation("theClient_recursiveDeleteConfirmText");
+		let confirmButtonNoText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonNoText");
+		let confirmButtonYesText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonYesText");
+		let confirmation = view.lastChild;
+
+		let questionSpec = dependencies.questionFactory.getSpec(0);
+		let questionSpy = dependencies.questionFactory.getFactored(0);
+
+		let expectedQuestionSpec = {
+			text: confirmText,
+			buttons: [{
+				text: confirmButtonNoText
+			}, {
+				text: confirmButtonYesText,
+				onclickFunction: fakeDeleteMethod
+			}]
+		};
+		assert.deepEqual(questionSpec, expectedQuestionSpec);
+
+		assert.strictEqual(view.lastChild, questionSpy.getView());
 	});
 
 	test("testBasicMetadata", function(assert) {
@@ -509,11 +552,11 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let metadataNode = view.childNodes[1];
 		let elementOne = metadataNode.firstChild.firstChild;
 		assert.strictEqual(elementOne.className, "failed");
-		
+
 		let errorElement = elementOne.lastChild;
 		assert.strictEqual(errorElement.tagName, "SPAN");
 		assert.strictEqual(errorElement.className, "errorMessage");
 		assert.strictEqual(errorElement.textContent, failedMessage.errorMessage);
-		
+
 	});
 });

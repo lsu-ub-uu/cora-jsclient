@@ -164,3 +164,47 @@ CORATEST.incomingLinksAnswer={
     "toNo": "4"
   }
 };
+
+CORATEST.incomingLinksWithoutPresentationsAnswer={
+  "dataList": {
+    "fromNo": "1",
+    "data": [
+      {
+        "children": [
+          {
+            "children": [
+              {"name": "linkedRecordType", "value": "metadataTextVariable"},
+              {
+                "name" : "linkedRecordId"              ,
+                "value": "newPresentationFormIdTextVar"
+              }
+            ],
+            "actionLinks": {
+              "read": {
+                "requestMethod": "GET",
+                "rel": "read",
+                "url": "http://localhost:8080/therest/rest/record/metadataTextVariable/newPresentationFormIdTextVar",
+                "accept": "application/vnd.uub.record+json"
+              }
+            },
+            "name": "from"
+          },
+          {
+            "children": [
+              {"name": "linkedRecordType", "value": "text"},
+              {
+                "name" : "linkedRecordId"                  ,
+                "value": "newPresentationFormIdTextVarText"
+              }
+            ],
+            "name": "to"
+          }
+        ],
+        "name": "recordToRecordLink"
+      }
+    ],
+    "totalNo": "1",
+    "containDataOfType": "recordToRecordLink",
+    "toNo": "1"
+  }
+}

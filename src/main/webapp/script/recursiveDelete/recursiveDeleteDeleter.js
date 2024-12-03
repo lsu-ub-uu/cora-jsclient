@@ -74,8 +74,19 @@ var CORA = (function(cora) {
 			view.setDeleteFailedElement(viewModel.elementId, errorMessage);
 		};
 
+		const onlyForTestGetDependencies = function(){
+			return dependencies;	
+		};
+		
+		const onlyForTestGetSpec = function(){
+			return spec;	
+		};
+		
 		out = Object.freeze({
-			deleteElement: deleteElement
+			type: "recursiveDeleteDeleter",
+			deleteElement: deleteElement,
+			onlyForTestGetDependencies: onlyForTestGetDependencies,
+			onlyForTestGetSpec: onlyForTestGetSpec
 		});
 		start();
 

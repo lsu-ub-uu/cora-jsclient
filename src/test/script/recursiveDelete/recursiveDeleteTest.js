@@ -27,13 +27,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	let clientInstanceProvider;
 	let ajaxCallFactorySpy;
 	let recursiveDeleteView;
+	let actionLinksWithIncomingLinks;
 
 	let dependencies;
 	let providers;
 	let spec;
 	let recursiveDelete;
-
-	const waitingTimeInMs = 100;
 
 	hooks.beforeEach(() => {
 		metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
@@ -69,12 +68,13 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	const setupDependencies = function() {
 		dependencies = {
 			ajaxCallFactory: ajaxCallFactorySpy,
-			view: recursiveDeleteView
+			view: recursiveDeleteView,
+			recursiveDeleteDeleter: CORATEST.recursiveDeleteDeleterSpy()
 		};
 	};
 
 	const createIncomingLinksResponse = function() {
-		let responseFromMetadataRecord =
+		actionLinksWithIncomingLinks =
 		{
 			actionLinks: {
 				read_incoming_links: {
@@ -85,11 +85,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 				}
 			}
 		};
-		metadataProvider.addMetadataRecordById("minimalGroupId", responseFromMetadataRecord);
-		metadataProvider.addMetadataRecordById("textVarId", responseFromMetadataRecord);
-		metadataProvider.addMetadataRecordById("attributeCollectionVarId", responseFromMetadataRecord);
-		metadataProvider.addMetadataRecordById("itemCollectionId", responseFromMetadataRecord);
-		metadataProvider.addMetadataRecordById("collectionItemId", responseFromMetadataRecord);
+
+		metadataProvider.addMetadataRecordById("minimalGroupId", actionLinksWithIncomingLinks);
+		metadataProvider.addMetadataRecordById("textVarId", actionLinksWithIncomingLinks);
+		metadataProvider.addMetadataRecordById("attributeCollectionVarId", actionLinksWithIncomingLinks);
+		metadataProvider.addMetadataRecordById("itemCollectionId", actionLinksWithIncomingLinks);
+		metadataProvider.addMetadataRecordById("collectionItemId", actionLinksWithIncomingLinks);
 	};
 
 	test("testInit", function(assert) {
@@ -120,8 +121,11 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		assert.strictEqual(metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
 	});
 
-	test("testViewModel", function(assert) {
-		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+	test("testViewModelNoIncomingLinks", function(assert) {
+		metadataProvider.addMetadataRecordById("minimalGroupId", { actionLinks: {} });
+		recursiveDelete.getView();
+
+		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
 
 		let expected = {
 			elementId: 1,
@@ -129,11 +133,41 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, 
-				{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" },
+			{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-
 		};
+
+		assert.deepEqual(viewModel, expected);
+	});
+
+	test("testViewModelWithIncommingLinksButNoPresentations", function(assert) {
+		metadataProvider.addMetadataRecordById("minimalGroupId", actionLinksWithIncomingLinks);
+
+		recursiveDelete.getView();
+
+		let callSpec = getCallSpecFromAjaxCall(0);
+		let answer = {
+			spec: { modelPart: callSpec.modelPart },
+			responseText: JSON.stringify(CORATEST.incomingLinksWithoutPresentationsAnswer)
+		};
+
+		callSpec.loadMethod(answer);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+
+		let expected = {
+			elementId: 1,
+			id: "minimalGroupId",
+			recordType: "someRecordType",
+			type: "group",
+			nameInData: "minimalGroupName",
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" },
+			{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
+			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
+		};
+
 		assert.deepEqual(viewModel, expected);
 	});
 
@@ -147,7 +181,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 			recordType: "someRecordType",
 			type: "group",
 			nameInData: "minimalGroupName",
-			texts: [{elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
+			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 		assert.deepEqual(viewModel, expected);
@@ -208,7 +242,10 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		};
 		metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+		recursiveDelete.getView();
+		respondToAjaxCallForWhitOutIncomingLinks(0);
+		respondToAjaxCallForWhitOutIncomingLinks(1);
+		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
 
 		let expected = {
 			elementId: 1,
@@ -233,6 +270,15 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		assert.deepEqual(viewModel, expected);
 	});
+
+	const respondToAjaxCallForWhitOutIncomingLinks = function(callNumber) {
+		let callSpec = getCallSpecFromAjaxCall(callNumber);
+		let answer = {
+			spec: { modelPart: callSpec.modelPart },
+			responseText: JSON.stringify(CORATEST.incomingLinksWithoutPresentationsAnswer)
+		};
+		callSpec.loadMethod(answer);
+	};
 
 	test("testViewModelAttributes", function(assert) {
 		let toAdd = {
@@ -267,7 +313,13 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		};
 		metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
-		let viewModel = recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+		recursiveDelete.getView();
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4)
+		respondToAjaxCallForWhitOutIncomingLinks(0);
+		respondToAjaxCallForWhitOutIncomingLinks(1);
+		respondToAjaxCallForWhitOutIncomingLinks(2);
+		respondToAjaxCallForWhitOutIncomingLinks(3);
+		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
 
 		let expected = {
 			elementId: 1,
@@ -319,7 +371,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	});
 
 	test("testCollectPresentationsCallsIncommingLinks", function(assert) {
-		let expectedModel = {
+		let expectedModelPart = {
 			elementId: 1,
 			id: "minimalGroupId",
 			recordType: "someRecordType",
@@ -329,7 +381,8 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 
-		recursiveDelete.onlyForTestGetViewModelForMetadataUsingId();
+		recursiveDelete.getView();
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1)
 
 		let ajaxCallSpy = ajaxCallFactorySpy.getFactored(0);
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
@@ -338,16 +391,22 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
 		assert.strictEqual(ajaxCallSpec.contentType, undefined);
 		assert.strictEqual(ajaxCallSpec.data, undefined);
-		assert.strictEqual(ajaxCallSpec.loadMethod, recursiveDelete.collectPresentations);
-		assert.strictEqual(ajaxCallSpec.errorMethod, recursiveDelete.handleErrorOnFetchPresentations);
-		assert.deepEqual(ajaxCallSpec.model, expectedModel);
+		assert.deepEqual(ajaxCallSpec.modelPart, expectedModelPart);
 	});
 
 	test("testHandleCallErrorDoesNothing", function(assert) {
+		let errorFromAjaxCall = {
+			status: 404,
+			response: "someError"
+		};
+
 		try {
-			recursiveDelete.handleErrorOnFetchPresentations();
+			recursiveDelete.getView();
+			let callSpec = getCallSpecFromAjaxCall(0);
+			callSpec.errorMethod(errorFromAjaxCall);
 		} catch (error) {
-			assert.strictEqual(error.message, "error fetching incoming links from server");
+			assert.strictEqual(error.message, "Error fetching incoming links from server. 404 : someError");
+			assert.strictEqual(error.cause, errorFromAjaxCall);
 		}
 	});
 
@@ -368,56 +427,50 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		};
 		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
 
-		let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
-		let currentModel = {
-			id: "minimalGroupId",
-			recordType: "someRecordType",
-			type: "group",
-			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-		};
-		let answer = {
-			spec: { model: currentModel },
-			responseText: incomingLinksAnswer
-		};
 
-		recursiveDelete.collectPresentations(answer);
+		recursiveDelete.getView();
+
+		let callSpec = getCallSpecFromAjaxCall(0);
+		let answer = {
+			spec: { modelPart: callSpec.modelPart },
+			responseText: JSON.stringify(CORATEST.incomingLinksAnswer)
+		};
+		callSpec.loadMethod(answer);
+
 
 		let expectedPresentation = [
 			{
-				elementId: 1,
+				elementId: 4,
 				id: "recordTypeFormPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
-				elementId: 2,
+				elementId: 5,
 				id: "recordTypeFormNewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
-				elementId: 3,
+				elementId: 6,
 				id: "recordTypeViewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			}
 		];
 
-		assert.strictEqual(answer.spec.model.presentations.length, 3);
-		assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
+		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
+		assert.deepEqual(answer.spec.modelPart.presentations, expectedPresentation);
 
-		waitAndAssertCreateViewIsCalled();
+		assertCreateViewIsCalled();
 	});
 
-
-	const sleep = function() {
-		return new Promise(resolve => setTimeout(resolve, waitingTimeInMs));
+	const getCallSpecFromAjaxCall = function(callNumber) {
+		let factoredAjax = ajaxCallFactorySpy.getFactored(callNumber);
+		return factoredAjax.getSpec();
 	};
 
-	const waitAndAssertCreateViewIsCalled = async function() {
-		await sleep();
+	const assertCreateViewIsCalled = async function() {
 		assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
 		assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), "generatedView");
 	};
@@ -443,64 +496,67 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		};
 		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
 
-		let incomingLinksAnswer = JSON.stringify(CORATEST.incomingLinksAnswer);
-		let currentModel = {
-			id: "minimalGroupId",
-			recordType: "someRecordType",
-			type: "group",
-			nameInData: "minimalGroupName",
-			texts: [{ id: "minimalGroupIdText", recordType: "text" }, { id: "minimalGroupIdDefText", recordType: "text" }],
-			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-		};
+		recursiveDelete.getView();
+		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
-			spec: { model: currentModel },
-			responseText: incomingLinksAnswer
+			spec: { modelPart: callSpec.modelPart },
+			responseText: JSON.stringify(CORATEST.incomingLinksAnswer)
 		};
-
-		recursiveDelete.collectPresentations(answer);
+		callSpec.loadMethod(answer);
 
 		let expectedPresentation = [
 			{
-				elementId: 1,
+				elementId: 4,
 				id: "recordTypeFormPGroup",
 				recordType: "presentation",
 				type: "container",
 				presentations: [{
-					elementId: 2,
+					elementId: 5,
 					id: "childPresentation",
 					recordType: "someRecordType",
 					type: "pVar"
 				}],
 				texts: [{
-					elementId: 3,
+					elementId: 6,
 					id: "textsText",
 					recordType: "text",
 				}],
 				guiElements: [{
-					elementId: 4,
+					elementId: 7,
 					id: "testGuiElement",
 					recordType: "guiElement",
 					type: "guiElementLink",
-					elementText: [{ elementId: 5, id: "minimalGroupIdText", recordType: "text" }]
+					elementText: [{ elementId: 8, id: "minimalGroupIdText", recordType: "text" }]
 				}]
 			},
 			{
-				elementId: 6,
+				elementId: 9,
 				id: "recordTypeFormNewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			},
 			{
-				elementId: 7,
+				elementId: 10,
 				id: "recordTypeViewPGroup",
 				recordType: "someRecordType",
 				type: "group"
 			}
 		];
 
-		assert.strictEqual(answer.spec.model.presentations.length, 3);
-		assert.deepEqual(answer.spec.model.presentations, expectedPresentation);
+		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
+		assert.deepEqual(answer.spec.modelPart.presentations, expectedPresentation);
 
-		waitAndAssertCreateViewIsCalled();
+		assertCreateViewIsCalled();
+	});
+
+	test("testSendDeleteMethodToView", function(assert) {
+		metadataProvider.addMetadataRecordById("minimalGroupId", { actionLinks: {} });
+
+		recursiveDelete.getView();
+
+		let deleteMethod = recursiveDeleteView.getDeleteMethod(0);
+
+		assert.strictEqual(deleteMethod, dependencies.recursiveDeleteDeleter.deleteElement);
+
 	});
 });

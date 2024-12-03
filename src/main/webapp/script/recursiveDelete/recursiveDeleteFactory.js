@@ -20,11 +20,31 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteFactory = function(providers, dependencies) {
-		
-		let factor = function (spec) {
+
+		let factor = function(spec) {
+			let deleteViewDep = {
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				view: ""
+			};
+			let deleteViewSpec = {
+				baseRestUrl: ""
+			};
+			let deleteView = CORA.recursiveDeleteView(deleteViewDep, deleteViewSpec);
+
+			let deleteDeleterDep = {
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				view: deleteView
+			};
+			let deleteDeleterSpec = {
+				baseRestUrl: ""
+			};
+			let deleteDeleter = CORA.recursiveDeleteDeleter(deleteDeleterDep, deleteDeleterSpec);
+
+
 			let dep = {
-				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
-				view : CORA.recursiveDeleteView()
+				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
+				view: deleteView,
+				deleteDeleter: deleteDeleter
 			};
 
 			let recursiveDelete = CORA.recursiveDelete(providers, dep, spec);
@@ -40,10 +60,10 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type : "recursiveDeleteFactory",
+			type: "recursiveDeleteFactory",
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			factor : factor
+			factor: factor
 		});
 	};
 	return cora;

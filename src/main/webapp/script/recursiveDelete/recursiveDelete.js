@@ -41,34 +41,33 @@ var CORA = (function(cora) {
 
 		const getView = function() {
 			model = getViewModelForMetadataUsingId(id);
+			if (ajaxActiveCalls.length === 0) {
+				modelIsReady(model);
+			}
 			return recursiveDeleteView.getView();
 		};
 
-		const onlyForTestGetViewModelForMetadataUsingId = function() {
-			//In order to be able to validate the model, since the async ajax calls complicates the testing
-			return getViewModelForMetadataUsingId(id);
-		}
-
 		const getViewModelForMetadataUsingId = function(metadataId) {
 			let cDataRecordGroup = getCMetadataById(metadataId);
-			let currentModel = getBasicModelForMetadata(cDataRecordGroup);
+			let modelPart = getBasicModelForMetadata(cDataRecordGroup);
 
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
-				currentModel.attributes = collectAttributes(cDataRecordGroup);
+				modelPart.attributes = collectAttributes(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("refCollection")) {
-				currentModel.refCollection = collectRefCollection(cDataRecordGroup);
+				modelPart.refCollection = collectRefCollection(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("collectionItemReferences")) {
-				currentModel.collectionItems = collectCollectionItemReferences(cDataRecordGroup);
+				modelPart.collectionItems = collectCollectionItemReferences(cDataRecordGroup);
 			}
 			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-				currentModel.children = collectChildReferences(cDataRecordGroup, "childReferences");
+				modelPart.children = collectChildReferences(cDataRecordGroup, "childReferences");
 			}
 			let metadataRecord = metadataProvider.getMetadataRecordById(metadataId);
-			fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, currentModel);
-
-			return currentModel;
+			if (metadataRecord.actionLinks.read_incoming_links) {
+				fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, modelPart);
+			}
+			return modelPart;
 		};
 
 		const getCMetadataById = function(metadataId) {
@@ -187,14 +186,15 @@ var CORA = (function(cora) {
 			}
 			return children;
 		};
-		const fetchPresenetationsByUrl = function(url, model) {
+
+		const fetchPresenetationsByUrl = function(url, modelPart) {
 			let callSpec = {
 				url: url,
 				requestMethod: "GET",
 				accept: "application/vnd.uub.recordList+json",
 				loadMethod: collectPresentations,
 				errorMethod: handleErrorOnFetchPresentations,
-				model: model
+				modelPart: modelPart
 			};
 			createActiveAjaxCall();
 			ajaxCallFactory.factor(callSpec);
@@ -209,9 +209,15 @@ var CORA = (function(cora) {
 			let data = response.dataList.data;
 			let presentations = [];
 			data.forEach((incomingLink) => filterAndAddIncomingPresentations(incomingLink, presentations));
-			answer.spec.model.presentations = presentations;
+			if (presentations.length != 0) {
+				answer.spec.modelPart.presentations = presentations;
+			}
 
 			ajaxActiveCalls.pop();
+			ensureModelIsReady();
+		};
+
+		const ensureModelIsReady = function() {
 			if (ajaxActiveCalls.length == 0) {
 				modelIsReady(model);
 			}
@@ -219,9 +225,8 @@ var CORA = (function(cora) {
 
 		const modelIsReady = function(model) {
 			recursiveDeleteView.createViewForViewModel(model);
-//			let deleteMetod = function(){dependencies.recursiveDeleteDeleter.deleteElement(viewModel)};
-//			recursiveDeleteView.setDeleteMethod(deleteMethod);
-		}
+			recursiveDeleteView.setDeleteMethod(dependencies.recursiveDeleteDeleter.deleteElement);
+		};
 
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
 			let incomingLink = getRecordTypeFromIncomingLink(incomingLinkAsJson);
@@ -339,7 +344,8 @@ var CORA = (function(cora) {
 		};
 
 		const handleErrorOnFetchPresentations = function(error) {
-			throw new Error("error fetching incoming links from server", error);
+			let errorMessage = `Error fetching incoming links from server. ${error.status} : ${error.response}`
+			throw new Error(errorMessage, { cause: error });
 		};
 
 		const openDefiningRecordUsingEventAndId = function(event, id) {
@@ -381,9 +387,6 @@ var CORA = (function(cora) {
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
 			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
-			collectPresentations: collectPresentations,
-			handleErrorOnFetchPresentations: handleErrorOnFetchPresentations,
-			onlyForTestGetViewModelForMetadataUsingId: onlyForTestGetViewModelForMetadataUsingId,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec,

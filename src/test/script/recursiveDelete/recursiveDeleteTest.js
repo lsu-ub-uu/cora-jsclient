@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	const test = QUnit.test;
 	const only = QUnit.only;
 
@@ -61,6 +61,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		createIncomingLinksResponse();
 	});
+
 	hooks.afterEach(() => {
 		//no after
 	});
@@ -74,8 +75,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	};
 
 	const createIncomingLinksResponse = function() {
-		actionLinksWithIncomingLinks =
-		{
+		actionLinksWithIncomingLinks = {
 			actionLinks: {
 				read_incoming_links: {
 					requestMethod: "GET",
@@ -112,9 +112,9 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	test("testCallToGetViewStartsFetchingOfDataButCreatesAMinimalHtmlElement", function(assert) {
 		let minimalView = recursiveDelete.getView();
 
-		assert.true(recursiveDeleteView.getViewForCallNo(0) != undefined);
-		assert.deepEqual(recursiveDeleteView.getViewForCallNo(0), minimalView);
+		assert.deepEqual(recursiveDeleteView.getView(), minimalView);
 	});
+
 	test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
 		recursiveDelete.getView();
 
@@ -125,7 +125,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		metadataProvider.addMetadataRecordById("minimalGroupId", { actionLinks: {} });
 		recursiveDelete.getView();
 
-		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {
 			elementId: 1,
@@ -155,7 +155,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		callSpec.loadMethod(answer);
 
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
-		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {
 			elementId: 1,
@@ -168,22 +168,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
 		};
 
-		assert.deepEqual(viewModel, expected);
-	});
-
-	test("testReloadForMetadataChanges", function(assert) {
-		recursiveDelete.reloadForMetadataChanges();
-
-		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
-		let expected = {
-			elementId: 1,
-			id: "minimalGroupId",
-			recordType: "someRecordType",
-			type: "group",
-			nameInData: "minimalGroupName",
-			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text" }, { elementId: 3, id: "minimalGroupIdDefText", recordType: "text" }],
-			methodOpenDefiningRecord: recursiveDelete.openDefiningRecordUsingEventAndId
-		};
 		assert.deepEqual(viewModel, expected);
 	});
 
@@ -245,7 +229,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		recursiveDelete.getView();
 		respondToAjaxCallForWhitOutIncomingLinks(0);
 		respondToAjaxCallForWhitOutIncomingLinks(1);
-		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {
 			elementId: 1,
@@ -319,7 +303,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		respondToAjaxCallForWhitOutIncomingLinks(1);
 		respondToAjaxCallForWhitOutIncomingLinks(2);
 		respondToAjaxCallForWhitOutIncomingLinks(3);
-		let viewModel = recursiveDeleteView.getViewModelForCallNo(0);
+		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {
 			elementId: 1,
@@ -460,9 +444,11 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		];
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
-		assert.deepEqual(answer.spec.modelPart.presentations, expectedPresentation);
-
-		assertCreateViewIsCalled();
+		
+		let expectedViewModel = callSpec.modelPart ;
+		expectedViewModel.presentations = expectedPresentation
+		
+		assertCreateViewIsCalled(assert, expectedViewModel);
 	});
 
 	const getCallSpecFromAjaxCall = function(callNumber) {
@@ -470,9 +456,9 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		return factoredAjax.getSpec();
 	};
 
-	const assertCreateViewIsCalled = async function() {
-		assert.true(recursiveDeleteView.getViewModelForCallNo(0) != undefined);
-		assert.deepEqual(recursiveDeleteView.getCreatedViewForCallNo(0), "generatedView");
+	const assertCreateViewIsCalled = async function(assert, expectedViewModel) {
+		assert.true(recursiveDeleteView.getCreateViewForViewModel(0) != undefined);
+		assert.deepEqual(recursiveDeleteView.getCreateViewForViewModel(0),expectedViewModel);
 	};
 
 	test("testPresentationWithThreeChilds_Presentation_Text_GuiElement", function(assert) {
@@ -497,6 +483,8 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
 
 		recursiveDelete.getView();
+		
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(),1);
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
 			spec: { modelPart: callSpec.modelPart },
@@ -544,9 +532,11 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		];
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
-		assert.deepEqual(answer.spec.modelPart.presentations, expectedPresentation);
+		
+		let expectedViewModel = callSpec.modelPart ;
+		expectedViewModel.presentations = expectedPresentation
 
-		assertCreateViewIsCalled();
+		assertCreateViewIsCalled(assert, expectedViewModel);
 	});
 
 	test("testSendDeleteMethodToView", function(assert) {
@@ -555,8 +545,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		recursiveDelete.getView();
 
 		let deleteMethod = recursiveDeleteView.getDeleteMethod(0);
-
 		assert.strictEqual(deleteMethod, dependencies.recursiveDeleteDeleter.deleteElement);
-
 	});
 });

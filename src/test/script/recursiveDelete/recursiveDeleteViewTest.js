@@ -19,9 +19,8 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 	const test = QUnit.test;
-	const only = QUnit.only;
 
 	let dependencies;
 	let spec;
@@ -102,21 +101,8 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 		let header = view.childNodes[0];
 		CORATEST.assertElementHasTypeClassText(header, "DIV", "header", "Recursive delete of minimalGroupId", assert);
-
-		recursiveDeleteUpdateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
-	let recursiveDeleteUpdateViewForViewModelAndAssertSameContent = function(assert, recursiveDeleteView, viewModel, view) {
-		let oldChildNodes = Array.from(view.childNodes);
-		recursiveDeleteView.updateViewForViewModel(viewModel);
-		let newChildNodes = Array.from(view.childNodes);
-		for (let i = 0; i < oldChildNodes.length; i++) {
-			let oldItem = oldChildNodes[i];
-			let newItem = newChildNodes[i];
-			assert.propEqual(oldItem, newItem);
-			assert.notStrictEqual(oldItem, newItem);
-		}
-	};
 
 	test("testLegend", function(assert) {
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
@@ -128,8 +114,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(storage, "DIV", "", "", assert);
 		CORATEST.assertElementHasTypeClassText(storage.childNodes[0], "SPAN", "presentation", "P", assert);
 		CORATEST.assertElementHasTypeClassText(storage.childNodes[1], "SPAN", "", "Presentation", assert);
-
-		recursiveDeleteUpdateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
 	//	test("testConfirmationMessageAndButton", function(assert) {
@@ -198,8 +182,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(elementParts[1], "SPAN", "nameInData", "[minimalGroup]", assert);
 		CORATEST.assertElementHasTypeClassText(elementParts[2], "SPAN", "type", "group", assert);
 		CORATEST.assertElementHasTypeClassText(elementParts[3], "SPAN", "dataDivider", "(someDataDivider)", assert);
-
-		updateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
 	const getFirstLevelUL = function(view) {
@@ -225,8 +207,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 		assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
 		assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
-
-		updateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
 	const getFirstElement = function(view) {
@@ -250,7 +230,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATESTHELPER.simulateOnclick(elementParts[1], { ctrlKey: true });
 		assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
 		assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
-		updateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
 	test("testTextAndDefText", function(assert) {
@@ -428,8 +407,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[1], "SPAN", "nameInData", "[textVar]", assert);
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[2], "SPAN", "type", "textVariable", assert);
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);
-
-		updateViewForViewModelAndAssertSameContent(assert, recursiveDeleteView, viewModel, view);
 	});
 
 	test("testPresentations", function(assert) {

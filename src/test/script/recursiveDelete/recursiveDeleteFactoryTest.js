@@ -19,88 +19,95 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteFactoryTest.js", {
-	beforeEach: function() {
-		this.providers = {
+QUnit.module("recursiveDelete/recursiveDeleteFactoryTest.js", hooks => {
+	const test = QUnit.test;
+	let providers;
+	let globalFactories;
+	let dependencies;
+	let spec;
+	let recursiveDeleteFactory;
+
+	hooks.beforeEach(() => {
+		providers = {
 			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
 			textProvider: CORATEST.textProviderSpy(),
 			metadataProvider: CORATEST.metadataProviderSpy(),
 			searchProvider: CORATEST.searchProviderSpy(),
 			clientInstanceProvider: CORATEST.clientInstanceProviderSpy()
 		};
-		this.globalFactories = {
+		globalFactories = {
 			ajaxCallFactory: CORATEST.standardFactorySpy("ajaxCallSpy")
 		};
-		this.dependencies = {
-			globalFactories: this.globalFactories
+		dependencies = {
+			globalFactories: globalFactories
 		};
-		this.spec = {
+		spec = {
 			jsClient: CORATEST.jsClientSpy(),
 			someKey: "someValue"
 		};
-		this.recursiveDeleteFactory = CORA.recursiveDeleteFactory(this.providers, this.dependencies);
-	},
-	afterEach: function() {
-	}
-});
+		recursiveDeleteFactory = CORA.recursiveDeleteFactory(providers, dependencies);
+	});
+	hooks.afterEach(() => {
+		//no afterEach
+	});
 
+	test("init", function(assert) {
+		assert.strictEqual(recursiveDeleteFactory.type, "recursiveDeleteFactory");
+	});
 
-QUnit.test("init", function(assert) {
-	assert.strictEqual(this.recursiveDeleteFactory.type, "recursiveDeleteFactory");
-});
+	test("testOnlyForTestGetProviders", function(assert) {
+		assert.strictEqual(recursiveDeleteFactory.onlyForTestGetProviders(), providers);
+	});
 
-QUnit.test("testOnlyForTestGetProviders", function(assert) {
-	assert.strictEqual(this.recursiveDeleteFactory.onlyForTestGetProviders(), this.providers);
-});
+	test("testOnlyForTestGetDependencies", function(assert) {
+		assert.strictEqual(recursiveDeleteFactory.onlyForTestGetDependencies(), dependencies);
+	});
 
-QUnit.test("testOnlyForTestGetDependencies", function(assert) {
-	assert.strictEqual(this.recursiveDeleteFactory.onlyForTestGetDependencies(), this.dependencies);
-});
+	test("factorTestType", function(assert) {
+		let recursiveDelete = recursiveDeleteFactory.factor(spec);
 
-QUnit.test("factorTestType", function(assert) {
-	let recursiveDelete = this.recursiveDeleteFactory.factor(this.spec);
+		assert.strictEqual(recursiveDelete.type, "recursiveDelete");
+	});
 
-	assert.strictEqual(recursiveDelete.type, "recursiveDelete");
-});
+	test("factorTestProviders", function(assert) {
+		let recursiveDelete = recursiveDeleteFactory.factor(spec);
 
-QUnit.test("factorTestProviders", function(assert) {
-	let recursiveDelete = this.recursiveDeleteFactory.factor(this.spec);
+		assert.strictEqual(recursiveDelete.onlyForTestGetProviders(), providers);
+	});
 
-	assert.strictEqual(recursiveDelete.onlyForTestGetProviders(), this.providers);
-});
+	test("factorTestDependencies", function(assert) {
+		let recursiveDelete = recursiveDeleteFactory.factor(spec);
 
-QUnit.test("factorTestDependencies", function(assert) {
-	let recursiveDelete = this.recursiveDeleteFactory.factor(this.spec);
+		assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().view.type,
+			"recursiveDeleteView");
+		assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().ajaxCallFactory,
+			globalFactories.ajaxCallFactory);
+		assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().deleteDeleter.type,
+			"recursiveDeleteDeleter");
+	});
 
-	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().view.type,
-		"recursiveDeleteView");
-	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().ajaxCallFactory,
-		this.globalFactories.ajaxCallFactory);
-	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().deleteDeleter.type,
-		"recursiveDeleteDeleter");
-});
+	test("factorTestDependenciesForDeleteDeleter", function(assert) {
+		let recursiveDelete = recursiveDeleteFactory.factor(spec);
 
-QUnit.test("factorTestDependenciesForDeleteDeleter", function(assert) {
-	let recursiveDelete = this.recursiveDeleteFactory.factor(this.spec);
-	
-	let deleteDeleter = recursiveDelete.onlyForTestGetDependencies().deleteDeleter;
-	let deleteDeleterDep = deleteDeleter.onlyForTestGetDependencies();
-	let deleteDeleterSpec = deleteDeleter.onlyForTestGetSpec();
-	
-	assert.strictEqual(deleteDeleter.type, "recursiveDeleteDeleter");
-	assert.strictEqual(deleteDeleterDep.view.type, "recursiveDeleteView");
-	assert.strictEqual(deleteDeleterSpec.baseRestUrl, "whatt");
+		let deleteDeleter = recursiveDelete.onlyForTestGetDependencies().deleteDeleter;
+		let deleteDeleterDep = deleteDeleter.onlyForTestGetDependencies();
+		let deleteDeleterSpec = deleteDeleter.onlyForTestGetSpec();
 
-//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().view.type,
-//		"recursiveDeleteView");
-//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().ajaxCallFactory,
-//		this.globalFactories.ajaxCallFactory);
-//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().deleteDeleter.type,
-//		"recursiveDeleteDeleter");
-});
+		assert.strictEqual(deleteDeleter.type, "recursiveDeleteDeleter");
+		assert.strictEqual(deleteDeleterDep.view.type, "recursiveDeleteView");
+		assert.strictEqual(deleteDeleterSpec.baseRestUrl, "whatt");
 
-QUnit.test("factorTestSpec", function(assert) {
-	let recursiveDelete = this.recursiveDeleteFactory.factor(this.spec);
+		//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().view.type,
+		//		"recursiveDeleteView");
+		//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().ajaxCallFactory,
+		//		globalFactories.ajaxCallFactory);
+		//	assert.deepEqual(recursiveDelete.onlyForTestGetDependencies().deleteDeleter.type,
+		//		"recursiveDeleteDeleter");
+	});
 
-	assert.deepEqual(recursiveDelete.onlyForTestGetSpec(), this.spec);
+	test("factorTestSpec", function(assert) {
+		let recursiveDelete = recursiveDeleteFactory.factor(spec);
+
+		assert.deepEqual(recursiveDelete.onlyForTestGetSpec(), spec);
+	});
 });

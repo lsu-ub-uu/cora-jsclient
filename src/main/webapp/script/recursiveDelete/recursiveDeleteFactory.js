@@ -21,7 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDeleteFactory = function(providers, dependencies) {
 
-		let factor = function(spec) {
+		const factor = function(spec) {
 			let deleteViewDep = {
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				view: ""

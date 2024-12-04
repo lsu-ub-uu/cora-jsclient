@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 		};
-
+		//NEW method: setModelAndUrlForDelete
 		const deleteElement = function(viewModel) {
 			view.setDeletingElement(viewModel.elementId);
 			deleteRecord(viewModel.recordType, viewModel.id, viewModel);
@@ -74,14 +74,14 @@ var CORA = (function(cora) {
 			view.setDeleteFailedElement(viewModel.elementId, errorMessage);
 		};
 
-		const onlyForTestGetDependencies = function(){
-			return dependencies;	
+		const onlyForTestGetDependencies = function() {
+			return dependencies;
 		};
-		
-		const onlyForTestGetSpec = function(){
-			return spec;	
+
+		const onlyForTestGetSpec = function() {
+			return spec;
 		};
-		
+
 		out = Object.freeze({
 			type: "recursiveDeleteDeleter",
 			deleteElement: deleteElement,

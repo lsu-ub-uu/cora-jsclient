@@ -22,42 +22,23 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recursiveDeleteViewSpy = function() {
 
-		let basicViews = [];
 		let viewModels = [];
-		let createdViews = [];
 		let deletingElement = [];
 		let deletedElement = [];
 		let deleteFailedElement = [];
 		let deleteMethods = [];
-
-		const createViewForViewModel = function(viewModel) {
-			viewModels.push(viewModel);
-
-			let createdView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
-			createdViews.push(createdView);
-			return createdView;
-		};
+		let view = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 
 		const getView = function() {
-			let basicView = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
-			basicViews.push(basicView);
-			return basicView;
+			return view;
 		};
-
-		const getViewForCallNo = function(no) {
-			return basicViews[no];
-		};
-
-		const getViewModelForCallNo = function(no) {
-			return viewModels[no];
-		};
-
-		const getCreatedViewForCallNo = function(no) {
-			return createdViews[no];
-		};
-
-		const updateViewForViewModel = function(viewModel) {
+		
+		const createViewForViewModel = function(viewModel) {
 			viewModels.push(viewModel);
+		};
+
+		const getCreateViewForViewModel = function(no) {
+			return viewModels[no];
 		};
 
 		const setDeletingElement = function(elementId) {
@@ -93,12 +74,9 @@ var CORATEST = (function(coraTest) {
 		};
 
 		return Object.freeze({
-			createViewForViewModel: createViewForViewModel,
 			getView: getView,
-			getViewForCallNo: getViewForCallNo,
-			getViewModelForCallNo: getViewModelForCallNo,
-			getCreatedViewForCallNo: getCreatedViewForCallNo,
-			updateViewForViewModel: updateViewForViewModel,
+			createViewForViewModel: createViewForViewModel,
+			getCreateViewForViewModel: getCreateViewForViewModel,
 			setDeletingElement: setDeletingElement,
 			setDeletedElement: setDeletedElement,
 			setDeleteFailedElement: setDeleteFailedElement,

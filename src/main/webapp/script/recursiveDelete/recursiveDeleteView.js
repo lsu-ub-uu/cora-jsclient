@@ -36,13 +36,6 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForViewModel = function(viewModel) {
-			//			console.log("viewModel",JSON.stringify(viewModel));
-			addPartsToView(viewModel, view);
-			return view;
-		};
-
-		const updateViewForViewModel = function(viewModel) {
-			view.innerHTML = "";
 			addPartsToView(viewModel, view);
 			return view;
 		};
@@ -280,7 +273,6 @@ var CORA = (function(cora) {
 			onlyForTestGetSpec: onlyForTestGetSpec,
 			getView: getView,
 			createViewForViewModel: createViewForViewModel,
-			updateViewForViewModel: updateViewForViewModel,
 			setDeletingElement: setDeletingElement,
 			setDeletedElement: setDeletedElement,
 			setDeleteFailedElement: setDeleteFailedElement,

@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	const test = QUnit.test;
 	const only = QUnit.only;
 
@@ -322,7 +322,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assertAjaxCalls(assert, 3, someRestUrl + "guiElement/testGuiElement", "DELETE", guiElement);
 		assertAjaxCalls(assert, 4, someRestUrl + "text/elementTextId", "DELETE", elementText);
 	});
-	
+
 	test("testViewModelWithoutAnyChildren", function(assert) {
 		viewModel = {
 			elementId: 1,

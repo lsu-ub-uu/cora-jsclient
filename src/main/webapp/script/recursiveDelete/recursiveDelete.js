@@ -20,30 +20,25 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.recursiveDelete = function(providers, dependencies, spec) {
+		const metadataProvider = providers.metadataProvider;
+		const jsClient = providers.clientInstanceProvider.getJsClient();
+		const ajaxCallFactory = dependencies.ajaxCallFactory;
+		const recursiveDeleteDeleter = dependencies.recursiveDeleteDeleter;
+		const recursiveDeleteView = dependencies.view;
+
+		const ajaxActiveCalls = [];
 		let out;
-		let metadataProvider = providers.metadataProvider;
-		let ajaxCallFactory = dependencies.ajaxCallFactory;
-		let jsClient = providers.clientInstanceProvider.getJsClient();
-		let recursiveDeleteView = dependencies.view;
 		let id;
 		let model;
-		let ajaxActiveCalls = [];
 		let elementId = 0;
 
 		const start = function() {
 			id = spec.id;
 		};
 
-		const reloadForMetadataChanges = function() {
-			let model = getViewModelForMetadataUsingId(id);
-			recursiveDeleteView.updateViewForViewModel(model);
-		};
-
 		const getView = function() {
 			model = getViewModelForMetadataUsingId(id);
-			if (ajaxActiveCalls.length === 0) {
-				modelIsReady(model);
-			}
+			ensureModelIsReady();
 			return recursiveDeleteView.getView();
 		};
 
@@ -72,7 +67,7 @@ var CORA = (function(cora) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-			//			console.log(JSON.stringify(metadata));
+			//						console.log(JSON.stringify(metadata));
 			return CORA.coraData(metadata);
 		};
 
@@ -224,8 +219,9 @@ var CORA = (function(cora) {
 		};
 
 		const modelIsReady = function(model) {
+//			recursiveDeleteDeleter.setModelAndUrlForDelete(model, baseUrl);
 			recursiveDeleteView.createViewForViewModel(model);
-			recursiveDeleteView.setDeleteMethod(dependencies.recursiveDeleteDeleter.deleteElement);
+			recursiveDeleteView.setDeleteMethod(recursiveDeleteDeleter.deleteElement);
 		};
 
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {
@@ -385,7 +381,6 @@ var CORA = (function(cora) {
 		out = Object.freeze({
 			type: "recursiveDelete",
 			getView: getView,
-			reloadForMetadataChanges: reloadForMetadataChanges,
 			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,

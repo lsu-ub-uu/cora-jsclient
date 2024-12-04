@@ -18,12 +18,11 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	const test = QUnit.test;
 	const only = QUnit.only;
 
 	let dependencies;
-	let spec;
 	let deleteUrl = "http://someRestUrl/rest/record/";
 	let ajaxCallFactorySpy;
 	let viewModel;
@@ -40,7 +39,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		deleter = CORA.recursiveDeleteDeleter(dependencies);
 
 		setUpBasicViewModel();
-		
+
 		deleter.setModelAndUrlForDelete(viewModel, deleteUrl);
 	});
 
@@ -85,7 +84,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	};
 
 	test("testDeleteElementSetDeletingAndCallsDeleteUsingAjax", function(assert) {
-		
+
 		deleter.deleteElement();
 
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
@@ -93,13 +92,13 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
 	});
 
-	only("testDeleteElementCallBackSetDeletingAndCallsDeleteForAllChildren", function(assert) {
+	test("testDeleteElementCallBackSetDeletingAndCallsDeleteForAllChildren", function(assert) {
 		let answer = {
 			spec: { viewModel: viewModel }
 		};
 
 		deleter.deleteElement();
-		
+
 		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
 
@@ -108,14 +107,14 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4);
 		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
 		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
-		assertAjaxCalls(assert, 0, deleteUrl + "text/minimalGroupIdText", "DELETE", textElement);
-//		assertAjaxCalls(assert, 1, deleteUrl + "text/minimalGroupIdText", "DELETE", textElement);
-//		assertAjaxCalls(assert, 2, deleteUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
-//		assertAjaxCalls(assert, 3, deleteUrl + "metadata/textVarId", "DELETE", childViewModel);
-//
-//		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 2);
-//		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 3);
-//		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
+		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
+		assertAjaxCalls(assert, 1, deleteUrl + "text/minimalGroupIdText", "DELETE", textElement);
+		assertAjaxCalls(assert, 2, deleteUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
+		assertAjaxCalls(assert, 3, deleteUrl + "metadata/textVarId", "DELETE", childViewModel);
+
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(1), 2);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(2), 3);
+		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
 	});
 
 	const getCallSpecFromAjaxCall = function(callNumber) {
@@ -126,12 +125,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 	test("testDeleteElementCallFailsSetFailedDeletingAndCallsDeleteForAllChildren", function(assert) {
 		let answer = {
-			spec: { viewModel: viewModel },
+			spec: { model: viewModel },
 			status: 404,
 			response: "someError"
 		};
 
-		deleter.deleteElement(viewModel);
+		deleter.deleteElement();
 		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.errorMethod(answer);
 
@@ -144,7 +143,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 	});
 
-	const assertAjaxCalls = function(assert, callNumber, url, requestMethod, viewModel) {
+	const assertAjaxCalls = function(assert, callNumber, url, requestMethod, expectedModel) {
 		let ajaxCallSpy = ajaxCallFactorySpy.getFactored(callNumber);
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, url);
@@ -152,7 +151,7 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.accept, undefined);
 		assert.strictEqual(ajaxCallSpec.contentType, undefined);
 		assert.strictEqual(ajaxCallSpec.data, undefined);
-		assert.deepEqual(ajaxCallSpec.viewModel, viewModel);
+		assert.deepEqual(ajaxCallSpec.model, expectedModel);
 	};
 
 	test("deleteElementsWithAttributes", function(assert) {
@@ -180,12 +179,13 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		};
 		viewModel.attributes.push(attribute);
 
+		deleter.setModelAndUrlForDelete(viewModel, deleteUrl);
+		deleter.deleteElement();
+
+		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
 			spec: { viewModel: viewModel }
 		};
-
-		deleter.deleteElement(viewModel);
-		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
 
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
@@ -236,13 +236,13 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		};
 		viewModel.collectionItems.push(collectionItem);
 
+		deleter.setModelAndUrlForDelete(viewModel, deleteUrl);
+		deleter.deleteElement();
 
+		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
 			spec: { viewModel: viewModel }
 		};
-
-		deleter.deleteElement(viewModel);
-		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
 
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 4);
@@ -298,12 +298,12 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		let elementText = { elementId: 5, id: "elementTextId", recordType: "text" };
 		viewModel.elementText.push(elementText);
 
+		deleter.setModelAndUrlForDelete(viewModel, deleteUrl);
+		deleter.deleteElement();
 
 		let answer = {
 			spec: { viewModel: viewModel }
 		};
-
-		deleter.deleteElement(viewModel);
 		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
 
@@ -334,15 +334,14 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			spec: { viewModel: viewModel }
 		};
 
-		deleter.deleteElement(viewModel);
+		deleter.deleteElement();
 		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
 
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 	});
 
-	test("testOnlyForTestGetDepenciesAndSpecs", function(assert) {
+	test("testOnlyForTestGetDepencies", function(assert) {
 		assert.strictEqual(deleter.onlyForTestGetDependencies(), dependencies);
-		assert.strictEqual(deleter.onlyForTestGetSpec(), spec);
 	});
 });

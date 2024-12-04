@@ -19,7 +19,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.recursiveDeleteView = function(dependencies, spec) {
+	cora.recursiveDeleteView = function(dependencies) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let elements = [];
@@ -263,14 +263,10 @@ var CORA = (function(cora) {
 			return dependencies;
 		};
 
-		const onlyForTestGetSpec = function() {
-			return spec;
-		};
 
 		out = Object.freeze({
 			type: "recursiveDeleteView",
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec,
 			getView: getView,
 			createViewForViewModel: createViewForViewModel,
 			setDeletingElement: setDeletingElement,

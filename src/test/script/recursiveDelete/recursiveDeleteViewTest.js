@@ -86,10 +86,6 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(recursiveDeleteView.onlyForTestGetDependencies(), dependencies);
 	});
 
-	test("testOnlyForTestGetSpec", function(assert) {
-		assert.strictEqual(recursiveDeleteView.onlyForTestGetSpec(), spec);
-	});
-
 	test("testGetView", function(assert) {
 		let view = recursiveDeleteView.getView();
 		CORATEST.assertElementHasTypeClassText(view, "SPAN", "recursiveDelete", "", assert);

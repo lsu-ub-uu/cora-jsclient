@@ -33,22 +33,22 @@ var CORA = (function(cora) {
 			viewModel = model;
 		};
 		
-		//NEW method: setModelAndUrlForDelete
 		const deleteElement = function() {
 			deleteRecord(viewModel);
 		};
+		
 		const deleteRecord = function(currentModel) {
 			view.setDeletingElement(currentModel.elementId);
 			callDeleteRecord(currentModel.recordType, currentModel.id, currentModel);
 		};
 
-		const callDeleteRecord = function(recordType, id, currentViewModel) {
+		const callDeleteRecord = function(recordType, id, currentModel) {
 			let callSpec = {
 				url: `${deleteUrl}${recordType}/${id}`,
 				requestMethod: "DELETE",
 				loadMethod: deleteRecordCallBack,
 				errorMethod: deleteRecordFailedCallBack,
-				viewModel: currentViewModel
+				model: currentModel
 			};
 			ajaxCallFactory.factor(callSpec);
 		}
@@ -59,45 +59,40 @@ var CORA = (function(cora) {
 			deleteAllChildren(currentModel);
 		};
 
-		const deleteAllChildren = function(currentViewModel) {
-			deleteSubElement(currentViewModel.texts);
-			deleteSubElement(currentViewModel.children);
-			deleteSubElement(currentViewModel.attributes);
-			deleteSubElement(currentViewModel.refCollection);
-			deleteSubElement(currentViewModel.collectionItems);
-			deleteSubElement(currentViewModel.presentations);
-			deleteSubElement(currentViewModel.guiElements);
-			deleteSubElement(currentViewModel.elementText);
+		const deleteAllChildren = function(currentModel) {
+			deleteSubElement(currentModel.texts);
+			deleteSubElement(currentModel.children);
+			deleteSubElement(currentModel.attributes);
+			deleteSubElement(currentModel.refCollection);
+			deleteSubElement(currentModel.collectionItems);
+			deleteSubElement(currentModel.presentations);
+			deleteSubElement(currentModel.guiElements);
+			deleteSubElement(currentModel.elementText);
 		};
 
 		const deleteSubElement = function(subElement) {
 			if (subElement) {
 				for (let childViewModel of subElement) {
-					deleteElement(childViewModel);
+					deleteRecord(childViewModel);
 				}
 			}
 		};
 
 		const deleteRecordFailedCallBack = function(answer) {
-			let viewModel = answer.spec.viewModel;
+			let currentModel = answer.spec.model;
 			let errorMessage = `${answer.status} : ${answer.response}`;
-			view.setDeleteFailedElement(viewModel.elementId, errorMessage);
+			view.setDeleteFailedElement(currentModel.elementId, errorMessage);
 		};
 
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};
 
-		const onlyForTestGetSpec = function() {
-			return spec;
-		};
-
 		out = Object.freeze({
 			type: "recursiveDeleteDeleter",
 			setModelAndUrlForDelete: setModelAndUrlForDelete,
 			deleteElement: deleteElement,
-			onlyForTestGetDependencies: onlyForTestGetDependencies,
-			onlyForTestGetSpec: onlyForTestGetSpec
+			onlyForTestGetDependencies: onlyForTestGetDependencies
 		});
 		start();
 

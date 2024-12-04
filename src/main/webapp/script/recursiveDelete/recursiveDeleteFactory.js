@@ -23,22 +23,17 @@ var CORA = (function(cora) {
 
 		const factor = function(spec) {
 			let deleteViewDep = {
-				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
-				view: ""
+				textProvider: providers.textProvider,
+				questionFactory: CORA.genericFactory("question", undefined),
 			};
-			let deleteViewSpec = {
-				baseRestUrl: ""
-			};
-			let deleteView = CORA.recursiveDeleteView(deleteViewDep, deleteViewSpec);
+			
+			let deleteView = CORA.recursiveDeleteView(deleteViewDep);
 
 			let deleteDeleterDep = {
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				view: deleteView
 			};
-			let deleteDeleterSpec = {
-				baseRestUrl: ""
-			};
-			let deleteDeleter = CORA.recursiveDeleteDeleter(deleteDeleterDep, deleteDeleterSpec);
+			let deleteDeleter = CORA.recursiveDeleteDeleter(deleteDeleterDep);
 
 
 			let dep = {

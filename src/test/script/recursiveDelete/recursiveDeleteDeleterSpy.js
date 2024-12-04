@@ -23,16 +23,29 @@ var CORATEST = (function(coraTest) {
 	coraTest.recursiveDeleteDeleterSpy = function() {
 
 		let deleteElements = [];
+		let modelAndUrl;
+		
+		const setModelAndUrlForDelete = function(model, url){
+			modelAndUrl ={
+				model: model,
+				url: url
+			}
+		};
+		
+		const getModelAndUrlForDelete = function(){
+			return modelAndUrl;
+		};
 
-
-		const deleteElement = function(viewModel) {
-			deleteElements.push(viewModel);
+		const deleteElement = function(model) {
+			deleteElements.push(model);
 		};
 		const getDeleteElement = function(no) {
 			return deleteElements[no];
 		};
 
 		return Object.freeze({
+			setModelAndUrlForDelete: setModelAndUrlForDelete,
+			getModelAndUrlForDelete: getModelAndUrlForDelete,
 			deleteElement: deleteElement,
 			getDeleteElement: getDeleteElement
 		});

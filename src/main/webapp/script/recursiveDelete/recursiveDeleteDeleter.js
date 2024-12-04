@@ -18,23 +18,33 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.recursiveDeleteDeleter = function(dependencies, spec) {
+	cora.recursiveDeleteDeleter = function(dependencies) {
 		let out;
 		let ajaxCallFactory = dependencies.ajaxCallFactory;
 		let view = dependencies.view;
-		let baseRestUrl = spec.baseRestUrl;
+		let deleteUrl;
+		let viewModel;
 
 		const start = function() {
 		};
+		
+		const setModelAndUrlForDelete = function(model, url){
+			deleteUrl = url;
+			viewModel = model;
+		};
+		
 		//NEW method: setModelAndUrlForDelete
-		const deleteElement = function(viewModel) {
-			view.setDeletingElement(viewModel.elementId);
-			deleteRecord(viewModel.recordType, viewModel.id, viewModel);
+		const deleteElement = function() {
+			deleteRecord(viewModel);
+		};
+		const deleteRecord = function(currentModel) {
+			view.setDeletingElement(currentModel.elementId);
+			callDeleteRecord(currentModel.recordType, currentModel.id, currentModel);
 		};
 
-		const deleteRecord = function(recordType, id, currentViewModel) {
+		const callDeleteRecord = function(recordType, id, currentViewModel) {
 			let callSpec = {
-				url: `${baseRestUrl}${recordType}/${id}`,
+				url: `${deleteUrl}${recordType}/${id}`,
 				requestMethod: "DELETE",
 				loadMethod: deleteRecordCallBack,
 				errorMethod: deleteRecordFailedCallBack,
@@ -44,9 +54,9 @@ var CORA = (function(cora) {
 		}
 
 		const deleteRecordCallBack = function(answer) {
-			let viewModel = answer.spec.viewModel;
-			view.setDeletedElement(viewModel.elementId);
-			deleteAllChildren(viewModel);
+			let currentModel = answer.spec.viewModel;
+			view.setDeletedElement(currentModel.elementId);
+			deleteAllChildren(currentModel);
 		};
 
 		const deleteAllChildren = function(currentViewModel) {
@@ -84,6 +94,7 @@ var CORA = (function(cora) {
 
 		out = Object.freeze({
 			type: "recursiveDeleteDeleter",
+			setModelAndUrlForDelete: setModelAndUrlForDelete,
 			deleteElement: deleteElement,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

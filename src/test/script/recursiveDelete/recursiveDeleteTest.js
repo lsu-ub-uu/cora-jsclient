@@ -21,13 +21,14 @@
 
 QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	const test = QUnit.test;
-	const only = QUnit.only;
 
 	let metadataProvider;
 	let clientInstanceProvider;
 	let ajaxCallFactorySpy;
 	let recursiveDeleteView;
+	let recursiveDeleteDeleter;
 	let actionLinksWithIncomingLinks;
+	let actionLinksWithRead;
 
 	let dependencies;
 	let providers;
@@ -39,6 +40,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 		recursiveDeleteView = CORATEST.recursiveDeleteViewSpy();
+		recursiveDeleteDeleter = CORATEST.recursiveDeleteDeleterSpy();
 
 		providers = {
 			metadataProvider: metadataProvider,
@@ -70,19 +72,31 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		dependencies = {
 			ajaxCallFactory: ajaxCallFactorySpy,
 			view: recursiveDeleteView,
-			recursiveDeleteDeleter: CORATEST.recursiveDeleteDeleterSpy()
+			recursiveDeleteDeleter: recursiveDeleteDeleter
 		};
 	};
 
 	const createIncomingLinksResponse = function() {
+		let actionLinkRead = {
+			requestMethod: "GET",
+			rel: "read",
+			url: "https://cora.epc.ub.uu.se/systemone/rest/record/someRecordType/minimalGroupId",
+			accept: "application/vnd.uub.record+json"
+		};
 		actionLinksWithIncomingLinks = {
 			actionLinks: {
+				read: actionLinkRead,
 				read_incoming_links: {
 					requestMethod: "GET",
 					rel: "read_incoming_links",
 					url: "http://some/incomingLinks",
 					accept: "application/vnd.uub.recordList+json"
 				}
+			}
+		};
+		actionLinksWithRead = {
+			actionLinks: {
+				read: actionLinkRead
 			}
 		};
 
@@ -122,7 +136,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	});
 
 	test("testViewModelNoIncomingLinks", function(assert) {
-		metadataProvider.addMetadataRecordById("minimalGroupId", { actionLinks: {} });
+		metadataProvider.addMetadataRecordById("minimalGroupId", actionLinksWithRead);
 		recursiveDelete.getView();
 
 		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
@@ -444,10 +458,10 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		];
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
-		
-		let expectedViewModel = callSpec.modelPart ;
+
+		let expectedViewModel = callSpec.modelPart;
 		expectedViewModel.presentations = expectedPresentation
-		
+
 		assertCreateViewIsCalled(assert, expectedViewModel);
 	});
 
@@ -458,7 +472,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 	const assertCreateViewIsCalled = async function(assert, expectedViewModel) {
 		assert.true(recursiveDeleteView.getCreateViewForViewModel(0) != undefined);
-		assert.deepEqual(recursiveDeleteView.getCreateViewForViewModel(0),expectedViewModel);
+		assert.deepEqual(recursiveDeleteView.getCreateViewForViewModel(0), expectedViewModel);
 	};
 
 	test("testPresentationWithThreeChilds_Presentation_Text_GuiElement", function(assert) {
@@ -483,8 +497,8 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		metadataProvider.addMetadataByCompactDefinition(addPresentation3);
 
 		recursiveDelete.getView();
-		
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(),1);
+
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
 			spec: { modelPart: callSpec.modelPart },
@@ -532,19 +546,31 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		];
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
-		
-		let expectedViewModel = callSpec.modelPart ;
+
+		let expectedViewModel = callSpec.modelPart;
 		expectedViewModel.presentations = expectedPresentation
 
 		assertCreateViewIsCalled(assert, expectedViewModel);
 	});
 
+	test("testSetModelAndUrlForDelteInDeleter", function(assert) {
+		metadataProvider.addMetadataRecordById("minimalGroupId", actionLinksWithRead);
+
+		recursiveDelete.getView();
+
+		let modelAndUrl = recursiveDeleteDeleter.getModelAndUrlForDelete();
+		let expectedModelSameAsView = recursiveDeleteView.getCreateViewForViewModel(0);
+
+		assert.strictEqual(modelAndUrl.model, expectedModelSameAsView);
+		assert.strictEqual(modelAndUrl.url, "https://cora.epc.ub.uu.se/systemone/rest/record/");
+	});
+
 	test("testSendDeleteMethodToView", function(assert) {
-		metadataProvider.addMetadataRecordById("minimalGroupId", { actionLinks: {} });
+		metadataProvider.addMetadataRecordById("minimalGroupId", actionLinksWithRead);
 
 		recursiveDelete.getView();
 
 		let deleteMethod = recursiveDeleteView.getDeleteMethod(0);
-		assert.strictEqual(deleteMethod, dependencies.recursiveDeleteDeleter.deleteElement);
+		assert.strictEqual(deleteMethod, recursiveDeleteDeleter.deleteElement);
 	});
 });

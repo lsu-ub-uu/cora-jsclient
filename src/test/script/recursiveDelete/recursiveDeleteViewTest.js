@@ -514,13 +514,8 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 	test("testChangeClassToFailed", function(assert) {
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
-
-		let failedMessage = {
-			elementId: 1,
-			errorMessage: "404 : someError"
-		};
-
-		recursiveDeleteView.setDeleteFailedElement(failedMessage);
+		let errorMessage = "404 : someError";
+		recursiveDeleteView.setDeleteFailedElement("1", errorMessage);
 
 		let metadataNode = view.childNodes[1];
 		let elementOne = metadataNode.firstChild.firstChild;
@@ -529,7 +524,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let errorElement = elementOne.lastChild;
 		assert.strictEqual(errorElement.tagName, "SPAN");
 		assert.strictEqual(errorElement.className, "errorMessage");
-		assert.strictEqual(errorElement.textContent, failedMessage.errorMessage);
+		assert.strictEqual(errorElement.textContent, errorMessage);
 
 	});
 });

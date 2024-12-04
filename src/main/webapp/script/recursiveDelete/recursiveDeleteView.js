@@ -245,10 +245,10 @@ var CORA = (function(cora) {
 			element.className = 'deleted';
 		};
 
-		const setDeleteFailedElement = function(failed) {
-			let element = elements[failed.elementId];
+		const setDeleteFailedElement = function(id, errorMessage) {
+			let element = elements[id];
 			element.className = 'failed';
-			let errorElement = createElementWithTypeClassText("span", "errorMessage", failed.errorMessage);
+			let errorElement = createElementWithTypeClassText("span", "errorMessage", errorMessage);
 			element.appendChild(errorElement);
 		};
 
@@ -262,7 +262,6 @@ var CORA = (function(cora) {
 		const onlyForTestGetDependencies = function() {
 			return dependencies;
 		};
-
 
 		out = Object.freeze({
 			type: "recursiveDeleteView",

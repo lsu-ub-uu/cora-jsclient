@@ -94,7 +94,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 	test("testDeleteElementCallBackSetDeletingAndCallsDeleteForAllChildren", function(assert) {
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { model: viewModel }
 		};
 
 		deleter.deleteElement();
@@ -184,7 +184,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { model: viewModel }
 		};
 		callSpec.loadMethod(answer);
 
@@ -241,7 +241,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { model: viewModel }
 		};
 		callSpec.loadMethod(answer);
 
@@ -302,7 +302,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		deleter.deleteElement();
 
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { model: viewModel }
 		};
 		let callSpec = getCallSpecFromAjaxCall(0);
 		callSpec.loadMethod(answer);
@@ -331,7 +331,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			nameInData: "minimalGroup"
 		};
 		let answer = {
-			spec: { viewModel: viewModel }
+			spec: { model: viewModel }
 		};
 
 		deleter.deleteElement();

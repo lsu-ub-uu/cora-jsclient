@@ -54,7 +54,7 @@ var CORA = (function(cora) {
 		}
 
 		const deleteRecordCallBack = function(answer) {
-			let currentModel = answer.spec.viewModel;
+			let currentModel = answer.spec.model;
 			view.setDeletedElement(currentModel.elementId);
 			deleteAllChildren(currentModel);
 		};

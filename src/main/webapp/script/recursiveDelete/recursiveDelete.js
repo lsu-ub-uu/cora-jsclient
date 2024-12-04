@@ -67,7 +67,6 @@ var CORA = (function(cora) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-			//						console.log(JSON.stringify(metadata));
 			return CORA.coraData(metadata);
 		};
 
@@ -78,7 +77,6 @@ var CORA = (function(cora) {
 				recordType: getRecordType(cDataRecordGroup),
 				type: getType(cDataRecordGroup),
 				nameInData: cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData"),
-				//				dataDivider: getDataDivider(cDataRecordGroup),
 				texts: [],
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
@@ -118,20 +116,11 @@ var CORA = (function(cora) {
 			return "-";
 		};
 
-		//		const getDataDivider = function(cDataRecordGroup) {
-		//			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
-		//			let type = cRecordInfo.getFirstChildByNameInData("dataDivider");
-		//			let cTtype = CORA.coraData(type);
-		//			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
-		//		};
-
-
 		const getText = function(cDataRecordGroup, name) {
 			let textObject = {
 				elementId: getNewElementId(),
 				id: cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name),
 				recordType: "text",
-				//				dataDivider: getDataDivider(cDataRecordGroup)
 			};
 			return textObject;
 		};
@@ -219,9 +208,16 @@ var CORA = (function(cora) {
 		};
 
 		const modelIsReady = function(model) {
-//			recursiveDeleteDeleter.setModelAndUrlForDelete(model, baseUrl);
+			let baseUrl = calculateBaseUrlFromTopRecordInModel(model);
+			recursiveDeleteDeleter.setModelAndUrlForDelete(model, baseUrl);
 			recursiveDeleteView.createViewForViewModel(model);
 			recursiveDeleteView.setDeleteMethod(recursiveDeleteDeleter.deleteElement);
+		};
+
+		const calculateBaseUrlFromTopRecordInModel = function(model) {
+			let baseInModelAsRecord = metadataProvider.getMetadataRecordById(model.id);
+			let readUrl = baseInModelAsRecord.actionLinks.read.url;
+			return readUrl.replace(`${model.recordType}/${model.id}`, '');
 		};
 
 		const filterAndAddIncomingPresentations = function(incomingLinkAsJson, presentations) {

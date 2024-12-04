@@ -39,7 +39,7 @@ var CORA = (function(cora) {
 			let dep = {
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				view: deleteView,
-				deleteDeleter: deleteDeleter
+				recursiveDeleteDeleter: deleteDeleter
 			};
 
 			let recursiveDelete = CORA.recursiveDelete(providers, dep, spec);

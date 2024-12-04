@@ -87,14 +87,14 @@ QUnit.module("recursiveDelete/recursiveDeleteFactoryTest.js", hooks => {
 		let dependencies = recursiveDelete.onlyForTestGetDependencies();
 		assert.strictEqual(dependencies.view.type, "recursiveDeleteView");
 		assert.deepEqual(dependencies.ajaxCallFactory, globalFactories.ajaxCallFactory);
-		assert.strictEqual(dependencies.deleteDeleter.type, "recursiveDeleteDeleter");
+		assert.strictEqual(dependencies.recursiveDeleteDeleter.type, "recursiveDeleteDeleter");
 		assert.strictEqual(dependencies.view.type, "recursiveDeleteView");
 	});
 
 	test("factorTestDependenciesForDeleteDeleter", function(assert) {
 		let recursiveDelete = recursiveDeleteFactory.factor(spec);
 
-		let deleteDeleter = recursiveDelete.onlyForTestGetDependencies().deleteDeleter;
+		let deleteDeleter = recursiveDelete.onlyForTestGetDependencies().recursiveDeleteDeleter;
 		let deleteDeleterDep = deleteDeleter.onlyForTestGetDependencies();
 
 		assert.strictEqual(deleteDeleter.type, "recursiveDeleteDeleter");

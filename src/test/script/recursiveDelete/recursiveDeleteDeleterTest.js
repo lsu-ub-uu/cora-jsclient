@@ -416,17 +416,14 @@ QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 			recordType: "metadata",
 			nameInData: "minimalGroup"
 		};
-		let answer = {
-			spec: { model: viewModel }
-		};
-
+		
+		deleter.setModelAndUrlForDelete(viewModel, deleteUrl);
 		deleter.deleteElement();
-		let callSpec = getCallSpecFromAjaxCall(0);
-		callSpec.loadMethod(answer);
-		// Varför funkar den nedan?
-//		sendOkAnswerToAjaxCall(0);
+		
+		sendOkAnswerToAjaxCall(0);
 
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
 	});
 
 	test("testOnlyForTestGetDepencies", function(assert) {

@@ -15,4 +15,3 @@ reports
 /.classpath
 /.settings/
 /node
-/dockerForTests/

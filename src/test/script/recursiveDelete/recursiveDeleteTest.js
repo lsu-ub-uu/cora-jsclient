@@ -459,7 +459,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
 
-		let expectedViewModel = callSpec.modelPart;
+		let expectedViewModel = {...callSpec.modelPart};
 		expectedViewModel.presentations = expectedPresentation
 
 		assertCreateViewIsCalled(assert, expectedViewModel);
@@ -498,6 +498,8 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		recursiveDelete.getView();
 
+		ajaxCallFactorySpy.getFactored(0)
+		
 		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
@@ -512,7 +514,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 				id: "recordTypeFormPGroup",
 				recordType: "presentation",
 				type: "container",
-				presentations: [{
+				childPresentations: [{
 					elementId: 5,
 					id: "childPresentation",
 					recordType: "someRecordType",
@@ -547,9 +549,9 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		assert.strictEqual(answer.spec.modelPart.presentations.length, 3);
 
-		let expectedViewModel = callSpec.modelPart;
-		expectedViewModel.presentations = expectedPresentation
-
+		let expectedViewModel = {...callSpec.modelPart};
+		expectedViewModel.presentations = expectedPresentation;
+		
 		assertCreateViewIsCalled(assert, expectedViewModel);
 	});
 

@@ -27,19 +27,65 @@ var CORA = (function(cora) {
 
 		const start = function() {
 		};
-		
-		const setModelAndUrlForDelete = function(model, url){
+
+		const setModelAndUrlForDelete = function(model, url) {
 			deleteUrl = url;
 			viewModel = model;
 		};
-		
+
 		const deleteElement = function() {
 			deleteRecord(viewModel);
 		};
-		
+
 		const deleteRecord = function(currentModel) {
-			view.setDeletingElement(currentModel.elementId);
-			callDeleteRecord(currentModel.recordType, currentModel.id, currentModel);
+			//SPIKE
+			if (currentModel.presentations) {
+				//				deleteSubElement(currentModel.presentations);
+				//				// we need To wait
+				let presentations = currentModel.presentations;
+				let presentationCalls = [];
+				for (let presentation of presentations) {
+					presentationCalls.push("deleting")
+					view.setDeletingElement(presentation.elementId);
+					callDeletePresentation(presentation.recordType, presentation.id, presentation, currentModel, presentationCalls);
+				}
+				//				let presentation = currentModel.presentations[0];
+
+			} else {
+
+				view.setDeletingElement(currentModel.elementId);
+				callDeleteRecord(currentModel.recordType, currentModel.id, currentModel);
+			}
+
+		};
+
+		const callDeletePresentation = function(recordType, id, presentationModel, parentModel, presentationCalls) {
+			let callSpec = {
+				url: `${deleteUrl}${recordType}/${id}`,
+				requestMethod: "DELETE",
+				loadMethod: deletePresentationCallBack,
+				errorMethod: deleteRecordFailedCallBack,
+				presentationModel: presentationModel,
+				parentModel: parentModel,
+				presentationCalls: presentationCalls
+			};
+			ajaxCallFactory.factor(callSpec);
+		}
+		const deletePresentationCallBack = function(answer) {
+			let presentationCalls = answer.spec.presentationCalls;
+			presentationCalls.pop();
+
+			let presentationModel = answer.spec.presentationModel;
+			view.setDeletedElement(presentationModel.elementId);
+			//			deleteAllChildren(presentationModel);
+
+			//wait if all presentations are deleted
+			if (presentationCalls.length === 0) {
+
+				let parentModel = answer.spec.parentModel;
+				view.setDeletingElement(parentModel.elementId);
+				callDeleteRecord(parentModel.recordType, parentModel.id, parentModel);
+			}
 		};
 
 		const callDeleteRecord = function(recordType, id, currentModel) {
@@ -65,7 +111,7 @@ var CORA = (function(cora) {
 			deleteSubElement(currentModel.attributes);
 			deleteSubElement(currentModel.refCollection);
 			deleteSubElement(currentModel.collectionItems);
-			deleteSubElement(currentModel.presentations);
+			deleteSubElement(currentModel.childPresentations);
 			deleteSubElement(currentModel.guiElements);
 			deleteSubElement(currentModel.elementText);
 		};

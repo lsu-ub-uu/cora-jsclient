@@ -216,6 +216,9 @@ var CORA = (function(cora) {
 			if (child.presentations) {
 				createAndAppendGroup(ul, child.presentations, "presentation");
 			}
+			if (child.chilPresentations) {
+				createAndAppendGroup(ul, child.chilPresentations, "childPresentation");
+			}
 			if (child.guiElements) {
 				createAndAppendGroup(ul, child.guiElements, "guiElement");
 			}

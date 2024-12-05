@@ -412,7 +412,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 				id: "recordTypeFormPGroup",
 				recordType: "presentation",
 				type: "container",
-				presentations: [{
+				chilPresentations: [{
 					id: "childPresentation",
 					recordType: "someRecordType",
 					type: "pVar"
@@ -473,7 +473,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(textsText[2], "SPAN", "dataDivider", "(-)", assert);
 
 		let childPresentation = thirdLevelUL.childNodes[1].childNodes[0].childNodes;
-		CORATEST.assertElementHasTypeClassText(childPresentation[0], "SPAN", "labelType", "presentation", assert);
+		CORATEST.assertElementHasTypeClassText(childPresentation[0], "SPAN", "labelType", "childPresentation", assert);
 		CORATEST.assertElementHasTypeClassText(childPresentation[1], "SPAN", "id", "childPresentation", assert);
 		CORATEST.assertElementHasTypeClassText(childPresentation[2], "SPAN", "type", "pVar", assert);
 		CORATEST.assertElementHasTypeClassText(childPresentation[3], "SPAN", "dataDivider", "(-)", assert);

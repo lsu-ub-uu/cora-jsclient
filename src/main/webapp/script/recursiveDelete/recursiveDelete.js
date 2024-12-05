@@ -296,7 +296,7 @@ var CORA = (function(cora) {
 			let currentLevelModel = getBasicModelForPresentation(cDataRecordGroup);
 			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = collectChildReferencesForPresentations(cDataRecordGroup, "childReferences");
-				currentLevelModel.presentations = presentationChildren.presentations;
+				currentLevelModel.childPresentations = presentationChildren.childPresentations;
 				currentLevelModel.texts = presentationChildren.texts;
 				currentLevelModel.guiElements = presentationChildren.guiElements;
 			}
@@ -304,7 +304,7 @@ var CORA = (function(cora) {
 		};
 
 		const collectChildReferencesForPresentations = function(cDataRecordGroup, groupName) {
-			let children = { presentations: [], texts: [], guiElements: [] };
+			let children = { childPresentations: [], texts: [], guiElements: [] };
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
 			for (let childReference of childReferences.children) {
 				handleChildReference(children, childReference);
@@ -325,7 +325,7 @@ var CORA = (function(cora) {
 			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			let childrenMetadataInfo = getViewModelForPresentationUsingId(refId);
 			if (getType(cRef) === "presentation") {
-				childrenArrays.presentations.push(childrenMetadataInfo);
+				childrenArrays.childPresentations.push(childrenMetadataInfo);
 			}
 			if (getType(cRef) === "text") {
 				childrenArrays.texts.push(childrenMetadataInfo);

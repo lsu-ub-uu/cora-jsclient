@@ -59,7 +59,10 @@ var CORA = (function(cora) {
 				modelPart.children = collectChildReferences(cDataRecordGroup, "childReferences");
 			}
 			let metadataRecord = metadataProvider.getMetadataRecordById(metadataId);
-			if (metadataRecord.actionLinks.read_incoming_links) {
+			let metadataRecordData = cDataRecordGroup.getData();
+			let metadataTypesToCheckForPresentations = ["itemCollection", "collectionItem"];
+			if ( !metadataTypesToCheckForPresentations.includes(metadataRecordData.attributes.type) &&
+				metadataRecord.actionLinks.read_incoming_links) {
 				fetchPresenetationsByUrl(metadataRecord.actionLinks.read_incoming_links.url, modelPart);
 			}
 			return modelPart;

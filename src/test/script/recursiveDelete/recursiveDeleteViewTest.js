@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
+QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 	const test = QUnit.test;
 
 	let dependencies;
@@ -167,7 +167,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 		CORATEST.assertElementHasTypeClassText(getFirstLevelUL(view), "UL", "metadata", "", assert);
 		let firstLI = getFirstLevelLI(view);
-		CORATEST.assertElementHasTypeClassText(firstLI, "LI", "", "", assert);
+		CORATEST.assertElementHasTypeClassText(firstLI, "LI", "recursiveDeleteGroup", "", assert);
 
 		let elementNodes = firstLI.childNodes;
 		let element = elementNodes[0];
@@ -259,8 +259,8 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 
 		let textVarLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(textVarLI.tagName, "LI");
-		assert.strictEqual(textVarLI.className, "");
+		CORATEST.assertElementHasTypeClassText(textVarLI, "LI", "recursiveDeleteTextVariable", "", assert);
+
 		let textVarElement = textVarLI.childNodes[0];
 		let textVarElementParts = textVarElement.childNodes;
 		//			assert.strictEqual(textVarElementParts.length, 3);
@@ -269,8 +269,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(textVarElementParts[2], "SPAN", "type", "textVariable", assert);
 		CORATEST.assertElementHasTypeClassText(textVarElementParts[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);
 
-		assert.strictEqual(textVarLI.tagName, "LI");
-		assert.strictEqual(textVarLI.className, "");
+		CORATEST.assertElementHasTypeClassText(textVarLI, "LI", "recursiveDeleteTextVariable", "", assert);
 		let thirdLevelUL = textVarLI.childNodes[1];
 		let secondLevelTextLI = thirdLevelUL.childNodes[0];
 		let secondLevelTextElement = secondLevelTextLI.childNodes[0];
@@ -293,7 +292,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let attributeReferenceChild = {
 			elementId: 1,
 			id: "attributeReferenceId",
-			type: "group",
+			type: "collectionVariable",
 			nameInData: "attributeReferences",
 			dataDivider: "someDataDivider",
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId,
@@ -311,14 +310,13 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let attributeLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(attributeLI.tagName, "LI");
-		assert.strictEqual(attributeLI.className, "");
+		CORATEST.assertElementHasTypeClassText(attributeLI, "LI", "recursiveDeleteCollectionVariable", "", assert);
 		let attributeElement = attributeLI.childNodes[0];
 		let attributeElementParts = attributeElement.childNodes;
 		CORATEST.assertElementHasTypeClassText(attributeElementParts[0], "SPAN", "labelType", "attribute", assert);
 		CORATEST.assertElementHasTypeClassText(attributeElementParts[1], "SPAN", "id", "attributeReferenceId", assert);
 		CORATEST.assertElementHasTypeClassText(attributeElementParts[2], "SPAN", "nameInData", "[attributeReferences]", assert);
-		CORATEST.assertElementHasTypeClassText(attributeElementParts[3], "SPAN", "type", "group", assert);
+		CORATEST.assertElementHasTypeClassText(attributeElementParts[3], "SPAN", "type", "collectionVariable", assert);
 		CORATEST.assertElementHasTypeClassText(attributeElementParts[4], "SPAN", "dataDivider", "(someDataDivider)", assert);
 	});
 
@@ -326,7 +324,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let refCollection = {
 			elementId: 1,
 			id: "itemCollectionId",
-			type: "itemCollection",
+			type: "collectionVariable",
 			nameInData: "itemCollectionName",
 			dataDivider: "someDataDivider",
 			methodOpenDefiningRecord: this.openDefiningRecordUsingEventAndId,
@@ -344,21 +342,20 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let attributeLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(attributeLI.tagName, "LI");
-		assert.strictEqual(attributeLI.className, "");
+		CORATEST.assertElementHasTypeClassText(attributeLI, "LI", "recursiveDeleteCollectionVariable", "", assert);
 		let refCollectionElement = attributeLI.childNodes[0];
 		let refCollectionElementParts = refCollectionElement.childNodes;
 		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[0], "SPAN", "labelType", "refCollection", assert);
 		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[1], "SPAN", "id", "itemCollectionId", assert);
 		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[2], "SPAN", "nameInData", "[itemCollectionName]", assert);
-		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[3], "SPAN", "type", "itemCollection", assert);
+		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[3], "SPAN", "type", "collectionVariable", assert);
 		CORATEST.assertElementHasTypeClassText(refCollectionElementParts[4], "SPAN", "dataDivider", "(someDataDivider)", assert);
 	});
 
 	test("testCollectionItemReferences", function(assert) {
 		let collectionItem = {
 			id: "collectionItemId",
-			type: "collectionItem",
+			type: "collectionVariable",
 			nameInData: "collectionItemName",
 			dataDivider: "someDataDivider",
 			methodOpenDefiningRecord: this.openDefiningRecordUsingEventAndId
@@ -375,14 +372,13 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let attributeLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(attributeLI.tagName, "LI");
-		assert.strictEqual(attributeLI.className, "");
+		CORATEST.assertElementHasTypeClassText(attributeLI, "LI", "recursiveDeleteCollectionVariable", "", assert);
 		let collectionItemRefElement = attributeLI.childNodes[0];
 		let collectionItemRefElementParts = collectionItemRefElement.childNodes;
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[0], "SPAN", "labelType", "collectionItems", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[1], "SPAN", "id", "collectionItemId", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[2], "SPAN", "nameInData", "[collectionItemName]", assert);
-		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[3], "SPAN", "type", "collectionItem", assert);
+		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[3], "SPAN", "type", "collectionVariable", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[4], "SPAN", "dataDivider", "(someDataDivider)", assert);
 	});
 
@@ -395,8 +391,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let attributeLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(attributeLI.tagName, "LI");
-		assert.strictEqual(attributeLI.className, "");
+		CORATEST.assertElementHasTypeClassText(attributeLI, "LI", "recursiveDeleteTextVariable", "", assert);
 		let childReferenceElement = attributeLI.childNodes[0];
 		let childReferenceElementParts = childReferenceElement.childNodes;
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[0], "SPAN", "id", "textVarId", assert);
@@ -454,8 +449,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let secondLevelLI = secondLevelUL.childNodes[2];
-		assert.strictEqual(secondLevelLI.tagName, "LI");
-		assert.strictEqual(secondLevelLI.className, "");
+		CORATEST.assertElementHasTypeClassText(secondLevelLI, "LI", "recursiveDeleteContainer", "", assert);
 		let presentationElement = secondLevelLI.childNodes[0];
 		let presentationElementParts = presentationElement.childNodes;
 

@@ -127,11 +127,18 @@ var CORA = (function(cora) {
 		};
 
 		const createViewForOneLevel = function(data, label) {
-			let li = createElementWithTypeClassText("li");
+			let li = createElementWithTypeClassText("li", createClassNameForLiUsingType(data.type));
 			let element = createElement(data, label);
 			li.append(element);
 			li.appendChild(createChildren(data));
 			return li;
+		};
+
+		const createClassNameForLiUsingType = function(str) {
+			if (str) {
+				return "recursiveDelete" +str.charAt(0).toUpperCase() + str.slice(1);
+			}
+			return "";
 		};
 
 		const createElement = function(data, label) {

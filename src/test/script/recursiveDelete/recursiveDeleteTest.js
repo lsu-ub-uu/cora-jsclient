@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2024 Uppsala University Library
  * Copyright 2023 Olov McKie
@@ -19,7 +20,7 @@
  */
 "use strict";
 
-QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
+QUnit.module.only("recursiveDelete/recursiveDeleteTest.js", hooks => {
 	const test = QUnit.test;
 
 	let metadataProvider;
@@ -312,11 +313,10 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
 		recursiveDelete.getView();
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4)
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2)
 		respondToAjaxCallForWhitOutIncomingLinks(0);
 		respondToAjaxCallForWhitOutIncomingLinks(1);
-		respondToAjaxCallForWhitOutIncomingLinks(2);
-		respondToAjaxCallForWhitOutIncomingLinks(3);
+		
 		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {

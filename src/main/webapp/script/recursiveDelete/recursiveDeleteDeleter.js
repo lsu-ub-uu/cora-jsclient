@@ -38,10 +38,7 @@ var CORA = (function(cora) {
 		};
 
 		const deleteRecord = function(currentModel) {
-			//SPIKE
 			if (currentModel.presentations) {
-				//				deleteSubElement(currentModel.presentations);
-				//				// we need To wait
 				let presentations = currentModel.presentations;
 				let presentationCalls = [];
 				for (let presentation of presentations) {
@@ -49,14 +46,11 @@ var CORA = (function(cora) {
 					view.setDeletingElement(presentation.elementId);
 					callDeletePresentation(presentation.recordType, presentation.id, presentation, currentModel, presentationCalls);
 				}
-				//				let presentation = currentModel.presentations[0];
-
 			} else {
 
 				view.setDeletingElement(currentModel.elementId);
 				callDeleteRecord(currentModel.recordType, currentModel.id, currentModel);
 			}
-
 		};
 
 		const callDeletePresentation = function(recordType, id, presentationModel, parentModel, presentationCalls) {
@@ -64,13 +58,14 @@ var CORA = (function(cora) {
 				url: `${deleteUrl}${recordType}/${id}`,
 				requestMethod: "DELETE",
 				loadMethod: deletePresentationCallBack,
-				errorMethod: deleteRecordFailedCallBack,
+				errorMethod: deletePresentationFailedCallBack,
 				presentationModel: presentationModel,
 				parentModel: parentModel,
 				presentationCalls: presentationCalls
 			};
 			ajaxCallFactory.factor(callSpec);
-		}
+		};
+		
 		const deletePresentationCallBack = function(answer) {
 			let presentationCalls = answer.spec.presentationCalls;
 			presentationCalls.pop();
@@ -81,11 +76,16 @@ var CORA = (function(cora) {
 
 			//wait if all presentations are deleted
 			if (presentationCalls.length === 0) {
-
 				let parentModel = answer.spec.parentModel;
 				view.setDeletingElement(parentModel.elementId);
 				callDeleteRecord(parentModel.recordType, parentModel.id, parentModel);
 			}
+		};
+
+		const deleteRecordFailedCallBack = function(answer) {
+			let currentModel = answer.spec.model;
+			let errorMessage = `${answer.status} : ${answer.response}`;
+			view.setDeleteFailedElement(currentModel.elementId, errorMessage);
 		};
 
 		const callDeleteRecord = function(recordType, id, currentModel) {
@@ -97,7 +97,7 @@ var CORA = (function(cora) {
 				model: currentModel
 			};
 			ajaxCallFactory.factor(callSpec);
-		}
+		};
 
 		const deleteRecordCallBack = function(answer) {
 			let currentModel = answer.spec.model;
@@ -124,8 +124,8 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const deleteRecordFailedCallBack = function(answer) {
-			let currentModel = answer.spec.model;
+		const deletePresentationFailedCallBack = function(answer) {
+			let currentModel = answer.spec.presentationModel;
 			let errorMessage = `${answer.status} : ${answer.response}`;
 			view.setDeleteFailedElement(currentModel.elementId, errorMessage);
 		};

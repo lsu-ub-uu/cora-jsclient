@@ -18,9 +18,8 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 	const test = QUnit.test;
-	const only = QUnit.only;
 
 	let dependencies;
 	let deleteUrl = "http://someRestUrl/rest/record/";

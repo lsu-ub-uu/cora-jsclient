@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
+QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 	const test = QUnit.test;
 
 	let dependencies;
@@ -143,7 +143,6 @@ QUnit.module.only("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let confirmText = textProvider.getTranslation("theClient_recursiveDeleteConfirmText");
 		let confirmButtonNoText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonNoText");
 		let confirmButtonYesText = textProvider.getTranslation("theClient_recursiveDeleteConfirmButtonYesText");
-		let confirmation = view.lastChild;
 
 		let questionSpec = dependencies.questionFactory.getSpec(0);
 		let questionSpy = dependencies.questionFactory.getFactored(0);

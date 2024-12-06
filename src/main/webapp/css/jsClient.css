@@ -928,6 +928,24 @@ h1, .h1TextStyle {
 /*     50% { visibility: hidden; } */
  }
 
+.workView>.recursiveDelete {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: max-content minmax(0, 1fr);
+	grid-template-areas: 
+		"header"
+		"mainView";
+	height: 100%;
+}
+.recursiveDelete>.header {
+	grid-area: header;
+}
+
+.recursiveDelete>.metadata {
+	grid-area: mainView;
+	overflow: scroll;
+}
+
 .recursiveDelete .failed {
 	background-color: rgb(215, 108, 130);
 	border-radius: 0.5rem;
@@ -943,4 +961,11 @@ h1, .h1TextStyle {
 	border: 1px dotted black;
 	width: fit-content;
 	border-radius: 5px;
+}
+
+.recursiveDelete>input {
+	display: block;
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
 }

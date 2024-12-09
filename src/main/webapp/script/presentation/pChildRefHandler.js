@@ -23,6 +23,7 @@ var CORA = (function(cora) {
 		const { dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub,
 			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
+		const isInputMode = spec.mode === "input";
 		let out;
 		let userCanUploadFile = false;
 		let userCanRemove = false;
@@ -128,7 +129,7 @@ var CORA = (function(cora) {
 		const subscribeToMessagesFromForm = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode === "input") {
+			if (spec.minNumberOfRepeatingToShow !== undefined || isInputMode) {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
@@ -137,7 +138,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanRemove = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
@@ -147,7 +148,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanMove = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (!isRepeating) {
@@ -157,7 +158,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanAddBefore = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
@@ -309,18 +310,39 @@ var CORA = (function(cora) {
 				add(dataFromMsg.metadataId, dataFromMsg.repeatId);
 			}
 		};
+		const repeatingNoValue = {};
 
 		const add = function(metadataIdToAdd, repeatId) {
 			noOfRepeating++;
 			let newPath = calculateNewPath(metadataIdToAdd, repeatId);
-			console.log("newPath", newPath)
+			//SPIKE
+			if (userCanUploadFile && isInputMode) {
+
+				console.log("newPath", newPath);
+				//			repeatingNoValue.push(newPath);
+				repeatingNoValue.newPath = "";
+				console.log("adding path to repeatingNoValue", repeatingNoValue);
+
+				//			repeatingNoValue.splice(repeatingNoValue.indexOf(newPath),1);
+				//			console.log("removing path from repeatingNoValue", repeatingNoValue);
+				//			//			pubSub.subscribe("setValue", spec.parentPath, undefined, handleMsg);
+				pubSub.subscribe("setValue", [].concat(newPath,"linkedRecordIdTextVar"), undefined, logMessage);
+//				pubSub.subscribe("remove", [].concat(spec.parentPath), undefined, logMessage);
+				pubSub.subscribe("remove", newPath, {andk:"alsödjf"}, logMessage);
+			}
+			//END SPIKE
+
+
 			let repeatingElement = createRepeatingElement(newPath);
 			pChildRefHandlerView.addChild(repeatingElement.getView());
 			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
 			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
 			updateView();
 		};
-
+		const logMessage = function(dataFromMsg, msg) {
+			console.log("dataFromMsg " + presentationId, dataFromMsg)
+			console.log("msg " + presentationId, msg)
+		};
 		const calculateNewPath = function(metadataIdToAdd, repeatId) {
 			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd,
 				repeatId, spec.parentPath);
@@ -402,7 +424,7 @@ var CORA = (function(cora) {
 		};
 
 		const updateView = function() {
-			if (spec.mode === "input") {
+			if (isInputMode) {
 				if (showAddButton()) {
 					updateButtonViewAndAddBeforeButtonVisibility();
 					updateChildrenRemoveButtonVisibility();
@@ -623,6 +645,7 @@ var CORA = (function(cora) {
 				uploadLink: uploadLink,
 				file: answer.spec.file
 			};
+
 			uploadManager.upload(uploadSpec);
 			saveMainRecordIfRecordsAreCreatedForAllFiles();
 		};

@@ -117,7 +117,6 @@ var CORA = (function(cora) {
 			collectedAttributes = collectAttributesForMetadataId(metadataId);
 			pChildRefHandlerView = createPChildRefHandlerView();
 
-
 			subscribeToMessagesFromForm();
 
 			userCanUploadFile = showFileUpload();
@@ -178,8 +177,6 @@ var CORA = (function(cora) {
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
-
-
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
@@ -234,7 +231,7 @@ var CORA = (function(cora) {
 
 		const additionalChildrenCanBeAdded = function() {
 			return ((isRepeating && !isStaticNoOfChildren) || calculateIsZeroToOne());
-		}
+		};
 
 		const calculateIsZeroToOne = function() {
 			return repeatMin === "0" && repeatMax === "1";
@@ -316,6 +313,7 @@ var CORA = (function(cora) {
 		const add = function(metadataIdToAdd, repeatId) {
 			noOfRepeating++;
 			let newPath = calculateNewPath(metadataIdToAdd, repeatId);
+			console.log("newPath", newPath)
 			let repeatingElement = createRepeatingElement(newPath);
 			pChildRefHandlerView.addChild(repeatingElement.getView());
 			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);

@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
+QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 	const test = QUnit.test;
 	let fixture;
 	let metadataProvider;

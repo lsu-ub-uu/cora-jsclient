@@ -50,9 +50,6 @@ var CORA = (function(cora) {
 			let metadataItems = createViewForOneLevel(viewModel);
 			metadataHolder.appendChild(metadataItems);
 
-			let legend = createLegend();
-			view.appendChild(legend);
-
 			let buttonText = textProvider.getTranslation("theClient_recursiveDeleteButtonText");
 			let deleteButton = createButton(buttonText, showDeleteConfirmation, "recursiveDeleteButton");
 			view.appendChild(deleteButton);
@@ -61,12 +58,6 @@ var CORA = (function(cora) {
 		const createHeader = function(id) {
 			let headerText = `Recursive delete of ${id}`;
 			return createElementWithTypeClassText("div", "header", headerText);
-		};
-
-		const createLegend = function() {
-			let legend = createElementWithTypeClassText("div", "legend", "Legend");
-			legend.append(createPresentationLegendItem());
-			return legend;
 		};
 
 		const createButton = function(text, onclickMethod, className) {
@@ -102,19 +93,6 @@ var CORA = (function(cora) {
 			};
 		};
 
-		let createPresentationLegendItem = function() {
-			return createLegendItemUsingClassNameAndSymbolAndText("presentation", "P", "Presentation");
-		};
-
-		const createLegendItemUsingClassNameAndSymbolAndText = function(className, symbol, text) {
-			let item = createElementWithTypeClassText("div", "");
-			let symbolPart = createElementWithTypeClassText("span", className, symbol);
-			item.append(symbolPart);
-			let textPart = createElementWithTypeClassText("span", "", text);
-			item.append(textPart);
-			return item;
-		};
-
 		const createElementWithTypeClassText = function(type, className, textContent) {
 			let element = document.createElement(type);
 			if (className) {
@@ -130,13 +108,16 @@ var CORA = (function(cora) {
 			let li = createElementWithTypeClassText("li", createClassNameForLiUsingType(data.type));
 			let element = createElement(data, label);
 			li.append(element);
-			li.appendChild(createChildren(data));
+			let ul = createChildren(data);
+			if (ul.childNodes.length > 0) {
+				li.appendChild(createChildren(data));
+			}
 			return li;
 		};
 
 		const createClassNameForLiUsingType = function(str) {
 			if (str) {
-				return "recursiveDelete" +str.charAt(0).toUpperCase() + str.slice(1);
+				return "recursiveDelete" + str.charAt(0).toUpperCase() + str.slice(1);
 			}
 			return "";
 		};
@@ -173,17 +154,19 @@ var CORA = (function(cora) {
 
 		let createId = function(child) {
 			let id = createElementWithTypeClassText("span", "id", child.id);
+
+			if (child.recordType === "metadata") {
 			id.onclick = function(event) {
 				child.methodOpenDefiningRecord(event, child.id);
 			};
+				id.classList.add("linked");
+			}
 			return id;
 		};
 
 		let createNameInData = function(child) {
 			let nameInData = createElementWithTypeClassText("span", "nameInData", `[${child.nameInData}]`);
-			nameInData.onclick = function(event) {
-				child.methodOpenDefiningRecord(event, child.id);
-			};
+			
 			return nameInData;
 		};
 
@@ -204,9 +187,7 @@ var CORA = (function(cora) {
 		};
 
 		let createChildren = function(child) {
-			//TODO: change to ensure create ul
 			let ul = document.createElement("ul");
-			//			let children;	
 
 			if (child.texts) {
 				createAndAppendGroup(ul, child.texts, "text");

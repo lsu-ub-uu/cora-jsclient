@@ -52,6 +52,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 			type: "group",
 			nameInData: "minimalGroup",
 			dataDivider: "someDataDivider",
+			recordType: "metadata",
 			texts: [{ elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" },
 			{ elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" }],
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId,
@@ -67,6 +68,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 			id: "textVarId",
 			type: "textVariable",
 			nameInData: "textVar",
+			recordType: "metadata",
 			dataDivider: "someOtherDataDivider",
 			texts: [{ elementId: 5, id: "someTextId", recordType: "text" }, { elementId: 6, id: "someDefTextId", recordType: "text" }],
 			methodOpenDefiningRecord: openDefiningRecordUsingEventAndId
@@ -99,27 +101,6 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(header, "DIV", "header", "Recursive delete of minimalGroupId", assert);
 	});
 
-
-	test("testLegend", function(assert) {
-		let view = recursiveDeleteView.createViewForViewModel(viewModel);
-
-		let legend = view.childNodes[2];
-		assert.strictEqual(legend.childNodes[0].textContent, "Legend", assert);
-
-		let storage = legend.childNodes[1];
-		CORATEST.assertElementHasTypeClassText(storage, "DIV", "", "", assert);
-		CORATEST.assertElementHasTypeClassText(storage.childNodes[0], "SPAN", "presentation", "P", assert);
-		CORATEST.assertElementHasTypeClassText(storage.childNodes[1], "SPAN", "", "Presentation", assert);
-	});
-
-	//	test("testConfirmationMessageAndButton", function(assert) {
-	//		let view = recursiveDeleteView.createViewForViewModel(viewModel);
-	//
-	//		let confimationMessage = view.childNodes[3];
-	//		assert.strictEqual(confimationMessage.childNodes[0].textContent, "Attention", assert);
-	//
-	//		CORATEST.assertElementHasTypeClassText(confimationMessage, "DIV", "confirmationMessage", "Attention", assert);
-	//	});
 
 	test("testAddDeleteButton", function(assert) {
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
@@ -173,7 +154,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasIdTypeClassText(element, "SPAN", 1, "toBeDeleted", "minimalGroupId[minimalGroup]group(someDataDivider)", assert);
 
 		let elementParts = element.childNodes;
-		CORATEST.assertElementHasTypeClassText(elementParts[0], "SPAN", "id", "minimalGroupId", assert);
+		CORATEST.assertElementHasTypeClassText(elementParts[0], "SPAN", "id linked", "minimalGroupId", assert);
 		CORATEST.assertElementHasTypeClassText(elementParts[1], "SPAN", "nameInData", "[minimalGroup]", assert);
 		CORATEST.assertElementHasTypeClassText(elementParts[2], "SPAN", "type", "group", assert);
 		CORATEST.assertElementHasTypeClassText(elementParts[3], "SPAN", "dataDivider", "(someDataDivider)", assert);
@@ -196,12 +177,24 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
 
-		let element = getFirstElement(view);
-		let elementParts = element.childNodes;
-		CORATESTHELPER.simulateOnclick(elementParts[0], { ctrlKey: true });
+		CORATESTHELPER.simulateOnclick(getIdSpanFromElement(view), { ctrlKey: true });
 
 		assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
 		assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
+	});
+
+	test("testBasicMetadataOnClickOpensDefiningRecord_shouldNotBeDefinedForNonMetadatarecordTypes", function(assert) {
+		let callsToOpenDefiningRecord = [];
+		let openDefiningRecordUsingEventAndId = function(event, id) {
+			callsToOpenDefiningRecord.push({ event: event, id: id });
+		}
+		viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
+		let view = recursiveDeleteView.createViewForViewModel(viewModel);
+
+		CORATESTHELPER.simulateOnclick(getIdFromFirstTextElement(view), { ctrlKey: true });	
+		
+		assert.strictEqual(callsToOpenDefiningRecord.length , 0);
+
 	});
 
 	const getFirstElement = function(view) {
@@ -210,23 +203,21 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		return elementNodes[0];
 	};
 
-	test("testBasicMetadataOnClickOpensDefiningRecord_OnNameInData", function(assert) {
-		let callsToOpenDefiningRecord = [];
-		let openDefiningRecordUsingEventAndId = function(event, id) {
-			callsToOpenDefiningRecord.push({ event: event, id: id });
-		}
-		viewModel.methodOpenDefiningRecord = openDefiningRecordUsingEventAndId;
-
-		let view = recursiveDeleteView.createViewForViewModel(viewModel);
-
+	const getIdSpanFromElement = function(view) {
 		let element = getFirstElement(view);
 		let elementParts = element.childNodes;
+		return elementParts[0];
+	};
 
-		CORATESTHELPER.simulateOnclick(elementParts[1], { ctrlKey: true });
-		assert.deepEqual(callsToOpenDefiningRecord[0].event.ctrlKey, true);
-		assert.deepEqual(callsToOpenDefiningRecord[0].id, "minimalGroupId");
-	});
-
+	const getIdFromFirstTextElement = function(view) {
+		let firstLI = getFirstLevelLI(view);
+		let elementNodes = firstLI.childNodes;
+		let ul = elementNodes[1];
+		let textSpan = ul.firstChild.firstChild;
+		let elementParts = textSpan.childNodes;
+		return elementParts[1];
+	};
+	
 	test("testTextAndDefText", function(assert) {
 		let view = recursiveDeleteView.createViewForViewModel(viewModel);
 
@@ -236,22 +227,24 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		assert.strictEqual(secondLevelUL.tagName, "UL");
 
 		let textLI = secondLevelUL.childNodes[0];
-		assert.strictEqual(textLI.tagName, "LI");
-		assert.strictEqual(textLI.className, "");
+		CORATEST.assertElementHasTypeClassText(textLI, "LI", "", "", assert);
+		assert.strictEqual(textLI.childNodes.length, 1);
 		let textElement = textLI.childNodes[0];
 		let textElementParts = textElement.childNodes;
-		//assert.strictEqual(textElementParts.length, 3);
+		assert.strictEqual(textElementParts.length, 3);
 		CORATEST.assertElementHasTypeClassText(textElementParts[0], "SPAN", "labelType", "text", assert);
 		CORATEST.assertElementHasTypeClassText(textElementParts[1], "SPAN", "id", "minimalGroupIdText", assert);
 		CORATEST.assertElementHasTypeClassText(textElementParts[2], "SPAN", "dataDivider", "(someDataDivider)", assert);
 
 
 		let defTextLI = secondLevelUL.childNodes[1];
+		CORATEST.assertElementHasTypeClassText(textLI, "LI", "", "", assert);
+		assert.strictEqual(defTextLI.childNodes.length, 1);
 		assert.strictEqual(defTextLI.tagName, "LI");
 		assert.strictEqual(defTextLI.className, "");
 		let defTtextElement = defTextLI.childNodes[0];
 		let defTtextElementParts = defTtextElement.childNodes;
-		//	assert.strictEqual(defTtextElementParts.length, 3);
+		assert.strictEqual(defTtextElementParts.length, 3);
 		CORATEST.assertElementHasTypeClassText(defTtextElementParts[0], "SPAN", "labelType", "text", assert);
 		CORATEST.assertElementHasTypeClassText(defTtextElementParts[1], "SPAN", "id", "minimalGroupIdDefText", assert);
 		CORATEST.assertElementHasTypeClassText(defTtextElementParts[2], "SPAN", "dataDivider", "(someDataDivider)", assert);
@@ -259,11 +252,11 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 
 		let textVarLI = secondLevelUL.childNodes[2];
 		CORATEST.assertElementHasTypeClassText(textVarLI, "LI", "recursiveDeleteTextVariable", "", assert);
-
+		assert.strictEqual(textVarLI.childNodes.length, 2);
 		let textVarElement = textVarLI.childNodes[0];
 		let textVarElementParts = textVarElement.childNodes;
-		//			assert.strictEqual(textVarElementParts.length, 3);
-		CORATEST.assertElementHasTypeClassText(textVarElementParts[0], "SPAN", "id", "textVarId", assert);
+		assert.strictEqual(textVarElementParts.length, 4);
+		CORATEST.assertElementHasTypeClassText(textVarElementParts[0], "SPAN", "id linked", "textVarId", assert);
 		CORATEST.assertElementHasTypeClassText(textVarElementParts[1], "SPAN", "nameInData", "[textVar]", assert);
 		CORATEST.assertElementHasTypeClassText(textVarElementParts[2], "SPAN", "type", "textVariable", assert);
 		CORATEST.assertElementHasTypeClassText(textVarElementParts[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);
@@ -271,17 +264,19 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(textVarLI, "LI", "recursiveDeleteTextVariable", "", assert);
 		let thirdLevelUL = textVarLI.childNodes[1];
 		let secondLevelTextLI = thirdLevelUL.childNodes[0];
+		assert.strictEqual(secondLevelTextLI.childNodes.length, 1);
 		let secondLevelTextElement = secondLevelTextLI.childNodes[0];
 		let secondLevelTextElementParts = secondLevelTextElement.childNodes;
-		//	assert.strictEqual(secondLevelTextElementParts.length, 3);
+		assert.strictEqual(secondLevelTextElementParts.length, 3);
 		CORATEST.assertElementHasTypeClassText(secondLevelTextElementParts[0], "SPAN", "labelType", "text", assert);
 		CORATEST.assertElementHasTypeClassText(secondLevelTextElementParts[1], "SPAN", "id", "someTextId", assert);
 		CORATEST.assertElementHasTypeClassText(secondLevelTextElementParts[2], "SPAN", "dataDivider", "(-)", assert);
 
 		let secondLevelDefTextLI = thirdLevelUL.childNodes[1];
+		assert.strictEqual(secondLevelDefTextLI.childNodes.length, 1);
 		let secondLevelDefTextElement = secondLevelDefTextLI.childNodes[0];
 		let secondLevelDefTextElementParts = secondLevelDefTextElement.childNodes;
-		//	assert.strictEqual(secondLevelDefTextElementParts.length, 3);
+		assert.strictEqual(secondLevelDefTextElementParts.length, 3);
 		CORATEST.assertElementHasTypeClassText(secondLevelDefTextElementParts[0], "SPAN", "labelType", "text", assert);
 		CORATEST.assertElementHasTypeClassText(secondLevelDefTextElementParts[1], "SPAN", "id", "someDefTextId", assert);
 		CORATEST.assertElementHasTypeClassText(secondLevelDefTextElementParts[2], "SPAN", "dataDivider", "(-)", assert);
@@ -357,6 +352,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 			type: "collectionVariable",
 			nameInData: "collectionItemName",
 			dataDivider: "someDataDivider",
+			recordType: "metadata",
 			methodOpenDefiningRecord: this.openDefiningRecordUsingEventAndId
 		};
 
@@ -375,7 +371,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		let collectionItemRefElement = attributeLI.childNodes[0];
 		let collectionItemRefElementParts = collectionItemRefElement.childNodes;
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[0], "SPAN", "labelType", "collectionItems", assert);
-		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[1], "SPAN", "id", "collectionItemId", assert);
+		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[1], "SPAN", "id linked", "collectionItemId", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[2], "SPAN", "nameInData", "[collectionItemName]", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[3], "SPAN", "type", "collectionVariable", assert);
 		CORATEST.assertElementHasTypeClassText(collectionItemRefElementParts[4], "SPAN", "dataDivider", "(someDataDivider)", assert);
@@ -393,7 +389,7 @@ QUnit.module("recursiveDelete/recursiveDeleteViewTest.js", hooks => {
 		CORATEST.assertElementHasTypeClassText(attributeLI, "LI", "recursiveDeleteTextVariable", "", assert);
 		let childReferenceElement = attributeLI.childNodes[0];
 		let childReferenceElementParts = childReferenceElement.childNodes;
-		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[0], "SPAN", "id", "textVarId", assert);
+		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[0], "SPAN", "id linked", "textVarId", assert);
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[1], "SPAN", "nameInData", "[textVar]", assert);
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[2], "SPAN", "type", "textVariable", assert);
 		CORATEST.assertElementHasTypeClassText(childReferenceElementParts[3], "SPAN", "dataDivider", "(someOtherDataDivider)", assert);

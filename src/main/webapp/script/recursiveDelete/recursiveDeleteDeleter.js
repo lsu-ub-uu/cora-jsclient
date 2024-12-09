@@ -72,9 +72,7 @@ var CORA = (function(cora) {
 
 			let presentationModel = answer.spec.presentationModel;
 			view.setDeletedElement(presentationModel.elementId);
-			//			deleteAllChildren(presentationModel);
 
-			//wait if all presentations are deleted
 			if (presentationCalls.length === 0) {
 				let parentModel = answer.spec.parentModel;
 				view.setDeletingElement(parentModel.elementId);

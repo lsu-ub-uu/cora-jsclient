@@ -859,73 +859,37 @@ h1, .h1TextStyle {
 	color: #0082c8;
 	font-weight: bold;
 	padding-right: 0.2rem;
-	cursor: pointer;
 }
 .recursiveDelete .nameInData {
 	font-size: .9rem;
-	color: #00c846;
+	color: #9558C7;
+	font-weight: bold;
 	padding-right: 0.2rem;
-	cursor: pointer;
 }
 
 .recursiveDelete .type {
 	font-size: .9rem;
 	color: #c84600;
 	padding-right: 0.2rem;
-	cursor: pointer;
 }
 .recursiveDelete .dataDivider {
 	font-size: .7rem;
 	padding-right: 0.2rem;
+}
+.recursiveDelete .linked {
 	cursor: pointer;
-}
-
-.recursiveDelete .details {
-	font-size: 0.8rem;
-	color: #188014;
-/* 	padding-right: 0.2rem; */
-}
-
-.recursiveDelete .legend {
-	color: #243bb7;
-/* 	font-weight: bold; */
-/* 	margin-right: auto; */
-	position: absolute;
-	top: 3rem;
-	right: 3rem;
-	border: 1px solid gray;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 10px 5px 5px #b9b9b9;
-}
-.recursiveDelete .storage {
-	color: #2e7af0;
-	font-weight: bold;	
-}
-
-.recursiveDelete .permission {
-	color: #2e7af0;
-	font-weight: bold;	
-}
-
-.recursiveDelete .index {
-	color: #2e7af0;
-	font-weight: bold;	
 }
 
 .recursiveDelete .deleting {
 	animation: blink 1s infinite;
 	position: relative; 
     will-change: opacity; 
-/*  transform: translateZ(0);  */
 }
 
 @keyframes blink {
 	0% {opacity: 1;}
     50% {opacity: 0.2;}
     100% {opacity: 1;}
-/*  	0%, 100% { visibility: visible; } */
-/*     50% { visibility: hidden; } */
  }
 
 .workView>.recursiveDelete {

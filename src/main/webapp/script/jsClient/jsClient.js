@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 201, 2019 Uppsala University Library
+ * Copyright 2016, 201, 2019, 2024 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -60,37 +60,41 @@ var CORA = (function(cora) {
 		};
 		
 		const onKeyDown = function(event){
-			let keyPressed = event.key;
-			if (event.altKey && keyPressed === 's') {
+			if (altPlusKeyPressed(event, 's')) {
 				blurCurrentActiveElementToSetValueFromSelect();
 				return save(event);
 			}
-			if (event.altKey && keyPressed === 'r') {
+			if (altPlusKeyPressed(event, 'r')) {
 				return reload(event);
 			}
-			if (event.altKey && keyPressed === 'w') {
+			if (altPlusKeyPressed(event, 'w')) {
 				return close(event);
 			}
-			if (event.ctrlKey && event.altKey && keyPressed === 'ArrowUp') {
+			if (event.ctrlKey && altPlusKeyPressed(event, 'ArrowUp')) {
 				return moveShowingUp(event);
 			}
-			if (event.ctrlKey && event.altKey && keyPressed === 'ArrowDown') {
+			if (event.ctrlKey && altPlusKeyPressed(event, 'ArrowDown')) {
 				return moveShowingDown(event);
 			}
-			if (event.altKey && keyPressed === 'ArrowUp') {
+			if (altPlusKeyPressed(event, 'ArrowUp')) {
 				return changeToPreviousShowing(event);
 			}
-			if (event.altKey && keyPressed === 'ArrowDown') {
+			if (altPlusKeyPressed(event, 'ArrowDown')) {
 				return changeToNextShowing(event);
 			}
-			if (event.altKey && keyPressed === 'ArrowRight') {
+			if (altPlusKeyPressed(event, 'ArrowRight')) {
 				return changeToNextIndicator(event);
 			}
-			if (event.altKey && keyPressed === 'ArrowLeft') {
+			if (altPlusKeyPressed(event, 'ArrowLeft')) {
 				return changeToPreviousIndicator(event);
 			}
 		};
-		
+
+		const altPlusKeyPressed = function(event, key){
+			let keyPressed = event.key;
+			return event.altKey && keyPressed === key;
+		};
+
 		const blurCurrentActiveElementToSetValueFromSelect = function(){
 			if(document.activeElement){
 				document.activeElement.blur();
@@ -304,6 +308,21 @@ var CORA = (function(cora) {
 			addGuiItem(definitionManagedGuiItem);
 			showView(definitionManagedGuiItem);
 		};
+
+		const openRecursiveDeleteForId = function(id) {
+			let recursiveDelete = dependencies.recursiveDeleteFactory.factor({id:id});
+			let recursiveDeleteView = recursiveDelete.getView();
+
+			let recursiveDeleteManagedGuiItem = createManagedGuiItem();
+			recursiveDeleteManagedGuiItem.addWorkPresentation(recursiveDeleteView);
+			
+			let recursiveDeleteMenuView = CORA.gui.createSpanWithClassName("recursiveDelete");
+			recursiveDeleteMenuView.innerHTML = "Recursive delete: " + id;
+			recursiveDeleteManagedGuiItem.addMenuPresentation(recursiveDeleteMenuView);
+			
+			addGuiItem(recursiveDeleteManagedGuiItem);
+			showView(recursiveDeleteManagedGuiItem);
+		};
 		
 		const createManagedGuiItem = function(reloadForMetadataChanges) {
 			let managedGuiItemSpec = assembleManagedGuiItemSpec(reloadForMetadataChanges);
@@ -383,7 +402,8 @@ var CORA = (function(cora) {
 			openRecordUsingReadLink: openRecordUsingReadLink,
 			reloadProviders: reloadProviders,
 			setCurrentLang: setCurrentLang,
-			openDefinitionViewerForId : openDefinitionViewerForId,
+			openDefinitionViewerForId: openDefinitionViewerForId,
+			openRecursiveDeleteForId: openRecursiveDeleteForId,
 			onKeyDown: onKeyDown
 		});
 		start();

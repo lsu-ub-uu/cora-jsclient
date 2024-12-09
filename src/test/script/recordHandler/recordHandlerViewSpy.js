@@ -1,5 +1,6 @@
 /*
  * Copyright 2016, 2023 Olov McKie
+ * Copyright 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -37,6 +38,8 @@ var CORATEST = (function(coraTest) {
 		let functionsAddedAsOpenDefinitionViewer = [];
 		let functionsAddedAsOpenDefinitionViewerValidationType = [];
 		let functionsAddedAsOpenDefinitionViewerRecordType = [];
+		
+		let functionsAddedAsOpenRecursiveDelete = [];
 
 		let spyView = document.createElement("span");
 		function getView() {
@@ -150,6 +153,14 @@ var CORATEST = (function(coraTest) {
 		const getAddDefinitionViewerOpenFunctionRecordType = function(no){
 			return functionsAddedAsOpenDefinitionViewerRecordType[no];
 		};
+		
+		const addRecursiveDeleteOpenFunction = function(functionToAdd){
+			functionsAddedAsOpenRecursiveDelete.push(functionToAdd);
+		};
+		
+		const getAddRecursiveDeleteOpenFunction = function(no){
+			return functionsAddedAsOpenRecursiveDelete[no];
+		};
 
 		const out = Object.freeze({
 			getView : getView,
@@ -187,7 +198,10 @@ var CORATEST = (function(coraTest) {
 			getAddDefinitionViewerOpenFunctionValidationType : getAddDefinitionViewerOpenFunctionValidationType,
 			
 			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType,
-			getAddDefinitionViewerOpenFunctionRecordType : getAddDefinitionViewerOpenFunctionRecordType
+			getAddDefinitionViewerOpenFunctionRecordType : getAddDefinitionViewerOpenFunctionRecordType,
+			
+			addRecursiveDeleteOpenFunction: addRecursiveDeleteOpenFunction,
+			getAddRecursiveDeleteOpenFunction : getAddRecursiveDeleteOpenFunction
 		});
 		return out;
 	};

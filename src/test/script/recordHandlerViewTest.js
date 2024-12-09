@@ -40,7 +40,8 @@ QUnit.module("recordHandlerViewTest.js", {
 			texts : {
 				showDefinitionViewer : "showDefinitionViewer",	
 				showDefinitionViewerValidationType : "showDefinitionViewerValidationType",	
-				showDefinitionViewerRecordType : "showDefinitionViewerRecordType"	
+				showDefinitionViewerRecordType : "showDefinitionViewerRecordType",	
+				showRecursiveDelete : "showRecursiveDelete"	
 			}
 		};
 		this.specWithoutShowIncomingLinks = {
@@ -280,6 +281,44 @@ QUnit.test("testAddButtonForDefinitionViewerRecordType_IsOnlyAddedOnceButUsesNew
 	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod2);
 
 	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+	let button2 = this.getViewsToolAddedToView()[3];
+	assert.strictEqual(button2, undefined);
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
+
+QUnit.test("testAddButtonForRecursiveDelete", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	const openRecursiveDeleteMethod= function() {
+		//empty method
+	};
+	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
+
+	const button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.nodeName, "INPUT");
+	assert.strictEqual(button.type, "button");
+	assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
+	assert.strictEqual(button.className, "recursiveDelete");
+	assert.strictEqual(button.value, "showRecursiveDelete");
+	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
+});
+
+QUnit.test("testAddButtonForRecursiveDelete_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
+	let openRecursiveDeleteMethod= function() {
+		//empty method
+	};
+	let openRecursiveDeleteMethod2= function() {
+		//empty method
+	};
+	
+	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
+	
+	let button = this.getViewsToolAddedToView()[2];
+	assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
+
+	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod2);
+
+	assert.strictEqual(button.onclick, openRecursiveDeleteMethod2);
 	let button2 = this.getViewsToolAddedToView()[3];
 	assert.strictEqual(button2, undefined);
 	assert.strictEqual(this.getViewsToolAddedToView().length, 3);

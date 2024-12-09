@@ -251,7 +251,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let texts = {
 			showDefinitionViewer: "translated_theClient_showDefinitionViewerButtonText",
 			showDefinitionViewerValidationType: "translated_theClient_showDefinitionViewerValidationTypeButtonText",
-			showDefinitionViewerRecordType: "translated_theClient_showDefinitionViewerRecordTypeButtonText"
+			showDefinitionViewerRecordType: "translated_theClient_showDefinitionViewerRecordTypeButtonText",
+			showRecursiveDelete: "translated_theClient_showRecursiveDeleteButtonText"
 		};
 		assert.deepEqual(usedSpec.texts, texts);
 
@@ -1138,6 +1139,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 		answerCall(0);
 
 		assert.strictEqual(recordHandler.getDataIsChanged(), false);
@@ -1165,6 +1167,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(managedGuiItemSpy.getReloadDataFromServer(0),
 			recordHandlerViewSpy.getReloadRecordUsingFunction(0));
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 
 		assert.strictEqual(busy.getHideWithEffectCalledNoOfTimes(), 1);
 	});
@@ -1174,20 +1177,24 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		CORA.recordHandler(dependencies, spec);
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
-
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+		
 		answerCall(0);
 
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 	});
 
 	test("initCheckAddOpenFunctionNotCalledInViewForNonMetadata", function(assert) {
 		CORA.recordHandler(dependencies, spec);
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 
 		answerCall(0);
 
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 	});
 
 	test("initCheckAddOpenFunctionCalledInViewForMetadataNotReloaded", function(assert) {
@@ -1209,6 +1216,10 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0));
 		assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0),
 			recordHandler.showDefinitionViewerRecordType);
+			
+		assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+		assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0),
+			recordHandler.showRecursiveDelete);
 	});
 
 	test("initCheckAddOpenFunctionCalledInViewForMetadata", function(assert) {
@@ -1225,6 +1236,10 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			recordHandler.showDefinitionViewer);
 
 		assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
+		
+		assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
+		assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0),
+			recordHandler.showRecursiveDelete);
 	});
 
 	test("testShowDefinitionViewer", function(assert) {
@@ -1276,6 +1291,19 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		assert.ok(spec.jsClient.getOpenDefinitionIds(0));
 		assert.equal(spec.jsClient.getOpenDefinitionIds(0), "textGroup");
+	});
+	
+	QUnit.test("testShowRecursiveDelete", function(assert) {
+		record = recordWithMetadata;
+		spec.record = recordWithMetadata;
+
+		let recordHandler = CORA.recordHandler(dependencies, spec);
+		answerCall(0);
+
+		recordHandler.showRecursiveDelete();
+
+		assert.ok(spec.jsClient.getOpenRecursiveDeleteForIds(0));
+		assert.equal(spec.jsClient.getOpenRecursiveDeleteForIds(0), "textPartEnGroup");
 	});
 
 	test("initRecordGuiCreatedCorrectlyBasePartOfSpec", function(assert) {

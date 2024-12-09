@@ -80,7 +80,8 @@ var CORA = (function(cora) {
 				texts: {
 					showDefinitionViewer: getTranslation("showDefinitionViewerButton"),
 					showDefinitionViewerValidationType: getTranslation("showDefinitionViewerValidationTypeButton"),
-					showDefinitionViewerRecordType: getTranslation("showDefinitionViewerRecordTypeButton")
+					showDefinitionViewerRecordType: getTranslation("showDefinitionViewerRecordTypeButton"),
+					showRecursiveDelete: getTranslation("showRecursiveDeleteButton")
 				}
 			};
 		};
@@ -157,7 +158,6 @@ var CORA = (function(cora) {
 			}
 			return spec;
 		};
-
 		const chosenValidationType = function(z) {
 			validationTypeId = z;
 			tryToCreateGuiForNewWithKnownValidationType();
@@ -189,6 +189,7 @@ var CORA = (function(cora) {
 				addListPresentationToView(recordGuiIn, definitionId);
 			}
 		};
+
 
 		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
 			let recordGuiSpec = {
@@ -404,6 +405,7 @@ var CORA = (function(cora) {
 			addEditButtonsToView();
 			possiblyShowShowIncomingLinksButton();
 			possiblyShowShowDefinitionButton();
+			possiblyShowShowRecursiveDeleteButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
 			managedGuiItem.setReloadDataFromServer(reloadRecordFromServer);
 			busy.hideWithEffect();
@@ -486,10 +488,14 @@ var CORA = (function(cora) {
 		};
 
 		const showDefinitionViewer = function() {
+			let id = getIdForMetadata();
+			spec.jsClient.openDefinitionViewerForId(id);
+		};
+
+		const getIdForMetadata = function() {
 			let cData = CORA.coraData(fetchedRecord.data);
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let id = cRecordInfo.getFirstAtomicValueByNameInData("id");
-			spec.jsClient.openDefinitionViewerForId(id);
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const showDefinitionViewerValidationType = function() {
@@ -502,6 +508,17 @@ var CORA = (function(cora) {
 
 		const showDefinitionViewerRecordType = function() {
 			spec.jsClient.openDefinitionViewerForId(definitionId);
+		};
+
+		const possiblyShowShowRecursiveDeleteButton = function() {
+			if (recordHandlesMetadata() && "true" !== spec.partOfList) {
+				recordHandlerView.addRecursiveDeleteOpenFunction(showRecursiveDelete);
+			}
+		};
+
+		const showRecursiveDelete = function() {
+			let id = getIdForMetadata();
+			spec.jsClient.openRecursiveDeleteForId(id);
 		};
 
 		const showData = function() {
@@ -706,7 +723,8 @@ var CORA = (function(cora) {
 			showDefinitionViewer: showDefinitionViewer,
 			showDefinitionViewerValidationType: showDefinitionViewerValidationType,
 			showDefinitionViewerRecordType: showDefinitionViewerRecordType,
-			sendDeleteDataToServer: sendDeleteDataToServer
+			sendDeleteDataToServer: sendDeleteDataToServer,
+			showRecursiveDelete: showRecursiveDelete
 		});
 	};
 	return cora;

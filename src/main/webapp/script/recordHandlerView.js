@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 		let definitionViewerButton;
 		let definitionViewerButtonValidationType;
 		let definitionViewerButtonRecordType;
+		let recursiveDeleteButton;
 		
 		const start = function() {
 			let workItemViewSpec = {
@@ -171,6 +172,20 @@ var CORA = (function(cora) {
 				functionToCall, "definitionViewer");
 			workItemView.addToolViewToToolHolder(definitionViewerButtonRecordType);
 		};
+		
+		const addRecursiveDeleteOpenFunction = function(functionToCall) {
+			if (undefined === recursiveDeleteButton) {
+				createNewRecursiveDeleteButton(functionToCall);
+			} else {
+				recursiveDeleteButton.onclick = functionToCall;
+			}
+		};
+		
+		const createNewRecursiveDeleteButton = function(functionToCall) {
+			recursiveDeleteButton = createButton(texts.showRecursiveDelete, functionToCall, 
+				"recursiveDelete");
+			workItemView.addToolViewToToolHolder(recursiveDeleteButton);
+		};
 
 		const addObjectToEditView = function(objectToAdd) {
 			editView.appendChild(document.createTextNode(JSON.stringify(objectToAdd)));
@@ -217,7 +232,8 @@ var CORA = (function(cora) {
 			addReloadRecordUsingFunction: addReloadRecordFunction,
 			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction,
 			addDefinitionViewerOpenFunctionValidationType: addDefinitionViewerOpenFunctionValidationType,
-			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType
+			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType,
+			addRecursiveDeleteOpenFunction: addRecursiveDeleteOpenFunction
 		});
 	};
 	return cora;

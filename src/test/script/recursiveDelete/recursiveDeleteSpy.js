@@ -1,6 +1,6 @@
 /*
- * Copyright 2016, 2017 Olov McKie
- * Copyright 2016 Uppsala University Library
+ * Copyright 2024 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -17,32 +17,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.ajaxCallFactorySpy = function(spec) {
-		let factoredAjaxCalls = [];
-		
-		const factor = function(ajaxCallSpec) {
-			let factoredAjaxCall = CORATEST.ajaxCallSpy({}, ajaxCallSpec);
-			factoredAjaxCalls.push(factoredAjaxCall);
-			return factoredAjaxCall;
-		};
+	coraTest.recursiveDeleteSpy = function() {
 
-		const getFactored = function(number) {
-			return factoredAjaxCalls[number];
+		let numberOfCalls = 0;
+		
+		const getView = function(){
+			numberOfCalls++;
+			return CORA.gui.createSpanWithClassName("definitionViewerSpy");	
 		};
 		
-		const getFactoredAjaxCalls = function(){
-			return factoredAjaxCalls.length;
+		const getNumberOfCallsToGetView = function(){
+			return numberOfCalls;
 		};
-
-		let out = Object.freeze({
-			factor: factor,
-			getFactored: getFactored,
-			getFactoredAjaxCalls: getFactoredAjaxCalls,
-			callCount: factoredAjaxCalls.length
+		
+		return Object.freeze({
+			getView: getView,
+			getNumberOfCallsToGetView : getNumberOfCallsToGetView
 		});
-		return out;
 	};
 	return coraTest;
 }(CORATEST || {}));

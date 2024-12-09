@@ -836,6 +836,100 @@ h1, .h1TextStyle {
 /* 	padding-right: 0.2rem; */
 }
 
+.recursiveDelete {
+	position: relative;
+	display: block;
+}
 
+.recursiveDelete .header {
+	font-size: 2rem;
+	color: #c84600;
+	padding-left: 0.2rem;
+}
 
+.recursiveDelete .labelType {
+	font-size: .7rem;
+	color: #0082c8;
+	color: #001ec8;
+	padding-right: 0.2rem;
+}
 
+.recursiveDelete .id {
+	font-size: .9rem;
+	color: #0082c8;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+.recursiveDelete .nameInData {
+	font-size: .9rem;
+	color: #9558C7;
+	font-weight: bold;
+	padding-right: 0.2rem;
+}
+
+.recursiveDelete .type {
+	font-size: .9rem;
+	color: #c84600;
+	padding-right: 0.2rem;
+}
+.recursiveDelete .dataDivider {
+	font-size: .7rem;
+	padding-right: 0.2rem;
+}
+.recursiveDelete .linked {
+	cursor: pointer;
+}
+
+.recursiveDelete .deleting {
+	animation: blink 1s infinite;
+	position: relative; 
+    will-change: opacity; 
+}
+
+@keyframes blink {
+	0% {opacity: 1;}
+    50% {opacity: 0.2;}
+    100% {opacity: 1;}
+ }
+
+.workView>.recursiveDelete {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: max-content minmax(0, 1fr);
+	grid-template-areas: 
+		"header"
+		"mainView";
+	height: 100%;
+}
+.recursiveDelete>.header {
+	grid-area: header;
+}
+
+.recursiveDelete>.metadata {
+	grid-area: mainView;
+	overflow: scroll;
+}
+
+.recursiveDelete .failed {
+	background-color: rgb(215, 108, 130);
+	border-radius: 0.5rem;
+}
+.recursiveDelete .deleted {
+	background-color: rgb(126, 212, 173);
+	border-radius: 0.5rem;
+}
+
+.recursiveDelete li.recursiveDeleteItemCollection {
+	max-height: 15rem;
+	overflow: scroll;
+	border: 1px dotted black;
+	width: fit-content;
+	border-radius: 5px;
+}
+
+.recursiveDelete>input {
+	display: block;
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+}

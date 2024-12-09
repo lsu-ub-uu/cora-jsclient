@@ -18,8 +18,7 @@
  */
 "use strict";
 
-QUnit
-		.module(
+QUnit.module(
 				"incomingLinksListHandlerTest.js",
 				{
 					beforeEach : function() {
@@ -144,7 +143,7 @@ QUnit.test("testHandleAnswerWithIncomingLinksList", function(assert) {
 
 	var incomingLinkAddedToView1 = factoredView.getAddedIncomingLink(1);
 	var expectedLInkForView1 = {
-		"linkedRecordType" : "presentationGroup",
+		"linkedRecordType" : "presentation",
 		"linkedRecordId" : "recordTypeFormPGroup",
 		"readLink" : {
 			"requestMethod" : "GET",

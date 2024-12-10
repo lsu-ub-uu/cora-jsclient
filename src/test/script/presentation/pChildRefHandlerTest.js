@@ -1000,26 +1000,36 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			metadataId: "myChildOfBinaryLink"
 		}, "x/y/z/add");
 
-		let files2 = [];
 		let file2 = {
 			name: "someFile2.tif",
 			size: 9876543210
 		};
-		files2.push(file2);
 		let file3 = {
 			name: "someFile3.tif",
 			size: 1122334455
 		};
-		files2.push(file3);
-		pChildRefHandler.handleFiles(files2);
+		
+		pChildRefHandler.handleFiles(filesToUpload(file2, file3));
 
 		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
 		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(dataBinaryRecord2));
 
 		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
 		assert.strictEqual(ajaxCallSpy2, undefined);
+		
+//		let messages = pubSub.getMessages();
+//		assert.deepEqual(messages.length, 3);
+//		assert.deepEqual(messages[2].type, "updateRecord");
 
 	});
+	
+	const filesToUpload = function(...files){
+		let uploadFiles = [];
+		for(let file of files){
+			uploadFiles.push(file);
+		}
+		return uploadFiles
+	};
 
 	test("testAddButtonShownFor0to1", function(assert) {
 		spec.cParentMetadata = CORA.coraData(metadataProvider

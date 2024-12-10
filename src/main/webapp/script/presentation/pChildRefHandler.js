@@ -207,7 +207,7 @@ var CORA = (function(cora) {
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
-//				pChildRefHandlerViewSpec.addMethod = sendAdd;
+				//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -334,20 +334,21 @@ var CORA = (function(cora) {
 			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
 			updateView();
 		};
-			//SPIKE
+		//SPIKE
 		const setRepeatingFileLinkValue = function(dataFromMsg, msg) {
 			let pathToEntireLink = copyPath(dataFromMsg.path);
 			pathToEntireLink.pop();
+			//			console.log("pathToEntireLink",pathToEntireLink)
 			fileLinkValues[pathToEntireLink] = dataFromMsg.data;
 
-			console.log("fileLinkValues", fileLinkValues)
+			console.log("setFileLinkValues", fileLinkValues)
 		};
 		const copyPath = function(pathToCopy) {
 			return [].concat(pathToCopy);
 		};
 		const removeRepeatingFileLinkValue = function(dataFromMsg, msg) {
 			delete fileLinkValues[dataFromMsg.path];
-			console.log("fileLinkValues", fileLinkValues)
+			console.log("removeFileLinkValues", fileLinkValues)
 		};
 		//END SPIKE
 		const calculateNewPath = function(metadataIdToAdd, repeatId) {
@@ -550,21 +551,22 @@ var CORA = (function(cora) {
 		};
 
 		const calculateNumOfFilesLeftToUpload = function(numberOfChosenFiles) {
-//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
-			let existingRepeatingWithValue = noOfRepeating; 
-//			let allExisting = fileLinkValues.keys;
-			let linkValues =Object.values(fileLinkValues); 
-//			console.log("linkValues",linkValues)
+			//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+			//			let existingRepeatingWithValue = noOfRepeating;
+			//			let allExisting = fileLinkValues.keys;
+			let linkValues = Object.values(fileLinkValues);
+			let existingRepeatingWithValue = linkValues.length;
+			//			console.log("linkValues",linkValues)
 			linkValues.forEach((value) => {
-				if(""===value){
+				if ("" === value) {
 					existingRepeatingWithValue--;
 				}
 			});
-//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+			//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
 			let numOfFilesLeftToUpLoad = Number(repeatMax) - existingRepeatingWithValue;
 			if (numOfFilesLeftToUpLoad < numberOfChosenFiles) {
-			console.log("numberOfChosenFiles", numberOfChosenFiles);
-			console.log("numOfFilesLeftToUpLoad", numOfFilesLeftToUpLoad);
+				console.log("numberOfChosenFiles", numberOfChosenFiles);
+				console.log("numOfFilesLeftToUpLoad", numOfFilesLeftToUpLoad);
 				return numOfFilesLeftToUpLoad;
 			}
 			console.log("numberOfChosenFiles", numberOfChosenFiles);
@@ -646,15 +648,46 @@ var CORA = (function(cora) {
 		};
 
 		const processNewBinary = function(answer) {
-			let calculatedRepeatId = sendAdd();
+			//do not sendAdd if existing empty link we can / must reuse
+
+			//			let linkValues =Object.values(fileLinkValues); 
+			//			linkValues.forEach((value) => {
+			//				if(""===value){
+			//					existingRepeatingWithValue--;
+			//				}
+			//			});
+			let emptyKey;
+			let linkValuesKeys = Object.keys(fileLinkValues);
+			linkValuesKeys.forEach((key) => {
+				//				console.log("asASFDDSAF", key);
+				console.log("in processNewBinary, fileLinkValues: ", fileLinkValues)
+				console.log("asASFDDSAF", fileLinkValues[key]);
+
+				if ("" === fileLinkValues[key]) {
+					//					existingRepeatingWithValue--;
+					console.log("EMPTY KEY !!!", key);
+					emptyKey = key;
+				}
+			});
+			let pathOldOrNew;
+			if (emptyKey) {
+				pathOldOrNew = [].concat(emptyKey.split(','), "linkedRecordIdTextVar");
+			} else {
+
+				let calculatedRepeatId = sendAdd();
+				let newPath1 = calculateNewPath(metadataId, calculatedRepeatId);
+				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
+					"linkedRecordIdTextVar", undefined, newPath1);
+				pathOldOrNew = newPath;
+			}
+
+
 			let data = getDataPartOfRecordFromAnswer(answer);
 			let createdRecordId = getIdFromRecordData(data);
-			let newPath1 = calculateNewPath(metadataId, calculatedRepeatId);
-			let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
-				"linkedRecordIdTextVar", undefined, newPath1);
 			let setValueData = {
 				data: createdRecordId,
-				path: newPath
+				//				path: newPath
+				path: pathOldOrNew
 			};
 			jsBookkeeper.setValue(setValueData);
 			let formData = new FormData();

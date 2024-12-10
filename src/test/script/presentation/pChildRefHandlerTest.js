@@ -21,14 +21,18 @@
 QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 	const test = QUnit.test;
 	let fixture;
-	let metadataProvider;
 	let dependencies;
+	let metadataProvider;
+	let pubSub;
+	let textProvider;
+	let ajaxCallFactory;
+	
 	let recordPartPermissionCalculator;
 	let spec;
 	let record;
-	let data;
-	let data2;
-	let data3;
+	let dataBinaryRecord;
+	let dataBinaryRecord2;
+	let dataBinaryRecord3;
 	let files1;
 	let file1;
 	let file2;
@@ -37,17 +41,19 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 
 	hooks.beforeEach(() => {
 		fixture = document.getElementById("qunit-fixture");
-
 		metadataProvider = new MetadataProviderStub();
+		pubSub = CORATEST.pubSubSpy();
+		textProvider = CORATEST.textProviderStub();
+		ajaxCallFactory = CORATEST.standardFactorySpy("ajaxCallSpy");
 		dependencies = {
 			metadataProvider: metadataProvider,
-			pubSub: CORATEST.pubSubSpy(),
-			textProvider: CORATEST.textProviderStub(),
+			pubSub: pubSub,
+			textProvider: textProvider,
 			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),
 			jsBookkeeper: CORATEST.jsBookkeeperSpy(),
 			recordTypeProvider: CORATEST.recordTypeProviderStub(),
 			uploadManager: CORATEST.uploadManagerSpy(),
-			ajaxCallFactory: CORATEST.ajaxCallFactorySpy(),
+			ajaxCallFactory: ajaxCallFactory,
 			pChildRefHandlerViewFactory: CORATEST.standardFactorySpy("pChildRefHandlerViewSpy"),
 			pRepeatingElementFactory: CORATEST.standardFactorySpy("pRepeatingElementSpy"),
 			dataDivider: "systemY"
@@ -149,7 +155,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 
 		};
 
-		data = {
+		dataBinaryRecord = {
 			name: "binary",
 			children: [{
 				name: "recordInfo",
@@ -190,7 +196,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			}
 		};
 
-		data2 = {
+		dataBinaryRecord2 = {
 			name: "binary",
 			children: [{
 				name: "recordInfo",
@@ -231,7 +237,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			}
 		};
 
-		data3 = {
+		dataBinaryRecord3 = {
 			name: "binary",
 			children: [{
 				name: "recordInfo",
@@ -325,7 +331,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.ok(pChildRefHandler.isStaticNoOfChildren === true);
 
 		// subscription
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 
 		let firstSubsription = subscriptions[0];
@@ -463,7 +469,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredSpec.addMethod, pChildRefHandler.sendAdd);
 
 		// subscription
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 	});
 
@@ -488,7 +494,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredSpec.addMethod, undefined);
 
 		// subscription
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 	});
 
@@ -542,7 +548,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			recordPartPermissionCalculator: recordPartPermissionCalculator
 		};
 		assert.deepEqual(dependencies.jsBookkeeper.getAddDataArray()[0], expectedAddData);
-		let messages = dependencies.pubSub.getMessages();
+		let messages = pubSub.getMessages();
 		assert.deepEqual(messages.length, 1);
 		assert.deepEqual(messages[0].type, "newElementsAdded");
 	});
@@ -583,7 +589,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			recordPartPermissionCalculator: recordPartPermissionCalculator
 		};
 		assert.deepEqual(dependencies.jsBookkeeper.getAddBeforeDataArray()[0], addBeforeData);
-		let messages = dependencies.pubSub.getMessages();
+		let messages = pubSub.getMessages();
 		assert.deepEqual(messages.length, 1);
 		assert.deepEqual(messages[0].type, "newElementsAdded");
 	});
@@ -655,8 +661,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
@@ -677,59 +682,54 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
 		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
 		assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
 
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 	});
 
 	test("testHandleFilesSendingOneBinaryFile", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
 		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
-		assert
-			.strictEqual(ajaxCallSpy0.getSpec().loadMethod,
-				pChildRefHandler.processNewBinary);
+		assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
 
-		data = JSON.parse(JSON.stringify(data));
-		data.attributes.type = "generic";
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		dataBinaryRecord = JSON.parse(JSON.stringify(dataBinaryRecord));
+		dataBinaryRecord.attributes.type = "generic";
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 	});
 
 	test("testHandleFilesSendingOneFileError", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
 		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0, "binary");
 
 		assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
@@ -738,7 +738,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			"status": 404
 		});
 
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 
 		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0).innerHTML, "404");
@@ -748,15 +748,14 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		answerCall(dependencies.ajaxCallFactory, 0);
+		answerCall(ajaxCallFactory, 0);
 
 		let addData = {
 			childReference: {
@@ -798,23 +797,22 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		answerCall(dependencies.ajaxCallFactory, 0);
+		answerCall(ajaxCallFactory, 0);
 
-		let messages = dependencies.pubSub.getMessages();
+		let messages = pubSub.getMessages();
 		assert.deepEqual(messages.length, 2);
 		assert.deepEqual(messages[1].type, "updateRecord");
 
 		// send more files
 		pChildRefHandler.handleFiles(files1);
-		answerCall(dependencies.ajaxCallFactory, 1);
+		answerCall(ajaxCallFactory, 1);
 		assert.deepEqual(messages.length, 4);
 		assert.deepEqual(messages[1].type, "updateRecord");
 		assert.deepEqual(messages[3].type, "updateRecord");
@@ -825,28 +823,27 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1to3);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 
-		let ajaxCallSpy1 = dependencies.ajaxCallFactory.getFactored(1);
-		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(data2));
+		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
+		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(dataBinaryRecord2));
 
-		let ajaxCallSpy2 = dependencies.ajaxCallFactory.getFactored(2);
-		assert.strictEqual(ajaxCallSpy2.getSpec().data, JSON.stringify(data3));
+		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
+		assert.strictEqual(ajaxCallSpy2.getSpec().data, JSON.stringify(dataBinaryRecord3));
 
-		answerCall(dependencies.ajaxCallFactory, 0);
-		answerCall(dependencies.ajaxCallFactory, 1);
-		answerCall(dependencies.ajaxCallFactory, 2);
+		answerCall(ajaxCallFactory, 0);
+		answerCall(ajaxCallFactory, 1);
+		answerCall(ajaxCallFactory, 2);
 
-		let messages = dependencies.pubSub.getMessages();
+		let messages = pubSub.getMessages();
 		assert.deepEqual(messages.length, 4);
 		assert.deepEqual(messages[3].type, "updateRecord");
 
@@ -904,31 +901,82 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 
 	});
 
+	test("testHandleFiles1to1ExistingFile", function(assert) {
+		dependencies.textProvider = CORATEST.textProviderSpy();
+		spec.cParentMetadata = CORA.coraData(metadataProvider
+			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeat1to1"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
+		let view = pChildRefHandler.getView();
+		fixture.appendChild(view);
+		pChildRefHandler.add("myChildOfBinaryLink", "0");
+		let subscriptions = pubSub.getSubscriptions();
+		let setValueSubscription = subscriptions[subscriptions.length - 2];
+		//		console.log("setValueSubscription", setValueSubscription)
+		//		assert.strictEqual(subscriptions.length, 2)
+		let setValueBinaryIdMethod = setValueSubscription.functionToCall;
+		let setValueData = {
+			path: ['myChildOfBinaryLink.0', 'linkedRecordIdTextVar'],
+			data: "someBinaryId"
+		};
+		setValueBinaryIdMethod(setValueData);
+
+		pChildRefHandler.handleFiles(files1to3);
+
+		assertNoOfNewBinaryCreated(assert, 0);
+	});
+
+	test("testHandleFiles1to1DefaultShownOneEmptyLink", function(assert) {
+		dependencies.textProvider = CORATEST.textProviderSpy();
+		spec.cParentMetadata = CORA.coraData(metadataProvider
+			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeat1to1"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
+		let view = pChildRefHandler.getView();
+		fixture.appendChild(view);
+		pChildRefHandler.add("myChildOfBinaryLink", "0");
+		let subscriptions = pubSub.getSubscriptions();
+		let setValueSubscription = subscriptions[subscriptions.length - 2];
+		let setValueBinaryIdMethod = setValueSubscription.functionToCall;
+		let setValueData = {
+			path: ['myChildOfBinaryLink.0', 'linkedRecordIdTextVar'],
+			data: ""
+		};
+		setValueBinaryIdMethod(setValueData);
+
+		pChildRefHandler.handleFiles(files1to3);
+
+		assertNoOfNewBinaryCreated(assert, 1);
+	});
+
+	const assertNoOfNewBinaryCreated = function(assert, noOfNewBinaryCreated) {
+		assert.strictEqual(ajaxCallFactory.getNoOfFactored(), noOfNewBinaryCreated);
+	};
+
 	test("testHandleFilesSendingMoreFilesThanAllowed", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1to3);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 
-		let ajaxCallSpy1 = dependencies.ajaxCallFactory.getFactored(1);
-		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(data2));
+		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
+		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(dataBinaryRecord2));
 
-		let ajaxCallSpy2 = dependencies.ajaxCallFactory.getFactored(2);
+		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
 		assert.strictEqual(ajaxCallSpy2, undefined);
 
-		answerCall(dependencies.ajaxCallFactory, 0);
-		answerCall(dependencies.ajaxCallFactory, 1);
+		answerCall(ajaxCallFactory, 0);
+		answerCall(ajaxCallFactory, 1);
 
-		let messages = dependencies.pubSub.getMessages();
+		let messages = pubSub.getMessages();
 		assert.deepEqual(messages.length, 3);
 		assert.deepEqual(messages[2].type, "updateRecord");
 
@@ -938,16 +986,15 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
-		spec.cPresentation = CORA.coraData(metadataProvider
-			.getMetadataById("myChildOfBinaryPLink"));
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
 		pChildRefHandler.handleFiles(files1);
 
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(0);
-		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(data));
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
+		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 
 		pChildRefHandler.handleMsg({
 			metadataId: "myChildOfBinaryLink"
@@ -966,10 +1013,10 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		files2.push(file3);
 		pChildRefHandler.handleFiles(files2);
 
-		let ajaxCallSpy1 = dependencies.ajaxCallFactory.getFactored(1);
-		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(data2));
+		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
+		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(dataBinaryRecord2));
 
-		let ajaxCallSpy2 = dependencies.ajaxCallFactory.getFactored(2);
+		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
 		assert.strictEqual(ajaxCallSpy2, undefined);
 
 	});
@@ -1258,7 +1305,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
 		// subscription
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription = subscriptions[4];
@@ -1269,7 +1316,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		firstSubsription.functionToCall();
 
 		assert.deepEqual(factoredView.getRemovedChild(0), factored.getView());
-		assert.deepEqual(dependencies.pubSub.getUnsubscriptions()[0],
+		assert.deepEqual(pubSub.getUnsubscriptions()[0],
 			firstSubsription.subscriptionId);
 	});
 
@@ -1479,7 +1526,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 1);
 
 		// call remove function in pChildRefHandler
-		dependencies.pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[4].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 3);
@@ -1507,7 +1554,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 		// call remove function in pChildRefHandler
-		dependencies.pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[4].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1546,7 +1593,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 		// call remove function in pChildRefHandler
-		dependencies.pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[4].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 1);
@@ -1588,7 +1635,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 		// call remove function in pChildRefHandler
-		dependencies.pubSub.getSubscriptions()[2].functionToCall();
+		pubSub.getSubscriptions()[2].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 0);
@@ -1850,7 +1897,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 
 		// subscription
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 
 		let firstSubsription = subscriptions[0];
@@ -1871,7 +1918,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		spec.minNumberOfRepeatingToShow = "1";
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		// unsubscription
-		let unsubscriptions = dependencies.pubSub.getUnsubscriptions();
+		let unsubscriptions = pubSub.getUnsubscriptions();
 		assert.deepEqual(unsubscriptions.length, 0);
 
 		pChildRefHandler.newElementsAdded();
@@ -1905,7 +1952,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.deepEqual(dependencies.jsBookkeeper.getAddDataArray().length, 1);
 
 		// unsubscription
-		let unsubscriptions2 = dependencies.pubSub.getUnsubscriptions();
+		let unsubscriptions2 = pubSub.getUnsubscriptions();
 		assert.deepEqual(unsubscriptions2.length, 1);
 	});
 

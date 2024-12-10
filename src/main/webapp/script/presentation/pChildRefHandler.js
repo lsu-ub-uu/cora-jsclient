@@ -207,6 +207,7 @@ var CORA = (function(cora) {
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
+//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -310,26 +311,20 @@ var CORA = (function(cora) {
 				add(dataFromMsg.metadataId, dataFromMsg.repeatId);
 			}
 		};
-		const repeatingNoValue = {};
+		const fileLinkValues = {};
 
 		const add = function(metadataIdToAdd, repeatId) {
 			noOfRepeating++;
 			let newPath = calculateNewPath(metadataIdToAdd, repeatId);
 			//SPIKE
 			if (userCanUploadFile && isInputMode) {
-
-				console.log("newPath", newPath);
-				//			repeatingNoValue.push(newPath);
-				repeatingNoValue.newPath = "";
-				console.log("adding path to repeatingNoValue", repeatingNoValue);
-
-				//			repeatingNoValue.splice(repeatingNoValue.indexOf(newPath),1);
-				//			console.log("removing path from repeatingNoValue", repeatingNoValue);
-				//			//			pubSub.subscribe("setValue", spec.parentPath, undefined, handleMsg);
-				pubSub.subscribe("setValue", [].concat(newPath,"linkedRecordIdTextVar"), undefined, logMessage);
-//				pubSub.subscribe("remove", [].concat(spec.parentPath), undefined, logMessage);
-				pubSub.subscribe("remove", newPath, {andk:"alsödjf"}, logMessage);
+				fileLinkValues[newPath] = "";
+				let pathToFileLinkedRecordId = [].concat(newPath, "linkedRecordIdTextVar");
+				console.log("pathToFileLinkedRecordId", pathToFileLinkedRecordId);
+				pubSub.subscribe("setValue", pathToFileLinkedRecordId, undefined, setRepeatingFileLinkValue);
+				pubSub.subscribe("remove", newPath, undefined, removeRepeatingFileLinkValue);
 			}
+			//add warning message if not all files where added
 			//END SPIKE
 
 
@@ -339,10 +334,22 @@ var CORA = (function(cora) {
 			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
 			updateView();
 		};
-		const logMessage = function(dataFromMsg, msg) {
-			console.log("dataFromMsg " + presentationId, dataFromMsg)
-			console.log("msg " + presentationId, msg)
+			//SPIKE
+		const setRepeatingFileLinkValue = function(dataFromMsg, msg) {
+			let pathToEntireLink = copyPath(dataFromMsg.path);
+			pathToEntireLink.pop();
+			fileLinkValues[pathToEntireLink] = dataFromMsg.data;
+
+			console.log("fileLinkValues", fileLinkValues)
 		};
+		const copyPath = function(pathToCopy) {
+			return [].concat(pathToCopy);
+		};
+		const removeRepeatingFileLinkValue = function(dataFromMsg, msg) {
+			delete fileLinkValues[dataFromMsg.path];
+			console.log("fileLinkValues", fileLinkValues)
+		};
+		//END SPIKE
 		const calculateNewPath = function(metadataIdToAdd, repeatId) {
 			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd,
 				repeatId, spec.parentPath);
@@ -525,28 +532,43 @@ var CORA = (function(cora) {
 		};
 
 		const handleFiles = function(files) {
-			numberOfFilesToUpload = files.length;
-			changeNumberOfFilesIfMaxNumberExceeded(numberOfFilesToUpload);
+			numberOfFilesToUpload = calculateNumberOfFilesToUpload(files.length);
 			for (let i = 0; i < numberOfFilesToUpload; i++) {
 				handleFile(files[i]);
 			}
 		};
 
-		const changeNumberOfFilesIfMaxNumberExceeded = function(numberOfChosenFiles) {
+		const calculateNumberOfFilesToUpload = function(numberOfChosenFiles) {
 			if (repeatMaxIsNumber()) {
-				calculateNumOfFilesLeftToUploadAndPossiblyChangeNumToUpload(numberOfChosenFiles);
+				return calculateNumOfFilesLeftToUpload(numberOfChosenFiles);
 			}
+			return numberOfChosenFiles;
 		};
 
 		const repeatMaxIsNumber = function() {
 			return !isNaN(repeatMax);
 		};
 
-		const calculateNumOfFilesLeftToUploadAndPossiblyChangeNumToUpload = function(numberOfChosenFiles) {
-			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+		const calculateNumOfFilesLeftToUpload = function(numberOfChosenFiles) {
+//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+			let existingRepeatingWithValue = noOfRepeating; 
+//			let allExisting = fileLinkValues.keys;
+			let linkValues =Object.values(fileLinkValues); 
+//			console.log("linkValues",linkValues)
+			linkValues.forEach((value) => {
+				if(""===value){
+					existingRepeatingWithValue--;
+				}
+			});
+//			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+			let numOfFilesLeftToUpLoad = Number(repeatMax) - existingRepeatingWithValue;
 			if (numOfFilesLeftToUpLoad < numberOfChosenFiles) {
-				numberOfFilesToUpload = numOfFilesLeftToUpLoad;
+			console.log("numberOfChosenFiles", numberOfChosenFiles);
+			console.log("numOfFilesLeftToUpLoad", numOfFilesLeftToUpLoad);
+				return numOfFilesLeftToUpLoad;
 			}
+			console.log("numberOfChosenFiles", numberOfChosenFiles);
+			return numberOfChosenFiles;
 		};
 
 		const handleFile = function(file) {

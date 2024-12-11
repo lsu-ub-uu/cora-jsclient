@@ -61,6 +61,7 @@ var CORA = (function(cora) {
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
+//				buttonViewNew.appendChild(createAddButton());
 				buttonViewNew.appendChild(createBrowseButton());
 
 			}

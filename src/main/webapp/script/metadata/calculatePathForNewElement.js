@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 		var newPath = calculatePathForNewElement();
 
 		function copyPath(pathToCopy) {
-			return JSON.parse(JSON.stringify(pathToCopy));
+			return [].concat(pathToCopy);
 		}
 
 		function calculatePathForNewElement() {

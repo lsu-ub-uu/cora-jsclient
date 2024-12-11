@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("metadata/metadataChildValidatorTest.js", {
+QUnit.module.only("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -285,6 +285,60 @@ QUnit.test("testValidategroupIdTwoTextChild1to1InGroupWithEmptyValue", function(
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableId", path: ["groupIdTwoTextChild"] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(2), { metadataId: "textVariableId2", path: ["groupIdTwoTextChild"] });
 });
+
+
+///////////////////////////////////////////////////
+QUnit.test("testValidategroupIdOneCollectionVariableWithFinalValue", function(assert) {
+	let dataHolder = this.spec.dataHolder;
+	let containerGroup = [{
+		name: "groupWithOneCollectionVarChildWithFinalValue",
+		children: [{
+			name: "trueFalse",
+			value: "true"
+		}]
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerGroup);
+
+	let containerChild1 = [{
+		name: "trueFalse",
+		value: "true"
+	}];
+	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
+
+	this.spec.childReference = CORATEST.createChildReference("groupWithOneCollectionVarChildWithFinalValue", "0", "1", "1");
+
+	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+	let validationResult = metadataChildValidator.validate();
+	
+	assert.strictEqual(validationResult.everythingOkBelow, true);
+	assert.strictEqual(validationResult.containsValuableData, false);
+
+});
+
+//QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
+//	let dataHolder = this.spec.dataHolder;
+//	let containerChild0 = [{
+//		name: "trueFalse",
+//		value: "true"
+//	}];
+//	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild0);
+//
+//	this.spec.childReference = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
+//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+//
+//
+//	let validationResult = metadataChildValidator.validate();
+//
+//	assert.strictEqual(validationResult.everythingOkBelow, true);
+//	assert.strictEqual(validationResult.containsValuableData, false);
+//	let pubSubMessages = this.pubSub.getMessages();
+//	assert.strictEqual(pubSubMessages.length, 0);
+//
+//	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
+//		{ metadataId: "trueFalseTrueIsFinalValueCollectionVar", path: [] });
+//});
+
+/////////////////////////////////////////
 
 CORATEST.createRemoveMessage =
 	function(metadataId) {
@@ -1601,7 +1655,7 @@ QUnit.test("testValidateGroupId0to1ResourceLink", function(assert) {
 	assert.strictEqual(messages.length, 0);
 });
 
-QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
+QUnit.only("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild0 = [{
 		name: "groupId0to1RecordLinkChild",
@@ -1984,6 +2038,8 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 
 	this.spec.childReference = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
+
+	console.log(this.spec.childReference);
 
 	let validationResult = metadataChildValidator.validate();
 
@@ -2387,19 +2443,19 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeAl
 			}]
 		}]
 	}];
-	
+
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
-	
+
 	let containerChild1 = containerChild[0].children;
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
-	
-	
+
+
 	let containerAttribute1 = containerChild1[0].attributes[0];
-	let pathToAttribute1 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
+	let pathToAttribute1 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
 	dataHolder.setContainer(pathToAttribute1, containerAttribute1);
 
 	let containerAttribute2 = containerChild1[0].attributes[1];
-	let pathToAttribute2 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
+	let pathToAttribute2 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
 	dataHolder.setContainer(pathToAttribute2, containerAttribute2);
 
 	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildWithChoice", "0", "1", "1");
@@ -2415,8 +2471,8 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeAl
 
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildWithChoice", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableWithAnAttributeAndAnAttributeChoice", path: ["groupIdOneTextChildWithChoice"] });
-	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
-	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
+	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
+	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
 });
 
 QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTextWithoutValue", function(assert) {
@@ -2438,19 +2494,19 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 			}]
 		}]
 	}];
-	
+
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
-	
+
 	let containerChild1 = containerChild[0].children;
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
-	
-	
+
+
 	let containerAttribute1 = containerChild1[0].attributes[0];
-	let pathToAttribute1 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
+	let pathToAttribute1 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
 	dataHolder.setContainer(pathToAttribute1, containerAttribute1);
 
 	let containerAttribute2 = containerChild1[0].attributes[1];
-	let pathToAttribute2 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
+	let pathToAttribute2 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
 	dataHolder.setContainer(pathToAttribute2, containerAttribute2);
 
 	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildWithChoice", "0", "0", "1");
@@ -2462,7 +2518,7 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 2);
-	
+
 	let expectedMessage0 = {
 		type: "validationError",
 		message: {
@@ -2471,7 +2527,7 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage0);
-	
+
 	let expectedMessage1 = {
 		type: "remove",
 		message: {
@@ -2483,8 +2539,8 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildWithChoice", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableWithAnAttributeAndAnAttributeChoice", path: ["groupIdOneTextChildWithChoice"] });
-	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
-	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
+	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
+	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
 });
 
 QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTextWithoutValue", function(assert) {
@@ -2506,19 +2562,19 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 			}]
 		}]
 	}];
-	
+
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild);
-	
+
 	let containerChild1 = containerChild[0].children;
 	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
-	
-	
+
+
 	let containerAttribute1 = containerChild1[0].attributes[0];
-	let pathToAttribute1 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
+	let pathToAttribute1 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"];
 	dataHolder.setContainer(pathToAttribute1, containerAttribute1);
 
 	let containerAttribute2 = containerChild1[0].attributes[1];
-	let pathToAttribute2 = ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
+	let pathToAttribute2 = ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"];
 	dataHolder.setContainer(pathToAttribute2, containerAttribute2);
 
 	this.spec.childReference = CORATEST.createChildReference("groupIdOneTextChildWithChoice", "0", "0", "1");
@@ -2530,7 +2586,7 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 
 	let messages = this.pubSub.getMessages();
 	assert.strictEqual(messages.length, 1);
-	
+
 	let expectedMessage0 = {
 		type: "validationError",
 		message: {
@@ -2539,12 +2595,12 @@ QUnit.test("testGroupWithTextVariableWithOneAttributeChoiceAnOneFinalAttributeTe
 		}
 	};
 	assert.stringifyEqual(messages[0], expectedMessage0);
-	
+
 
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0), { metadataId: "groupIdOneTextChildWithChoice", path: [] });
 	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(1), { metadataId: "textVariableWithAnAttributeAndAnAttributeChoice", path: ["groupIdOneTextChildWithChoice"] });
-	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
-	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice","textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
+	assert.deepEqual(dataHolder.getRequestedPath(0), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttribute"]);
+	assert.deepEqual(dataHolder.getRequestedPath(1), ["groupIdOneTextChildWithChoice", "textVariableWithAnAttributeAndAnAttributeChoice", "@anAttributeChoice"]);
 });
 
 

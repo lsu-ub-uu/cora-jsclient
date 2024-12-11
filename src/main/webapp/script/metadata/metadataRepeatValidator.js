@@ -122,8 +122,15 @@ var CORA = (function(cora) {
 				.getFirstChildByNameInData('childReferences');
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
+				
+//			console.log("validateGroup, childs",JSON.stringify(childReference));
+//			console.log("validateGroup, childs",JSON.stringify(nextLevelPath));
 			});
 
+//			console.log(JSON.stringify(result));
+			//Here might be the problem: Add && only one child with finalValue
+			
+			
 			if (!result.containsValuableData) {
 				result.everythingOkBelow = false;
 			}

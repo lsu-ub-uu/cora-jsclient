@@ -144,6 +144,7 @@ var CORA = (function(cora) {
 
 		const setEverythingOkBelowInResult = function() {
 			if (childInstancesCanBeRemoved.length > 0) {
+				console.log(childInstancesCanBeRemoved)
 				result.everythingOkBelow = false;
 			}
 		};

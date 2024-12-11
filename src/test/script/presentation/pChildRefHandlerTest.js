@@ -18,13 +18,14 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
+QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	const test = QUnit.test;
 	let fixture;
 	let dependencies;
 	let metadataProvider;
 	let pubSub;
 	let textProvider;
+	let presentationFactory;
 	let ajaxCallFactory;
 	let jsBookkeeper;
 
@@ -45,13 +46,14 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		metadataProvider = new MetadataProviderStub();
 		pubSub = CORATEST.pubSubSpy();
 		textProvider = CORATEST.textProviderStub();
+		presentationFactory =CORATEST.standardFactorySpy("presentationSpy");
 		ajaxCallFactory = CORATEST.standardFactorySpy("ajaxCallSpy");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		dependencies = {
 			metadataProvider: metadataProvider,
 			pubSub: pubSub,
 			textProvider: textProvider,
-			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),
+			presentationFactory: presentationFactory,
 			jsBookkeeper: jsBookkeeper,
 			recordTypeProvider: CORATEST.recordTypeProviderStub(),
 			uploadManager: CORATEST.uploadManagerSpy(),
@@ -900,7 +902,6 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			}
 		};
 		assert.deepEqual(uploadSpec3, expectedUploadSpec3);
-
 	});
 
 	test("testHandleFiles1to1ExistingFile", function(assert) {
@@ -914,8 +915,6 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		pChildRefHandler.add("myChildOfBinaryLink", "0");
 		let subscriptions = pubSub.getSubscriptions();
 		let setValueSubscription = subscriptions[subscriptions.length - 2];
-		//		console.log("setValueSubscription", setValueSubscription)
-		//		assert.strictEqual(subscriptions.length, 2)
 		let setValueBinaryIdMethod = setValueSubscription.functionToCall;
 		assert.strictEqual("setValue", setValueSubscription.type);
 		let setValueData = {
@@ -964,7 +963,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.deepEqual(firstSetValueData.path, setValueData.path);
 	});
 
-	QUnit.only("testHandleFilesMax2DefaultShownOneEmptyLink", function(assert) {
+	test("testHandleFilesMax2DefaultShownOneEmptyLink", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
@@ -994,12 +993,10 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(firstSetValueData.data, "image:333759270435575");
 		assert.deepEqual(firstSetValueData.path, setValueData.path);
 		//call set value with values recorded from bookkeper
-		//		console.log("TEST",firstSetValueData.data)
 		let setValueWithDataFromBookkeeper = {
 			path: ['myChildOfBinaryLink.0', 'linkedRecordIdTextVar'],
 			data: firstSetValueData.data
 		};
-		//		console.log("TEST setValueWithDataFromBookkeeper", setValueWithDataFromBookkeeper)
 		setValueBinaryIdMethod(setValueWithDataFromBookkeeper);
 
 
@@ -1023,7 +1020,6 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 			path: secondSetValueData.path,
 			data: "someRecordId"
 		};
-		//		console.log("TEST setValueWithDataFromBookkeeper", setValueWithDataFromBookkeeper)
 		setValueBinaryIdMethod(setValueWithDataFromBookkeeper2);
 		// two files added no more create should happen if this is run
 		pChildRefHandler.handleFiles(files1to3);
@@ -1044,34 +1040,6 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assertNoOfNewBinaryCreated(assert, 3);
 
 	});
-
-	//	test("testHandleFilesSendingMoreFilesThanAllowed", function(assert) {
-	//		dependencies.textProvider = CORATEST.textProviderSpy();
-	//		spec.cParentMetadata = CORA.coraData(metadataProvider
-	//			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
-	//		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
-	//		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
-	//		let view = pChildRefHandler.getView();
-	//		fixture.appendChild(view);
-	//
-	//		pChildRefHandler.handleFiles(files1to3);
-	//
-	//		let ajaxCallSpy0 = ajaxCallFactory.getFactored(0);
-	//		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
-	//
-	//		let ajaxCallSpy1 = ajaxCallFactory.getFactored(1);
-	//		assert.strictEqual(ajaxCallSpy1.getSpec().data, JSON.stringify(dataBinaryRecord2));
-	//
-	//		let ajaxCallSpy2 = ajaxCallFactory.getFactored(2);
-	//		assert.strictEqual(ajaxCallSpy2, undefined);
-	//
-	//		answerCall(ajaxCallFactory, 0);
-	//		answerCall(ajaxCallFactory, 1);
-	//
-	//		let messages = pubSub.getMessages();
-	//		assert.deepEqual(messages.length, 3);
-	//		assert.deepEqual(messages[2].type, "updateRecord");
-	//	});
 
 	test("testHandleFilesSendingMoreFilesThanAllowed", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
@@ -1196,7 +1164,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 		assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.path, ["textVariableId"]);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 		assert.strictEqual(factoredPresentationSpec.cPresentation,
@@ -1234,7 +1202,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 
 		assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	});
 
@@ -1271,7 +1239,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 
 		assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	});
 
@@ -1300,7 +1268,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	});
 
@@ -1332,7 +1300,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	});
 
@@ -1363,7 +1331,7 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
-		let factoredPresentationSpec = dependencies.presentationFactory.getSpec(0);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
 	});
 

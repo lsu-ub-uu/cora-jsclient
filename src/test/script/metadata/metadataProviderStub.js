@@ -3051,6 +3051,21 @@ function MetadataProviderStub() {
 				}]
 			};
 		}
+		if (idToGet === "groupIdOneChildOfBinaryRecordLinkChildRepeat1to1") {
+			return {
+				name: "metadata",
+				attributes: {
+					type: "group"
+				},
+				children: [{
+					name: "childReferences",
+					children: [
+						createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax(
+							"metadataRecordLink", "myChildOfBinaryLink", "one", "1", "1")]
+				}]
+					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+			};
+		}
 		if (idToGet === "groupIdOneChildOfBinaryRecordLinkChildRepeatMax2") {
 			return {
 				name: "metadata",
@@ -3059,7 +3074,9 @@ function MetadataProviderStub() {
 				},
 				children: [{
 					name: "childReferences",
-					children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadataRecordLink", "myChildOfBinaryLink", "one", "0", "2")]
+					children: [
+						createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax(
+							"metadataRecordLink", "myChildOfBinaryLink", "one", "0", "2")]
 				}]
 					.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 			};

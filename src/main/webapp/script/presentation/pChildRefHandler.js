@@ -23,6 +23,9 @@ var CORA = (function(cora) {
 		const { dataDivider, recordTypeProvider, metadataProvider, textProvider, pubSub,
 			jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
+		const isInputMode = spec.mode === "input";
+		const binaryLinkRecordIdValues = {};
+
 		let out;
 		let userCanUploadFile = false;
 		let userCanRemove = false;
@@ -117,7 +120,6 @@ var CORA = (function(cora) {
 			collectedAttributes = collectAttributesForMetadataId(metadataId);
 			pChildRefHandlerView = createPChildRefHandlerView();
 
-
 			subscribeToMessagesFromForm();
 
 			userCanUploadFile = showFileUpload();
@@ -129,7 +131,7 @@ var CORA = (function(cora) {
 		const subscribeToMessagesFromForm = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, handleMsg);
 			pubSub.subscribe("move", spec.parentPath, undefined, handleMsg);
-			if (spec.minNumberOfRepeatingToShow !== undefined || spec.mode === "input") {
+			if (spec.minNumberOfRepeatingToShow !== undefined || isInputMode) {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
@@ -138,7 +140,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanRemove = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
@@ -148,7 +150,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanMove = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (!isRepeating) {
@@ -158,7 +160,7 @@ var CORA = (function(cora) {
 		};
 
 		const calculateUserCanAddBefore = function() {
-			if (spec.mode !== "input") {
+			if (!isInputMode) {
 				return false;
 			}
 			if (isStaticNoOfChildren) {
@@ -177,8 +179,6 @@ var CORA = (function(cora) {
 			let cTextGroup = CORA.coraData(cMetadataElementIn.getFirstChildByNameInData("textId"));
 			return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
-
-
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
@@ -209,6 +209,7 @@ var CORA = (function(cora) {
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
+				//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -234,7 +235,7 @@ var CORA = (function(cora) {
 
 		const additionalChildrenCanBeAdded = function() {
 			return ((isRepeating && !isStaticNoOfChildren) || calculateIsZeroToOne());
-		}
+		};
 
 		const calculateIsZeroToOne = function() {
 			return repeatMin === "0" && repeatMax === "1";
@@ -316,11 +317,40 @@ var CORA = (function(cora) {
 		const add = function(metadataIdToAdd, repeatId) {
 			noOfRepeating++;
 			let newPath = calculateNewPath(metadataIdToAdd, repeatId);
+			if (handlesFilesInInputMode()) {
+				keepTrackOfBinaryLinkValues(newPath);
+			}
+
 			let repeatingElement = createRepeatingElement(newPath);
 			pChildRefHandlerView.addChild(repeatingElement.getView());
 			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
 			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
 			updateView();
+		};
+
+		const keepTrackOfBinaryLinkValues = function(newPath) {
+			binaryLinkRecordIdValues[newPath] = "";
+			let pathToFileLinkedRecordId = [].concat(newPath, "linkedRecordIdTextVar");
+			pubSub.subscribe("setValue", pathToFileLinkedRecordId, undefined, setRepeatingFileLinkValue);
+			pubSub.subscribe("remove", newPath, undefined, removeRepeatingFileLinkValue);
+		};
+
+		const handlesFilesInInputMode = function() {
+			return userCanUploadFile && isInputMode;
+		};
+
+		const setRepeatingFileLinkValue = function(dataFromMsg, msg) {
+			let pathToEntireLink = copyPath(dataFromMsg.path);
+			pathToEntireLink.pop();
+			binaryLinkRecordIdValues[pathToEntireLink] = dataFromMsg.data;
+		};
+
+		const copyPath = function(pathToCopy) {
+			return [].concat(pathToCopy);
+		};
+
+		const removeRepeatingFileLinkValue = function(dataFromMsg, msg) {
+			delete binaryLinkRecordIdValues[dataFromMsg.path];
 		};
 
 		const calculateNewPath = function(metadataIdToAdd, repeatId) {
@@ -404,7 +434,7 @@ var CORA = (function(cora) {
 		};
 
 		const updateView = function() {
-			if (spec.mode === "input") {
+			if (isInputMode) {
 				if (showAddButton()) {
 					updateButtonViewAndAddBeforeButtonVisibility();
 					updateChildrenRemoveButtonVisibility();
@@ -505,28 +535,41 @@ var CORA = (function(cora) {
 		};
 
 		const handleFiles = function(files) {
-			numberOfFilesToUpload = files.length;
-			changeNumberOfFilesIfMaxNumberExceeded(numberOfFilesToUpload);
+			numberOfFilesToUpload = calculateNumberOfFilesToUpload(files.length);
 			for (let i = 0; i < numberOfFilesToUpload; i++) {
 				handleFile(files[i]);
 			}
 		};
 
-		const changeNumberOfFilesIfMaxNumberExceeded = function(numberOfChosenFiles) {
+		const calculateNumberOfFilesToUpload = function(numberOfChosenFiles) {
 			if (repeatMaxIsNumber()) {
-				calculateNumOfFilesLeftToUploadAndPossiblyChangeNumToUpload(numberOfChosenFiles);
+				return calculateNumOfFilesLeftToUpload(numberOfChosenFiles);
 			}
+			return numberOfChosenFiles;
 		};
 
 		const repeatMaxIsNumber = function() {
 			return !isNaN(repeatMax);
 		};
 
-		const calculateNumOfFilesLeftToUploadAndPossiblyChangeNumToUpload = function(numberOfChosenFiles) {
-			let numOfFilesLeftToUpLoad = Number(repeatMax) - noOfRepeating;
+		const calculateNumOfFilesLeftToUpload = function(numberOfChosenFiles) {
+			let existingRepeatingWithValue = calculateNumberOfAddedBinaryLinksThatCurrentlyHasAValue();
+			let numOfFilesLeftToUpLoad = Number(repeatMax) - existingRepeatingWithValue;
 			if (numOfFilesLeftToUpLoad < numberOfChosenFiles) {
-				numberOfFilesToUpload = numOfFilesLeftToUpLoad;
+				return numOfFilesLeftToUpLoad;
 			}
+			return numberOfChosenFiles;
+		};
+
+		const calculateNumberOfAddedBinaryLinksThatCurrentlyHasAValue = function() {
+			let linkValues = Object.values(binaryLinkRecordIdValues);
+			let existingRepeatingWithValue = linkValues.length;
+			linkValues.forEach((value) => {
+				if ("" === value) {
+					existingRepeatingWithValue--;
+				}
+			});
+			return existingRepeatingWithValue;
 		};
 
 		const handleFile = function(file) {
@@ -604,15 +647,14 @@ var CORA = (function(cora) {
 		};
 
 		const processNewBinary = function(answer) {
-			let calculatedRepeatId = sendAdd();
+			let pathOldOrNew = getPathUsedToSetBinaryRecordIdCreateNewLinkIfNoEmptyLinkCanBeReused();
+
 			let data = getDataPartOfRecordFromAnswer(answer);
 			let createdRecordId = getIdFromRecordData(data);
-			let newPath1 = calculateNewPath(metadataId, calculatedRepeatId);
-			let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
-				"linkedRecordIdTextVar", undefined, newPath1);
 			let setValueData = {
 				data: createdRecordId,
-				path: newPath
+				//				path: newPath
+				path: pathOldOrNew
 			};
 			jsBookkeeper.setValue(setValueData);
 			let formData = new FormData();
@@ -625,9 +667,32 @@ var CORA = (function(cora) {
 				uploadLink: uploadLink,
 				file: answer.spec.file
 			};
+
 			uploadManager.upload(uploadSpec);
 			saveMainRecordIfRecordsAreCreatedForAllFiles();
 		};
+
+		const getPathUsedToSetBinaryRecordIdCreateNewLinkIfNoEmptyLinkCanBeReused = function() {
+			let emptyKey = findBinaryKeyForEmptyExistingBinaryRecordLink();
+			if (emptyKey) {
+				return transformKeyToPath(emptyKey);
+			}
+
+			let calculatedRepeatId = sendAdd();
+			let newPath1 = calculateNewPath(metadataId, calculatedRepeatId);
+			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
+				"linkedRecordIdTextVar", undefined, newPath1);
+
+		};
+
+		const findBinaryKeyForEmptyExistingBinaryRecordLink = function() {
+			let linkValuesKeys = Object.keys(binaryLinkRecordIdValues);
+			return linkValuesKeys.find((key) => "" === binaryLinkRecordIdValues[key]);
+		};
+
+		const transformKeyToPath = function(key) {
+			return [].concat(key.split(','), "linkedRecordIdTextVar");
+		}
 
 		const getDataPartOfRecordFromAnswer = function(answer) {
 			return JSON.parse(answer.responseText).record.data;

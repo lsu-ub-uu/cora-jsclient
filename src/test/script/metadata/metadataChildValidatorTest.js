@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/metadataChildValidatorTest.js", {
+QUnit.module("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = new MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -312,31 +312,9 @@ QUnit.test("testValidategroupIdOneCollectionVariableWithFinalValue", function(as
 	
 	assert.strictEqual(validationResult.everythingOkBelow, true);
 	assert.strictEqual(validationResult.containsValuableData, false);
+	assert.strictEqual(validationResult.onlyFinalValues, true);
 
 });
-
-//QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueWithData", function(assert) {
-//	let dataHolder = this.spec.dataHolder;
-//	let containerChild0 = [{
-//		name: "trueFalse",
-//		value: "true"
-//	}];
-//	dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild0);
-//
-//	this.spec.childReference = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
-//	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-//
-//
-//	let validationResult = metadataChildValidator.validate();
-//
-//	assert.strictEqual(validationResult.everythingOkBelow, true);
-//	assert.strictEqual(validationResult.containsValuableData, false);
-//	let pubSubMessages = this.pubSub.getMessages();
-//	assert.strictEqual(pubSubMessages.length, 0);
-//
-//	assert.deepEqual(dataHolder.getRequestedPathAndMetadataId(0),
-//		{ metadataId: "trueFalseTrueIsFinalValueCollectionVar", path: [] });
-//});
 
 /////////////////////////////////////////
 
@@ -1655,7 +1633,7 @@ QUnit.test("testValidateGroupId0to1ResourceLink", function(assert) {
 	assert.strictEqual(messages.length, 0);
 });
 
-QUnit.only("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
+QUnit.test("testValidateGroupId0to1RecordLinkWithDataEmptyValue", function(assert) {
 	let dataHolder = this.spec.dataHolder;
 	let containerChild0 = [{
 		name: "groupId0to1RecordLinkChild",
@@ -2038,8 +2016,6 @@ QUnit.test("testValidateGroupIdOneTextChild1to1OneCollectionChildWithFinalValueW
 
 	this.spec.childReference = CORATEST.createChildReference("trueFalseTrueIsFinalValueCollectionVar", "0", "1", "1");
 	let metadataChildValidator = CORA.metadataChildValidator(this.dependencies, this.spec);
-
-	console.log(this.spec.childReference);
 
 	let validationResult = metadataChildValidator.validate();
 

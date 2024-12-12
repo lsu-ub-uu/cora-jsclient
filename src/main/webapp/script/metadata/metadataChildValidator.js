@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let pubSub = dependencies.pubSub;
 		let path = spec.path;
 		let result = {
+			onlyFinalValues: true,
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
@@ -69,6 +70,9 @@ var CORA = (function(cora) {
 
 		const validateAndCategorizeChildInstance = function(index) {
 			let childInstanceValidationResult = validateRepeatingChildInstanceWithData(index);
+			if(!childInstanceValidationResult.onlyFinalValues){
+				result.onlyFinalValues = false;
+			}
 			setValuableDataInResult(childInstanceValidationResult);
 			updateNumberOfChildrenOk(childInstanceValidationResult);
 			categorizeChildInstance(childInstanceValidationResult);
@@ -95,12 +99,14 @@ var CORA = (function(cora) {
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
+		// if any child of the group has valuable data then the validation result has valuable data
 		const setValuableDataInResult = function(childInstanceValidationResult) {
 			if (childInstanceValidationResult.containsValuableData) {
 				result.containsValuableData = true;
 			}
 		};
 
+		
 		const updateNumberOfChildrenOk = function(childInstanceValidationResult) {
 			if (childInstanceValidationResult.everythingOkBelow) {
 				numberOfChildrenOk++;

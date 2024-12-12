@@ -23,6 +23,7 @@ var CORA = (function(cora) {
 	cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
 		pubSub) {
 		const result = {
+			onlyFinalValues: true,
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
@@ -123,12 +124,16 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
-
-			if (!result.containsValuableData) {
+			
+			if (childDataNotValid()) {
 				result.everythingOkBelow = false;
 			}
 		};
-
+		
+		const childDataNotValid = function(){
+			return !result.containsValuableData && !result.onlyFinalValues;
+		};
+		
 		const validateGroupChild = function(childReference, nextLevelPath) {
 			validateChild(childReference, nextLevelPath);
 		};
@@ -141,7 +146,6 @@ var CORA = (function(cora) {
 			let spec = {
 				path: nextLevelPath,
 				childReference: childReference,
-				//				data: childData
 				dataHolder: dataHolder
 			};
 			let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
@@ -151,6 +155,9 @@ var CORA = (function(cora) {
 			}
 			if (childResult.containsValuableData) {
 				result.containsValuableData = true;
+			}
+			if (!childResult.onlyFinalValues) {
+				result.onlyFinalValues = false;
 			}
 			result.validationMessage = {
 				metadataId: metadataId,
@@ -213,8 +220,8 @@ var CORA = (function(cora) {
 		};
 
 		const validateVariableValue = function(nextLevelPath) {
-			let hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
 			if (dataIsValid()) {
+				let hasFinalValue = cMetadataElement.containsChildWithNameInData("finalValue");
 				handleValidData(hasFinalValue, result);
 			} else {
 				handleInvalidData(nextLevelPath);
@@ -275,6 +282,7 @@ var CORA = (function(cora) {
 				result.containsValuableData = false;
 			} else {
 				result.containsValuableData = true;
+				result.onlyFinalValues = false;
 			}
 		};
 
@@ -287,6 +295,7 @@ var CORA = (function(cora) {
 			result.containsValuableData = false;
 			result.validationMessage = message;
 			result.sendValidationMessages = true;
+			result.onlyFinalValues = false;
 		};
 		return start();
 	}

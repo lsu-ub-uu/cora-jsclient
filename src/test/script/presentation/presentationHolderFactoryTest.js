@@ -20,7 +20,7 @@
 QUnit.module("presentation/presentationHolderFactoryTest.js", {
 	beforeEach : function() {
 		this.dependencies = {
-				"metadataProvider" : new MetadataProviderStub(),
+				"metadataProvider" : CORATEST.MetadataProviderStub(),
 				"pubSub" : CORATEST.pubSubSpy(),
 				"textProvider" : CORATEST.textProviderStub(),
 				"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),

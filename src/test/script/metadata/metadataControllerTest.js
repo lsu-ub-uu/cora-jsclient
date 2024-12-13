@@ -21,7 +21,7 @@
 
 QUnit.module("metadata/metadataControllerTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.metadataChildAndRepeatInitializerFactory = CORATEST.metadataChildAndRepeatInitializerFactorySpy({});
 		this.metadataChildInitializerFactory = CORATEST.standardFactorySpy("metadataChildInitializerSpy");
 		this.pubSub = CORATEST.pubSubSpy();

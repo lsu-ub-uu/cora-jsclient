@@ -23,11 +23,11 @@ QUnit.module("metadata/dataHolderTest.js", {
 	beforeEach: function() {
 		this.spec = {
 			metadataId: "recordTypeOnlyMetadataIdChild",
-			metadataProvider: new MetadataProviderStub(),
+			metadataProvider: CORATEST.MetadataProviderStub(),
 			pubSub: CORATEST.pubSubSpy()
 		};
 
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.newDataHolder = function(metadataId) {
 			let spec = {

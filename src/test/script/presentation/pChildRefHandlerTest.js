@@ -43,7 +43,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 	hooks.beforeEach(() => {
 		fixture = document.getElementById("qunit-fixture");
-		metadataProvider = new MetadataProviderStub();
+		metadataProvider = CORATEST.MetadataProviderStub();
 		pubSub = CORATEST.pubSubSpy();
 		textProvider = CORATEST.textProviderStub();
 		presentationFactory =CORATEST.standardFactorySpy("presentationSpy");

@@ -27,6 +27,10 @@ var CORATEST = (function(coraTest) {
 			return "fakeView from pParentVarSpy";
 		};
 		
+		const disableVar = function(){
+			//fake method doing nothing
+		};
+		
 		let openLinkedRecordForLinkCalls = [];
 		const openLinkedRecordForLink = function(event, readLink){
 			openLinkedRecordForLinkCalls.push([event, readLink]);
@@ -40,6 +44,7 @@ var CORATEST = (function(coraTest) {
 			type: "pParentVarSpy",
 			getDependencies: getDependencies,
 			getView: getView,
+			disableVar: disableVar,
 			openLinkedRecordForLink: openLinkedRecordForLink,
 			getOpenLinkedRecordForLink: getOpenLinkedRecordForLink
 		});

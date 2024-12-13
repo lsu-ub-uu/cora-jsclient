@@ -20,7 +20,7 @@
 
 QUnit.module("recordListHandlerFactoryTest.js", {
 	beforeEach : function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			"factories" : {
 				"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy(),

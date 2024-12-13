@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("presentation/presentationFactoryTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();

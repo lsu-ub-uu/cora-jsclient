@@ -31,7 +31,7 @@ QUnit.module("presentation/pGroupTest.js", {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
 		this.dependencies = {
-			metadataProvider : new MetadataProviderStub(),
+			metadataProvider : CORATEST.MetadataProviderStub(),
 			pubSub : CORATEST.pubSubSpy(),
 			textProvider : CORATEST.textProviderStub(),
 			presentationFactory : CORATEST.standardFactorySpy("presentationSpy"),

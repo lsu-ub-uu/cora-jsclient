@@ -22,7 +22,7 @@
 
 QUnit.module("metadata/metadataValidatorTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.metadataChildValidatorFactory = CORATEST.standardFactorySpy("metadataChildValidatorSpy");
 		this.dependencies = {

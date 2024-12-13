@@ -53,12 +53,12 @@ QUnit.module("metadata/jsBookkeeperTest.js", {
 		};
 		this.spec = {
 			"metadataId" : "groupIdOneTextChild",
-			"metadataProvider" : new MetadataProviderStub(),
+			"metadataProvider" : CORATEST.MetadataProviderStub(),
 			"pubSub" : CORATEST.pubSubSpy(),
 			"textProvider" : CORATEST.textProviderStub(),
 			"dataHolder" : CORATEST.dataHolderStub()
 		};
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.dataHolder = CORATEST.dataHolderStub();

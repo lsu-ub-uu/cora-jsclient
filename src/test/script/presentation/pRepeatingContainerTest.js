@@ -63,7 +63,7 @@ var CORATEST = (function(coraTest) {
 QUnit.module("presentation/pRepeatingContainerTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();

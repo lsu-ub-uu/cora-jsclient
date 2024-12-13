@@ -21,7 +21,7 @@
 QUnit.module("metadata/metadataHelperTest.js", {
 	beforeEach : function() {
 		this.metadataHelper = CORA.metadataHelper({
-			"metadataProvider" : new MetadataProviderStub()
+			"metadataProvider" : CORATEST.MetadataProviderStub()
 		})
 	},
 	afterEach : function() {

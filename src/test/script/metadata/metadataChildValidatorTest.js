@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("metadata/metadataChildValidatorTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,

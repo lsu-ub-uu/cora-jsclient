@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("presentation/pNumVarTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		
 		

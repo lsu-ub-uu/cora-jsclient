@@ -22,7 +22,7 @@ QUnit.module("managedGuiItemTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			managedGuiItemViewFactory : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
 		};

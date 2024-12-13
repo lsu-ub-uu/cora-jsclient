@@ -108,7 +108,7 @@ var CORATEST = (function(coraTest) {
 QUnit.module("jsClient/jsClientIntegrationTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORA.pubSub();
 		this.textProvider = CORATEST.textProviderStub();
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");

@@ -27,7 +27,7 @@ QUnit.module("presentation/pParentMultipleChildrenTest.js", {
 		this.pParentMultipleChildren = null;
 		this.path = [];
 		this.pMultipleChildrenViewFactory = CORATEST.standardFactorySpy("pMultipleChildrenViewSpy");
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		
 		this.dependencies = {
 			clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),

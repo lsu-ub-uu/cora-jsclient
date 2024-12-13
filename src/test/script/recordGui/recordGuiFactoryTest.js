@@ -23,7 +23,7 @@ QUnit.module("recordGui/recordGuiFactoryTest.js", {
 		this.dependencies = {
 			providers : {
 				clientInstanceProvider : CORATEST.clientInstanceProviderSpy(),
-				metadataProvider : new MetadataProviderStub(),
+				metadataProvider : CORATEST.MetadataProviderStub(),
 				textProvider : CORATEST.textProviderStub(),
 				recordTypeProvider :CORATEST.recordTypeProviderSpy()
 			},

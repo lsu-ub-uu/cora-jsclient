@@ -192,6 +192,7 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: pParentVar.getView,
+			disableVar: pParentVar.disableVar,
 			openRefCollectionIdRecord: openRefCollectionIdRecord
 		});
 

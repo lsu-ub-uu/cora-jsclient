@@ -21,7 +21,7 @@
 QUnit.module("recordTypeHandlerFactoryTest.js", {
 	beforeEach : function() {
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			"factories" : {
 				"recordGuiFactory" : CORATEST.standardFactorySpy("recordGuiSpy"),

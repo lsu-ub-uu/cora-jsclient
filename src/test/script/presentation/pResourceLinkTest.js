@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("presentation/pResourceLinkTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.textProvider = CORATEST.textProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		

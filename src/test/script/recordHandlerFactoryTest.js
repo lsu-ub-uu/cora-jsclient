@@ -21,7 +21,7 @@
 
 QUnit.module("recordHandlerFactoryTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 
 		this.recordGuiFactorySpy = {
 			"factor": function(metadataId, data, dataDivider) {

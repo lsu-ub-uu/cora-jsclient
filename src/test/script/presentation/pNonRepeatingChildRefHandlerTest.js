@@ -22,10 +22,10 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			providers : {
-				metadataProvider : new MetadataProviderStub()
+				metadataProvider : CORATEST.MetadataProviderStub()
 			},
 			"presentationFactory" : CORATEST.standardFactorySpy("presentationSpy"),
 			"pNonRepeatingChildRefHandlerViewFactory" : CORATEST

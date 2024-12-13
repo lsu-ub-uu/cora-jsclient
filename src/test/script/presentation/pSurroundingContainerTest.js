@@ -31,7 +31,7 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 		
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {
-			metadataProvider: new MetadataProviderStub(),
+			metadataProvider: CORATEST.MetadataProviderStub(),
 			pubSub: CORATEST.pubSubSpy(),
 			textProvider: CORATEST.textProviderStub(),
 			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),

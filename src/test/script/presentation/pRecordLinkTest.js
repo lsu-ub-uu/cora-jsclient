@@ -65,7 +65,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 			clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
 			pRecordLinkViewFactory: CORATEST.standardFactorySpy("pRecordLinkViewSpy"),
 			pAttributesFactory: pAttributesFactory,
-			metadataProvider: new MetadataProviderStub(),
+			metadataProvider: CORATEST.MetadataProviderStub(),
 			pubSub: CORATEST.pubSubSpy(),
 			textProvider: CORATEST.textProviderStub(),
 			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),

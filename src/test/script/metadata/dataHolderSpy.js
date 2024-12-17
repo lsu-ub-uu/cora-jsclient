@@ -69,6 +69,9 @@ var CORATEST = (function(coraTest) {
 			pathsAndMetadataId.push({ path: path, metadataId: metadataId });
 			let toReturn = containerPathNoRepeatId[returnNo];
 			returnNo++;
+			if (toReturn === undefined){
+				return [];
+			}
 			return toReturn;
 		};
 		

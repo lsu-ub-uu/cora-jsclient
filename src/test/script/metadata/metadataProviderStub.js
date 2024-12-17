@@ -920,6 +920,34 @@ var CORATEST = (function(coraTest) {
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 				};
 			}
+			if (idToGet === "textVariableIdRepeat0to1InGroup") {
+				return {
+					name: "metadata",
+					attributes: {
+						type: "group"
+					},
+					children: [{
+						name: "childReferences",
+						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableId", "1", "0", "1")]
+					}]
+						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+				};
+			}
+			if (idToGet === "textVariableId2Repeat0to1InGroup") {
+				return {
+					name: "metadata",
+					attributes: {
+						type: "group"
+					},
+					children: [{
+						name: "childReferences",
+						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableId", "1", "0", "1"),
+							createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableId2", "1", "1", "1")
+						]
+					}]
+						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+				};
+			}
 			if (idToGet === "textVariableIdRepeat1to3InGroup") {
 				return {
 					name: "metadata",
@@ -1022,6 +1050,33 @@ var CORATEST = (function(coraTest) {
 					children: [{
 						name: "childReferences",
 						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadataTextVariable", "textVariableId", "1", "1", "3")]
+					}]
+						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+				};
+			}
+			if (idToGet === "groupOneChildGroupRepeat0to1") {
+				return {
+					name: "metadata",
+					attributes: {
+						type: "group"
+					},
+					children: [{
+						name: "childReferences",
+						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableIdRepeat0to1InGroup", "1", "0", "1")]
+					}]
+						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
+				};
+			}
+			if (idToGet === "groupTwoChildrenGroupRepeat0to1") {
+				return {
+					name: "metadata",
+					attributes: {
+						type: "group"
+					},
+					children: [{
+						name: "childReferences",
+						children: [createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableIdRepeat0to1InGroup", "1", "0", "1"),
+						createChildReferenceWithRecordTypeAndRecordIdAndRepeatIdAndRepeatMinAndRepeatMax("metadata", "textVariableId2Repeat0to1InGroup", "1", "0", "1")]
 					}]
 						.concat(createArrayWithRecordInfoAndNameInDataAndLinkedTextIdAndDefTextId(idToGet))
 				};

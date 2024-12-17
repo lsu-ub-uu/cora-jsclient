@@ -124,6 +124,9 @@ var CORA = (function(cora) {
 			nextLevelChildReferences.children.forEach(function(childReference) {
 				validateGroupChild(childReference, nextLevelPath);
 			});
+			if(data.children.length === 0){
+				result.onlyFinalValues = false;
+			}
 			
 			if (childDataNotValid()) {
 				result.everythingOkBelow = false;

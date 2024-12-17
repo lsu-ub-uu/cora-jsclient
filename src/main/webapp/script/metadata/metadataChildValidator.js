@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016, 2024 Olov McKie
- * Copyright 2016, 2020 Uppsala University Library
+ * Copyright 2016, 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -70,7 +70,7 @@ var CORA = (function(cora) {
 
 		const validateAndCategorizeChildInstance = function(index) {
 			let childInstanceValidationResult = validateRepeatingChildInstanceWithData(index);
-			if(!childInstanceValidationResult.onlyFinalValues){
+			if (!childInstanceValidationResult.onlyFinalValues) {
 				result.onlyFinalValues = false;
 			}
 			setValuableDataInResult(childInstanceValidationResult);
@@ -106,7 +106,7 @@ var CORA = (function(cora) {
 			}
 		};
 
-		
+
 		const updateNumberOfChildrenOk = function(childInstanceValidationResult) {
 			if (childInstanceValidationResult.everythingOkBelow) {
 				numberOfChildrenOk++;
@@ -144,7 +144,7 @@ var CORA = (function(cora) {
 		const removeEmptyChildren = function() {
 			let childrenNotRemovable = numberOfChildrenOk + childInstancesCanNotBeRemoved.length;
 			let noChildrenNeededForRepeatMin = calculateNeededNoChildrenForRepeatMin(childrenNotRemovable);
-			
+
 			sendRemoveForEmptyChildren(childInstancesCanBeRemoved, noChildrenNeededForRepeatMin);
 		};
 
@@ -164,10 +164,10 @@ var CORA = (function(cora) {
 		};
 
 		const removeAllEmptyChildren = function(childrenCanBeRemoved) {
-			childrenCanBeRemoved.forEach(function(errorMessage) {
-				sendRemoveForEmptyChild(errorMessage);
+			childrenCanBeRemoved.forEach(function(removableChildAnswer) {
+				sendRemoveForEmptyChild(removableChildAnswer);
 			});
-			childrenCanBeRemoved.splice(0,childrenCanBeRemoved.length)
+			childrenCanBeRemoved.splice(0, childrenCanBeRemoved.length)
 		};
 
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {
@@ -178,10 +178,10 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const sendRemoveForEmptyChild = function(errorMessage) {
+		const sendRemoveForEmptyChild = function(removableChildAnswer) {
 			let removeMessage = {
 				type: "remove",
-				path: errorMessage.validationMessage.path
+				path: removableChildAnswer.validationMessage.path
 			};
 			pubSub.publish("remove", removeMessage);
 		};

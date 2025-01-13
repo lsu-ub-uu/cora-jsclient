@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,21 +24,21 @@ var CORA = (function(cora) {
 
 		const login = function(loginIdIn, appToken) {
 			loginId = loginIdIn;
-			let callSpec = createCallSpec(loginId,appToken);
+			let callSpec = createCallSpec(loginId, appToken);
 			ajaxCallFactory.factor(callSpec);
 		};
 
-		const createCallSpec = function(loginId,appToken) {
+		const createCallSpec = function(loginId, appToken) {
 			return {
-				requestMethod : spec.requestMethod,
-				url : spec.url,
-				contentType : spec.contentType,
-				accept : spec.accept,
-				loadMethod : handleResponse,
-				errorMethod : errorMethod,
-				timeoutMethod : timeoutMethod,
-				data : loginId+'\n'+appToken,
-				timeoutInMS : 15000
+				requestMethod: spec.requestMethod,
+				url: spec.url,
+				contentType: spec.contentType,
+				accept: spec.accept,
+				loadMethod: handleResponse,
+				errorMethod: errorMethod,
+				timeoutMethod: timeoutMethod,
+				data: loginId + '\n' + appToken,
+				timeoutInMS: 15000
 			};
 		};
 
@@ -56,13 +56,19 @@ var CORA = (function(cora) {
 			let cData = CORA.coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
 			let userId = cData.getFirstAtomicValueByNameInData("userId");
-			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
+			let validUntil = cData.getFirstAtomicValueByNameInData("validUntil");
+			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
+			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
+			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
 			let authInfo = {
-				userId : userId,
-				loginId : loginId,
-				token : token,
-				validForNoSeconds : validForNoSeconds,
-				actionLinks : everything.actionLinks
+				userId: userId,
+				loginId: loginId,
+				token: token,
+				firstName: firstName,
+				lastName: lastName,
+				validUntil: validUntil,
+				renewUntil: renewUntil,
+				actionLinks: everything.actionLinks
 			};
 			spec.authInfoCallback(authInfo);
 		};
@@ -78,11 +84,11 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type : "appTokenLogin",
-			login : login,
-			handleResponse : handleResponse,
-			getDependencies : getDependencies,
-			getSpec : getSpec
+			type: "appTokenLogin",
+			login: login,
+			handleResponse: handleResponse,
+			getDependencies: getDependencies,
+			getSpec: getSpec
 		});
 	};
 

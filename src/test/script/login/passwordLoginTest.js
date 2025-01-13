@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2024 Uppsala University Library
+ * Copyright 2019, 2024, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,65 +18,65 @@
  */
 "use strict";
 
-QUnit.module("login/passwordLoginTest.js", {
-	beforeEach : function() {
-		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
-		let textProvider = CORATEST.textProviderStub();
+QUnit.module.only("login/passwordLoginTest.js", hooks => {
+	const test = QUnit.test;
+	let ajaxCallFactorySpy;
+	let assertAjaxCallSpecIsCorrect;
+	let dependencies;
+	let spec;
+	let authInfo;
+	let errorInfo;
+	let timeoutInfo;
+	let passwordLogin;
+	let loginData;
 
-		let dependencies = {
-			ajaxCallFactory : this.ajaxCallFactorySpy,
-			recordGuiFactory : CORATEST.standardFactorySpy("recordGuiSpy"),
-			passwordLoginViewFactory : CORATEST.standardFactorySpy("passwordLoginViewSpy"),
-			textProvider : textProvider
-		};
-		this.dependencies = dependencies;
+	hooks.beforeEach(() => {
+		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 
-		let authInfo = {};
-		this.getAuthInfo = function() {
-			return authInfo;
+		dependencies = {
+			ajaxCallFactory: ajaxCallFactorySpy,
+			recordGuiFactory: CORATEST.standardFactorySpy("recordGuiSpy"),
+			passwordLoginViewFactory: CORATEST.standardFactorySpy("passwordLoginViewSpy"),
+			textProvider: CORATEST.textProviderStub()
 		};
-		let errorInfo = {};
-		this.getErrorInfo = function() {
-			return errorInfo;
-		};
-		let timeoutInfo = {};
-		this.getTimeoutInfo = function() {
-			return timeoutInfo;
-		};
-		let spec = {
-			metadataId : "someMetadataGroup",
-			presentationId :"somePGroup",
+
+		authInfo = {};
+		errorInfo = {};
+		timeoutInfo = {};
+
+		spec = {
+			metadataId: "someMetadataGroup",
+			presentationId: "somePGroup",
 			requestMethod: "POST",
-			url: "someAppTokenBaseUrl/" + "login/rest/password",
+			url: "someAppTokenBaseUrl/login/rest/password",
 			contentType: "application/vnd.uub.login",
 			accept: "application/vnd.uub.record+json",
-			authInfoCallback : function(authInfoIn) {
+			authInfoCallback: function(authInfoIn) {
 				authInfo = authInfoIn;
 			},
-			errorCallback : function(error) {
+			errorCallback: function(error) {
 				errorInfo = error;
 			},
-			timeoutCallback : function(timeout) {
+			timeoutCallback: function(timeout) {
 				timeoutInfo = timeout;
 			}
 		};
-		this.spec = spec;
 
-		this.passwordLogin = CORA.passwordLogin(dependencies, spec);
+		passwordLogin = CORA.passwordLogin(dependencies, spec);
 
-		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
+		assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
 			let ajaxCallSpec = ajaxCallSpy.getSpec();
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
 			assert.strictEqual(ajaxCallSpec.url, spec.url);
 			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
 			assert.strictEqual(ajaxCallSpec.accept, spec.accept);
-			assert.strictEqual(ajaxCallSpec.loadMethod, this.passwordLogin.handleResponse);
+			assert.strictEqual(ajaxCallSpec.loadMethod, passwordLogin.handleResponse);
 			assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutMethod, spec.timeoutCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutInMS, 15000);
 			assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomePassword");
 		};
-		this.loginData = {
+		loginData = {
 			name: "password",
 			children: [
 				{
@@ -89,156 +89,199 @@ QUnit.module("login/passwordLoginTest.js", {
 				}
 			]
 		};
-	},
-	afterEach : function() {
-	}
-});
+	});
 
-QUnit.test("testInit", function(assert) {
-	assert.strictEqual(this.passwordLogin.type, "passwordLogin");
-});
+	hooks.afterEach(() => {
+		//no after
+	});
 
-QUnit.test("testGetDependencies", function(assert) {
-	assert.strictEqual(this.passwordLogin.getDependencies(), this.dependencies);
-});
+	test("testInit", function(assert) {
+		assert.strictEqual(passwordLogin.type, "passwordLogin");
+	});
 
-QUnit.test("testGetSpec", function(assert) {
-	assert.strictEqual(this.passwordLogin.getSpec(), this.spec);
-});
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(passwordLogin.getDependencies(), dependencies);
+	});
 
-QUnit.test("testInitViewCreatedUsingFactory", function(assert) {
-	let factoredView = this.dependencies.passwordLoginViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.type, "passwordLoginViewSpy");
+	test("testGetSpec", function(assert) {
+		assert.strictEqual(passwordLogin.getSpec(), spec);
+	});
 
-	let spec = this.dependencies.passwordLoginViewFactory.getSpec(0);
-	assert.strictEqual(spec.loginMethod, this.passwordLogin.login);
-});
+	test("testInitViewCreatedUsingFactory", function(assert) {
+		let factoredView = dependencies.passwordLoginViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.type, "passwordLoginViewSpy");
 
-QUnit.test("testGetView", function(assert) {
-	let factoredView = this.dependencies.passwordLoginViewFactory.getFactored(0);
-	assert.strictEqual(this.passwordLogin.getView(), factoredView.getView());
-});
+		let spec = dependencies.passwordLoginViewFactory.getSpec(0);
+		assert.strictEqual(spec.loginMethod, passwordLogin.login);
+	});
 
-QUnit.test("testInitRecordGuiFactoryCalled", function(assert) {
-	let factoredSpec = this.dependencies.recordGuiFactory.getSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "someMetadataGroup");
-	let emptyPermissions = {
-				write: [],
-				read: []
-			};
-	assert.deepEqual(factoredSpec.permissions, emptyPermissions);
-});
+	test("testGetView", function(assert) {
+		let factoredView = dependencies.passwordLoginViewFactory.getFactored(0);
+		assert.strictEqual(passwordLogin.getView(), factoredView.getView());
+	});
 
-QUnit.test("testInitRecordGuiGetPresentationCalled", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	assert.strictEqual(factoredGui.getPresentationIdUsed(0), "somePGroup");
-	assert.strictEqual(factoredGui.getMetadataIdsUsedInData(0), "someMetadataGroup");
-});
+	test("testInitRecordGuiFactoryCalled", function(assert) {
+		let factoredSpec = dependencies.recordGuiFactory.getSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "someMetadataGroup");
+		let emptyPermissions = {
+			write: [],
+			read: []
+		};
+		assert.deepEqual(factoredSpec.permissions, emptyPermissions);
+	});
 
-QUnit.test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	assert.strictEqual(this.dependencies.passwordLoginViewFactory.getFactored(0)
+	test("testInitRecordGuiGetPresentationCalled", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		assert.strictEqual(factoredGui.getPresentationIdUsed(0), "somePGroup");
+		assert.strictEqual(factoredGui.getMetadataIdsUsedInData(0), "someMetadataGroup");
+	});
+
+	test("testInitRecordGuiGetPresentationAddedToFormView", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		assert.strictEqual(dependencies.passwordLoginViewFactory.getFactored(0)
 			.getPresentationsAddedToLoginForm(0), factoredGui.getReturnedPresentations(0)
-			.getView());
-});
+				.getView());
+	});
 
-QUnit.test("testInitRecordGuiStartedGui", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	assert.strictEqual(factoredGui.getInitCalled(), 1);
-});
+	test("testInitRecordGuiStartedGui", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		assert.strictEqual(factoredGui.getInitCalled(), 1);
+	});
 
-QUnit.test("testLoginSendsRequest", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	let dataHolderSpy = factoredGui.dataHolder;
-	dataHolderSpy.setData(this.loginData);
+	test("testLoginSendsRequest", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		let dataHolderSpy = factoredGui.dataHolder;
+		dataHolderSpy.setData(loginData);
 
-	this.passwordLogin.login();
+		passwordLogin.login();
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
-});
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
+	});
 
-QUnit.test("testGetAuthTokenForAppToken", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	let dataHolderSpy = factoredGui.dataHolder;
-	dataHolderSpy.setData(this.loginData);
+	test("testGetAuthTokenForAppToken", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		let dataHolderSpy = factoredGui.dataHolder;
+		dataHolderSpy.setData(loginData);
 
-	this.passwordLogin.login();
+		passwordLogin.login();
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-	let tokenAnswer = {
-		data : {
-			children : [ {
-					name : "token",
-					value : "someAuthToken"
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
+		//		let tokenAnswer = {
+		//			data: {
+		//				children: [{
+		//					name: "token",
+		//					value: "someAuthToken"
+		//				}, {
+		//					name: "userId",
+		//					value: "someUserId"
+		//				}, {
+		//					name: "validForNoSeconds",
+		//					value: "278"
+		//				}
+		//				],
+		//				name: "authToken"
+		//			},
+		//			actionLinks: {
+		//				delete: {
+		//					requestMethod: "DELETE",
+		//					rel: "delete",
+		//					url: "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
+		//				}
+		//			}
+		//		};
+		let tokenAnswer = {
+			data: {
+				children: [{
+					name: "token",
+					value: "someAuthToken"
 				}, {
-					name : "userId",
-					value : "someUserId"
+					name: "validUntil",
+					value: "1736780585864"
 				}, {
-					name : "validForNoSeconds",
-					value : "278"
+					name: "renewUntil",
+					value: "1736866385864"
+				}, {
+					name: "userId",
+					value: "someUserId"
+				}, {
+					name: "loginId",
+					value: "someLoginId"
+				}, {
+					name: "firstName",
+					value: "someFirstName"
+				}, {
+					name: "lastName",
+					value: "someLastName"
 				}
-			],
-			name : "authToken"
-		},
-		actionLinks : {
-			delete : {
-				requestMethod : "DELETE",
-				rel : "delete",
-				url : "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
+				],
+				name: "authToken"
+			},
+			actionLinks: {
+				renew: {
+					requestMethod: "POST",
+					rel: "renew",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId",
+					accept: "application/vnd.uub.authToken+json"
+				},
+				delete: {
+					requestMethod: "DELETE",
+					rel: "delete",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId"
+				}
 			}
-		}
-	};
-	let answer = {
-		status : 201,
-		responseText : JSON.stringify(tokenAnswer)
-	};
-	loadMethod(answer);
-	let authInfo = this.getAuthInfo();
-	assert.strictEqual(authInfo.userId, "someUserId");
-	assert.strictEqual(authInfo.loginId, "someLoginId");
-	assert.strictEqual(authInfo.token, "someAuthToken");
-	assert.strictEqual(authInfo.validForNoSeconds, "278");
-	assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
-});
+		};
+		let answer = {
+			status: 201,
+			responseText: JSON.stringify(tokenAnswer)
+		};
+		loadMethod(answer);
+		assert.strictEqual(authInfo.token, "someAuthToken");
+		assert.strictEqual(authInfo.validUntil, "1736780585864");
+		assert.strictEqual(authInfo.renewUntil, "1736866385864");
+		assert.strictEqual(authInfo.userId, "someUserId");
+		assert.strictEqual(authInfo.loginId, "someLoginId");
+		assert.strictEqual(authInfo.firstName, "someFirstName");
+		assert.strictEqual(authInfo.lastName, "someLastName");
+		assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
+	});
 
-QUnit.test("testGetError", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	let dataHolderSpy = factoredGui.dataHolder;
-	dataHolderSpy.setData(this.loginData);
+	test("testGetError", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		let dataHolderSpy = factoredGui.dataHolder;
+		dataHolderSpy.setData(loginData);
 
-	this.passwordLogin.login();
+		passwordLogin.login();
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
 
-	let answer = {
-		status : 201,
-		responseText : "error"
-	};
-	errorMethod(answer);
-	let errorInfo = this.getErrorInfo();
+		let answer = {
+			status: 201,
+			responseText: "error"
+		};
+		errorMethod(answer);
 
-	assert.strictEqual(errorInfo, answer);
-});
+		assert.strictEqual(errorInfo, answer);
+	});
 
-QUnit.test("testGetTimeOut", function(assert) {
-	let factoredGui = this.dependencies.recordGuiFactory.getFactored(0);
-	let dataHolderSpy = factoredGui.dataHolder;
-	dataHolderSpy.setData(this.loginData);
+	test("testGetTimeOut", function(assert) {
+		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		let dataHolderSpy = factoredGui.dataHolder;
+		dataHolderSpy.setData(loginData);
 
-	this.passwordLogin.login();
+		passwordLogin.login();
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
 
-	let answer = {
-		status : 201,
-		responseText : "timeout"
-	};
-	timeoutMethod(answer);
-	let timeoutInfo = this.getTimeoutInfo();
+		let answer = {
+			status: 201,
+			responseText: "timeout"
+		};
+		timeoutMethod(answer);
 
-	assert.strictEqual(timeoutInfo, answer);
+		assert.strictEqual(timeoutInfo, answer);
+	});
 });

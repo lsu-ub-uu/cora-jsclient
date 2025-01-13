@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, 2024 Uppsala University Library
+ * Copyright 2019, 2024, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 			view = createView();
 			recordGui = createRecordGui();
 			let presentationView = recordGui.getPresentationHolder(spec.presentationId,
-					spec.metadataId).getView();
+				spec.metadataId).getView();
 			view.addPresentationToLoginFormHolder(presentationView);
 			recordGui.initMetadataControllerStartingGui();
 		};
@@ -45,7 +45,7 @@ var CORA = (function(cora) {
 
 		const createRecordGui = function() {
 			let recordGuiSpec = {
-				metadataId : spec.metadataId,
+				metadataId: spec.metadataId,
 				permissions: createEmptyPermissions()
 			};
 			return recordGuiFactory.factor(recordGuiSpec);
@@ -68,15 +68,15 @@ var CORA = (function(cora) {
 
 		const createCallSpec = function(loginId, password) {
 			return {
-				requestMethod : spec.requestMethod,
-				url : spec.url,
-				contentType : spec.contentType,
-				accept : spec.accept,
-				loadMethod : handleResponse,
-				errorMethod : spec.errorCallback,
-				timeoutMethod : spec.timeoutCallback,
-				data : loginId+'\n'+password,
-				timeoutInMS : 15000
+				requestMethod: spec.requestMethod,
+				url: spec.url,
+				contentType: spec.contentType,
+				accept: spec.accept,
+				loadMethod: handleResponse,
+				errorMethod: spec.errorCallback,
+				timeoutMethod: spec.timeoutCallback,
+				data: loginId + '\n' + password,
+				timeoutInMS: 15000
 			};
 		};
 
@@ -86,13 +86,19 @@ var CORA = (function(cora) {
 			let cData = CORA.coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
 			let userId = cData.getFirstAtomicValueByNameInData("userId");
-			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
+			let validUntil = cData.getFirstAtomicValueByNameInData("validUntil");
+			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
+			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
+			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
 			let authInfo = {
-				userId : userId,
-				loginId : loginId,
-				token : token,
-				validForNoSeconds : validForNoSeconds,
-				actionLinks : everything.actionLinks
+				userId: userId,
+				loginId: loginId,
+				token: token,
+				firstName: firstName,
+				lastName: lastName,
+				validUntil: validUntil,
+				renewUntil: renewUntil,
+				actionLinks: everything.actionLinks
 			};
 			spec.authInfoCallback(authInfo);
 		};
@@ -111,12 +117,12 @@ var CORA = (function(cora) {
 
 		start();
 		return Object.freeze({
-			type : "passwordLogin",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
+			type: "passwordLogin",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
 			login: login,
-			handleResponse : handleResponse
+			handleResponse: handleResponse
 		});
 	};
 

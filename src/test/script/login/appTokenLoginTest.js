@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,156 +18,171 @@
  */
 "use strict";
 
-QUnit.module("login/appTokenLoginTest.js", {
-	beforeEach : function() {
+QUnit.module.only("login/appTokenLoginTest.js", hooks => {
+	const test = QUnit.test;
+	let ajaxCallFactorySpy;
+	let dependencies;
+	let spec;
+	let authInfo;
+	let errorInfo;
+	let timeoutInfo;
+	let appTokenLogin;
 
-		this.ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
+	hooks.beforeEach(() => {
+		ajaxCallFactorySpy = CORATEST.ajaxCallFactorySpy();
 
-		this.dependencies = {
-			ajaxCallFactory : this.ajaxCallFactorySpy
+		dependencies = {
+			ajaxCallFactory: ajaxCallFactorySpy
 		};
 
-		let authInfo = {};
-		this.getAuthInfo = function() {
-			return authInfo;
-		};
-		let errorInfo = {};
-		this.getErrorInfo = function() {
-			return errorInfo;
-		};
-		let timeoutInfo = {};
-		this.getTimeoutInfo = function() {
-			return timeoutInfo;
-		};
+		authInfo = {};
+		errorInfo = {};
+		timeoutInfo = {};
 
-		this.spec = {
-			requestMethod : "POST",
-			url : "http://localhost:8080/login/rest/apptoken",
-			contentType : "application/vnd.uub.login",
-			accept : "",
-			authInfoCallback : function(authInfoIn) {
+		spec = {
+			requestMethod: "POST",
+			url: "http://localhost:8080/login/rest/apptoken",
+			contentType: "application/vnd.uub.login",
+			accept: "",
+			authInfoCallback: function(authInfoIn) {
 				authInfo = authInfoIn;
 			},
-			errorCallback : function(error) {
+			errorCallback: function(error) {
 				errorInfo = error;
 			},
-			timeoutCallback : function(timeout) {
+			timeoutCallback: function(timeout) {
 				timeoutInfo = timeout;
 			}
 		};
 
-		this.appTokenLogin = CORA.appTokenLogin(this.dependencies, this.spec);
+		appTokenLogin = CORA.appTokenLogin(dependencies, spec);
+	});
 
-		this.assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
-			let ajaxCallSpec = ajaxCallSpy.getSpec();
-			assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
-					+ "rest/apptoken");
-			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
-			assert.strictEqual(ajaxCallSpec.accept, "");
-			assert.strictEqual(ajaxCallSpec.loadMethod, this.appTokenLogin.handleResponse);
-			assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomeAppToken");
-		};
-	},
-	afterEach : function() {
-	}
-});
+	hooks.afterEach(() => {
+		//no after
+	});
 
-QUnit.test("init", function(assert) {
-	assert.ok(this.appTokenLogin);
-	assert.strictEqual(this.appTokenLogin.type, "appTokenLogin");
-});
+	const assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
+			+ "rest/apptoken");
+		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
+		assert.strictEqual(ajaxCallSpec.accept, "");
+		assert.strictEqual(ajaxCallSpec.loadMethod, appTokenLogin.handleResponse);
+		assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomeAppToken");
+	};
 
-QUnit.test("getDependencies", function(assert) {
-	assert.ok(this.appTokenLogin);
-	assert.strictEqual(this.appTokenLogin.getDependencies(), this.dependencies);
-});
+	test("init", function(assert) {
+		assert.ok(appTokenLogin);
+		assert.strictEqual(appTokenLogin.type, "appTokenLogin");
+	});
 
-QUnit.test("getSpec", function(assert) {
-	assert.ok(this.appTokenLogin);
-	assert.strictEqual(this.appTokenLogin.getSpec(), this.spec);
-});
+	test("getDependencies", function(assert) {
+		assert.ok(appTokenLogin);
+		assert.strictEqual(appTokenLogin.getDependencies(), dependencies);
+	});
 
-QUnit.test("testUpload", function(assert) {
-	let appTokenLogin = this.appTokenLogin;
+	test("getSpec", function(assert) {
+		assert.ok(appTokenLogin);
+		assert.strictEqual(appTokenLogin.getSpec(), spec);
+	});
 
-	appTokenLogin.login("someLoginId", "someAppToken");
+	test("testUpload", function(assert) {
+		appTokenLogin.login("someLoginId", "someAppToken");
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
-});
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
+	});
 
-QUnit.test("testGetAuthTokenForAppToken", function(assert) {
-	let appTokenLogin = this.appTokenLogin;
+	test("testGetAuthTokenForAppToken", function(assert) {
+		appTokenLogin.login("someLoginId", "someAppToken");
 
-	appTokenLogin.login("someLoginId", "someAppToken");
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
 
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-	let tokenAnswer = {
-		data : {
-			children : [ {
-					name : "token",
-					value : "someAuthToken"
+		let tokenAnswer = {
+			data: {
+				children: [{
+					name: "token",
+					value: "someAuthToken"
 				}, {
-					name : "userId",
-					value : "someUserId"
+					name: "validUntil",
+					value: "1736780585864"
 				}, {
-					name : "validForNoSeconds",
-					value : "278"
-				} 
-			],
-			name : "authToken"
-		},
-		actionLinks : {
-			delete : {
-				requestMethod : "DELETE",
-				rel : "delete",
-				url : "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
+					name: "renewUntil",
+					value: "1736866385864"
+				}, {
+					name: "userId",
+					value: "someUserId"
+				}, {
+					name: "loginId",
+					value: "someLoginId"
+				}, {
+					name: "firstName",
+					value: "someFirstName"
+				}, {
+					name: "lastName",
+					value: "someLastName"
+				}
+				],
+				name: "authToken"
+			},
+			actionLinks: {
+				renew: {
+					requestMethod: "POST",
+					rel: "renew",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId",
+					accept: "application/vnd.uub.authToken+json"
+				},
+				delete: {
+					requestMethod: "DELETE",
+					rel: "delete",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId"
+				}
 			}
-		}
-	};
-	let answer = {
-		status : 201,
-		responseText : JSON.stringify(tokenAnswer)
-	};
-	loadMethod(answer);
-	let authInfo = this.getAuthInfo();
-	assert.strictEqual(authInfo.userId, "someUserId");
-	assert.strictEqual(authInfo.loginId, "someLoginId");
-	assert.strictEqual(authInfo.token, "someAuthToken");
-	assert.strictEqual(authInfo.validForNoSeconds, "278");
-	assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
-});
+		};
 
-QUnit.test("testGetError", function(assert) {
-	let appTokenLogin = this.appTokenLogin;
-	appTokenLogin.login("someUserId", "someAppToken");
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
+		let answer = {
+			status: 201,
+			responseText: JSON.stringify(tokenAnswer)
+		};
+		loadMethod(answer);
+		assert.strictEqual(authInfo.token, "someAuthToken");
+		assert.strictEqual(authInfo.validUntil, "1736780585864");
+		assert.strictEqual(authInfo.renewUntil, "1736866385864");
+		assert.strictEqual(authInfo.userId, "someUserId");
+		assert.strictEqual(authInfo.loginId, "someLoginId");
+		assert.strictEqual(authInfo.firstName, "someFirstName");
+		assert.strictEqual(authInfo.lastName, "someLastName");
+		assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
+	});
 
-	let answer = {
-		status : 201,
-		responseText : "error"
-	};
-	errorMethod(answer);
-	let errorInfo = this.getErrorInfo();
+	test("testGetError", function(assert) {
+		appTokenLogin.login("someUserId", "someAppToken");
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
 
-	assert.strictEqual(errorInfo, answer);
-});
+		let answer = {
+			status: 201,
+			responseText: "error"
+		};
+		errorMethod(answer);
 
-QUnit.test("testGetTimeOut", function(assert) {
-	let appTokenLogin = this.appTokenLogin;
-	appTokenLogin.login("someUserId", "someAppToken");
-	let ajaxCallSpy0 = this.ajaxCallFactorySpy.getFactored(0);
-	let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
+		assert.strictEqual(errorInfo, answer);
+	});
 
-	let answer = {
-		status : 201,
-		responseText : "timeout"
-	};
-	timeoutMethod(answer);
-	let timeoutInfo = this.getTimeoutInfo();
+	test("testGetTimeOut", function(assert) {
+		appTokenLogin.login("someUserId", "someAppToken");
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
 
-	assert.strictEqual(timeoutInfo, answer);
+		let answer = {
+			status: 201,
+			responseText: "timeout"
+		};
+		timeoutMethod(answer);
+
+		assert.strictEqual(timeoutInfo, answer);
+	});
 });

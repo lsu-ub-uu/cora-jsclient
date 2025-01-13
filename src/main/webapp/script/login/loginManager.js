@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018, 2019, 2024 Uppsala University Library
+ * Copyright 2016, 2018, 2019, 2024, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -226,8 +226,8 @@ var CORA = (function(cora) {
 			let loginSpec = {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
-				contentType : "application/vnd.uub.login",
-				accept: "application/vnd.uub.record+json",
+				contentType: "application/vnd.uub.login",
+				accept: "application/vnd.uub.authToken+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
@@ -277,8 +277,8 @@ var CORA = (function(cora) {
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
-				contentType : "application/vnd.uub.login",
-				accept: "application/vnd.uub.record+json",
+				contentType: "application/vnd.uub.login",
+				accept: "application/vnd.uub.authToken+json",
 				authInfoCallback: authInfoCallback,
 				errorCallback: passwordErrorCallback,
 				timeoutCallback: passwordTimeoutCallback

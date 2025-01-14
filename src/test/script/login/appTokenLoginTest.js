@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("login/appTokenLoginTest.js", hooks => {
+QUnit.module("login/appTokenLoginTest.js", hooks => {
 	const test = QUnit.test;
 	let ajaxCallFactorySpy;
 	let dependencies;

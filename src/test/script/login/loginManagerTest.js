@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("login/loginManagerTest.js", hooks => {
+QUnit.module("login/loginManagerTest.js", hooks => {
 	const test = QUnit.test;
 	let addedEvents = [];
 	let dependencies;

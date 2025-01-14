@@ -19,13 +19,12 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ajaxCall = function(spec) {
-
-		var defaultTimeoutMS = 90000;
-		var timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
-		var intervalId;
-		var xhr = factorXmlHttpRequestUsingFactoryFromSpec();
-		var intervalStart;
-		var timeProgress;
+		const defaultTimeoutMS = 90000;
+		const timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
+		let intervalId;
+		const xhr = factorXmlHttpRequestUsingFactoryFromSpec();
+		let intervalStart;
+		let timeProgress;
 
 		addListenersToXmlHttpRequest();
 		open();
@@ -66,12 +65,12 @@ var CORA = (function(cora) {
 		}
 
 		function createReturnObject() {
-			var returnObject = {
+			let returnObject = {
 				"spec" : spec,
 				"status" : xhr.status,
 				"response" : xhr.response
 			};
-			var responseType = spec.responseType;
+			let responseType = spec.responseType;
 			if (responseType === undefined || responseType === 'document') {
 				returnObject.responseText = xhr.responseText;
 			}
@@ -113,7 +112,7 @@ var CORA = (function(cora) {
 		}
 
 		function createUrl() {
-			var url = spec.url + "?";
+			let url = spec.url + "?";
 			url += possiblyCreateUrlParameters();
 			url += "preventCache=" + (new Date()).getTime();
 			return url;
@@ -127,10 +126,10 @@ var CORA = (function(cora) {
 		}
 
 		function createUrlParameters() {
-			var url = "";
-			var keys = Object.keys(spec.parameters);
-			for (var i = 0; i < keys.length; i++) {
-				url += createUrlParameter(keys[i]);
+			let url = "";
+			let keys = Object.keys(spec.parameters);
+			for (const element of keys) {
+				url += createUrlParameter(element);
 			}
 			return url;
 		}
@@ -149,7 +148,7 @@ var CORA = (function(cora) {
 		}
 
 		function handleTimeout() {
-			var progressAfterStartTime = timeProgress - intervalStart;
+			let progressAfterStartTime = timeProgress - intervalStart;
 			if (progressAfterStartTime > 0) {
 				intervalStart = performance.now();
 			} else {
@@ -161,9 +160,9 @@ var CORA = (function(cora) {
 
 		function setHeadersSpecifiedInSpec() {
 			if (spec.requestHeaders) {
-				var keys = Object.keys(spec.requestHeaders);
-				for (var i = 0; i < keys.length; i++) {
-					xhr.setRequestHeader(keys[i], spec.requestHeaders[keys[i]]);
+				let keys = Object.keys(spec.requestHeaders);
+				for (const element of keys) {
+					xhr.setRequestHeader(element, spec.requestHeaders[element]);
 				}
 			}
 		}
@@ -187,7 +186,7 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "ajaxCall",
+			type : "ajaxCall",
 			xhr : xhr,
 			spec : spec,
 			getCurrentTimeout : getCurrentTimeout

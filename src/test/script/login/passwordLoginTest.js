@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("login/passwordLoginTest.js", hooks => {
+QUnit.module("login/passwordLoginTest.js", hooks => {
 	const test = QUnit.test;
 	let ajaxCallFactorySpy;
 	let assertAjaxCallSpecIsCorrect;
@@ -168,29 +168,6 @@ QUnit.module.only("login/passwordLoginTest.js", hooks => {
 
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
 		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-		//		let tokenAnswer = {
-		//			data: {
-		//				children: [{
-		//					name: "token",
-		//					value: "someAuthToken"
-		//				}, {
-		//					name: "userId",
-		//					value: "someUserId"
-		//				}, {
-		//					name: "validForNoSeconds",
-		//					value: "278"
-		//				}
-		//				],
-		//				name: "authToken"
-		//			},
-		//			actionLinks: {
-		//				delete: {
-		//					requestMethod: "DELETE",
-		//					rel: "delete",
-		//					url: "http://epc.ub.uu.se/login/rest/apptoken/b01dab5e-50eb-492a-b40d-f416500f5e6f"
-		//				}
-		//			}
-		//		};
 		let tokenAnswer = {
 			data: {
 				children: [{

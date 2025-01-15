@@ -72,35 +72,12 @@ var CORA = (function(cora) {
 				url: spec.url,
 				contentType: spec.contentType,
 				accept: spec.accept,
-				loadMethod: handleResponse,
+				loadMethod: spec.loadMethod,
 				errorMethod: spec.errorCallback,
 				timeoutMethod: spec.timeoutCallback,
 				data: loginId + '\n' + password,
 				timeoutInMS: 15000
 			};
-		};
-
-		const handleResponse = function(answer) {
-			let everything = JSON.parse(answer.responseText);
-			let data = everything.data;
-			let cData = CORA.coraData(data);
-			let token = cData.getFirstAtomicValueByNameInData("token");
-			let userId = cData.getFirstAtomicValueByNameInData("userId");
-			let validUntil = cData.getFirstAtomicValueByNameInData("validUntil");
-			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
-			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
-			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
-			let authInfo = {
-				userId: userId,
-				loginId: loginId,
-				token: token,
-				firstName: firstName,
-				lastName: lastName,
-				validUntil: validUntil,
-				renewUntil: renewUntil,
-				actionLinks: everything.actionLinks
-			};
-			spec.authInfoCallback(authInfo);
 		};
 
 		const getDependencies = function() {
@@ -121,8 +98,7 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			login: login,
-			handleResponse: handleResponse
+			login: login
 		});
 	};
 

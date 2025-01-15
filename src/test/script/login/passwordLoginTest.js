@@ -24,7 +24,6 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 	let assertAjaxCallSpecIsCorrect;
 	let dependencies;
 	let spec;
-	let authInfo;
 	let errorInfo;
 	let timeoutInfo;
 	let passwordLogin;
@@ -40,7 +39,6 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 			textProvider: CORATEST.textProviderStub()
 		};
 
-		authInfo = {};
 		errorInfo = {};
 		timeoutInfo = {};
 
@@ -51,14 +49,14 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 			url: "someAppTokenBaseUrl/login/rest/password",
 			contentType: "application/vnd.uub.login",
 			accept: "application/vnd.uub.record+json",
-			authInfoCallback: function(authInfoIn) {
-				authInfo = authInfoIn;
+			loadMethod: function() {
+				//empty test method
 			},
-			errorCallback: function(error) {
-				errorInfo = error;
+			errorCallback: function() {
+				//empty test method
 			},
-			timeoutCallback: function(timeout) {
-				timeoutInfo = timeout;
+			timeoutCallback: function() {
+				//empty test method
 			}
 		};
 
@@ -70,7 +68,7 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 			assert.strictEqual(ajaxCallSpec.url, spec.url);
 			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
 			assert.strictEqual(ajaxCallSpec.accept, spec.accept);
-			assert.strictEqual(ajaxCallSpec.loadMethod, passwordLogin.handleResponse);
+			assert.strictEqual(ajaxCallSpec.loadMethod, spec.loadMethod);
 			assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutMethod, spec.timeoutCallback);
 			assert.strictEqual(ajaxCallSpec.timeoutInMS, 15000);
@@ -157,108 +155,5 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
 		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
-	});
-
-	test("testGetAuthTokenForAppToken", function(assert) {
-		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
-		let dataHolderSpy = factoredGui.dataHolder;
-		dataHolderSpy.setData(loginData);
-
-		passwordLogin.login();
-
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-		let tokenAnswer = {
-			data: {
-				children: [{
-					name: "token",
-					value: "someAuthToken"
-				}, {
-					name: "validUntil",
-					value: "1736780585864"
-				}, {
-					name: "renewUntil",
-					value: "1736866385864"
-				}, {
-					name: "userId",
-					value: "someUserId"
-				}, {
-					name: "loginId",
-					value: "someLoginId"
-				}, {
-					name: "firstName",
-					value: "someFirstName"
-				}, {
-					name: "lastName",
-					value: "someLastName"
-				}
-				],
-				name: "authToken"
-			},
-			actionLinks: {
-				renew: {
-					requestMethod: "POST",
-					rel: "renew",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-					accept: "application/vnd.uub.authToken+json"
-				},
-				delete: {
-					requestMethod: "DELETE",
-					rel: "delete",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId"
-				}
-			}
-		};
-		let answer = {
-			status: 201,
-			responseText: JSON.stringify(tokenAnswer)
-		};
-		loadMethod(answer);
-		assert.strictEqual(authInfo.token, "someAuthToken");
-		assert.strictEqual(authInfo.validUntil, "1736780585864");
-		assert.strictEqual(authInfo.renewUntil, "1736866385864");
-		assert.strictEqual(authInfo.userId, "someUserId");
-		assert.strictEqual(authInfo.loginId, "someLoginId");
-		assert.strictEqual(authInfo.firstName, "someFirstName");
-		assert.strictEqual(authInfo.lastName, "someLastName");
-		assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
-	});
-
-	test("testGetError", function(assert) {
-		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
-		let dataHolderSpy = factoredGui.dataHolder;
-		dataHolderSpy.setData(loginData);
-
-		passwordLogin.login();
-
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
-
-		let answer = {
-			status: 201,
-			responseText: "error"
-		};
-		errorMethod(answer);
-
-		assert.strictEqual(errorInfo, answer);
-	});
-
-	test("testGetTimeOut", function(assert) {
-		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
-		let dataHolderSpy = factoredGui.dataHolder;
-		dataHolderSpy.setData(loginData);
-
-		passwordLogin.login();
-
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
-
-		let answer = {
-			status: 201,
-			responseText: "timeout"
-		};
-		timeoutMethod(answer);
-
-		assert.strictEqual(timeoutInfo, answer);
 	});
 });

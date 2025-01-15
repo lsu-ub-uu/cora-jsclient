@@ -318,7 +318,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
 		assert.strictEqual(spec0.contentType, "application/vnd.uub.login");
 		assert.strictEqual(spec0.accept, "application/vnd.uub.authToken+json");
-		assert.strictEqual(spec0.authInfoCallback, loginManager.authInfoCallback);
+		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
 	});
@@ -391,7 +391,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			assert.strictEqual(authTokenHolder.getToken(0), undefined);
 		});
 
-	QUnit.only("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
+	test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
 		loginManager.authInfoCallback(authInfo);
 		assertTokenCorrect(assert, authInfo.token);
 	});
@@ -402,7 +402,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(authTokenHolder.getToken(0), token);
 	};
 
-	QUnit.only("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
+	test("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
 		loginManager.authInfoCallback(authInfo);
 
 		assertLoginIdCorrect(assert, authInfo.loginId);
@@ -413,7 +413,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(factoredView.getLoginId(0), loginId);
 	};
 
-	QUnit.only("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
+	test("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
 		loginManager.authInfoCallback(authInfo);
 
 		assertLoginStateSetToLoggedIn(assert);
@@ -435,7 +435,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(afterLoginMethodCalled, true);
 	};
 
-	QUnit.only("testGetAuthTokenForAppToken", function(assert) {
+	test("testGetAuthTokenForAppToken", function(assert) {
 		//		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
 		//		let dataHolderSpy = factoredGui.dataHolder;
 		//		dataHolderSpy.setData(loginData);
@@ -500,7 +500,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assertPasswordsLoginsRemoved(assert, passwordLogins);
 	});
 
-	QUnit.only("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
+	test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
 		let done = assert.async();
 		const timeOutMarginInLoginManager = 10000;
 		let validUntil = Date.now() + timeOutMarginInLoginManager;
@@ -617,7 +617,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.requestMethod, "POST");
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
 		assert.strictEqual(spec0.accept, "application/vnd.uub.authToken+json");
-		assert.strictEqual(spec0.authInfoCallback, loginManager.authInfoCallback);
+		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.passwordTimeoutCallback);
 	});
@@ -680,7 +680,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.ok(factored1);
 	});
 
-	QUnit.only("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
+	test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
 		let passwordLogins = setUpTwoPasswordLogins();
 
 		loginManager.authInfoCallback(authInfo);

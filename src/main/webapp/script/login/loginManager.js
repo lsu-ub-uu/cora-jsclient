@@ -228,8 +228,7 @@ var CORA = (function(cora) {
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
 				contentType: "application/vnd.uub.login",
 				accept: "application/vnd.uub.authToken+json",
-				authInfoCallback: authInfoCallback,
-//				loadMethod: handleNewAuthTokenAnswer,
+				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
 			};
@@ -280,7 +279,7 @@ var CORA = (function(cora) {
 				url: spec.appTokenBaseUrl + "login/rest/password/",
 				contentType: "application/vnd.uub.login",
 				accept: "application/vnd.uub.authToken+json",
-				authInfoCallback: authInfoCallback,
+				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: passwordErrorCallback,
 				timeoutCallback: passwordTimeoutCallback
 			};

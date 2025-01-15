@@ -18,9 +18,11 @@
  */
 "use strict";
 
+
 QUnit.module("login/loginManagerTest.js", hooks => {
 	const test = QUnit.test;
 	let addedEvents = [];
+	let ajaxCallFactory;
 	let dependencies;
 	let afterLogoutMethodCalled
 	let errorMessage;
@@ -29,11 +31,12 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	let loginManager;
 	let authInfo;
 	let afterLoginMethodCalled;
- 
+
 	hooks.beforeEach(() => {
-		errorMessage=undefined;
+		errorMessage = undefined;
 		addStandardAppTokensToLoginMenu = true;
 		window.addEventListener = addEvent;
+		ajaxCallFactory = CORATEST.ajaxCallFactorySpy();
 		dependencies = {
 			textProvider: CORATEST.textProviderSpy(),
 			loginManagerViewFactory: CORATEST.loginManagerViewFactorySpy(),
@@ -42,7 +45,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			passwordLoginJsClientIntegratorFactory: CORATEST
 				.standardFactorySpy("passwordLoginJsClientIntegratorSpy"),
 			authTokenHolder: CORATEST.authTokenHolderSpy(),
-			ajaxCallFactory: CORATEST.ajaxCallFactorySpy()
+			ajaxCallFactory: ajaxCallFactory
 		};
 		afterLoginMethodCalled = false;
 		afterLogoutMethodCalled = false;
@@ -62,13 +65,16 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			userId: "141414",
 			loginId: "someLoginId",
 			token: "fakeAuthTokenFromHere",
-			validUntil: Date.now()+tenMinInMillis,
-			renewUntil: Date.now()+twentyFourHoursInMillis,
+			firstName: "someFirstName",
+			lastName: "someLastName",
+			validUntil: Date.now() + tenMinInMillis,
+			renewUntil: Date.now() + twentyFourHoursInMillis,
 			actionLinks: {
 				renew: {
 					requestMethod: "POST",
 					rel: "renew",
-					url:"http://localhost:38180/login/rest/authToken/someTokenId"
+					url: "http://localhost:38180/login/rest/authToken/someTokenId",
+					accept: "application/vnd.uub.authToken+json"
 				},
 				delete: {
 					requestMethod: "DELETE",
@@ -121,7 +127,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
-	
+
 	const answerListLoginsCall = function(no) {
 		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(no);
 		let jsonLoginList = JSON.stringify(CORATEST.loginList);
@@ -385,33 +391,148 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			assert.strictEqual(authTokenHolder.getToken(0), undefined);
 		});
 
-	test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
+	QUnit.only("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
 		loginManager.authInfoCallback(authInfo);
+		assertTokenCorrect(assert, authInfo.token);
+	});
+
+	const assertTokenCorrect = function(assert, token) {
 		let authTokenHolder = dependencies.authTokenHolder;
-		assert.strictEqual(authTokenHolder.getToken(0), "fakeAuthTokenFromHere");
+
+		assert.strictEqual(authTokenHolder.getToken(0), token);
+	};
+
+	QUnit.only("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
+		loginManager.authInfoCallback(authInfo);
+
+		assertLoginIdCorrect(assert, authInfo.loginId);
 	});
 
-	test("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
-
-		loginManager.authInfoCallback(authInfo);
+	const assertLoginIdCorrect = function(assert, loginId) {
 		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
-		assert.strictEqual(factoredView.getLoginId(0), "someLoginId");
+		assert.strictEqual(factoredView.getLoginId(0), loginId);
+	};
+
+	QUnit.only("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
+		loginManager.authInfoCallback(authInfo);
+
+		assertLoginStateSetToLoggedIn(assert);
 	});
 
-	test("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
-
-		loginManager.authInfoCallback(authInfo);
+	const assertLoginStateSetToLoggedIn = function(assert) {
 		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
 		let stateSetInView = factoredView.getState();
-
 		assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDIN);
-	});
+	};
 
 	test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
 		loginManager.authInfoCallback(authInfo);
 
-		assert.strictEqual(afterLoginMethodCalled, true);
+		assertAfterLoginMethodIsCalled(assert);
 	});
+
+	const assertAfterLoginMethodIsCalled = function(assert) {
+		assert.strictEqual(afterLoginMethodCalled, true);
+	};
+
+	QUnit.only("testGetAuthTokenForAppToken", function(assert) {
+		//		let factoredGui = dependencies.recordGuiFactory.getFactored(0);
+		//		let dataHolderSpy = factoredGui.dataHolder;
+		//		dataHolderSpy.setData(loginData);
+
+		//		passwordLogin.login();
+		//
+		//		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
+		//		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
+		let tokenAnswer = {
+			data: {
+				children: [{
+					name: "token",
+					value: "someAuthToken"
+				}, {
+					name: "validUntil",
+					value: "1736780585864"
+				}, {
+					name: "renewUntil",
+					value: "1736866385864"
+				}, {
+					name: "userId",
+					value: "someUserId"
+				}, {
+					name: "loginId",
+					value: "someLoginId"
+				}, {
+					name: "firstName",
+					value: "someFirstName"
+				}, {
+					name: "lastName",
+					value: "someLastName"
+				}
+				],
+				name: "authToken"
+			},
+			actionLinks: {
+				renew: {
+					requestMethod: "POST",
+					rel: "renew",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId",
+					accept: "application/vnd.uub.authToken+json"
+				},
+				delete: {
+					requestMethod: "DELETE",
+					rel: "delete",
+					url: "http://localhost:38180/login/rest/authToken/someTokenId"
+				}
+			}
+		};
+		let answer = {
+			status: 201,
+			responseText: JSON.stringify(tokenAnswer)
+		};
+		let passwordLogins = setUpTwoPasswordLogins();
+
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		assertTokenCorrect(assert, "someAuthToken");
+		assertLoginIdCorrect(assert, "someLoginId");
+		assertLoginStateSetToLoggedIn(assert);
+		assertAfterLoginMethodIsCalled(assert);
+		assertPasswordsLoginsRemoved(assert, passwordLogins);
+	});
+
+	QUnit.only("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
+		let done = assert.async();
+		const timeOutMarginInLoginManager = 10000;
+		let validUntil = Date.now() + timeOutMarginInLoginManager;
+		authInfo.validUntil = validUntil;
+
+		//		authInfo.renewUntil = Date.now() + twentyFourHoursInMillis;
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+		const assertRenewCalled = function() {
+			assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 3);
+			let ajaxCallSpy = ajaxCallFactory.getFactored(2);
+			let ajaxCallSpec = ajaxCallSpy.getSpec();
+			let renewAction = authInfo.actionLinks.renew;
+			assert.strictEqual(ajaxCallSpec.url, renewAction.url);
+			assert.strictEqual(ajaxCallSpec.requestMethod, renewAction.requestMethod);
+			assert.strictEqual(ajaxCallSpec.accept, renewAction.accept);
+			//			assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.renewCallback);
+			done();
+		};
+
+		loginManager.authInfoCallback(authInfo);
+
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+
+		window.setTimeout(assertRenewCalled, 10);
+
+		//		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		//		let renewAction = authInfo.actionLInks.renew;
+		//		assert.strictEqual(ajaxCallSpec.url, renewAction.url);
+		//		assert.strictEqual(ajaxCallSpec.requestMethod, renewAction.requestMethod);
+		//		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.renewCallback);
+	});
+
 
 	test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 		loginManager.login({
@@ -461,14 +582,14 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 
 	test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
 		let errorObject = {
-			status: 0, 
+			status: 0,
 			spec: {
 				requestMethod: "DELETE"
 			}
-		}; 
+		};
 
 		loginManager.appTokenErrorCallback(errorObject);
-		
+
 		assert.strictEqual(errorMessage, undefined);
 		assertLogoutPerformed(assert);
 	});
@@ -559,7 +680,15 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.ok(factored1);
 	});
 
-	test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
+	QUnit.only("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
+		let passwordLogins = setUpTwoPasswordLogins();
+
+		loginManager.authInfoCallback(authInfo);
+
+		assertPasswordsLoginsRemoved(assert, passwordLogins);
+	});
+
+	const setUpTwoPasswordLogins = function() {
 		let spec = {
 			text: "someText",
 			type: "password",
@@ -569,19 +698,18 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 
 		};
 		loginManager.login(spec);
-		let factored = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-		assert.ok(factored);
+		let passwordLogin1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
 
 		spec.loginUnitId = "someOtherLDAPLoginUnit";
 		loginManager.login(spec);
-		let factored1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
-		assert.ok(factored1);
+		let passwordLogin2 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
+		return [passwordLogin1, passwordLogin2];
+	};
 
-		loginManager.authInfoCallback(authInfo);
-
-		assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
-		assert.strictEqual(factored1.getNoOfRemovePasswordLoginFromJsClient(), 1);
-	});
+	const assertPasswordsLoginsRemoved = function(assert, passwordLogins) {
+		assert.strictEqual(passwordLogins[0].getNoOfRemovePasswordLoginFromJsClient(), 1);
+		assert.strictEqual(passwordLogins[1].getNoOfRemovePasswordLoginFromJsClient(), 1);
+	};
 
 	test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
 		let spec = {

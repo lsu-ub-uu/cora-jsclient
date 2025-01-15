@@ -23,9 +23,6 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 	let ajaxCallFactorySpy;
 	let dependencies;
 	let spec;
-	let authInfo;
-	let errorInfo;
-	let timeoutInfo;
 	let appTokenLogin;
 
 	hooks.beforeEach(() => {
@@ -35,23 +32,19 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 			ajaxCallFactory: ajaxCallFactorySpy
 		};
 
-		authInfo = {};
-		errorInfo = {};
-		timeoutInfo = {};
-
 		spec = {
 			requestMethod: "POST",
 			url: "http://localhost:8080/login/rest/apptoken",
 			contentType: "application/vnd.uub.login",
 			accept: "",
-			authInfoCallback: function(authInfoIn) {
-				authInfo = authInfoIn;
+			loadMethod: function() {
+				//empty test method
 			},
-			errorCallback: function(error) {
-				errorInfo = error;
+			errorCallback: function() {
+				//empty test method
 			},
-			timeoutCallback: function(timeout) {
-				timeoutInfo = timeout;
+			timeoutCallback: function() {
+				//empty test method
 			}
 		};
 
@@ -61,17 +54,6 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 	hooks.afterEach(() => {
 		//no after
 	});
-
-	const assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
-		let ajaxCallSpec = ajaxCallSpy.getSpec();
-		assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
-			+ "rest/apptoken");
-		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
-		assert.strictEqual(ajaxCallSpec.accept, "");
-		assert.strictEqual(ajaxCallSpec.loadMethod, appTokenLogin.handleResponse);
-		assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomeAppToken");
-	};
 
 	test("init", function(assert) {
 		assert.ok(appTokenLogin);
@@ -95,94 +77,16 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 		assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
 	});
 
-	test("testGetAuthTokenForAppToken", function(assert) {
-		appTokenLogin.login("someLoginId", "someAppToken");
-
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let loadMethod = ajaxCallSpy0.getSpec().loadMethod;
-
-		let tokenAnswer = {
-			data: {
-				children: [{
-					name: "token",
-					value: "someAuthToken"
-				}, {
-					name: "validUntil",
-					value: "1736780585864"
-				}, {
-					name: "renewUntil",
-					value: "1736866385864"
-				}, {
-					name: "userId",
-					value: "someUserId"
-				}, {
-					name: "loginId",
-					value: "someLoginId"
-				}, {
-					name: "firstName",
-					value: "someFirstName"
-				}, {
-					name: "lastName",
-					value: "someLastName"
-				}
-				],
-				name: "authToken"
-			},
-			actionLinks: {
-				renew: {
-					requestMethod: "POST",
-					rel: "renew",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-					accept: "application/vnd.uub.authToken+json"
-				},
-				delete: {
-					requestMethod: "DELETE",
-					rel: "delete",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId"
-				}
-			}
-		};
-
-		let answer = {
-			status: 201,
-			responseText: JSON.stringify(tokenAnswer)
-		};
-		loadMethod(answer);
-		assert.strictEqual(authInfo.token, "someAuthToken");
-		assert.strictEqual(authInfo.validUntil, "1736780585864");
-		assert.strictEqual(authInfo.renewUntil, "1736866385864");
-		assert.strictEqual(authInfo.userId, "someUserId");
-		assert.strictEqual(authInfo.loginId, "someLoginId");
-		assert.strictEqual(authInfo.firstName, "someFirstName");
-		assert.strictEqual(authInfo.lastName, "someLastName");
-		assert.stringifyEqual(authInfo.actionLinks, tokenAnswer.actionLinks);
-	});
-
-	test("testGetError", function(assert) {
-		appTokenLogin.login("someUserId", "someAppToken");
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let errorMethod = ajaxCallSpy0.getSpec().errorMethod;
-
-		let answer = {
-			status: 201,
-			responseText: "error"
-		};
-		errorMethod(answer);
-
-		assert.strictEqual(errorInfo, answer);
-	});
-
-	test("testGetTimeOut", function(assert) {
-		appTokenLogin.login("someUserId", "someAppToken");
-		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(0);
-		let timeoutMethod = ajaxCallSpy0.getSpec().timeoutMethod;
-
-		let answer = {
-			status: 201,
-			responseText: "timeout"
-		};
-		timeoutMethod(answer);
-
-		assert.strictEqual(timeoutInfo, answer);
-	});
+	const assertAjaxCallSpecIsCorrect = function(assert, ajaxCallSpy) {
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
+			+ "rest/apptoken");
+		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
+		assert.strictEqual(ajaxCallSpec.accept, "");
+		assert.strictEqual(ajaxCallSpec.loadMethod, spec.loadMethod);
+		assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);
+		assert.strictEqual(ajaxCallSpec.timeoutMethod, spec.timeoutCallback);
+		assert.strictEqual(ajaxCallSpec.data, "someLoginId\nsomeAppToken");
+	};
 });

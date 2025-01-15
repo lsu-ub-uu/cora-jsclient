@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,7 @@
 "use strict";
 
 QUnit.module("net/ajaxCallTest.js", hooks => {
+	const test = QUnit.test;
 	let loadMethodWasCalled;
 	let answer;
 	let errorMethodWasCalled;
@@ -27,60 +28,63 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 	let uploadProgressCalls;
 	let xmlHttpRequestFactoryMultipleSpy;
 	let spec;
-	let c =0;
+
 	hooks.beforeEach(() => {
-		c++;
-		console.log("beforeM_"+Date.now(),c)
 		loadMethodWasCalled = false;
 		errorMethodWasCalled = false;
 		timeoutMethodWasCalled = false;
 		downloadProgressCalls = 0;
 		uploadProgressCalls = 0;
-		answer=undefined;
+		answer = undefined;
 
 		xmlHttpRequestFactoryMultipleSpy = CORATEST.xmlHttpRequestFactoryMultipleSpy();
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(200);
-  
+
 		spec = {
-			 "xmlHttpRequestFactory": xmlHttpRequestFactoryMultipleSpy,
-			"requestMethod": "GET",
-			"url": "http://localhost:8080/therest/rest/record/recordType",
-			"requestHeaders": {
+			xmlHttpRequestFactory: xmlHttpRequestFactoryMultipleSpy,
+			requestMethod: "GET",
+			url: "http://localhost:8080/therest/rest/record/recordType",
+			requestHeaders: {
 				"content-type": "application/vnd.uub.record+json",
-				"accept": "application/vnd.uub.record+json",
-				"authToken": "someRandomToken"
+				accept: "application/vnd.uub.record+json",
+				authToken: "someRandomToken"
 			},
-			"loadMethod": loadMethod,
-			"errorMethod": errorMethod,
-			"timeoutMethod": timeoutMethod,
-			"downloadProgressMethod": downloadProgressMethod,
-			"uploadProgressMethod": uploadProgressMethod
+			loadMethod: loadMethod,
+			errorMethod: errorMethod,
+			timeoutMethod: timeoutMethod,
+			downloadProgressMethod: downloadProgressMethod,
+			uploadProgressMethod: uploadProgressMethod
 		};
-	}); 
+	});
 
 	hooks.afterEach(() => {
-		console.log("AfterM_"+Date.now(),c)
-		//no after
+		clearTimeoutOfLastAjaxCall();
 	});
+
+	const clearTimeoutOfLastAjaxCall = function() {
+		spec.loadMethod = function() { };
+		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
+		xmlHttpRequestSpy.addedEventListeners["load"][0]([]);
+	}
 
 	const loadMethod = function(answerIn) {
 		loadMethodWasCalled = true;
 		answer = answerIn;
 	};
 
-	const errorMethod = function(xhr) {
+	const errorMethod = function() {
 		errorMethodWasCalled = true;
 	};
 
-	const timeoutMethod = function(xhr) {
+	const timeoutMethod = function() {
 		timeoutMethodWasCalled = true;
 	};
 
-	const downloadProgressMethod = function(progressEvent) {
+	const downloadProgressMethod = function() {
 		downloadProgressCalls++;
 	};
 
-	const uploadProgressMethod = function(progressEvent) {
+	const uploadProgressMethod = function() {
 		uploadProgressCalls++;
 	};
 
@@ -100,71 +104,64 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		return timeoutMethodWasCalled;
 	};
 
-	const getDownloadProgressMethodCalls = function() {
-		return downloadProgressCalls;
-	};
 
-	const getUploadProgressMethodCalls = function() {
-		return uploadProgressCalls;
-	};
-
-
-	QUnit.test("init", function(assert) {
+	test("init", function(assert) {
 		let ajaxCall = CORA.ajaxCall(spec);
 		assert.strictEqual(ajaxCall.type, "ajaxCall");
 		assert.strictEqual(ajaxCall.spec, spec);
 	});
 
-	QUnit.test("defaultTimeout", function(assert) {
+	test("defaultTimeout", function(assert) {
 		let ajaxCall = CORA.ajaxCall(spec);
 		assert.strictEqual(ajaxCall.getCurrentTimeout(), 90000);
 	});
 
-	QUnit.test("setTimeout", function(assert) {
+	test("setTimeout", function(assert) {
 		spec.timeoutInMS = 10000;
 		let ajaxCall = CORA.ajaxCall(spec);
 		assert.strictEqual(ajaxCall.getCurrentTimeout(), 10000);
 	});
 
-	QUnit.test("testResponseTypeNotSet", function(assert) {
+	test("testResponseTypeNotSet", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(201);
 		xmlHttpRequestFactoryMultipleSpy.setResponseText("a dummy response text");
 		xmlHttpRequestFactoryMultipleSpy.setResponse("a dummy response");
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		assert.strictEqual(xmlHttpRequestSpy.responseType, undefined);
 		assert.strictEqual(getAnswer().responseText, "a dummy response text");
 		assert.strictEqual(getAnswer().response, "a dummy response");
 	});
-	QUnit.test("testResponseTypeDocument", function(assert) {
+	
+	test("testResponseTypeDocument", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(201);
 		xmlHttpRequestFactoryMultipleSpy.setResponseText("a dummy response text");
 		xmlHttpRequestFactoryMultipleSpy.setResponse("a dummy response");
 
 		spec.responseType = "document";
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		assert.strictEqual(xmlHttpRequestSpy.responseType, "document");
 		assert.strictEqual(getAnswer().responseText, "a dummy response text");
 		assert.strictEqual(getAnswer().response, "a dummy response");
 	});
 
-	QUnit.test("testResponseType", function(assert) {
+	test("testResponseType", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(201);
 		xmlHttpRequestFactoryMultipleSpy.setResponseText("a dummy response text");
 		xmlHttpRequestFactoryMultipleSpy.setResponse("a dummy response");
 
 		spec.responseType = "blob";
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		assert.strictEqual(xmlHttpRequestSpy.responseType, "blob");
 		assert.strictEqual(getAnswer().responseText, undefined);
 		assert.strictEqual(getAnswer().response, "a dummy response");
 	});
 
-	QUnit.test("testXMLHttpRequestSetUpCorrect", function(assert) {
-		let ajaxCall = CORA.ajaxCall(spec);
+	test("testXMLHttpRequestSetUpCorrect", function(assert) {
+		CORA.ajaxCall(spec);
 
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
@@ -181,11 +178,11 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		assert.ok(getLoadMethodWasCalled(), "loadMethod was called ok")
 	});
 
-	QUnit.test("testXMLHttpRequestSetUpWithRequestParameter", function(assert) {
+	test("testXMLHttpRequestSetUpWithRequestParameter", function(assert) {
 		spec.parameters = {
 			"someParameterName": "someParameterValue"
 		};
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
@@ -196,12 +193,12 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			"?someParameterName=someParameterValue&preventCache");
 	});
 
-	QUnit.test("testXMLHttpRequestSetUpWithRequestParameters", function(assert) {
+	test("testXMLHttpRequestSetUpWithRequestParameters", function(assert) {
 		spec.parameters = {
 			"someParameterName": "someParameterValue",
 			"key2": "value2"
 		};
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
@@ -212,11 +209,11 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			"?someParameterName=someParameterValue&key2=value2&preventCache");
 	});
 
-	QUnit.test("testXMLHttpRequestSetUpWithRequestParameterIsUrlEncoded", function(assert) {
+	test("testXMLHttpRequestSetUpWithRequestParameterIsUrlEncoded", function(assert) {
 		spec.parameters = {
 			"someParameterName": "va&lue"
 		};
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
@@ -227,17 +224,17 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			"?someParameterName=" + encodeURIComponent("va&lue") + "&preventCache");
 	});
 
-	QUnit.test("testSpecReturnedInCallToLoadMethod", function(assert) {
+	test("testSpecReturnedInCallToLoadMethod", function(assert) {
 		let specReturned;
 		function loadMethod(answer) {
 			specReturned = answer.spec;
 		}
 		spec.loadMethod = loadMethod;
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		assert.stringifyEqual(specReturned, spec);
 	});
 
-	QUnit.test("testSpecReturnedInCallToLoadMethodNoSpecifiedProgressMethods", function(assert) {
+	test("testSpecReturnedInCallToLoadMethodNoSpecifiedProgressMethods", function(assert) {
 		let specReturned;
 		function loadMethod(answer) {
 			specReturned = answer.spec;
@@ -245,32 +242,32 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.loadMethod = loadMethod;
 		spec.downloadProgressMethod = undefined;
 		spec.uploadProgressMethod = undefined;
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		assert.stringifyEqual(specReturned, spec);
 	});
 
-	QUnit.test("testCallErrorNot200answer406", function(assert) {
+	test("testCallErrorNot200answer406", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(406);
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		assert.ok(getErrorMethodWasCalled(), "errorMethod was called ok");
 	});
 
-	QUnit.test("testCallOKReturns500", function(assert) {
+	test("testCallOKReturns500", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		xmlHttpRequestSpy.status = 500;
 		xmlHttpRequestSpy.runLoadFunction();
 		assert.ok(getErrorMethodWasCalled(), "errorMethod was called ok");
 	});
 
-	QUnit.test("testCallErrorNot200answer0", function(assert) {
+	test("testCallErrorNot200answer0", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(0);
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		assert.ok(getErrorMethodWasCalled(), "errorMethod was called ok");
 	});
 
-	QUnit.test("testTimeoutIsCalled", function(assert) {
+	test("testTimeoutIsCalled", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);
 
 		let done = assert.async();
@@ -281,7 +278,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.loadMethod = assertFalse;
 		spec.errorMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		window.setTimeout(function() {
 			assert.ok(getTimeoutMethodWasCalled(), "timeoutMethod was called ok");
 			done();
@@ -289,7 +286,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 
 	});
 
-	QUnit.test("testTimeoutIsNotCalledAsLoadIsCalled", function(assert) {
+	test("testTimeoutIsNotCalledAsLoadIsCalled", function(assert) {
 		let done = assert.async();
 		function assertFalse() {
 			assert.ok(false);
@@ -297,7 +294,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.timeoutInMS = 5;
 		spec.errorMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 
 		window.setTimeout(function() {
 			assert.ok(!getTimeoutMethodWasCalled(), "timeoutMethod should not have been called");
@@ -305,7 +302,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		}, 10);
 	});
 
-	QUnit.test("testTimeoutIsNotCalledAsErrorIsCalled", function(assert) {
+	test("testTimeoutIsNotCalledAsErrorIsCalled", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setResponseStatus(400);
 		let done = assert.async();
 		function assertFalse() {
@@ -314,14 +311,14 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.timeoutInMS = 5;
 		spec.loadMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		window.setTimeout(function() {
 			assert.ok(!getTimeoutMethodWasCalled(), "timeoutMethod should not have been called");
 			done();
 		}, 10);
 	});
 
-	QUnit.test("testTimeoutIsNotCalledAsDownloadProgressIsCalled", function(assert) {
+	test("testTimeoutIsNotCalledAsDownloadProgressIsCalled", function(assert) {
 		let done = assert.async();
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);
 
@@ -332,7 +329,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.loadMethod = assertFalse;
 		spec.errorMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		let intervalId = window.setInterval(function() {
@@ -346,17 +343,17 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		}, 10);
 	});
 
-	QUnit.test("testTimeoutIsNotCalledAsUploadProgressIsCalled", function(assert) {
+	test("testTimeoutIsNotCalledAsUploadProgressIsCalled", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);
 		let done = assert.async();
 		function assertFalse() {
 			assert.ok(false);
 		}
-		spec.timeoutInMS = 5;
+		spec.timeoutInMS = 10;
 		spec.loadMethod = assertFalse;
 		spec.errorMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		let intervalId = window.setInterval(function() {
@@ -364,13 +361,12 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		}, 1);
 		window.setTimeout(function() {
 			assert.ok(!getTimeoutMethodWasCalled(), "timeoutMethod should not have been called");
-		console.log("löadjfölsajflkdsjf_"+Date.now()) 
 			window.clearInterval(intervalId);
 			done();
-		}, 10);
+		}, 20);
 	});
 
-	QUnit.test("testTimeoutIsCalledAsUploadProgressIsCalledOnlyOnceUsingTimeout", function(assert) {
+	test("testTimeoutIsCalledAsUploadProgressIsCalledOnlyOnceUsingTimeout", function(assert) {
 		xmlHttpRequestFactoryMultipleSpy.setSendResponse(false);
 		let done = assert.async();
 		function assertFalse() {
@@ -380,7 +376,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		spec.loadMethod = assertFalse;
 		spec.errorMethod = assertFalse;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 
 		function waitABitThenCheckThatTimeoutHasBeenCalled() {
 			window.setTimeout(function() {
@@ -389,13 +385,13 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			}, 100);
 		}
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
-		let intervalId = window.setTimeout(function() {
+		window.setTimeout(function() {
 			xmlHttpRequestSpy.upload.addedEventListeners["progress"][1]();
 			waitABitThenCheckThatTimeoutHasBeenCalled();
 		}, 20);
 	});
 
-	QUnit.test("testSendCreate", function(assert) {
+	test("testSendCreate", function(assert) {
 		let textData = {
 			"name": "text",
 			"children": [{
@@ -422,7 +418,7 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 
 		spec.requestMethod = "POST";
 		spec.data = JSON.stringify(textData);
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
@@ -440,11 +436,11 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		assert.ok(getLoadMethodWasCalled(), "loadMethod was called ok")
 	});
 
-	QUnit.test("testSendDelete", function(assert) {
+	test("testSendDelete", function(assert) {
 		spec.requestMethod = "DELETE";
 		spec.requestHeaders = null;
 
-		let ajaxCall = CORA.ajaxCall(spec);
+		CORA.ajaxCall(spec);
 		let xmlHttpRequestSpy = xmlHttpRequestFactoryMultipleSpy.getFactoredXmlHttpRequest(0);
 		let openUrl = xmlHttpRequestSpy.getOpenUrl();
 		assert.strictEqual(openUrl, "http://localhost:8080/therest/rest/record/recordType");
@@ -455,17 +451,18 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		assert.ok(getLoadMethodWasCalled(), "loadMethod was called ok")
 	});
 
-	QUnit.test("testDownloadProgress", function(assert) {
-		function progressMethod(progressEvent) {
+	test("testDownloadProgress", function(assert) {
+		function progressMethod() {
+			//empty method to check it is added
 		}
 		spec.downloadProgressMethod = progressMethod;
 		let ajaxCall = CORA.ajaxCall(spec);
 		assert.strictEqual(ajaxCall.xhr.addedEventListeners["progress"][0], progressMethod);
-
 	});
 
-	QUnit.test("testUploadProgress", function(assert) {
-		function progressMethod(progressEvent) {
+	test("testUploadProgress", function(assert) {
+		function progressMethod() {
+			//empty method to check it is added
 		}
 		spec.uploadProgressMethod = progressMethod;
 		let ajaxCall = CORA.ajaxCall(spec);

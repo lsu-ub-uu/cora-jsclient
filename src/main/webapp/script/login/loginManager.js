@@ -229,6 +229,7 @@ var CORA = (function(cora) {
 				contentType: "application/vnd.uub.login",
 				accept: "application/vnd.uub.authToken+json",
 				authInfoCallback: authInfoCallback,
+//				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
 			};
@@ -307,6 +308,31 @@ var CORA = (function(cora) {
 		const getHtml = function() {
 			return loginManagerView.getHtml();
 		};
+		
+
+		const handleNewAuthTokenAnswer = function(answer) {
+			let everything = JSON.parse(answer.responseText);
+			let data = everything.data;
+			let cData = CORA.coraData(data);
+			let token = cData.getFirstAtomicValueByNameInData("token");
+			let userId = cData.getFirstAtomicValueByNameInData("userId");
+			let loginId = cData.getFirstAtomicValueByNameInData("loginId");
+			let validUntil = cData.getFirstAtomicValueByNameInData("validUntil");
+			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
+			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
+			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
+			let authInfo = {
+				userId: userId,
+				loginId: loginId,
+				token: token,
+				firstName: firstName,
+				lastName: lastName,
+				validUntil: validUntil,
+				renewUntil: renewUntil,
+				actionLinks: everything.actionLinks
+			};
+			authInfoCallback(authInfo);
+		};
 
 		const authInfoCallback = function(authInfoIn) {
 			authInfo = authInfoIn;
@@ -314,10 +340,34 @@ var CORA = (function(cora) {
 			loginManagerView.setLoginId(authInfo.loginId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
+			removeStartedPasswordLogins();
+			startRenewAuthTokenProcess(authInfo);
+		};
+
+		const removeStartedPasswordLogins = function() {
 			for (let key in startedPasswordLogins) {
 				startedPasswordLogins[key].removePasswordLoginFromJsClient();
 				delete startedPasswordLogins[key];
 			}
+		};
+
+		const startRenewAuthTokenProcess = function(authInfo) {
+			const renewMargin = 10000;
+			let timeout = authInfo.validUntil - Date.now() - renewMargin;
+			window.setTimeout(renewAuthToken, timeout);
+		};
+
+		const renewAuthToken = function() {
+			let renewAction = authInfo.actionLinks.renew;
+			let callSpec = {
+				requestMethod: renewAction.requestMethod,
+				url: renewAction.url,
+				accept: renewAction.accept
+//				loadMethod: fetchLoginUnitCallback,
+//				errorMethod: fetchLoginUnitErrorCallback,
+//				timeoutMethod: fetchLoginUnitTimeoutCallback
+			};
+			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
 		const appTokenErrorCallback = function(errorObject) {
@@ -382,6 +432,7 @@ var CORA = (function(cora) {
 			getHtml: getHtml,
 			login: login,
 			logout: logout,
+			handleNewAuthTokenAnswer: handleNewAuthTokenAnswer,
 			authInfoCallback: authInfoCallback,
 			appTokenErrorCallback: appTokenErrorCallback,
 			appTokenTimeoutCallback: appTokenTimeoutCallback,

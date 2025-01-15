@@ -169,7 +169,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		callSpec.loadMethod(answer);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1);
 		let viewModel = recursiveDeleteView.getCreateViewForViewModel(0);
 
 		let expected = {
@@ -313,7 +313,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
 		recursiveDelete.getView();
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2)
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2)
 		respondToAjaxCallForWhitOutIncomingLinks(0);
 		respondToAjaxCallForWhitOutIncomingLinks(1);
 		
@@ -380,7 +380,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		};
 
 		recursiveDelete.getView();
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1)
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1)
 
 		let ajaxCallSpy = ajaxCallFactorySpy.getFactored(0);
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
@@ -500,7 +500,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 
 		ajaxCallFactorySpy.getFactored(0)
 		
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1);
 		let callSpec = getCallSpecFromAjaxCall(0);
 		let answer = {
 			spec: { modelPart: callSpec.modelPart },

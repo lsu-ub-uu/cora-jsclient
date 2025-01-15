@@ -87,7 +87,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		deleter.deleteElement();
 
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(0), 1);
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1);
 		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
 	});
 
@@ -98,7 +98,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 4);
 		let textElement = { elementId: 2, id: "minimalGroupIdText", recordType: "text", dataDivider: "someDataDivider" };
 		let defTextElement = { elementId: 3, id: "minimalGroupIdDefText", recordType: "text", dataDivider: "someDataDivider" };
 		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
@@ -134,7 +134,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		};
 		assert.deepEqual(recursiveDeleteView.getDeleteFailedElement(0), expectedFailedMessage);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1);
 	});
 
 	const assertAjaxCalls = function(assert, callNumber, url, requestMethod, expectedModel) {
@@ -184,7 +184,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(3), 4);
 		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 4);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 4);
 		assertAjaxCalls(assert, 0, deleteUrl + "someRecordType/minimalGroupId", "DELETE", viewModel);
 		assertAjaxCalls(assert, 1, deleteUrl + "text/minimalGroupIdText", "DELETE", textElement);
 		assertAjaxCalls(assert, 2, deleteUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
@@ -238,7 +238,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(4), 10);
 		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 4);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 5);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 5);
 		assertAjaxCalls(assert, 0, deleteUrl + "someRecordType/attributeCollectionVarId", "DELETE", viewModel);
 		assertAjaxCalls(assert, 1, deleteUrl + "text/minimalGroupIdText", "DELETE", textElement);
 		assertAjaxCalls(assert, 2, deleteUrl + "text/minimalGroupIdDefText", "DELETE", defTextElement);
@@ -278,7 +278,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		assertElementIdSetToDeleting(assert, 0, 2);
 		assertElementIdSetToDeleting(assert, 1, 3);
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2);
 		assertAjaxCallsPresentation(assert, 0, deleteUrl + "presentation/somePresentation2",
 			"DELETE", presentation2, viewModel);
 		assertAjaxCallsPresentation(assert, 1, deleteUrl + "presentation/somePresentation3",
@@ -287,12 +287,12 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		sendOkAnswerToAjaxPresentationCall(1);
 
 		assertElementIdSetToDeleted(assert, 0, 3);
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2);
 
 		sendOkAnswerToAjaxPresentationCall(0);
 
 		assertElementIdSetToDeleted(assert, 1, 2);
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 3);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 3);
 
 		assertElementIdSetToDeleting(assert, 2, 1);
 		assertAjaxCalls(assert, 2, deleteUrl + "metadata/someGroup", "DELETE", viewModel);
@@ -335,7 +335,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		assertElementIdSetToDeleting(assert, 0, 2);
 		assertElementIdSetToDeleting(assert, 1, 3);
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2);
 		assertAjaxCallsPresentation(assert, 0, deleteUrl + "presentation/somePresentation2",
 			"DELETE", presentation2, viewModel);
 		assertAjaxCallsPresentation(assert, 1, deleteUrl + "presentation/somePresentation3",
@@ -344,13 +344,13 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		sendFailedAnswerToAjaxPresentationCall(1);
 
 		assertElementIdSetDeleteFailed(assert, 0, 3, "404 : someError");
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2);
 		//
 		sendOkAnswerToAjaxPresentationCall(0);
 
 		assertElementIdSetToDeleted(assert, 0, 2);
 		
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 2);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 2);
 	});
 
 	const sendOkAnswerToAjaxPresentationCall = function(callNo) {
@@ -470,7 +470,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 		assert.strictEqual(recursiveDeleteView.getDeletingElement(4), 5);
 		assert.strictEqual(recursiveDeleteView.getDeletedElement(0), 1);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 5);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 5);
 		assertAjaxCalls(assert, 0, deleteUrl + "presentation/recordTypeFormPGroup", "DELETE", viewModel);
 		assertAjaxCalls(assert, 1, deleteUrl + "text/textsText", "DELETE", text);
 		assertAjaxCalls(assert, 2, deleteUrl + "presentation/childPresentation", "DELETE", childPresentation);
@@ -492,7 +492,7 @@ QUnit.module("recursiveDelete/recursiveDeleteDeleterTest.js", hooks => {
 
 		sendOkAnswerToAjaxCall(0);
 
-		assert.strictEqual(ajaxCallFactorySpy.getFactoredAjaxCalls(), 1);
+		assert.strictEqual(ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 1);
 		assertAjaxCalls(assert, 0, deleteUrl + "metadata/minimalGroupId", "DELETE", viewModel);
 	});
 

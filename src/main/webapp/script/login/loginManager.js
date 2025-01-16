@@ -21,6 +21,7 @@ let appTokenOptions = [];
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManager = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
 		let out;
 		let loginManagerView;
 		let authInfo;
@@ -188,15 +189,17 @@ var CORA = (function(cora) {
 		};
 
 		const getTranslatedText = function(textId) {
-			return dependencies.textProvider.getTranslation(textId);
+			return textProvider.getTranslation(textId);
 		};
 
 		const fetchLoginUnitErrorCallback = function() {
-			spec.setErrorMessage("Fetching of loginUnits failed!");
+			const translatedText = getTranslatedText("theClient_fetchLoginUnitsErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginUnitTimeoutCallback = function() {
-			spec.setErrorMessage("Fetching of loginUnits timedout!");
+			const translatedText = getTranslatedText("theClient_fetchLoginUnitsTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginCallback = function(answer) {
@@ -205,11 +208,13 @@ var CORA = (function(cora) {
 		};
 
 		const fetchLoginErrorCallback = function() {
-			spec.setErrorMessage("Fetching of logins failed!");
+			const translatedText = getTranslatedText("theClient_fetchLoginsErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginTimeoutCallback = function() {
-			spec.setErrorMessage("Fetching of logins timedout!");
+			const translatedText = getTranslatedText("theClient_fetchLoginsTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const login = function(loginOption) {
@@ -289,15 +294,13 @@ var CORA = (function(cora) {
 		};
 
 		const passwordErrorCallback = function(errorObject) {
-			if (failedToLogout(errorObject)) {
-				logoutCallback();
-			} else {
-				spec.setErrorMessage("Password login failed!");
-			}
+			const translatedText = getTranslatedText("theClient_passwordLoginErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const passwordTimeoutCallback = function() {
-			spec.setErrorMessage("Password login timedout!");
+			const translatedText = getTranslatedText("theClient_passwordLoginTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const getDependencies = function() {
@@ -307,9 +310,14 @@ var CORA = (function(cora) {
 		const getHtml = function() {
 			return loginManagerView.getHtml();
 		};
-		
+
 
 		const handleNewAuthTokenAnswer = function(answer) {
+			let authInfo = parseAuthTokenToAuthInfo(answer);
+			authInfoCallback(authInfo);
+		};
+
+		const parseAuthTokenToAuthInfo = function(answer) {
 			let everything = JSON.parse(answer.responseText);
 			let data = everything.data;
 			let cData = CORA.coraData(data);
@@ -330,7 +338,7 @@ var CORA = (function(cora) {
 				renewUntil: renewUntil,
 				actionLinks: everything.actionLinks
 			};
-			authInfoCallback(authInfo);
+			return authInfo;
 		};
 
 		const authInfoCallback = function(authInfoIn) {
@@ -351,39 +359,68 @@ var CORA = (function(cora) {
 		};
 
 		const startRenewAuthTokenProcess = function(authInfo) {
-			const renewMargin = 10000;
-			let timeout = authInfo.validUntil - Date.now() - renewMargin;
-			window.setTimeout(renewAuthToken, timeout);
+			if (renewUntilIsInTheFuture(authInfo.renewUntil)) {
+				callRenewAuthToken(authInfo.validUntil);
+			} else {
+				handleRenewNoLongerPossible();
+			}
 		};
 
-		const renewAuthToken = function() {
+		const renewUntilIsInTheFuture = function(renewUntil) {
+			return Date.now() < renewUntil;
+		};
+
+		const callRenewAuthToken = function(validUntil) {
+			const renewMargin = 10000;
+			let timeToRenew = validUntil - Date.now() - renewMargin;
+			window.setTimeout(renewAuthTokenCall, timeToRenew);
+		}
+
+		const handleRenewNoLongerPossible = function() {
+			const infoTextSkipTimeout = 0;
+			let translatedText = getTranslatedText("theClient_reauthenticationNeededText");
+			spec.setInfoMessage(translatedText, infoTextSkipTimeout);
+			logoutCallback();
+		};
+
+		const renewAuthTokenCall = function() {
 			let renewAction = authInfo.actionLinks.renew;
 			let callSpec = {
 				requestMethod: renewAction.requestMethod,
 				url: renewAction.url,
-				accept: renewAction.accept
-//				loadMethod: fetchLoginUnitCallback,
-//				errorMethod: fetchLoginUnitErrorCallback,
-//				timeoutMethod: fetchLoginUnitTimeoutCallback
+				accept: renewAction.accept,
+				loadMethod: handleRenewAuthTokenAnswer,
+				errorMethod: renewError,
+				timeoutMethod: renewTimeOut
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
 		};
 
-		const appTokenErrorCallback = function(errorObject) {
-			if (failedToLogout(errorObject)) {
-				logoutCallback();
-			} else {
-				spec.setErrorMessage("AppToken login failed!");
-			}
+		const renewError = function() {
+			const translatedText = getTranslatedText("theClient_renewAuthTokenErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
-		const failedToLogout = function(errorObject) {
-			return (errorObject.status === 0 || errorObject.status === 404)
-				&& errorObject.spec.requestMethod === "DELETE";
+		const renewTimeOut = function() {
+			const translatedText = getTranslatedText("theClient_renewAuthTokenTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
+
+		const handleRenewAuthTokenAnswer = function(answer) {
+			authInfo = parseAuthTokenToAuthInfo(answer);
+			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
+			startRenewAuthTokenProcess(authInfo);
+		};
+
+		const appTokenErrorCallback = function(errorObject) {
+			const translatedText = getTranslatedText("theClient_appTokenLoginErrorText");
+			spec.setErrorMessage(translatedText);
+		};
+
 
 		const appTokenTimeoutCallback = function() {
-			spec.setErrorMessage("AppToken login timedout!");
+			const translatedText = getTranslatedText("theClient_appTokenLoginTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const logout = function() {
@@ -392,8 +429,8 @@ var CORA = (function(cora) {
 				requestMethod: deleteLink.requestMethod,
 				url: deleteLink.url,
 				loadMethod: logoutCallback,
-				errorMethod: appTokenErrorCallback,
-				timeoutMethod: appTokenTimeoutCallback,
+				errorMethod: logoutCallback,
+				timeoutMethod: logoutCallback,
 				timeoutInMS: 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
@@ -433,10 +470,13 @@ var CORA = (function(cora) {
 			logout: logout,
 			handleNewAuthTokenAnswer: handleNewAuthTokenAnswer,
 			authInfoCallback: authInfoCallback,
+			handleRenewAuthTokenAnswer: handleRenewAuthTokenAnswer,
 			appTokenErrorCallback: appTokenErrorCallback,
 			appTokenTimeoutCallback: appTokenTimeoutCallback,
 			passwordErrorCallback: passwordErrorCallback,
 			passwordTimeoutCallback: passwordTimeoutCallback,
+			renewError: renewError,
+			renewTimeOut: renewTimeOut,
 			logoutCallback: logoutCallback,
 			getSpec: getSpec,
 			receiveMessage: receiveMessage,

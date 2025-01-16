@@ -23,10 +23,12 @@ var CORATEST = (function(coraTest) {
 		var recordTypeViews = [];
 		var loginManagerViews = [];
 		var workViews = [];
+		let infoMessages = [];
+		let errorMessages = [];
 		var removedWorkViews = [];
 		var openGuiItemHandlerViews = [];
 		var addedGlobalViews = [];
-
+		
 		var recordTypesClearedNoOfTimes = 0;
 		var searchesClearedNoOfTimes = 0;
 		var html = CORA.gui.createSpanWithClassName("jsClientViewSpy");
@@ -93,6 +95,17 @@ var CORATEST = (function(coraTest) {
 		function getSearchesClearedNoOfTimes() {
 			return searchesClearedNoOfTimes;
 		}
+		
+		const addErrorMessage = function(message){
+			errorMessages.push(message);
+		};
+		
+		const addInfoMessage = function(message, timeout){
+			let infoMessage = {};
+			infoMessage.message = message;
+			infoMessage.timeout = timeout;
+			infoMessages.push(infoMessage);
+		};
 
 		function removeFromWorkView(viewToRemove) {
 			removedWorkViews.push(viewToRemove);
@@ -142,6 +155,8 @@ var CORATEST = (function(coraTest) {
 			getAddedWorkView : getAddedWorkView,
 			addGlobalView : addGlobalView,
 			getAddedGlobalView : getAddedGlobalView,
+			addInfoMessage : addInfoMessage,
+			addErrorMessage : addErrorMessage,
 			removeFromWorkView : removeFromWorkView,
 			getRemovedWorkView : getRemovedWorkView,
 			addOpenGuiItemHandlerView : addOpenGuiItemHandlerView,

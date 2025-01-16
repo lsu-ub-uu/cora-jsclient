@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  * Copyright 2017 Olov McKie
  *
  * This file is part of Cora.
@@ -86,7 +86,7 @@ var CORA = (function(cora) {
 				reloadProvidersButton.className = reloadProvidersButton.className + " uploading";
 			} else {
 				reloadProvidersButton.className = reloadProvidersButton.className.replace(
-						" uploading", "");
+					" uploading", "");
 			}
 		}
 
@@ -154,10 +154,18 @@ var CORA = (function(cora) {
 			return recordTypesView;
 		}
 
+		const addInfoMessage = function(infoText, timeout) {
+			let messageSpec = {
+				message: infoText,
+				type: CORA.message.INFO,
+				timeout:timeout
+			};
+			messageHolder.createMessage(messageSpec);
+		}
 		function addErrorMessage(errorText) {
 			let messageSpec = {
-				"message" : errorText,
-				"type" : CORA.message.ERROR
+				"message": errorText,
+				"type": CORA.message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		}
@@ -196,28 +204,29 @@ var CORA = (function(cora) {
 			return spec;
 		}
 		out = Object.freeze({
-			type : "jsClientView",
-			getDependencies : getDependencies,
-			getProviders : getProviders,
-			getSpec : getSpec,
-			getView : getView,
-			addOpenGuiItemHandlerView : addOpenGuiItemHandlerView,
-			addToSearchesView : addToSearchesView,
-			clearSearchesView : clearSearchesView,
-			addToRecordTypesView : addToRecordTypesView,
-			clearRecordTypesView : clearRecordTypesView,
-			getWorkView : getWorkView,
-			addToWorkView : addToWorkView,
-			addLoginManagerView : addLoginManagerView,
-			addGlobalView : addGlobalView,
-			getHeader : getHeader,
-			getSideBar : getSideBar,
-			getSearchesView : getSearchesView,
-			getRecordTypesView : getRecordTypesView,
-			addErrorMessage : addErrorMessage,
-			removeFromWorkView : removeFromWorkView,
-			setReloadingProviders : setReloadingProviders,
-			addGroupOfRecordTypesToView : addGroupOfRecordTypesToView
+			type: "jsClientView",
+			getDependencies: getDependencies,
+			getProviders: getProviders,
+			getSpec: getSpec,
+			getView: getView,
+			addOpenGuiItemHandlerView: addOpenGuiItemHandlerView,
+			addToSearchesView: addToSearchesView,
+			clearSearchesView: clearSearchesView,
+			addToRecordTypesView: addToRecordTypesView,
+			clearRecordTypesView: clearRecordTypesView,
+			getWorkView: getWorkView,
+			addToWorkView: addToWorkView,
+			addLoginManagerView: addLoginManagerView,
+			addGlobalView: addGlobalView,
+			getHeader: getHeader,
+			getSideBar: getSideBar,
+			getSearchesView: getSearchesView,
+			getRecordTypesView: getRecordTypesView,
+			addInfoMessage: addInfoMessage,
+			addErrorMessage: addErrorMessage,
+			removeFromWorkView: removeFromWorkView,
+			setReloadingProviders: setReloadingProviders,
+			addGroupOfRecordTypesToView: addGroupOfRecordTypesToView
 		});
 		start();
 

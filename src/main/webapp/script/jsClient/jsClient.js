@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 201, 2019, 2024 Uppsala University Library
+ * Copyright 2016, 201, 2019, 2024, 2025 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -166,6 +166,7 @@ var CORA = (function(cora) {
 			let loginManagerSpec = {
 				afterLoginMethod: afterLogin,
 				afterLogoutMethod: afterLogout,
+				setInfoMessage: jsClientView.addInfoMessage,
 				setErrorMessage: jsClientView.addErrorMessage,
 				appTokenBaseUrl: spec.appTokenBaseUrl,
 				baseUrl: spec.baseUrl,

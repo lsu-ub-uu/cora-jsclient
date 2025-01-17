@@ -9,10 +9,12 @@
 }
 
 .messageHolder {
-	width: calc(100% - 25rem);
 	color: black;
 	top: 5em;
-	position: fixed;
+	position: absolute;
+	font-size: 1rem;
+	left: 5em;
+	right: 5em;
 	z-index: 1002;
 }
 
@@ -27,6 +29,7 @@
 }
 
 .messageHolder .message {
+	border: 1px solid;
 	margin: 4px;
 	min-height: 19px;
 	padding: .5rem;
@@ -40,19 +43,23 @@
 }
 
 .messageHolder .error {
-	background-color: #FFB0B0;
+	color: #D8000C;
+	background-color: #FFBABA;
 }
 
 .messageHolder .warning {
-	background-color: #ffb300;
+	color: #9F6000;
+	background-color: #FEEFB3;
 }
 
 .messageHolder .info {
-	background-color: #91FFFD;
+	color: #00529B;
+	background-color: #BDE5F8;
 }
 
 .messageHolder .positive {
-	background-color: #7aff00;
+	color: #4F8A10;
+	background-color: #DFF2BF;
 }
 
 .message {

@@ -21,7 +21,6 @@
 
 QUnit.module.only("login/loginManagerTest.js", hooks => {
 	const test = QUnit.test;
-	const only = QUnit.only;
 	let addedEvents = [];
 	let ajaxCallFactory;
 	let dependencies;
@@ -112,7 +111,6 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 	};
 
 	const setInfoMessage = function(message, timeout) {
-		//		infoMessage = [infoMessageIn,timeout];
 		infoMessage.message = message;
 		infoMessage.timeout = timeout;
 	};
@@ -433,7 +431,7 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 	};
 
 	test("testGetAuthTokenForAppToken", function(assert) {
-		let answer = getAuthTokenAsAnswer(Date.now(), Date.now() + 1000);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 		let passwordLogins = setUpTwoPasswordLogins();
 
 		loginManager.handleNewAuthTokenAnswer(answer);
@@ -522,7 +520,7 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 	};
 
 	test("testRenewAuthTokenAnswerSetsNewTokenInTokenHolder", function(assert) {
-		let answer = getAuthTokenAsAnswer(Date.now(), Date.now() + 1000);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
 		loginManager.handleRenewAuthTokenAnswer(answer);
 
@@ -531,14 +529,24 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 
 	test("testRenewAuthTokenAnswerSetsUpNewRenew", function(assert) {
 		let done = assert.async();
-		const timeOutMarginInLoginManager = 10000;
-		let validUntil = Date.now() + timeOutMarginInLoginManager;
-		let answer = getAuthTokenAsAnswer(validUntil, Date.now() + 1000);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
 		loginManager.handleRenewAuthTokenAnswer(answer);
 
+		window.setTimeout(assertRenewCallNotSentWithoutStoppingAssert, 3, assert);
 		window.setTimeout(assertRenewCalled, 10, assert, done);
 	});
+
+	const createAnswerWithTimeToRenewUntilInTheFuture = function() {
+		const timeOutMarginInLoginManager = 10000;
+		let validUntil = Date.now() + timeOutMarginInLoginManager + 6;
+		return getAuthTokenAsAnswer(validUntil, Date.now() + 100000);
+	};
+
+
+	const assertRenewCallNotSentWithoutStoppingAssert = function(assert) {
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+	};
 
 	test("testRenewErrorMessage", function(assert) {
 		loginManager.renewError();
@@ -550,19 +558,24 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(errorMessage, "translated_theClient_renewAuthTokenTimeoutText");
 	});
 
-	test("testRenewAuthTokenAnswerSetsUpNewRenewButRenewUntilHasPassed", function(assert) {
+	test("testRenewAuthTokenAnswerSetsUpNewRenewButCallToRenewIsOlderThanRenewUntil", function(assert) {
 		let done = assert.async();
-		const timeOutMarginInLoginManager = 10000;
-		let validUntil = Date.now() + timeOutMarginInLoginManager;
-		let renewUntilInThePast = Date.now() - 1000;
-		let answer = getAuthTokenAsAnswer(validUntil, renewUntilInThePast);
+		let answer = createAnswerWithTimeToRenewAuthTokenAfterRenewUntilLimit();
 
 		loginManager.handleRenewAuthTokenAnswer(answer);
 
-		window.setTimeout(assertRenewNotCalled, 10, assert, done);
+		window.setTimeout(assertRenewNotSentAndCreateInfoMessageToForceRelogin, 10, assert, done);
 	});
 
-	const assertRenewNotCalled = function(assert, done) {
+	const createAnswerWithTimeToRenewAuthTokenAfterRenewUntilLimit = function() {
+		const timeOutMarginInLoginManager = 10000;
+		let timeNow = Date.now();
+		let validUntilMinusTimeoutMarging = timeOutMarginInLoginManager + timeNow + 8;
+		let renewUntilInThePast = timeNow + 2;
+		return getAuthTokenAsAnswer(validUntilMinusTimeoutMarging, renewUntilInThePast);
+	};
+
+	const assertRenewNotSentAndCreateInfoMessageToForceRelogin = function(assert, done) {
 		const infoTextSkipTimeout = 0;
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
 		assert.strictEqual(infoMessage.message, "translated_theClient_reauthenticationNeededText");
@@ -570,6 +583,22 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assertLogoutPerformed(assert);
 		done();
 	};
+
+	test("testWhenLoggoutCancelAnyOngoingRenewOfAuthToken", function(assert) {
+		let done = assert.async();
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+
+		loginManager.handleRenewAuthTokenAnswer(answer);
+		loginManager.logoutCallback();
+		
+		window.setTimeout(assertRenewAuthTokenNotSent, 10, assert, done);
+	});
+	
+	const assertRenewAuthTokenNotSent = function(assert, done) {
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+		done()
+	};
+
 
 	test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
 		loginManager.login({
@@ -589,30 +618,12 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.logoutCallback);
 	});
 
-//	test("testLoggedoutStateIsSetOnAppTokenLogoutCallback", function(assert) {
-//		loginManager.authInfoCallback(authInfo);
-//		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
-//
-//		loginManager.logoutCallback();
-//		let stateSetInView = factoredView.getState();
-//		assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
-//	});
-//
-//	test("testLoggedoutSpecAfterLogoutMethodIsCalledOnAppTokenLogoutCallback", function(assert) {
-//		loginManager.authInfoCallback(authInfo);
-//		loginManager.logoutCallback();
-//
-//		assert.strictEqual(afterLogoutMethodCalled, true);
-//	});
-
 	test("testLogoutCallback", function(assert) {
 		loginManager.authInfoCallback(authInfo);
-		
+
 		loginManager.logoutCallback();
 
 		assertLogoutPerformed(assert);
-//		let authTokenHolder = dependencies.authTokenHolder;
-//		assert.strictEqual(authTokenHolder.getToken(1), "");
 	});
 
 	test("testErrorMessage", function(assert) {
@@ -621,45 +632,6 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(errorMessage, "translated_theClient_appTokenLoginErrorText");
 	});
 
-	//	test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
-	//		let errorObject = {
-	//			status: 0,
-	//			spec: {
-	//				requestMethod: "DELETE"
-	//			}
-	//		};
-	//
-	//		loginManager.appTokenErrorCallback(errorObject);
-	//
-	//		assert.strictEqual(errorMessage, undefined);
-	//		assertLogoutPerformed(assert);
-	//	});
-
-	//	test("testPasswordErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
-	//		let errorObject = {
-	//			status: 0,
-	//			spec: {
-	//				requestMethod: "DELETE"
-	//			}
-	//		};
-	//		loginManager.passwordErrorCallback(errorObject);
-	//		assert.strictEqual(errorMessage, undefined);
-	//
-	//		assertLogoutPerformed(assert);
-	//	});
-
-	//	test("testErrorRestartedServerOnLogoutResultsInLogout", function(assert) {
-	//		let errorObject = {
-	//			status: 404,
-	//			spec: {
-	//				requestMethod: "DELETE"
-	//			}
-	//		};
-	//		loginManager.appTokenErrorCallback(errorObject);
-	//		assert.strictEqual(errorMessage, undefined);
-	//
-	//		assertLogoutPerformed(assert);
-	//	});
 
 	test("testPasswordTimeoutMessage", function(assert) {
 		loginManager.passwordTimeoutCallback();

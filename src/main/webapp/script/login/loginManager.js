@@ -37,6 +37,7 @@ var CORA = (function(cora) {
 		let logins = {};
 		let loginUnitDataList;
 		let loginDataList;
+		let renewCallTimeout;
 
 		const start = function() {
 			fetchAllLoginInfoFromServer();
@@ -293,7 +294,7 @@ var CORA = (function(cora) {
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
 
-		const passwordErrorCallback = function(errorObject) {
+		const passwordErrorCallback = function() {
 			const translatedText = getTranslatedText("theClient_passwordLoginErrorText");
 			spec.setErrorMessage(translatedText);
 		};
@@ -359,21 +360,26 @@ var CORA = (function(cora) {
 		};
 
 		const startRenewAuthTokenProcess = function(authInfo) {
-			if (renewUntilIsInTheFuture(authInfo.renewUntil)) {
-				callRenewAuthToken(authInfo.validUntil);
+			let timeToRenew = getTimeToRenew(authInfo.validUntil);
+			if (renewUntilIsInTheFuture(authInfo.renewUntil, timeToRenew)) {
+				callRenewAuthToken(timeToRenew);
 			} else {
 				handleRenewNoLongerPossible();
 			}
 		};
 
-		const renewUntilIsInTheFuture = function(renewUntil) {
-			return Date.now() < renewUntil;
+		const getTimeToRenew = function(validUntil) {
+			const renewMargin = 10000;
+			let timeNow = Date.now();
+			return validUntil - timeNow - renewMargin;
 		};
 
-		const callRenewAuthToken = function(validUntil) {
-			const renewMargin = 10000;
-			let timeToRenew = validUntil - Date.now() - renewMargin;
-			window.setTimeout(renewAuthTokenCall, timeToRenew);
+		const renewUntilIsInTheFuture = function(renewUntil, timeToRenew) {
+			return Date.now() + timeToRenew < renewUntil;
+		};
+
+		const callRenewAuthToken = function(timeToRenew) {
+			renewCallTimeout = window.setTimeout(renewAuthTokenCall, timeToRenew);
 		}
 
 		const handleRenewNoLongerPossible = function() {
@@ -412,7 +418,7 @@ var CORA = (function(cora) {
 			startRenewAuthTokenProcess(authInfo);
 		};
 
-		const appTokenErrorCallback = function(errorObject) {
+		const appTokenErrorCallback = function() {
 			const translatedText = getTranslatedText("theClient_appTokenLoginErrorText");
 			spec.setErrorMessage(translatedText);
 		};
@@ -440,6 +446,7 @@ var CORA = (function(cora) {
 			loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
 			dependencies.authTokenHolder.setCurrentAuthToken("");
 			spec.afterLogoutMethod();
+			window.clearTimeout(renewCallTimeout);
 		};
 
 		const getSpec = function() {

@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module.only("jsClient/jsClientTest.js", {
+QUnit.module("jsClient/jsClientTest.js", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.record = CORATEST.recordTypeList.dataList.data[4].record;

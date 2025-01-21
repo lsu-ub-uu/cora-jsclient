@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("jsClient/jsClientViewTest.js", {
+QUnit.module("jsClient/jsClientViewTest.js", {
 	beforeEach: function() {
 		this.textProvider = CORATEST.textProviderSpy();
 		this.providers = {

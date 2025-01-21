@@ -233,7 +233,7 @@ var CORA = (function(cora) {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
 				contentType: "application/vnd.uub.login",
-				accept: "application/vnd.uub.authToken+json",
+				accept: "application/vnd.uub.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
@@ -284,7 +284,7 @@ var CORA = (function(cora) {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
 				contentType: "application/vnd.uub.login",
-				accept: "application/vnd.uub.authToken+json",
+				accept: "application/vnd.uub.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: passwordErrorCallback,
 				timeoutCallback: passwordTimeoutCallback
@@ -320,7 +320,8 @@ var CORA = (function(cora) {
 
 		const parseAuthTokenToAuthInfo = function(answer) {
 			let everything = JSON.parse(answer.responseText);
-			let data = everything.data;
+			let authentication = everything.authentication;
+			let data = authentication.data;
 			let cData = CORA.coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
 			let userId = cData.getFirstAtomicValueByNameInData("userId");
@@ -337,7 +338,7 @@ var CORA = (function(cora) {
 				lastName: lastName,
 				validUntil: validUntil,
 				renewUntil: renewUntil,
-				actionLinks: everything.actionLinks
+				actionLinks: authentication.actionLinks
 			};
 			return authInfo;
 		};

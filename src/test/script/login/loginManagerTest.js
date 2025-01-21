@@ -19,7 +19,7 @@
 "use strict";
 
 
-QUnit.module.only("login/loginManagerTest.js", hooks => {
+QUnit.module("login/loginManagerTest.js", hooks => {
 	const test = QUnit.test;
 	let addedEvents = [];
 	let ajaxCallFactory;
@@ -79,7 +79,7 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 					requestMethod: "POST",
 					rel: "renew",
 					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-					accept: "application/vnd.uub.authToken+json"
+					accept: "application/vnd.uub.authentication+json"
 				},
 				delete: {
 					requestMethod: "DELETE",
@@ -326,7 +326,7 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.requestMethod, "POST");
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
 		assert.strictEqual(spec0.contentType, "application/vnd.uub.login");
-		assert.strictEqual(spec0.accept, "application/vnd.uub.authToken+json");
+		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
@@ -445,43 +445,46 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 
 	const getAuthTokenAsAnswer = function(validUntil, renewUntil) {
 		let tokenAnswer = {
-			data: {
-				children: [{
-					name: "token",
-					value: "someAuthToken"
-				}, {
-					name: "validUntil",
-					value: validUntil
-				}, {
-					name: "renewUntil",
-					value: renewUntil
-				}, {
-					name: "userId",
-					value: "someUserId"
-				}, {
-					name: "loginId",
-					value: "someLoginId"
-				}, {
-					name: "firstName",
-					value: "someFirstName"
-				}, {
-					name: "lastName",
-					value: "someLastName"
-				}
-				],
-				name: "authToken"
-			},
-			actionLinks: {
-				renew: {
-					requestMethod: "POST",
-					rel: "renew",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-					accept: "application/vnd.uub.authToken+json"
+			authentication: {
+				data: {
+					children: [{
+						name: "token",
+						value: "someAuthToken"
+					}, {
+						name: "validUntil",
+						value: validUntil
+					}, {
+						name: "renewUntil",
+						value: renewUntil
+					}, {
+						name: "userId",
+						value: "someUserId"
+					}, {
+						name: "loginId",
+						value: "someLoginId"
+					}, {
+						name: "firstName",
+						value: "someFirstName"
+					}, {
+						name: "lastName",
+						value: "someLastName"
+					}
+					],
+					name: "authToken"
+
 				},
-				delete: {
-					requestMethod: "DELETE",
-					rel: "delete",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId"
+				actionLinks: {
+					renew: {
+						requestMethod: "POST",
+						rel: "renew",
+						url: "http://localhost:38180/login/rest/authToken/someTokenId",
+						accept: "application/vnd.uub.authentication+json"
+					},
+					delete: {
+						requestMethod: "DELETE",
+						rel: "delete",
+						url: "http://localhost:38180/login/rest/authToken/someTokenId"
+					}
 				}
 			}
 		};
@@ -590,10 +593,10 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 
 		loginManager.handleRenewAuthTokenAnswer(answer);
 		loginManager.logoutCallback();
-		
+
 		window.setTimeout(assertRenewAuthTokenNotSent, 10, assert, done);
 	});
-	
+
 	const assertRenewAuthTokenNotSent = function(assert, done) {
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
 		done()
@@ -654,7 +657,7 @@ QUnit.module.only("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.jsClient, spec.jsClient);
 		assert.strictEqual(spec0.requestMethod, "POST");
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
-		assert.strictEqual(spec0.accept, "application/vnd.uub.authToken+json");
+		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.passwordTimeoutCallback);

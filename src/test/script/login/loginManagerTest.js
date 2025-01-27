@@ -31,6 +31,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	let spec;
 	let loginManager;
 	let authInfo;
+	let authentication;
 	let afterLoginMethodCalled;
 	let textprovider;
 
@@ -66,28 +67,31 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		loginManager = CORA.loginManager(dependencies, spec);
 		let tenMinInMillis = 600000;
 		let twentyFourHoursInMillis = 86400000;
-		authInfo = {
-			userId: "141414",
-			loginId: "someLoginId",
-			token: "fakeAuthTokenFromHere",
-			firstName: "someFirstName",
-			lastName: "someLastName",
-			validUntil: Date.now() + tenMinInMillis,
-			renewUntil: Date.now() + twentyFourHoursInMillis,
-			actionLinks: {
-				renew: {
-					requestMethod: "POST",
-					rel: "renew",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-					accept: "application/vnd.uub.authentication+json"
-				},
-				delete: {
-					requestMethod: "DELETE",
-					rel: "delete",
-					url: "http://localhost:38180/login/rest/authToken/someTokenId"
-				}
-			}
-		};
+		//		authInfo = {
+		//			userId: "141414",
+		//			loginId: "someLoginId",
+		//			token: "fakeAuthTokenFromHere",
+		//			firstName: "someFirstName",
+		//			lastName: "someLastName",
+		//			validUntil: Date.now() + tenMinInMillis,
+		//			renewUntil: Date.now() + twentyFourHoursInMillis,
+		//			actionLinks: {
+		//				renew: {
+		//					requestMethod: "POST",
+		//					rel: "renew",
+		//					url: "http://localhost:38180/login/rest/authToken/someTokenId",
+		//					accept: "application/vnd.uub.authentication+json"
+		//				},
+		//				delete: {
+		//					requestMethod: "DELETE",
+		//					rel: "delete",
+		//					url: "http://localhost:38180/login/rest/authToken/someTokenId"
+		//				}
+		//			}
+		//		};
+		authentication = getAuthentication(Date.now() + tenMinInMillis, Date.now() + twentyFourHoursInMillis);
+		authInfo = authentication;
+
 	});
 
 	hooks.afterEach(() => {
@@ -145,6 +149,53 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			"responseText": jsonLoginList
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
+	};
+
+	const getAuthentication = function(validUntil, renewUntil) {
+		return {
+			authentication: {
+				data: {
+					children: [{
+						name: "token",
+						value: "someAuthToken"
+					}, {
+						name: "validUntil",
+						value: ""+validUntil
+					}, {
+						name: "renewUntil",
+						value: ""+renewUntil
+					}, {
+						name: "userId",
+						value: "someUserId"
+					}, {
+						name: "loginId",
+						value: "someLoginId"
+					}, {
+						name: "firstName",
+						value: "someFirstName"
+					}, {
+						name: "lastName",
+						value: "someLastName"
+					}
+					],
+					name: "authToken"
+
+				},
+				actionLinks: {
+					renew: {
+						requestMethod: "POST",
+						rel: "renew",
+						url: "http://localhost:38180/login/rest/authToken/someTokenId",
+						accept: "application/vnd.uub.authentication+json"
+					},
+					delete: {
+						requestMethod: "DELETE",
+						rel: "delete",
+						url: "http://localhost:38180/login/rest/authToken/someTokenId"
+					}
+				}
+			}
+		};
 	};
 
 	test("testConstants", function(assert) {
@@ -373,7 +424,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			source: factored.getOpenedWindow()
 		});
 		let authTokenHolder = dependencies.authTokenHolder;
-		assert.strictEqual(authTokenHolder.getToken(0), "fakeAuthTokenFromHere");
+		assert.strictEqual(authTokenHolder.getToken(0), "someAuthToken");
 	});
 
 	test("testRecieveMessageFromWebRedirectLoginNotHandledIfWrongOrigin", function(assert) {
@@ -444,50 +495,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	});
 
 	const getAuthTokenAsAnswer = function(validUntil, renewUntil) {
-		let tokenAnswer = {
-			authentication: {
-				data: {
-					children: [{
-						name: "token",
-						value: "someAuthToken"
-					}, {
-						name: "validUntil",
-						value: validUntil
-					}, {
-						name: "renewUntil",
-						value: renewUntil
-					}, {
-						name: "userId",
-						value: "someUserId"
-					}, {
-						name: "loginId",
-						value: "someLoginId"
-					}, {
-						name: "firstName",
-						value: "someFirstName"
-					}, {
-						name: "lastName",
-						value: "someLastName"
-					}
-					],
-					name: "authToken"
-
-				},
-				actionLinks: {
-					renew: {
-						requestMethod: "POST",
-						rel: "renew",
-						url: "http://localhost:38180/login/rest/authToken/someTokenId",
-						accept: "application/vnd.uub.authentication+json"
-					},
-					delete: {
-						requestMethod: "DELETE",
-						rel: "delete",
-						url: "http://localhost:38180/login/rest/authToken/someTokenId"
-					}
-				}
-			}
-		};
+		let tokenAnswer = getAuthentication(validUntil, renewUntil);
 		return {
 			status: 201,
 			responseText: JSON.stringify(tokenAnswer)
@@ -511,7 +519,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	const assertRenewCalled = function(assert, done) {
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 3);
 		let ajaxCallSpy = ajaxCallFactory.getFactored(2);
-		let ajaxCallSpec = ajaxCallSpy.getSpec();
+ 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		let renewAction = authInfo.actionLinks.renew;
 		assert.strictEqual(ajaxCallSpec.url, renewAction.url);
 		assert.strictEqual(ajaxCallSpec.requestMethod, renewAction.requestMethod);

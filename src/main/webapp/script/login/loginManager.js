@@ -314,13 +314,17 @@ var CORA = (function(cora) {
 
 
 		const handleNewAuthTokenAnswer = function(answer) {
-			let authInfo = parseAuthTokenToAuthInfo(answer);
-			authInfoCallback(authInfo);
+			let authentication = parseLoginAnswerToAuthentication(answer);
+			authInfoCallback(authentication);
 		};
 
-		const parseAuthTokenToAuthInfo = function(answer) {
-			let everything = JSON.parse(answer.responseText);
-			let authentication = everything.authentication;
+		const parseLoginAnswerToAuthentication = function(answer) {
+			let authenticationAsJson = JSON.parse(answer.responseText);
+			return convertJsonToAuthentication(authenticationAsJson);
+		};
+
+		const convertJsonToAuthentication = function(json) {
+			let authentication = json.authentication;
 			let data = authentication.data;
 			let cData = CORA.coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
@@ -330,17 +334,16 @@ var CORA = (function(cora) {
 			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
 			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
 			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
-			let authInfo = {
+			return {
 				userId: userId,
 				loginId: loginId,
-				token: token,
+				token: token, 
 				firstName: firstName,
 				lastName: lastName,
 				validUntil: validUntil,
 				renewUntil: renewUntil,
 				actionLinks: authentication.actionLinks
 			};
-			return authInfo;
 		};
 
 		const authInfoCallback = function(authInfoIn) {
@@ -414,7 +417,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleRenewAuthTokenAnswer = function(answer) {
-			authInfo = parseAuthTokenToAuthInfo(answer);
+			authInfo = parseLoginAnswerToAuthentication(answer);
 			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
 			startRenewAuthTokenProcess(authInfo);
 		};
@@ -462,7 +465,9 @@ var CORA = (function(cora) {
 		};
 
 		const handleMessagesFromOkSender = function(data) {
-			authInfoCallback(data);
+			//			authInfoCallback(data);
+			let authentication = convertJsonToAuthentication(data);
+			authInfoCallback(authentication);
 		};
 
 		const messageIsFromWindowOpenedFromHere = function(event) {

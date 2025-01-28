@@ -151,6 +151,22 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
 
+	const renewActionLink = {
+		requestMethod: "POST",
+		rel: "renew",
+		url: "http://localhost:38180/login/rest/authToken/someTokenId",
+		accept: "application/vnd.uub.authentication+json"
+	};
+
+	const deleteActionLink = {
+		renew: renewActionLink,
+		delete: {
+			requestMethod: "DELETE",
+			rel: "delete",
+			url: "http://localhost:38180/login/rest/authToken/someTokenId"
+		}
+	};
+
 	const getAuthentication = function(validUntil, renewUntil) {
 		return {
 			authentication: {
@@ -160,10 +176,10 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 						value: "someAuthToken"
 					}, {
 						name: "validUntil",
-						value: ""+validUntil
+						value: "" + validUntil
 					}, {
 						name: "renewUntil",
-						value: ""+renewUntil
+						value: "" + renewUntil
 					}, {
 						name: "userId",
 						value: "someUserId"
@@ -181,19 +197,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 					name: "authToken"
 
 				},
-				actionLinks: {
-					renew: {
-						requestMethod: "POST",
-						rel: "renew",
-						url: "http://localhost:38180/login/rest/authToken/someTokenId",
-						accept: "application/vnd.uub.authentication+json"
-					},
-					delete: {
-						requestMethod: "DELETE",
-						rel: "delete",
-						url: "http://localhost:38180/login/rest/authToken/someTokenId"
-					}
-				}
+				actionLinks: deleteActionLink
 			}
 		};
 	};
@@ -451,14 +455,6 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			assert.strictEqual(authTokenHolder.getToken(0), undefined);
 		});
 
-	test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
-		loginManager.authInfoCallback(authInfo);
-
-		assertTokenCorrectInAuthTokenHolder(assert, authInfo.token);
-		assertLoginIdCorrect(assert, authInfo.loginId);
-		assertLoginStateSetToLoggedIn(assert);
-		assertAfterLoginMethodIsCalled(assert);
-	});
 
 	const assertTokenCorrectInAuthTokenHolder = function(assert, token) {
 		let authTokenHolder = dependencies.authTokenHolder;
@@ -504,13 +500,12 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 
 	test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
 		let done = assert.async();
-		const timeOutMarginInLoginManager = 10000;
-		let validUntil = Date.now() + timeOutMarginInLoginManager;
-		authInfo.validUntil = validUntil;
+
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
 
-		loginManager.authInfoCallback(authInfo);
+		loginManager.handleNewAuthTokenAnswer(answer);
 
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
 		window.setTimeout(assertRenewCalled, 10, assert, done);
@@ -519,11 +514,10 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	const assertRenewCalled = function(assert, done) {
 		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 3);
 		let ajaxCallSpy = ajaxCallFactory.getFactored(2);
- 		let ajaxCallSpec = ajaxCallSpy.getSpec();
-		let renewAction = authInfo.actionLinks.renew;
-		assert.strictEqual(ajaxCallSpec.url, renewAction.url);
-		assert.strictEqual(ajaxCallSpec.requestMethod, renewAction.requestMethod);
-		assert.strictEqual(ajaxCallSpec.accept, renewAction.accept);
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, renewActionLink.url);
+		assert.strictEqual(ajaxCallSpec.requestMethod, renewActionLink.requestMethod);
+		assert.strictEqual(ajaxCallSpec.accept, renewActionLink.accept);
 		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.handleRenewAuthTokenAnswer);
 		assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.renewError);
 		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.renewTimeOut);
@@ -616,7 +610,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			text: "someText",
 			type: "appTokenLogin"
 		});
-		loginManager.authInfoCallback(authInfo);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
 
 		loginManager.logout();
 
@@ -630,7 +625,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	});
 
 	test("testLogoutCallback", function(assert) {
-		loginManager.authInfoCallback(authInfo);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
 
 		loginManager.logoutCallback();
 
@@ -718,7 +714,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
 		let passwordLogins = setUpTwoPasswordLogins();
 
-		loginManager.authInfoCallback(authInfo);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
 
 		assertPasswordsLoginsRemoved(assert, passwordLogins);
 	});
@@ -785,7 +782,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		loginManager.login(spec);
 		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
 
-		loginManager.authInfoCallback(authInfo);
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
 
 		loginManager.login(spec);
 		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 2);

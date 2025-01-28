@@ -24,7 +24,7 @@ var CORA = (function(cora) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let loginManagerView;
-		let authInfo;
+		let authentication;
 		let createdWebRedirectLogin;
 		let startedPasswordLogins = {};
 
@@ -304,10 +304,6 @@ var CORA = (function(cora) {
 			spec.setErrorMessage(translatedText);
 		};
 
-		const getDependencies = function() {
-			return dependencies;
-		};
-
 		const getHtml = function() {
 			return loginManagerView.getHtml();
 		};
@@ -315,15 +311,15 @@ var CORA = (function(cora) {
 
 		const handleNewAuthTokenAnswer = function(answer) {
 			let authentication = parseLoginAnswerToAuthentication(answer);
-			authInfoCallback(authentication);
+			handleSuccessfulLogin(authentication);
 		};
 
 		const parseLoginAnswerToAuthentication = function(answer) {
 			let authenticationAsJson = JSON.parse(answer.responseText);
-			return convertJsonToAuthentication(authenticationAsJson);
+			return convertCoraAuthenticationToAuthentication(authenticationAsJson);
 		};
 
-		const convertJsonToAuthentication = function(json) {
+		const convertCoraAuthenticationToAuthentication = function(json) {
 			let authentication = json.authentication;
 			let data = authentication.data;
 			let cData = CORA.coraData(data);
@@ -337,7 +333,7 @@ var CORA = (function(cora) {
 			return {
 				userId: userId,
 				loginId: loginId,
-				token: token, 
+				token: token,
 				firstName: firstName,
 				lastName: lastName,
 				validUntil: validUntil,
@@ -346,14 +342,14 @@ var CORA = (function(cora) {
 			};
 		};
 
-		const authInfoCallback = function(authInfoIn) {
-			authInfo = authInfoIn;
-			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
-			loginManagerView.setLoginId(authInfo.loginId);
+		const handleSuccessfulLogin = function(authenticationIn) {
+			authentication = authenticationIn;
+			dependencies.authTokenHolder.setCurrentAuthToken(authentication.token);
+			loginManagerView.setLoginId(authentication.loginId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
 			removeStartedPasswordLogins();
-			startRenewAuthTokenProcess(authInfo);
+			startRenewAuthTokenProcess(authentication);
 		};
 
 		const removeStartedPasswordLogins = function() {
@@ -363,9 +359,9 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const startRenewAuthTokenProcess = function(authInfo) {
-			let timeToRenew = getTimeToRenew(authInfo.validUntil);
-			if (renewUntilIsInTheFuture(authInfo.renewUntil, timeToRenew)) {
+		const startRenewAuthTokenProcess = function(authentication) {
+			let timeToRenew = getTimeToRenew(authentication.validUntil);
+			if (renewUntilIsInTheFuture(authentication.renewUntil, timeToRenew)) {
 				callRenewAuthToken(timeToRenew);
 			} else {
 				handleRenewNoLongerPossible();
@@ -394,7 +390,7 @@ var CORA = (function(cora) {
 		};
 
 		const renewAuthTokenCall = function() {
-			let renewAction = authInfo.actionLinks.renew;
+			let renewAction = authentication.actionLinks.renew;
 			let callSpec = {
 				requestMethod: renewAction.requestMethod,
 				url: renewAction.url,
@@ -417,9 +413,9 @@ var CORA = (function(cora) {
 		};
 
 		const handleRenewAuthTokenAnswer = function(answer) {
-			authInfo = parseLoginAnswerToAuthentication(answer);
-			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
-			startRenewAuthTokenProcess(authInfo);
+			authentication = parseLoginAnswerToAuthentication(answer);
+			dependencies.authTokenHolder.setCurrentAuthToken(authentication.token);
+			startRenewAuthTokenProcess(authentication);
 		};
 
 		const appTokenErrorCallback = function() {
@@ -434,7 +430,7 @@ var CORA = (function(cora) {
 		};
 
 		const logout = function() {
-			let deleteLink = authInfo.actionLinks['delete'];
+			let deleteLink = authentication.actionLinks['delete'];
 			let callSpec = {
 				requestMethod: deleteLink.requestMethod,
 				url: deleteLink.url,
@@ -453,26 +449,29 @@ var CORA = (function(cora) {
 			window.clearTimeout(renewCallTimeout);
 		};
 
-		const getSpec = function() {
-			// needed for test
-			return spec;
-		};
-
 		const receiveMessage = function(event) {
 			if (messageIsFromWindowOpenedFromHere(event)) {
 				handleMessagesFromOkSender(event.data);
 			}
 		};
 
-		const handleMessagesFromOkSender = function(data) {
-			//			authInfoCallback(data);
-			let authentication = convertJsonToAuthentication(data);
-			authInfoCallback(authentication);
-		};
-
 		const messageIsFromWindowOpenedFromHere = function(event) {
 			return loginOrigin === event.origin
 				&& createdWebRedirectLogin.getOpenedWindow() === event.source;
+		};
+
+		const handleMessagesFromOkSender = function(data) {
+			let authentication = convertCoraAuthenticationToAuthentication(data);
+			handleSuccessfulLogin(authentication);
+		};
+
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			// needed for test
+			return spec;
 		};
 
 		out = Object.freeze({
@@ -482,7 +481,6 @@ var CORA = (function(cora) {
 			login: login,
 			logout: logout,
 			handleNewAuthTokenAnswer: handleNewAuthTokenAnswer,
-			authInfoCallback: authInfoCallback,
 			handleRenewAuthTokenAnswer: handleRenewAuthTokenAnswer,
 			appTokenErrorCallback: appTokenErrorCallback,
 			appTokenTimeoutCallback: appTokenTimeoutCallback,

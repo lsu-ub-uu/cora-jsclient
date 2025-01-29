@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021, 2024 Uppsala University Library
- * Copyright 2016, 2017, 2023, 2024 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -84,7 +84,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			busyFactory: CORATEST.standardFactorySpy("busySpy")
 		};
 	};
-	
+
 	const setupSpec = function() {
 		spec = {
 			fetchLatestDataFromServer: "true",
@@ -104,7 +104,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			jsClient: CORATEST.jsClientSpy()
 		};
 	};
-	
+
 	const setupSpecForNewWithData = function() {
 		specForNewWithData = {
 			fetchLatestDataFromServer: "false",
@@ -115,7 +115,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			jsClient: CORATEST.jsClientSpy()
 		};
 	};
-	
+
 	const setupSpecForNewWithChoiceValidationType = function() {
 		specForNewWithChoiceValidationType = {
 			fetchLatestDataFromServer: "false",
@@ -147,7 +147,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			jsClient: CORATEST.jsClientSpy()
 		};
 	};
-	
+
 	const answerCall = function(no) {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({
@@ -170,7 +170,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
-	
+
 	const answerCallWithoutDeleteLink = function(no) {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({
@@ -182,7 +182,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
-	
+
 	const answerCallWithIncomingLinks = function(no) {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({
@@ -1178,7 +1178,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
 		assert.notOk(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
-		
+
 		answerCall(0);
 
 		assert.notOk(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
@@ -1216,7 +1216,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0));
 		assert.equal(recordHandlerViewSpy.getAddDefinitionViewerOpenFunctionRecordType(0),
 			recordHandler.showDefinitionViewerRecordType);
-			
+
 		assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 		assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0),
 			recordHandler.showRecursiveDelete);
@@ -1236,7 +1236,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			recordHandler.showDefinitionViewer);
 
 		assert.ok(recordHandlerViewSpy.getAddDefinitionViewerOpenFunction(0));
-		
+
 		assert.ok(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0));
 		assert.equal(recordHandlerViewSpy.getAddRecursiveDeleteOpenFunction(0),
 			recordHandler.showRecursiveDelete);
@@ -1292,7 +1292,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.ok(spec.jsClient.getOpenDefinitionIds(0));
 		assert.equal(spec.jsClient.getOpenDefinitionIds(0), "textGroup");
 	});
-	
+
 	QUnit.test("testShowRecursiveDelete", function(assert) {
 		record = recordWithMetadata;
 		spec.record = recordWithMetadata;
@@ -1527,7 +1527,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 		assert.deepEqual(factoredSpec.permissions, emptyPermissions);
 	});
-	
+
 	test("initCheckRightGuiCreatedForListWithSearchResultPresentationId", function(assert) {
 		let recordHandler = CORA.recordHandler(dependencies, specForListWithSearchResultPresentationId);
 		let managedGuiItemSpy = dependencies.managedGuiItemFactory.getFactored(0);
@@ -1630,6 +1630,19 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
 
 		assert.strictEqual(busy.getHideWithEffectCalledNoOfTimes(), 1);
+
+		answerCall(1);
+		let factoredRecordGui0 = dependencies.recordGuiFactory.getFactored(0);
+		let presentationFormIdUsed0 = factoredRecordGui0.getPresentationIdUsed(0);
+		assert.strictEqual(presentationFormIdUsed0, "recordTypeNewPGroup");
+
+		let factoredRecordGui1 = dependencies.recordGuiFactory.getFactored(1);
+		let presentationFormIdUsed1 = factoredRecordGui1.getPresentationIdUsed(0);
+		assert.strictEqual(presentationFormIdUsed1, "recordTypePGroup");
+
+		let factoredRecordGui2 = dependencies.recordGuiFactory.getFactored(2);
+		let presentationFormIdUsed2 = factoredRecordGui2.getPresentationIdUsed(0);
+		assert.strictEqual(presentationFormIdUsed2, "recordTypePGroup");
 	});
 
 	test("testCreateNewCallValidationError", function(assert) {
@@ -1757,6 +1770,29 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
 		let factoredForm = factoredRecordGui.getReturnedPresentations(0);
 		assert.strictEqual(factoredForm.getView(), recordHandlerViewSpy.getAddedEditView(1));
+	});
+
+	test("testReloadForMetadataChangesRecordHandlerViewIsUpdateIfCreated", function(assert) {
+		let recordHandler = CORA.recordHandler(dependencies, specForNew);
+
+		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
+		let createButtonSpec = recordHandlerViewSpy.getAddedButton(0);
+		createButtonSpec.onclickMethod();
+		answerCall(0);
+
+		recordHandler.reloadForMetadataChanges();
+
+		let createGui = dependencies.recordGuiFactory.getFactored(0);
+		let createFormId = createGui.getPresentationIdUsed(0);
+		assert.strictEqual(createFormId, "recordTypeNewPGroup");
+
+		let updateGui = dependencies.recordGuiFactory.getFactored(1);
+		let updateFormId = updateGui.getPresentationIdUsed(0);
+		assert.strictEqual(updateFormId, "recordTypePGroup");
+
+		let updateGuiAfterReloadForMetadataChanges = dependencies.recordGuiFactory.getFactored(2);
+		let updateFormIdAfterReloadForMetadataChanges = updateGuiAfterReloadForMetadataChanges.getPresentationIdUsed(0);
+		assert.strictEqual(updateFormIdAfterReloadForMetadataChanges, "recordTypePGroup");
 	});
 
 	test("testReloadRecordHandlerViewViewFactoredAndAdded", function(assert) {

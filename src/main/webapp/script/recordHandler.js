@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020, 2021, 2024 Uppsala University Library
- * Copyright 2016, 2017, 2023, 2024 Olov McKie
+ * Copyright 2016, 2017, 2023, 2024, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -318,6 +318,7 @@ var CORA = (function(cora) {
 			recordHandlerView.clearViews();
 			initComplete = false;
 			dataIsChanged = false;
+			createNewRecord = "false"; 
 			managedGuiItem.setChanged(dataIsChanged);
 			processFetchedRecord(answer);
 		};

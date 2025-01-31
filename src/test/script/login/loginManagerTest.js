@@ -67,28 +67,6 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		loginManager = CORA.loginManager(dependencies, spec);
 		let tenMinInMillis = 600000;
 		let twentyFourHoursInMillis = 86400000;
-		//		authInfo = {
-		//			userId: "141414",
-		//			loginId: "someLoginId",
-		//			token: "fakeAuthTokenFromHere",
-		//			firstName: "someFirstName",
-		//			lastName: "someLastName",
-		//			validUntil: Date.now() + tenMinInMillis,
-		//			renewUntil: Date.now() + twentyFourHoursInMillis,
-		//			actionLinks: {
-		//				renew: {
-		//					requestMethod: "POST",
-		//					rel: "renew",
-		//					url: "http://localhost:38180/login/rest/authToken/someTokenId",
-		//					accept: "application/vnd.uub.authentication+json"
-		//				},
-		//				delete: {
-		//					requestMethod: "DELETE",
-		//					rel: "delete",
-		//					url: "http://localhost:38180/login/rest/authToken/someTokenId"
-		//				}
-		//			}
-		//		};
 		authentication = getAuthentication(Date.now() + tenMinInMillis, Date.now() + twentyFourHoursInMillis);
 		authInfo = authentication;
 

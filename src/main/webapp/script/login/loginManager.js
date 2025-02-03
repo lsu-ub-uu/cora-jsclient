@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018, 2019, 2024 Uppsala University Library
+ * Copyright 2016, 2018, 2019, 2024, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,9 +21,10 @@ let appTokenOptions = [];
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManager = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
 		let out;
 		let loginManagerView;
-		let authInfo;
+		let authentication;
 		let createdWebRedirectLogin;
 		let startedPasswordLogins = {};
 
@@ -36,6 +37,7 @@ var CORA = (function(cora) {
 		let logins = {};
 		let loginUnitDataList;
 		let loginDataList;
+		let renewCallTimeout;
 
 		const start = function() {
 			fetchAllLoginInfoFromServer();
@@ -188,15 +190,17 @@ var CORA = (function(cora) {
 		};
 
 		const getTranslatedText = function(textId) {
-			return dependencies.textProvider.getTranslation(textId);
+			return textProvider.getTranslation(textId);
 		};
 
 		const fetchLoginUnitErrorCallback = function() {
-			spec.setErrorMessage("Fetching of loginUnits failed!");
+			const translatedText = getTranslatedText("theClient_fetchLoginUnitsErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginUnitTimeoutCallback = function() {
-			spec.setErrorMessage("Fetching of loginUnits timedout!");
+			const translatedText = getTranslatedText("theClient_fetchLoginUnitsTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginCallback = function(answer) {
@@ -205,11 +209,13 @@ var CORA = (function(cora) {
 		};
 
 		const fetchLoginErrorCallback = function() {
-			spec.setErrorMessage("Fetching of logins failed!");
+			const translatedText = getTranslatedText("theClient_fetchLoginsErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const fetchLoginTimeoutCallback = function() {
-			spec.setErrorMessage("Fetching of logins timedout!");
+			const translatedText = getTranslatedText("theClient_fetchLoginsTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const login = function(loginOption) {
@@ -226,9 +232,9 @@ var CORA = (function(cora) {
 			let loginSpec = {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
-				contentType : "application/vnd.uub.login",
-				accept: "application/vnd.uub.record+json",
-				authInfoCallback: authInfoCallback,
+				contentType: "application/vnd.uub.login",
+				accept: "application/vnd.uub.authentication+json",
+				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
 			};
@@ -277,9 +283,9 @@ var CORA = (function(cora) {
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
-				contentType : "application/vnd.uub.login",
-				accept: "application/vnd.uub.record+json",
-				authInfoCallback: authInfoCallback,
+				contentType: "application/vnd.uub.login",
+				accept: "application/vnd.uub.authentication+json",
+				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: passwordErrorCallback,
 				timeoutCallback: passwordTimeoutCallback
 			};
@@ -288,63 +294,149 @@ var CORA = (function(cora) {
 			startedPasswordLogins[loginOption.loginUnitId] = passwordLoginJsClientIntegrator;
 		};
 
-		const passwordErrorCallback = function(errorObject) {
-			if (failedToLogout(errorObject)) {
-				logoutCallback();
-			} else {
-				spec.setErrorMessage("Password login failed!");
-			}
+		const passwordErrorCallback = function() {
+			const translatedText = getTranslatedText("theClient_passwordLoginErrorText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const passwordTimeoutCallback = function() {
-			spec.setErrorMessage("Password login timedout!");
-		};
-
-		const getDependencies = function() {
-			return dependencies;
+			const translatedText = getTranslatedText("theClient_passwordLoginTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const getHtml = function() {
 			return loginManagerView.getHtml();
 		};
 
-		const authInfoCallback = function(authInfoIn) {
-			authInfo = authInfoIn;
-			dependencies.authTokenHolder.setCurrentAuthToken(authInfo.token);
-			loginManagerView.setLoginId(authInfo.loginId);
+
+		const handleNewAuthTokenAnswer = function(answer) {
+			let authentication = parseLoginAnswerToAuthentication(answer);
+			handleSuccessfulLogin(authentication);
+		};
+
+		const parseLoginAnswerToAuthentication = function(answer) {
+			let authenticationAsJson = JSON.parse(answer.responseText);
+			return convertCoraAuthenticationToAuthentication(authenticationAsJson);
+		};
+
+		const convertCoraAuthenticationToAuthentication = function(json) {
+			let authentication = json.authentication;
+			let data = authentication.data;
+			let cData = CORA.coraData(data);
+			let token = cData.getFirstAtomicValueByNameInData("token");
+			let userId = cData.getFirstAtomicValueByNameInData("userId");
+			let loginId = cData.getFirstAtomicValueByNameInData("loginId");
+			let validUntil = cData.getFirstAtomicValueByNameInData("validUntil");
+			let renewUntil = cData.getFirstAtomicValueByNameInData("renewUntil");
+			let firstName = cData.getFirstAtomicValueByNameInData("firstName");
+			let lastName = cData.getFirstAtomicValueByNameInData("lastName");
+			return {
+				userId: userId,
+				loginId: loginId,
+				token: token,
+				firstName: firstName,
+				lastName: lastName,
+				validUntil: validUntil,
+				renewUntil: renewUntil,
+				actionLinks: authentication.actionLinks
+			};
+		};
+
+		const handleSuccessfulLogin = function(authenticationIn) {
+			authentication = authenticationIn;
+			dependencies.authTokenHolder.setCurrentAuthToken(authentication.token);
+			loginManagerView.setLoginId(authentication.loginId);
 			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
+			removeStartedPasswordLogins();
+			startRenewAuthTokenProcess(authentication);
+		};
+
+		const removeStartedPasswordLogins = function() {
 			for (let key in startedPasswordLogins) {
 				startedPasswordLogins[key].removePasswordLoginFromJsClient();
 				delete startedPasswordLogins[key];
 			}
 		};
 
-		const appTokenErrorCallback = function(errorObject) {
-			if (failedToLogout(errorObject)) {
-				logoutCallback();
+		const startRenewAuthTokenProcess = function(authentication) {
+			let timeToRenew = getTimeToRenew(authentication.validUntil);
+			if (renewUntilIsInTheFuture(authentication.renewUntil, timeToRenew)) {
+				callRenewAuthToken(timeToRenew);
 			} else {
-				spec.setErrorMessage("AppToken login failed!");
+				handleRenewNoLongerPossible();
 			}
 		};
 
-		const failedToLogout = function(errorObject) {
-			return (errorObject.status === 0 || errorObject.status === 404)
-				&& errorObject.spec.requestMethod === "DELETE";
+		const getTimeToRenew = function(validUntil) {
+			const renewMargin = 10000;
+			let timeNow = Date.now();
+			return validUntil - timeNow - renewMargin;
 		};
 
+		const renewUntilIsInTheFuture = function(renewUntil, timeToRenew) {
+			return Date.now() + timeToRenew < renewUntil;
+		};
+
+		const callRenewAuthToken = function(timeToRenew) {
+			renewCallTimeout = window.setTimeout(renewAuthTokenCall, timeToRenew);
+		}
+
+		const handleRenewNoLongerPossible = function() {
+			const infoTextSkipTimeout = 0;
+			let translatedText = getTranslatedText("theClient_reauthenticationNeededText");
+			spec.setInfoMessage(translatedText, infoTextSkipTimeout);
+			logoutCallback();
+		};
+
+		const renewAuthTokenCall = function() {
+			let renewAction = authentication.actionLinks.renew;
+			let callSpec = {
+				requestMethod: renewAction.requestMethod,
+				url: renewAction.url,
+				accept: renewAction.accept,
+				loadMethod: handleRenewAuthTokenAnswer,
+				errorMethod: renewError,
+				timeoutMethod: renewTimeOut
+			};
+			dependencies.ajaxCallFactory.factor(callSpec);
+		};
+
+		const renewError = function() {
+			const translatedText = getTranslatedText("theClient_renewAuthTokenErrorText");
+			spec.setErrorMessage(translatedText);
+		};
+
+		const renewTimeOut = function() {
+			const translatedText = getTranslatedText("theClient_renewAuthTokenTimeoutText");
+			spec.setErrorMessage(translatedText);
+		};
+
+		const handleRenewAuthTokenAnswer = function(answer) {
+			authentication = parseLoginAnswerToAuthentication(answer);
+			dependencies.authTokenHolder.setCurrentAuthToken(authentication.token);
+			startRenewAuthTokenProcess(authentication);
+		};
+
+		const appTokenErrorCallback = function() {
+			const translatedText = getTranslatedText("theClient_appTokenLoginErrorText");
+			spec.setErrorMessage(translatedText);
+		};
+
+
 		const appTokenTimeoutCallback = function() {
-			spec.setErrorMessage("AppToken login timedout!");
+			const translatedText = getTranslatedText("theClient_appTokenLoginTimeoutText");
+			spec.setErrorMessage(translatedText);
 		};
 
 		const logout = function() {
-			let deleteLink = authInfo.actionLinks['delete'];
+			let deleteLink = authentication.actionLinks['delete'];
 			let callSpec = {
 				requestMethod: deleteLink.requestMethod,
 				url: deleteLink.url,
 				loadMethod: logoutCallback,
-				errorMethod: appTokenErrorCallback,
-				timeoutMethod: appTokenTimeoutCallback,
+				errorMethod: logoutCallback,
+				timeoutMethod: logoutCallback,
 				timeoutInMS: 15000
 			};
 			dependencies.ajaxCallFactory.factor(callSpec);
@@ -354,11 +446,7 @@ var CORA = (function(cora) {
 			loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
 			dependencies.authTokenHolder.setCurrentAuthToken("");
 			spec.afterLogoutMethod();
-		};
-
-		const getSpec = function() {
-			// needed for test
-			return spec;
+			window.clearTimeout(renewCallTimeout);
 		};
 
 		const receiveMessage = function(event) {
@@ -367,13 +455,23 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const handleMessagesFromOkSender = function(data) {
-			authInfoCallback(data);
-		};
-
 		const messageIsFromWindowOpenedFromHere = function(event) {
 			return loginOrigin === event.origin
 				&& createdWebRedirectLogin.getOpenedWindow() === event.source;
+		};
+
+		const handleMessagesFromOkSender = function(data) {
+			let authentication = convertCoraAuthenticationToAuthentication(data);
+			handleSuccessfulLogin(authentication);
+		};
+
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			// needed for test
+			return spec;
 		};
 
 		out = Object.freeze({
@@ -382,11 +480,14 @@ var CORA = (function(cora) {
 			getHtml: getHtml,
 			login: login,
 			logout: logout,
-			authInfoCallback: authInfoCallback,
+			handleNewAuthTokenAnswer: handleNewAuthTokenAnswer,
+			handleRenewAuthTokenAnswer: handleRenewAuthTokenAnswer,
 			appTokenErrorCallback: appTokenErrorCallback,
 			appTokenTimeoutCallback: appTokenTimeoutCallback,
 			passwordErrorCallback: passwordErrorCallback,
 			passwordTimeoutCallback: passwordTimeoutCallback,
+			renewError: renewError,
+			renewTimeOut: renewTimeOut,
 			logoutCallback: logoutCallback,
 			getSpec: getSpec,
 			receiveMessage: receiveMessage,

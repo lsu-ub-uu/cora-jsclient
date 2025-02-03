@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,24 +19,24 @@
 "use strict";
 
 QUnit.module("jsClient/jsClientViewTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.textProvider = CORATEST.textProviderSpy();
 		this.providers = {
-			textProvider : this.textProvider			
+			textProvider: this.textProvider
 		};
 		this.dependencies = {
-			messageHolderFactory : CORATEST.messageHolderFactorySpy()
+			messageHolderFactory: CORATEST.messageHolderFactorySpy()
 		};
 		this.spec = {
-			name : "The Client",
-			serverAddress : "http://epc.ub.uu.se/cora/rest/",
-			reloadProvidersMethod : function() {
+			name: "The Client",
+			serverAddress: "http://epc.ub.uu.se/cora/rest/",
+			reloadProvidersMethod: function() {
 			},
-			setLanguageMethod : function() {
+			setLanguageMethod: function() {
 			}
 		};
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -83,9 +83,9 @@ QUnit.test("testMainLayout", function(assert) {
 	assert.strictEqual(sideBar.className, "sideBar");
 	assert.strictEqual(sideBar, mainView.childNodes[1]);
 
-    let serverAddress = sideBar.childNodes[2];
-    assert.strictEqual(serverAddress.className, "serverAddress");
-    assert.strictEqual(serverAddress.textContent, this.spec.serverAddress);
+	let serverAddress = sideBar.childNodes[2];
+	assert.strictEqual(serverAddress.className, "serverAddress");
+	assert.strictEqual(serverAddress.textContent, this.spec.serverAddress);
 
 	let searchesView = jsClientView.getSearchesView();
 	assert.strictEqual(searchesView.className, "searchesView");
@@ -149,11 +149,11 @@ QUnit.test("testSetLanguageButton", function(assert) {
 
 	languageChoice.options[1].selected = true;
 	languageChoice.onchange();
-	 assert.strictEqual(settedLang, "en");
-	 
-	 languageChoice.options[0].selected = true;
-	 languageChoice.onchange();
-	 assert.strictEqual(settedLang, "sv");
+	assert.strictEqual(settedLang, "en");
+
+	languageChoice.options[0].selected = true;
+	languageChoice.onchange();
+	assert.strictEqual(settedLang, "sv");
 });
 
 QUnit.test("testGetSpec", function(assert) {
@@ -173,7 +173,7 @@ QUnit.test("testAddToOpenGuiItemsView", function(assert) {
 QUnit.test("testSearchesViewHasHeadline", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	let searchesView = jsClientView.getSearchesView();
-	
+
 	let searchesViewFirstChild = searchesView.childNodes[0];
 	assert.strictEqual(searchesViewFirstChild.nodeName, "DIV");
 	assert.strictEqual(searchesViewFirstChild.className, "searchesViewHeadline");
@@ -184,24 +184,24 @@ QUnit.test("testAddToSearchesView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 	let searchesView = jsClientView.getSearchesView();
 	let aView = document.createElement("SPAN");
-	
+
 	jsClientView.addToSearchesView(aView);
-	
+
 	let searchesViewHeadline = searchesView.childNodes[1];
 	assert.strictEqual(searchesViewHeadline, aView);
 });
 
 QUnit.test("testClearSearchesView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
-	
+
 	let aView = document.createElement("SPAN");
 	jsClientView.addToSearchesView(aView);
-	
+
 	let searchesView2 = jsClientView.getSearchesView();
 	assert.strictEqual(searchesView2.childNodes.length, 2);
-	
+
 	jsClientView.clearSearchesView();
-	
+
 	assert.strictEqual(searchesView2.childNodes.length, 1);
 });
 
@@ -295,14 +295,27 @@ QUnit.test("testAddGlobalView", function(assert) {
 	assert.strictEqual(jsClientView.getHeader().childNodes[6], someView);
 });
 
+QUnit.test("testSetInfoMessage", function(assert) {
+	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
+	let timeout = 100;
+	jsClientView.addInfoMessage("some info text", timeout);
+
+		let messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
+		let expectedMessageSpec = {
+			message : "some info text",
+			type : CORA.message.INFO,
+			timeout : timeout
+		};
+		assert.deepEqual(messageHolder.getCreatedMessageSpec(0), expectedMessageSpec);
+});
 QUnit.test("testSetErrorMessage", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
 	jsClientView.addErrorMessage("some error text");
 	let messageHolder = this.dependencies.messageHolderFactory.getFactored(0);
 	let expectedMessageSpec = {
-		"message" : "some error text",
-		"type" : CORA.message.ERROR
+		"message": "some error text",
+		"type": CORA.message.ERROR
 	};
 	assert.stringifyEqual(messageHolder.getCreatedMessageSpec(0), expectedMessageSpec);
 });

@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 
 		const factor = function(spec) {
 			let appTokenLoginDependencies = {
-				"ajaxCallFactory" : dependencies.ajaxCallFactory
+				ajaxCallFactory : dependencies.ajaxCallFactory
 			};
 			return CORA.appTokenLogin(appTokenLoginDependencies, spec);
 		};

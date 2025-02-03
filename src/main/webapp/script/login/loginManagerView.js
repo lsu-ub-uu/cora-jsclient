@@ -19,6 +19,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.loginManagerView = function(dependencies, spec) {
+		const textProvider = dependencies.textProvider;
 		let out;
 		let view;
 		let menu;
@@ -29,7 +30,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			let holderSpec = {
 				className : baseClassName,
-				buttonText : dependencies.textProvider.getTranslation("theClient_loginMenuText"),
+				buttonText : textProvider.getTranslation("theClient_loginMenuText"),
 				appendTo : document.body
 			};
 			holder = CORA.holder(holderSpec);
@@ -87,13 +88,13 @@ var CORA = (function(cora) {
 			if (CORA.loginManager.LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
 				let logoutOptions = [ {
-					text : dependencies.textProvider.getTranslation("theClient_logoutMenuText"),
+					text : textProvider.getTranslation("theClient_logoutMenuText"),
 					call : spec.logoutMethod
 				} ];
 				logoutOptions.forEach(addLogoutMenuElement);
 			} else {
 				setLoginOptions(loginOptions);
-				view.textContent = dependencies.textProvider
+				view.textContent = textProvider
 						.getTranslation("theClient_loginMenuText");
 			}
 		};

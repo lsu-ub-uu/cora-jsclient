@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018, 2019, 2024 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2019, 2024, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,682 +18,780 @@
  */
 "use strict";
 
-QUnit.module("login/loginManagerTest.js", {
-	beforeEach: function() {
+
+QUnit.module("login/loginManagerTest.js", hooks => {
+	const test = QUnit.test;
+	let addedEvents = [];
+	let ajaxCallFactory;
+	let dependencies;
+	let afterLogoutMethodCalled
+	let infoMessage;
+	let errorMessage;
+	let loginOption;
+	let spec;
+	let loginManager;
+	let authInfo;
+	let authentication;
+	let afterLoginMethodCalled;
+	let textprovider;
+
+	hooks.beforeEach(() => {
+		infoMessage = {};
+		errorMessage = undefined;
 		addStandardAppTokensToLoginMenu = true;
-		this.getAddedWindowEvents = function() {
-			return addedEvents;
-		};
-		let addedEvents = [];
-		this.addEvent = function(type, listener, useCapture) {
-			addedEvents.push({
-				type: type,
-				listener: listener,
-				useCapture: useCapture
-			});
-		}
-		let oldAddEvent = window.addEventListener;
-		window.addEventListener = this.addEvent;
-		this.dependencies = {
-			textProvider: CORATEST.textProviderSpy(),
+		window.addEventListener = addEvent;
+		ajaxCallFactory = CORATEST.ajaxCallFactorySpy();
+		textprovider = CORATEST.textProviderSpy();
+		dependencies = {
+			textProvider: textprovider,
 			loginManagerViewFactory: CORATEST.loginManagerViewFactorySpy(),
 			appTokenLoginFactory: CORATEST.appTokenLoginFactorySpy(),
 			webRedirectLoginFactory: CORATEST.standardFactorySpy("webRedirectLoginSpy"),
 			passwordLoginJsClientIntegratorFactory: CORATEST
 				.standardFactorySpy("passwordLoginJsClientIntegratorSpy"),
 			authTokenHolder: CORATEST.authTokenHolderSpy(),
-			ajaxCallFactory: CORATEST.ajaxCallFactorySpy()
+			ajaxCallFactory: ajaxCallFactory
 		};
-		let afterLoginMethodCalled = false;
-		this.afterLoginMethod = function() {
-			afterLoginMethodCalled = true;
-		};
-		this.afterLoginMethodWasCalled = function() {
-			return afterLoginMethodCalled;
-		}
+		afterLoginMethodCalled = false;
+		afterLogoutMethodCalled = false;
 
-		let afterLogoutMethodCalled = false;
-		this.afterLogoutMethod = function() {
-			afterLogoutMethodCalled = true;
-		};
-		this.afterLogoutMethodWasCalled = function() {
-			return afterLogoutMethodCalled;
-		}
-
-		let errorMessage;
-		this.setErrorMessage = function(errorMessageIn) {
-			errorMessage = errorMessageIn;
-		}
-		this.getErrorMessage = function() {
-			return errorMessage;
-		}
-		this.spec = {
-			"afterLoginMethod": this.afterLoginMethod,
-			"afterLogoutMethod": this.afterLogoutMethod,
-			"setErrorMessage": this.setErrorMessage,
-			"appTokenBaseUrl": "someAppTokenBaseUrl/",
+		spec = {
+			afterLoginMethod: afterLoginMethod,
+			afterLogoutMethod: afterLogoutMethod,
+			setInfoMessage: setInfoMessage,
+			setErrorMessage: setErrorMessage,
+			appTokenBaseUrl: "someAppTokenBaseUrl/",
 			baseUrl: "http://epc.ub.uu.se/cora/rest/",
-			"jsClient": CORATEST.jsClientSpy()
+			jsClient: CORATEST.jsClientSpy()
 		};
-		this.loginManager = CORA.loginManager(this.dependencies, this.spec);
+		loginManager = CORA.loginManager(dependencies, spec);
+		let tenMinInMillis = 600000;
+		let twentyFourHoursInMillis = 86400000;
+		authentication = getAuthentication(Date.now() + tenMinInMillis, Date.now() + twentyFourHoursInMillis);
+		authInfo = authentication;
 
-		this.authInfo = {
-			userId: "141414",
-			loginId: "someLoginId",
-			token: "fake authToken from here",
-			validForNoSeconds: "131",
-			actionLinks: {
-				delete: {
-					requestMethod: "DELETE",
-					rel: "delete",
-					url: "http://localhost:8080/login/rest/apptoken/141414"
-				}
+	});
+
+	hooks.afterEach(() => {
+		//no after
+	});
+
+	const addEvent = function(type, listener, useCapture) {
+		addedEvents.push({
+			type: type,
+			listener: listener,
+			useCapture: useCapture
+		});
+	};
+
+	const afterLoginMethod = function() {
+		afterLoginMethodCalled = true;
+	};
+
+	const afterLogoutMethod = function() {
+		afterLogoutMethodCalled = true;
+	};
+
+	const setInfoMessage = function(message, timeout) {
+		infoMessage.message = message;
+		infoMessage.timeout = timeout;
+	};
+	const setErrorMessage = function(errorMessageIn) {
+		errorMessage = errorMessageIn;
+	};
+
+	const loginWithWebRedirect = function() {
+		loginOption = {
+			text: "Uppsala webredirect",
+			type: "webRedirectLogin",
+			url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
+		};
+		loginManager.login(loginOption);
+	};
+
+	const answerListLoginUnitsCall = function(no) {
+		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(no);
+		let jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
+		let answer = {
+			"spec": ajaxCallSpy0.getSpec(),
+			"responseText": jsonLoginUnitList
+		};
+		ajaxCallSpy0.getSpec().loadMethod(answer);
+	};
+
+	const answerListLoginsCall = function(no) {
+		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(no);
+		let jsonLoginList = JSON.stringify(CORATEST.loginList);
+		let answer = {
+			"spec": ajaxCallSpy0.getSpec(),
+			"responseText": jsonLoginList
+		};
+		ajaxCallSpy0.getSpec().loadMethod(answer);
+	};
+
+	const renewActionLink = {
+		requestMethod: "POST",
+		rel: "renew",
+		url: "http://localhost:38180/login/rest/authToken/someTokenId",
+		accept: "application/vnd.uub.authentication+json"
+	};
+
+	const deleteActionLink = {
+		renew: renewActionLink,
+		delete: {
+			requestMethod: "DELETE",
+			rel: "delete",
+			url: "http://localhost:38180/login/rest/authToken/someTokenId"
+		}
+	};
+
+	const getAuthentication = function(validUntil, renewUntil) {
+		return {
+			authentication: {
+				data: {
+					children: [{
+						name: "token",
+						value: "someAuthToken"
+					}, {
+						name: "validUntil",
+						value: "" + validUntil
+					}, {
+						name: "renewUntil",
+						value: "" + renewUntil
+					}, {
+						name: "userId",
+						value: "someUserId"
+					}, {
+						name: "loginId",
+						value: "someLoginId"
+					}, {
+						name: "firstName",
+						value: "someFirstName"
+					}, {
+						name: "lastName",
+						value: "someLastName"
+					}
+					],
+					name: "authToken"
+
+				},
+				actionLinks: deleteActionLink
 			}
 		};
-		this.loginWithWebRedirect = function() {
-			this.loginOption = {
-				text: "Uppsala webredirect",
-				type: "webRedirectLogin",
-				"url": "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/systemone/idplogin/login"
-			};
-			this.loginManager.login(this.loginOption);
-		}
+	};
 
-		this.answerListLoginUnitsCall = function(no) {
-			let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-			let jsonLoginUnitList = JSON.stringify(CORATEST.loginUnitList);
-			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonLoginUnitList
-			};
-			ajaxCallSpy0.getSpec().loadMethod(answer);
-		}
-		this.answerListLoginsCall = function(no) {
-			let ajaxCallSpy0 = this.dependencies.ajaxCallFactory.getFactored(no);
-			let jsonLoginList = JSON.stringify(CORATEST.loginList);
-			let answer = {
-				"spec": ajaxCallSpy0.getSpec(),
-				"responseText": jsonLoginList
-			};
-			ajaxCallSpy0.getSpec().loadMethod(answer);
-		}
-	},
-	afterEach: function() {
-	}
-});
+	test("testConstants", function(assert) {
+		assert.strictEqual(CORA.loginManager.LOGGEDOUT, 0);
+		assert.strictEqual(CORA.loginManager.LOGGEDIN, 1);
+	});
 
-QUnit.test("testConstants", function(assert) {
-	assert.strictEqual(CORA.loginManager.LOGGEDOUT, 0);
-	assert.strictEqual(CORA.loginManager.LOGGEDIN, 1);
-});
+	test("init", function(assert) {
+		assert.strictEqual(loginManager.type, "loginManager");
+	});
 
-QUnit.test("init", function(assert) {
-	let loginManager = this.loginManager;
-	assert.strictEqual(loginManager.type, "loginManager");
-});
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(loginManager.getDependencies(), dependencies);
+	});
+	test("testGetSpec", function(assert) {
+		assert.strictEqual(loginManager.getSpec(), spec);
+	});
 
-QUnit.test("testGetDependencies", function(assert) {
-	let loginManager = this.loginManager;
-	assert.strictEqual(loginManager.getDependencies(), this.dependencies);
-});
-QUnit.test("testGetSpec", function(assert) {
-	let loginManager = this.loginManager;
-	assert.strictEqual(loginManager.getSpec(), this.spec);
-});
+	test("testCallForLoginUnitsAndLogin", function(assert) {
+		let ajaxCallSpy = dependencies.ajaxCallFactory.getFactored(0);
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, spec.baseUrl + "record/loginUnit");
+		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.fetchLoginUnitCallback);
+		assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.fetchLoginUnitErrorCallback);
+		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.fetchLoginUnitTimeoutCallback);
+		assert.strictEqual(ajaxCallSpec.data, undefined);
+		assert.strictEqual(ajaxCallSpec.timeoutInMS, undefined);
 
-QUnit.test("testCallForLoginUnitsAndLogin", function(assert) {
-	let loginManager = this.loginManager;
-	let ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(0);
-	let ajaxCallSpec = ajaxCallSpy.getSpec();
-	assert.strictEqual(ajaxCallSpec.url, this.spec.baseUrl + "record/loginUnit");
-	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
-	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.fetchLoginUnitCallback);
-	assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.fetchLoginUnitErrorCallback);
-	assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.fetchLoginUnitTimeoutCallback);
-	assert.strictEqual(ajaxCallSpec.data, undefined);
-	assert.strictEqual(ajaxCallSpec.timeoutInMS, undefined);
+		let ajaxCallSpy1 = dependencies.ajaxCallFactory.getFactored(1);
+		let ajaxCallSpec1 = ajaxCallSpy1.getSpec();
+		assert.strictEqual(ajaxCallSpec1.url, spec.baseUrl + "record/login");
+		assert.strictEqual(ajaxCallSpec1.requestMethod, "GET");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec1.loadMethod, loginManager.fetchLoginCallback);
+		assert.strictEqual(ajaxCallSpec1.errorMethod, loginManager.fetchLoginErrorCallback);
+		assert.strictEqual(ajaxCallSpec1.timeoutMethod, loginManager.fetchLoginTimeoutCallback);
+		assert.strictEqual(ajaxCallSpec1.data, undefined);
+		assert.strictEqual(ajaxCallSpec1.timeoutInMS, undefined);
+	});
 
-	let ajaxCallSpy1 = this.dependencies.ajaxCallFactory.getFactored(1);
-	let ajaxCallSpec1 = ajaxCallSpy1.getSpec();
-	assert.strictEqual(ajaxCallSpec1.url, this.spec.baseUrl + "record/login");
-	assert.strictEqual(ajaxCallSpec1.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
-	assert.strictEqual(ajaxCallSpec1.loadMethod, loginManager.fetchLoginCallback);
-	assert.strictEqual(ajaxCallSpec1.errorMethod, loginManager.fetchLoginErrorCallback);
-	assert.strictEqual(ajaxCallSpec1.timeoutMethod, loginManager.fetchLoginTimeoutCallback);
-	assert.strictEqual(ajaxCallSpec1.data, undefined);
-	assert.strictEqual(ajaxCallSpec1.timeoutInMS, undefined);
-});
-
-QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothLists", function(assert) {
-	let loginManager = this.loginManager;
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.getLoginOptions(), undefined);
-	this.answerListLoginUnitsCall(0);
-	assert.strictEqual(factoredView.getLoginOptions(), undefined);
-	this.answerListLoginsCall(1);
-	assert.notEqual(factoredView.getLoginOptions(), undefined);
-});
-
-QUnit.test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothListsReOrdered",
-	function(assert) {
-		let loginManager = this.loginManager;
-		let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
+	test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothLists", function(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getLoginOptions(), undefined);
-		this.answerListLoginsCall(1);
+		answerListLoginUnitsCall(0);
 		assert.strictEqual(factoredView.getLoginOptions(), undefined);
-		this.answerListLoginUnitsCall(0);
+		answerListLoginsCall(1);
 		assert.notEqual(factoredView.getLoginOptions(), undefined);
 	});
 
-QUnit.test("testAnswerForLoginUnits", function(assert) {
-			addStandardAppTokensToLoginMenu = true;
-			appTokenOptions.push({
-					text: "someText",
-					type: "appTokenLogin",
-					userId: "someLoginId",
-					appToken: "someAppToken"
-				});
+	test("testAnswerForLoginUnitsOnlySetInViewAfterAnswerForBothListsReOrdered",
+		function(assert) {
 
-			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-			let factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
-			this.answerListLoginUnitsCall(2);
-			this.answerListLoginsCall(3);
-
-			let expectedLoginOptions = [
-				{
-					text: "someText",
-					type: "appTokenLogin",
-					userId: "someLoginId",
-					appToken: "someAppToken"
-				},
-				{
-					text: "translated_uuLoginUnitText",
-					type: "webRedirect",
-					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
-				},
-				{
-					text: "translated_testLoginUnitText",
-					type: "webRedirect",
-					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
-				}, {
-					text: "translated_uuSystemOneLDAPLoginUnitText",
-					type: "password",
-					"metadataId": "passwordGroup",
-					"presentationId": "passwordPGroup",
-					"loginUnitId": "uuSystemOneLDAPLoginUnit"
-				}];
-			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
+			let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+			assert.strictEqual(factoredView.getLoginOptions(), undefined);
+			answerListLoginsCall(1);
+			assert.strictEqual(factoredView.getLoginOptions(), undefined);
+			answerListLoginUnitsCall(0);
+			assert.notEqual(factoredView.getLoginOptions(), undefined);
 		});
 
-QUnit.test("testAnswerForLoginUnitsWithoutStandardApptokenLogins", function(assert) {
-			addStandardAppTokensToLoginMenu = false;
-			this.loginManager = CORA.loginManager(this.dependencies, this.spec);
-			let factoredView = this.dependencies.loginManagerViewFactory.getFactored(1);
-			this.answerListLoginUnitsCall(2);
-			this.answerListLoginsCall(3);
-			let expectedLoginOptions = [
-				{
-					text: "translated_uuLoginUnitText",
-					type: "webRedirect",
-					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
-				},
-				{
-					text: "translated_testLoginUnitText",
-					type: "webRedirect",
-					url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
-				}, {
-					text: "translated_uuSystemOneLDAPLoginUnitText",
-					type: "password",
-					"metadataId": "passwordGroup",
-					"presentationId": "passwordPGroup",
-					"loginUnitId": "uuSystemOneLDAPLoginUnit"
-				}];
-			assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
+	test("testAnswerForLoginUnits", function(assert) {
+		addStandardAppTokensToLoginMenu = true;
+		appTokenOptions.push({
+			text: "someText",
+			type: "appTokenLogin",
+			userId: "someLoginId",
+			appToken: "someAppToken"
 		});
 
-QUnit.test("testLoginUnitErrorMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.fetchLoginUnitErrorCallback();
-	assert.strictEqual(this.getErrorMessage(), "Fetching of loginUnits failed!");
-});
+		loginManager = CORA.loginManager(dependencies, spec);
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(1);
+		answerListLoginUnitsCall(2);
+		answerListLoginsCall(3);
 
-QUnit.test("testLoginUnitTimeoutMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.fetchLoginUnitTimeoutCallback();
-	assert.strictEqual(this.getErrorMessage(), "Fetching of loginUnits timedout!");
-});
-
-QUnit.test("testLoginErrorMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.fetchLoginErrorCallback();
-	assert.strictEqual(this.getErrorMessage(), "Fetching of logins failed!");
-});
-
-QUnit.test("testLoginTimeoutMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.fetchLoginTimeoutCallback();
-	assert.strictEqual(this.getErrorMessage(), "Fetching of logins timedout!");
-});
-
-QUnit.test("testInitCreatesALoginManagerView", function(assert) {
-	let loginManager = this.loginManager;
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	assert.ok(factoredView !== undefined);
-});
-
-QUnit.test("testInitCreatesALoginManagerViewsViewIsReturnedForGetHtml", function(assert) {
-	let loginManager = this.loginManager;
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	let loginManagerHtml = loginManager.getHtml();
-	assert.strictEqual(loginManagerHtml, factoredView.getHtml());
-});
-
-QUnit.test("testInitLoginManagerViewSpec", function(assert) {
-	let loginManager = this.loginManager;
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	let factoredSpec = factoredView.getSpec();
-
-	let factoredLoginOptions = factoredSpec.loginOptions;
-
-	assert.strictEqual(factoredLoginOptions, undefined);
-	assert.strictEqual(factoredSpec.loginMethod, loginManager.login);
-	assert.strictEqual(factoredSpec.logoutMethod, loginManager.logout);
-});
-
-QUnit.test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.login({
-		text: "someText",
-		type: "appTokenLogin"
+		let expectedLoginOptions = [
+			{
+				text: "someText",
+				type: "appTokenLogin",
+				userId: "someLoginId",
+				appToken: "someAppToken"
+			},
+			{
+				text: "translated_uuLoginUnitText",
+				type: "webRedirect",
+				url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
+			},
+			{
+				text: "translated_testLoginUnitText",
+				type: "webRedirect",
+				url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
+			}, {
+				text: "translated_uuSystemOneLDAPLoginUnitText",
+				type: "password",
+				"metadataId": "passwordGroup",
+				"presentationId": "passwordPGroup",
+				"loginUnitId": "uuSystemOneLDAPLoginUnit"
+			}];
+		assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
 	});
-	let factored1 = this.dependencies.appTokenLoginFactory.getFactored(0);
-	assert.ok(factored1);
-	let spec0 = this.dependencies.appTokenLoginFactory.getSpec(0);
-	assert.strictEqual(spec0.requestMethod, "POST");
-	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
-	assert.strictEqual(spec0.contentType,  "application/vnd.uub.login");
-	assert.strictEqual(spec0.accept,  "application/vnd.uub.record+json");
-	assert.strictEqual(spec0.authInfoCallback, loginManager.authInfoCallback);
-	assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
-	assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
-});
 
-QUnit.test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.login({
-		text: "someText",
-		type: "appTokenLogin",
-		loginId: "testLoginId",
-		appToken: "testAppToken"
+	test("testAnswerForLoginUnitsWithoutStandardApptokenLogins", function(assert) {
+		addStandardAppTokensToLoginMenu = false;
+		loginManager = CORA.loginManager(dependencies, spec);
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(1);
+		answerListLoginUnitsCall(2);
+		answerListLoginsCall(3);
+		let expectedLoginOptions = [
+			{
+				text: "translated_uuLoginUnitText",
+				type: "webRedirect",
+				url: "https://epc.ub.uu.se/Shibboleth.sso/Login/uu?target=https://epc.ub.uu.se/idplogin/login"
+			},
+			{
+				text: "translated_testLoginUnitText",
+				type: "webRedirect",
+				url: "https://epc.ub.uu.se/Shibboleth.sso/Login/test?target=https://epc.ub.uu.se/idplogin/login"
+			}, {
+				text: "translated_uuSystemOneLDAPLoginUnitText",
+				type: "password",
+				"metadataId": "passwordGroup",
+				"presentationId": "passwordPGroup",
+				"loginUnitId": "uuSystemOneLDAPLoginUnit"
+			}];
+		assert.stringifyEqual(factoredView.getLoginOptions(), expectedLoginOptions);
 	});
-	let factored0 = this.dependencies.appTokenLoginFactory.getFactored(0);
-	assert.strictEqual(factored0.getLoginId(0), "testLoginId");
-	assert.strictEqual(factored0.getAppToken(0), "testAppToken");
-});
 
-QUnit.test("testWebRedirectLoginListensForMessagesOnWindow", function(assert) {
-	let loginManager = this.loginManager;
-	this.loginWithWebRedirect();
-
-	let addedEvent = this.getAddedWindowEvents()[0];
-	assert.strictEqual(addedEvent.type, "message");
-	assert.strictEqual(addedEvent.listener, loginManager.receiveMessage);
-	assert.strictEqual(addedEvent.useCapture, false);
-});
-
-QUnit.test("testWebRedirectLoginFactoryIsCalledOnWebRedirectLogin", function(assert) {
-	let loginManager = this.loginManager;
-	this.loginWithWebRedirect();
-
-	let factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
-	assert.strictEqual(factored.type, "webRedirectLoginSpy");
-	let spec0 = this.dependencies.webRedirectLoginFactory.getSpec(0);
-
-	assert.strictEqual(spec0.url, this.loginOption.url);
-});
-
-QUnit.test("testRecieveMessageFromWebRedirectLogin", function(assert) {
-	let loginManager = this.loginManager;
-	this.loginWithWebRedirect();
-
-	let factored = this.dependencies.webRedirectLoginFactory.getFactored(0);
-	loginManager.receiveMessage({
-		origin: "https://epc.ub.uu.se",
-		data: this.authInfo,
-		source: factored.getOpenedWindow()
+	test("testLoginUnitErrorMessage", function(assert) {
+		loginManager.fetchLoginUnitErrorCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_fetchLoginUnitsErrorText");
 	});
-	let authTokenHolder = this.dependencies.authTokenHolder;
-	assert.strictEqual(authTokenHolder.getToken(0), "fake authToken from here");
-});
 
-QUnit.test("testRecieveMessageFromWebRedirectLoginNotHandledIfWrongOrigin", function(assert) {
-	let loginManager = this.loginManager;
-	this.loginWithWebRedirect();
-	loginManager.receiveMessage({
-		origin: "https://epc.ub.uu.se/systemoneNOT/idplogin/login",
-		data: this.authInfo,
-		source: {}
+	test("testLoginUnitTimeoutMessage", function(assert) {
+		loginManager.fetchLoginUnitTimeoutCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_fetchLoginUnitsTimeoutText");
 	});
-	let authTokenHolder = this.dependencies.authTokenHolder;
-	assert.strictEqual(authTokenHolder.getToken(0), undefined);
-});
 
-QUnit.test("testRecieveMessageFromWebRedirectLoginOnlyHandledIfFromCorrectWindow",
-	function(assert) {
-		let loginManager = this.loginManager;
-		this.loginWithWebRedirect();
+	test("testLoginErrorMessage", function(assert) {
+		loginManager.fetchLoginErrorCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_fetchLoginsErrorText");
+	});
+
+	test("testLoginTimeoutMessage", function(assert) {
+		loginManager.fetchLoginTimeoutCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_fetchLoginsTimeoutText");
+	});
+
+	test("testInitCreatesALoginManagerView", function(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		assert.ok(factoredView !== undefined);
+	});
+
+	test("testInitCreatesALoginManagerViewsViewIsReturnedForGetHtml", function(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		let loginManagerHtml = loginManager.getHtml();
+		assert.strictEqual(loginManagerHtml, factoredView.getHtml());
+	});
+
+	test("testInitLoginManagerViewSpec", function(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		let factoredSpec = factoredView.getSpec();
+
+		let factoredLoginOptions = factoredSpec.loginOptions;
+
+		assert.strictEqual(factoredLoginOptions, undefined);
+		assert.strictEqual(factoredSpec.loginMethod, loginManager.login);
+		assert.strictEqual(factoredSpec.logoutMethod, loginManager.logout);
+	});
+
+	test("testAppTokenLoginFactoryIsCalledOnAppTokenLogin", function(assert) {
+		loginManager.login({
+			text: "someText",
+			type: "appTokenLogin"
+		});
+		let factored1 = dependencies.appTokenLoginFactory.getFactored(0);
+		assert.ok(factored1);
+		let spec0 = dependencies.appTokenLoginFactory.getSpec(0);
+		assert.strictEqual(spec0.requestMethod, "POST");
+		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
+		assert.strictEqual(spec0.contentType, "application/vnd.uub.login");
+		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
+		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
+		assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
+		assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
+	});
+
+	test("testAppTokenLoginCallsServerOnAppTokenLogin", function(assert) {
+		loginManager.login({
+			text: "someText",
+			type: "appTokenLogin",
+			loginId: "testLoginId",
+			appToken: "testAppToken"
+		});
+		let factored0 = dependencies.appTokenLoginFactory.getFactored(0);
+		assert.strictEqual(factored0.getLoginId(0), "testLoginId");
+		assert.strictEqual(factored0.getAppToken(0), "testAppToken");
+	});
+
+	test("testWebRedirectLoginListensForMessagesOnWindow", function(assert) {
+		loginWithWebRedirect();
+
+		let addedEvent = addedEvents[0];
+		assert.strictEqual(addedEvent.type, "message");
+		assert.strictEqual(addedEvent.listener, loginManager.receiveMessage);
+		assert.strictEqual(addedEvent.useCapture, false);
+	});
+
+	test("testWebRedirectLoginFactoryIsCalledOnWebRedirectLogin", function(assert) {
+		loginWithWebRedirect();
+
+		let factored = dependencies.webRedirectLoginFactory.getFactored(0);
+		assert.strictEqual(factored.type, "webRedirectLoginSpy");
+		let spec0 = dependencies.webRedirectLoginFactory.getSpec(0);
+
+		assert.strictEqual(spec0.url, loginOption.url);
+	});
+
+	test("testRecieveMessageFromWebRedirectLogin", function(assert) {
+		loginWithWebRedirect();
+
+		let factored = dependencies.webRedirectLoginFactory.getFactored(0);
 		loginManager.receiveMessage({
-			origin: "https://epc.ub.uu.se/systemone/idplogin/login",
-			data: this.authInfo,
+			origin: "https://epc.ub.uu.se",
+			data: authInfo,
+			source: factored.getOpenedWindow()
+		});
+		let authTokenHolder = dependencies.authTokenHolder;
+		assert.strictEqual(authTokenHolder.getToken(0), "someAuthToken");
+	});
+
+	test("testRecieveMessageFromWebRedirectLoginNotHandledIfWrongOrigin", function(assert) {
+		loginWithWebRedirect();
+		loginManager.receiveMessage({
+			origin: "https://epc.ub.uu.se/systemoneNOT/idplogin/login",
+			data: authInfo,
 			source: {}
 		});
-		let authTokenHolder = this.dependencies.authTokenHolder;
+		let authTokenHolder = dependencies.authTokenHolder;
 		assert.strictEqual(authTokenHolder.getToken(0), undefined);
 	});
 
-QUnit.test("testAuthTokenIsSetInAuthTokenHolderOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	let authTokenHolder = this.dependencies.authTokenHolder;
-	assert.strictEqual(authTokenHolder.getToken(0), "fake authToken from here");
-});
+	test("testRecieveMessageFromWebRedirectLoginOnlyHandledIfFromCorrectWindow",
+		function(assert) {
 
-QUnit.test("testUserIdIsSetInViewOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.getLoginId(0), "someLoginId");
-});
+			loginWithWebRedirect();
+			loginManager.receiveMessage({
+				origin: "https://epc.ub.uu.se/systemone/idplogin/login",
+				data: authInfo,
+				source: {}
+			});
+			let authTokenHolder = dependencies.authTokenHolder;
+			assert.strictEqual(authTokenHolder.getToken(0), undefined);
+		});
 
-QUnit.test("testLoggedinStateIsSetOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	let stateSetInView = factoredView.getState();
 
-	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDIN);
-});
+	const assertTokenCorrectInAuthTokenHolder = function(assert, token) {
+		let authTokenHolder = dependencies.authTokenHolder;
 
-QUnit.test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
+		assert.strictEqual(authTokenHolder.getToken(0), token);
+	};
 
-	assert.strictEqual(this.afterLoginMethodWasCalled(), true);
-});
+	const assertLoginIdCorrect = function(assert, loginId) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.getLoginId(0), loginId);
+	};
 
-QUnit.test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.login({
-		text: "someText",
-		type: "appTokenLogin"
+	const assertLoginStateSetToLoggedIn = function(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		let stateSetInView = factoredView.getState();
+		assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDIN);
+	};
+
+	const assertAfterLoginMethodIsCalled = function(assert) {
+		assert.strictEqual(afterLoginMethodCalled, true);
+	};
+
+	test("testGetAuthTokenForAppToken", function(assert) {
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		let passwordLogins = setUpTwoPasswordLogins();
+
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		assertTokenCorrectInAuthTokenHolder(assert, "someAuthToken");
+		assertLoginIdCorrect(assert, "someLoginId");
+		assertLoginStateSetToLoggedIn(assert);
+		assertAfterLoginMethodIsCalled(assert);
+		assertPasswordsLoginsRemoved(assert, passwordLogins);
 	});
-	loginManager.authInfoCallback(this.authInfo);
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
-	loginManager.logout();
-
-	let ajaxCallSpy = this.dependencies.ajaxCallFactory.getFactored(2);
-	let ajaxCallSpec = ajaxCallSpy.getSpec();
-	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
-		+ "rest/apptoken/141414");
-	assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
-	assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.logoutCallback);
-});
-
-QUnit.test("testLoggedoutStateIsSetOnAppTokenLogoutCallback", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-
-	loginManager.logoutCallback();
-	let stateSetInView = factoredView.getState();
-	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
-});
-
-QUnit.test("testLoggedoutSpecAfterLogoutMethodIsCalledOnAppTokenLogoutCallback", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	loginManager.logoutCallback();
-
-	assert.strictEqual(this.afterLogoutMethodWasCalled(), true);
-});
-
-QUnit.test("testAuthTokenIsRemovedOnAppTokenLogoutCallback", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.authInfoCallback(this.authInfo);
-	loginManager.logoutCallback();
-
-	let authTokenHolder = this.dependencies.authTokenHolder;
-	assert.strictEqual(authTokenHolder.getToken(1), "");
-});
-
-QUnit.test("testErrorMessage", function(assert) {
-	let loginManager = this.loginManager;
-	let errorObject = {};
-	loginManager.appTokenErrorCallback(errorObject);
-	assert.strictEqual(this.getErrorMessage(), "AppToken login failed!");
-});
-
-QUnit.test("testErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
-	let loginManager = this.loginManager;
-	let errorObject = {
-		status: 0,
-		spec: {
-			requestMethod: "DELETE"
-		}
+	const getAuthTokenAsAnswer = function(validUntil, renewUntil) {
+		let tokenAnswer = getAuthentication(validUntil, renewUntil);
+		return {
+			status: 201,
+			responseText: JSON.stringify(tokenAnswer)
+		};
 	};
-	loginManager.appTokenErrorCallback(errorObject);
-	assert.strictEqual(this.getErrorMessage(), undefined);
 
-	assertLogoutPerformed(this, assert);
-});
+	test("testLoggedinSpecAfterLoginMethodIsCalledOnAppTokenLogin", function(assert) {
+		let done = assert.async();
 
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
-QUnit.test("testPasswordTimeoutMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.passwordTimeoutCallback();
-	assert.strictEqual(this.getErrorMessage(), "Password login timedout!");
-});
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
 
-QUnit.test("testPasswordLoginFactoryIsCalledOnPasswordLogin", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.login({
-		text: "someText",
-		type: "password",
-		metadataId: "someMetadataId",
-		presentationId: "somePresentationId"
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+		window.setTimeout(assertRenewCalled, 10, assert, done);
 	});
-	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-	assert.ok(factored1);
-	assert.strictEqual(factored1.type, "passwordLoginJsClientIntegratorSpy");
-	let spec0 = this.dependencies.passwordLoginJsClientIntegratorFactory.getSpec(0);
-	assert.strictEqual(spec0.metadataId, "someMetadataId");
-	assert.strictEqual(spec0.presentationId, "somePresentationId");
-	assert.strictEqual(spec0.jsClient, this.spec.jsClient);
-	assert.strictEqual(spec0.requestMethod, "POST");
-	assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
-	assert.strictEqual(spec0.accept, "application/vnd.uub.record+json");
-	assert.strictEqual(spec0.authInfoCallback, loginManager.authInfoCallback);
-	assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);
-	assert.strictEqual(spec0.timeoutCallback, loginManager.passwordTimeoutCallback);
-});
 
-QUnit.test("testPasswordErrorMessage", function(assert) {
-	let loginManager = this.loginManager;
-	let errorObject = {};
-	loginManager.passwordErrorCallback(errorObject);
-	assert.strictEqual(this.getErrorMessage(), "Password login failed!");
-});
-
-QUnit.test("testPasswordErrorForStoppedServerOnLogoutResultsInLogout", function(assert) {
-	let loginManager = this.loginManager;
-	let errorObject = {
-		status: 0,
-		spec: {
-			requestMethod: "DELETE"
-		}
-	};
-	loginManager.passwordErrorCallback(errorObject);
-	assert.strictEqual(this.getErrorMessage(), undefined);
-
-	assertLogoutPerformed(this, assert);
-});
-
-QUnit.test("testPasswordLoginFactoryIsCalledOnlyOnceForSamePasswordLogin", function(assert) {
-	let loginManager = this.loginManager;
-	let spec = {
-		text: "someText",
-		type: "password",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId",
-		"loginUnitId": "uuSystemOneLDAPLoginUnit"
-
-	};
-	loginManager.login(spec);
-	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-	assert.ok(factored);
-
-	loginManager.login(spec);
-
-	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
-	assert.strictEqual(factored1, undefined);
-});
-
-QUnit.test("testPasswordLoginFactoryIsCalledOnceForEachDifferentPasswordLogin", function(assert) {
-	let loginManager = this.loginManager;
-	let spec = {
-		text: "someText",
-		type: "password",
-		"metadataId": "someMetadataId",
-		"presentationId": "somePresentationId",
-		"loginUnitId": "uuSystemOneLDAPLoginUnit"
-
-	};
-	loginManager.login(spec);
-	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-	assert.ok(factored);
-	spec.loginUnitId = "someOtherLDAPLoginUnit";
-	loginManager.login(spec);
-
-	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
-	assert.ok(factored1);
-});
-
-QUnit.test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
-	let loginManager = this.loginManager;
-	let spec = {
-		text: "someText",
-		type: "password",
-		metadataId: "someMetadataId",
-		presentationId: "somePresentationId",
-		loginUnitId: "uuSystemOneLDAPLoginUnit"
-
-	};
-	loginManager.login(spec);
-	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-	assert.ok(factored);
-
-	spec.loginUnitId = "someOtherLDAPLoginUnit";
-	loginManager.login(spec);
-	let factored1 = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
-	assert.ok(factored1);
-
-	loginManager.authInfoCallback(this.authInfo);
-
-	assert.strictEqual(factored.getNoOfRemovePasswordLoginFromJsClient(), 1);
-	assert.strictEqual(factored1.getNoOfRemovePasswordLoginFromJsClient(), 1);
-});
-
-QUnit.test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
-	let loginManager = this.loginManager;
-	let spec = {
-		text: "someText",
-		type: "password",
-		metadataId: "someMetadataId",
-		presentationId: "somePresentationId",
-		loginUnitId: "uuSystemOneLDAPLoginUnit"
+	const assertRenewCalled = function(assert, done) {
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 3);
+		let ajaxCallSpy = ajaxCallFactory.getFactored(2);
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, renewActionLink.url);
+		assert.strictEqual(ajaxCallSpec.requestMethod, renewActionLink.requestMethod);
+		assert.strictEqual(ajaxCallSpec.accept, renewActionLink.accept);
+		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.handleRenewAuthTokenAnswer);
+		assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.renewError);
+		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.renewTimeOut);
+		done();
 	};
 
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
-	loginManager.login(spec);
-	let factored = this.dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
-	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 0);
+	test("testRenewAuthTokenAnswerSetsNewTokenInTokenHolder", function(assert) {
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
-	loginManager.login(spec);
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
-	assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 1);
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
-	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 2);
-});
+		loginManager.handleRenewAuthTokenAnswer(answer);
 
-QUnit.test("testPasswordLoginFirstLoginRemovedOnSuccesfullLogin", function(assert) {
-	let loginManager = this.loginManager;
-	let spec = {
-		text: "someText",
-		type: "password",
-		metadataId: "someMetadataId",
-		presentationId: "somePresentationId",
-		loginUnitId: "uuSystemOneLDAPLoginUnit"
-	};
-
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
-
-	loginManager.login(spec);
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
-
-	loginManager.login(spec);
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
-
-	loginManager.authInfoCallback(this.authInfo);
-
-	loginManager.login(spec);
-	assert.strictEqual(this.dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 2);
-});
-
-QUnit.test("testCloseHolderIsCalledOnShowPassword", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.login({
-		text: "someText",
-		type: "password",
-		metadataId: "someMetadataId",
-		presentationId: "somePresentationId"
+		assertTokenCorrectInAuthTokenHolder(assert, "someAuthToken");
 	});
-	let factoredView = this.dependencies.loginManagerViewFactory.getFactored(0);
 
-	assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 1);
-});
+	test("testRenewAuthTokenAnswerSetsUpNewRenew", function(assert) {
+		let done = assert.async();
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
 
-function assertLogoutPerformed(test, assert) {
-	let factoredView = test.dependencies.loginManagerViewFactory.getFactored(0);
-	let stateSetInView = factoredView.getState();
-	assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
+		loginManager.handleRenewAuthTokenAnswer(answer);
 
-	assert.strictEqual(test.afterLogoutMethodWasCalled(), true);
+		window.setTimeout(assertRenewCallNotSentWithoutStoppingAssert, 3, assert);
+		window.setTimeout(assertRenewCalled, 10, assert, done);
+	});
 
-	let authTokenHolder = test.dependencies.authTokenHolder;
-	assert.strictEqual(authTokenHolder.getToken(0), "");
-}
-
-QUnit.test("testErrorRestartedServerOnLogoutResultsInLogout", function(assert) {
-	let loginManager = this.loginManager;
-	let errorObject = {
-		status: 404,
-		spec: {
-			requestMethod: "DELETE"
-		}
+	const createAnswerWithTimeToRenewUntilInTheFuture = function() {
+		const timeOutMarginInLoginManager = 10000;
+		let validUntil = Date.now() + timeOutMarginInLoginManager + 6;
+		return getAuthTokenAsAnswer(validUntil, Date.now() + 100000);
 	};
-	loginManager.appTokenErrorCallback(errorObject);
-	assert.strictEqual(this.getErrorMessage(), undefined);
 
-	assertLogoutPerformed(this, assert);
+
+	const assertRenewCallNotSentWithoutStoppingAssert = function(assert) {
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+	};
+
+	test("testRenewErrorMessage", function(assert) {
+		loginManager.renewError();
+		assert.strictEqual(errorMessage, "translated_theClient_renewAuthTokenErrorText");
+	});
+
+	test("testRenewTimeOutMessage", function(assert) {
+		loginManager.renewTimeOut();
+		assert.strictEqual(errorMessage, "translated_theClient_renewAuthTokenTimeoutText");
+	});
+
+	test("testRenewAuthTokenAnswerSetsUpNewRenewButCallToRenewIsOlderThanRenewUntil", function(assert) {
+		let done = assert.async();
+		let answer = createAnswerWithTimeToRenewAuthTokenAfterRenewUntilLimit();
+
+		loginManager.handleRenewAuthTokenAnswer(answer);
+
+		window.setTimeout(assertRenewNotSentAndCreateInfoMessageToForceRelogin, 10, assert, done);
+	});
+
+	const createAnswerWithTimeToRenewAuthTokenAfterRenewUntilLimit = function() {
+		const timeOutMarginInLoginManager = 10000;
+		let timeNow = Date.now();
+		let validUntilMinusTimeoutMarging = timeOutMarginInLoginManager + timeNow + 8;
+		let renewUntilInThePast = timeNow + 2;
+		return getAuthTokenAsAnswer(validUntilMinusTimeoutMarging, renewUntilInThePast);
+	};
+
+	const assertRenewNotSentAndCreateInfoMessageToForceRelogin = function(assert, done) {
+		const infoTextSkipTimeout = 0;
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+		assert.strictEqual(infoMessage.message, "translated_theClient_reauthenticationNeededText");
+		assert.strictEqual(infoMessage.timeout, infoTextSkipTimeout);
+		assertLogoutPerformed(assert);
+		done();
+	};
+
+	test("testWhenLoggoutCancelAnyOngoingRenewOfAuthToken", function(assert) {
+		let done = assert.async();
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+
+		loginManager.handleRenewAuthTokenAnswer(answer);
+		loginManager.logoutCallback();
+
+		window.setTimeout(assertRenewAuthTokenNotSent, 10, assert, done);
+	});
+
+	const assertRenewAuthTokenNotSent = function(assert, done) {
+		assert.strictEqual(ajaxCallFactory.getFactoredNoOfAjaxCalls(), 2);
+		done()
+	};
+
+
+	test("testLogoutCallIsMadeOnAppTokenLogout", function(assert) {
+		loginManager.login({
+			text: "someText",
+			type: "appTokenLogin"
+		});
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		loginManager.logout();
+
+		let ajaxCallSpy = dependencies.ajaxCallFactory.getFactored(2);
+		let ajaxCallSpec = ajaxCallSpy.getSpec();
+		assert.strictEqual(ajaxCallSpec.url, "http://localhost:38180/login/rest/authToken/someTokenId");
+		assert.strictEqual(ajaxCallSpec.requestMethod, "DELETE");
+		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.logoutCallback);
+		assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.logoutCallback);
+		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.logoutCallback);
+	});
+
+	test("testLogoutCallback", function(assert) {
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		loginManager.logoutCallback();
+
+		assertLogoutPerformed(assert);
+	});
+
+	test("testErrorMessage", function(assert) {
+		let errorObject = {};
+		loginManager.appTokenErrorCallback(errorObject);
+		assert.strictEqual(errorMessage, "translated_theClient_appTokenLoginErrorText");
+	});
+
+
+	test("testPasswordTimeoutMessage", function(assert) {
+		loginManager.passwordTimeoutCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_passwordLoginTimeoutText");
+	});
+
+	test("testPasswordLoginFactoryIsCalledOnPasswordLogin", function(assert) {
+		loginManager.login({
+			text: "someText",
+			type: "password",
+			metadataId: "someMetadataId",
+			presentationId: "somePresentationId"
+		});
+		let factored1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+		assert.ok(factored1);
+		assert.strictEqual(factored1.type, "passwordLoginJsClientIntegratorSpy");
+		let spec0 = dependencies.passwordLoginJsClientIntegratorFactory.getSpec(0);
+		assert.strictEqual(spec0.metadataId, "someMetadataId");
+		assert.strictEqual(spec0.presentationId, "somePresentationId");
+		assert.strictEqual(spec0.jsClient, spec.jsClient);
+		assert.strictEqual(spec0.requestMethod, "POST");
+		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
+		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
+		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
+		assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);
+		assert.strictEqual(spec0.timeoutCallback, loginManager.passwordTimeoutCallback);
+	});
+
+	test("testPasswordErrorMessage", function(assert) {
+		let errorObject = {};
+		loginManager.passwordErrorCallback(errorObject);
+		assert.strictEqual(errorMessage, "translated_theClient_passwordLoginErrorText");
+	});
+
+	test("testPasswordLoginFactoryIsCalledOnlyOnceForSamePasswordLogin", function(assert) {
+		let spec = {
+			text: "someText",
+			type: "password",
+			"metadataId": "someMetadataId",
+			"presentationId": "somePresentationId",
+			"loginUnitId": "uuSystemOneLDAPLoginUnit"
+
+		};
+		loginManager.login(spec);
+		let factored = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+		assert.ok(factored);
+
+		loginManager.login(spec);
+
+		let factored1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
+		assert.strictEqual(factored1, undefined);
+	});
+
+	test("testPasswordLoginFactoryIsCalledOnceForEachDifferentPasswordLogin", function(assert) {
+		let spec = {
+			text: "someText",
+			type: "password",
+			"metadataId": "someMetadataId",
+			"presentationId": "somePresentationId",
+			"loginUnitId": "uuSystemOneLDAPLoginUnit"
+
+		};
+		loginManager.login(spec);
+		let factored = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+		assert.ok(factored);
+		spec.loginUnitId = "someOtherLDAPLoginUnit";
+		loginManager.login(spec);
+
+		let factored1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
+		assert.ok(factored1);
+	});
+
+	test("testRemovePasswordLoginFromJsClientCalledOnIntegrationAfterLogin", function(assert) {
+		let passwordLogins = setUpTwoPasswordLogins();
+
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		assertPasswordsLoginsRemoved(assert, passwordLogins);
+	});
+
+	const setUpTwoPasswordLogins = function() {
+		let spec = {
+			text: "someText",
+			type: "password",
+			metadataId: "someMetadataId",
+			presentationId: "somePresentationId",
+			loginUnitId: "uuSystemOneLDAPLoginUnit"
+
+		};
+		loginManager.login(spec);
+		let passwordLogin1 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+
+		spec.loginUnitId = "someOtherLDAPLoginUnit";
+		loginManager.login(spec);
+		let passwordLogin2 = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(1);
+		return [passwordLogin1, passwordLogin2];
+	};
+
+	const assertPasswordsLoginsRemoved = function(assert, passwordLogins) {
+		assert.strictEqual(passwordLogins[0].getNoOfRemovePasswordLoginFromJsClient(), 1);
+		assert.strictEqual(passwordLogins[1].getNoOfRemovePasswordLoginFromJsClient(), 1);
+	};
+
+	test("testPasswordLoginShownInJsClientWhenSameLoginCalledAgain", function(assert) {
+		let spec = {
+			text: "someText",
+			type: "password",
+			metadataId: "someMetadataId",
+			presentationId: "somePresentationId",
+			loginUnitId: "uuSystemOneLDAPLoginUnit"
+		};
+
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
+		loginManager.login(spec);
+		let factored = dependencies.passwordLoginJsClientIntegratorFactory.getFactored(0);
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+		assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 0);
+
+		loginManager.login(spec);
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+		assert.strictEqual(factored.getNoOfShowPasswordLoginInJsClient(), 1);
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 2);
+	});
+
+	test("testPasswordLoginFirstLoginRemovedOnSuccesfullLogin", function(assert) {
+		let spec = {
+			text: "someText",
+			type: "password",
+			metadataId: "someMetadataId",
+			presentationId: "somePresentationId",
+			loginUnitId: "uuSystemOneLDAPLoginUnit"
+		};
+
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 0);
+
+		loginManager.login(spec);
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+
+		loginManager.login(spec);
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 1);
+
+		let answer = createAnswerWithTimeToRenewUntilInTheFuture();
+		loginManager.handleNewAuthTokenAnswer(answer);
+
+		loginManager.login(spec);
+		assert.strictEqual(dependencies.passwordLoginJsClientIntegratorFactory.getNoOfFactored(), 2);
+	});
+
+	test("testCloseHolderIsCalledOnShowPassword", function(assert) {
+		loginManager.login({
+			text: "someText",
+			type: "password",
+			metadataId: "someMetadataId",
+			presentationId: "somePresentationId"
+		});
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+
+		assert.strictEqual(factoredView.getNoOfCallsToCloseHolder(), 1);
+	});
+
+	function assertLogoutPerformed(assert) {
+		let factoredView = dependencies.loginManagerViewFactory.getFactored(0);
+		let stateSetInView = factoredView.getState();
+		assert.strictEqual(stateSetInView, CORA.loginManager.LOGGEDOUT);
+
+		assert.strictEqual(afterLogoutMethodCalled, true);
+
+		let authTokenHolder = dependencies.authTokenHolder;
+		assert.strictEqual(authTokenHolder.getToken(1), "");
+	}
+
+	test("testAppTokenTimeoutMessage", function(assert) {
+		loginManager.appTokenTimeoutCallback();
+		assert.strictEqual(errorMessage, "translated_theClient_appTokenLoginTimeoutText");
+	});
 });
-
-QUnit.test("testAppTokenTimeoutMessage", function(assert) {
-	let loginManager = this.loginManager;
-	loginManager.appTokenTimeoutCallback();
-	assert.strictEqual(this.getErrorMessage(), "AppToken login timedout!");
-});
-

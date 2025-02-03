@@ -70,7 +70,7 @@ QUnit.test("testIndexDataWithoutIndexLink", function(assert) {
 
     indexHandler.indexData(record);
 
-    assert.strictEqual(this.ajaxCallFactorySpy.callCount, 0);
+    assert.strictEqual(this.ajaxCallFactorySpy.getFactoredNoOfAjaxCalls(), 0);
 });
 
 QUnit.test("testHandleCallErrorDoesNothing", function(assert) {

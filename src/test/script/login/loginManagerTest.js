@@ -521,7 +521,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	});
 
 	const createAnswerWithTimeToRenewUntilInTheFuture = function() {
-		const timeOutMarginInLoginManager = 10000;
+		const timeOutMarginInLoginManager = 30000;
 		let validUntil = Date.now() + timeOutMarginInLoginManager + 6;
 		return getAuthTokenAsAnswer(validUntil, Date.now() + 100000);
 	};
@@ -551,7 +551,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 	});
 
 	const createAnswerWithTimeToRenewAuthTokenAfterRenewUntilLimit = function() {
-		const timeOutMarginInLoginManager = 10000;
+		const timeOutMarginInLoginManager = 30000;
 		let timeNow = Date.now();
 		let validUntilMinusTimeoutMarging = timeOutMarginInLoginManager + timeNow + 8;
 		let renewUntilInThePast = timeNow + 2;

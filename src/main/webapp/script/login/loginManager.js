@@ -369,7 +369,7 @@ var CORA = (function(cora) {
 		};
 
 		const getTimeToRenew = function(validUntil) {
-			const renewMargin = 10000;
+			const renewMargin = 30000;
 			let timeNow = Date.now();
 			return validUntil - timeNow - renewMargin;
 		};

@@ -1782,13 +1782,31 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		recordHandler.reloadForMetadataChanges();
 
+		let emptyPermissions = {
+			write: [],
+			read: []
+		};
 		let createGui = dependencies.recordGuiFactory.getFactored(0);
+		let createGuiSpec = dependencies.recordGuiFactory.getSpec(0);
 		let createFormId = createGui.getPresentationIdUsed(0);
 		assert.strictEqual(createFormId, "recordTypeNewPGroup");
+		assert.deepEqual(createGuiSpec.permissions, emptyPermissions);
 
+		let permissions ={
+			  "read": [
+			    "someReadVariable",
+			    "someOtherReadVariable"
+			  ],
+			  "write": [
+			    "someWriteVariable",
+			    "someOtherWriteVariable"
+			  ]
+			}
 		let updateGui = dependencies.recordGuiFactory.getFactored(1);
+		let updateGuiSpec = dependencies.recordGuiFactory.getSpec(1);
 		let updateFormId = updateGui.getPresentationIdUsed(0);
-		assert.strictEqual(updateFormId, "recordTypePGroup");
+		assert.strictEqual(updateFormId, "recordTypePGroup"); 
+		assert.deepEqual(updateGuiSpec.permissions, permissions);
 
 		let updateGuiAfterReloadForMetadataChanges = dependencies.recordGuiFactory.getFactored(2);
 		let updateFormIdAfterReloadForMetadataChanges = updateGuiAfterReloadForMetadataChanges.getPresentationIdUsed(0);

@@ -659,9 +659,8 @@ var CORA = (function(cora) {
 
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
-			let recordPartPermissionCalculator = recordGuiSpec.recordPartPermissionCalculator;
-			recordGui = createRecordGui(metadataId, data, dataDivider,
-				recordPartPermissionCalculator);
+			recordGui = createRecordGui(metadataId, data, dataDivider, recordGuiSpec.permissions);
+			
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);
 			} else {

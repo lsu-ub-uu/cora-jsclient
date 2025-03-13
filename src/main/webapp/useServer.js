@@ -25,79 +25,101 @@ const start = function() {
 		enableCSS("aClientCSS");
 		useSysteOnePreview();
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
+	
 	} else if (hrefContains(href, "cora.alvin-portal.org")) {
 		enableCSS("alvinCSS");
 		useAlvinPre();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, []);
+	
 	} else if (hrefContains(href, "mig.alvin-portal.org")) {
 		enableCSS("alvinCSS");
 		useAlvinMigration();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
+	
 	} else if (hrefContains(href, "pre.diva-portal.org")) {
 		enableCSS("divaLilaCSS");
 		useDivaPre();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['divaAdmin']);
+	
+	} else if (hrefContains(href, "mig.diva-portal.org")) {
+		enableCSS("divaLilaCSS");
+		useDivaMigration();
+		enableIcon("diva");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+	
 	} else if (hrefContains(href, "alvin")) {
 		enableCSS("alvinCSS");
 		useAlvinPreview();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin', 'alvinUser']);
+	
 	} else if (hrefContains(href, "20240226/diva")) {
 		enableCSS("divaLilaCSS");
 		useDiva20240226();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
+	
 	} else if (hrefContains(href, "diva")) {
 		enableCSS("divaLilaCSS");
 		useDivaPreview();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
 			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+	
 	} else if (hrefContains(href, "localhost:38080")) {
 		useLocalhostWithPort("38080", "38180", "SystemOne utveckling", "systemone");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
+	
 	} else if (hrefContains(href, "localhost:38081")) {
 		enableCSS("alvinCSS");
 		useLocalhostWithPort("38081", "38181", "ALVIN utveckling", "alvin");
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin', 'alvinUser']);
+	
 	} else if (hrefContains(href, "localhost:38082")) {
 		enableCSS("divaLilaCSS");
 		useLocalhostWithPort("38082", "38182", "DiVA utveckling", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
 			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+	
 	} else if (hrefContains(href, "116:38080")) {
 		useDevWithPort("38080", "38180", "SystemOne metadata (dev dator)", "systemone");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
+	
 	} else if (hrefContains(href, "116:38081")) {
 		enableCSS("alvinCSS");
 		useDevWithPort("38081", "38181", "ALVIN metadata (dev dator)", "alvin");
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
+	
 	} else if (hrefContains(href, "116:38082")) {
 		enableCSS("divaLilaCSS");
 		useDevWithPort("38082", "38182", "DiVA metadata (dev dator)", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
+	
 	} else if (hrefContains(href, "238:38080")) {
 		useDevExternallyWithPort("38080", "38180", "SystemOne metadata (dev dator)", "systemone");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
+	
 	} else if (hrefContains(href, "238:38081")) {
 		enableCSS("alvinCSS");
 		useDevExternallyWithPort("38081", "38181", "ALVIN metadata (dev dator)", "alvin");
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
+	
 	} else if (hrefContains(href, "238:38082")) {
 		enableCSS("divaLilaCSS");
 		useDevExternallyWithPort("38082", "38182", "DiVA metadata (dev dator)", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
-	}
-	else {
+	
+	} else {
 		askForServerToUse();
 	}
 };
@@ -290,6 +312,13 @@ const useAlvinPreview = function() {
 	name = "ALVIN preview";
 	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
 	appTokenBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+	startDependencies();
+};
+
+const useDivaMigration = function() {
+	name = "DiVA migration";
+	baseUrl = "https://mig.diva-portal.org/rest/";
+	appTokenBaseUrl = "https://mig.diva-portal.org/";
 	startDependencies();
 };
 

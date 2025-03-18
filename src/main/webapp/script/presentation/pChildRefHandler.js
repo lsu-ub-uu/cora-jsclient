@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2020, 2023 Uppsala University Library
- * Copyright 2016, 2017, 2018 Olov McKie
+ * Copyright 2016, 2017, 2018, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -40,7 +40,7 @@ var CORA = (function(cora) {
 		let metadataId;
 		let cMetadataElement;
 
-		let text;
+		let addButtonText;
 
 		let repeatMin;
 		let repeatMax;
@@ -107,7 +107,7 @@ var CORA = (function(cora) {
 			metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			cMetadataElement = getMetadataById(metadataId);
 
-			text = getTextForAddButton(cMetadataElement);
+			addButtonText = getTextForAddButton(cMetadataElement);
 
 			repeatMin = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMin");
 			repeatMax = cParentMetadataChildRefPart.getFirstAtomicValueByNameInData("repeatMax");
@@ -197,7 +197,7 @@ var CORA = (function(cora) {
 			let pChildRefHandlerViewSpec = {
 				presentationId: presentationId,
 				isRepeating: isRepeating,
-				addText: "+ " + text,
+				addText: "+ " + addButtonText,
 				mode: spec.mode
 			};
 			if (spec.textStyle !== undefined) {
@@ -209,7 +209,6 @@ var CORA = (function(cora) {
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
-				//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -377,6 +376,9 @@ var CORA = (function(cora) {
 				userCanMove: userCanMove,
 				userCanAddBefore: userCanAddBefore
 			};
+			if (spec.titleText !== undefined) {
+				repeatingElementSpec.titleText = textProvider.getTranslation(spec.titleText);;
+			}
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
 

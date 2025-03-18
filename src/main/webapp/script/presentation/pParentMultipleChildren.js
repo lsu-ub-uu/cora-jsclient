@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2023 Olov McKie
+ * Copyright 2016, 2017, 2023, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -374,12 +374,6 @@ var CORA = (function(cora) {
 			return cChildRef.getNoOfChildrenWithNameInData("refGroup") === 2;
 		};
 
-		const possiblyAddAddTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
-			if (cPresentationChildRef.containsChildWithNameInData("addText")) {
-				let addText = cPresentationChildRef.getLinkedRecordIdFromFirstChildLinkWithNameInData("addText");
-				childRefHandlerSpec.addText = addText;
-			}
-		};
 
 		const createPChildRefHandler = function(cPresentationChild, cPresentationChildRef,
 			hasWritePermission) {
@@ -397,9 +391,23 @@ var CORA = (function(cora) {
 			childRefHandlerSpec.hasWritePermissionsForRecordPart = hasWritePermission;
 			childRefHandlerSpec.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 			possiblyAddAddTextToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddTitleTextToSpec(cPresentationChildRef, childRefHandlerSpec);
 
 			possiblyAddRepatingToShow(childRefHandlerSpec, cPresentationChildRef);
 			return childRefHandlerSpec;
+		};
+		const possiblyAddAddTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
+			if (cPresentationChildRef.containsChildWithNameInData("addText")) {
+				let addText = cPresentationChildRef.getLinkedRecordIdFromFirstChildLinkWithNameInData("addText");
+				childRefHandlerSpec.addText = addText;
+			}
+		};
+		
+		const possiblyAddTitleTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
+			if (cPresentationChildRef.containsChildWithNameInData("title")) {
+				let title = cPresentationChildRef.getLinkedRecordIdFromFirstChildLinkWithNameInData("title");
+				childRefHandlerSpec.titleText = title;
+			}
 		};
 
 		const possiblyAddRepatingToShow = function(childRefHandlerSpec, cPresentationChildRef) {

@@ -41,6 +41,8 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
+			//TODO: if spec.titleText exist add title (clickabel) 
+			
 			let newClassName = "pChildRefHandler";
 			if (spec.textStyle !== undefined) {
 				newClassName += " " + spec.textStyle;
@@ -61,9 +63,7 @@ var CORA = (function(cora) {
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
-//				buttonViewNew.appendChild(createAddButton());
 				buttonViewNew.appendChild(createBrowseButton());
-
 			}
 			buttonView = buttonViewNew;
 			view.appendChild(buttonView);

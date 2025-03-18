@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2017, 2018, 2020 Uppsala University Library
- * Copyright 2016, 2017, 2018, 2023 Olov McKie
+ * Copyright 2016, 2017, 2018, 2023, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -48,6 +48,7 @@ var CORA = (function(cora) {
 
 		const createBaseView = function() {
 			let repeatingElement = CORA.gui.createSpanWithClassName("repeatingElement");
+			//TODO: if spec.titleText 
 			if (userCanMove) {
 				repeatingElement.ondragenter = ondragenterHandler;
 			}

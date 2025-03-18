@@ -6875,7 +6875,19 @@ var CORATEST = (function(coraTest) {
 											value: "someTextIdForAddText"
 										}
 									]
-								}]
+								}								, {
+																	name: "title",
+																	children: [
+																		{
+																			name: "linkedRecordType",
+																			value: "coraText"
+																		},
+																		{
+																			name: "linkedRecordId",
+																			value: "someTextIdForTitleText"
+																		}
+																	]
+																}]
 							}, {
 								name: "childReference",
 								repeatId: "2",

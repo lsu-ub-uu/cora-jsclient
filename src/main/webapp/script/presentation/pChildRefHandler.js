@@ -601,26 +601,25 @@ var CORA = (function(cora) {
 						children: [{
 							name: "linkedRecordType",
 							value: "system"
-						}, {
+							}, {
 							name: "linkedRecordId",
 							value: dataDividerLinkedRecordId
-						}]
-					}, {
+							}]
+						}, {
 						name: "validationType",
 						children: [{
 							name: "linkedRecordType",
 							value: "validationType"
-						}, {
+							}, {
 							name: "linkedRecordId",
 							value: "genericBinary"
-						}]
-					}]
-				}, {
-					name: "adminInfo",
-					children: [{
-						name: "visibility",
-						value: "unpublished"
-					}]
+							}]
+						},
+						{
+							name: "visibility",
+							value: "unpublished"
+						}
+					]
 				}, {
 					name: "originalFileName",
 					value: file.name

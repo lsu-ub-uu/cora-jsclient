@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2018 Uppsala University Library
+ * Copyright 2016, 2017, 2018, 2025 Uppsala University Library
  * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -20,7 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.managedGuiItem = function(dependencies, spec) {
-		const maxNumberIndicators = 9;
+		const maxNumberIndicators = 16;
 
 		let out;
 		let active = false;

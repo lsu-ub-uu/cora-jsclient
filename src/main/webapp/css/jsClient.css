@@ -369,34 +369,49 @@ h1, .h1TextStyle {
 }
 
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName1 {
-    box-shadow: 0px 0px black inset, .5rem 0 #3498db inset;
-}
-.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName2 {
-    box-shadow: 0px 0px black inset, .5rem 0 #2ecc71 inset;
-}
-
-.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName3 {
     box-shadow: 0px 0px black inset, .5rem 0 #e74c3c inset;
 }
-
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName2 {
+    box-shadow: 0px 0px black inset, .5rem 0 #c0392b inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName3 {
+    box-shadow: 0px 0px black inset, .5rem 0 #FF7F50 inset;
+}
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName4 {
+    box-shadow: 0px 0px black inset, .5rem 0 #F0AD4E inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName5 {
     box-shadow: 0px 0px black inset, .5rem 0 #f39c12 inset;
 }
-
-.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName5 {
-    box-shadow: 0px 0px black inset, .5rem 0 #9b59b6 inset;
-}
-
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName6 {
+    box-shadow: 0px 0px black inset, .5rem 0 #FFD700 inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName7 {
     box-shadow: 0px 0px black inset, .5rem 0 #f8e45c inset;
 }
-
-.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName7 {
-    box-shadow: 0px 0px black inset, .5rem 0 #27ae60 inset;
-}
-
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName8 {
-    box-shadow: 0px 0px black inset, .5rem 0 #c0392b inset;
+    box-shadow: 0px 0px black inset, .5rem 0 #A1D99B inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName9 {
+    box-shadow: 0px 0px black inset, .5rem 0 #5CB85C inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName10 {
+    box-shadow: 0px 0px black inset, .5rem 0 #2ecc71 inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName11 {
+    box-shadow: 0px 0px black inset, .5rem 0 #20B2AA inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName12 {
+    box-shadow: 0px 0px black inset, .5rem 0 #5BC0DE inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName13 {
+    box-shadow: 0px 0px black inset, .5rem 0 #0275D8 inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName14 {
+    box-shadow: 0px 0px black inset, .5rem 0 #9370DB inset;
+}
+.jsClient .sideBar .openGuiItemHandlerView .indicatorClassName15 {
+    box-shadow: 0px 0px black inset, .5rem 0 #9b59b6 inset;
 }
 
 .openGuiItemHandlerView .menuView, .recordTypesView .recordType  span,

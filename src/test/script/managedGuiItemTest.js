@@ -312,7 +312,7 @@ QUnit.test("testToggleNextColor", function(assert) {
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName8"
+		indicatorClassName : "indicatorClassName15"
 	});
 	
 	managedGuiItem.togglePreviousIndicator();
@@ -323,9 +323,16 @@ QUnit.test("testToggleNextColor", function(assert) {
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName4"
+		indicatorClassName : "indicatorClassName11"
 	});
 	
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
@@ -347,7 +354,7 @@ QUnit.test("testToggleNextColor", function(assert) {
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName8"
+		indicatorClassName : "indicatorClassName9"
 	});
 	
 	managedGuiItem.toggleNextIndicator();

@@ -20,7 +20,7 @@
 var CORATEST = (function (coraTest) {
     "use strict";
     coraTest.recordTypeProviderStub = function () {
-        let recordTypeArray = [];
+        let recordTypeArray = {};
 
         // switch (metadataId) {
         recordTypeArray["presentationVar"] = {
@@ -2029,7 +2029,7 @@ var CORATEST = (function (coraTest) {
                     ]
                 },{
                     "name": "groupOfRecordType",
-                    "value": "metadata",
+                    "value": "test",
                     "repeatId": "1"
                 }],
                 "name": "recordType"
@@ -2061,12 +2061,12 @@ var CORATEST = (function (coraTest) {
                     "url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
                     "accept": "application/vnd.uub.record+json"
                 },
-                "list": {
-                    "requestMethod": "GET",
-                    "rel": "list",
-                    "url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
-                    "accept": "application/vnd.uub.recordList+json"
-                },
+//                "list": {
+//                    "requestMethod": "GET",
+//                    "rel": "list",
+//                    "url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
+//                    "accept": "application/vnd.uub.recordList+json"
+//                },
                 "delete": {
                     "requestMethod": "DELETE",
                     "rel": "delete",
@@ -2717,7 +2717,7 @@ var CORATEST = (function (coraTest) {
                         "value": "false"
                     },{
                         "name": "groupOfRecordType",
-                        "value": "system",
+                        "value": "test",
                         "repeatId": "1"
                     }
                 ],
@@ -2806,6 +2806,11 @@ var CORATEST = (function (coraTest) {
         		//one child but no list link in that child
         		listToReturn.push(recordTypeArray["textSystemOne"]);
         	}
+        	else if("test" === groupId){
+        		//one child but no list link in that child
+        		listToReturn.push(recordTypeArray["metadataItemCollection"]);
+        	}
+			
         	//else empty list = no children
         	return listToReturn;
         }

@@ -115,27 +115,27 @@ QUnit.test("initViewWithoutCreateButton", function(assert) {
 	assert.strictEqual(factoredViewSpec.createNewMethod, undefined);
 });
 
-QUnit.test("testHasAnyAction", function(assert) {
+QUnit.test("testHasCreateOrListAction", function(assert) {
 	let recordTypeHandler = CORA.recordTypeHandler(this.dependencies, this.spec);
-	assert.strictEqual(recordTypeHandler.hasAnyAction(), true);
+	assert.strictEqual(recordTypeHandler.hasCreateOrListAction(), true);
 });
 
-QUnit.test("testHasAnyActionWithoutListMethod", function(assert) {
+QUnit.test("testHasCreateOrListActionWithoutListMethod", function(assert) {
 	this.spec.recordTypeRecord = this.recordWithoutListLink;
 	let recordTypeHandler = CORA.recordTypeHandler(this.dependencies, this.spec);
-	assert.strictEqual(recordTypeHandler.hasAnyAction(), true);
+	assert.strictEqual(recordTypeHandler.hasCreateOrListAction(), true);
 });
 
-QUnit.test("testHasAnyActionWithoutCreateLink", function(assert) {
+QUnit.test("testHasCreateOrListActionWithoutCreateLink", function(assert) {
 	this.spec.recordTypeRecord = this.recordWithoutCreateLink;
 	let recordTypeHandler = CORA.recordTypeHandler(this.dependencies, this.spec);
-	assert.strictEqual(recordTypeHandler.hasAnyAction(), true);
+	assert.strictEqual(recordTypeHandler.hasCreateOrListAction(), true);
 });
 
-QUnit.test("testHasAnyActionWithoutListAndCreateLink", function(assert) {
+QUnit.test("testHasCreateOrListActionWithoutListAndCreateLink", function(assert) {
 	this.spec.recordTypeRecord = this.recordWithoutListAndCreateLink;
 	let recordTypeHandler = CORA.recordTypeHandler(this.dependencies, this.spec);
-	assert.strictEqual(recordTypeHandler.hasAnyAction(), false);
+	assert.strictEqual(recordTypeHandler.hasCreateOrListAction(), false);
 });
 
 QUnit.test("fetchListCheckSpec", function(assert) {

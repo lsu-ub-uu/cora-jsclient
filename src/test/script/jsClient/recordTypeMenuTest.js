@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2020 Uppsala University Library
+ * Copyright 2018, 2020, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,101 +18,108 @@
  */
 "use strict";
 
-QUnit.module("jsClient/recordTypeMenuTest.js", {
-	beforeEach : function() {
-		var providers = {
-			"metadataProvider" : CORATEST.metadataProviderRealStub(),
-			"textProvider" : CORATEST.textProviderSpy(),
-			"recordTypeProvider" : CORATEST.recordTypeProviderStub()
+QUnit.module.only("jsClient/recordTypeMenuTest.js", hooks => {
+	const test = QUnit.test;
+	let providers;
+	let dependencies;
+	let spec;
+	let menu;
+	let dummyJsClient;
+	let recordTypeGroups;
+	
+	hooks.beforeEach(() => {
+		providers = {
+			metadataProvider: CORATEST.metadataProviderRealStub(),
+			textProvider: CORATEST.textProviderSpy(),
+			recordTypeProvider: CORATEST.recordTypeProviderStub()
 		};
-		this.providers = providers;
 
-		this.dependencies = {
-			recordTypeHandlerFactory : CORATEST.standardFactorySpy("recordTypeHandlerSpy")
+		dependencies = {
+			recordTypeHandlerFactory: CORATEST.standardFactorySpy("recordTypeHandlerSpy")
 		};
-		this.spec = {};
-		this.dummyJsClient = {};
+		spec = {};
+		dummyJsClient = {};
 
-		this.menu = CORA.recordTypeMenu(this.providers, this.dependencies, this.spec);
-		this.recordTypeGroups = this.menu.getRecordTypeGroups(this.dummyJsClient);
+		menu = CORA.recordTypeMenu(providers, dependencies, spec);
+		recordTypeGroups = menu.getRecordTypeGroups(dummyJsClient);
+	});
 
-	},
-	afterEach : function() {
-	}
-});
+	hooks.afterEach(() => {
+	});
 
-QUnit.test("init", function(assert) {
-	assert.strictEqual(this.menu.type, "recordTypeMenu");
-});
+	test("init", function(assert) {
+		assert.strictEqual(menu.type, "recordTypeMenu");
+	});
 
-QUnit.test("testGetProviders", function(assert) {
-	assert.strictEqual(this.menu.getProviders(), this.providers);
-});
+	test("testGetProviders", function(assert) {
+		assert.strictEqual(menu.getProviders(), providers);
+	});
 
-QUnit.test("testGetDependencies", function(assert) {
-	assert.strictEqual(this.menu.getDependencies(), this.dependencies);
-});
+	test("testGetDependencies", function(assert) {
+		assert.strictEqual(menu.getDependencies(), dependencies);
+	});
 
-QUnit.test("testGetSpec", function(assert) {
-	var menu = CORA.recordTypeMenu(this.providers, this.dependencies, this.spec);
-	assert.strictEqual(menu.getSpec(), this.spec);
-});
+	test("testGetSpec", function(assert) {
+		let menu = CORA.recordTypeMenu(providers, dependencies, spec);
+		assert.strictEqual(menu.getSpec(), spec);
+	});
 
-QUnit.test("testGetRecordTypeGroupsLength", function(assert) {
-	assert.strictEqual(this.recordTypeGroups.length, 2);
-});
+	test("testGetRecordTypeGroupsLength", function(assert) {
+		assert.strictEqual(recordTypeGroups.length, 3);
+	});
 
-QUnit.test("testGetRecordTypeGroupsContainsExpectedHtmlFirstGroup", function(assert) {
-	var recordTypeGroup = this.recordTypeGroups[0];
-	var headline0 = recordTypeGroup.childNodes[0];
+	test("testGetRecordTypeGroupsContainsExpectedHtmlFirstGroup", function(assert) {
+		let recordTypeGroup = recordTypeGroups[0];
+		let headline0 = recordTypeGroup.childNodes[0];
 
-	var translatedHeadline = this.providers.textProvider.getTranslation("typeOfResourceItemText");
+		let translatedHeadline = providers.textProvider.getTranslation("typeOfResourceItemText");
 
-	assert.strictEqual(headline0.nodeName, "SPAN");
-	assert.strictEqual(headline0.className, "recordTypeGroupHeadline");
-	assert.strictEqual(headline0.innerHTML, translatedHeadline);
-	assert.strictEqual(recordTypeGroup.childNodes.length, 3);
-});
+		assert.strictEqual(headline0.nodeName, "SPAN");
+		assert.strictEqual(headline0.className, "recordTypeGroupHeadline");
+		assert.strictEqual(headline0.innerHTML, translatedHeadline);
+		assert.strictEqual(recordTypeGroup.childNodes.length, 3);
+	});
 
-QUnit.test("testGetRecordTypeGroupsContainsExpectedHtmlSecondGroup", function(assert) {
-	var recordTypeGroup = this.recordTypeGroups[1];
-	var headline0 = recordTypeGroup.childNodes[0];
+	test("testGetRecordTypeGroupsContainsExpectedHtmlSecondGroup", function(assert) {
+		let recordTypeGroup = recordTypeGroups[1];
+		let headline0 = recordTypeGroup.childNodes[0];
 
-	var translatedHeadline = this.providers.textProvider.getTranslation("authorityItemText");
+		let translatedHeadline = providers.textProvider.getTranslation("authorityItemText");
 
-	assert.strictEqual(headline0.nodeName, "SPAN");
-	assert.strictEqual(headline0.className, "recordTypeGroupHeadline");
-	assert.strictEqual(headline0.innerHTML, translatedHeadline);
-	assert.strictEqual(recordTypeGroup.childNodes.length, 3);
-});
+		assert.strictEqual(headline0.nodeName, "SPAN");
+		assert.strictEqual(headline0.className, "recordTypeGroupHeadline");
+		assert.strictEqual(headline0.innerHTML, translatedHeadline);
+		assert.strictEqual(recordTypeGroup.childNodes.length, 3);
+	});
 
-QUnit.test("testGetRecordTypeGroupsContainsNoHeadlineForGroupWhenNoChildren", function(assert) {
-	var recordTypeGroup = this.recordTypeGroups[2];
-	assert.strictEqual(recordTypeGroup, undefined);
-});
+	test("testGetRecordTypeGroupsContainsNoHeadlineForGroupWhenNoChildren", function(assert) {
+		let recordTypeGroup = recordTypeGroups[3];
+		assert.strictEqual(recordTypeGroup, undefined);
+	});
 
-QUnit.test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandler", function(assert) {
-	var rthf = this.dependencies.recordTypeHandlerFactory;
+	test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandler", function(assert) {
+		let rthf = dependencies.recordTypeHandlerFactory;
 
-	var recordTypeGroupChildren1 = this.recordTypeGroups[0].childNodes;
-	assert.strictEqual(recordTypeGroupChildren1[1], rthf.getFactored(0).getView());
-	assert.strictEqual(recordTypeGroupChildren1[2], rthf.getFactored(1).getView());
+		let recordTypeGroupChildren1 = recordTypeGroups[0].childNodes;
+		assert.strictEqual(recordTypeGroupChildren1[1], rthf.getFactored(0).getView());
+		assert.strictEqual(recordTypeGroupChildren1[2], rthf.getFactored(1).getView());
 
-	var recordTypeGroupChildren2 = this.recordTypeGroups[1].childNodes;
-	assert.strictEqual(recordTypeGroupChildren2[1], rthf.getFactored(2).getView());
-	assert.strictEqual(recordTypeGroupChildren2[2], rthf.getFactored(3).getView());
-});
+		let recordTypeGroupChildren2 = recordTypeGroups[1].childNodes;
+		assert.strictEqual(recordTypeGroupChildren2[1], rthf.getFactored(2).getView());
+		assert.strictEqual(recordTypeGroupChildren2[2], rthf.getFactored(3).getView());
+	});
 
-QUnit.test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandlerNoAction", function(assert) {
-	var spySpec = {
-		"returnFalseForAnyAction" : true
-	};
-	this.dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
+	test("testGetRecordTypeGroupsChildrenAreViewFromRecordTypeHandlerNoAction", function(assert) {
+		let spySpec = {
+			"returnFalseForAnyAction": true
+		};
+		dependencies.recordTypeHandlerFactory.setSpySpec(spySpec);
 
-	this.menu = CORA.recordTypeMenu(this.providers, this.dependencies, this.spec);
-	this.recordTypeGroups = this.menu.getRecordTypeGroups(this.dummyJsClient);
+		menu = CORA.recordTypeMenu(providers, dependencies, spec);
+		recordTypeGroups = menu.getRecordTypeGroups(dummyJsClient);
 
-	assert.strictEqual(this.recordTypeGroups.length, 2);
-	assert.strictEqual(this.recordTypeGroups[0].childNodes.length, 1);
-	assert.strictEqual(this.recordTypeGroups[1].childNodes.length, 1);
+		assert.strictEqual(recordTypeGroups.length, 3);
+		assert.strictEqual(recordTypeGroups[0].childNodes.length, 1);
+		assert.strictEqual(recordTypeGroups[1].childNodes.length, 1);
+	});
 });

@@ -31,7 +31,7 @@ var CORATEST = (function(coraTest) {
 		}
 		
 		
-		function hasAnyAction(){
+		function hasCreateOrListAction(){
 			if(spySpec.returnFalseForAnyAction){
 				return false;
 			}
@@ -39,10 +39,10 @@ var CORATEST = (function(coraTest) {
 		}
 		
 		return Object.freeze({
-			"type" : "recordTypeHandlerSpy",
+			type : "recordTypeHandlerSpy",
 			getView : getView,
 			getGetViewCalled : getGetViewCalled,
-			hasAnyAction : hasAnyAction
+			hasCreateOrListAction : hasCreateOrListAction
 		});
 	};
 	return coraTest;

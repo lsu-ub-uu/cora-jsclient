@@ -126,6 +126,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 
 	};
+	
 	const setupSpecForNewList = function() {
 		specForNewList = {
 			fetchLatestDataFromServer: "false",
@@ -136,6 +137,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			jsClient: CORATEST.jsClientSpy()
 		};
 	};
+	
 	const setupSpecForListWithSearchResultPresentationId = function() {
 		specForListWithSearchResultPresentationId = {
 			fetchLatestDataFromServer: "false",
@@ -159,6 +161,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
+	
 	const answerCallWithoutUpdateOrDeleteLink = function(no) {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({

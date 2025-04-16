@@ -118,7 +118,7 @@ var CORA = (function(cora) {
 			return spec;
 		}
 
-		const hasAnyAction = function() {
+		const hasCreateOrListAction = function() {
 			return recordTypeHasListLink() || recordTypeHasCreateLink();
 		};
 
@@ -130,7 +130,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			createRecordTypeList: createRecordTypeList,
 			createRecordHandler: createRecordHandler,
-			hasAnyAction: hasAnyAction
+			hasCreateOrListAction: hasCreateOrListAction
 		});
 	};
 	return cora;

@@ -183,7 +183,7 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 			"rel": "read",
 			"url": "http://localhost:8080/therest/rest/record/text/" + "groupIdOneTextChildRepeat1to3"
 			 + "Text",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -211,7 +211,7 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 			"rel": "read",
 			"url": "http://localhost:8080/therest/rest/record/text/" + "groupIdOneTextChildRepeat1to3"
 				+ "DefText",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -238,7 +238,7 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 			"requestMethod": "GET",
 			"rel": "read",
 			"url": "http://fake.from.metadataproviderstub/rest/record/sometype/groupIdOneTextChildRepeat1to3",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -267,7 +267,7 @@ QUnit.test("testOpenPresentationIdRecord", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pgGroupIdOneTextChildMinimized",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		},
 		loadInBackground: "false"
 	};
@@ -290,7 +290,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pgGroupIdOneTextChildMinimized",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		};
 	event.ctrlKey = true;
 	pParentMultipleChildren.openLinkedRecordForLink(event, link);
@@ -302,7 +302,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pgGroupIdOneTextChildMinimized",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		},
 		loadInBackground: "false"
 	};

@@ -27,7 +27,7 @@ var CORATEST = (function(coraTest) {
 					"requestMethod": "GET",
 					"rel": "read",
 					"url": "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					"accept": "application/vnd.uub.record+json"
+					"accept": "application/vnd.cora.record+json"
 				}
 			}
 		};

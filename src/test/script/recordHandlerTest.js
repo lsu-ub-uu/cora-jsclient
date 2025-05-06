@@ -421,7 +421,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url,
 			"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
 		assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.processFetchedRecord);
 
 
@@ -558,8 +558,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url,
 			"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.record+json");
 		assert.strictEqual(ajaxCallSpec.data, "{}");
 		assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.resetViewsAndProcessFetchedRecord);
 
@@ -584,8 +584,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url,
 			"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.record+json");
 		assert.strictEqual(ajaxCallSpec.data, "{}");
 		assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.resetViewsAndProcessFetchedRecord);
 	});
@@ -1440,7 +1440,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url,
 			"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
 
 		let factoredRecordGuiSpec0 = dependencies.recordGuiFactory.getSpec(0);
 		assert.strictEqual(recordHandlerViewSpy.getClearViewsWasCalled(), false);
@@ -1581,8 +1581,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/recordType/");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.record+json");
 		assert.strictEqual(ajaxCallSpec.data, "{}");
 		assert.strictEqual(ajaxCallSpec.loadMethod, recordHandler.resetViewsAndProcessFetchedRecord);
 		answerCall(0);
@@ -1630,7 +1630,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url,
 			"https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
 
 		assert.strictEqual(busy.getHideWithEffectCalledNoOfTimes(), 1);
 

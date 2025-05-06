@@ -82,7 +82,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 			requestMethod: "GET",
 			rel: "read",
 			url: "https://cora.epc.ub.uu.se/systemone/rest/record/someRecordType/minimalGroupId",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		};
 		actionLinksWithIncomingLinks = {
 			actionLinks: {
@@ -91,7 +91,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 					requestMethod: "GET",
 					rel: "read_incoming_links",
 					url: "http://some/incomingLinks",
-					accept: "application/vnd.uub.recordList+json"
+					accept: "application/vnd.cora.recordList+json"
 				}
 			}
 		};
@@ -386,7 +386,7 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, "http://some/incomingLinks");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 		assert.strictEqual(ajaxCallSpec.contentType, undefined);
 		assert.strictEqual(ajaxCallSpec.data, undefined);
 		assert.deepEqual(ajaxCallSpec.modelPart, expectedModelPart);

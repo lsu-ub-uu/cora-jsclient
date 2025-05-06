@@ -30,8 +30,8 @@ QUnit.module("net/ajaxCallFactoryTest.js", {
 		this.spec = {
 			"requestMethod" : "GET",
 			"url" : "http://localhost:8080/therest/rest/record/recordType",
-			"contentType" : "application/vnd.uub.record+json",
-			"accept" : "application/vnd.uub.record+json",
+			"contentType" : "application/vnd.cora.record+json",
+			"accept" : "application/vnd.cora.record+json",
 			"loadMethod" : minimalDummyFunction,
 			"errorMethod" : minimalDummyFunction,
 			"timeoutMethod" : minimalDummyFunction,
@@ -63,8 +63,8 @@ QUnit.test("factor", function(assert) {
 	assert.strictEqual(ajaxCall.type, "ajaxCall");
 
 	var ajaxCallSpec = ajaxCall.spec;
-	assert.strictEqual(ajaxCallSpec.requestHeaders["Content-Type"], "application/vnd.uub.record+json");
-	assert.strictEqual(ajaxCallSpec.requestHeaders["Accept"], "application/vnd.uub.record+json");
+	assert.strictEqual(ajaxCallSpec.requestHeaders["Content-Type"], "application/vnd.cora.record+json");
+	assert.strictEqual(ajaxCallSpec.requestHeaders["Accept"], "application/vnd.cora.record+json");
 	var xmlHttpRequestFactory = this.dependencies.xmlHttpRequestFactory;
 	assert.strictEqual(ajaxCallSpec.xmlHttpRequestFactory, xmlHttpRequestFactory);
 });
@@ -86,7 +86,7 @@ QUnit.test("noAccept", function(assert) {
 	this.spec.accept = undefined;
 	var ajaxCall = this.ajaxCallFactory.factor(this.spec);
 	var ajaxCallSpec = ajaxCall.spec;
-	assert.strictEqual(ajaxCallSpec.requestHeaders["Content-Type"], "application/vnd.uub.record+json");
+	assert.strictEqual(ajaxCallSpec.requestHeaders["Content-Type"], "application/vnd.cora.record+json");
 	assert.strictEqual(ajaxCallSpec.requestHeaders["Accept"], undefined);
 });
 QUnit.test("noContentType", function(assert) {
@@ -94,5 +94,5 @@ QUnit.test("noContentType", function(assert) {
 	var ajaxCall = this.ajaxCallFactory.factor(this.spec);
 	var ajaxCallSpec = ajaxCall.spec;
 	assert.strictEqual(ajaxCallSpec.requestHeaders["Content-Type"], undefined);
-	assert.strictEqual(ajaxCallSpec.requestHeaders["Accept"], "application/vnd.uub.record+json");
+	assert.strictEqual(ajaxCallSpec.requestHeaders["Accept"], "application/vnd.cora.record+json");
 });

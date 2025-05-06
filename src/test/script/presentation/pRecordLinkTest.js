@@ -101,7 +101,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 						requestMethod: "GET",
 						rel: "read",
 						url: "http://localhost:8080/therest/rest/record/system/cora",
-						accept: "application/vnd.uub.record+json"
+						accept: "application/vnd.cora.record+json"
 					}
 				},
 				name: "dataDivider"
@@ -123,7 +123,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 						requestMethod: "GET",
 						rel: "read",
 						url: "http://localhost:8080/therest/rest/record/system/cora",
-						accept: "application/vnd.uub.record+json"
+						accept: "application/vnd.cora.record+json"
 					}
 				},
 				name: "dataDivider"
@@ -558,7 +558,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				requestMethod: "GET",
 				rel: "search",
 				url: "http://epc.ub.uu.se/therest/rest/record/searchResult/textSearch",
-				accept: "application/vnd.uub.recordList+json"
+				accept: "application/vnd.cora.recordList+json"
 			},
 			triggerWhenResultIsChoosen: pRecordLink.setResultFromSearch
 		};
@@ -583,7 +583,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				requestMethod: "GET",
 				rel: "search",
 				url: "http://epc.ub.uu.se/therest/rest/record/searchResult/textSearch",
-				accept: "application/vnd.uub.recordList+json"
+				accept: "application/vnd.cora.recordList+json"
 			},
 			triggerWhenResultIsChoosen: pRecordLink.setResultFromSearch
 		};
@@ -963,7 +963,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 							requestMethod: "GET",
 							rel: "read",
 							url: "http://localhost:8080/therest/rest/record/system/cora",
-							accept: "application/vnd.uub.record+json"
+							accept: "application/vnd.cora.record+json"
 						}
 					},
 					name: "dataDivider"
@@ -1173,7 +1173,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				requestMethod: "GET",
 				rel: "read",
 				url: "http://localhost:8080/therest/rest/record/text/" + "myLink" + "Text",
-				accept: "application/vnd.uub.record+json"
+				accept: "application/vnd.cora.record+json"
 			},
 			loadInBackground: "false"
 		};
@@ -1200,7 +1200,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				rel: "read",
 				url: "http://localhost:8080/therest/rest/record/text/" + "myLink"
 					+ "DefText",
-				accept: "application/vnd.uub.record+json"
+				accept: "application/vnd.cora.record+json"
 			},
 			loadInBackground: "false"
 		};
@@ -1227,7 +1227,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				rel: "read",
 				url: "http://localhost:8080/therest/rest/record/" + "metadata/"
 					+ "myLink",
-				accept: "application/vnd.uub.record+json"
+				accept: "application/vnd.cora.record+json"
 			},
 			loadInBackground: "false"
 		};
@@ -1254,7 +1254,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 				rel: "read",
 				url: "http://fake.from.metadataproviderstub/rest/record/sometype/"
 					+ "myLinkNoPresentationOfLinkedRecordPLink",
-				accept: "application/vnd.uub.record+json"
+				accept: "application/vnd.cora.record+json"
 			},
 			loadInBackground: "false"
 		};

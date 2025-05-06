@@ -133,7 +133,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		requestMethod: "POST",
 		rel: "renew",
 		url: "http://localhost:38180/login/rest/authToken/someTokenId",
-		accept: "application/vnd.uub.authentication+json"
+		accept: "application/vnd.cora.authentication+json"
 	};
 
 	const deleteActionLink = {
@@ -201,7 +201,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		let ajaxCallSpec = ajaxCallSpy.getSpec();
 		assert.strictEqual(ajaxCallSpec.url, spec.baseUrl + "record/loginUnit");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 		assert.strictEqual(ajaxCallSpec.loadMethod, loginManager.fetchLoginUnitCallback);
 		assert.strictEqual(ajaxCallSpec.errorMethod, loginManager.fetchLoginUnitErrorCallback);
 		assert.strictEqual(ajaxCallSpec.timeoutMethod, loginManager.fetchLoginUnitTimeoutCallback);
@@ -212,7 +212,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		let ajaxCallSpec1 = ajaxCallSpy1.getSpec();
 		assert.strictEqual(ajaxCallSpec1.url, spec.baseUrl + "record/login");
 		assert.strictEqual(ajaxCallSpec1.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 		assert.strictEqual(ajaxCallSpec1.loadMethod, loginManager.fetchLoginCallback);
 		assert.strictEqual(ajaxCallSpec1.errorMethod, loginManager.fetchLoginErrorCallback);
 		assert.strictEqual(ajaxCallSpec1.timeoutMethod, loginManager.fetchLoginTimeoutCallback);
@@ -358,8 +358,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		let spec0 = dependencies.appTokenLoginFactory.getSpec(0);
 		assert.strictEqual(spec0.requestMethod, "POST");
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
-		assert.strictEqual(spec0.contentType, "application/vnd.uub.login");
-		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
+		assert.strictEqual(spec0.contentType, "application/vnd.cora.login");
+		assert.strictEqual(spec0.accept, "application/vnd.cora.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.appTokenErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.appTokenTimeoutCallback);
@@ -639,7 +639,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.jsClient, spec.jsClient);
 		assert.strictEqual(spec0.requestMethod, "POST");
 		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
-		assert.strictEqual(spec0.accept, "application/vnd.uub.authentication+json");
+		assert.strictEqual(spec0.accept, "application/vnd.cora.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);
 		assert.strictEqual(spec0.timeoutCallback, loginManager.passwordTimeoutCallback);

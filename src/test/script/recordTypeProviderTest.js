@@ -31,7 +31,7 @@ QUnit.module("recordTypeProviderTest.js", {
 			requestMethod: "GET",
 			rel: "list",
 			url: "http://epc.ub.uu.se/cora/rest/record/recordType/",
-			accept: "application/vnd.uub.recordList+json"
+			accept: "application/vnd.cora.recordList+json"
 		};
 		this.recordTypeListLink = recordTypeListLink;
 
@@ -39,7 +39,7 @@ QUnit.module("recordTypeProviderTest.js", {
 			requestMethod: "GET",
 			rel: "list",
 			url: "http://epc.ub.uu.se/cora/rest/record/validationType/",
-			accept: "application/vnd.uub.recordList+json"
+			accept: "application/vnd.cora.recordList+json"
 		};
 		this.validationTypeListLink = recordTypeListLink;
 
@@ -101,7 +101,7 @@ QUnit.test("initCorrectRequestMade", function(assert) {
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/recordType/");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.loadMethod, provider.onlyForTestHandleAnswerForRecordTypes);
@@ -115,7 +115,7 @@ QUnit.test("initCorrectRequestMadeForValidationType", function(assert) {
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/validationType/");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.loadMethod, provider.onlyForTestHandleAnswerForValidationTypes);
@@ -204,7 +204,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/textGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "metadataId"
@@ -231,7 +231,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 												"requestMethod": "GET",
 												"rel": "read",
 												"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-												"accept": "application/vnd.uub.record+json"
+												"accept": "application/vnd.cora.record+json"
 											}
 										},
 										"name": "type"
@@ -252,7 +252,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 												"requestMethod": "GET",
 												"rel": "read",
 												"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-												"accept": "application/vnd.uub.record+json"
+												"accept": "application/vnd.cora.record+json"
 											}
 										},
 										"name": "dataDivider"
@@ -273,7 +273,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 												"requestMethod": "GET",
 												"rel": "read",
 												"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-												"accept": "application/vnd.uub.record+json"
+												"accept": "application/vnd.cora.record+json"
 											}
 										},
 										"name": "validationType"
@@ -297,7 +297,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -328,7 +328,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -359,7 +359,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -390,7 +390,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -421,7 +421,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -452,7 +452,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -483,7 +483,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -514,7 +514,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -545,7 +545,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 														"requestMethod": "GET",
 														"rel": "read",
 														"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-														"accept": "application/vnd.uub.record+json"
+														"accept": "application/vnd.cora.record+json"
 													}
 												},
 												"name": "updatedBy"
@@ -573,7 +573,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 												"requestMethod": "GET",
 												"rel": "read",
 												"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-												"accept": "application/vnd.uub.record+json"
+												"accept": "application/vnd.cora.record+json"
 											}
 										},
 										"name": "createdBy"
@@ -601,7 +601,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textOutputPGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "presentationViewId"
@@ -622,7 +622,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textPGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "presentationFormId"
@@ -643,7 +643,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/textNewGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "newMetadataId"
@@ -664,7 +664,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textNewPGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "newPresentationFormId"
@@ -685,7 +685,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textMenuPGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "menuPresentationViewId"
@@ -706,7 +706,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textListPGroup",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "listPresentationViewId"
@@ -731,7 +731,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/textText",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "textId"
@@ -752,7 +752,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/textDefText",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "defTextId"
@@ -773,7 +773,7 @@ QUnit.test("getRecordTypeById", function(assert) {
 										"requestMethod": "GET",
 										"rel": "read",
 										"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/textSearch",
-										"accept": "application/vnd.uub.record+json"
+										"accept": "application/vnd.cora.record+json"
 									}
 								},
 								"name": "search"
@@ -809,26 +809,26 @@ QUnit.test("getRecordTypeById", function(assert) {
 							"requestMethod": "GET",
 							"rel": "search",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/textSearch",
-							"accept": "application/vnd.uub.recordList+json"
+							"accept": "application/vnd.cora.recordList+json"
 						},
 						"read": {
 							"requestMethod": "GET",
 							"rel": "read",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"read_incoming_links": {
 							"requestMethod": "GET",
 							"rel": "read_incoming_links",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text/incomingLinks",
-							"accept": "application/vnd.uub.recordList+json"
+							"accept": "application/vnd.cora.recordList+json"
 						},
 						"update": {
 							"requestMethod": "POST",
 							"rel": "update",
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"index": {
 							"requestMethod": "POST",
@@ -859,36 +859,36 @@ QUnit.test("getRecordTypeById", function(assert) {
 								],
 								"name": "workOrder"
 							},
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"create": {
 							"requestMethod": "POST",
 							"rel": "create",
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"batch_index": {
 							"requestMethod": "POST",
 							"rel": "batch_index",
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/text/",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"list": {
 							"requestMethod": "GET",
 							"rel": "list",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-							"accept": "application/vnd.uub.recordList+json"
+							"accept": "application/vnd.cora.recordList+json"
 						},
 						"validate": {
 							"requestMethod": "POST",
 							"rel": "validate",
-							"contentType": "application/vnd.uub.workorder+json",
+							"contentType": "application/vnd.cora.workorder+json",
 							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						}
 					}
 				};
@@ -937,26 +937,26 @@ QUnit.test("getMetadataByRecordTypeIdAllButValidationTypeInfo", function(assert)
       "requestMethod": "GET",
       "rel": "search",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/textSearch",
-      "accept": "application/vnd.uub.recordList+json"
+      "accept": "application/vnd.cora.recordList+json"
     },
     "read": {
       "requestMethod": "GET",
       "rel": "read",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     },
     "read_incoming_links": {
       "requestMethod": "GET",
       "rel": "read_incoming_links",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text/incomingLinks",
-      "accept": "application/vnd.uub.recordList+json"
+      "accept": "application/vnd.cora.recordList+json"
     },
     "update": {
       "requestMethod": "POST",
       "rel": "update",
-      "contentType": "application/vnd.uub.record+json",
+      "contentType": "application/vnd.cora.record+json",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     },
     "index": {
       "requestMethod": "POST",
@@ -987,36 +987,36 @@ QUnit.test("getMetadataByRecordTypeIdAllButValidationTypeInfo", function(assert)
         ],
         "name": "workOrder"
       },
-      "contentType": "application/vnd.uub.record+json",
+      "contentType": "application/vnd.cora.record+json",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     },
     "create": {
       "requestMethod": "POST",
       "rel": "create",
-      "contentType": "application/vnd.uub.record+json",
+      "contentType": "application/vnd.cora.record+json",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     },
     "batch_index": {
       "requestMethod": "POST",
       "rel": "batch_index",
-      "contentType": "application/vnd.uub.record+json",
+      "contentType": "application/vnd.cora.record+json",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/text/",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     },
     "list": {
       "requestMethod": "GET",
       "rel": "list",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-      "accept": "application/vnd.uub.recordList+json"
+      "accept": "application/vnd.cora.recordList+json"
     },
     "validate": {
       "requestMethod": "POST",
       "rel": "validate",
-      "contentType": "application/vnd.uub.workorder+json",
+      "contentType": "application/vnd.cora.workorder+json",
       "url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-      "accept": "application/vnd.uub.record+json"
+      "accept": "application/vnd.cora.record+json"
     }
   }
 //  ,

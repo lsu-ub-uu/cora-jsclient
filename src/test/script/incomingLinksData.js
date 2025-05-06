@@ -20,7 +20,7 @@ CORATEST.incomingLinksAnswer={
                 "requestMethod": "GET",
                 "rel": "read",
                 "url": "http://localhost:8080/therest/rest/record/metadataTextVariable/newPresentationFormIdTextVar",
-                "accept": "application/vnd.uub.record+json"
+                "accept": "application/vnd.cora.record+json"
               }
             },
             "name": "from"
@@ -59,7 +59,7 @@ CORATEST.incomingLinksAnswer={
                 "requestMethod": "GET",
                 "rel": "read",
                 "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormPGroup",
-                "accept": "application/vnd.uub.record+json"
+                "accept": "application/vnd.cora.record+json"
               }
             },
             "name": "from"
@@ -98,7 +98,7 @@ CORATEST.incomingLinksAnswer={
                 "requestMethod": "GET",
                 "rel": "read",
                 "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeFormNewPGroup",
-                "accept": "application/vnd.uub.record+json"
+                "accept": "application/vnd.cora.record+json"
               }
             },
             "name": "from"
@@ -137,7 +137,7 @@ CORATEST.incomingLinksAnswer={
                 "requestMethod": "GET",
                 "rel": "read",
                 "url": "http://localhost:8080/therest/rest/record/presentationGroup/recordTypeViewPGroup",
-                "accept": "application/vnd.uub.record+json"
+                "accept": "application/vnd.cora.record+json"
               }
             },
             "name": "from"
@@ -184,7 +184,7 @@ CORATEST.incomingLinksWithoutPresentationsAnswer={
                 "requestMethod": "GET",
                 "rel": "read",
                 "url": "http://localhost:8080/therest/rest/record/metadataTextVariable/newPresentationFormIdTextVar",
-                "accept": "application/vnd.uub.record+json"
+                "accept": "application/vnd.cora.record+json"
               }
             },
             "name": "from"

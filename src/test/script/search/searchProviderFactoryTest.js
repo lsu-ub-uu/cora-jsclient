@@ -27,7 +27,7 @@ QUnit.module("search/searchProviderFactoryTest.js", {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/search/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		this.spec = {
 			"searchRecordListLink" : searchRecordListLink

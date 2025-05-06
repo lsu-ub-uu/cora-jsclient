@@ -178,7 +178,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				url: url,
 				requestMethod: "GET",
-				accept: "application/vnd.uub.recordList+json",
+				accept: "application/vnd.cora.recordList+json",
 				loadMethod: collectPresentations,
 				errorMethod: handleErrorOnFetchPresentations,
 				modelPart: modelPart

@@ -242,19 +242,19 @@
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : baseUrl + "record/metadata/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var presentationListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : baseUrl + "record/presentation/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var textListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : baseUrl + "record/text/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var metadataProviderSpec = {
 			"dependencies" : dependencies,
@@ -279,7 +279,7 @@
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : baseUrl + "record/recordType/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var recordTypeProviderSpec = {
 			"dependencies" : dependencies,
@@ -329,8 +329,8 @@
 			},
 			"requestMethod" : "GET",
 			"requestHeaders" : {
-				"content-type" : "application/vnd.uub.record+json",
-				"accept" : "application/vnd.uub.record+json"
+				"content-type" : "application/vnd.cora.record+json",
+				"accept" : "application/vnd.cora.record+json"
 			},
 			"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
 			"loadMethod" : loadMethod,

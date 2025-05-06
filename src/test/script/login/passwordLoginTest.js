@@ -47,8 +47,8 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 			presentationId: "somePGroup",
 			requestMethod: "POST",
 			url: "someAppTokenBaseUrl/login/rest/password",
-			contentType: "application/vnd.uub.login",
-			accept: "application/vnd.uub.record+json",
+			contentType: "application/vnd.cora.login",
+			accept: "application/vnd.cora.record+json",
 			loadMethod: function() {
 				//empty test method
 			},
@@ -66,7 +66,7 @@ QUnit.module("login/passwordLoginTest.js", hooks => {
 			let ajaxCallSpec = ajaxCallSpy.getSpec();
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
 			assert.strictEqual(ajaxCallSpec.url, spec.url);
-			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
+			assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.login");
 			assert.strictEqual(ajaxCallSpec.accept, spec.accept);
 			assert.strictEqual(ajaxCallSpec.loadMethod, spec.loadMethod);
 			assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);

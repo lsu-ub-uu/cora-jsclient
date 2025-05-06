@@ -171,14 +171,14 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/recordInfoPVarGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "update": {
 				              "requestMethod": "POST",
 				              "rel": "update",
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/recordInfoPVarGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "delete": {
 				              "requestMethod": "DELETE",
@@ -433,14 +433,14 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/metadataGroupGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "update": {
 				              "requestMethod": "POST",
 				              "rel": "update",
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/metadataGroupGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "delete": {
 				              "requestMethod": "DELETE",
@@ -553,14 +553,14 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "update": {
 				              "requestMethod": "POST",
 				              "rel": "update",
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "delete": {
 				              "requestMethod": "DELETE",

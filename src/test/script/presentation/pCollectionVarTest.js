@@ -194,7 +194,7 @@ QUnit.module("presentation/pCollectionVarTest.js", hooks => {
 
 		let pParentVar = pParentVarFactory.getFactored(0);
 		let expected = [event, {
-			accept: "application/vnd.uub.record+json",
+			accept: "application/vnd.cora.record+json",
 			rel: "read",
 			requestMethod: "GET",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/trueFalseCollection"

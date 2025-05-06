@@ -45,8 +45,8 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			requestMethod: "GET",
 			url: "http://localhost:8080/therest/rest/record/recordType",
 			requestHeaders: {
-				"content-type": "application/vnd.uub.record+json",
-				accept: "application/vnd.uub.record+json",
+				"content-type": "application/vnd.cora.record+json",
+				accept: "application/vnd.cora.record+json",
 				authToken: "someRandomToken"
 			},
 			loadMethod: loadMethod,
@@ -171,9 +171,9 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 			"?preventCache");
 		assert.strictEqual(xmlHttpRequestSpy.getOpenMethod(), "GET");
 		assert.strictEqual(xmlHttpRequestSpy.addedRequestHeaders["accept"][0],
-			"application/vnd.uub.record+json");
+			"application/vnd.cora.record+json");
 		assert.strictEqual(xmlHttpRequestSpy.addedRequestHeaders["content-type"][0],
-			"application/vnd.uub.record+json");
+			"application/vnd.cora.record+json");
 		assert.strictEqual(xmlHttpRequestSpy.addedRequestHeaders["authToken"][0], "someRandomToken");
 		assert.ok(getLoadMethodWasCalled(), "loadMethod was called ok")
 	});
@@ -425,9 +425,9 @@ QUnit.module("net/ajaxCallTest.js", hooks => {
 		assert.strictEqual(openUrl, "http://localhost:8080/therest/rest/record/recordType");
 		assert.strictEqual(xmlHttpRequestSpy.getOpenMethod(), "POST");
 		assert.strictEqual(xmlHttpRequestSpy.addedRequestHeaders["accept"][0],
-			"application/vnd.uub.record+json");
+			"application/vnd.cora.record+json");
 		assert.strictEqual(xmlHttpRequestSpy.addedRequestHeaders["content-type"][0],
-			"application/vnd.uub.record+json");
+			"application/vnd.cora.record+json");
 
 		assert.strictEqual(xmlHttpRequestSpy.getSentData(), JSON.stringify(textData));
 		assert.strictEqual(getAnswer().status, 201);

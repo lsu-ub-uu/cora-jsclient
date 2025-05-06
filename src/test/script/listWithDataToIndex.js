@@ -49,7 +49,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/recordType/writtenText",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "type"
@@ -83,7 +83,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/system/testSystem",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "dataDivider"
@@ -151,7 +151,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/locationUnit/uu",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "location"
@@ -187,7 +187,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/person/PersonOne",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "personLink"
@@ -203,14 +203,14 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:9011356289912",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "update": {
 				              "requestMethod": "POST",
 				              "rel": "update",
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:9011356289912",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "index": {
 				              "requestMethod": "POST",
@@ -241,9 +241,9 @@ var CORATEST = (function(coraTest) {
 				                ],
 				                "name": "workOrder"
 				              },
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/workOrder/",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "delete": {
 				              "requestMethod": "DELETE",
@@ -279,7 +279,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/recordType/writtenText",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "type"
@@ -313,7 +313,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/system/testSystem",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "dataDivider"
@@ -383,7 +383,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/person/person2",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "personLink"
@@ -413,7 +413,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "https://epc.ub.uu.se/therest/rest/record/locationUnit/uu",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "location"
@@ -433,14 +433,14 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:93918281873569",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "update": {
 				              "requestMethod": "POST",
 				              "rel": "update",
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:93918281873569",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "index": {
 				              "requestMethod": "POST",
@@ -471,9 +471,9 @@ var CORATEST = (function(coraTest) {
 				                ],
 				                "name": "workOrder"
 				              },
-				              "contentType": "application/vnd.uub.record+json",
+				              "contentType": "application/vnd.cora.record+json",
 				              "url": "https://epc.ub.uu.se/therest/rest/record/workOrder/",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "delete": {
 				              "requestMethod": "DELETE",
@@ -509,7 +509,7 @@ var CORATEST = (function(coraTest) {
                                                             "requestMethod": "GET",
                                                             "rel": "read",
                                                             "url": "https://epc.ub.uu.se/therest/rest/record/recordType/writtenText",
-                                                            "accept": "application/vnd.uub.record+json"
+                                                            "accept": "application/vnd.cora.record+json"
                                                         }
                                                     },
                                                     "name": "type"
@@ -543,7 +543,7 @@ var CORATEST = (function(coraTest) {
                                                             "requestMethod": "GET",
                                                             "rel": "read",
                                                             "url": "https://epc.ub.uu.se/therest/rest/record/system/testSystem",
-                                                            "accept": "application/vnd.uub.record+json"
+                                                            "accept": "application/vnd.cora.record+json"
                                                         }
                                                     },
                                                     "name": "dataDivider"
@@ -613,7 +613,7 @@ var CORATEST = (function(coraTest) {
                                                             "requestMethod": "GET",
                                                             "rel": "read",
                                                             "url": "https://epc.ub.uu.se/therest/rest/record/person/person2",
-                                                            "accept": "application/vnd.uub.record+json"
+                                                            "accept": "application/vnd.cora.record+json"
                                                         }
                                                     },
                                                     "name": "personLink"
@@ -643,7 +643,7 @@ var CORATEST = (function(coraTest) {
                                                             "requestMethod": "GET",
                                                             "rel": "read",
                                                             "url": "https://epc.ub.uu.se/therest/rest/record/locationUnit/uu",
-                                                            "accept": "application/vnd.uub.record+json"
+                                                            "accept": "application/vnd.cora.record+json"
                                                         }
                                                     },
                                                     "name": "location"
@@ -663,14 +663,14 @@ var CORATEST = (function(coraTest) {
                                         "requestMethod": "GET",
                                         "rel": "read",
                                         "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:93918281873569",
-                                        "accept": "application/vnd.uub.record+json"
+                                        "accept": "application/vnd.cora.record+json"
                                     },
                                     "update": {
                                         "requestMethod": "POST",
                                         "rel": "update",
-                                        "contentType": "application/vnd.uub.record+json",
+                                        "contentType": "application/vnd.cora.record+json",
                                         "url": "https://epc.ub.uu.se/therest/rest/record/writtenText/writtenText:93918281873569",
-                                        "accept": "application/vnd.uub.record+json"
+                                        "accept": "application/vnd.cora.record+json"
                                     },
                                     "delete": {
                                         "requestMethod": "DELETE",

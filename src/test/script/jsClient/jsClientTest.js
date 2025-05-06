@@ -571,7 +571,7 @@ QUnit.test("testOpenRecordUsingReadLinkInBackground", function(assert) {
 		requestMethod: "GET",
 		rel: "read",
 		url: "http://epc.ub.uu.se/cora/rest/record/recordType/presentationVar",
-		accept: "application/vnd.uub.record+json"
+		accept: "application/vnd.cora.record+json"
 	};
 	let openInfo = {
 		readLink: readLink,

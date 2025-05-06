@@ -150,7 +150,7 @@ QUnit.test("fetchListCheckSpec", function(assert) {
 		"requestMethod" : "GET",
 		"rel" : "list",
 		"url" : "https://cora.epc.ub.uu.se/systemone/rest/record/collectTerm/",
-		"accept" : "application/vnd.uub.recordList+json"
+		"accept" : "application/vnd.cora.recordList+json"
 	};
 	assert.stringifyEqual(factoredSpec.listLink, expectedListLink);
 	assert.strictEqual(factoredSpec.openRecordMethod, recordTypeHandler.createRecordHandler);

@@ -42,7 +42,7 @@ var CORATEST = (function(coraTest) {
 										"requestMethod" : "GET",
 										"rel" : "read",
 										"url" : "http://localhost:8080/therest/rest/record/recordType/metadataTextVariable",
-										"accept" : "application/vnd.uub.record+json"
+										"accept" : "application/vnd.cora.record+json"
 									}
 								},
 								"name" : "type"
@@ -70,7 +70,7 @@ var CORATEST = (function(coraTest) {
 										"requestMethod" : "GET",
 										"rel" : "read",
 										"url" : "http://localhost:8080/therest/rest/record/system/bibsys",
-										"accept" : "application/vnd.uub.record+json"
+										"accept" : "application/vnd.cora.record+json"
 									}
 								},
 								"name" : "dataDivider"
@@ -113,20 +113,20 @@ var CORATEST = (function(coraTest) {
 					"requestMethod" : "GET",
 					"rel" : "read",
 					"url" : "http://localhost:8080/therest/rest/record/metadataTextVariable/filenameTextVar",
-					"accept" : "application/vnd.uub.record+json"
+					"accept" : "application/vnd.cora.record+json"
 				},
 				"read_incoming_links" : {
 					"requestMethod" : "GET",
 					"rel" : "read_incoming_links",
 					"url" : "http://localhost:8080/therest/rest/record/metadataTextVariable/filenameTextVar/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+					"accept" : "application/vnd.cora.recordList+json"
 				},
 				"update" : {
 					"requestMethod" : "POST",
 					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
+					"contentType" : "application/vnd.cora.record+json",
 					"url" : "http://localhost:8080/therest/rest/record/metadataTextVariable/filenameTextVar",
-					"accept" : "application/vnd.uub.record+json"
+					"accept" : "application/vnd.cora.record+json"
 				}
 			}
 		}
@@ -156,7 +156,7 @@ var CORATEST = (function(coraTest) {
 										"requestMethod" : "GET",
 										"rel" : "read",
 										"url" : "http://localhost:8080/therest/rest/record/recordType/coraText",
-										"accept" : "application/vnd.uub.record+json"
+										"accept" : "application/vnd.cora.record+json"
 									}
 								},
 								"name" : "type"
@@ -184,7 +184,7 @@ var CORATEST = (function(coraTest) {
 										"requestMethod" : "GET",
 										"rel" : "read",
 										"url" : "http://localhost:8080/therest/rest/record/system/bibsys",
-										"accept" : "application/vnd.uub.record+json"
+										"accept" : "application/vnd.cora.record+json"
 									}
 								},
 								"name" : "dataDivider"
@@ -218,20 +218,20 @@ var CORATEST = (function(coraTest) {
 					"requestMethod" : "GET",
 					"rel" : "read",
 					"url" : "http://localhost:8080/therest/rest/record/coraText/writtenTextGroupText",
-					"accept" : "application/vnd.uub.record+json"
+					"accept" : "application/vnd.cora.record+json"
 				},
 				"read_incoming_links" : {
 					"requestMethod" : "GET",
 					"rel" : "read_incoming_links",
 					"url" : "http://localhost:8080/therest/rest/record/coraText/writtenTextGroupText/incomingLinks",
-					"accept" : "application/vnd.uub.recordList+json"
+					"accept" : "application/vnd.cora.recordList+json"
 				},
 				"update" : {
 					"requestMethod" : "POST",
 					"rel" : "update",
-					"contentType" : "application/vnd.uub.record+json",
+					"contentType" : "application/vnd.cora.record+json",
 					"url" : "http://localhost:8080/therest/rest/record/coraText/writtenTextGroupText",
-					"accept" : "application/vnd.uub.record+json"
+					"accept" : "application/vnd.cora.record+json"
 				}
 			}
 		}

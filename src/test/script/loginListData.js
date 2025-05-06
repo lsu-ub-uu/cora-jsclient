@@ -45,7 +45,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/system/systemOne",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "dataDivider"
@@ -63,7 +63,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/recordType/loginToken",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "type"
@@ -116,7 +116,7 @@ var CORATEST = (function(coraTest) {
 									"requestMethod" : "GET",
 									"rel" : "read",
 									"url" : "http://localhost:8080/therest/rest/record/loginToken/systemOneTokenLogin",
-									"accept" : "application/vnd.uub.record+json"
+									"accept" : "application/vnd.cora.record+json"
 								}
 							}
 						}
@@ -144,7 +144,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/recordType/loginWebRedirect",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "type"
@@ -172,7 +172,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/system/systemOne",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "dataDivider"
@@ -232,13 +232,13 @@ var CORATEST = (function(coraTest) {
 									"requestMethod" : "GET",
 									"rel" : "read",
 									"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/uuwr",
-									"accept" : "application/vnd.uub.record+json"
+									"accept" : "application/vnd.cora.record+json"
 								},
 								"read_incoming_links" : {
 									"requestMethod" : "GET",
 									"rel" : "read_incoming_links",
 									"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/uuwr/incomingLinks",
-									"accept" : "application/vnd.uub.recordList+json"
+									"accept" : "application/vnd.cora.recordList+json"
 								}
 							}
 						}
@@ -266,7 +266,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/recordType/loginWebRedirect",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "type"
@@ -294,7 +294,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/system/systemOne",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "dataDivider"
@@ -354,13 +354,13 @@ var CORATEST = (function(coraTest) {
 									"requestMethod" : "GET",
 									"rel" : "read",
 									"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/testwr",
-									"accept" : "application/vnd.uub.record+json"
+									"accept" : "application/vnd.cora.record+json"
 								},
 								"read_incoming_links" : {
 									"requestMethod" : "GET",
 									"rel" : "read_incoming_links",
 									"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/testwr/incomingLinks",
-									"accept" : "application/vnd.uub.recordList+json"
+									"accept" : "application/vnd.cora.recordList+json"
 								}
 							}
 						}
@@ -391,7 +391,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/recordType/loginLDAP",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "type"
@@ -425,7 +425,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/system/cora",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "dataDivider"
@@ -499,7 +499,7 @@ var CORATEST = (function(coraTest) {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
 				                    "url": "http://localhost:8080/therest/rest/record/metadataGroup/passwordGroup",
-				                    "accept": "application/vnd.uub.record+json"
+				                    "accept": "application/vnd.cora.record+json"
 				                  }
 				                },
 				                "name": "viewDefinition"
@@ -520,7 +520,7 @@ var CORATEST = (function(coraTest) {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
 				                    "url": "http://localhost:8080/therest/rest/record/presentationGroup/passwordPGroup",
-				                    "accept": "application/vnd.uub.record+json"
+				                    "accept": "application/vnd.cora.record+json"
 				                  }
 				                },
 				                "name": "viewPresentation"
@@ -541,7 +541,7 @@ var CORATEST = (function(coraTest) {
 				                    "requestMethod": "GET",
 				                    "rel": "read",
 				                    "url": "http://localhost:8080/therest/rest/record/coraText/passwordGroupText",
-				                    "accept": "application/vnd.uub.record+json"
+				                    "accept": "application/vnd.cora.record+json"
 				                  }
 				                },
 				                "name": "description"
@@ -557,13 +557,13 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "http://localhost:8080/therest/rest/record/loginLDAP/uppsalaLDAP",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            },
 				            "read_incoming_links": {
 				              "requestMethod": "GET",
 				              "rel": "read_incoming_links",
 				              "url": "http://localhost:8080/therest/rest/record/loginLDAP/uppsalaLDAP/incomingLinks",
-				              "accept": "application/vnd.uub.recordList+json"
+				              "accept": "application/vnd.cora.recordList+json"
 				            }
 				          }
 				        }

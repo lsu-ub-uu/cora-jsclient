@@ -205,7 +205,7 @@ QUnit.test("testGetChildRefPartOfMetadata2", function(assert) {
 						"requestMethod" : "GET",
 						"rel" : "read",
 						"url" : "http://localhost:8080/therest/rest/record/system/cora",
-						"accept" : "application/vnd.uub.record+json"
+						"accept" : "application/vnd.cora.record+json"
 					}
 				},
 				"name" : "dataDivider"

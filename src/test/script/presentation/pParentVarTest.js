@@ -836,7 +836,7 @@ QUnit.test("testOpenTextIdRecord", function(assert) {
 			"requestMethod": "GET",
 			"rel": "read",
 			"url": "http://localhost:8080/therest/rest/record/text/" + "textVariableId" + "Text",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -863,7 +863,7 @@ QUnit.test("testOpenDefTextIdRecord", function(assert) {
 			"rel": "read",
 			"url": "http://localhost:8080/therest/rest/record/text/" + "textVariableId"
 				+ "DefText",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -889,7 +889,7 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 			"requestMethod": "GET",
 			"rel": "read",
 			"url": "http://fake.from.metadataproviderstub/rest/record/sometype/textVariableId",
-			"accept": "application/vnd.uub.record+json"
+			"accept": "application/vnd.cora.record+json"
 		},
 		"loadInBackground": "false"
 	};
@@ -917,7 +917,7 @@ QUnit.test("testOpenPresentationIdRecord", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pVarTextVariableId",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		},
 		loadInBackground: "false"
 	};
@@ -939,7 +939,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pVarTextVariableId",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		};
 	event.ctrlKey = true;
 	pParentVar.openLinkedRecordForLink(event, link);
@@ -951,7 +951,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 			rel: "read",
 			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
 				+ "pVarTextVariableId",
-			accept: "application/vnd.uub.record+json"
+			accept: "application/vnd.cora.record+json"
 		},
 		loadInBackground: "false"
 	};

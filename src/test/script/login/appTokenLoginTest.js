@@ -35,7 +35,7 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 		spec = {
 			requestMethod: "POST",
 			url: "http://localhost:8080/login/rest/apptoken",
-			contentType: "application/vnd.uub.login",
+			contentType: "application/vnd.cora.login",
 			accept: "",
 			loadMethod: function() {
 				//empty test method
@@ -82,7 +82,7 @@ QUnit.module("login/appTokenLoginTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/login/"
 			+ "rest/apptoken");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.login");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.login");
 		assert.strictEqual(ajaxCallSpec.accept, "");
 		assert.strictEqual(ajaxCallSpec.loadMethod, spec.loadMethod);
 		assert.strictEqual(ajaxCallSpec.errorMethod, spec.errorCallback);

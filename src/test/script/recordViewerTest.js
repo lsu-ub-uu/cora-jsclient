@@ -59,7 +59,7 @@ QUnit.module("recordViewerTest.js", {
 				requestMethod : "GET",
 				rel : "read",
 				url : "http://epc.ub.uu.se/cora/rest/record/system/cora",
-				accept : "application/vnd.uub.record+json"
+				accept : "application/vnd.cora.record+json"
 			},
 			presentationId : "somePresentationId",
 			metadataId : "someMetadataId",
@@ -105,7 +105,7 @@ QUnit.test("initCallToServer", function(assert) {
 	let ajaxCallSpec = ajaxCallSpy.getSpec();
 	assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/system/cora");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.loadMethod, recordViewer.processFetchedRecord);

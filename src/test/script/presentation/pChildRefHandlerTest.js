@@ -95,7 +95,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 								requestMethod: "GET",
 								rel: "read",
 								url: "http://localhost:8080/therest/rest/record/system/alvin",
-								accept: "application/vnd.uub.record+json"
+								accept: "application/vnd.cora.record+json"
 							}
 						},
 						name: "dataDivider"
@@ -131,15 +131,15 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 					rel: "read",
 					url: "http://localhost:8080/therest/rest/record/image/"
 						+ "image:333759270435575",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				},
 				update: {
 					requestMethod: "POST",
 					rel: "update",
-					contentType: "application/vnd.uub.record+json",
+					contentType: "application/vnd.cora.record+json",
 					url: "http://localhost:8080/therest/rest/record/image/"
 						+ "image:333759270435575",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				},
 				delete: {
 					requestMethod: "DELETE",
@@ -153,7 +153,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 					contentType: "multipart/form-data",
 					url: "http://localhost:8080/therest/rest/record/image/"
 						+ "image:333759270435575/upload",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				}
 			}
 
@@ -307,8 +307,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/"
 			+ recordType + "/");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
-		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.uub.record+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
+		assert.strictEqual(ajaxCallSpec.contentType, "application/vnd.cora.record+json");
 	};
 
 	const answerCall = function(ajaxCallFactory, no) {
@@ -858,7 +858,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 				size: 1234567890
 			},
 			uploadLink: {
-				accept: "application/vnd.uub.record+json",
+				accept: "application/vnd.cora.record+json",
 				contentType: "multipart/form-data",
 				rel: "upload",
 				requestMethod: "POST",
@@ -874,7 +874,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 				size: 9876543210
 			},
 			uploadLink: {
-				accept: "application/vnd.uub.record+json",
+				accept: "application/vnd.cora.record+json",
 				contentType: "multipart/form-data",
 				rel: "upload",
 				requestMethod: "POST",
@@ -890,7 +890,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 				size: 1122334455
 			},
 			uploadLink: {
-				accept: "application/vnd.uub.record+json",
+				accept: "application/vnd.cora.record+json",
 				contentType: "multipart/form-data",
 				rel: "upload",
 				requestMethod: "POST",

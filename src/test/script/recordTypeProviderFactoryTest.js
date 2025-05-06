@@ -24,13 +24,13 @@ QUnit.module("recordTypeProviderFactoryTest.js", {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		let validationTypeListLink = {
 			requestMethod: "GET",
 			rel: "list",
 			url: "http://epc.ub.uu.se/cora/rest/record/validationType/",
-			accept: "application/vnd.uub.recordList+json"
+			accept: "application/vnd.cora.recordList+json"
 		};
 		this.validationTypeListLink = recordTypeListLink;
 

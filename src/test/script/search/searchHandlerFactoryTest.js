@@ -45,7 +45,7 @@ QUnit.module("search/searchHandlerFactoryTest.js", {
 				"requestMethod": "GET",
 				"rel": "search",
 				"url": "http://epc.ub.uu.se/cora/rest/record/searchResult/coraTextSearch",
-				"accept": "application/vnd.uub.recordList+json"
+				"accept": "application/vnd.cora.recordList+json"
 			}
 		};
 	},

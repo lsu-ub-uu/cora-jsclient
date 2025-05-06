@@ -43,7 +43,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/collectTermGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -70,7 +70,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -91,7 +91,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -112,7 +112,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -136,7 +136,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -167,7 +167,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -198,7 +198,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -229,7 +229,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -260,7 +260,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -291,7 +291,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -322,7 +322,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -353,7 +353,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -384,7 +384,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -415,7 +415,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -446,7 +446,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -477,7 +477,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -505,7 +505,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -533,7 +533,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/collectTermOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -554,7 +554,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/collectTermPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -575,7 +575,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/collectTermNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -596,7 +596,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/collectTermNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -617,7 +617,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/collectTermMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -638,7 +638,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/collectTermListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -663,7 +663,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/collectTermText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -684,7 +684,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/collectTermDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -705,7 +705,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/collectTermSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -736,26 +736,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/collectTermSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/collectTerm",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/collectTerm/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/collectTerm",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -786,36 +786,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/collectTerm/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/collectTerm/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/collectTerm/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -840,7 +840,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/indexBatchJobGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -867,7 +867,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -888,7 +888,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -909,7 +909,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -933,7 +933,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -964,7 +964,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -995,7 +995,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1026,7 +1026,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1057,7 +1057,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1085,7 +1085,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -1113,7 +1113,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -1134,7 +1134,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -1155,7 +1155,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/indexBatchJobNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -1176,7 +1176,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -1197,7 +1197,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -1218,7 +1218,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -1243,7 +1243,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/indexBatchJobText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -1264,7 +1264,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/indexBatchJobDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -1285,7 +1285,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/indexBatchJobSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -1306,7 +1306,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/indexBatchJobAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -1332,26 +1332,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/indexBatchJobSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/indexBatchJob",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/indexBatchJob/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/indexBatchJob",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -1382,36 +1382,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/indexBatchJob/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/indexBatchJob/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/indexBatchJob/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -1436,7 +1436,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/workOrderGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -1463,7 +1463,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -1484,7 +1484,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -1505,7 +1505,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -1529,7 +1529,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1560,7 +1560,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1591,7 +1591,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1622,7 +1622,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1653,7 +1653,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1684,7 +1684,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1715,7 +1715,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1746,7 +1746,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -1774,7 +1774,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -1802,7 +1802,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -1823,7 +1823,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -1844,7 +1844,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/workOrderNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -1865,7 +1865,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -1886,7 +1886,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -1907,7 +1907,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -1932,7 +1932,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/workOrderText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -1953,7 +1953,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/workOrderDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -1974,7 +1974,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/workOrderSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -1995,7 +1995,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/workOrderAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -2021,26 +2021,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/workOrderSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/workOrder",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/workOrder/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/workOrder",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -2071,36 +2071,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -2125,7 +2125,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/metadataGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -2152,7 +2152,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -2173,7 +2173,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -2194,7 +2194,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -2218,7 +2218,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2249,7 +2249,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2280,7 +2280,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2311,7 +2311,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2342,7 +2342,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2373,7 +2373,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2404,7 +2404,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2435,7 +2435,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2466,7 +2466,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2497,7 +2497,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2528,7 +2528,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2559,7 +2559,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2590,7 +2590,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2621,7 +2621,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2652,7 +2652,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2683,7 +2683,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -2711,7 +2711,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -2739,7 +2739,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/metadataOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -2760,7 +2760,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/metadataPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -2781,7 +2781,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/metadataNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -2802,7 +2802,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/metadataNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -2823,7 +2823,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/metadataMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -2844,7 +2844,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/metadataListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -2869,7 +2869,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/metadataText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -2890,7 +2890,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/metadataDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -2911,7 +2911,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/metadataSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -2937,26 +2937,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/metadataSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/metadata",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -2987,36 +2987,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/metadata/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -3041,7 +3041,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/permissionRoleGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -3068,7 +3068,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -3089,7 +3089,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -3110,7 +3110,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -3134,7 +3134,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3165,7 +3165,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3196,7 +3196,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3227,7 +3227,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3258,7 +3258,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3289,7 +3289,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3320,7 +3320,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3351,7 +3351,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3379,7 +3379,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -3407,7 +3407,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRoleOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -3428,7 +3428,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRolePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -3449,7 +3449,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/permissionRoleNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -3470,7 +3470,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRoleNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -3491,7 +3491,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRoleMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -3512,7 +3512,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRoleListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -3537,7 +3537,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionRoleText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -3558,7 +3558,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionRoleDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -3579,7 +3579,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/permissionRoleSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -3605,26 +3605,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/permissionRoleSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRole",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRole/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRole",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -3655,36 +3655,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionRole/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/permissionRole/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionRole/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -3709,7 +3709,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/appTokenGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -3736,7 +3736,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -3757,7 +3757,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -3778,7 +3778,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -3802,7 +3802,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3833,7 +3833,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3864,7 +3864,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3895,7 +3895,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3926,7 +3926,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3957,7 +3957,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -3988,7 +3988,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4019,7 +4019,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4047,7 +4047,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/131313",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -4075,7 +4075,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/appTokenOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -4096,7 +4096,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/appTokenPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -4117,7 +4117,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/appTokenNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -4138,7 +4138,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/appTokenNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -4159,7 +4159,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/appTokenMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -4180,7 +4180,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/appTokenListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -4205,7 +4205,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/appTokenText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -4226,7 +4226,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/appTokenDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -4247,7 +4247,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/appTokenSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -4273,20 +4273,20 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/appToken",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/appToken/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/appToken",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -4317,16 +4317,16 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/appToken/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -4351,7 +4351,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/recordTypeGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -4378,7 +4378,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -4399,7 +4399,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -4420,7 +4420,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -4444,7 +4444,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4475,7 +4475,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4506,7 +4506,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4537,7 +4537,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4568,7 +4568,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4599,7 +4599,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4630,7 +4630,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4661,7 +4661,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -4689,7 +4689,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -4717,7 +4717,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -4738,7 +4738,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -4759,7 +4759,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/recordTypeNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -4780,7 +4780,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -4801,7 +4801,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -4822,7 +4822,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/recordTypeListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -4847,7 +4847,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/recordTypeText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -4868,7 +4868,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/recordTypeDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -4889,7 +4889,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/recordTypeSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -4915,26 +4915,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/recordTypeSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -4965,36 +4965,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/recordType/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -5019,7 +5019,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/validationTypeGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -5046,7 +5046,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -5067,7 +5067,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -5088,7 +5088,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -5112,7 +5112,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5143,7 +5143,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5174,7 +5174,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5205,7 +5205,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5236,7 +5236,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5264,7 +5264,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -5292,7 +5292,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypeOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -5313,7 +5313,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -5334,7 +5334,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/validationTypeNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -5355,7 +5355,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypeNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -5376,7 +5376,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypeMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -5397,7 +5397,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypeListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -5422,7 +5422,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/validationTypeText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -5443,7 +5443,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/validationTypeDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -5464,7 +5464,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/validationTypeSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -5485,7 +5485,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationTypeAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -5511,26 +5511,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/validationTypeSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationType",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationType/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationType",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -5561,36 +5561,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/validationType/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -5615,7 +5615,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/guiElementGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -5642,7 +5642,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -5663,7 +5663,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -5684,7 +5684,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -5708,7 +5708,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5739,7 +5739,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5770,7 +5770,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5801,7 +5801,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5832,7 +5832,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -5860,7 +5860,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -5888,7 +5888,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -5909,7 +5909,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -5930,7 +5930,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/guiElementNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -5951,7 +5951,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -5972,7 +5972,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -5993,7 +5993,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -6018,7 +6018,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/guiElementText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -6039,7 +6039,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/guiElementDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -6060,7 +6060,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/guiElementSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -6081,7 +6081,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/guiElementAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -6107,26 +6107,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/guiElementSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/guiElement",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/guiElement/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/guiElement",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -6157,36 +6157,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/guiElement/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/guiElement/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/guiElement/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -6211,7 +6211,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/loginUnitGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -6238,7 +6238,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -6259,7 +6259,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -6280,7 +6280,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -6304,7 +6304,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6335,7 +6335,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6366,7 +6366,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6397,7 +6397,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6428,7 +6428,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6459,7 +6459,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6490,7 +6490,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6521,7 +6521,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6552,7 +6552,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6583,7 +6583,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -6611,7 +6611,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -6639,7 +6639,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -6660,7 +6660,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -6681,7 +6681,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/loginUnitNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -6702,7 +6702,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -6723,7 +6723,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -6744,7 +6744,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -6769,7 +6769,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/loginUnitText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -6790,7 +6790,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/loginUnitDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -6811,7 +6811,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/loginUnitSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -6832,7 +6832,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginUnitAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -6863,26 +6863,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/loginUnitSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/loginUnit",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/loginUnit/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/loginUnit",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -6913,36 +6913,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/loginUnit/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/loginUnit/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/loginUnit/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -6967,7 +6967,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/loginGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -6994,7 +6994,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -7015,7 +7015,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -7036,7 +7036,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -7060,7 +7060,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7091,7 +7091,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7122,7 +7122,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7153,7 +7153,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7184,7 +7184,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7215,7 +7215,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7246,7 +7246,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7277,7 +7277,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7308,7 +7308,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7339,7 +7339,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7367,7 +7367,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -7395,7 +7395,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -7416,7 +7416,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -7437,7 +7437,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/loginNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -7458,7 +7458,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -7479,7 +7479,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -7500,7 +7500,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/loginListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -7525,7 +7525,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/loginText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -7546,7 +7546,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/loginDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -7567,7 +7567,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/loginSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -7593,26 +7593,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/loginSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/login",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/login/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/login",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -7643,36 +7643,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/login/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/login/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/login/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -7697,7 +7697,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/defaultPermissionRuleGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -7724,7 +7724,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -7745,7 +7745,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -7766,7 +7766,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -7790,7 +7790,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7821,7 +7821,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7852,7 +7852,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7883,7 +7883,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7914,7 +7914,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7945,7 +7945,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -7976,7 +7976,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8007,7 +8007,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8035,7 +8035,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -8063,7 +8063,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRuleOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -8084,7 +8084,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRulePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -8105,7 +8105,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/permissionRuleNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -8126,7 +8126,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRuleNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -8147,7 +8147,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRuleMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -8168,7 +8168,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionRuleListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -8193,7 +8193,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionRuleText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -8214,7 +8214,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionRuleDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -8235,7 +8235,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/permissionRuleSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -8261,26 +8261,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/permissionRuleSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRule",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRule/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionRule",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -8311,36 +8311,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionRule/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/permissionRule/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionRule/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -8365,7 +8365,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/demoGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -8392,7 +8392,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -8413,7 +8413,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/testSystem",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -8434,7 +8434,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -8458,7 +8458,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8489,7 +8489,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8520,7 +8520,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8551,7 +8551,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8582,7 +8582,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8613,7 +8613,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8644,7 +8644,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -8672,7 +8672,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -8700,7 +8700,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -8721,7 +8721,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -8742,7 +8742,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/demoNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -8763,7 +8763,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -8784,7 +8784,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -8805,7 +8805,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -8830,7 +8830,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/demoText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -8851,7 +8851,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/demoDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -8872,7 +8872,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/demoSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -8893,7 +8893,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/demoAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -8919,26 +8919,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/demoSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/demo",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/demo/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/demo",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -8969,36 +8969,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/demo/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/demo/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/demo/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -9023,7 +9023,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/exampleGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -9050,7 +9050,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -9071,7 +9071,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/testSystem",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -9092,7 +9092,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -9116,7 +9116,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9147,7 +9147,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9178,7 +9178,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9209,7 +9209,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9240,7 +9240,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9271,7 +9271,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9299,7 +9299,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -9327,7 +9327,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/exampleOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -9348,7 +9348,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/examplePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -9369,7 +9369,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/exampleNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -9390,7 +9390,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/exampleNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -9411,7 +9411,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/exampleMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -9432,7 +9432,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/exampleListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -9457,7 +9457,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/exampleText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -9478,7 +9478,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/exampleDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -9499,7 +9499,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/exampleSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -9520,7 +9520,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/exampleAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -9546,26 +9546,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/exampleSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/example",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/example/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/example",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -9596,36 +9596,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/example/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/example/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/example/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -9650,7 +9650,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/presentationGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -9677,7 +9677,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -9698,7 +9698,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -9719,7 +9719,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -9743,7 +9743,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9774,7 +9774,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9805,7 +9805,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9836,7 +9836,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9867,7 +9867,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9898,7 +9898,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9929,7 +9929,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9960,7 +9960,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -9991,7 +9991,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10022,7 +10022,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10053,7 +10053,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10084,7 +10084,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10115,7 +10115,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10146,7 +10146,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10177,7 +10177,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10205,7 +10205,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -10233,7 +10233,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/presentationOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -10254,7 +10254,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/presentationPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -10275,7 +10275,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/presentationNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -10296,7 +10296,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/presentationNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -10317,7 +10317,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/presentationMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -10338,7 +10338,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/presentationListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -10363,7 +10363,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/presentationText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -10384,7 +10384,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/presentationDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -10405,7 +10405,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/presentationSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -10431,26 +10431,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/presentationSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/presentation",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/presentation/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/presentation",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -10481,36 +10481,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/presentation/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -10535,7 +10535,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/searchGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -10562,7 +10562,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -10583,7 +10583,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -10604,7 +10604,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -10628,7 +10628,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10659,7 +10659,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10690,7 +10690,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10721,7 +10721,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10752,7 +10752,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10783,7 +10783,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10814,7 +10814,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10845,7 +10845,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -10873,7 +10873,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -10901,7 +10901,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -10922,7 +10922,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -10943,7 +10943,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/searchNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -10964,7 +10964,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -10985,7 +10985,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -11006,7 +11006,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -11031,7 +11031,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/searchText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -11052,7 +11052,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/searchDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -11073,7 +11073,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/searchSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -11099,26 +11099,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/searchSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/search",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/search/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/search",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -11149,36 +11149,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/search/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -11203,7 +11203,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/searchTermGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -11230,7 +11230,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -11251,7 +11251,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -11272,7 +11272,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -11296,7 +11296,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11327,7 +11327,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11358,7 +11358,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11389,7 +11389,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11420,7 +11420,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11451,7 +11451,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11482,7 +11482,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11513,7 +11513,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11541,7 +11541,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -11569,7 +11569,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchTermOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -11590,7 +11590,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchTermPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -11611,7 +11611,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/searchTermNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -11632,7 +11632,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchTermNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -11653,7 +11653,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchTermMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -11674,7 +11674,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/searchTermListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -11699,7 +11699,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/searchTermText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -11720,7 +11720,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/searchTermDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -11741,7 +11741,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/searchTermSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -11767,26 +11767,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/searchTermSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/searchTerm",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/searchTerm/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/searchTerm",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -11817,36 +11817,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchTerm/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/searchTerm/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchTerm/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -11871,7 +11871,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/systemGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -11898,7 +11898,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -11919,7 +11919,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -11940,7 +11940,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -11964,7 +11964,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -11995,7 +11995,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12026,7 +12026,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12057,7 +12057,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12088,7 +12088,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12119,7 +12119,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12150,7 +12150,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12181,7 +12181,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12209,7 +12209,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -12237,7 +12237,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -12258,7 +12258,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -12279,7 +12279,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/systemNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -12300,7 +12300,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -12321,7 +12321,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -12342,7 +12342,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -12367,7 +12367,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/systemText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -12388,7 +12388,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/systemDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -12409,7 +12409,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/systemSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -12435,26 +12435,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/systemSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/system",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/system/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/system",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -12485,36 +12485,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/system/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -12539,7 +12539,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/binaryGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -12566,7 +12566,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -12587,7 +12587,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -12608,7 +12608,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -12632,7 +12632,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12663,7 +12663,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12694,7 +12694,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12725,7 +12725,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12756,7 +12756,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12787,7 +12787,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12818,7 +12818,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12849,7 +12849,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12880,7 +12880,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12911,7 +12911,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12942,7 +12942,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -12973,7 +12973,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13001,7 +13001,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -13029,7 +13029,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/binaryOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -13050,7 +13050,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/binaryPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -13071,7 +13071,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/binaryNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -13092,7 +13092,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/binaryNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -13113,7 +13113,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/binaryMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -13134,7 +13134,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/binaryListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -13159,7 +13159,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/binaryText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -13180,7 +13180,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/binaryDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -13201,7 +13201,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/binarySearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -13227,26 +13227,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/binarySearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/binary",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/binary/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/binary",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -13277,36 +13277,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/binary/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/binary/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/binary/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -13331,7 +13331,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/permissionUnitGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -13358,7 +13358,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -13379,7 +13379,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -13400,7 +13400,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -13424,7 +13424,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13455,7 +13455,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13486,7 +13486,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13517,7 +13517,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13548,7 +13548,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13579,7 +13579,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13610,7 +13610,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13641,7 +13641,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13672,7 +13672,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -13700,7 +13700,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -13728,7 +13728,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -13749,7 +13749,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -13770,7 +13770,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/permissionUnitNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -13791,7 +13791,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -13812,7 +13812,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -13833,7 +13833,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -13858,7 +13858,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionUnitText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -13879,7 +13879,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/permissionUnitDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -13900,7 +13900,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/permissionUnitSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -13921,7 +13921,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/permissionUnitAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -13947,26 +13947,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/permissionUnitSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionUnit",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionUnit/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/permissionUnit",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -13997,36 +13997,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionUnit/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/permissionUnit/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/permissionUnit/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -14051,7 +14051,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/systemSecretGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -14078,7 +14078,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -14099,7 +14099,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -14120,7 +14120,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -14144,7 +14144,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14175,7 +14175,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14206,7 +14206,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14234,7 +14234,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -14262,7 +14262,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -14283,7 +14283,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -14304,7 +14304,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/systemSecretGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -14325,7 +14325,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -14346,7 +14346,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -14367,7 +14367,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -14392,7 +14392,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/systemSecretText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -14413,7 +14413,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/systemSecretDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -14434,7 +14434,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/textSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -14455,7 +14455,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/systemSecretAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -14481,26 +14481,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/textSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/systemSecret",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/systemSecret/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/systemSecret",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -14531,9 +14531,9 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -14558,7 +14558,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/textGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -14585,7 +14585,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -14606,7 +14606,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -14627,7 +14627,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -14651,7 +14651,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14682,7 +14682,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14713,7 +14713,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14744,7 +14744,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14775,7 +14775,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14806,7 +14806,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14837,7 +14837,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14868,7 +14868,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14899,7 +14899,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -14927,7 +14927,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -14955,7 +14955,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -14976,7 +14976,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -14997,7 +14997,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/textNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -15018,7 +15018,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -15039,7 +15039,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -15060,7 +15060,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/textListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -15085,7 +15085,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/textText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -15106,7 +15106,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/textDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -15127,7 +15127,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/textSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -15163,26 +15163,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/textSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/text",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -15213,36 +15213,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/text/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -15267,7 +15267,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/validationOrderGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -15294,7 +15294,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -15315,7 +15315,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -15336,7 +15336,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -15360,7 +15360,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15391,7 +15391,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15422,7 +15422,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15453,7 +15453,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15484,7 +15484,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15512,7 +15512,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -15540,7 +15540,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -15561,7 +15561,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -15582,7 +15582,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/validationOrderNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -15603,7 +15603,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -15624,7 +15624,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -15645,7 +15645,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -15670,7 +15670,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/validationOrderText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -15691,7 +15691,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/validationOrderDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -15712,7 +15712,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/validationOrderSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -15733,7 +15733,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/validationOrderAutocompletePGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -15759,26 +15759,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/validationOrderSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationOrder",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationOrder/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/validationOrder",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -15809,36 +15809,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/validationOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationOrder/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -15863,7 +15863,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/userGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "metadataId"
@@ -15890,7 +15890,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "type"
@@ -15911,7 +15911,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "validationType"
@@ -15932,7 +15932,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/system/cora",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "dataDivider"
@@ -15956,7 +15956,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -15987,7 +15987,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16018,7 +16018,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16049,7 +16049,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16080,7 +16080,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16111,7 +16111,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16142,7 +16142,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16173,7 +16173,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16204,7 +16204,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16235,7 +16235,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16266,7 +16266,7 @@ var CORATEST = (function(coraTest) {
 															"requestMethod": "GET",
 															"rel": "read",
 															"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/141414",
-															"accept": "application/vnd.uub.record+json"
+															"accept": "application/vnd.cora.record+json"
 														}
 													},
 													"name": "updatedBy"
@@ -16294,7 +16294,7 @@ var CORATEST = (function(coraTest) {
 													"requestMethod": "GET",
 													"rel": "read",
 													"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/12345",
-													"accept": "application/vnd.uub.record+json"
+													"accept": "application/vnd.cora.record+json"
 												}
 											},
 											"name": "createdBy"
@@ -16322,7 +16322,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userOutputPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationViewId"
@@ -16343,7 +16343,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "presentationFormId"
@@ -16364,7 +16364,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/userNewGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newMetadataId"
@@ -16385,7 +16385,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userNewPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "newPresentationFormId"
@@ -16406,7 +16406,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userMenuPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "menuPresentationViewId"
@@ -16427,7 +16427,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userListPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "listPresentationViewId"
@@ -16452,7 +16452,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/userText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "textId"
@@ -16473,7 +16473,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/text/userDefText",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "defTextId"
@@ -16494,7 +16494,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/search/userSearch",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "search"
@@ -16515,7 +16515,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userFilterPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "autocompletePresentationView"
@@ -16541,7 +16541,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/metadata/userFilterGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "filter"
@@ -16562,7 +16562,7 @@ var CORATEST = (function(coraTest) {
 											"requestMethod": "GET",
 											"rel": "read",
 											"url": "https://cora.epc.ub.uu.se/systemone/rest/record/presentation/userFilterPGroup",
-											"accept": "application/vnd.uub.record+json"
+											"accept": "application/vnd.cora.record+json"
 										}
 									},
 									"name": "filterPresentation"
@@ -16583,26 +16583,26 @@ var CORATEST = (function(coraTest) {
 								"requestMethod": "GET",
 								"rel": "search",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/searchResult/userSearch",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"read": {
 								"requestMethod": "GET",
 								"rel": "read",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/user",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"read_incoming_links": {
 								"requestMethod": "GET",
 								"rel": "read_incoming_links",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/user/incomingLinks",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"update": {
 								"requestMethod": "POST",
 								"rel": "update",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/user",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"index": {
 								"requestMethod": "POST",
@@ -16633,36 +16633,36 @@ var CORATEST = (function(coraTest) {
 									],
 									"name": "workOrder"
 								},
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"create": {
 								"requestMethod": "POST",
 								"rel": "create",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"batch_index": {
 								"requestMethod": "POST",
 								"rel": "batch_index",
-								"contentType": "application/vnd.uub.record+json",
+								"contentType": "application/vnd.cora.record+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/index/user/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							},
 							"list": {
 								"requestMethod": "GET",
 								"rel": "list",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/user/",
-								"accept": "application/vnd.uub.recordList+json"
+								"accept": "application/vnd.cora.recordList+json"
 							},
 							"validate": {
 								"requestMethod": "POST",
 								"rel": "validate",
-								"contentType": "application/vnd.uub.workorder+json",
+								"contentType": "application/vnd.cora.workorder+json",
 								"url": "https://cora.epc.ub.uu.se/systemone/rest/record/workOrder/",
-								"accept": "application/vnd.uub.record+json"
+								"accept": "application/vnd.cora.record+json"
 							}
 						}
 					}
@@ -16729,7 +16729,7 @@ var CORATEST = (function(coraTest) {
 												"requestMethod": "GET",
 												"rel": "read",
 												"url": "http://localhost:8080/therest/rest/record/system/cora",
-												"accept": "application/vnd.uub.record+json"
+												"accept": "application/vnd.cora.record+json"
 											}
 										},
 										"name": "dataDivider"
@@ -16821,33 +16821,33 @@ var CORATEST = (function(coraTest) {
 							"requestMethod": "GET",
 							"rel": "search",
 							"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
-							"accept": "application/vnd.uub.recordList+json"
+							"accept": "application/vnd.cora.recordList+json"
 						},
 						"read": {
 							"requestMethod": "GET",
 							"rel": "read",
 							"url": "http://epc.ub.uu.se/cora/rest/record/recordType/presentationVar",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"update": {
 							"requestMethod": "POST",
 							"rel": "update",
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "http://epc.ub.uu.se/cora/rest/record/recordType/presentationVar",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"create": {
 							"requestMethod": "POST",
 							"rel": "create",
-							"contentType": "application/vnd.uub.record+json",
+							"contentType": "application/vnd.cora.record+json",
 							"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
-							"accept": "application/vnd.uub.record+json"
+							"accept": "application/vnd.cora.record+json"
 						},
 						"list": {
 							"requestMethod": "GET",
 							"rel": "list",
 							"url": "http://epc.ub.uu.se/cora/rest/record/recordType/",
-							"accept": "application/vnd.uub.recordList+json"
+							"accept": "application/vnd.cora.recordList+json"
 						},
 						"delete": {
 							"requestMethod": "DELETE",

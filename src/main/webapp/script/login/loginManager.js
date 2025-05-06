@@ -57,7 +57,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/loginUnit",
-				accept: "application/vnd.uub.recordList+json",
+				accept: "application/vnd.cora.recordList+json",
 				loadMethod: fetchLoginUnitCallback,
 				errorMethod: fetchLoginUnitErrorCallback,
 				timeoutMethod: fetchLoginUnitTimeoutCallback
@@ -69,7 +69,7 @@ var CORA = (function(cora) {
 			let callSpec = {
 				requestMethod: "GET",
 				url: spec.baseUrl + "record/login",
-				accept: "application/vnd.uub.recordList+json",
+				accept: "application/vnd.cora.recordList+json",
 				loadMethod: fetchLoginCallback,
 				errorMethod: fetchLoginErrorCallback,
 				timeoutMethod: fetchLoginTimeoutCallback
@@ -232,8 +232,8 @@ var CORA = (function(cora) {
 			let loginSpec = {
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/apptoken",
-				contentType: "application/vnd.uub.login",
-				accept: "application/vnd.uub.authentication+json",
+				contentType: "application/vnd.cora.login",
+				accept: "application/vnd.cora.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: appTokenErrorCallback,
 				timeoutCallback: appTokenTimeoutCallback
@@ -283,8 +283,8 @@ var CORA = (function(cora) {
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
 				url: spec.appTokenBaseUrl + "login/rest/password/",
-				contentType: "application/vnd.uub.login",
-				accept: "application/vnd.uub.authentication+json",
+				contentType: "application/vnd.cora.login",
+				accept: "application/vnd.cora.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,
 				errorCallback: passwordErrorCallback,
 				timeoutCallback: passwordTimeoutCallback

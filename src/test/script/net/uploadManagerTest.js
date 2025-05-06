@@ -55,7 +55,7 @@ QUnit.module("net/uploadManagerTest.js", {
 			assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/therest/rest/record/"
 					+ "image/image:333759270435575/upload");
 			assert.strictEqual(ajaxCallSpec.requestMethod, "POST");
-			assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.record+json");
+			assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.record+json");
 			assert.strictEqual(ajaxCallSpec.loadMethod, this.uploadManager.uploadFinished);
 			assert.strictEqual(ajaxCallSpec.data.get("file"), this.file);
 		}
@@ -130,7 +130,7 @@ var CORATEST = (function(coraTest) {
 			"rel" : "upload",
 			"contentType" : "multipart/form-data",
 			"url" : "http://localhost:8080/therest/rest/record/image/image:333759270435575/upload",
-			"accept" : "application/vnd.uub.record+json"
+			"accept" : "application/vnd.cora.record+json"
 		};
 	};
 	coraTest.createFileForUpload = function() {

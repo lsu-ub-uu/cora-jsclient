@@ -1668,7 +1668,7 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChild", functi
 					requestMethod: "GET",
 					rel: "read",
 					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				}
 			},
 			name: "type"
@@ -1698,7 +1698,7 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChild", functi
 					requestMethod: "GET",
 					rel: "read",
 					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				}
 			}
 		}]
@@ -1756,7 +1756,7 @@ QUnit.test("testHandleMsgLinkedDataActionLinksGroupIdOneRecordLinkChildWrongPath
 					requestMethod: "GET",
 					rel: "read",
 					url: "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					accept: "application/vnd.uub.record+json"
+					accept: "application/vnd.cora.record+json"
 				}
 			},
 			name: "type"

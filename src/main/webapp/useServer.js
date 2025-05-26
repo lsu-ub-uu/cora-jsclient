@@ -292,7 +292,8 @@ const useDevExternallyWithPort = function(port, appTokenPort, nameIn, deployedNa
 };
 const useCurrentHostWithPort = function(port, appTokenPort, nameIn, deployedName) {
 	name = nameIn;
-	let urlObj = new URL(href);
+	let currentUrl = window.location.href;
+	let urlObj = new URL(currentUrl);
 	let calculatedUrl = urlObj.protocol + "//" + urlObj.hostname + ":";
 	appTokenBaseUrl = calculatedUrl + appTokenPort + "/";
 	baseUrl = calculatedUrl + port + "/" + deployedName + "/rest/";

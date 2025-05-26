@@ -120,18 +120,18 @@ const start = function() {
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	
 	} else if (hrefContains(href, ":30280")) {
-		useCurrentHostWithPort("30280", "30180", "SystemOne metadata (k8s)", "systemone");
+		useCurrentHostWithPort("30080", "30180", "SystemOne metadata (k8s)", "systemone");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
 	
 	} else if (hrefContains(href, ":30281")) {
 		enableCSS("alvinCSS");
-		useCurrentHostWithPort("30281", "30181", "ALVIN metadata (k8s)", "alvin");
+		useCurrentHostWithPort("30081", "30181", "ALVIN metadata (k8s)", "alvin");
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
 	
 	} else if (hrefContains(href, ":30282")) {
 		enableCSS("divaLilaCSS");
-		useCurrentHostWithPort("30282", "30182", "DiVA metadata (k8s)", "diva");
+		useCurrentHostWithPort("30082", "30182", "DiVA metadata (k8s)", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	

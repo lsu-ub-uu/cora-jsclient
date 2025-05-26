@@ -119,6 +119,22 @@ const start = function() {
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	
+	} else if (hrefContains(href, ":30280")) {
+		useCurrentHostWithPort("30280", "30180", "SystemOne metadata (k8s)", "systemone");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
+	
+	} else if (hrefContains(href, ":30281")) {
+		enableCSS("alvinCSS");
+		useCurrentHostWithPort("30281", "30181", "ALVIN metadata (k8s)", "alvin");
+		enableIcon("alvin");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
+	
+	} else if (hrefContains(href, ":30282")) {
+		enableCSS("divaLilaCSS");
+		useCurrentHostWithPort("30282", "30182", "DiVA metadata (k8s)", "diva");
+		enableIcon("diva");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
+	
 	} else {
 		askForServerToUse();
 	}
@@ -272,6 +288,14 @@ const useDevExternallyWithPort = function(port, appTokenPort, nameIn, deployedNa
 	name = nameIn;
 	appTokenBaseUrl = "http://130.238.171.238:" + appTokenPort + "/";
 	baseUrl = "http://130.238.171.238:" + port + "/" + deployedName + "/rest/";
+	startDependencies();
+};
+const useCurrentHostWithPort = function(port, appTokenPort, nameIn, deployedName) {
+	name = nameIn;
+	let urlObj = new URL(href);
+	let calculatedUrl = urlObj.protocol + "//" + urlObj.hostname + ":";
+	appTokenBaseUrl = calculatedUrl + appTokenPort + "/";
+	baseUrl = calculatedUrl + port + "/" + deployedName + "/rest/";
 	startDependencies();
 };
 

@@ -367,8 +367,15 @@ var CORA = (function(cora) {
 			if (cPresentationChildRef.containsChildWithNameInData("presentationSize")) {
 				childRefHandlerSpec.presentationSize = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("presentationSize");
+//					(firstSmaller) Första presentationen är mindre
+//					(firstLarger) Första presentationen är större
+//					(bothEqual) Båda är likvärdiga
+//					(singleInitiallyHidden) Enstaka är dold initialt
+//					(singleInitiallyVisible) Enstaka visas initialt
 			}
 		};
+//		"titleLink" länk till klickbar titel
+//		"titleHeadlineLevel" rubriknivå h1-h6
 
 		const childHasAlternativePresentation = function(cChildRef) {
 			return cChildRef.getNoOfChildrenWithNameInData("refGroup") === 2;

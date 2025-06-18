@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("jsClient/recordTypeMenuTest.js", hooks => {
+QUnit.module("jsClient/recordTypeMenuTest.js", hooks => {
 	const test = QUnit.test;
 	let providers;
 	let dependencies;

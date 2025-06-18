@@ -301,7 +301,14 @@ QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasAc
 	assert.strictEqual(childrenOfGroup2.length, 3);
 
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 });
 
 QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasNoActions", function(
@@ -332,8 +339,16 @@ QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasNo
 	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
 	assert.strictEqual(childrenOfGroup2.length, 1);
 
+
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 });
 
 QUnit.test("requestGroupsOfRecordTypes", function(assert) {
@@ -495,7 +510,7 @@ QUnit.test("testAfterReloadRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHa
 		jsClient.afterRecordTypeProviderReload();
 
 		assert.strictEqual(jsClientView.getRecordTypesClearedNoOfTimes(), 1);
-		CORATEST.assertRecordTypesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
+		CORATEST.assertRecordTypesHasBeenLoadedCorrectly2(assert, this, jsClient, 1);
 	});
 
 CORATEST.assertRecordTypesHasBeenLoadedCorrectly = function(assert, test, jsClient,
@@ -523,8 +538,18 @@ CORATEST.assertRecordTypesHasBeenLoadedCorrectly = function(assert, test, jsClie
 	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
 	assert.strictEqual(childrenOfGroup2.length, 3);
 
+//	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+//	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3 + extra);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 }
 QUnit.test("testAfterReloadSearchProviderViewIsReloaded", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
@@ -786,11 +811,46 @@ QUnit.test("testReloadProvidersReloadsRecordTypesAndSearches", function(assert) 
 	this.searchProvider.callWhenReloadedMethod();
 
 	assert.strictEqual(jsClientView.getRecordTypesClearedNoOfTimes(), 1);
-	CORATEST.assertRecordTypesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
+	CORATEST.assertRecordTypesHasBeenLoadedCorrectly2(assert, this, jsClient, 1);
 	assert.strictEqual(jsClientView.getSearchesClearedNoOfTimes(), 1);
 	CORATEST.assertSearchesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
 });
+CORATEST.assertRecordTypesHasBeenLoadedCorrectly2 = function(assert, test, jsClient,
+	noOfPreviousReloads) {
+	let extra = noOfPreviousReloads * 2;
+	let jsClientView = test.dependencies.jsClientViewFactory.getFactored(0);
 
+	let firstGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(0 + extra);
+	assert.notEqual(firstGroupOfRecordTypes, undefined);
+	assert.strictEqual(firstGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(firstGroupOfRecordTypes.firstChild.className,
+		"recordTypeGroupHeadline");
+	assert.strictEqual(firstGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+	let childrenOfGroup1 = firstGroupOfRecordTypes.children;
+	assert.strictEqual(childrenOfGroup1.length, 2);
+
+	let secondGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(1 + extra);
+	assert.notEqual(secondGroupOfRecordTypes, undefined);
+	assert.strictEqual(secondGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(secondGroupOfRecordTypes.firstChild.className,
+		"recordTypeGroupHeadline");
+	assert.strictEqual(secondGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_typeOfResourceItemText");
+	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
+	assert.strictEqual(childrenOfGroup2.length, 3);
+
+//	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+//	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+
+	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_authorityItemText");
+
+}
 QUnit.test("testSetCurrentLangReloadsManagedGuiItem", function(assert) {
 	this.metadataProvider = CORATEST.metadataProviderSpy();
 	this.dependencies.providers.metadataProvider = this.metadataProvider;

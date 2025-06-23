@@ -403,7 +403,7 @@ QUnit.test("testFirstPChildRefHandlerSpecNoStyleInfo", function(assert) {
 	assert.strictEqual(factoredSpec.childStyle, undefined);
 	assert.strictEqual(factoredSpec.minNumberOfRepeatingToShow, undefined);
 	assert.strictEqual(factoredSpec.mode, "input");
-	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
+	assert.strictEqual(factoredSpec.presentationSize, "firstSmaller");
 });
 
 QUnit.test("testPGroupChildRefHandlerSpecPresentationSizeFirstSmaller", function(assert) {
@@ -502,7 +502,7 @@ QUnit.test("testPNonRepeatingChildRefHandlerSpec", function(assert) {
 	assert.strictEqual(viewSpy.getAppendedChild(0), factored.getView());
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
-	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
+	assert.strictEqual(factoredSpec.presentationSize, "firstSmaller");
 });
 
 QUnit.test("testPNonRepeatingChildRefHandlerSpecFirstSmaller", function(assert) {
@@ -638,7 +638,7 @@ QUnit.test("testSurroundingContainerPermissionWhenTwoChildrenOk", function(asser
 
 	assert.strictEqual(factoredSpec.textStyle, "h2TextStyle");
 	assert.strictEqual(factoredSpec.childStyle, "fourChildStyle");
-	assert.strictEqual(factoredSpec.presentationSize, "bothEqual");
+	assert.strictEqual(factoredSpec.presentationSize, "firstSmaller");
 });
 
 QUnit.test("testSurroundingContainerPermissionWhenOneChildOkOneNotOk", function(assert) {

@@ -335,10 +335,15 @@ var CORA = (function(cora) {
 				cPresentation: cPresentationChild,
 				cParentPresentation: cParentPresentation,
 				mode: mode,
-				presentationSize: "bothEqual"
+				presentationSize: "firstSmaller"
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
+//TODO: 
+//			possiblyAddClickableHeadlineToSpec(cPresentationChildRef, childRefHandlerSpec);
+//			title
+//			possiblyAddClickableSpecifiedHeadlineToSpec(cPresentationChildRef, childRefHandlerSpec);
+//			titleHeadlineLevel
 			return childRefHandlerSpec;
 		};
 

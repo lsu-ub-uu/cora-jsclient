@@ -6433,7 +6433,20 @@ var CORATEST = (function(coraTest) {
 								}, {
 									name: "childStyle",
 									value: "oneChildStyle"
-								}]
+								},	{
+									name: "title",
+									children: [{
+										name: "linkedRecordType",
+										value: "text"
+									}, {
+										name: "linkedRecordId",
+										value: "someHeadlineIdText"
+									}]
+								},{
+									name: "titleHeadlineLevel",
+									value: "h3"
+								}
+							]
 							}]
 						}])
 					};

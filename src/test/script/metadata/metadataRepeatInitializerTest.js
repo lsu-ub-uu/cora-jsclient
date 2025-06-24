@@ -594,18 +594,31 @@ QUnit.test("testRecordLinkCorrectCallToChildAndRepeatInitalizerNoDataFinalValue"
 
 QUnit.test("testResourceLinkMessage", function (assert) {
     this.spec.metadataId = "masterResLink";
-    this.spec.data = {
-        actionLinks: {
-            read: {
-                requestMethod: "GET",
-                rel: "read",
-                url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
-                accept: "image/jpeg"
-            }
-        },
-        name: "large",
-        mimeType: "image/jpeg"
-    };
+	this.spec.data = 	{
+		children: [
+			{
+				name: "linkedRecordType",
+				value: "binary"
+			},
+			{
+				name: "linkedRecordId",
+				value: "binary:29475728554942"
+			},
+			{
+				name: "mimeType",
+				value: "image/jpeg"
+			}
+		],
+		actionLinks: {
+			read: {
+				requestMethod: "GET",
+				rel: "read",
+				url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
+				accept: "image/jpeg"
+			}
+		},
+		name: "large",
+	};
     let metadataRepeatInitializer = CORA.metadataRepeatInitializer(this.dependencies, this.spec);
     metadataRepeatInitializer.initialize();
 

@@ -226,18 +226,31 @@ QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
 QUnit.test("testTransformValueForView_pickUrl", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
-	const value = {
-					"actionLinks": {
-						"read": {
-							"requestMethod": "GET",
-							"rel": "read",
-							"url": "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail",
-							"accept": "image/jpeg"
-						}
-					},
-					"name": "thumbnail",
-					"mimeType": "image/jpeg"
-				};
+	const value = 	{
+		children: [
+			{
+				name: "linkedRecordType",
+				value: "binary"
+			},
+			{
+				name: "linkedRecordId",
+				value: "binary:49671507525818"
+			},
+			{
+				name: "mimeType",
+				value: "image/jpeg"
+			}
+		],
+		actionLinks: {
+			read: {
+				requestMethod: "GET",
+				rel: "read",
+				url: "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail",
+				accept: "image/jpeg"
+			}
+		},
+		name: "large",
+	};
 	const transformed = child.transformValueForView("input", value);
 	
 	assert.strictEqual(transformed, "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail?authToken=fitnesseAdminToken");

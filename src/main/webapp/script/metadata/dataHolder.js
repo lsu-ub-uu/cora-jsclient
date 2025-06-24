@@ -59,7 +59,6 @@ var CORA = (function(cora) {
 		const addChildrenOrValueOfAtomic = function(dataContainerPart, cMetadataElement) {
 			let type = getDataType(cMetadataElement);
 			if(isResourceLink(type)){
-				dataContainerPart.mimeType= "";
 			}else if (isChild(type)) {
 				addGroupParts(dataContainerPart);
 			} else {
@@ -191,10 +190,9 @@ var CORA = (function(cora) {
 		};
 
 		const setMimeTypeInfo = function(dataFromMsg) {
-			let mimeType = dataFromMsg.data.mimeType;
 			let foundContainer = findContainer(dataFromMsg.path);
-			foundContainer.mimeType = mimeType;
 			foundContainer.actionLinks = dataFromMsg.data.actionLinks;
+			foundContainer.children = dataFromMsg.data.children;
 		};
 
 		const setValue = function(path, value) {

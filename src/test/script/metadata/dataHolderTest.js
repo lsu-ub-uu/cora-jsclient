@@ -1780,8 +1780,7 @@ QUnit.test("testAddChildToGroupIdOneResourceLinkChild", function(assert) {
 	let expected = {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
-			name: "master",
-			mimeType: ""
+			name: "master"
 		}]
 	};
 
@@ -1793,6 +1792,20 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
 	dataHolder.addChild([], "masterResLink");
 	let message = {
 		data: {
+			children: [
+				{
+					name: "linkedRecordType",
+					value: "binary"
+				},
+				{
+					name: "linkedRecordId",
+					value: "binary:29475728554942"
+				},
+				{
+					name: "mimeType",
+					value: "image/jpeg"
+				}
+			],
 			actionLinks: {
 				read: {
 					requestMethod: "GET",
@@ -1802,7 +1815,6 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
 				}
 			},
 			name: "large",
-			mimeType: "image/jpeg"
 		},
 		path:"root/groupIdOneResourceLinkChild/masterResLink"
 	};
@@ -1822,7 +1834,20 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild", function(assert) {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
 			name: "master",
-			mimeType: "image/jpeg"
+			children: [
+				{
+					name: "linkedRecordType",
+					value: "binary"
+				},
+				{
+					name: "linkedRecordId",
+					value: "binary:29475728554942"
+				},
+				{
+					name: "mimeType",
+					value: "image/jpeg"
+				}
+			]
 		}]
 	};
 	assert.deepEqual(dataHolder.getData(), expected);
@@ -1833,6 +1858,20 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild_ActionLinksStoredInte
 	dataHolder.addChild([], "masterResLink");
 	let message = {
 		data: {
+			children: [
+				{
+					name: "linkedRecordType",
+					value: "binary"
+				},
+				{
+					name: "linkedRecordId",
+					value: "binary:29475728554942"
+				},
+				{
+					name: "mimeType",
+					value: "image/jpeg"
+				}
+			],
 			actionLinks: {
 				read: {
 					requestMethod: "GET",
@@ -1842,7 +1881,6 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild_ActionLinksStoredInte
 				}
 			},
 			name: "large",
-			mimeType: "image/jpeg"
 		},
 		path:"root/groupIdOneResourceLinkChild/masterResLink"
 	};
@@ -1861,6 +1899,21 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild_ActionLinksStoredInte
 	let expected2 = {
 		name: "groupIdOneResourceLinkChild",
 		children: [{
+			name: "master",
+			children: [
+				{
+					name: "linkedRecordType",
+					value: "binary"
+				},
+				{
+					name: "linkedRecordId",
+					value: "binary:29475728554942"
+				},
+				{
+					name: "mimeType",
+					value: "image/jpeg"
+				}
+			],
 			actionLinks: {
 				read: {
 					requestMethod: "GET",
@@ -1868,9 +1921,7 @@ QUnit.test("testSetValueChildToGroupIdOneResourceLinkChild_ActionLinksStoredInte
 					url: "http://localhost:38080/systemone/rest/record/binary/binary:1899959244835025/large",
 					accept: "image/jpeg"
 				}
-			},
-			name: "master",
-			mimeType: "image/jpeg"
+			}
 		}]
 	};
 	assert.deepEqual(dataHolder.getDataWithActionLinks(), expected2);

@@ -46,7 +46,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		metadataProvider = CORATEST.MetadataProviderStub();
 		pubSub = CORATEST.pubSubSpy();
 		textProvider = CORATEST.textProviderStub();
-		presentationFactory =CORATEST.standardFactorySpy("presentationSpy");
+		presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		ajaxCallFactory = CORATEST.standardFactorySpy("ajaxCallSpy");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		dependencies = {
@@ -181,11 +181,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 						name: "linkedRecordId",
 						value: "genericBinary"
 					}]
-				},	{
+				}, {
 					name: "visibility",
 					value: "unpublished"
 				}
-			]
+				]
 			}, {
 				name: "originalFileName",
 				value: "someFile.tif"
@@ -225,8 +225,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 					name: "visibility",
 					value: "unpublished"
 				}
-			]
-			}, 
+				]
+			},
 			{
 				name: "originalFileName",
 				value: "someFile2.tif"
@@ -261,12 +261,12 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 						name: "linkedRecordId",
 						value: "genericBinary"
 					}]
-				},	{
+				}, {
 					name: "visibility",
 					value: "unpublished"
 				}
-			]
-			},  {
+				]
+			}, {
 				name: "originalFileName",
 				value: "someFile3.tif"
 			}, {
@@ -1169,6 +1169,48 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			spec.cParentPresentation);
 		assert.strictEqual(factoredPresentationSpec.recordPartPermissionCalculator,
 			spec.recordPartPermissionCalculator);
+	});
+
+	test("testAddOneChildWithOptionalClickableHeadline", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h3";
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
+		let view = pChildRefHandler.getView();
+		fixture.appendChild(view);
+
+		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		assert.strictEqual(factoredView.getAddedChild(0), undefined);
+
+		pChildRefHandler.add("textVariableId");
+
+		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
+		let factored = pRepeatingElementFactory.getFactored(0);
+		let factoredSpec = pRepeatingElementFactory.getSpec(0);
+		let expectedSpec = {
+			path: ["textVariableId"],
+			pChildRefHandlerView: factoredView,
+			pChildRefHandler: pChildRefHandler,
+			userCanRemove: false,
+			userCanMove: false,
+			userCanAddBefore: false,
+			clickableHeadlineText: "Some headline text",
+			clickableHeadlineLevel: "h3",
+		};
+		assert.stringifyEqual(factoredSpec, expectedSpec);
+		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
+		assert.deepEqual(factoredSpec.path, ["textVariableId"]);
+
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
+		assert.deepEqual(factoredPresentationSpec.path, ["textVariableId"]);
+		assert.deepEqual(factoredPresentationSpec.metadataIdUsedInData, "textVariableId");
+		assert.strictEqual(factoredPresentationSpec.cPresentation,
+			spec.cPresentation);
+		assert.strictEqual(factoredPresentationSpec.cParentPresentation,
+			spec.cParentPresentation);
+		assert.strictEqual(factoredPresentationSpec.recordPartPermissionCalculator,
+			spec.recordPartPermissionCalculator);
+
+
 	});
 
 	test("testAddOneChildModeOutput", function(assert) {

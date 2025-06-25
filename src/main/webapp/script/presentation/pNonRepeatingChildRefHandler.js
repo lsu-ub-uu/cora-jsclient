@@ -48,15 +48,17 @@ var CORA = (function(cora) {
 				presentationId: findPresentationId(spec.cPresentation),
 				textStyle: spec.textStyle,
 				childStyle: spec.childStyle,
-				"callOnFirstShowOfAlternativePresentation": publishPresentationShown
+				callOnFirstShowOfAlternativePresentation: publishPresentationShown,
+				clickableHeadlineText: spec.clickableHeadlineText,
+				clickableHeadlineLevel: spec.clickableHeadlineLevel
 			};
 			view = dependencies.pNonRepeatingChildRefHandlerViewFactory.factor(viewSpec);
 		};
 
 		const publishPresentationShown = function() {
 			dependencies.pubSub.publish("presentationShown", {
-				"data": "",
-				"path": []
+				data: "",
+				path: []
 			});
 		};
 
@@ -75,7 +77,7 @@ var CORA = (function(cora) {
 				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
 					cParentMetadata, presentationOfId);
-				if(cParentMetadataChildRefPart.getData() != undefined){
+				if (cParentMetadataChildRefPart.getData() != undefined) {
 					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 					topLevelMetadataIds[metadataId] = "exists";
@@ -114,9 +116,9 @@ var CORA = (function(cora) {
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
 			parentPath) {
 			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"repeatId": repeatId,
-				"parentPath": parentPath
+				metadataIdToAdd: metadataIdToAdd,
+				repeatId: repeatId,
+				parentPath: parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};

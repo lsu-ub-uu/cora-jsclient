@@ -18,324 +18,341 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", {
-	beforeEach : function() {
-		this.fixture = document.getElementById("qunit-fixture");
-		this.dependencies = {};
+QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
+	const test = QUnit.test;
+	let fixture;
+	let dependencies;
 
-		this.defaultChild = document.createElement("SPAN");
-		var content = document.createTextNode(JSON
-				.stringify("content needed for span to be visible in chrome"));
-		this.defaultChild.appendChild(content);
-		this.defaultChild.className = "someNode";
-		this.defaultButton;
+	let defaultChild;
+	let defaultButton;
+	let alternativeChild;
+	let alternativeButton;
 
-		this.alternativeChild = document.createElement("SPAN");
-		var content2 = document.createTextNode(JSON
-				.stringify("content needed for span to be visible in chrome"));
-		this.alternativeChild.appendChild(content2);
-		this.alternativeChild.className = "someOtherNode";
-		this.alternativeButton;
+	let spec;
 
-		this.spec = {
-			mode : "input"
+	hooks.beforeEach(() => {
+		fixture = document.getElementById("qunit-fixture");
+		dependencies = {};
+
+		defaultChild = document.createElement("SPAN");
+		let content = document.createTextNode(JSON
+			.stringify("content needed for span to be visible in chrome"));
+		defaultChild.appendChild(content);
+		defaultChild.className = "someNode";
+
+		alternativeChild = document.createElement("SPAN");
+		let content2 = document.createTextNode(JSON
+			.stringify("content needed for span to be visible in chrome"));
+		alternativeChild.appendChild(content2);
+		alternativeChild.className = "someOtherNode";
+
+		spec = {
+			mode: "input"
 		};
-		this.createHandlerAddChildrenAndReturnHandler = function(presentationSizeIn) {
-			let presentationSize = presentationSizeIn!==undefined ? presentationSizeIn : "bothEqual";
-			var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
-					this.dependencies, this.spec);
-			pNonRepeatingChildRefHandlerView.addChild(this.defaultChild);
 
-			pNonRepeatingChildRefHandlerView.addAlternativeChild(this.alternativeChild, 
-				presentationSize);
-			var view = pNonRepeatingChildRefHandlerView.getView();
-			this.fixture.appendChild(view);
+	});
 
-			var buttonView = view.childNodes[2];
-			this.alternativeButton = buttonView.childNodes[0];
-			this.defaultButton = buttonView.childNodes[1];
+	hooks.afterEach(() => {
+		//no after
+	});
 
-			return pNonRepeatingChildRefHandlerView;
-		}
-		this.createHandlerAddChildAndReturnHandler = function() {
-			var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
-					this.dependencies, this.spec);
-			pNonRepeatingChildRefHandlerView.addChild(this.defaultChild);
+	const createHandlerAddChildrenAndReturnHandler = function(presentationSizeIn) {
+		let presentationSize = presentationSizeIn !== undefined ? presentationSizeIn : "bothEqual";
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
+			dependencies, spec);
+		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
 
-			// pNonRepeatingChildRefHandlerView.addAlternativeChild(this.alternativeChild);
-			this.fixture.appendChild(pNonRepeatingChildRefHandlerView.getView());
+		pNonRepeatingChildRefHandlerView.addAlternativeChild(alternativeChild,
+			presentationSize);
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		fixture.appendChild(view);
 
-			return pNonRepeatingChildRefHandlerView;
-		}
-	},
-	afterEach : function() {
-	}
-});
+		let buttonView = view.childNodes[2];
+		alternativeButton = buttonView.childNodes[0];
+		defaultButton = buttonView.childNodes[1];
 
-QUnit.test("testInit", function(assert) {
-	var pChildRefHandlerViewSpec = {};
-	var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(this.dependencies,
-			pChildRefHandlerViewSpec);
-	assert.strictEqual(pNonRepeatingChildRefHandlerView.type, "pNonRepeatingChildRefHandlerView");
-});
-
-QUnit.test("testInitCreatesBaseView", function(assert) {
-	var pChildRefHandlerViewSpec = {
-		"presentationId" : "someSContainer"
+		return pNonRepeatingChildRefHandlerView;
 	};
-	var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(this.dependencies,
+
+	const createHandlerAddChildAndReturnHandler = function() {
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
+			dependencies, spec);
+		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
+
+		fixture.appendChild(pNonRepeatingChildRefHandlerView.getView());
+
+		return pNonRepeatingChildRefHandlerView;
+	};
+
+	test("testInit", function(assert) {
+		let pChildRefHandlerViewSpec = {};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
 			pChildRefHandlerViewSpec);
-	var view = pNonRepeatingChildRefHandlerView.getView();
-	assert.strictEqual(view.nodeName, "SPAN");
-	assert
+		assert.strictEqual(pNonRepeatingChildRefHandlerView.type, "pNonRepeatingChildRefHandlerView");
+	});
+
+	test("testInitCreatesBaseView", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			presentationId: "someSContainer"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
+			pChildRefHandlerViewSpec);
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		assert.strictEqual(view.nodeName, "SPAN");
+		assert
 			.strictEqual(view.className,
-					"pNonRepeatingChildRefHandler someSContainer containsNoData");
-});
+				"pNonRepeatingChildRefHandler someSContainer containsNoData");
+	});
 
-QUnit
-		.test(
-				"testInitCreatesBaseViewWithStyleInfo",
-				function(assert) {
-					var pChildRefHandlerViewSpec = {
-						"presentationId" : "someSContainer",
-						textStyle : "someTextStyle",
-						childStyle : "someChildStyle"
-					};
-					var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
-							this.dependencies, pChildRefHandlerViewSpec);
-					var view = pNonRepeatingChildRefHandlerView.getView();
-					assert.strictEqual(view.nodeName, "SPAN");
-					assert
-							.strictEqual(view.className,
-									"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
-				});
+	test("testInitCreatesBaseViewWithStyleInfo", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			presentationId: "someSContainer",
+			textStyle: "someTextStyle",
+			childStyle: "someChildStyle"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
+			dependencies, pChildRefHandlerViewSpec);
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		assert.strictEqual(view.nodeName, "SPAN");
+		assert.strictEqual(view.className,
+			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
+	});
 
-QUnit
-		.test(
-				"testSetStyleDataInfo",
-				function(assert) {
-					var pChildRefHandlerViewSpec = {
-						"presentationId" : "someSContainer",
-						textStyle : "someTextStyle",
-						childStyle : "someChildStyle"
-					};
-					var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
-							this.dependencies, pChildRefHandlerViewSpec);
-					var viewHandler = pNonRepeatingChildRefHandlerView;
-					var view = viewHandler.getView();
-					assert
-							.strictEqual(view.className,
-									"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
+	test("testSetStyleDataInfo", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			presentationId: "someSContainer",
+			textStyle: "someTextStyle",
+			childStyle: "someChildStyle"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
+			dependencies, pChildRefHandlerViewSpec);
+		let viewHandler = pNonRepeatingChildRefHandlerView;
+		let view = viewHandler.getView();
+		assert.strictEqual(view.className,
+			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
 
-					viewHandler.setHasDataStyle(true);
-					assert
-							.strictEqual(view.className,
-									"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsData");
+		viewHandler.setHasDataStyle(true);
+		assert.strictEqual(view.className,
+			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsData");
 
-					viewHandler.setHasDataStyle(false);
-					assert
-							.strictEqual(view.className,
-									"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
-				});
+		viewHandler.setHasDataStyle(false);
+		assert.strictEqual(view.className,
+			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
+		assert.strictEqual(view.childNodes.length, 0);
+	});
 
-QUnit.test("testAddChild", function(assert) {
-	var pChildRefHandlerViewSpec = {};
-	var pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(this.dependencies,
+	test("testInitWithClickabeHeadline", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			clickableHeadlineText: "Some headline text"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
 			pChildRefHandlerViewSpec);
-	pNonRepeatingChildRefHandlerView.addChild(this.defaultChild);
 
-	var view = pNonRepeatingChildRefHandlerView.getView();
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		let headline = view.childNodes[0];
 
-	assert.strictEqual(view.firstChild, this.defaultChild);
-	assert.strictEqual(view.firstChild.className, "someNode default");
-});
+		assert.strictEqual(headline.nodeName, "H2");
+		assert.strictEqual(headline.textContent, "Some headline text");
+	});
 
-QUnit.test("testAddAlternativeChild", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler().getView();
-	assert.strictEqual(view.childNodes[1], this.alternativeChild);
-	assert.strictEqual(view.childNodes[1].className, "someOtherNode alternative");
+	test("testAddChild", function(assert) {
+		let pChildRefHandlerViewSpec = {};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
+			pChildRefHandlerViewSpec);
+		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
 
-	var buttonView = view.childNodes[2];
-	assert.strictEqual(buttonView.nodeName, "SPAN");
-	assert.strictEqual(buttonView.className, "buttonView");
-});
+		let view = pNonRepeatingChildRefHandlerView.getView();
 
-QUnit.test("testAddAlternativeChildHasButtons", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler().getView();
-	var buttonView = view.childNodes[2];
+		assert.strictEqual(view.childNodes[0], defaultChild);
+		assert.strictEqual(view.childNodes[0].className, "someNode default");
+	});
 
-	assert.strictEqual(buttonView.childNodes.length, 2);
-});
+	test("testAddAlternativeChild", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler().getView();
+		assert.strictEqual(view.childNodes[1], alternativeChild);
+		assert.strictEqual(view.childNodes[1].className, "someOtherNode alternative");
 
-QUnit.test("testalternativeButtonHasCorrectClassName", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler("bothEqual").getView();
-	var buttonView = view.childNodes[2];
-	var alternativeButton = buttonView.childNodes[0];
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.nodeName, "SPAN");
+		assert.strictEqual(buttonView.className, "buttonView");
+	});
 
-	assert.strictEqual(alternativeButton.className, "iconButton alternativeButton");
-});
+	test("testAddAlternativeChildHasButtons", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler().getView();
+		let buttonView = view.childNodes[2];
 
-QUnit.test("testdefaultButtonHasCorrectClassName", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler("bothEqual").getView();
-	var buttonView = view.childNodes[2];
-	var defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(buttonView.childNodes.length, 2);
+	});
 
-	assert.strictEqual(defaultButton.className, "iconButton defaultButton");
-});
+	test("testalternativeButtonHasCorrectClassName", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler("bothEqual").getView();
+		let buttonView = view.childNodes[2];
+		let alternativeButton = buttonView.childNodes[0];
 
-QUnit.test("testalternativeButtonHasCorrectClassNameForFirstSmaller", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler("firstSmaller").getView();
-	var buttonView = view.childNodes[2];
+		assert.strictEqual(alternativeButton.className, "iconButton alternativeButton");
+	});
 
-	var alternativeButton = buttonView.childNodes[0];
-	assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+	test("testdefaultButtonHasCorrectClassName", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler("bothEqual").getView();
+		let buttonView = view.childNodes[2];
+		let defaultButton = buttonView.childNodes[1];
 
-	var defaultButton = buttonView.childNodes[1];
-	assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
-});
+		assert.strictEqual(defaultButton.className, "iconButton defaultButton");
+	});
 
-QUnit.test("testalternativeButtonHasCorrectClassNameForFirstLarger", function(assert) {
-	var view = this.createHandlerAddChildrenAndReturnHandler("firstLarger").getView();
-	var buttonView = view.childNodes[2];
+	test("testalternativeButtonHasCorrectClassNameForFirstSmaller", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler("firstSmaller").getView();
+		let buttonView = view.childNodes[2];
 
-	var alternativeButton = buttonView.childNodes[0];
-	assert.strictEqual(alternativeButton.className, "iconButton minimizeButton");
+		let alternativeButton = buttonView.childNodes[0];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
 
-	var defaultButton = buttonView.childNodes[1];
-	assert.strictEqual(defaultButton.className, "iconButton maximizeButton");
-});
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+	});
 
-QUnit.test("testButtonFunctions", function(assert) {
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
+	test("testalternativeButtonHasCorrectClassNameForFirstLarger", function(assert) {
+		let view = createHandlerAddChildrenAndReturnHandler("firstLarger").getView();
+		let buttonView = view.childNodes[2];
 
-	viewHandler.showContent();
+		let alternativeButton = buttonView.childNodes[0];
+		assert.strictEqual(alternativeButton.className, "iconButton minimizeButton");
 
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton maximizeButton");
+	});
 
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	assert.allNotVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allVisible([ this.alternativeChild, this.defaultButton ]);
+	test("testButtonFunctions", function(assert) {
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
 
-	CORATESTHELPER.simulateOnclick(this.defaultButton);
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
-});
+		viewHandler.showContent();
 
-QUnit.test("testShowAlterntiveButtonCallsFunction", function(assert) {
-	var altFuncWasCalled = 0;
-	var altFunc = function() {
-		altFuncWasCalled++;
-	}
-	this.spec.callOnFirstShowOfAlternativePresentation = altFunc;
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
 
-	viewHandler.showContent();
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.allNotVisible([defaultChild, alternativeButton]);
+		assert.allVisible([alternativeChild, defaultButton]);
+
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
+	});
+
+	test("testShowAlterntiveButtonCallsFunction", function(assert) {
+		let altFuncWasCalled = 0;
+		let altFunc = function() {
+			altFuncWasCalled++;
+		}
+		spec.callOnFirstShowOfAlternativePresentation = altFunc;
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
+
+		viewHandler.showContent();
 
 
-	assert.strictEqual(altFuncWasCalled, 0);
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	assert.strictEqual(altFuncWasCalled, 1);
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	assert.strictEqual(altFuncWasCalled, 1);
-});
+		assert.strictEqual(altFuncWasCalled, 0);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+	});
 
-QUnit.test("testButtonFunctionsKeyboardSpace", function(assert) {
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
+	test("testButtonFunctionsKeyboardSpace", function(assert) {
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
 
-	viewHandler.showContent();
+		viewHandler.showContent();
 
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
 
-	CORATESTHELPER.simulateKeydown(this.alternativeButton, " ");
-	assert.allNotVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allVisible([ this.alternativeChild, this.defaultButton ]);
+		CORATESTHELPER.simulateKeydown(alternativeButton, " ");
+		assert.allNotVisible([defaultChild, alternativeButton]);
+		assert.allVisible([alternativeChild, defaultButton]);
 
-	CORATESTHELPER.simulateKeydown(this.defaultButton, " ");
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
+		CORATESTHELPER.simulateKeydown(defaultButton, " ");
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
 
-});
+	});
 
-QUnit.test("testButtonFunctionsKeyboardEnter", function(assert) {
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
+	test("testButtonFunctionsKeyboardEnter", function(assert) {
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
 
-	viewHandler.showContent();
+		viewHandler.showContent();
 
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
 
-	CORATESTHELPER.simulateKeydown(this.alternativeButton, "Enter");
-	assert.allNotVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allVisible([ this.alternativeChild, this.defaultButton ]);
+		CORATESTHELPER.simulateKeydown(alternativeButton, "Enter");
+		assert.allNotVisible([defaultChild, alternativeButton]);
+		assert.allVisible([alternativeChild, defaultButton]);
 
-	CORATESTHELPER.simulateKeydown(this.defaultButton, "Enter");
-	assert.allVisible([ this.defaultChild, this.alternativeButton ]);
-	assert.allNotVisible([ this.alternativeChild, this.defaultButton ]);
-});
+		CORATESTHELPER.simulateKeydown(defaultButton, "Enter");
+		assert.allVisible([defaultChild, alternativeButton]);
+		assert.allNotVisible([alternativeChild, defaultButton]);
+	});
 
-QUnit.test("testHideAndShowContentOnlyOnePresentationShouldNotCrash", function(assert) {
-	var viewHandler = this.createHandlerAddChildAndReturnHandler();
-	var view = viewHandler.getView();
+	test("testHideAndShowContentOnlyOnePresentationShouldNotCrash", function(assert) {
+		let viewHandler = createHandlerAddChildAndReturnHandler();
 
-	viewHandler.showContent();
+		viewHandler.showContent();
 
-	assert.visible(this.defaultChild);
+		assert.visible(defaultChild);
 
-	viewHandler.hideContent();
-	assert.notVisible(this.defaultChild);
+		viewHandler.hideContent();
+		assert.notVisible(defaultChild);
 
-	viewHandler.showContent();
-	assert.visible(this.defaultChild);
-});
+		viewHandler.showContent();
+		assert.visible(defaultChild);
+	});
 
-QUnit.test("testHideAndShowContent", function(assert) {
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
-	var view = viewHandler.getView();
-	var buttonView = view.childNodes[2];
+	test("testHideAndShowContent", function(assert) {
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
+		let view = viewHandler.getView();
+		let buttonView = view.childNodes[2];
 
-	viewHandler.showContent();
+		viewHandler.showContent();
 
-	assert.visible(this.defaultChild);
-	assert.notVisible(this.alternativeChild);
-	assert.visible(buttonView);
+		assert.visible(defaultChild);
+		assert.notVisible(alternativeChild);
+		assert.visible(buttonView);
 
-	viewHandler.hideContent();
-	assert.notVisible(this.defaultChild);
-	assert.notVisible(this.alternativeChild);
-	assert.notVisible(buttonView);
+		viewHandler.hideContent();
+		assert.notVisible(defaultChild);
+		assert.notVisible(alternativeChild);
+		assert.notVisible(buttonView);
 
-	viewHandler.showContent();
-	assert.visible(this.defaultChild);
-	assert.notVisible(this.alternativeChild);
-	assert.visible(buttonView);
-});
+		viewHandler.showContent();
+		assert.visible(defaultChild);
+		assert.notVisible(alternativeChild);
+		assert.visible(buttonView);
+	});
 
-QUnit.test("testHideAndShowContentAlternativeShown", function(assert) {
-	var viewHandler = this.createHandlerAddChildrenAndReturnHandler();
-	var view = viewHandler.getView();
-	var buttonView = view.childNodes[2];
-	var alternativeButton = buttonView.childNodes[0];
+	test("testHideAndShowContentAlternativeShown", function(assert) {
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
+		let view = viewHandler.getView();
+		let buttonView = view.childNodes[2];
+		let alternativeButton = buttonView.childNodes[0];
 
-	viewHandler.showContent();
+		viewHandler.showContent();
 
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
 
-	CORATESTHELPER.simulateOnclick(this.alternativeButton);
-	assert.notVisible(this.defaultChild);
-	assert.visible(this.alternativeChild);
-	assert.visible(buttonView);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.notVisible(defaultChild);
+		assert.visible(alternativeChild);
+		assert.visible(buttonView);
 
-	viewHandler.hideContent();
-	assert.notVisible(this.defaultChild);
-	assert.notVisible(this.alternativeChild);
-	assert.notVisible(buttonView);
+		viewHandler.hideContent();
+		assert.notVisible(defaultChild);
+		assert.notVisible(alternativeChild);
+		assert.notVisible(buttonView);
 
-	viewHandler.showContent();
-	assert.notVisible(this.defaultChild);
-	assert.visible(this.alternativeChild);
-	assert.visible(buttonView);
+		viewHandler.showContent();
+		assert.notVisible(defaultChild);
+		assert.visible(alternativeChild);
+		assert.visible(buttonView);
+	});
 });

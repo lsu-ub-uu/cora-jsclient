@@ -161,24 +161,23 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(pNonRepeatingChildRefHandler.getSpec(), spec);
 	});
 
-	test("testInitCreatesPresentation",
-		function(assert) {
-			CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-			let factoredPresentationSpec = presentationFactory.getSpec(0);
+	test("testInitCreatesPresentation", function(assert) {
+		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
 
-			assert.strictEqual(factoredPresentationSpec.path, spec.parentPath);
-			assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
-				spec.parentMetadataId);
-			assert.strictEqual(factoredPresentationSpec.cPresentation, spec.cPresentation);
-			assert.strictEqual(factoredPresentationSpec.cParentPresentation,
-				spec.cParentPresentation);
+		assert.strictEqual(factoredPresentationSpec.path, spec.parentPath);
+		assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
+			spec.parentMetadataId);
+		assert.strictEqual(factoredPresentationSpec.cPresentation, spec.cPresentation);
+		assert.strictEqual(factoredPresentationSpec.cParentPresentation,
+			spec.cParentPresentation);
 
-			let factoredAlternativePresentationSpec = presentationFactory
-				.getSpec(1);
-			assert.strictEqual(factoredAlternativePresentationSpec, undefined);
-			assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
+		let factoredAlternativePresentationSpec = presentationFactory
+			.getSpec(1);
+		assert.strictEqual(factoredAlternativePresentationSpec, undefined);
+		assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
 
-		});
+	});
 
 	test("testInitPresentationAddedToView", function(assert) {
 		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
@@ -214,22 +213,37 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	test("testViewSpec", function(assert) {
 		spec.textStyle = "someTextStyle";
 		spec.childStyle = "someChildStyle";
-		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(
-			dependencies, spec);
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 
-		let viewSpec = pNonRepeatingChildRefHandlerViewFactory
-			.getSpec(0);
-		let expectedSpec = {
+		let viewSpec = pNonRepeatingChildRefHandlerViewFactory.getSpec(0);
+		let expectedViewSpec = {
 			presentationId: "somePresentationId",
 			textStyle: "someTextStyle",
 			childStyle: "someChildStyle",
 			callOnFirstShowOfAlternativePresentation: pNonRepeatingChildRefHandler.publishPresentationShown
 		}
-		assert.stringifyEqual(viewSpec, expectedSpec);
+		assert.stringifyEqual(viewSpec, expectedViewSpec);
 
-		assert.notStrictEqual(
-			pNonRepeatingChildRefHandler.publishPresentationShown,
-			undefined);
+		assert.notStrictEqual(pNonRepeatingChildRefHandler.publishPresentationShown, undefined);
+	});
+
+	test("testViewSpecWithOptionalClickableHeadline", function(assert) {
+		spec.textStyle = "someTextStyle";
+		spec.childStyle = "someChildStyle";
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h3";
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+
+		let viewSpec = pNonRepeatingChildRefHandlerViewFactory.getSpec(0);
+		let expectedViewSpec = {
+			presentationId: "somePresentationId",
+			textStyle: "someTextStyle",
+			childStyle: "someChildStyle",
+			callOnFirstShowOfAlternativePresentation: pNonRepeatingChildRefHandler.publishPresentationShown,
+			clickableHeadlineText: "Some headline text",
+			clickableHeadlineLevel: "h3"
+		}
+		assert.stringifyEqual(viewSpec, expectedViewSpec);
 	});
 
 	test("testInitWithAlternativeCreatesPresentation", function(assert) {
@@ -238,12 +252,9 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		let factoredPresentationSpec = presentationFactory.getSpec(1);
 
 		assert.strictEqual(factoredPresentationSpec.path, spec.parentPath);
-		assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
-			spec.parentMetadataId);
-		assert.strictEqual(factoredPresentationSpec.cPresentation,
-			spec.cAlternativePresentation);
-		assert.strictEqual(factoredPresentationSpec.cParentPresentation,
-			spec.cParentPresentation);
+		assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData, spec.parentMetadataId);
+		assert.strictEqual(factoredPresentationSpec.cPresentation, spec.cAlternativePresentation);
+		assert.strictEqual(factoredPresentationSpec.cParentPresentation, spec.cParentPresentation);
 	});
 
 	test("testInitPresentationAlternativeAddedToView", function(assert) {

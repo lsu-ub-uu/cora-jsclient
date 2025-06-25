@@ -734,11 +734,41 @@ label::after, .label:after {
 	border-top: 1px dashed var(--main-color);
 }
 
-.repeatingElement {
-	border-bottom: 1px dashed var(--main-color);
-	transition: background-color 0.5s linear;
-	position: relative;
-	border-bottom: 0.2rem;
+.workView .repeatingElement {
+ 	display: grid;
+  	grid-template-columns: 10fr 16px;
+  	gap: 0px;
+}
+.repeatingElement :is(h1, h2, h3, h4, h5, h6) {
+	grid-column: 1;
+  	grid-row: 1;
+  	width: calc(100% - 16px);
+}
+.repeatingElement .pGroup {
+	grid-area: 2 / 1;
+}
+.repeatingElement .buttonView {
+	grid-column: 2;
+  	grid-row: 1 / 3;
+/*   	background: aquamarine; */
+}
+.workView .pNonRepeatingChildRefHandler {
+ 	display: grid;
+  	grid-template-columns: 10fr 16px;
+  	gap: 0px;
+}
+.pNonRepeatingChildRefHandler :is(h1, h2, h3, h4, h5, h6) {
+	grid-column: 1;
+  	grid-row: 1;
+  	width: calc(100% - 16px);
+}
+.pNonRepeatingChildRefHandler .pGroup, .pNonRepeatingChildRefHandler .pSurroundingContainer {
+	grid-area: 2 / 1;
+}
+.pNonRepeatingChildRefHandler .buttonView {
+	grid-column: 2;
+  	grid-row: 1 / 3;
+/*   	background: aquamarine; */
 }
 
 .jsClient .repeatingElement.hoverRemove {
@@ -750,19 +780,6 @@ label::after, .label:after {
 	border-bottom: none;
 }
 
-/*.recordViewer::before {
-	background: url("../images/icons3.svg") no-repeat scroll;
-	content: "";
-	background-position: -240px -32px;
-	opacity: 0.1;
-	height: 16px;
-	width: 16px;
-	transform: scale(10, 10);
-	position: absolute;
-	right: 5.5rem;
-	top: 5rem;
-	z-index: -1;
-}*/
 
 .compactChildStyle .pGroup, .compactChildStyle .pVar, .compactChildStyle .pCollVar, .compactChildStyle .pSurroundingContainer {
 	padding-right: 0;

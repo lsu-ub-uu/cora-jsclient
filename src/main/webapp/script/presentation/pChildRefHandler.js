@@ -209,7 +209,6 @@ var CORA = (function(cora) {
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
-				//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -375,7 +374,9 @@ var CORA = (function(cora) {
 				pChildRefHandler: out,
 				userCanRemove: userCanRemove,
 				userCanMove: userCanMove,
-				userCanAddBefore: userCanAddBefore
+				userCanAddBefore: userCanAddBefore,
+				clickableHeadlineText: spec.clickableHeadlineText,
+				clickableHeadlineLevel: spec.clickableHeadlineLevel
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -601,24 +602,24 @@ var CORA = (function(cora) {
 						children: [{
 							name: "linkedRecordType",
 							value: "system"
-							}, {
+						}, {
 							name: "linkedRecordId",
 							value: dataDividerLinkedRecordId
-							}]
-						}, {
+						}]
+					}, {
 						name: "validationType",
 						children: [{
 							name: "linkedRecordType",
 							value: "validationType"
-							}, {
+						}, {
 							name: "linkedRecordId",
 							value: "genericBinary"
-							}]
-						},
-						{
-							name: "visibility",
-							value: "unpublished"
-						}
+						}]
+					},
+					{
+						name: "visibility",
+						value: "unpublished"
+					}
 					]
 				}, {
 					name: "originalFileName",

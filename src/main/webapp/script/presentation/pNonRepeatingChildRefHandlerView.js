@@ -34,6 +34,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			view = createBaseView();
 			setContainsDataStyle();
+			possiblyAddClickableHeadline();
 		};
 
 		const createBaseView = function() {
@@ -51,6 +52,18 @@ var CORA = (function(cora) {
 
 		const setContainsDataStyle = function() {
 			view.className = originalStyle + (containsData ? " containsData" : " containsNoData");
+		};
+
+		const possiblyAddClickableHeadline = function() {
+			if (spec.clickableHeadlineText) {
+				addClickableHeadline(spec.clickableHeadlineText);
+			}
+		};
+
+		const addClickableHeadline = function(text, level) {
+			let headline = document.createElement("h2");
+			view.appendChild(headline);
+			headline.appendChild(document.createTextNode(text));
 		};
 
 		const getView = function() {
@@ -89,7 +102,7 @@ var CORA = (function(cora) {
 
 		const createAndAddSwapButton = function(buttonClass, toggleDefaultShownValue) {
 			let buttonSpec = {
-				"className": "iconButton " + buttonClass,
+				className: "iconButton " + buttonClass,
 				action: {
 					method: function() {
 						toggleDefaultShown(toggleDefaultShownValue);
@@ -181,7 +194,7 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type": "pNonRepeatingChildRefHandlerView",
+			type: "pNonRepeatingChildRefHandlerView",
 			getView: getView,
 			addChild: addChild,
 			addAlternativeChild: addAlternativeChild,

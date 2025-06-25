@@ -43,6 +43,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			view = createBaseView();
+			possiblyAddClickableHeadline();
 			buttonView = createButtonView();
 		};
 
@@ -56,6 +57,18 @@ var CORA = (function(cora) {
 
 		const ondragenterHandler = function() {
 			pChildRefHandlerView.setRepeatingElementDragOver(view.modelObject);
+		};
+
+		const possiblyAddClickableHeadline = function() {
+			if (spec.clickableHeadlineText) {
+				addClickableHeadline(spec.clickableHeadlineText);
+			}
+		};
+
+		const addClickableHeadline = function(text, level) {
+			let headline = document.createElement("h2");
+			view.appendChild(headline);
+			headline.appendChild(document.createTextNode(text));
 		};
 
 		const createButtonView = function() {
@@ -217,13 +230,13 @@ var CORA = (function(cora) {
 		};
 
 		const hideDragButton = function() {
-			if(dragButton !== undefined){
+			if (dragButton !== undefined) {
 				hide(dragButton);
 			}
 		};
 
 		const showDragButton = function() {
-			if(dragButton !== undefined){
+			if (dragButton !== undefined) {
 				show(dragButton);
 			}
 		};

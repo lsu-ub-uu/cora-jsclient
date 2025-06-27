@@ -18,7 +18,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.gui.button = function(spec) {
+	cora.button = function(spec) {
 		let view;
 		let action;
 
@@ -31,7 +31,7 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return CORA.gui.createSpanWithClassName(getClassNameOrEmptyFromSpec());
+			return CORA.createSpanWithClassName(getClassNameOrEmptyFromSpec());
 		};
 
 		const getClassNameOrEmptyFromSpec = function() {

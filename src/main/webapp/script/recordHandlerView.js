@@ -43,11 +43,11 @@ var CORA = (function(cora) {
 			workItemView = dependencies.workItemViewFactory.factor(workItemViewSpec);
 			view = workItemView.getView();
 
-			editView = CORA.gui.createSpanWithClassName("editView");
+			editView = CORA.createSpanWithClassName("editView");
 			workItemView.addViewToView(editView);
-			showView = CORA.gui.createSpanWithClassName("showView");
+			showView = CORA.createSpanWithClassName("showView");
 			workItemView.addViewToView(showView);
-			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			buttonView = CORA.createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 
 			setShowDataFunction(spec.showDataMethod);

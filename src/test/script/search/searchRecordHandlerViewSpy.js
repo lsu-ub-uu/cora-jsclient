@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.searchRecordHandlerViewSpy = function(dependencies, spec) {
 		var addedManagedGuiItem = [];
 		var getViewCalled = 0;
-		var view = CORA.gui.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
+		var view = CORA.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
 		function getView() {
 			getViewCalled++;
 			return view;

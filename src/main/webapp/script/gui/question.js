@@ -20,7 +20,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.question = function(spec) {
 		var view = createView();
-		var box = cora.gui.box(view);
+		var box = cora.box(view);
 
 		var questionBox = createTextView();
 		view.appendChild(questionBox);
@@ -28,10 +28,10 @@ var CORA = (function(cora) {
 		createAndAddButtons();
 
 		function createView() {
-			return CORA.gui.createDivWithClassName("question");
+			return CORA.createDivWithClassName("question");
 		}
 		function createTextView() {
-			var viewNew = CORA.gui.createDivWithClassName("questionBox");
+			var viewNew = CORA.createDivWithClassName("questionBox");
 			var textElement = document.createElement("text");
 			viewNew.appendChild(textElement);
 			textElement.innerHTML = spec.text;

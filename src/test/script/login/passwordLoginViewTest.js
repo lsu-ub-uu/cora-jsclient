@@ -72,7 +72,7 @@ QUnit.test("testAddPresentationToLoginFormHolder", function(assert) {
 	let loginFormHolder = factoredWorkItemView.getViewsAddedToView(0);
 	assert.strictEqual(loginFormHolder.childNodes.length, 0);
 
-	let aPresentation = CORA.gui.createSpanWithClassName("some");
+	let aPresentation = CORA.createSpanWithClassName("some");
 	this.passwordLoginView.addPresentationToLoginFormHolder(aPresentation);
 	assert.strictEqual(loginFormHolder.childNodes.length, 1);
 	assert.strictEqual(loginFormHolder.firstChild, aPresentation);

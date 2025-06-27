@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			return CORA.gui.createSpanWithClassName(newClassName);
+			return CORA.createSpanWithClassName(newClassName);
 		};
 
 		const getView = function() {
@@ -57,7 +57,7 @@ var CORA = (function(cora) {
 		};
 
 		const createButtonView = function() {
-			let buttonViewNew = CORA.gui.createSpanWithClassName("buttonView");
+			let buttonViewNew = CORA.createSpanWithClassName("buttonView");
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
@@ -101,7 +101,7 @@ var CORA = (function(cora) {
 		};
 
 		const createChildrenView = function() {
-			let childrenViewNew = CORA.gui.createSpanWithClassName("childrenView");
+			let childrenViewNew = CORA.createSpanWithClassName("childrenView");
 			if (spec.isRepeating) {
 				addDragEventHandlers(childrenViewNew);
 			}

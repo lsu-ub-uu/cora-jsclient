@@ -44,12 +44,12 @@ var CORA = (function(cora) {
 		}
 
 		const createSearchFormHolderAndAddTo = function(addTo) {
-			searchFormHolder = CORA.gui.createSpanWithClassName("searchFormHolder");
+			searchFormHolder = CORA.createSpanWithClassName("searchFormHolder");
 			addTo.addViewToView(searchFormHolder);
 		}
 
 		const createButtonViewAndAddTo = function(addTo) {
-			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			buttonView = CORA.createSpanWithClassName("buttonView");
 			addTo.appendChild(buttonView);
 		}
 
@@ -67,11 +67,11 @@ var CORA = (function(cora) {
 					method: spec.searchMethod
 				}
 			};
-			return CORA.gui.inputButton(buttonSpec);
+			return CORA.inputButton(buttonSpec);
 		}
 
 		const createResultHolderAndAddTo = function(addTo) {
-			resultHolder = CORA.gui.createSpanWithClassName("searchResultHolder");
+			resultHolder = CORA.createSpanWithClassName("searchResultHolder");
 			addTo.addViewToView(resultHolder);
 		}
 

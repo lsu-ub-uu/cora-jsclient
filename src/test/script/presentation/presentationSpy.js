@@ -19,7 +19,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.presentationSpy = function(dependencies, spec) {
-		var view = CORA.gui.createSpanWithClassName("presentationSpyView");
+		var view = CORA.createSpanWithClassName("presentationSpyView");
 		let disableIsCalled = false;
 		function getView() {
 			return view;

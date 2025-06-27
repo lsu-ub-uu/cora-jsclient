@@ -29,17 +29,17 @@ var CORA = (function(cora) {
 		const start = function() {
 			menuView = createMenuView();
 			workView = createWorkView();
-			listView = CORA.gui.createSpanWithClassName("listView");
+			listView = CORA.createSpanWithClassName("listView");
 		};
 		
 		const createWorkView = function() {
-			let newWorkView = CORA.gui.createSpanWithClassName("workView");
+			let newWorkView = CORA.createSpanWithClassName("workView");
 			newWorkView.addEventListener("focusin", spec.focusinMethod);
 			return newWorkView;
 		};
 
 		const createMenuView = function() {
-			let newMenuView = CORA.gui.createSpanWithClassName(originalMenuViewClassName);
+			let newMenuView = CORA.createSpanWithClassName(originalMenuViewClassName);
 			newMenuView.onclick = spec.activateMethod;
 			possiblyCreateRemoveButton(newMenuView);
 			return newMenuView;
@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 		};
 		
 		const createRemoveButton = function(addToView) {
-			let newButton = CORA.gui.createRemoveButton(spec.removeMethod);
+			let newButton = CORA.createRemoveButton(spec.removeMethod);
 			addToView.appendChild(newButton);
 		};
 

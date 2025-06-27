@@ -77,7 +77,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 				return true;
 			};
 			const createOutputWithSetValueFunction = function(){
-				let outputNew = CORA.gui.createSpanWithClassName("from child spy");
+				let outputNew = CORA.createSpanWithClassName("from child spy");
 				outputNew.setValue = function(value) {
 					outputNew.textContent = value;
 				};

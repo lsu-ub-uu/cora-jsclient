@@ -48,7 +48,7 @@ var CORA = (function(cora) {
 		};
 
 		const addTextToMenuView = function() {
-			let menuPresentation = CORA.gui.createSpanWithClassName("listMenu");
+			let menuPresentation = CORA.createSpanWithClassName("listMenu");
 			menuPresentation.textContent = "List (" + spec.headerText + ")";
 			managedGuiItem.addMenuPresentation(menuPresentation);
 		};

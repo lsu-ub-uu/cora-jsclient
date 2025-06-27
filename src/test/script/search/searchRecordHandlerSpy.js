@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.searchRecordHandlerSpy = function(dependencies, spec) {
 //		var addedManagedGuiItem = [];
 		var getViewCalled = 0;
-		var view = CORA.gui.createSpanWithClassName("searchRecordHandlerSpy");
+		var view = CORA.createSpanWithClassName("searchRecordHandlerSpy");
 		function getView() {
 			getViewCalled++;
 			return view;
@@ -32,8 +32,8 @@ var CORATEST = (function(coraTest) {
 //		function addManagedGuiItem(handledBy) {
 //			var managedGuiItem = {
 //				"handledBy" : handledBy,
-//				"workView" : CORA.gui.createSpanWithClassName("workView"),
-//				"menuView" : CORA.gui.createSpanWithClassName("menuView")
+//				"workView" : CORA.createSpanWithClassName("workView"),
+//				"menuView" : CORA.createSpanWithClassName("menuView")
 //			};
 //			addedManagedGuiItem.push(managedGuiItem);
 //			return managedGuiItem;

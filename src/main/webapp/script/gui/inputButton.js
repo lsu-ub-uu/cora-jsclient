@@ -19,7 +19,7 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.gui.inputButton = function(spec) {
+	cora.inputButton = function(spec) {
 		var view;
 		var action;
 

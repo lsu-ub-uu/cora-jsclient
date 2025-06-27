@@ -211,7 +211,7 @@ QUnit.test("testAddToRecordTypesView", function(assert) {
 	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.childNodes.length, 0);
 
-	let someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.createSpanWithClassName("recordType");
 	jsClientView.addToRecordTypesView(someView);
 
 	let firstRecordType = recordTypesView.childNodes[0];
@@ -225,7 +225,7 @@ QUnit.test("testAddGroupOfRecordTypeToRecordTypesView", function(assert) {
 	let recordTypesView = jsClientView.getRecordTypesView();
 	assert.strictEqual(recordTypesView.childNodes.length, 0);
 
-	let someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.createSpanWithClassName("recordType");
 	jsClientView.addGroupOfRecordTypesToView(someView);
 
 	let firstRecordType = recordTypesView.childNodes[0];
@@ -236,7 +236,7 @@ QUnit.test("testAddGroupOfRecordTypeToRecordTypesView", function(assert) {
 QUnit.test("testClearRecordTypesView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	let someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.createSpanWithClassName("recordType");
 	jsClientView.addToRecordTypesView(someView);
 
 	let recordTypesView = jsClientView.getRecordTypesView();
@@ -253,7 +253,7 @@ QUnit.test("testAddWorkView", function(assert) {
 	let workView = jsClientView.getWorkView();
 	assert.strictEqual(workView.childNodes.length, 0);
 
-	let someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.createSpanWithClassName("recordType");
 	jsClientView.addToWorkView(someView);
 
 	let firstWorkView = workView.childNodes[0];
@@ -265,7 +265,7 @@ QUnit.test("testRemoveFromWorkView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
 	let workView = jsClientView.getWorkView();
-	let someView = CORA.gui.createSpanWithClassName("recordType");
+	let someView = CORA.createSpanWithClassName("recordType");
 	jsClientView.addToWorkView(someView);
 
 	let firstWorkView = workView.childNodes[0];
@@ -280,7 +280,7 @@ QUnit.test("testRemoveFromWorkView", function(assert) {
 QUnit.test("testAddLoginManagerView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	let someView = CORA.gui.createSpanWithClassName("loginManagerView");
+	let someView = CORA.createSpanWithClassName("loginManagerView");
 	jsClientView.addLoginManagerView(someView);
 
 	assert.strictEqual(jsClientView.getHeader().childNodes[6], someView);
@@ -289,7 +289,7 @@ QUnit.test("testAddLoginManagerView", function(assert) {
 QUnit.test("testAddGlobalView", function(assert) {
 	let jsClientView = CORA.jsClientView(this.providers, this.dependencies, this.spec);
 
-	let someView = CORA.gui.createSpanWithClassName("globalView");
+	let someView = CORA.createSpanWithClassName("globalView");
 	jsClientView.addGlobalView(someView);
 
 	assert.strictEqual(jsClientView.getHeader().childNodes[6], someView);

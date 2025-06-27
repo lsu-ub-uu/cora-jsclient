@@ -30,7 +30,7 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
+			view = CORA.createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
@@ -60,7 +60,7 @@ var CORA = (function(cora) {
 		};
 
 		const addLabelForOutput = function(){
-			let label = CORA.gui.createSpanWithClassName("label");
+			let label = CORA.createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
@@ -116,7 +116,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOutputText = function() {
-			let outputNew = CORA.gui.createSpanWithClassName("value");
+			let outputNew = CORA.createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};

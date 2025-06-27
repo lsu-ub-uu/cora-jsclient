@@ -27,7 +27,7 @@ var CORA = (function(cora) {
 			let workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createLoginFormHolderAndAddTo(workItemView);
-			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			buttonView = CORA.createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 			addLoginButton();
 		};
@@ -40,7 +40,7 @@ var CORA = (function(cora) {
 		};
 
 		const createLoginFormHolderAndAddTo = function(addTo) {
-			loginFormHolder = CORA.gui.createSpanWithClassName("loginFormHolder");
+			loginFormHolder = CORA.createSpanWithClassName("loginFormHolder");
 			addTo.addViewToView(loginFormHolder);
 		};
 		
@@ -59,7 +59,7 @@ var CORA = (function(cora) {
 					method: spec.loginMethod
 				}
 			};
-			return CORA.gui.inputButton(buttonSpec);
+			return CORA.inputButton(buttonSpec);
 		};
 
 		const getView = function() {

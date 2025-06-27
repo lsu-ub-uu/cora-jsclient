@@ -21,8 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.pNonRepeatingChildRefHandlerViewSpy = function(dependencies, spec) {
 		var addedChildren = [];
 		var addedAlternativeChildren = [];
-		var view = CORA.gui.createSpanWithClassName("pNonRepeatingChildRefHandlerViewSpyView");
-		var presentationSize;
+		var view = CORA.createSpanWithClassName("pNonRepeatingChildRefHandlerViewSpyView");
 		//
 
 		function getView() {
@@ -41,16 +40,11 @@ var CORATEST = (function(coraTest) {
 		function getAddedChild(number) {
 			return addedChildren[number];
 		}
-		function addAlternativeChild(childToAdd, presentationSizeIn) {
+		function addAlternativeChild(childToAdd) {
 			addedAlternativeChildren.push(childToAdd);
-			presentationSize = presentationSizeIn;
 		}
 		function getAddedAlternativeChild(number) {
 			return addedAlternativeChildren[number];
-		}
-		
-		function getPresentationSize(){
-			return presentationSize;
 		}
 		
 		var isShown;
@@ -81,7 +75,6 @@ var CORATEST = (function(coraTest) {
 			getAddedChild : getAddedChild,
 			addAlternativeChild : addAlternativeChild,
 			getAddedAlternativeChild : getAddedAlternativeChild,
-			getPresentationSize : getPresentationSize,
 
 			hideContent : hideContent,
 			showContent : showContent,

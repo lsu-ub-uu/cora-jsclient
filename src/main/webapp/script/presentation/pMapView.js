@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 		var marker;
 
 		function start() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
+			view = CORA.createSpanWithClassName(baseClassName);
 			info = createInfo();
 
 			view.appendChild(info.getButton());
@@ -100,7 +100,7 @@ var CORA = (function(cora) {
 		}
 
 		function createValueView() {
-			valueView = CORA.gui.createDivWithClassName("coraMap");
+			valueView = CORA.createDivWithClassName("coraMap");
 			view.appendChild(valueView);
 		}
 

@@ -22,10 +22,10 @@ var CORA = (function(cora) {
 		let view = createView();
 		let beforeShowFunction;
 
-		let box = cora.gui.box(view);
+		let box = cora.box(view);
 
 		function createView() {
-			return CORA.gui.createDivWithClassName("busy hidden");
+			return CORA.createDivWithClassName("busy hidden");
 		}
 
 

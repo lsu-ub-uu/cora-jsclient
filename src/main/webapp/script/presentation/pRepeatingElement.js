@@ -48,7 +48,7 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
-			let repeatingElement = CORA.gui.createSpanWithClassName("repeatingElement");
+			let repeatingElement = CORA.createSpanWithClassName("repeatingElement");
 			if (userCanMove) {
 				repeatingElement.ondragenter = ondragenterHandler;
 			}
@@ -72,7 +72,7 @@ var CORA = (function(cora) {
 		};
 
 		const createButtonView = function() {
-			let newButtonView = CORA.gui.createSpanWithClassName("buttonView");
+			let newButtonView = CORA.createSpanWithClassName("buttonView");
 			view.appendChild(newButtonView);
 			if (userCanRemove) {
 				removeButton = createRemoveButton();
@@ -98,7 +98,7 @@ var CORA = (function(cora) {
 				};
 				jsBookkeeper.remove(data);
 			};
-			let newRemoveButton = CORA.gui.createRemoveButton(removeFunction);
+			let newRemoveButton = CORA.createRemoveButton(removeFunction);
 			newRemoveButton.addEventListener("mouseenter", function() {
 				view.classList.add("hoverRemove");
 			});
@@ -109,7 +109,7 @@ var CORA = (function(cora) {
 		};
 
 		const createDragButton = function() {
-			let createdDragButton = CORA.gui.createSpanWithClassName("iconButton dragButton");
+			let createdDragButton = CORA.createSpanWithClassName("iconButton dragButton");
 			createdDragButton.onmousedown = function() {
 				view.draggable = "true";
 			};
@@ -132,7 +132,7 @@ var CORA = (function(cora) {
 					method: addBeforeFunction
 				}
 			};
-			return CORA.gui.button(buttonSpec);
+			return CORA.button(buttonSpec);
 		};
 
 		const getView = function() {
@@ -146,11 +146,11 @@ var CORA = (function(cora) {
 			view.className = "repeatingElement";
 		};
 
-		const addAlternativePresentation = function(presentation, presentationSize) {
+		const addAlternativePresentation = function(presentation) {
 			alternativePresentation = presentation.getView();
 			alternativePresentation.classList.add("alternative");
 			view.insertBefore(alternativePresentation, buttonView);
-			createDefaultAndAlternativeButtons(presentationSize);
+			createDefaultAndAlternativeButtons(spec.presentationSize);
 			toggleDefaultShown("true");
 		};
 
@@ -180,7 +180,7 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAddAlternativeButton = function(buttonClasses) {
-			alternativeButton = CORA.gui.createSpanWithClassName("iconButton " + buttonClasses.alternative);
+			alternativeButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.alternative);
 			alternativeButton.onclick = showAlternativePresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(alternativeButton, dragButton);
@@ -190,7 +190,7 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAddDefaultButton = function(buttonClasses) {
-			defaultButton = CORA.gui.createSpanWithClassName("iconButton " + buttonClasses.default);
+			defaultButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.default);
 			defaultButton.onclick = showDefaultPresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(defaultButton, dragButton);

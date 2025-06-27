@@ -389,6 +389,25 @@ QUnit.test("testFirstMinimizedDefaultPChildRefHandlerSpec", function(assert) {
 	assert.strictEqual(factoredSpec.mode, "input");
 });
 
+QUnit.test("testpgGroupIdOneTextChildHeadlineFirstSmallerPChildRefHandlerSpec", function(assert) {
+	this.setSpecCPresentation("pgGroupIdOneTextChildHeadlineFirstSmaller");
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+	let view = pParentMultipleChildren.getView();
+	this.fixture.appendChild(view);
+
+	let factoredSpec = this.dependencies.pChildRefHandlerFactory.getSpec(0);
+	assert.strictEqual(factoredSpec.parentPath, this.spec.path);
+	assert.strictEqual(this.getId(factoredSpec.cParentMetadata), "groupIdOneTextChildRepeat1to3");
+	assert.strictEqual(this.getId(factoredSpec.cPresentation), "pVarTextVariableId");
+	assert.strictEqual(this.getId(factoredSpec.cParentPresentation),
+		"pgGroupIdOneTextChildMinimized");
+
+	assert.strictEqual(factoredSpec.textStyle, "h1TextStyle");
+	assert.strictEqual(factoredSpec.childStyle, "oneChildStyle");
+	assert.strictEqual(factoredSpec.mode, "input");
+	assert.strictEqual(factoredSpec.presentationSize, "firstLarger");
+});
+
 QUnit.test("testFirstPChildRefHandlerSpecNoStyleInfo", function(assert) {
 	this.setSpecCPresentation("pgGroupIdOneTextChildMinimizedDefaultNoStyleInfo");
 	let pParentMultipleChildren = this.createAndInitPMultipleChildren();

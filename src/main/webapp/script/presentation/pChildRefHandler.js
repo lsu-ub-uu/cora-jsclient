@@ -200,12 +200,8 @@ var CORA = (function(cora) {
 				addText: "+ " + text,
 				mode: spec.mode
 			};
-			if (spec.textStyle !== undefined) {
-				pChildRefHandlerViewSpec.textStyle = spec.textStyle;
-			}
-			if (spec.childStyle !== undefined) {
-				pChildRefHandlerViewSpec.childStyle = spec.childStyle;
-			}
+			pChildRefHandlerViewSpec.textStyle = spec.textStyle;
+			pChildRefHandlerViewSpec.childStyle = spec.childStyle;
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
@@ -376,7 +372,8 @@ var CORA = (function(cora) {
 				userCanMove: userCanMove,
 				userCanAddBefore: userCanAddBefore,
 				clickableHeadlineText: spec.clickableHeadlineText,
-				clickableHeadlineLevel: spec.clickableHeadlineLevel
+				clickableHeadlineLevel: spec.clickableHeadlineLevel,
+				presentationSize: spec.presentationSize
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -390,7 +387,7 @@ var CORA = (function(cora) {
 			if (hasAlternativePresentation()) {
 				let presentationMinimized = factorPresentation(path, spec.cAlternativePresentation,
 					metadataIdToAdd);
-				repeatingElement.addAlternativePresentation(presentationMinimized, spec.presentationSize);
+				repeatingElement.addAlternativePresentation(presentationMinimized);
 			}
 		};
 

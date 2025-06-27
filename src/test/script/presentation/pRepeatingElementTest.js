@@ -77,7 +77,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 		assert.strictEqual(buttonView.childNodes.length, 3);
 	});
-	
+
 	test("testInitClickableHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
@@ -420,6 +420,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testaddAlternativePresentationFirstSmaller", function(assert) {
+		spec.presentationSize = "firstSmaller";
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
 		fixture.appendChild(view);
@@ -430,7 +431,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		pRepeatingElement.addPresentation(presentation);
 
 		let alternativePresentation = CORATEST.presentationStub("maximized", "presentationStubMaximized");
-		pRepeatingElement.addAlternativePresentation(alternativePresentation, "firstSmaller");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
 
 		let presentationView = view.childNodes[0];
 		assert.strictEqual(presentationView.className, "presentationStubMinimized default");
@@ -451,6 +452,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testaddAlternativePresentationFirstLarger", function(assert) {
+		spec.presentationSize = "firstLarger";
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
 		fixture.appendChild(view);
@@ -461,7 +463,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		pRepeatingElement.addPresentation(presentation);
 
 		let alternativePresentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
-		pRepeatingElement.addAlternativePresentation(alternativePresentation, "firstLarger");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
 
 		let presentationView = view.childNodes[0];
 		assert.strictEqual(presentationView.className, "presentationStubMaximized default");
@@ -482,6 +484,8 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testaddAlternativePresentationBothEqual", function(assert) {
+		spec.presentationSize = "bothEqual";
+
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
 		fixture.appendChild(view);
@@ -497,7 +501,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(view.childNodes.length, 2);
 
 		let alternativePresentation = CORATEST.presentationStub("minimized");
-		pRepeatingElement.addAlternativePresentation(alternativePresentation, "bothEqual");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
 		assert.deepEqual(view.className, "repeatingElement");
 
 		let alternativePresentationView = view.childNodes[1];
@@ -514,6 +518,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testMinimizealternativeButtonShouldWorkWithoutDraghandle", function(assert) {
+		spec.presentationSize = "bothEqual";
 		spec.userCanRemove = false;
 		spec.userCanMove = false;
 		spec.userCanAddBefore = false;
@@ -527,7 +532,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		pRepeatingElement.addPresentation(presentation);
 
 		let alternativePresentation = CORATEST.presentationStub("minimized");
-		pRepeatingElement.addAlternativePresentation(alternativePresentation, "bothEqual");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
 
 		let alternativeButton = buttonView.childNodes[0];
 		assert.strictEqual(alternativeButton.className, "iconButton alternativeButton");
@@ -540,6 +545,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testaddAlternativePresentationToggleNoStyle", function(assert) {
+		spec.presentationSize = "bothEqual";
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
 		fixture.appendChild(view);
@@ -552,7 +558,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.deepEqual(view.className, "repeatingElement");
 
 		let alternativePresentation = CORATEST.presentationStub("minimized maximized");
-		pRepeatingElement.addAlternativePresentation(alternativePresentation, "bothEqual");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
 		assert.deepEqual(view.className, "repeatingElement");
 
 		let alternativeButton = buttonView.childNodes[1];

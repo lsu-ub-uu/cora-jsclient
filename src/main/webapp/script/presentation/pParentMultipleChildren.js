@@ -287,7 +287,7 @@ var CORA = (function(cora) {
 				textClassName += " "
 					+ cPresentationChildRef.getFirstAtomicValueByNameInData("childStyle");
 			}
-			let textSpan = CORA.gui.createSpanWithClassName(textClassName);
+			let textSpan = CORA.createSpanWithClassName(textClassName);
 			textSpan.appendChild(document.createTextNode(textProvider.getTranslation(presRef)));
 			return textSpan;
 		};
@@ -339,16 +339,25 @@ var CORA = (function(cora) {
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblySetNonDefaultPresentationSize(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddClickableHeadlineInfoToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return childRefHandlerSpec;
 		};
 
 
 		const possiblyAddStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
+			possiblyAddTextStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddChildStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
+		};
+
+		const possiblyAddTextStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("textStyle")) {
 				childRefHandlerSpec.textStyle = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("textStyle");
 			}
+		};
+
+		const possiblyAddChildStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("childStyle")) {
 				childRefHandlerSpec.childStyle = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("childStyle");
@@ -360,7 +369,6 @@ var CORA = (function(cora) {
 			if (childHasAlternativePresentation(cPresentationChildRef)) {
 				let cAlternativePresentation = getAlternativePresentation(cPresentationChildRef);
 				childRefHandlerSpec.cAlternativePresentation = cAlternativePresentation;
-				possiblySetNonDefaultPresentationSize(cPresentationChildRef, childRefHandlerSpec);
 			}
 		};
 

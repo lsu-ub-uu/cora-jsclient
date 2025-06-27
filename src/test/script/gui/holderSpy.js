@@ -20,8 +20,8 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.holderSpy = function(spec) {
 
-		var button = CORA.gui.createSpanWithClassName("fakeButton");
-		var view = CORA.gui.createSpanWithClassName("fakeView");
+		var button = CORA.createSpanWithClassName("fakeButton");
+		var view = CORA.createSpanWithClassName("fakeView");
 
 		var openCalled = 0;
         var toggleCalled = 0;

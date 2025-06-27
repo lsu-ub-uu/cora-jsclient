@@ -55,8 +55,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			cPresentation: createPresentation(),
 			cParentPresentation: {
 				type: "fakeCParentPresentationObject"
-			},
-			presentationSize: "bothEqual"
+			}
 		};
 		cAlternativePresentation = createAlternativePresentation();
 
@@ -232,6 +231,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		spec.childStyle = "someChildStyle";
 		spec.clickableHeadlineText = "Some headline text";
 		spec.clickableHeadlineLevel = "h3";
+		spec.presentationSize = "bothEqual";
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 
 		let viewSpec = pNonRepeatingChildRefHandlerViewFactory.getSpec(0);
@@ -241,7 +241,8 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			childStyle: "someChildStyle",
 			callOnFirstShowOfAlternativePresentation: pNonRepeatingChildRefHandler.publishPresentationShown,
 			clickableHeadlineText: "Some headline text",
-			clickableHeadlineLevel: "h3"
+			clickableHeadlineLevel: "h3",
+			presentationSize: "bothEqual"
 		}
 		assert.stringifyEqual(viewSpec, expectedViewSpec);
 	});
@@ -258,6 +259,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testInitPresentationAlternativeAddedToView", function(assert) {
+		spec.presentationSize = "bothEqual";
 		spec.cAlternativePresentation = cAlternativePresentation;
 		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let factoredPresentation = presentationFactory.getFactored(1);
@@ -265,19 +267,8 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		let factoredView = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 		let addedView = factoredView.getAddedAlternativeChild(0);
 		assert.strictEqual(factoredPresentation.getView(), addedView);
-		let addedPresentationSize = factoredView.getPresentationSize();
-		assert.strictEqual(addedPresentationSize, "bothEqual");
 	});
 
-	test("testInitPresentationAlternativePresentationSize", function(assert) {
-		spec.cAlternativePresentation = cAlternativePresentation;
-		spec.presentationSize = "firstSmaller";
-		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-
-		let factoredView = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-		let addedPresentationSize = factoredView.getPresentationSize();
-		assert.strictEqual(addedPresentationSize, "firstSmaller");
-	});
 
 	test("testInitSubscribesToAdd", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);

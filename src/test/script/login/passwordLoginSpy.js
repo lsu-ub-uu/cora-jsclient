@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.passwordLoginSpy = function(dependencies, spec) {
 
-		let view = CORA.gui.createSpanWithClassName("passwordLoginSpy");
+		let view = CORA.createSpanWithClassName("passwordLoginSpy");
 		const getView = function() {
 			return view;
 		};

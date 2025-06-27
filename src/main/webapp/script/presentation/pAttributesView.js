@@ -23,7 +23,7 @@ var CORA = (function(cora) {
 		let view;
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName("attributes");
+			view = CORA.createSpanWithClassName("attributes");
 		};
 
 		const getView = function() {

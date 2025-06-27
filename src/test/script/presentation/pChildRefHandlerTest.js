@@ -28,6 +28,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	let presentationFactory;
 	let ajaxCallFactory;
 	let jsBookkeeper;
+	let pRepeatingElementFactory;
+	let pChildRefHandlerViewFactory;
+	let uploadManager;
 
 	let recordPartPermissionCalculator;
 	let spec;
@@ -45,10 +48,13 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		fixture = document.getElementById("qunit-fixture");
 		metadataProvider = CORATEST.MetadataProviderStub();
 		pubSub = CORATEST.pubSubSpy();
-		textProvider = CORATEST.textProviderStub();
+		textProvider = CORATEST.textProviderSpy();
 		presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		ajaxCallFactory = CORATEST.standardFactorySpy("ajaxCallSpy");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
+		pRepeatingElementFactory = CORATEST.standardFactorySpy("pRepeatingElementSpy");
+		pChildRefHandlerViewFactory = CORATEST.standardFactorySpy("pChildRefHandlerViewSpy");
+		uploadManager = CORATEST.uploadManagerSpy();
 		dependencies = {
 			metadataProvider: metadataProvider,
 			pubSub: pubSub,
@@ -56,10 +62,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			presentationFactory: presentationFactory,
 			jsBookkeeper: jsBookkeeper,
 			recordTypeProvider: CORATEST.recordTypeProviderStub(),
-			uploadManager: CORATEST.uploadManagerSpy(),
+			uploadManager: uploadManager,
 			ajaxCallFactory: ajaxCallFactory,
-			pChildRefHandlerViewFactory: CORATEST.standardFactorySpy("pChildRefHandlerViewSpy"),
-			pRepeatingElementFactory: CORATEST.standardFactorySpy("pRepeatingElementSpy"),
+			pChildRefHandlerViewFactory: pChildRefHandlerViewFactory,
+			pRepeatingElementFactory: pRepeatingElementFactory,
 			dataDivider: "systemY"
 		};
 		recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
@@ -73,7 +79,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			cAlternativePresentation: CORA.coraData(metadataProvider
 				.getMetadataById("pVarTextVariableIdOutput")),
 			cParentPresentation: { value: "someDummyDataToSeeThatItIsPassedAlong" },
-			presentationSize: "bothEqual",
 			mode: "input",
 			hasWritePermissionsForRecordPart: true,
 			recordPartPermissionCalculator: recordPartPermissionCalculator
@@ -356,7 +361,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testInitViewIsFromFactoredView", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.childStyle = "someChildStyle";
 		spec.textStyle = "someTextStyle";
 		spec.mode = "input";
@@ -364,10 +368,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(view, factoredView.getView());
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: false,
@@ -380,7 +384,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testInitViewIsFromFactoredViewOutputMode", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.childStyle = "someChildStyle";
 		spec.textStyle = "someTextStyle";
 		spec.mode = "output";
@@ -388,10 +391,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(view, factoredView.getView());
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: false,
@@ -439,7 +442,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			newPosition: "after"
 		};
 		pChildRefHandler.handleMsg(moveMessageData, "root/move");
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 
 		assert.deepEqual(factoredView.getMovedChild(0), moveMessageData);
 	});
@@ -455,14 +458,14 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.ok(pChildRefHandler.isRepeating === true);
 		assert.ok(pChildRefHandler.isStaticNoOfChildren === false);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(view, factoredView.getView());
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: true,
-			addText: "+ Exempel textvariabel",
+			addText: "+ translated_textVariableIdText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -483,11 +486,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.ok(pChildRefHandler.isRepeating === true);
 		assert.ok(pChildRefHandler.isStaticNoOfChildren === true);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: true,
-			addText: "+ Exempel textvariabel",
+			addText: "+ translated_textVariableIdText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -505,11 +508,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: true,
-			addText: "+ Exempel textvariabel",
+			addText: "+ translated_textVariableIdText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -603,11 +606,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pgTextVarRepeat1to3InGroupOneAttribute",
 			isRepeating: true,
-			addText: "+ textVarRepeat1to3InGroupOneAttributeText",
+			addText: "+ translated_textVarRepeat1to3InGroupOneAttributeText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -658,7 +661,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testUploadButtonFor0toX", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -666,7 +668,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "myChildOfBinaryPLink",
 			isRepeating: true,
@@ -679,7 +681,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingOneFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -698,7 +699,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingOneBinaryFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myBinaryPLink"));
@@ -719,7 +719,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingOneFileError", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -740,12 +739,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0).innerHTML, "404");
 	});
 
 	test("testHandleFilesReceiveAnswerForOneFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -794,7 +792,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSavingMainRecordAfterReceiveAnswerForOneFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -820,7 +817,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingMoreThanOneFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -847,7 +843,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.deepEqual(messages.length, 4);
 		assert.deepEqual(messages[3].type, "updateRecord");
 
-		let uploadManagerSpy = dependencies.uploadManager;
+		let uploadManagerSpy = uploadManager;
 		assert.ok(uploadManagerSpy.wasUploadCalled());
 
 		let uploadSpecs = uploadManagerSpy.uploadSpecs;
@@ -901,7 +897,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFiles1to1ExistingFile", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeat1to1"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -929,7 +924,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	};
 
 	test("testHandleFiles1to1DefaultShownOneEmptyLink", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeat1to1"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -960,7 +954,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesMax2DefaultShownOneEmptyLink", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -1038,7 +1031,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingMoreFilesThanAllowed", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -1066,7 +1058,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testHandleFilesSendingMoreFilesThanAllowedDifferentRequest", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChildRepeatMax2"));
 		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("myChildOfBinaryPLink"));
@@ -1120,17 +1111,17 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: false,
-			addText: "+ Exempel textvariabel",
+			addText: "+ translated_textVariableIdText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredSpec.addMethod, pChildRefHandler.sendAdd);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 	});
@@ -1140,12 +1131,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 		let expectedSpec = {
@@ -1174,16 +1164,16 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	test("testAddOneChildWithOptionalClickableHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.clickableHeadlineLevel = "h3";
+		spec.presentationSize = "singleInitiallyVisible";
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 		let expectedSpec = {
@@ -1195,6 +1185,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanAddBefore: false,
 			clickableHeadlineText: "Some headline text",
 			clickableHeadlineLevel: "h3",
+			presentationSize: "singleInitiallyVisible"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
@@ -1219,12 +1210,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 		let expectedSpec = {
@@ -1245,7 +1235,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 	});
 
 	test("testAddOneChildBinary", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.cParentMetadata = CORA.coraData(metadataProvider
 			.getMetadataById("groupIdOneChildOfBinaryRecordLinkChild"));
 		spec.cPresentation = CORA.coraData(metadataProvider
@@ -1254,12 +1243,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 
@@ -1286,12 +1274,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId", "one");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1317,12 +1304,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1349,12 +1335,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVariableId");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1385,16 +1370,15 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 
 		pChildRefHandler.add("textVarRepeat1to3InGroupOtherAttribute", "one2");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
-		let factoredSpec = dependencies.pRepeatingElementFactory.getSpec(0);
+		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 		let expectedSpec = {
 			path: ["textVarRepeat1to3InGroupOtherAttribute.one2"],
 			pChildRefHandlerView: factoredView,
@@ -1420,10 +1404,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1465,9 +1448,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 
@@ -1491,9 +1473,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 
@@ -1518,20 +1499,19 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.ok(pChildRefHandler.isRepeating === true);
 		assert.ok(pChildRefHandler.isStaticNoOfChildren === true);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: true,
-			addText: "+ Exempel textvariabel",
+			addText: "+ translated_textVariableIdText",
 			mode: "input"
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredSpec.addMethod, undefined);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1557,10 +1537,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		assert.ok(pChildRefHandler.isRepeating === true);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1582,10 +1561,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		assert.ok(pChildRefHandler.isRepeating === true);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 
@@ -1604,7 +1582,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1636,7 +1614,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1676,7 +1654,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1703,7 +1681,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 0);
@@ -1745,7 +1723,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 0);
@@ -1787,7 +1765,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		assert.strictEqual(factoredSpec.addMethod, undefined);
 	});
 
@@ -1800,9 +1778,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			metadataId: "textVariableId"
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 	});
 
@@ -1823,9 +1800,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			}
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 	});
 
@@ -1847,9 +1823,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 				}
 			}, "x/y/z/add");
 
-			let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 			let factored = pRepeatingElementFactory.getFactored(0);
-			let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+			let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 			assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 		});
 
@@ -1870,10 +1845,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			}
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factored, undefined);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 	});
 
@@ -1892,10 +1866,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			attributes: {}
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factored, undefined);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 	});
 
@@ -1913,10 +1886,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			nameInData: "textVarRepeat1to3InGroupOneAttribute"
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factored, undefined);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 	});
 
@@ -1932,9 +1904,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			nameInData: "textVariableId"
 		}, "x/y/z/add");
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 	});
 
@@ -1947,31 +1918,20 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			metadataId: "textVariableIdNOT"
 		});
 
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 		let factored = pRepeatingElementFactory.getFactored(0);
 		assert.strictEqual(factored, undefined);
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(factoredView.getAddedChild(0), undefined);
 	});
 
 	test("testWithAlternative", function(assert) {
+		spec.presentationSize = "bothEqual";
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 
 		pChildRefHandler.add("textVariableId", "one");
 
-		let pRepeatingElement = dependencies.pRepeatingElementFactory.getFactored(0);
+		let pRepeatingElement = pRepeatingElementFactory.getFactored(0);
 		assert.ok(pRepeatingElement.getPresentationMinimized() !== undefined);
-		assert.strictEqual(pRepeatingElement.getPresentationSize(), "bothEqual");
-	});
-
-	test("testWithAlternativePresentationSize", function(assert) {
-		spec.presentationSize = "firstSmaller";
-		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
-
-		pChildRefHandler.add("textVariableId", "one");
-
-		let pRepeatingElement = dependencies.pRepeatingElementFactory.getFactored(0);
-		assert.strictEqual(pRepeatingElement.getPresentationSize(), "firstSmaller");
 	});
 
 	test("testPresentationMatchingNameInData", function(assert) {
@@ -1983,7 +1943,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		assert.strictEqual(factoredSpec.presentationId, "recordInfoPGroup");
 	});
 
@@ -1998,7 +1958,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		fixture.appendChild(view);
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		assert.strictEqual(factoredSpec.presentationId, "recordInfoAttributePGroup");
 	});
 
@@ -2125,7 +2085,6 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 
 	test("testAddTextIsPickedFromSpecWhenExistInSpec", function(assert) {
-		dependencies.textProvider = CORATEST.textProviderSpy();
 		spec.childStyle = "someChildStyle";
 		spec.textStyle = "someTextStyle";
 		spec.addText = "some_other_addButtonText";
@@ -2134,10 +2093,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		let view = pChildRefHandler.getView();
 		fixture.appendChild(view);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		assert.strictEqual(view, factoredView.getView());
 
-		let factoredSpec = dependencies.pChildRefHandlerViewFactory.getSpec(0);
+		let factoredSpec = pChildRefHandlerViewFactory.getSpec(0);
 		let expectedSpec = {
 			presentationId: "pVarTextVariableId",
 			isRepeating: false,
@@ -2156,9 +2115,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 
-		let factoredView = dependencies.pChildRefHandlerViewFactory.getFactored(0);
+		let factoredView = pChildRefHandlerViewFactory.getFactored(0);
 		pChildRefHandler.add("textVariableId", "one");
-		let pRepeatingElementFactory = dependencies.pRepeatingElementFactory;
 
 		let factoredSpec = pRepeatingElementFactory.getSpec(0);
 

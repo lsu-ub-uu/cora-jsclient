@@ -57,13 +57,12 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 	});
 
 	const createHandlerAddChildrenAndReturnHandler = function(presentationSizeIn) {
-		let presentationSize = presentationSizeIn !== undefined ? presentationSizeIn : "bothEqual";
+		spec.presentationSize = presentationSizeIn !== undefined ? presentationSizeIn : "bothEqual";
 		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(
 			dependencies, spec);
 		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
 
-		pNonRepeatingChildRefHandlerView.addAlternativeChild(alternativeChild,
-			presentationSize);
+		pNonRepeatingChildRefHandlerView.addAlternativeChild(alternativeChild);
 		let view = pNonRepeatingChildRefHandlerView.getView();
 		fixture.appendChild(view);
 
@@ -99,9 +98,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 			pChildRefHandlerViewSpec);
 		let view = pNonRepeatingChildRefHandlerView.getView();
 		assert.strictEqual(view.nodeName, "SPAN");
-		assert
-			.strictEqual(view.className,
-				"pNonRepeatingChildRefHandler someSContainer containsNoData");
+		assert.strictEqual(view.className, "pNonRepeatingChildRefHandler someSContainer containsNoData");
 	});
 
 	test("testInitCreatesBaseViewWithStyleInfo", function(assert) {

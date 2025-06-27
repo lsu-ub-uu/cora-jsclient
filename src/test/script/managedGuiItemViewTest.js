@@ -262,12 +262,12 @@ QUnit.test("testAddMenuPresentation", function(assert) {
 	let menuView = managedGuiItemView.getMenuView();
 	assert.strictEqual(menuView.childNodes[0].className, "iconButton removeButton");
 
-	let presentation = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addMenuPresentation(presentation);
 	assert.strictEqual(menuView.childNodes[0], presentation);
 	assert.strictEqual(menuView.childNodes[1].className, "iconButton removeButton");
 
-	let presentation2 = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation2 = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addMenuPresentation(presentation2);
 	assert.strictEqual(menuView.childNodes[0], presentation);
 	assert.strictEqual(menuView.childNodes[1], presentation2);
@@ -278,11 +278,11 @@ QUnit.test("testAddListPresentation", function(assert) {
 	let managedGuiItemView = CORA.managedGuiItemView(this.spec);
 	let listView = managedGuiItemView.getListView();
 
-	let presentation = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addListPresentation(presentation);
 	assert.strictEqual(listView.childNodes[0], presentation);
 
-	let presentation2 = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation2 = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addListPresentation(presentation2);
 	assert.strictEqual(listView.childNodes[0], presentation);
 	assert.strictEqual(listView.childNodes[1], presentation2);
@@ -293,11 +293,11 @@ QUnit.test("testAddWorkPresentation", function(assert) {
 	let workView = managedGuiItemView.getWorkView();
 	assert.strictEqual(workView.childNodes[0], undefined);
 
-	let presentation = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addWorkPresentation(presentation);
 	assert.strictEqual(workView.childNodes[0], presentation);
 
-	let presentation2 = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation2 = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addWorkPresentation(presentation2);
 	assert.strictEqual(workView.childNodes[0], presentation);
 	assert.strictEqual(workView.childNodes[1], presentation2);
@@ -346,12 +346,12 @@ QUnit.test("testClearMenuView", function(assert) {
 	let menuView = managedGuiItemView.getMenuView();
 	assert.strictEqual(menuView.childNodes[0].className, "iconButton removeButton");
 
-	let presentation = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addMenuPresentation(presentation);
 	assert.strictEqual(menuView.childNodes[0], presentation);
 	assert.strictEqual(menuView.childNodes[1].className, "iconButton removeButton");
 
-	let presentation2 = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation2 = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addMenuPresentation(presentation2);
 	assert.strictEqual(menuView.childNodes[0], presentation);
 	assert.strictEqual(menuView.childNodes[1], presentation2);
@@ -367,11 +367,11 @@ QUnit.test("testClearWorkView", function(assert) {
 	let workView = managedGuiItemView.getWorkView();
 	assert.strictEqual(workView.childNodes[0], undefined);
 
-	let presentation = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addWorkPresentation(presentation);
 	assert.strictEqual(workView.childNodes[0], presentation);
 
-	let presentation2 = CORA.gui.createSpanWithClassName("someClassName");
+	let presentation2 = CORA.createSpanWithClassName("someClassName");
 	managedGuiItemView.addWorkPresentation(presentation2);
 	assert.strictEqual(workView.childNodes[0], presentation);
 	assert.strictEqual(workView.childNodes[1], presentation2);

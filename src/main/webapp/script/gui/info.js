@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 					method : showInfo
 				}
 			};
-			return CORA.gui.button(infoButtonSpec);
+			return CORA.button(infoButtonSpec);
 		};
 
 		const getButton = function() {
@@ -73,7 +73,7 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
-			view = CORA.gui.createSpanWithClassName("infoView");
+			view = CORA.createSpanWithClassName("infoView");
 		};
 
 		const addBaseViewAccordingToSpec = function() {
@@ -95,7 +95,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewPart = function(info) {
-			let viewPart = CORA.gui.createSpanWithClassName(info.className);
+			let viewPart = CORA.createSpanWithClassName(info.className);
 			viewPart.innerHTML = info.text;
 			addOnClickIfSpecifiedInSpec(info.onclickMethod, viewPart);
 			view.appendChild(viewPart);

@@ -19,7 +19,7 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.loginManagerSpy = function() {
-		let html = CORA.gui.createSpanWithClassName("loginManagerSpy");
+		let html = CORA.createSpanWithClassName("loginManagerSpy");
 		
 		function getHtml() {
 			return html;

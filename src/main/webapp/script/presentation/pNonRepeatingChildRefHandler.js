@@ -50,7 +50,8 @@ var CORA = (function(cora) {
 				childStyle: spec.childStyle,
 				callOnFirstShowOfAlternativePresentation: publishPresentationShown,
 				clickableHeadlineText: spec.clickableHeadlineText,
-				clickableHeadlineLevel: spec.clickableHeadlineLevel
+				clickableHeadlineLevel: spec.clickableHeadlineLevel,
+				presentationSize: spec.presentationSize
 			};
 			view = dependencies.pNonRepeatingChildRefHandlerViewFactory.factor(viewSpec);
 		};
@@ -224,7 +225,7 @@ var CORA = (function(cora) {
 		const possiblyAddAlternativePresentation = function() {
 			if (spec.cAlternativePresentation !== undefined) {
 				let factoredAlternativePresentation = factorPresentation(spec.cAlternativePresentation);
-				view.addAlternativeChild(factoredAlternativePresentation.getView(), spec.presentationSize);
+				view.addAlternativeChild(factoredAlternativePresentation.getView());
 			}
 		};
 

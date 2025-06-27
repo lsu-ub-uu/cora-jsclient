@@ -30,6 +30,8 @@ var CORA = (function(cora) {
 		let containsData = false;
 		let originalStyle;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+		let buttonFactory = CORA.genericFactory("button");
+
 
 		const start = function() {
 			view = createBaseView();
@@ -47,7 +49,7 @@ var CORA = (function(cora) {
 			}
 			newClassName += " " + spec.presentationId;
 			originalStyle = newClassName;
-			return CORA.gui.createSpanWithClassName(newClassName);
+			return CORA.createSpanWithClassName(newClassName);
 		};
 
 		const setContainsDataStyle = function() {
@@ -77,16 +79,16 @@ var CORA = (function(cora) {
 			hide(defaultPresentation);
 		};
 
-		const addAlternativeChild = function(child, presentationSize) {
+		const addAlternativeChild = function(child) {
 			child.className += " alternative";
 			alternativePresentation = child;
-			createButtonView(presentationSize);
+			createButtonView(spec.presentationSize);
 			view.insertBefore(child, buttonView);
 			hide(alternativePresentation);
 		};
 
 		const createButtonView = function(presentationSize) {
-			let buttonViewNew = CORA.gui.createSpanWithClassName("buttonView");
+			let buttonViewNew = CORA.createSpanWithClassName("buttonView");
 			buttonView = buttonViewNew;
 			view.appendChild(buttonViewNew);
 			createDefaultAndAlternativeButtons(presentationSize);
@@ -112,7 +114,7 @@ var CORA = (function(cora) {
 					}
 				}
 			};
-			let button = CORA.gui.button(buttonSpec);
+			let button = buttonFactory.factor(buttonSpec);
 			buttonView.appendChild(button);
 			return button;
 		};

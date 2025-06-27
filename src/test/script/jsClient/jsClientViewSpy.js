@@ -31,11 +31,11 @@ var CORATEST = (function(coraTest) {
 		
 		var recordTypesClearedNoOfTimes = 0;
 		var searchesClearedNoOfTimes = 0;
-		var html = CORA.gui.createSpanWithClassName("jsClientViewSpy");
+		var html = CORA.createSpanWithClassName("jsClientViewSpy");
 		function getHtml() {
 			return html;
 		}
-		var view = CORA.gui.createSpanWithClassName("jsClientViewSpy");
+		var view = CORA.createSpanWithClassName("jsClientViewSpy");
 		function getView() {
 			return view;
 		}
@@ -59,7 +59,7 @@ var CORATEST = (function(coraTest) {
 			return loginManagerViews[number];
 		}
 
-		var workView = CORA.gui.createSpanWithClassName("workViewSpy");
+		var workView = CORA.createSpanWithClassName("workViewSpy");
 		function addToWorkView(viewToAdd) {
 			workView.appendChild(viewToAdd);
 			workViews.push(viewToAdd);

@@ -36,7 +36,7 @@ var CORA = (function(cora) {
 				},
 				"text" : spec.buttonText
 			};
-			return CORA.gui.button(holderButtonSpec);
+			return CORA.button(holderButtonSpec);
 		}
 
 		function getClassNameFromSpec() {
@@ -74,7 +74,7 @@ var CORA = (function(cora) {
 		}
 
 		function createBaseView() {
-			return CORA.gui.createSpanWithClassName("holder" + getClassNameFromSpec());
+			return CORA.createSpanWithClassName("holder" + getClassNameFromSpec());
 		}
 
 		function addBaseViewAccordingToSpec() {

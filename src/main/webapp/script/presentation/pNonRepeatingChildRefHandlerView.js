@@ -30,6 +30,7 @@ var CORA = (function(cora) {
 		let containsData = false;
 		let originalStyle;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+		//TODO: change to be sent in through dependencies
 		let buttonFactory = CORA.genericFactory("button");
 
 

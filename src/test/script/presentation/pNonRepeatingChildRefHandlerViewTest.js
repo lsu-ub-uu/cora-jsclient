@@ -149,6 +149,23 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		let headline = view.childNodes[0];
 
 		assert.strictEqual(headline.nodeName, "H2");
+		assert.strictEqual(headline.className, "clickableHeadline");
+		assert.strictEqual(headline.textContent, "Some headline text");
+	});
+
+	test("testInitWithClickabeHeadline_nonDefaultHeadlineLevel", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			clickableHeadlineText: "Some headline text",
+			clickableHeadlineLevel: "h4"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
+			pChildRefHandlerViewSpec);
+
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		let headline = view.childNodes[0];
+
+		assert.strictEqual(headline.nodeName, "H4");
+		assert.strictEqual(headline.className, "clickableHeadline");
 		assert.strictEqual(headline.textContent, "Some headline text");
 	});
 

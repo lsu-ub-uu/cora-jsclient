@@ -61,12 +61,14 @@ var CORA = (function(cora) {
 
 		const possiblyAddClickableHeadline = function() {
 			if (spec.clickableHeadlineText) {
-				addClickableHeadline(spec.clickableHeadlineText);
+				const level = spec.clickableHeadlineLevel ? spec.clickableHeadlineLevel : "h2";
+				addClickableHeadline(spec.clickableHeadlineText, level);
 			}
 		};
 
 		const addClickableHeadline = function(text, level) {
-			let headline = document.createElement("h2");
+			let headline = document.createElement(level);
+			headline.className = "clickableHeadline"
 			view.appendChild(headline);
 			headline.appendChild(document.createTextNode(text));
 		};

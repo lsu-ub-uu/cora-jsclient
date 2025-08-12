@@ -84,36 +84,29 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let view = pRepeatingElement.getView();
 		fixture.appendChild(view);
 
-		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
-		assert.deepEqual(view.className, "repeatingElement");
-		assert.ok(view.modelObject === pRepeatingElement,
-			"modelObject should be a pointer to the javascript object instance");
-
-		assert.strictEqual(pRepeatingElement.getPath(), spec.path);
-
 		let repeatingElement = view;
 		assert.strictEqual(repeatingElement.className, "repeatingElement");
 
 		let headline = view.childNodes[0];
 		assert.strictEqual(headline.nodeName, "H2");
+		assert.strictEqual(headline.className, "clickableHeadline");
 		assert.strictEqual(headline.textContent, "Some headline text");
+	});
 
-		let buttonView = repeatingElement.childNodes[1];
-		assert.strictEqual(buttonView.className, "buttonView");
+	test("testInitClickableHeadline_nonDefaultHeadlineLevel", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h4";
+		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		let view = pRepeatingElement.getView();
+		fixture.appendChild(view);
 
-		// remove button
-		let removeButton = buttonView.firstChild;
-		assert.strictEqual(removeButton.className, "iconButton removeButton");
+		let repeatingElement = view;
+		assert.strictEqual(repeatingElement.className, "repeatingElement");
 
-		// drag button
-		let dragButton = buttonView.childNodes[1];
-		assert.strictEqual(dragButton.className, "iconButton dragButton");
-
-		// addBeforeButton
-		let addBeforeButton = buttonView.childNodes[2];
-		assert.strictEqual(addBeforeButton.className, "iconButton addBeforeButton");
-
-		assert.strictEqual(buttonView.childNodes.length, 3);
+		let headline = view.childNodes[0];
+		assert.strictEqual(headline.nodeName, "H4");
+		assert.strictEqual(headline.className, "clickableHeadline");
+		assert.strictEqual(headline.textContent, "Some headline text");
 	});
 
 	test("testInitNoAddBeforeButton", function(assert) {

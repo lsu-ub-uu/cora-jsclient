@@ -2,7 +2,7 @@
   --color-presentation-grey: #868686;
 }
 
-var(--color-presentation-grey)
+/* var(--color-presentation-grey) */
 
 .jsClient {
 	white-space: pre-wrap;
@@ -744,6 +744,11 @@ label::after, .label:after {
   	grid-row: 1;
   	width: calc(100% - 16px);
 }
+
+.clickableHeadline {
+	cursor: pointer;
+}
+
 .repeatingElement .pGroup {
 	grid-area: 2 / 1;
 }

@@ -86,7 +86,7 @@ QUnit.module("jsClient/jsClientTest.js", {
 		this.spec = {
 			name: "The Client",
 			baseUrl: "http://epc.ub.uu.se/cora/rest/",
-			appTokenBaseUrl: "someAppTokenBaseUrl/"
+			loginBaseUrl: "someAppTokenBaseUrl/"
 		};
 		let addedEvents = [];
 		this.addedEvents = addedEvents;
@@ -171,7 +171,7 @@ QUnit.test("testInitCreatesALoginManager", function(assert) {
 	assert.strictEqual(loginManagerSpec.setErrorMessage, jsClientView.addErrorMessage);
 
 	assert.strictEqual(loginManagerSpec.baseUrl, this.spec.baseUrl);
-	assert.strictEqual(loginManagerSpec.appTokenBaseUrl, "someAppTokenBaseUrl/");
+	assert.strictEqual(loginManagerSpec.loginBaseUrl, "someAppTokenBaseUrl/");
 	assert.strictEqual(loginManagerSpec.jsClient, jsClient);
 
 	assert.strictEqual(this.dependencies.globalInstances.loginManager, factored);

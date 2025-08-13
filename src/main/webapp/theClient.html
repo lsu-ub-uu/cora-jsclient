@@ -231,7 +231,7 @@
 
 	var name = "A Client";
 	var baseUrl = "http://epc.ub.uu.se/cora/rest/";
-	var appTokenBaseUrl = "http://epc.ub.uu.se/";
+	var loginBaseUrl = "http://epc.ub.uu.se/";
 	var jsClientSpec;
 	var jsClientDependencies;
 	var jsClient;
@@ -418,7 +418,7 @@
 		jsClientSpec = {
 			"name" : name,
 			"baseUrl" : baseUrl,
-			"appTokenBaseUrl" : appTokenBaseUrl
+			"loginBaseUrl" : loginBaseUrl
 		};
 		var dependencies = {
 			"authTokenHolder" : authTokenHolder

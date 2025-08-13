@@ -68,7 +68,13 @@ var CORA = (function(cora) {
 
 		const addClickableHeadline = function(text, level) {
 			let headline = document.createElement(level);
-			headline.className = "clickableHeadline"
+			headline.classList.add("clickableHeadline");
+			//			headline.addEventListener('click', (event) => {
+			////				event.stopPropagation();
+			////				toggleDefaultShown(currentDefaultShown === "true" ? "false" : "true");
+			//				toggleDefaultShown("true");
+			//			});
+			//TODO: create a toggle method that could be called from here too
 			view.appendChild(headline);
 			headline.appendChild(document.createTextNode(text));
 		};

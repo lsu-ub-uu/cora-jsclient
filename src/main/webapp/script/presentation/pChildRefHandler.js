@@ -385,9 +385,9 @@ var CORA = (function(cora) {
 			repeatingElement.addPresentation(presentation);
 
 			if (hasAlternativePresentation()) {
-				let presentationMinimized = factorPresentation(path, spec.cAlternativePresentation,
+				let alternativePresentation = factorPresentation(path, spec.cAlternativePresentation,
 					metadataIdToAdd);
-				repeatingElement.addAlternativePresentation(presentationMinimized);
+				repeatingElement.addAlternativePresentation(alternativePresentation);
 			}
 		};
 

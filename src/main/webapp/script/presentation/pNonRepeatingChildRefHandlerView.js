@@ -28,7 +28,6 @@ var CORA = (function(cora) {
 		let defaultButton;
 		let currentDefaultShown = "true";
 		let containsData = false;
-		let originalStyle;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		//TODO: change to be sent in through dependencies
 		let buttonFactory = CORA.genericFactory("button");
@@ -49,12 +48,14 @@ var CORA = (function(cora) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			originalStyle = newClassName;
 			return CORA.createSpanWithClassName(newClassName);
 		};
 
 		const setContainsDataStyle = function() {
-			view.className = originalStyle + (containsData ? " containsData" : " containsNoData");
+			let currentContainsStateClass = containsData ? "containsData" : "containsNoData";
+			let notCurrentContainsStateClass = !containsData ? "containsData" : "containsNoData";
+			view.classList.remove(notCurrentContainsStateClass);
+			view.classList.add(currentContainsStateClass);
 		};
 
 		const possiblyAddClickableHeadline = function() {
@@ -66,7 +67,10 @@ var CORA = (function(cora) {
 
 		const addClickableHeadline = function(text, level) {
 			let headline = document.createElement(level);
-			headline.className = "clickableHeadline"
+			headline.classList.add("clickableHeadline");
+//			headline.onclick =  function() {
+//									toggleDefaultShown(currentDefaultShown==="true" ? "false" : "true");
+//								};
 			view.appendChild(headline);
 			headline.appendChild(document.createTextNode(text));
 		};
@@ -76,14 +80,14 @@ var CORA = (function(cora) {
 		};
 
 		const addChild = function(child) {
-			child.className += " default";
+			child.classList.add("default");
 			defaultPresentation = child;
 			view.insertBefore(child, buttonView);
 			hide(defaultPresentation);
 		};
 
 		const addAlternativeChild = function(child) {
-			child.className += " alternative";
+			child.classList.add("alternative");
 			alternativePresentation = child;
 			createButtonView(spec.presentationSize);
 			view.insertBefore(child, buttonView);

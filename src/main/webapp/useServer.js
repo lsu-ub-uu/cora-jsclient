@@ -21,7 +21,7 @@ const start = function() {
 	let href = window.location.href;
 	let appTokensMap = createMapWithAppTokens();
 
-	if (hrefContains(href, "systemone")) {
+	if (hrefContains(href, "preview.systemone")) {
 		enableCSS("aClientCSS");
 		useSysteOnePreview();
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
@@ -51,19 +51,13 @@ const start = function() {
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
 			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
-	} else if (hrefContains(href, "alvin")) {
+	} else if (hrefContains(href, "preview.alvin")) {
 		enableCSS("alvinCSS");
 		useAlvinPreview();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin', 'alvinUser']);
 	
-	} else if (hrefContains(href, "20240226/diva")) {
-		enableCSS("divaLilaCSS");
-		useDiva20240226();
-		enableIcon("diva");
-		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
-	
-	} else if (hrefContains(href, "diva")) {
+	} else if (hrefContains(href, "preview.diva")) {
 		enableCSS("divaLilaCSS");
 		useDivaPreview();
 		enableIcon("diva");
@@ -314,15 +308,15 @@ const useLocalhost3 = function() {
 
 const useSysteOnePreview = function() {
 	name = "SystemOne preview";
-	baseUrl = "https://cora.epc.ub.uu.se/systemone/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
+	baseUrl = "https://preview.systemone.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.systemone.cora.epc.ub.uu.se/";
 	startDependencies();
 };
 
-const useAlvinPre = function() {
-	name = "ALVIN";
-	baseUrl = "https://cora.alvin-portal.org/rest/";
-	loginBaseUrl = "https://cora.alvin-portal.org/";
+const useAlvinPreview = function() {
+	name = "ALVIN preview";
+	baseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/rest/";
+	loginBaseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/";
 	startDependencies();
 };
 
@@ -332,11 +326,17 @@ const useAlvinMigration = function() {
 	loginBaseUrl = "https://mig.alvin-portal.org/";
 	startDependencies();
 };
+const useAlvinPre = function() {
+	name = "ALVIN";
+	baseUrl = "https://cora.alvin-portal.org/rest/";
+	loginBaseUrl = "https://cora.alvin-portal.org/";
+	startDependencies();
+};
 
-const useAlvinPreview = function() {
-	name = "ALVIN preview";
-	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+const useDivaPreview = function() {
+	name = "DiVA preview";
+	baseUrl = "https://preview.diva.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.diva.cora.epc.ub.uu.se/";
 	startDependencies();
 };
 
@@ -346,24 +346,9 @@ const useDivaMigration = function() {
 	loginBaseUrl = "https://mig.diva-portal.org/";
 	startDependencies();
 };
-
-const useDivaPreview = function() {
-	name = "DiVA preview";
-	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/diva/";
-	startDependencies();
-};
-
 const useDivaPre = function() {
 	name = "DiVA pre";
 	baseUrl = "https://pre.diva-portal.org/rest/";
 	loginBaseUrl = "https://pre.diva-portal.org/";
-	startDependencies();
-};
-
-const useDiva20240226 = function() {
-	name = "DiVA version 20240226";
-	baseUrl = "https://cora.epc.ub.uu.se/20240226/diva/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/20240226/diva/";
 	startDependencies();
 };

@@ -20,15 +20,17 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingElement = function(dependencies, spec) {
-		let jsBookkeeper = dependencies.jsBookkeeper;
+		const jsBookkeeper = dependencies.jsBookkeeper;
 
-		let pChildRefHandler = spec.pChildRefHandler;
-		let pChildRefHandlerView = spec.pChildRefHandlerView;
-		let path = spec.path;
+		const pChildRefHandler = spec.pChildRefHandler;
+		const pChildRefHandlerView = spec.pChildRefHandlerView;
+		const path = spec.path;
 
-		let userCanRemove = spec.userCanRemove;
-		let userCanMove = spec.userCanMove;
-		let userCanAddBefore = spec.userCanAddBefore;
+		const userCanRemove = spec.userCanRemove;
+		const userCanMove = spec.userCanMove;
+		const userCanAddBefore = spec.userCanAddBefore;
+
+		let presentationSize = spec.presentationSize;
 
 		let view;
 		let removeButton;
@@ -40,11 +42,14 @@ var CORA = (function(cora) {
 		let defaultButton;
 
 		let buttonView;
-
+		//TODO:: defalut hidden för klickbar rubrik
+		//TODO: clickable headline
+		//TODO: add new always initialShown after startup is completret
+		//TODO: firstshow for initial hidden.... as with alternative
 		const start = function() {
 			view = createBaseView();
-			possiblyAddClickableHeadline();
 			buttonView = createButtonView();
+			possiblyAddClickableHeadline();
 		};
 
 		const createBaseView = function() {
@@ -63,19 +68,22 @@ var CORA = (function(cora) {
 			if (spec.clickableHeadlineText) {
 				const level = spec.clickableHeadlineLevel ? spec.clickableHeadlineLevel : "h2";
 				addClickableHeadline(spec.clickableHeadlineText, level);
+				presentationSize = presentationSize ? presentationSize : "singleInitiallyHidden";
+				createDefaultAndAlternativeButtons(presentationSize);
 			}
 		};
 
 		const addClickableHeadline = function(text, level) {
 			let headline = document.createElement(level);
 			headline.classList.add("clickableHeadline");
-			//			headline.addEventListener('click', (event) => {
-			////				event.stopPropagation();
-			////				toggleDefaultShown(currentDefaultShown === "true" ? "false" : "true");
-			//				toggleDefaultShown("true");
-			//			});
+			//						headline.addEventListener('click', (event) => {
+			//			//				event.stopPropagation();
+			//			//				toggleDefaultShown(currentDefaultShown === "true" ? "false" : "true");
+			//							toggleDefaultShown();
+			//						});
 			//TODO: create a toggle method that could be called from here too
-			view.appendChild(headline);
+			//			view.appendChild(headline);
+			view.insertBefore(headline, buttonView);
 			headline.appendChild(document.createTextNode(text));
 		};
 
@@ -152,29 +160,61 @@ var CORA = (function(cora) {
 			defaultPresentation.classList.add("default");
 			view.insertBefore(defaultPresentation, buttonView);
 			view.className = "repeatingElement";
+			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
 		};
+		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
+			if (presentationSize === "singleInitiallyHidden") {
+				//				toggleDefaultShown(false);
+				showDefaultPresentationNext = false;
+				toggleDefaultShown();
+				//				hide(defaultPresentation);
+			}
+			if (presentationSize === "singleInitiallyVisible") {
+				//				toggleDefaultShown(true);
+				showDefaultPresentationNext = true;
+				toggleDefaultShown();
+				//				hide(defaultPresentation);
+			}
+		}
 
 		const addAlternativePresentation = function(presentation) {
 			alternativePresentation = presentation.getView();
 			alternativePresentation.classList.add("alternative");
 			view.insertBefore(alternativePresentation, buttonView);
-			createDefaultAndAlternativeButtons(spec.presentationSize);
-			toggleDefaultShown("true");
+			createDefaultAndAlternativeButtons(presentationSize);
+			//			toggleDefaultShown(true);
+			showDefaultPresentationNext = true;
+			toggleDefaultShown();
 		};
 
+		let toggleButtonsCreated = false;
 		const createDefaultAndAlternativeButtons = function(presentationSize) {
-			let buttonClasses = getButtonClassName(presentationSize);
-			createAndAddAlternativeButton(buttonClasses);
-			createAndAddDefaultButton(buttonClasses);
+			if (!toggleButtonsCreated) {
+				toggleButtonsCreated = true;
+				let buttonClasses = getButtonClassName(presentationSize);
+				createAndAddAlternativeButton(buttonClasses);
+				createAndAddDefaultButton(buttonClasses);
+			}
 		};
 
 		const getButtonClassName = function(presentationSize) {
-			if (presentationSize === "firstLarger") {
+			//			nameInData: presentationSize
+			//			presentationId: presentationSizePCollVar
+			//			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
+			//			(firstLarger) Första presentationen är större - Första presentationen är större
+			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
+			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
+			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
+			//			if (presentationSize === "firstLarger" || presentationSize === "singleInitiallyHidden") {
+			if (presentationSize === "firstLarger" || presentationSize === "singleInitiallyHidden"
+				|| presentationSize === "singleInitiallyVisible"
+			) {
 				return {
 					default: "maximizeButton",
 					alternative: "minimizeButton"
 				};
 			}
+			//			if (presentationSize === "firstSmaller"|| presentationSize === "singleInitiallyVisible") {
 			if (presentationSize === "firstSmaller") {
 				return {
 					default: "minimizeButton",
@@ -208,15 +248,22 @@ var CORA = (function(cora) {
 		};
 
 		const showAlternativePresentation = function() {
-			toggleDefaultShown("false");
+			//			toggleDefaultShown(false);
+			showDefaultPresentationNext = false;
+			toggleDefaultShown();
 		};
 
 		const showDefaultPresentation = function() {
-			toggleDefaultShown("true");
+			//			toggleDefaultShown(true);
+			showDefaultPresentationNext = true;
+			toggleDefaultShown();
 		};
-
-		const toggleDefaultShown = function(defaultShown) {
-			if (defaultShown !== undefined && defaultShown === "true") {
+		let showDefaultPresentationNext = false;
+		//		const toggleDefaultShown = function(defaultShown) {
+		const toggleDefaultShown = function() {
+			//			if (defaultShown !== undefined && defaultShown === "true") {
+			//			if (defaultShown === true) {
+			if (showDefaultPresentationNext === true) {
 				hide(alternativePresentation);
 				show(defaultPresentation);
 				show(alternativeButton);
@@ -227,7 +274,10 @@ var CORA = (function(cora) {
 				hide(alternativeButton);
 				show(defaultButton);
 			}
+			showDefaultPresentationNext = !showDefaultPresentationNext;
 		};
+
+
 
 		const hideRemoveButton = function() {
 			hide(removeButton);
@@ -250,13 +300,17 @@ var CORA = (function(cora) {
 		};
 
 		const hide = function(element) {
-			element.styleOriginal = element.style.display;
-			element.style.display = "none";
+			if (element) {
+				element.styleOriginal = element.style.display;
+				element.style.display = "none";
+			}
 		};
 
 		const show = function(element) {
-			if (element.styleOriginal !== undefined) {
-				element.style.display = element.styleOriginal;
+			if (element) {
+				if (element.styleOriginal !== undefined) {
+					element.style.display = element.styleOriginal;
+				}
 			}
 		};
 

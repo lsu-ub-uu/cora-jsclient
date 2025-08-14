@@ -62,7 +62,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 			dependencies, spec);
 		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
 
-		pNonRepeatingChildRefHandlerView.addAlternativeChild(alternativeChild);
+		pNonRepeatingChildRefHandlerView.addAlternativePresentation(alternativeChild);
 		let view = pNonRepeatingChildRefHandlerView.getView();
 		fixture.appendChild(view);
 
@@ -181,7 +181,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		assert.strictEqual(view.childNodes[0].className, "someNode default");
 	});
 
-	test("testAddAlternativeChild", function(assert) {
+	test("testaddAlternativePresentation", function(assert) {
 		let view = createHandlerAddChildrenAndReturnHandler().getView();
 		assert.strictEqual(view.childNodes[1], alternativeChild);
 		assert.strictEqual(view.childNodes[1].className, "someOtherNode alternative");
@@ -191,7 +191,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		assert.strictEqual(buttonView.className, "buttonView");
 	});
 
-	test("testAddAlternativeChildHasButtons", function(assert) {
+	test("testaddAlternativePresentationHasButtons", function(assert) {
 		let view = createHandlerAddChildrenAndReturnHandler().getView();
 		let buttonView = view.childNodes[2];
 

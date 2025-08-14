@@ -40,7 +40,7 @@ var CORATEST = (function(coraTest) {
 		function getAddedChild(number) {
 			return addedChildren[number];
 		}
-		function addAlternativeChild(childToAdd) {
+		function addAlternativePresentation(childToAdd) {
 			addedAlternativeChildren.push(childToAdd);
 		}
 		function getAddedAlternativeChild(number) {
@@ -73,7 +73,7 @@ var CORATEST = (function(coraTest) {
 			getView : getView,
 			addChild : addChild,
 			getAddedChild : getAddedChild,
-			addAlternativeChild : addAlternativeChild,
+			addAlternativePresentation : addAlternativePresentation,
 			getAddedAlternativeChild : getAddedAlternativeChild,
 
 			hideContent : hideContent,

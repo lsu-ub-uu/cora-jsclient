@@ -225,7 +225,7 @@ var CORA = (function(cora) {
 		const possiblyAddAlternativePresentation = function() {
 			if (spec.cAlternativePresentation !== undefined) {
 				let factoredAlternativePresentation = factorPresentation(spec.cAlternativePresentation);
-				view.addAlternativeChild(factoredAlternativePresentation.getView());
+				view.addAlternativePresentation(factoredAlternativePresentation.getView());
 			}
 		};
 

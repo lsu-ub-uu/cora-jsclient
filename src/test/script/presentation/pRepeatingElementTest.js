@@ -508,7 +508,160 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let defaultButton = buttonView.childNodes[2];
 		assert.strictEqual(defaultButton.className, "iconButton defaultButton");
 		assert.notVisible(defaultButton, "defaultButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 5);
 	});
+
+	test("testaddAlternativePresentation_SingleInitiallyHidden", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "singleInitiallyHidden";
+
+		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		let view = pRepeatingElement.getView();
+		fixture.appendChild(view);
+
+		let buttonView = view.childNodes[1];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		let presentation = CORATEST.presentationStub("maximized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let presentationView = view.childNodes[1];
+		assert.strictEqual(presentationView.className, "presentationStub default");
+		assert.notVisible(presentationView, "presentationView should not be visible");
+		assert.strictEqual(view.childNodes.length, 3);
+		//
+		//		let alternativePresentation = CORATEST.presentationStub("minimized");
+		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
+		//		assert.deepEqual(view.className, "repeatingElement");
+		//
+		//		let alternativePresentationView = view.childNodes[1];
+		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
+		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
+
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[2];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+		assert.visible(alternativeButton, "maximizeButton should be shown");
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+		assert.notVisible(defaultButton, "minimizeButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 5);
+	});
+	test("testaddAlternativePresentation_headlineDefaultsToSingleInitiallyHidden", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+//		spec.presentationSize = "singleInitiallyHidden";
+
+		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		let view = pRepeatingElement.getView();
+		fixture.appendChild(view);
+
+		let buttonView = view.childNodes[1];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		let presentation = CORATEST.presentationStub("maximized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let presentationView = view.childNodes[1];
+		assert.strictEqual(presentationView.className, "presentationStub default");
+		assert.notVisible(presentationView, "presentationView should not be visible");
+		assert.strictEqual(view.childNodes.length, 3);
+		//
+		//		let alternativePresentation = CORATEST.presentationStub("minimized");
+		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
+		//		assert.deepEqual(view.className, "repeatingElement");
+		//
+		//		let alternativePresentationView = view.childNodes[1];
+		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
+		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
+
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[2];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+		assert.visible(alternativeButton, "maximizeButton should be shown");
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+		assert.notVisible(defaultButton, "minimizeButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 5);
+	});
+//	const assertCorretHandlingOfSingleInitallyHidden = function(assert)
+
+	test("testaddAlternativePresentation_SingleInitiallyVisible", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "singleInitiallyVisible";
+
+		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		let view = pRepeatingElement.getView();
+		fixture.appendChild(view);
+
+		let buttonView = view.childNodes[1];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		let presentation = CORATEST.presentationStub("maximized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let presentationView = view.childNodes[1];
+		assert.strictEqual(presentationView.className, "presentationStub default");
+		assert.visible(presentationView, "presentationView should be visible");
+		assert.strictEqual(view.childNodes.length, 3);
+		//
+		//		let alternativePresentation = CORATEST.presentationStub("minimized");
+		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
+		//		assert.deepEqual(view.className, "repeatingElement");
+		//
+		//		let alternativePresentationView = view.childNodes[1];
+		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
+		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
+
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[2];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+		assert.notVisible(alternativeButton, "maximizeButton should not be shown");
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+		assert.visible(defaultButton, "minimizeButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 5);
+	});
+
+	test("testaddAlternativePresentation_FirstSmallerWithHeadline", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		//				spec.presentationSize = "singleInitiallyVisible";
+		spec.presentationSize = "firstSmaller";
+		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		let view = pRepeatingElement.getView();
+		fixture.appendChild(view);
+
+		let buttonView = view.childNodes[1];
+
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let alternativePresentation = CORATEST.presentationStub("maximized", "presentationStubMaximized");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
+
+		let presentationView = view.childNodes[1];
+		assert.strictEqual(presentationView.className, "presentationStubMinimized default");
+		assert.visible(presentationView, "presentationView should be visible");
+		assert.strictEqual(view.childNodes.length, 4);
+
+		let alternativePresentationView = view.childNodes[2];
+		assert.strictEqual(alternativePresentationView.className, "presentationStubMaximized alternative");
+		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
+
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[1];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+		assert.visible(alternativeButton, "maximizeButton should be shown");
+		let defaultButton = buttonView.childNodes[2];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+		assert.notVisible(defaultButton, "minimizeButton should be hidden");
+		
+		assert.strictEqual(buttonView.childNodes.length, 5);
+	});
+
 
 	test("testMinimizealternativeButtonShouldWorkWithoutDraghandle", function(assert) {
 		spec.presentationSize = "bothEqual";

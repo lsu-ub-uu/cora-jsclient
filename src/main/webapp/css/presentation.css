@@ -154,19 +154,19 @@ img {
 }
 
 .defaultButton::before {
-	background-position: -176px 0px;
+	background-position: -192px -32px;
 }
 
 .defaultButton::after {
-	background-position: -176px -16px;
+	background-position: -192px -48px;
 }
 
 .alternativeButton::before {
-	background-position: -160px 0px;
+	background-position: -192px -32px;
 }
 
 .alternativeButton::after {
-	background-position: -160px -16px;
+	background-position: -192px -48px;
 }
 
 .minimizeButton::before {

@@ -86,7 +86,7 @@ var CORA = (function(cora) {
 			hide(defaultPresentation);
 		};
 
-		const addAlternativeChild = function(child) {
+		const addAlternativePresentation = function(child) {
 			child.classList.add("alternative");
 			alternativePresentation = child;
 			createButtonView(spec.presentationSize);
@@ -206,7 +206,7 @@ var CORA = (function(cora) {
 			type: "pNonRepeatingChildRefHandlerView",
 			getView: getView,
 			addChild: addChild,
-			addAlternativeChild: addAlternativeChild,
+			addAlternativePresentation: addAlternativePresentation,
 			hideContent: hideContent,
 			showContent: showContent,
 			setHasDataStyle: setHasDataStyle

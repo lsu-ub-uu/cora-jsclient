@@ -21,7 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.createRemoveButton = function(onclick) {
 		let spec = {
-			"className" : "iconButton removeButton",
+			className : "iconButton removeButton",
 			action : {
 				method : onclick
 			}

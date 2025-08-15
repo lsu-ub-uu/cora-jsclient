@@ -548,10 +548,15 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.notVisible(defaultButton, "minimizeButton should be hidden");
 
 		assert.strictEqual(buttonView.childNodes.length, 5);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(presentationView, "presentationView should be visible");
 	});
+
 	test("testaddAlternativePresentation_headlineDefaultsToSingleInitiallyHidden", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
-//		spec.presentationSize = "singleInitiallyHidden";
+		//		spec.presentationSize = "singleInitiallyHidden";
 
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
@@ -585,8 +590,11 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.notVisible(defaultButton, "minimizeButton should be hidden");
 
 		assert.strictEqual(buttonView.childNodes.length, 5);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(presentationView, "presentationView should be visible");
 	});
-//	const assertCorretHandlingOfSingleInitallyHidden = function(assert)
 
 	test("testaddAlternativePresentation_SingleInitiallyVisible", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
@@ -624,11 +632,14 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.visible(defaultButton, "minimizeButton should be hidden");
 
 		assert.strictEqual(buttonView.childNodes.length, 5);
+		
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.notVisible(presentationView, "presentationView should not be visible");
 	});
 
 	test("testaddAlternativePresentation_FirstSmallerWithHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
-		//				spec.presentationSize = "singleInitiallyVisible";
 		spec.presentationSize = "firstSmaller";
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
@@ -658,7 +669,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let defaultButton = buttonView.childNodes[2];
 		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
 		assert.notVisible(defaultButton, "minimizeButton should be hidden");
-		
+
 		assert.strictEqual(buttonView.childNodes.length, 5);
 	});
 

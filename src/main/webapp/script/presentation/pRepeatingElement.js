@@ -29,6 +29,8 @@ var CORA = (function(cora) {
 		const userCanRemove = spec.userCanRemove;
 		const userCanMove = spec.userCanMove;
 		const userCanAddBefore = spec.userCanAddBefore;
+		const clickableHeadlineText = spec.clickableHeadlineText;
+		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
 
 		let presentationSize = spec.presentationSize;
 
@@ -42,6 +44,10 @@ var CORA = (function(cora) {
 		let defaultButton;
 
 		let buttonView;
+		let showDefaultPresentationNext = false;
+		let toggleButtonsAreCreated = false;
+
+
 		//TODO:: defalut hidden för klickbar rubrik
 		//TODO: clickable headline
 		//TODO: add new always initialShown after startup is completret
@@ -62,29 +68,6 @@ var CORA = (function(cora) {
 
 		const ondragenterHandler = function() {
 			pChildRefHandlerView.setRepeatingElementDragOver(view.modelObject);
-		};
-
-		const possiblyAddClickableHeadline = function() {
-			if (spec.clickableHeadlineText) {
-				const level = spec.clickableHeadlineLevel ? spec.clickableHeadlineLevel : "h2";
-				addClickableHeadline(spec.clickableHeadlineText, level);
-				presentationSize = presentationSize ? presentationSize : "singleInitiallyHidden";
-				createDefaultAndAlternativeButtons(presentationSize);
-			}
-		};
-
-		const addClickableHeadline = function(text, level) {
-			let headline = document.createElement(level);
-			headline.classList.add("clickableHeadline");
-			//						headline.addEventListener('click', (event) => {
-			//			//				event.stopPropagation();
-			//			//				toggleDefaultShown(currentDefaultShown === "true" ? "false" : "true");
-			//							toggleDefaultShown();
-			//						});
-			//TODO: create a toggle method that could be called from here too
-			//			view.appendChild(headline);
-			view.insertBefore(headline, buttonView);
-			headline.appendChild(document.createTextNode(text));
 		};
 
 		const createButtonView = function() {
@@ -151,6 +134,25 @@ var CORA = (function(cora) {
 			return CORA.button(buttonSpec);
 		};
 
+		const possiblyAddClickableHeadline = function() {
+			if (clickableHeadlineText) {
+				const level = clickableHeadlineLevel || "h2";
+				addClickableHeadline(clickableHeadlineText, level);
+				presentationSize = presentationSize || "singleInitiallyHidden";
+				createDefaultAndAlternativeButtons(presentationSize);
+			}
+		};
+
+		const addClickableHeadline = function(text, level) {
+			let headline = document.createElement(level);
+			headline.classList.add("clickableHeadline");
+			headline.addEventListener('click', () => {
+				toggleDefaultShown();
+			});
+			view.insertBefore(headline, buttonView);
+			headline.appendChild(document.createTextNode(text));
+		};
+
 		const getView = function() {
 			return view;
 		};
@@ -162,35 +164,30 @@ var CORA = (function(cora) {
 			view.className = "repeatingElement";
 			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
 		};
+
 		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
 			if (presentationSize === "singleInitiallyHidden") {
-				//				toggleDefaultShown(false);
 				showDefaultPresentationNext = false;
 				toggleDefaultShown();
-				//				hide(defaultPresentation);
 			}
 			if (presentationSize === "singleInitiallyVisible") {
-				//				toggleDefaultShown(true);
 				showDefaultPresentationNext = true;
 				toggleDefaultShown();
-				//				hide(defaultPresentation);
 			}
-		}
+		};
 
 		const addAlternativePresentation = function(presentation) {
 			alternativePresentation = presentation.getView();
 			alternativePresentation.classList.add("alternative");
 			view.insertBefore(alternativePresentation, buttonView);
 			createDefaultAndAlternativeButtons(presentationSize);
-			//			toggleDefaultShown(true);
 			showDefaultPresentationNext = true;
 			toggleDefaultShown();
 		};
 
-		let toggleButtonsCreated = false;
 		const createDefaultAndAlternativeButtons = function(presentationSize) {
-			if (!toggleButtonsCreated) {
-				toggleButtonsCreated = true;
+			if (!toggleButtonsAreCreated) {
+				toggleButtonsAreCreated = true;
 				let buttonClasses = getButtonClassName(presentationSize);
 				createAndAddAlternativeButton(buttonClasses);
 				createAndAddDefaultButton(buttonClasses);
@@ -205,16 +202,12 @@ var CORA = (function(cora) {
 			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
 			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
 			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
-			//			if (presentationSize === "firstLarger" || presentationSize === "singleInitiallyHidden") {
-			if (presentationSize === "firstLarger" || presentationSize === "singleInitiallyHidden"
-				|| presentationSize === "singleInitiallyVisible"
-			) {
+			if (presentationSizeIsExpanding(presentationSize)) {
 				return {
 					default: "maximizeButton",
 					alternative: "minimizeButton"
 				};
 			}
-			//			if (presentationSize === "firstSmaller"|| presentationSize === "singleInitiallyVisible") {
 			if (presentationSize === "firstSmaller") {
 				return {
 					default: "minimizeButton",
@@ -225,6 +218,11 @@ var CORA = (function(cora) {
 				default: "defaultButton",
 				alternative: "alternativeButton"
 			};
+		};
+
+		const presentationSizeIsExpanding = function(presentationSize) {
+			return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
+				.includes(presentationSize);
 		};
 
 		const createAndAddAlternativeButton = function(buttonClasses) {
@@ -248,21 +246,16 @@ var CORA = (function(cora) {
 		};
 
 		const showAlternativePresentation = function() {
-			//			toggleDefaultShown(false);
 			showDefaultPresentationNext = false;
 			toggleDefaultShown();
 		};
 
 		const showDefaultPresentation = function() {
-			//			toggleDefaultShown(true);
 			showDefaultPresentationNext = true;
 			toggleDefaultShown();
 		};
-		let showDefaultPresentationNext = false;
-		//		const toggleDefaultShown = function(defaultShown) {
+
 		const toggleDefaultShown = function() {
-			//			if (defaultShown !== undefined && defaultShown === "true") {
-			//			if (defaultShown === true) {
 			if (showDefaultPresentationNext === true) {
 				hide(alternativePresentation);
 				show(defaultPresentation);

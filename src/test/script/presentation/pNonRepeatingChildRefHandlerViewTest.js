@@ -138,37 +138,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		assert.strictEqual(view.childNodes.length, 0);
 	});
 
-	test("testInitWithClickabeHeadline", function(assert) {
-		let pChildRefHandlerViewSpec = {
-			clickableHeadlineText: "Some headline text"
-		};
-		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
-			pChildRefHandlerViewSpec);
-
-		let view = pNonRepeatingChildRefHandlerView.getView();
-		let headline = view.childNodes[0];
-
-		assert.strictEqual(headline.nodeName, "H2");
-		assert.strictEqual(headline.className, "clickableHeadline");
-		assert.strictEqual(headline.textContent, "Some headline text");
-	});
-
-	test("testInitWithClickabeHeadline_nonDefaultHeadlineLevel", function(assert) {
-		let pChildRefHandlerViewSpec = {
-			clickableHeadlineText: "Some headline text",
-			clickableHeadlineLevel: "h4"
-		};
-		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
-			pChildRefHandlerViewSpec);
-
-		let view = pNonRepeatingChildRefHandlerView.getView();
-		let headline = view.childNodes[0];
-
-		assert.strictEqual(headline.nodeName, "H4");
-		assert.strictEqual(headline.className, "clickableHeadline");
-		assert.strictEqual(headline.textContent, "Some headline text");
-	});
-
 	test("testAddChild", function(assert) {
 		let pChildRefHandlerViewSpec = {};
 		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
@@ -234,6 +203,53 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 
 		let defaultButton = buttonView.childNodes[1];
 		assert.strictEqual(defaultButton.className, "iconButton maximizeButton");
+	});
+
+	test("testInitWithClickabeHeadline_SingleInitiallyHidden", function(assert) {
+		spec.presentationSize = "singleInitiallyHidden";
+		spec.clickableHeadlineText = "Some headline text";
+		let view = createHandlerAddChildAndReturnHandler().getView();
+		let headline = view.childNodes[0];
+
+		assert.strictEqual(headline.nodeName, "H2");
+		assert.strictEqual(headline.className, "clickableHeadline");
+		assert.strictEqual(headline.textContent, "Some headline text");
+
+		let presentationView = view.childNodes[1];
+		assert.strictEqual(presentationView.className, "someNode default");
+		assert.notVisible(presentationView, "presentationView should not be visible");
+		assert.strictEqual(view.childNodes.length, 3);
+
+		let buttonView = view.childNodes[2];
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[2];
+		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
+		assert.visible(alternativeButton, "maximizeButton should be shown");
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
+		assert.notVisible(defaultButton, "minimizeButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 5);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(presentationView, "presentationView should be visible");
+	});
+
+	test("testInitWithClickabeHeadline_nonDefaultHeadlineLevel", function(assert) {
+		let pChildRefHandlerViewSpec = {
+			clickableHeadlineText: "Some headline text",
+			clickableHeadlineLevel: "h4"
+		};
+		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
+			pChildRefHandlerViewSpec);
+
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		let headline = view.childNodes[0];
+
+		assert.strictEqual(headline.nodeName, "H4");
+		assert.strictEqual(headline.className, "clickableHeadline");
+		assert.strictEqual(headline.textContent, "Some headline text");
 	});
 
 	test("testButtonFunctions", function(assert) {

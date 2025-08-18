@@ -32,6 +32,11 @@ var CORA = (function(cora) {
 		//TODO: change to be sent in through dependencies
 		let buttonFactory = CORA.genericFactory("button");
 
+		const clickableHeadlineText = spec.clickableHeadlineText;
+		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
+
+		let presentationSize = spec.presentationSize;
+
 
 		const start = function() {
 			view = createBaseView();
@@ -58,22 +63,43 @@ var CORA = (function(cora) {
 			view.classList.add(currentContainsStateClass);
 		};
 
+		const possiblyAddClickableHeadlineOld = function() {
+			if (clickableHeadlineText) {
+				const level = clickableHeadlineLevel ? clickableHeadlineLevel : "h2";
+				addClickableHeadline(clickableHeadlineText, level);
+				//				presentationSize = presentationSize || "singleInitiallyHidden";
+				//				createDefaultAndAlternativeButtons(presentationSize);
+			}
+		};
 		const possiblyAddClickableHeadline = function() {
-			if (spec.clickableHeadlineText) {
-				const level = spec.clickableHeadlineLevel ? spec.clickableHeadlineLevel : "h2";
-				addClickableHeadline(spec.clickableHeadlineText, level);
+			if (clickableHeadlineText) {
+				const level = clickableHeadlineLevel || "h2";
+				addClickableHeadline(clickableHeadlineText, level);
+				//				presentationSize = presentationSize || "singleInitiallyHidden";
+				createButtonView(presentationSize);
+				createDefaultAndAlternativeButtons(presentationSize);
 			}
 		};
 
 		const addClickableHeadline = function(text, level) {
 			let headline = document.createElement(level);
 			headline.classList.add("clickableHeadline");
-//			headline.onclick =  function() {
-//									toggleDefaultShown(currentDefaultShown==="true" ? "false" : "true");
-//								};
+			//			headline.onclick =  function() {
+			//									toggleDefaultShown(currentDefaultShown==="true" ? "false" : "true");
+			//								};
 			view.appendChild(headline);
 			headline.appendChild(document.createTextNode(text));
 		};
+		const addClickableHeadline2 = function(text, level) {
+			let headline = document.createElement(level);
+			headline.classList.add("clickableHeadline");
+			headline.addEventListener('click', () => {
+				toggleDefaultShown();
+			});
+			view.insertBefore(headline, buttonView);
+			headline.appendChild(document.createTextNode(text));
+		};
+
 
 		const getView = function() {
 			return view;
@@ -89,7 +115,7 @@ var CORA = (function(cora) {
 		const addAlternativePresentation = function(child) {
 			child.classList.add("alternative");
 			alternativePresentation = child;
-			createButtonView(spec.presentationSize);
+			createButtonView(presentationSize);
 			view.insertBefore(child, buttonView);
 			hide(alternativePresentation);
 		};
@@ -143,6 +169,36 @@ var CORA = (function(cora) {
 				default: "defaultButton",
 				alternative: "alternativeButton"
 			};
+		};
+		const getButtonClassName2 = function(presentationSize) {
+			//			nameInData: presentationSize
+			//			presentationId: presentationSizePCollVar
+			//			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
+			//			(firstLarger) Första presentationen är större - Första presentationen är större
+			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
+			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
+			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
+			if (presentationSizeIsExpanding(presentationSize)) {
+				return {
+					default: "maximizeButton",
+					alternative: "minimizeButton"
+				};
+			}
+			if (presentationSize === "firstSmaller") {
+				return {
+					default: "minimizeButton",
+					alternative: "maximizeButton"
+				};
+			}
+			return {
+				default: "defaultButton",
+				alternative: "alternativeButton"
+			};
+		};
+
+		const presentationSizeIsExpanding = function(presentationSize) {
+			return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
+				.includes(presentationSize);
 		};
 
 		const toggleDefaultShown = function(defaultShown) {

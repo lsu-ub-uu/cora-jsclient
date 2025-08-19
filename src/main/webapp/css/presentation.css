@@ -1,12 +1,12 @@
 :root {
-  --color-presentation-grey: #868686;
+	--color-presentation-grey: #868686;
 }
 
 /* var(--color-presentation-grey) */
-
 .jsClient {
 	white-space: pre-wrap;
 }
+
 .presentation {
 	min-height: 13px;
 	min-width: 13px;
@@ -96,7 +96,8 @@ img {
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {
-/* 	transform: scale(0.7, 0.7); */
+	/* 	transform: scale(0.7, 0.7); */
+	
 }
 
 .infoButton, .openLinkedRecordButton, .showSearchButton {
@@ -213,14 +214,12 @@ img {
 	display: none;
 }
 
-
 .workView .pVar:hover>.infoButton::before, .pNumVar:hover>.infoButton::before,
-	.workView .pRecordLink:hover>.buttonView .infoButton::before,
-	input:focus+.infoButton::before, .workView .pCollVar:hover>.infoButton::before,
-	select:focus+.infoButton::before, textarea:focus+.infoButton::before,
-	.workView .pGroup:hover>.infoButton::before, .workView .pMap:hover>.infoButton::before,
-	textarea:focus+.infoButton::before, .workView .pSurroundingContainer:hover>.infoButton::before
-	{
+	.workView .pRecordLink:hover>.buttonView .infoButton::before, input:focus+.infoButton::before,
+	.workView .pCollVar:hover>.infoButton::before, select:focus+.infoButton::before,
+	textarea:focus+.infoButton::before, .workView .pGroup:hover>.infoButton::before,
+	.workView .pMap:hover>.infoButton::before, textarea:focus+.infoButton::before,
+	.workView .pSurroundingContainer:hover>.infoButton::before {
 	opacity: 1;
 }
 
@@ -272,8 +271,9 @@ img {
 }
 
 /* .infoActive { */
-.pVar.infoActive, .pNumVar.infoActive, .pCollVar.infoActive, .pMap.infoActive, .pGroup.infoActive,
-	.pSurroundingContainer.infoActive, .repeatingElement.infoActive, .pRecordLink.infoActive,
+.pVar.infoActive, .pNumVar.infoActive, .pCollVar.infoActive, .pMap.infoActive,
+	.pGroup.infoActive, .pSurroundingContainer.infoActive,
+	.repeatingElement.infoActive, .pRecordLink.infoActive,
 	.pNonRepeatingChildRefHandler.infoActive {
 	background-color: rgba(60, 150, 255, 0.3);
 	transition: background-color 0.5s linear;
@@ -291,22 +291,23 @@ img {
 
 .workView .pVar {
 	flex: 1;
-/* 	display: grid; */
-/* 	grid-template-columns: 1fr minmax(0, 1fr); */
-/* 	grid-template-rows: max-content max-content max-content; */
-/* 	grid-template-areas:  */
-/* 		"label infoButton" */
-/* 		"attributes infoButton" */
-/* 		"input infoButton"; */
+	/* 	display: grid; */
+	/* 	grid-template-columns: 1fr minmax(0, 1fr); */
+	/* 	grid-template-rows: max-content max-content max-content; */
+	/* 	grid-template-areas:  */
+	/* 		"label infoButton" */
+	/* 		"attributes infoButton" */
+	/* 		"input infoButton"; */
 }
 
 .default, input[type="button"], input[type="file"] {
-/*   margin-bottom: 0.5rem; */
-/*   margin-top: 0.5rem; */
+	/*   margin-bottom: 0.5rem; */
+	/*   margin-top: 0.5rem; */
+	
 }
 
 .attributes {
-	display: flex;	
+	display: flex;
 }
 
 .attributes label, .attributes .label {
@@ -322,51 +323,56 @@ textarea {
 	flex: 1 auto;
 }
 
-.pGroup, .pMap, .pVar,  .pCollVar, .pNumVar,  .pSurroundingContainer {
+.pGroup, .pMap, .pVar, .pCollVar, .pNumVar, .pSurroundingContainer {
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding-right: 16px;
 }
+
 .pMap, .pVar, .pCollVar, .pNumVar {
-    margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .pChildRefHandler {
-/*     margin-bottom: 1em; */
+	/*     margin-bottom: 1em; */
+	
 }
 
 .pChildRefHandler, .pNonRepeatingChildRefHandler, .text {
 	width: 100%;
 }
-.menuView .pChildRefHandler, .menuView .pNonRepeatingChildRefHandler, .menuView .text {
+
+.menuView .pChildRefHandler, .menuView .pNonRepeatingChildRefHandler,
+	.menuView .text {
 	width: auto;
 }
-.workItem .presentation > .pGroup {
-  border-radius: 5px;
-  padding: 0rem 1rem 1rem 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
-  margin: 1rem;
+
+.workItem .presentation>.pGroup {
+	border-radius: 5px;
+	padding: 0rem 1rem 1rem 1rem;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+	margin: 1rem;
 }
 
 .searchButton {
-  margin-left: 1rem;
+	margin-left: 1rem;
 }
 
 .pGroup.recordTypePGroup {
-  margin-top: .5rem;
-  margin-left: .5rem;
-  margin-right: .5rem;
-  padding-top: 1rem;
-  padding: 1rem;
+	margin-top: .5rem;
+	margin-left: .5rem;
+	margin-right: .5rem;
+	padding-top: 1rem;
+	padding: 1rem;
 }
 
 .pGroup.recordTypeOutputPGroup {
-  margin-top: .5rem;
-  margin-left: .5rem;
-  margin-right: .5rem;
-  padding-top: 1rem;
-  padding: 1rem;
+	margin-top: .5rem;
+	margin-left: .5rem;
+	margin-right: .5rem;
+	padding-top: 1rem;
+	padding: 1rem;
 }
 
 .pGroup {
@@ -384,8 +390,8 @@ textarea {
 }
 
 .inline {
-  display: inherit;
-  position: static;
+	display: inherit;
+	position: static;
 }
 
 .jsClient .workView .inline span, .jsClient .workView .inline div {
@@ -416,12 +422,13 @@ textarea {
 	width: auto;
 	min-width: 10rem;
 }
+
 .workView .editView .pRecordLink .linkedRecordIdView {
 	min-width: 20rem;
 }
 
 .workView .pRecordLink.searchActive {
-	border: 1px dashed var(--color-presentation-grey);	
+	border: 1px dashed var(--color-presentation-grey);
 	border-radius: 10px 10px;
 }
 
@@ -434,7 +441,7 @@ textarea {
 	order: 1;
 }
 
-.workView .pRecordLink > .buttonView {
+.workView .pRecordLink>.buttonView {
 	flex: 1;
 	order: 2;
 	display: flex;
@@ -460,9 +467,11 @@ textarea {
 	z-index: 0;
 	order: 1;
 }
-.workView .presentation > .pGroup > .infoButton {
+
+.workView .presentation>.pGroup>.infoButton {
 	z-index: 1005;
 }
+
 .workView .infoButton {
 	z-index: 5;
 	position: absolute;
@@ -472,8 +481,7 @@ textarea {
 
 .workView .pGroup>.pChildRefHandler, .workView .pGroup>.pNonRepeatingChildRefHandler,
 	.workView .pGroup>.pSurroundingContainer, .workView .pGroup>.text {
-position: relative;
-
+	position: relative;
 }
 
 .jsClient .workView .openLinkedRecordButton, .jsClient .workView .showSearchButton,
@@ -508,6 +516,7 @@ position: relative;
 	top: 3rem;
 	z-index: -1;
 }
+
 .defTextView {
 	font-style: italic;
 }
@@ -538,7 +547,7 @@ position: relative;
 	padding-top: 0.1rem;
 }
 
-.infoView .defTextView + .technicalView {
+.infoView .defTextView+.technicalView {
 	padding-top: 0.2rem;
 }
 
@@ -556,62 +565,62 @@ position: relative;
 }
 
 .workView .twelveChildStyle {
-/* 	width: 100%; */
+	/* 	width: 100%; */
 	width: 96%;
 }
 
 .workView .elevenChildStyle {
-/* 	width: 91%; */
+	/* 	width: 91%; */
 	width: 87%;
 }
 
 .workView .tenChildStyle {
-/* 	width: 83%; */
+	/* 	width: 83%; */
 	width: 80%;
 }
 
 .workView .nineChildStyle {
-/* 	width: 75%; */
+	/* 	width: 75%; */
 	width: 72%;
 }
 
 .workView .eightChildStyle {
-/* 	width: 66%; */
+	/* 	width: 66%; */
 	width: 63%;
 }
 
 .workView .sevenChildStyle {
-/* 	width: 58%; */
+	/* 	width: 58%; */
 	width: 55%;
 }
 
 .workView .sixChildStyle {
-/* 	width: 50%; */
+	/* 	width: 50%; */
 	width: 48%;
 }
 
 .workView .fiveChildStyle {
-/* 	width: 41%; */
+	/* 	width: 41%; */
 	width: 39%;
 }
 
 .workView .fourChildStyle {
-/* 	width: 33%; */
+	/* 	width: 33%; */
 	width: 31%;
 }
 
 .workView .threeChildStyle {
-/* 	width: 25%; */
+	/* 	width: 25%; */
 	width: 23%;
 }
 
 .workView .twoChildStyle {
-/* 	width: 16%; */
+	/* 	width: 16%; */
 	width: 15%;
 }
 
 .workView .oneChildStyle {
-/* 	width: 8%; */
+	/* 	width: 8%; */
 	width: 7%;
 }
 
@@ -635,20 +644,20 @@ h1, h2, h3, h4, h5, h6 {
 	margin-top: .5rem;
 	margin-bottom: 0rem;
 }
-h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle{
+
+h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle {
 	padding-left: .5rem;
 	padding-right: .5rem;
 	margin-bottom: 1rem;
 }
 
-h2, h3, .h2TextStyle, .h3TextStyle{
+h2, h3, .h2TextStyle, .h3TextStyle {
 	border-radius: 4px;
 }
 
-h3, .h3TextStyle{
+h3, .h3TextStyle {
 	padding-left: 0rem;
 }
-
 
 h1, .presentation .h1TextStyle {
 	font-size: 1.6rem;
@@ -695,10 +704,11 @@ h6, .presentation .h6TextStyle {
 }
 
 label, .label {
-/* 	font-style: italic; */
+	/* 	font-style: italic; */
 	font-weight: bold;
 	color: #575757;
 }
+
 .pRecordLink .label {
 	flex: 1 1 100%;
 }
@@ -718,11 +728,12 @@ label::after, .label:after {
 .presentation .text.labelTextStyle {
 	font-weight: bold;
 }
+
 .presentation .text.labelTextStyle::after {
 	content: ": ";
 }
 
-.presentation .inline > .text {
+.presentation .inline>.text {
 	flex: 0 0;
 }
 
@@ -735,45 +746,58 @@ label::after, .label:after {
 }
 
 .workView .repeatingElement {
- 	display: grid;
-  	grid-template-columns: 10fr 16px;
-  	gap: 0px;
+	display: grid;
+	grid-template-columns: 10fr 16px;
+	gap: 0px;
 }
+
 .repeatingElement :is(h1, h2, h3, h4, h5, h6) {
 	grid-column: 1;
-  	grid-row: 1;
-  	width: calc(100% - 16px);
+	grid-row: 1;
+	width: calc(100% - 16px);
 }
 
 .clickableHeadline {
 	cursor: pointer;
 }
 
-.repeatingElement .pGroup {
-	grid-area: 2 / 1;
+/* .repeatingElement .pGroup { */
+.repeatingElement .default, .repeatingElement .alternative {
+	grid-area: 1/1;
+	grid-row: span 2;
 }
+/* .repeatingElement .pGroup { */
+.repeatingElement:has(.clickableHeadline) .default, .repeatingElement:has(.clickableHeadline) .alternative
+	{
+	grid-area: 2/1;
+}
+
 .repeatingElement .buttonView {
 	grid-column: 2;
-  	grid-row: 1 / 3;
-/*   	background: aquamarine; */
+	grid-row: 1/3;
 }
+
 .workView .pNonRepeatingChildRefHandler {
- 	display: grid;
-  	grid-template-columns: 10fr 16px;
-  	gap: 0px;
+	display: grid;
+	grid-template-columns: 10fr 16px;
+	gap: 0px;
 }
+
 .pNonRepeatingChildRefHandler :is(h1, h2, h3, h4, h5, h6) {
 	grid-column: 1;
-  	grid-row: 1;
-  	width: calc(100% - 16px);
+	grid-row: 1;
+	width: calc(100% - 16px);
 }
-.pNonRepeatingChildRefHandler .pGroup, .pNonRepeatingChildRefHandler .pSurroundingContainer {
-	grid-area: 2 / 1;
+
+.pNonRepeatingChildRefHandler .pGroup, .pNonRepeatingChildRefHandler .pSurroundingContainer
+	{
+	grid-area: 2/1;
 }
+
 .pNonRepeatingChildRefHandler .buttonView {
 	grid-column: 2;
-  	grid-row: 1 / 3;
-/*   	background: aquamarine; */
+	grid-row: 1/3;
+	/*   	background: aquamarine; */
 }
 
 .jsClient .repeatingElement.hoverRemove {
@@ -785,12 +809,12 @@ label::after, .label:after {
 	border-bottom: none;
 }
 
-
-.compactChildStyle .pGroup, .compactChildStyle .pVar, .compactChildStyle .pCollVar, .compactChildStyle .pSurroundingContainer {
+.compactChildStyle .pGroup, .compactChildStyle .pVar, .compactChildStyle .pCollVar,
+	.compactChildStyle .pSurroundingContainer {
 	padding-right: 0;
 }
 
-.jsClient .workView .rowBasedChildStyle,  .jsClient .workView .rowBased {
+.jsClient .workView .rowBasedChildStyle, .jsClient .workView .rowBased {
 	flex-direction: row;
 	flex-wrap: wrap;
 }
@@ -804,41 +828,46 @@ label::after, .label:after {
 	width: calc(100% - 20px);
 }
 
-.boldTextStyle{
-	font-weight:bold;
+.boldTextStyle {
+	font-weight: bold;
 }
 
 .italicTextStyle {
 	font-style: italic;
 }
 
-.specificationTextStyle, .specificationNormalTextStyle, .specificationChildStyle > .childrenView .value {
-	color:#999;
-}
-.specificationTextStyle::before, .specificationNormalTextStyle::before, .specificationChildStyle > .childrenView .value::before{
-	content:" (";
+.specificationTextStyle, .specificationNormalTextStyle,
+	.specificationChildStyle>.childrenView .value {
+	color: #999;
 }
 
-.specificationTextStyle::after, .specificationNormalTextStyle::after, .specificationChildStyle > .childrenView .value::after{
-	content:") ";
+.specificationTextStyle::before, .specificationNormalTextStyle::before,
+	.specificationChildStyle>.childrenView .value::before {
+	content: " (";
 }
 
-.specificationNormalTextStyle{
+.specificationTextStyle::after, .specificationNormalTextStyle::after,
+	.specificationChildStyle>.childrenView .value::after {
+	content: ") ";
+}
+
+.specificationNormalTextStyle {
 	font-weight: normal;
 }
 
-.labelSquareBracketTextStyle::before{
-	content:" [";
+.labelSquareBracketTextStyle::before {
+	content: " [";
 }
 
-.labelSquareBracketTextStyle::after{
-	content:"] ";
+.labelSquareBracketTextStyle::after {
+	content: "] ";
 }
 
-.highlight > .pChildRefHandler > .childrenView > .repeatingElement:nth-child(2n+1) {
+.highlight>.pChildRefHandler>.childrenView>.repeatingElement:nth-child(2n+1)
+	{
 	background: #d9e9f2;
-	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-	padding:4px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	padding: 4px;
 }
 
 .frameChildStyle {
@@ -846,17 +875,23 @@ label::after, .label:after {
 }
 
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans Regular'), local('OpenSans-Regular'), url('../fonts/OpenSans-Regular.woff2') format('woff2');
-   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans Regular'), local('OpenSans-Regular'),
+		url('../fonts/OpenSans-Regular.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+		U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../fonts/OpenSans-Bold.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local('OpenSans-Bold'),
+		url('../fonts/OpenSans-Bold.woff2') format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+		U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
+		U+2212, U+2215, U+FEFF, U+FFFD;
 }

@@ -19,8 +19,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.button = function(spec) {
+		const action = spec.action;
 		let view;
-		let action;
+		let actionMethod;
 
 		const start = function() {
 			view = createView();
@@ -42,13 +43,13 @@ var CORA = (function(cora) {
 		};
 
 		const possiblyHandleAction = function() {
-			if (spec.action !== undefined) {
+			if (action !== undefined) {
 				handleAction();
 			}
 		};
 
 		const handleAction = function() {
-			action = spec.action.method;
+			actionMethod = action.method;
 		};
 
 		const possiblyAddOnclickMethod = function() {
@@ -58,14 +59,14 @@ var CORA = (function(cora) {
 		};
 
 		const specDemandsClick = function(){
-			return spec.action !== undefined
-			&& (spec.action.clickable === true || spec.action.clickable === undefined);
+			return action !== undefined
+			&& (action.clickable === true || action.clickable === undefined);
 		};
 
 		const addOnclickForMethodFromAction = function(){
 			view.addEventListener('click', (event) => {
 				event.stopPropagation();
-				action(event);
+				actionMethod(event);
 			});
 		};
 
@@ -77,7 +78,7 @@ var CORA = (function(cora) {
 		};
 
 		const specDemandsKeydown = function(){
-			return spec.action !== undefined && spec.action.onkeydown !== undefined;
+			return action !== undefined && action.onkeydown !== undefined;
 		};
 
 		const addTabstop = function() {
@@ -86,9 +87,9 @@ var CORA = (function(cora) {
 
 		const addOnkeydownMethod = function() {
 			let onkeydownFunction = function(event) {
-				if (spec.action.onkeydown.keys.indexOf(event.key) !== -1) {
+				if (action.onkeydown.keys.indexOf(event.key) !== -1) {
 					event.stopPropagation();
-					action(event);
+					actionMethod(event);
 				}
 			};
 			view.addEventListener("keydown", onkeydownFunction);

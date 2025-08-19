@@ -52,6 +52,8 @@ var CORA = (function(cora) {
 		//TODO: clickable headline
 		//TODO: add new always initialShown after startup is completret
 		//TODO: firstshow for initial hidden.... as with alternative
+		//TODO: handle correct for view side where there is no data from start when adding data so it is shown on add  or not depending on initial value
+		//TODO: Clickable headline should not be shown in view mode if no data...
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
@@ -269,8 +271,6 @@ var CORA = (function(cora) {
 			}
 			showDefaultPresentationNext = !showDefaultPresentationNext;
 		};
-
-
 
 		const hideRemoveButton = function() {
 			hide(removeButton);

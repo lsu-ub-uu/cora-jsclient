@@ -221,15 +221,16 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		assert.strictEqual(view.childNodes.length, 3);
 
 		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView");
 		// test minimized/maximized button
-		let alternativeButton = buttonView.childNodes[2];
+		let alternativeButton = buttonView.childNodes[1];
 		assert.strictEqual(alternativeButton.className, "iconButton maximizeButton");
 		assert.visible(alternativeButton, "maximizeButton should be shown");
-		let defaultButton = buttonView.childNodes[1];
+		let defaultButton = buttonView.childNodes[0];
 		assert.strictEqual(defaultButton.className, "iconButton minimizeButton");
 		assert.notVisible(defaultButton, "minimizeButton should be hidden");
 
-		assert.strictEqual(buttonView.childNodes.length, 5);
+		assert.strictEqual(buttonView.childNodes.length, 2);
 
 		let clickableHeadline = view.childNodes[0];
 		CORATESTHELPER.simulateOnclick(clickableHeadline);

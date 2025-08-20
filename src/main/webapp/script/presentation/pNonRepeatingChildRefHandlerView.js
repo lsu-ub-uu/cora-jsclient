@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		let view;
+		let headline;
 		let buttonView;
 		let alternativePresentation;
 		let defaultPresentation;
@@ -69,12 +70,11 @@ var CORA = (function(cora) {
 				const level = clickableHeadlineLevel || "h2";
 				addClickableHeadline(clickableHeadlineText, level);
 				createButtonView(presentationSize);
-				createDefaultAndAlternativeButtons(presentationSize);
 			}
 		};
 
 		const addClickableHeadline = function(text, level) {
-			let headline = document.createElement(level);
+			headline = document.createElement(level);
 			headline.classList.add("clickableHeadline");
 			headline.addEventListener('click', () => {
 				toggleDefaultShown();
@@ -93,7 +93,6 @@ var CORA = (function(cora) {
 			defaultPresentation = child;
 			view.insertBefore(child, buttonView);
 			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
-			hide(defaultPresentation);
 		};
 
 		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
@@ -112,23 +111,24 @@ var CORA = (function(cora) {
 			alternativePresentation = child;
 			createButtonView(presentationSize);
 			view.insertBefore(child, buttonView);
-			hide(alternativePresentation);
+			showDefaultPresentationNext = true;
+			toggleDefaultShown();
 		};
 
 		const createButtonView = function(presentationSize) {
-			let buttonViewNew = CORA.createSpanWithClassName("buttonView");
-			buttonView = buttonViewNew;
-			view.appendChild(buttonViewNew);
-			createDefaultAndAlternativeButtons(presentationSize);
+			if (!toggleButtonsAreCreated) {
+				toggleButtonsAreCreated = true;
+				let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+				buttonView = buttonViewNew;
+				view.appendChild(buttonViewNew);
+				createDefaultAndAlternativeButtons(presentationSize);
+			}
 		};
 
 		const createDefaultAndAlternativeButtons = function(presentationSize) {
-			if (!toggleButtonsAreCreated) {
-				toggleButtonsAreCreated = true;
-				let buttonClasses = getButtonClassName(presentationSize);
-				createAndAddAlternativeButton(buttonClasses);
-				createAndAddDefaultButton(buttonClasses);
-			}
+			let buttonClasses = getButtonClassName(presentationSize);
+			createAndAddAlternativeButton(buttonClasses);
+			createAndAddDefaultButton(buttonClasses);
 		};
 
 		const createAndAddAlternativeButton = function(buttonClasses) {
@@ -228,16 +228,12 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const hideContent = function() {
-			hide(defaultPresentation);
-			hide(buttonView);
-			hide(alternativePresentation);
+		const hideView = function() {
+			hide(view);
 		};
 
-		const showContent = function() {
-			show(buttonView);
-			showDefaultPresentationNext = !showDefaultPresentationNext;
-			toggleDefaultShown();
+		const showView = function() {
+			show(view);
 		};
 
 		const callOnFirstShowOfAlternativePresentation = function() {
@@ -258,8 +254,8 @@ var CORA = (function(cora) {
 			getView: getView,
 			addChild: addChild,
 			addAlternativePresentation: addAlternativePresentation,
-			hideContent: hideContent,
-			showContent: showContent,
+			hideContent: hideView,
+			showContent: showView,
 			setHasDataStyle: setHasDataStyle
 		});
 		start();

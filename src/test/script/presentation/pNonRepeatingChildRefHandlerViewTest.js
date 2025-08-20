@@ -235,22 +235,145 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		let clickableHeadline = view.childNodes[0];
 		CORATESTHELPER.simulateOnclick(clickableHeadline);
 		assert.visible(presentationView, "presentationView should be visible");
+
+		assert.strictEqual(view.childNodes.length, 3);
 	});
 
 	test("testInitWithClickabeHeadline_nonDefaultHeadlineLevel", function(assert) {
-		let pChildRefHandlerViewSpec = {
-			clickableHeadlineText: "Some headline text",
-			clickableHeadlineLevel: "h4"
-		};
-		let pNonRepeatingChildRefHandlerView = CORA.pNonRepeatingChildRefHandlerView(dependencies,
-			pChildRefHandlerViewSpec);
-
-		let view = pNonRepeatingChildRefHandlerView.getView();
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h4";
+		let view = createHandlerAddChildAndReturnHandler().getView();
 		let headline = view.childNodes[0];
 
 		assert.strictEqual(headline.nodeName, "H4");
 		assert.strictEqual(headline.className, "clickableHeadline");
 		assert.strictEqual(headline.textContent, "Some headline text");
+
+		assert.strictEqual(view.childNodes.length, 3);
+	});
+
+
+	test("testaddAlternativePresentation_headlineDefaultsToSingleInitiallyHidden", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		let pNonRepeatingChildRefHandlerView = createHandlerAddChildAndReturnHandler();
+		let view = pNonRepeatingChildRefHandlerView.getView();
+
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		pNonRepeatingChildRefHandlerView.addAlternativePresentation(alternativeChild);
+
+		let defaultPresentation = view.childNodes[1];
+		assert.strictEqual(defaultPresentation.className, "someNode default");
+		assert.visible(defaultPresentation, "defalutPresentation should be visible, as there is an alternative");
+		assert.strictEqual(view.childNodes.length, 4);
+
+		// test minimized/maximized button
+		let alternativeButton = buttonView.childNodes[0];
+		assert.strictEqual(alternativeButton.className, "iconButton alternativeButton");
+		assert.visible(alternativeButton, "alternativeButton should be shown");
+		let defaultButton = buttonView.childNodes[1];
+		assert.strictEqual(defaultButton.className, "iconButton defaultButton");
+		assert.notVisible(defaultButton, "defaultButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 2);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(alternativeChild, "presentationView should be visible");
+	});
+
+	test("testaddAlternativePresentation_headlineSingleInitiallyVisible", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "singleInitiallyVisible";
+		let pNonRepeatingChildRefHandlerView = createHandlerAddChildAndReturnHandler();
+		let view = pNonRepeatingChildRefHandlerView.getView();
+
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		pNonRepeatingChildRefHandlerView.addAlternativePresentation(alternativeChild);
+
+		let defaultPresentation = view.childNodes[1];
+		assert.strictEqual(defaultPresentation.className, "someNode default");
+		assert.visible(defaultPresentation, "defalutPresentation should be visible, as there is an alternative");
+		assert.strictEqual(view.childNodes.length, 4);
+
+		// test minimized/maximized button
+		let minimizeButton = buttonView.childNodes[0];
+		assert.strictEqual(minimizeButton.className, "iconButton minimizeButton");
+		assert.visible(minimizeButton, "minimizeButton should be shown");
+		let maximizeButton = buttonView.childNodes[1];
+		assert.strictEqual(maximizeButton.className, "iconButton maximizeButton");
+		assert.notVisible(maximizeButton, "maximizeButton should be hidden");
+
+		assert.strictEqual(buttonView.childNodes.length, 2);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(alternativeChild, "presentationView should be visible");
+	});
+	
+	test("testaddAlternativePresentation_headlineFirstSmaller", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "firstSmaller";
+		let pNonRepeatingChildRefHandlerView = createHandlerAddChildAndReturnHandler();
+		let view = pNonRepeatingChildRefHandlerView.getView();
+
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		pNonRepeatingChildRefHandlerView.addAlternativePresentation(alternativeChild);
+
+		let defaultPresentation = view.childNodes[1];
+		assert.strictEqual(defaultPresentation.className, "someNode default");
+		assert.visible(defaultPresentation, "defalutPresentation should be visible, as there is an alternative");
+		assert.strictEqual(view.childNodes.length, 4);
+
+		// test minimized/maximized button
+		let minimizeButton = buttonView.childNodes[1];
+		assert.strictEqual(minimizeButton.className, "iconButton minimizeButton");
+		assert.notVisible(minimizeButton, "minimizeButton should not be visible");
+		let maximizeButton = buttonView.childNodes[0];
+		assert.strictEqual(maximizeButton.className, "iconButton maximizeButton");
+		assert.visible(maximizeButton, "maximizeButton should be visible");
+
+		assert.strictEqual(buttonView.childNodes.length, 2);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(alternativeChild, "presentationView should be visible");
+	});
+	
+	test("testaddAlternativePresentation_headlineFirstLarger", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "firstLarger";
+		let pNonRepeatingChildRefHandlerView = createHandlerAddChildAndReturnHandler();
+		let view = pNonRepeatingChildRefHandlerView.getView();
+
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		pNonRepeatingChildRefHandlerView.addAlternativePresentation(alternativeChild);
+
+		let defaultPresentation = view.childNodes[1];
+		assert.strictEqual(defaultPresentation.className, "someNode default");
+		assert.visible(defaultPresentation, "defalutPresentation should be visible, as there is an alternative");
+		assert.strictEqual(view.childNodes.length, 4);
+
+		// test minimized/maximized button
+		let minimizeButton = buttonView.childNodes[0];
+		assert.strictEqual(minimizeButton.className, "iconButton minimizeButton");
+		assert.visible(minimizeButton, "minimizeButton should be visible");
+		let maximizeButton = buttonView.childNodes[1];
+		assert.strictEqual(maximizeButton.className, "iconButton maximizeButton");
+		assert.notVisible(maximizeButton, "maximizeButton should not be visible");
+
+		assert.strictEqual(buttonView.childNodes.length, 2);
+
+		let clickableHeadline = view.childNodes[0];
+		CORATESTHELPER.simulateOnclick(clickableHeadline);
+		assert.visible(alternativeChild, "presentationView should be visible");
 	});
 
 	test("testButtonFunctions", function(assert) {
@@ -305,7 +428,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		CORATESTHELPER.simulateKeydown(defaultButton, " ");
 		assert.allVisible([defaultChild, alternativeButton]);
 		assert.allNotVisible([alternativeChild, defaultButton]);
-
 	});
 
 	test("testButtonFunctionsKeyboardEnter", function(assert) {
@@ -346,19 +468,15 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 
 		viewHandler.showContent();
 
-		assert.visible(defaultChild);
+		assert.allVisible([defaultChild, buttonView]);
 		assert.notVisible(alternativeChild);
-		assert.visible(buttonView);
 
 		viewHandler.hideContent();
-		assert.notVisible(defaultChild);
-		assert.notVisible(alternativeChild);
-		assert.notVisible(buttonView);
+		assert.allNotVisible([defaultChild, alternativeChild, buttonView]);
 
 		viewHandler.showContent();
-		assert.visible(defaultChild);
+		assert.allVisible([defaultChild, buttonView]);
 		assert.notVisible(alternativeChild);
-		assert.visible(buttonView);
 	});
 
 	test("testHideAndShowContentAlternativeShown", function(assert) {
@@ -371,19 +489,40 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 
 		CORATESTHELPER.simulateOnclick(alternativeButton);
 
-		CORATESTHELPER.simulateOnclick(alternativeButton);
 		assert.notVisible(defaultChild);
-		assert.visible(alternativeChild);
-		assert.visible(buttonView);
+		assert.allVisible([view, alternativeChild, buttonView]);
 
 		viewHandler.hideContent();
-		assert.notVisible(defaultChild);
-		assert.notVisible(alternativeChild);
-		assert.notVisible(buttonView);
+		assert.allNotVisible([view, defaultChild, alternativeChild, buttonView]);
 
 		viewHandler.showContent();
 		assert.notVisible(defaultChild);
-		assert.visible(alternativeChild);
-		assert.visible(buttonView);
+		assert.allVisible([view, alternativeChild, buttonView]);
+	});
+
+	test("testHideAndShowContent_withClickableHeadline", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
+		let view = viewHandler.getView();
+		let headline = view.childNodes[0];
+		let buttonView = view.childNodes[3];
+
+		viewHandler.showContent();
+
+		assert.strictEqual(buttonView.className, "buttonView");
+		assert.strictEqual(view.childNodes.length, 4);
+		assert.allVisible([view]);
+		assert.allVisible([headline]);
+		assert.allVisible([defaultChild]);
+		assert.allVisible([buttonView]);
+		assert.allVisible([view, headline, defaultChild, buttonView]);
+		assert.notVisible(alternativeChild);
+
+		viewHandler.hideContent();
+		assert.allNotVisible([view, headline, defaultChild, alternativeChild, buttonView]);
+
+		viewHandler.showContent();
+		assert.allVisible([view, headline, defaultChild, buttonView]);
+		assert.notVisible(alternativeChild);
 	});
 });

@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let storedValuePositions = {};
 		let metadataHelper;
 		const metadataProvider = dependencies.providers.metadataProvider;
+
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
 				metadataProvider: metadataProvider

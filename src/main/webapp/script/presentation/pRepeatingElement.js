@@ -50,10 +50,21 @@ var CORA = (function(cora) {
 
 		//TODO:: defalut hidden för klickbar rubrik
 		//TODO: clickable headline
+		//TODO: handle correct for view side where there is no data from start when
+		//  adding data so it is shown on add  or not depending on initial value
+
+
+		//TODO: Clickable headline should not be shown in view mode if no data...
+		//fixed for pNonRepeating
+		//TODO: data state for headline
+		//works for pNonRepeating
+
+
 		//TODO: add new always initialShown after startup is completret
 		//TODO: firstshow for initial hidden.... as with alternative
-		//TODO: handle correct for view side where there is no data from start when adding data so it is shown on add  or not depending on initial value
-		//TODO: Clickable headline should not be shown in view mode if no data...
+		
+		//TODO: look into tabstops
+
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();

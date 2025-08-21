@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let storedValuePositions = {};
 		let metadataHelper;
 		const metadataProvider = dependencies.providers.metadataProvider;
+		const pubSub = dependencies.pubSub;
 
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
@@ -58,7 +59,7 @@ var CORA = (function(cora) {
 		};
 
 		const publishPresentationShown = function() {
-			dependencies.pubSub.publish("presentationShown", {
+			pubSub.publish("presentationShown", {
 				data: "",
 				path: []
 			});
@@ -99,14 +100,14 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToAddMessagesForParentPath = function() {
-			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
+			pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
 		};
 
 		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
-				dependencies.pubSub
+				pubSub
 					.subscribe("*", newPath, undefined, handleMsgToDeterminDataState);
 			}
 		};

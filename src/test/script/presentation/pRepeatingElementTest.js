@@ -22,16 +22,20 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let jsBookkeeper;
+	let pubSub;
 	let spec;
 
 	let fixture;
+	let view;
 
 	hooks.beforeEach(() => {
 		fixture = document.getElementById("qunit-fixture");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
+		pubSub = CORATEST.pubSubSpy();
 
 		dependencies = {
-			jsBookkeeper: jsBookkeeper
+			jsBookkeeper: jsBookkeeper,
+			pubSub: pubSub
 		};
 		spec = {
 			path: [],
@@ -46,10 +50,15 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		//no after
 	});
 
-	test("testInit", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
+	const createAndReturnPRepeatingElementGetAndAttatchView = function() {
+		const pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
+		view = pRepeatingElement.getView();
 		fixture.appendChild(view);
+		return pRepeatingElement;
+	};
+
+	test("testInit", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
 		assert.deepEqual(view.className, "repeatingElement");
@@ -80,9 +89,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testInitClickableHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let repeatingElement = view;
 		assert.strictEqual(repeatingElement.className, "repeatingElement");
@@ -96,9 +103,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	test("testInitClickableHeadline_nonDefaultHeadlineLevel", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.clickableHeadlineLevel = "h4";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let repeatingElement = view;
 		assert.strictEqual(repeatingElement.className, "repeatingElement");
@@ -111,9 +116,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testInitNoAddBeforeButton", function(assert) {
 		spec.userCanAddBefore = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
 		assert.deepEqual(view.className, "repeatingElement");
@@ -143,9 +146,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		spec.userCanRemove = false;
 		spec.userCanMove = false;
 		spec.userCanAddBefore = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
 		assert.deepEqual(view.className, "repeatingElement");
@@ -163,24 +164,18 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testGetDependencies", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.getDependencies(), dependencies);
 	});
 
 	test("testGetSpec", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.getSpec(), spec);
 	});
 	test("testDragenterToTellPChildRefHandlerThatSomethingIsDragedOverThis", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		pRepeatingElement.getView().ondragenter();
 		assert
@@ -191,17 +186,13 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		"testDragenterToTellPChildRefHandlerThatSomethingIsDragedOverThisNoFunctionWhenNoMove",
 		function(assert) {
 			spec.userCanMove = false;
-			let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-			let view = pRepeatingElement.getView();
-			fixture.appendChild(view);
+			let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 			assert.strictEqual(pRepeatingElement.getView().ondragenter, null);
 		});
 
 	test("testButtonViewAndRemoveButton", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.firstChild;
@@ -211,9 +202,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	test("test0to1ShouldHaveRemoveButtonNoAddBeforeButton", function(assert) {
 		spec.userCanMove = false;
 		spec.userCanAddBefore = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.firstChild;
@@ -225,18 +214,14 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		spec.userCanRemove = false;
 		spec.userCanMove = false;
 		spec.userCanAddBefore = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		assert.strictEqual(buttonView.childNodes.length, 0);
 	});
 
 	test("testRemoveButtonOnclick", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.firstChild;
@@ -253,9 +238,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testRemoveButtonHover", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 		assert.deepEqual(view.className, "repeatingElement");
 
 		let buttonView = view.childNodes[0];
@@ -276,9 +259,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testDragButtonOnmousedownOnmouseup", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let dragButton = buttonView.childNodes[1];
@@ -291,9 +272,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testHideRemoveButton", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.firstChild;
@@ -308,9 +287,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testHideDragButton", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let dragButton = buttonView.childNodes[1];
@@ -326,9 +303,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testHideAndShowDragButtonWhenDragButtonNotPresent", function(assert) {
 		spec.userCanMove = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.childNodes[0];
@@ -347,9 +322,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testAddBeforeButtonOnclick", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let addBeforeButton = buttonView.childNodes[2];
@@ -364,9 +337,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testHideShowAddBeforeButton", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 		let addBeforeButton = buttonView.childNodes[2];
@@ -381,9 +352,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testAddPresentation", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let presentation = CORATEST.presentationStub();
 
@@ -397,9 +366,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	});
 
 	test("testAddPresentationNoStyle", function(assert) {
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let presentation = CORATEST.presentationStub();
 
@@ -414,9 +381,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testaddAlternativePresentationFirstSmaller", function(assert) {
 		spec.presentationSize = "firstSmaller";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 
@@ -446,9 +411,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testaddAlternativePresentationFirstLarger", function(assert) {
 		spec.presentationSize = "firstLarger";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 
@@ -478,10 +441,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testaddAlternativePresentationBothEqual", function(assert) {
 		spec.presentationSize = "bothEqual";
-
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 
@@ -515,10 +475,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	test("testaddAlternativePresentation_SingleInitiallyHidden", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.presentationSize = "singleInitiallyHidden";
-
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[1];
 		assert.strictEqual(buttonView.className, "buttonView");
@@ -599,10 +556,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	test("testaddAlternativePresentation_SingleInitiallyVisible", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.presentationSize = "singleInitiallyVisible";
-
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[1];
 		assert.strictEqual(buttonView.className, "buttonView");
@@ -632,7 +586,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.visible(defaultButton, "minimizeButton should be hidden");
 
 		assert.strictEqual(buttonView.childNodes.length, 5);
-		
+
 		let clickableHeadline = view.childNodes[0];
 		CORATESTHELPER.simulateOnclick(clickableHeadline);
 		assert.notVisible(presentationView, "presentationView should not be visible");
@@ -641,9 +595,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	test("testaddAlternativePresentation_FirstSmallerWithHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.presentationSize = "firstSmaller";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[1];
 
@@ -679,9 +631,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		spec.userCanRemove = false;
 		spec.userCanMove = false;
 		spec.userCanAddBefore = false;
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 
@@ -703,9 +653,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testaddAlternativePresentationToggleNoStyle", function(assert) {
 		spec.presentationSize = "bothEqual";
-		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
-		let view = pRepeatingElement.getView();
-		fixture.appendChild(view);
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let buttonView = view.childNodes[0];
 

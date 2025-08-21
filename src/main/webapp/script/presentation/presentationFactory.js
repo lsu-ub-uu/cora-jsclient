@@ -27,7 +27,8 @@ var CORA = (function(cora) {
 
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,
-			jsBookkeeper: dependencies.jsBookkeeper
+			jsBookkeeper: dependencies.jsBookkeeper,
+			pubSub: dependencies.pubSub
 		};
 
 		const pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",

@@ -311,6 +311,7 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
+	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
 }
 
 CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {

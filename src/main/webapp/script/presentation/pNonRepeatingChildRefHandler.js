@@ -21,18 +21,20 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pNonRepeatingChildRefHandler = function(dependencies, spec) {
 		let view;
-		let topLevelMetadataIds = {};
+		let topLevelMetadataIds = [];
 		let storedValuePositions = {};
 		let metadataHelper;
 		const metadataProvider = dependencies.providers.metadataProvider;
 		const pubSub = dependencies.pubSub;
 
 		const start = function() {
+
 			metadataHelper = CORA.metadataHelper({
 				metadataProvider: metadataProvider
 			});
 			createView();
 			calculateHandledTopLevelMetadataIds(spec.cPresentation);
+			createContainsDataTracker();
 			subscribeToAddMessagesForParentPath();
 			let factoredPresentation = factorPresentation(spec.cPresentation);
 			view.addChild(factoredPresentation.getView());
@@ -42,6 +44,30 @@ var CORA = (function(cora) {
 				view.showContent();
 			} else {
 				view.hideContent();
+			}
+		};
+		const createContainsDataTracker = function() {
+			let providers2 = {
+				metadataProvider: metadataProvider
+			};
+			let dependencies2 = {
+				pubSub: pubSub
+			};
+			let spec2 = {
+				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+				topLevelMetadataIds: topLevelMetadataIds,
+				parentPath: spec.parentPath,
+				parentMetadataId: spec.parentMetadataId,
+				//				cPresentation: spec.cPresentation,
+			};
+//			console.log("topLevelMetadataIds", topLevelMetadataIds)
+			return CORA.containsDataTracker(providers2, dependencies2, spec2);
+		};
+		const methodToCallOnContainsDataChange = function(state) {
+			if (state) {
+				updateViewForData();
+			} else {
+				updateViewForNoData();
 			}
 		};
 
@@ -73,9 +99,11 @@ var CORA = (function(cora) {
 		const calculateHandledTopLevelMetadataIds = function(cPresentation) {
 			let cPresentationsOf = CORA.coraData(cPresentation
 				.getFirstChildByNameInData("presentationsOf"));
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
 			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
-			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
+			//			console.log(listPresentationOf)
 			listPresentationOf.forEach(function(child) {
+				//				console.log(child)
 				let cChild = CORA.coraData(child);
 				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
@@ -83,8 +111,10 @@ var CORA = (function(cora) {
 				if (cParentMetadataChildRefPart.getData() != undefined) {
 					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-					topLevelMetadataIds[metadataId] = "exists";
+					topLevelMetadataIds.push(metadataId);
 				}
+
+				//				console.log(topLevelMetadataIds)
 			});
 		};
 
@@ -113,7 +143,7 @@ var CORA = (function(cora) {
 		};
 
 		const messageIsHandledByThisPNonRepeatingChildRefHandler = function(dataFromMsg) {
-			return topLevelMetadataIds[dataFromMsg.metadataId] !== undefined;
+			return topLevelMetadataIds.includes(dataFromMsg.metadataId);
 		};
 
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,

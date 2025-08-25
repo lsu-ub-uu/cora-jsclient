@@ -19,12 +19,13 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.containsDataTracker = function(dependencies, spec) {
-		const metadataProvider = dependencies.providers.metadataProvider;
+	cora.containsDataTracker = function(providers, dependencies, spec) {
+		const metadataProvider = providers.metadataProvider;
 		const pubSub = dependencies.pubSub;
 		const methodToCallOnContainsDataChange = spec.methodToCallOnContainsDataChange;
-//		let topLevelMetadataIds = spec.topLevelMetadataIds;
-		let topLevelMetadataIds = {};
+		let currentState;
+		let topLevelMetadataIds = spec.topLevelMetadataIds;
+		//		let topLevelMetadataIds = [];
 		let storedValuePositions = {};
 		let metadataHelper;
 
@@ -32,15 +33,14 @@ var CORA = (function(cora) {
 			metadataHelper = CORA.metadataHelper({
 				metadataProvider: metadataProvider
 			});
-			calculateHandledTopLevelMetadataIds(spec.cPresentation);
+//						calculateHandledTopLevelMetadataIds(spec.cPresentation);
 			subscribeToAddMessagesForParentPath();
 		};
 
 		const calculateHandledTopLevelMetadataIds = function(cPresentation) {
-			let cPresentationsOf = CORA.coraData(cPresentation
-				.getFirstChildByNameInData("presentationsOf"));
+			let cPresentationsOf = CORA.coraData(cPresentation.getFirstChildByNameInData("presentationsOf"));
 			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
-			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
 			listPresentationOf.forEach(function(child) {
 				let cChild = CORA.coraData(child);
 				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -49,14 +49,15 @@ var CORA = (function(cora) {
 				if (cParentMetadataChildRefPart.getData() != undefined) {
 					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
 					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-					topLevelMetadataIds[metadataId] = "exists";
+					topLevelMetadataIds.push(metadataId);
 				}
 			});
-			console.log(topLevelMetadataIds)
+						console.log(topLevelMetadataIds)
 		};
 
 		const subscribeToAddMessagesForParentPath = function() {
 			pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
+			pubSub.subscribe("*", spec.parentPath, undefined, handleMsgToDeterminDataState);
 		};
 
 		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
@@ -69,7 +70,7 @@ var CORA = (function(cora) {
 		};
 
 		const messageIsHandledByThisPNonRepeatingChildRefHandler = function(dataFromMsg) {
-			return topLevelMetadataIds[dataFromMsg.metadataId] !== undefined;
+			return topLevelMetadataIds.includes(dataFromMsg.metadataId);
 		};
 
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
@@ -103,7 +104,14 @@ var CORA = (function(cora) {
 		};
 
 		const updateViewForData = function() {
-			methodToCallOnContainsDataChange(true);
+			callMethodToCallOnContainsDataChangeIfCurrentStateIsChanged(true);
+		};
+
+		const callMethodToCallOnContainsDataChangeIfCurrentStateIsChanged = function(state) {
+			if (currentState != state) {
+				currentState = state;
+				methodToCallOnContainsDataChange(state);
+			}
 		};
 
 		const removeAndSetState = function(msgAsArray) {
@@ -135,7 +143,7 @@ var CORA = (function(cora) {
 		};
 
 		const updateViewForNoData = function() {
-			methodToCallOnContainsDataChange(false);
+			callMethodToCallOnContainsDataChangeIfCurrentStateIsChanged(false);
 		};
 
 		const findOrAddPathToStored = function(pathAsArray) {

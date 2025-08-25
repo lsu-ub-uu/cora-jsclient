@@ -62,14 +62,50 @@ var CORA = (function(cora) {
 
 		//TODO: add new always initialShown after startup is completret
 		//TODO: firstshow for initial hidden.... as with alternative
-		
+
 		//TODO: look into tabstops
 
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
 			possiblyAddClickableHeadline();
+			//SPIKE
+//			createContainsDataTracker();
+			//END SPIKE
 		};
+		//SPIKE
+//		const createContainsDataTracker = function() {
+//			let providers2 = {
+//				metadataProvider: undefined
+//			};
+//			let dependencies2 = {
+//				pubSub: spec.pubSub
+//			};
+//			let spec2 = {
+//				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+//				topLevelMetadataIds: spec.metadataId,
+//				parentPath: spec.path,
+//				parentMetadataId: spec.parentMetadataId,
+//				//				cPresentation: spec.cPresentation,
+//			};
+//			console.log("topLevelMetadataIds", spec.metadataId)
+//			return CORA.containsDataTracker(providers2, dependencies2, spec2);
+//		};
+//		const methodToCallOnContainsDataChange = function(state) {
+//			if (state) {
+//				updateViewForData();
+//			} else {
+//				updateViewForNoData();
+//			}
+//		};
+//		const updateViewForData = function() {
+//			view.classList.add("containsData");
+//		}
+//		const updateViewForNoData = function() {
+//			view.classList.remove("containsData");
+//		}
+
+		//END SPIKE
 
 		const createBaseView = function() {
 			let repeatingElement = CORA.createSpanWithClassName("repeatingElement");

@@ -93,11 +93,8 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 						value: "groupWithOneCollectionVarChildGroup"
 					}],
 					name: "presentationOf"
-				}]
-			}, {
-				name: "presentationsOf",
-				children: [{
-					repeatId: "0",
+				}, {
+					repeatId: "1",
 					children: [{
 						name: "linkedRecordType",
 						value: "metadata"
@@ -107,7 +104,22 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 					}],
 					name: "presentationOf"
 				}]
-			}]
+			}
+//			, {
+//				name: "presentationsOf",
+//				children: [{
+//					repeatId: "0",
+//					children: [{
+//						name: "linkedRecordType",
+//						value: "metadata"
+//					}, {
+//						name: "linkedRecordId",
+//						value: "groupIdOneTextChild"
+//					}],
+//					name: "presentationOf"
+//				}]
+//			}
+		]
 		});
 	};
 	const createAlternativePresentation = function() {

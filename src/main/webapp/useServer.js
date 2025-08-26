@@ -21,7 +21,7 @@ const start = function() {
 	let href = window.location.href;
 	let appTokensMap = createMapWithAppTokens();
 
-	if (hrefContains(href, "systemone")) {
+	if (hrefContains(href, "preview.systemone")) {
 		enableCSS("aClientCSS");
 		useSysteOnePreview();
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
@@ -51,19 +51,13 @@ const start = function() {
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
 			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
-	} else if (hrefContains(href, "alvin")) {
+	} else if (hrefContains(href, "preview.alvin")) {
 		enableCSS("alvinCSS");
 		useAlvinPreview();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin', 'alvinUser']);
 	
-	} else if (hrefContains(href, "20240226/diva")) {
-		enableCSS("divaLilaCSS");
-		useDiva20240226();
-		enableIcon("diva");
-		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
-	
-	} else if (hrefContains(href, "diva")) {
+	} else if (hrefContains(href, "preview.diva")) {
 		enableCSS("divaLilaCSS");
 		useDivaPreview();
 		enableIcon("diva");
@@ -119,19 +113,19 @@ const start = function() {
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	
-	} else if (hrefContains(href, ":30280")) {
-		useCurrentHostWithPort("30080", "30180", "SystemOne metadata (k8s)", "systemone");
+	} else if (hrefContains(href, ":30980")) {
+		useCurrentHost("30980", "SystemOne utveckling (k8s)");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
 	
-	} else if (hrefContains(href, ":30281")) {
+	} else if (hrefContains(href, ":30981")) {
 		enableCSS("alvinCSS");
-		useCurrentHostWithPort("30081", "30181", "ALVIN metadata (k8s)", "alvin");
+		useCurrentHost("30981",  "ALVIN utveckling (k8s)");
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
 	
-	} else if (hrefContains(href, ":30282")) {
+	} else if (hrefContains(href, ":30982")) {
 		enableCSS("divaLilaCSS");
-		useCurrentHostWithPort("30082", "30182", "DiVA metadata (k8s)", "diva");
+		useCurrentHost("30982", "DiVA utveckling (k8s)");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	
@@ -254,116 +248,107 @@ const askForServerToUse = function() {
 const useBaseUrlAndLoginUrl = function(baseUrlIn, loginUrlIn) {
 	name = baseUrlIn;
 	baseUrl = baseUrlIn;
-	appTokenBaseUrl = loginUrlIn;
+	loginBaseUrl = loginUrlIn;
 	startDependencies();
 };
 
 const useUb = function() {
 	baseUrl = "http://epc.ub.uu.se/cora/rest/";
-	appTokenBaseUrl = "http://epc.ub.uu.se/";
+	loginBaseUrl = "http://epc.ub.uu.se/";
 	startDependencies();
 };
 
 const useLocalhost = function() {
-	appTokenBaseUrl = "http://localhost:8180/";
+	loginBaseUrl = "http://localhost:8180/";
 	baseUrl = "http://localhost:8080/systemone/rest/";
 	startDependencies();
 };
 
-const useLocalhostWithPort = function(port, appTokenPort, nameIn, deployedName) {
+const useLocalhostWithPort = function(port, loginPort, nameIn, deployedName) {
 	name = nameIn;
-	appTokenBaseUrl = "http://localhost:" + appTokenPort + "/";
+	loginBaseUrl = "http://localhost:" + loginPort + "/";
 	baseUrl = "http://localhost:" + port + "/" + deployedName + "/rest/";
 	startDependencies();
 };
 
-const useDevWithPort = function(port, appTokenPort, nameIn, deployedName) {
+const useDevWithPort = function(port, loginPort, nameIn, deployedName) {
 	name = nameIn;
-	appTokenBaseUrl = "http://192.168.1.116:" + appTokenPort + "/";
+	loginBaseUrl = "http://192.168.1.116:" + loginPort + "/";
 	baseUrl = "http://192.168.1.116:" + port + "/" + deployedName + "/rest/";
 	startDependencies();
 };
 
-const useDevExternallyWithPort = function(port, appTokenPort, nameIn, deployedName) {
+const useDevExternallyWithPort = function(port, loginPort, nameIn, deployedName) {
 	name = nameIn;
-	appTokenBaseUrl = "http://130.238.171.238:" + appTokenPort + "/";
+	loginBaseUrl = "http://130.238.171.238:" + loginPort + "/";
 	baseUrl = "http://130.238.171.238:" + port + "/" + deployedName + "/rest/";
 	startDependencies();
 };
-const useCurrentHostWithPort = function(port, appTokenPort, nameIn, deployedName) {
+const useCurrentHost = function(port, nameIn) {
 	name = nameIn;
 	let currentUrl = window.location.href;
 	let urlObj = new URL(currentUrl);
 	let calculatedUrl = urlObj.protocol + "//" + urlObj.hostname + ":";
-	appTokenBaseUrl = calculatedUrl + appTokenPort + "/";
-	baseUrl = calculatedUrl + port + "/" + deployedName + "/rest/";
+	loginBaseUrl = calculatedUrl + port + "/";
+	baseUrl = calculatedUrl + port + "/rest/";
 	startDependencies();
 };
 
 const useLocalhost2 = function() {
-	appTokenBaseUrl = "http://localhost:8089/";
+	loginBaseUrl = "http://localhost:8089/";
 	baseUrl = "http://localhost:8080/systemone/rest/";
 	startDependencies();
 };
 
 const useLocalhost3 = function() {
-	appTokenBaseUrl = "/";
+	loginBaseUrl = "/";
 	baseUrl = "/systemone/rest/";
 	startDependencies();
 };
 
 const useSysteOnePreview = function() {
 	name = "SystemOne preview";
-	baseUrl = "https://cora.epc.ub.uu.se/systemone/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
+	baseUrl = "https://preview.systemone.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.systemone.cora.epc.ub.uu.se/";
 	startDependencies();
 };
 
-const useAlvinPre = function() {
-	name = "ALVIN";
-	baseUrl = "https://cora.alvin-portal.org/rest/";
-	appTokenBaseUrl = "https://cora.alvin-portal.org/";
+const useAlvinPreview = function() {
+	name = "ALVIN preview";
+	baseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/rest/";
+	loginBaseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/";
 	startDependencies();
 };
 
 const useAlvinMigration = function() {
 	name = "ALVIN migration";
 	baseUrl = "https://mig.alvin-portal.org/rest/";
-	appTokenBaseUrl = "https://mig.alvin-portal.org/";
+	loginBaseUrl = "https://mig.alvin-portal.org/";
+	startDependencies();
+};
+const useAlvinPre = function() {
+	name = "ALVIN";
+	baseUrl = "https://cora.alvin-portal.org/rest/";
+	loginBaseUrl = "https://cora.alvin-portal.org/";
 	startDependencies();
 };
 
-const useAlvinPreview = function() {
-	name = "ALVIN preview";
-	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+const useDivaPreview = function() {
+	name = "DiVA preview";
+	baseUrl = "https://preview.diva.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.diva.cora.epc.ub.uu.se/";
 	startDependencies();
 };
 
 const useDivaMigration = function() {
 	name = "DiVA migration";
 	baseUrl = "https://mig.diva-portal.org/rest/";
-	appTokenBaseUrl = "https://mig.diva-portal.org/";
+	loginBaseUrl = "https://mig.diva-portal.org/";
 	startDependencies();
 };
-
-const useDivaPreview = function() {
-	name = "DiVA preview";
-	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/diva/";
-	startDependencies();
-};
-
 const useDivaPre = function() {
 	name = "DiVA pre";
 	baseUrl = "https://pre.diva-portal.org/rest/";
-	appTokenBaseUrl = "https://pre.diva-portal.org/";
-	startDependencies();
-};
-
-const useDiva20240226 = function() {
-	name = "DiVA version 20240226";
-	baseUrl = "https://cora.epc.ub.uu.se/20240226/diva/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/20240226/diva/";
+	loginBaseUrl = "https://pre.diva-portal.org/";
 	startDependencies();
 };

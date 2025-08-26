@@ -168,7 +168,7 @@ var CORA = (function(cora) {
 				afterLogoutMethod: afterLogout,
 				setInfoMessage: jsClientView.addInfoMessage,
 				setErrorMessage: jsClientView.addErrorMessage,
-				appTokenBaseUrl: spec.appTokenBaseUrl,
+				loginBaseUrl: spec.loginBaseUrl,
 				baseUrl: spec.baseUrl,
 				jsClient: out
 			};

@@ -60,7 +60,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			afterLogoutMethod: afterLogoutMethod,
 			setInfoMessage: setInfoMessage,
 			setErrorMessage: setErrorMessage,
-			appTokenBaseUrl: "someAppTokenBaseUrl/",
+			loginBaseUrl: "someAppTokenBaseUrl/",
 			baseUrl: "http://epc.ub.uu.se/cora/rest/",
 			jsClient: CORATEST.jsClientSpy()
 		};

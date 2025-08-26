@@ -231,7 +231,7 @@ var CORA = (function(cora) {
 		const appTokenLogin = function(loginId, appToken) {
 			let loginSpec = {
 				requestMethod: "POST",
-				url: spec.appTokenBaseUrl + "login/rest/apptoken",
+				url: spec.loginBaseUrl + "login/rest/apptoken",
 				contentType: "application/vnd.cora.login",
 				accept: "application/vnd.cora.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,
@@ -282,7 +282,7 @@ var CORA = (function(cora) {
 				presentationId: loginOption.presentationId,
 				jsClient: spec.jsClient,
 				requestMethod: "POST",
-				url: spec.appTokenBaseUrl + "login/rest/password/",
+				url: spec.loginBaseUrl + "login/rest/password/",
 				contentType: "application/vnd.cora.login",
 				accept: "application/vnd.cora.authentication+json",
 				loadMethod: handleNewAuthTokenAnswer,

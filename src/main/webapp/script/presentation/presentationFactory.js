@@ -57,10 +57,16 @@ var CORA = (function(cora) {
 
 		const pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
 			pChildRefHandlerFactoryDependencies);
+//TODO: test
+		const containsDataTrackerDependencies = {
+			pubSub: dependencies.pubSub
+		};
+		const containsDataTrackerFactory = CORA.genericFactory("containsDataTracker",
+			dependencies.providers, containsDataTrackerDependencies);
 
 		const pNonRepeatingChildRefHandlerFactoryDependencies = {
-			pNonRepeatingChildRefHandlerViewFactory: CORA
-				.genericFactory("pNonRepeatingChildRefHandlerView", {}),
+			pNonRepeatingChildRefHandlerViewFactory: CORA.genericFactory("pNonRepeatingChildRefHandlerView", {}),
+			containsDataTrackerFactory: containsDataTrackerFactory,
 			pubSub: dependencies.pubSub,
 			providers: dependencies.providers
 		};

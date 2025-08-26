@@ -20,52 +20,57 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.containsDataTracker = function(providers, dependencies, spec) {
-		const metadataProvider = providers.metadataProvider;
+		//		const metadataProvider = providers.metadataProvider;
 		const pubSub = dependencies.pubSub;
 		const methodToCallOnContainsDataChange = spec.methodToCallOnContainsDataChange;
+		const path = spec.path;
 		let currentState;
 		let topLevelMetadataIds = spec.topLevelMetadataIds;
 		//		let topLevelMetadataIds = [];
 		let storedValuePositions = {};
-		let metadataHelper;
+		//		let metadataHelper;
 
 		const start = function() {
-			metadataHelper = CORA.metadataHelper({
-				metadataProvider: metadataProvider
-			});
-//						calculateHandledTopLevelMetadataIds(spec.cPresentation);
+			console.log("path", path)
+			console.log("topLevelMetadataIds", topLevelMetadataIds)
+			//			metadataHelper = CORA.metadataHelper({
+			//				metadataProvider: metadataProvider
+			//			});
+			//						calculateHandledTopLevelMetadataIds(spec.cPresentation);
 			subscribeToAddMessagesForParentPath();
 		};
 
-		const calculateHandledTopLevelMetadataIds = function(cPresentation) {
-			let cPresentationsOf = CORA.coraData(cPresentation.getFirstChildByNameInData("presentationsOf"));
-			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
-			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
-			listPresentationOf.forEach(function(child) {
-				let cChild = CORA.coraData(child);
-				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
-				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
-					cParentMetadata, presentationOfId);
-				if (cParentMetadataChildRefPart.getData() != undefined) {
-					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
-					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-					topLevelMetadataIds.push(metadataId);
-				}
-			});
-						console.log(topLevelMetadataIds)
-		};
+		//		const calculateHandledTopLevelMetadataIds = function(cPresentation) {
+		//			let cPresentationsOf = CORA.coraData(cPresentation.getFirstChildByNameInData("presentationsOf"));
+		//			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
+		//			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
+		//			listPresentationOf.forEach(function(child) {
+		//				let cChild = CORA.coraData(child);
+		//				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
+		//				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+		//					cParentMetadata, presentationOfId);
+		//				if (cParentMetadataChildRefPart.getData() != undefined) {
+		//					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
+		//					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		//					topLevelMetadataIds.push(metadataId);
+		//				}
+		//			});
+		//						console.log(topLevelMetadataIds)
+		//		};
 
 		const subscribeToAddMessagesForParentPath = function() {
-			pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
-			pubSub.subscribe("*", spec.parentPath, undefined, handleMsgToDeterminDataState);
+			pubSub.subscribe("add", path, undefined, possiblySubscribeOnAddMsg);
+			//TODO:this does not work
+//			pubSub.subscribe("*", path, undefined, handleMsgToDeterminDataState);
 		};
 
 		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
+				console.log("subscribe on add for:",dataFromMsg)
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
-					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
-				pubSub
-					.subscribe("*", newPath, undefined, handleMsgToDeterminDataState);
+					dataFromMsg.metadataId, dataFromMsg.repeatId, path);
+				console.log("subscribe on add for path:",newPath)
+				pubSub.subscribe("*", newPath, undefined, handleMsgToDeterminDataState);
 			}
 		};
 
@@ -73,17 +78,20 @@ var CORA = (function(cora) {
 			return topLevelMetadataIds.includes(dataFromMsg.metadataId);
 		};
 
-		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
-			parentPath) {
+		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd,
+			repeatId, path) {
 			let pathSpec = {
 				metadataIdToAdd: metadataIdToAdd,
 				repeatId: repeatId,
-				parentPath: parentPath
+				parentPath: path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
 
 		const handleMsgToDeterminDataState = function(dataFromMsg, msg) {
+			console.log("handleMsgToDeterminDataState", dataFromMsg, msg)
+			console.log("storedValuePositions", JSON.stringify(storedValuePositions))
+
 			let msgAsArray = msg.split("/");
 			let msgType = msgAsArray.pop();
 			if (msgType === "setValue") {
@@ -108,8 +116,11 @@ var CORA = (function(cora) {
 		};
 
 		const callMethodToCallOnContainsDataChangeIfCurrentStateIsChanged = function(state) {
+			console.log("currentState", currentState);
+			console.log("setting state in containsData", state);
 			if (currentState != state) {
 				currentState = state;
+				console.log("calling change", state);
 				methodToCallOnContainsDataChange(state);
 			}
 		};

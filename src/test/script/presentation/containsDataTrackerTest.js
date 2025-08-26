@@ -48,7 +48,7 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		spec = {
 			methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 			topLevelMetadataIds: ['groupWithOneCollectionVarChildGroup'],
-			parentPath: [],
+			path: [],
 			parentMetadataId: "someParentMetadataId",
 			//			cPresentation: createPresentation(),
 		};
@@ -131,12 +131,12 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		let subscriptions = pubSub.getSubscriptions();
 		assert.strictEqual(subscriptions.length, 2)
 		assert.strictEqual(subscriptions[0].type, "add");
-		assert.stringifyEqual(subscriptions[0].path, spec.parentPath);
+		assert.stringifyEqual(subscriptions[0].path, spec.path);
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, containsDataTracker.possiblySubscribeOnAddMsg);
 
 		assert.strictEqual(subscriptions[1].type, "*");
-		assert.stringifyEqual(subscriptions[1].path, spec.parentPath);
+		assert.stringifyEqual(subscriptions[1].path, spec.path);
 		assert.strictEqual(subscriptions[1].context, undefined);
 		assert.strictEqual(subscriptions[1].functionToCall, containsDataTracker.handleMsgToDeterminDataState);
 	});

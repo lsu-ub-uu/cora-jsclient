@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2018 Uppsala University Library
+ * Copyright 2025 Uppsala University Library
  * 
  * This file is part of Cora.
  *
@@ -18,27 +18,15 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.presentationSpy = function(dependencies, spec) {
-		let view = CORA.createSpanWithClassName("presentationSpyView");
-		let disableIsCalled = false;
-		function getView() {
-			return view;
-		}
-		const getText = function() {
-			return "fake text from presentationSpy, " + spec.metadataIdUsedInData;
+	coraTest.containsDataTrackerSpy = function(prividers, dependencies, spec) {
+		
+		const getSpec = function(){
+			return spec;
 		};
-		const disableVar = function() {
-			disableIsCalled = true;
-		};
-		const getDisableVarStatus = function() {
-			return disableIsCalled;
-		};
+		
 		return Object.freeze({
-			type: "presentationSpy",
-			getView: getView,
-			getText: getText,
-			disableVar: disableVar,
-			getDisableVarStatus: getDisableVarStatus
+			type: "containsDataTrackerSpy",
+			getSpec: getSpec
 		});
 	};
 	return coraTest;

@@ -20,9 +20,7 @@
 "use strict";
 QUnit.module("presentation/containsDataTracker.js", hooks => {
 	const test = QUnit.test;
-	let providers;
 	let dependencies;
-	let metadataProvider;
 	let pubSub;
 
 	let spec;
@@ -32,10 +30,6 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 	hooks.beforeEach(() => {
 		containsData = undefined;
 		noOfCallsToContainsData = 0
-		metadataProvider = CORATEST.MetadataProviderStub();
-		providers = {
-			metadataProvider: metadataProvider
-		};
 		pubSub = CORATEST.pubSubSpy();
 		dependencies = {
 			pubSub: pubSub
@@ -58,56 +52,8 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		//no after
 	});
 
-	const createPresentation = function() {
-		return CORA.coraData({
-			name: "presentation",
-			children: [{
-				name: "recordInfo",
-				children: [{
-					name: "id",
-					value: "somePresentationId"
-				}, {
-					name: "type",
-					children: [{
-						name: "linkedRecordType",
-						value: "recordType"
-					}, {
-						name: "linkedRecordId",
-						value: "presentationSurroundingContainer"
-					}]
-				}]
-			}, {
-				name: "presentationsOf",
-				children: [{
-					repeatId: "0",
-					children: [{
-						name: "linkedRecordType",
-						value: "metadata"
-					}, {
-						name: "linkedRecordId",
-						value: "groupWithOneCollectionVarChildGroup"
-					}],
-					name: "presentationOf"
-				}]
-			}, {
-				name: "presentationsOf",
-				children: [{
-					repeatId: "0",
-					children: [{
-						name: "linkedRecordType",
-						value: "metadata"
-					}, {
-						name: "linkedRecordId",
-						value: "groupIdOneTextChild"
-					}],
-					name: "presentationOf"
-				}]
-			}]
-		});
-	};
-
 	const createContainsDataTracker = function() {
-		return CORA.containsDataTracker(providers, dependencies, spec);
+		return CORA.containsDataTracker(dependencies, spec);
 	};
 
 	test("testInit", function(assert) {
@@ -129,17 +75,25 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		let containsDataTracker = createContainsDataTracker();
 
 		let subscriptions = pubSub.getSubscriptions();
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 		assert.strictEqual(subscriptions[0].type, "add");
 		assert.stringifyEqual(subscriptions[0].path, spec.path);
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, containsDataTracker.possiblySubscribeOnAddMsg);
-
-		assert.strictEqual(subscriptions[1].type, "*");
-		assert.stringifyEqual(subscriptions[1].path, spec.path);
-		assert.strictEqual(subscriptions[1].context, undefined);
-		assert.strictEqual(subscriptions[1].functionToCall, containsDataTracker.handleMsgToDeterminDataState);
 	});
+	
+	test("testInitSubscribesToAdd_forRepeatingElementsAkaNoTopLevelMetadataIds", function(assert) {
+		spec.topLevelMetadataIds=undefined;
+		let containsDataTracker = createContainsDataTracker();
+
+		let subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 1);
+		assert.strictEqual(subscriptions[0].type, "*");
+		assert.stringifyEqual(subscriptions[0].path, spec.path);
+		assert.strictEqual(subscriptions[0].context, undefined);
+		assert.strictEqual(subscriptions[0].functionToCall, containsDataTracker.handleMsgToDeterminDataState);
+	});
+	
 
 	test("testSubscribesWhenAdd_SameId", function(assert) {
 		let containsDataTracker = createContainsDataTracker();
@@ -152,57 +106,48 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 			nameInData: "groupWithOneCollectionVarChildGroup"
 		};
 		let subscriptions = pubSub.getSubscriptions();
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 
 		containsDataTracker.possiblySubscribeOnAddMsg(dataFromMsg, msg);
-
-		let path = ["groupWithOneCollectionVarChildGroup.1"];
-
-		assert.strictEqual(subscriptions.length, 3)
-		assert.strictEqual(subscriptions[2].type, "*");
-		assert.stringifyEqual(subscriptions[2].path, path);
-		assert.strictEqual(subscriptions[2].context, undefined);
-		assert.strictEqual(subscriptions[2].functionToCall,
-			containsDataTracker.handleMsgToDeterminDataState);
 	});
 
 	test("testSubscribesWhenAdd_OtherIdSameNameInDataAttributes", function(assert) {
-//		spec.cPresentation = CORA.coraData({
-//			name: "presentation",
-//			children: [{
-//				name: "recordInfo",
-//				children: [{
-//					name: "id",
-//					value: "somePresentationId"
-//				}, {
-//					name: "type",
-//					children: [{
-//						name: "linkedRecordType",
-//						value: "recordType"
-//					}, {
-//						name: "linkedRecordId",
-//						value: "presentationSurroundingContainer"
-//					}]
-//				}]
-//			}, {
-//				name: "presentationsOf",
-//				children: [{
-//					repeatId: "0",
-//					children: [{
-//						name: "linkedRecordType",
-//						value: "metadata"
-//					}, {
-//						name: "linkedRecordId",
-//						value: "groupWithOneCollectionVarChildGroupOtherIdSameNameInData"
-//					}],
-//					name: "presentationOf"
-//				}]
-//			}
-//			]
-//		});
+		//		spec.cPresentation = CORA.coraData({
+		//			name: "presentation",
+		//			children: [{
+		//				name: "recordInfo",
+		//				children: [{
+		//					name: "id",
+		//					value: "somePresentationId"
+		//				}, {
+		//					name: "type",
+		//					children: [{
+		//						name: "linkedRecordType",
+		//						value: "recordType"
+		//					}, {
+		//						name: "linkedRecordId",
+		//						value: "presentationSurroundingContainer"
+		//					}]
+		//				}]
+		//			}, {
+		//				name: "presentationsOf",
+		//				children: [{
+		//					repeatId: "0",
+		//					children: [{
+		//						name: "linkedRecordType",
+		//						value: "metadata"
+		//					}, {
+		//						name: "linkedRecordId",
+		//						value: "groupWithOneCollectionVarChildGroupOtherIdSameNameInData"
+		//					}],
+		//					name: "presentationOf"
+		//				}]
+		//			}
+		//			]
+		//		});
 
-		spec.topLevelMetadataIds= ['groupWithOneCollectionVarChildGroup'];
-				
+		spec.topLevelMetadataIds = ['groupWithOneCollectionVarChildGroup'];
+
 
 		let containsDataTracker = createContainsDataTracker();
 
@@ -214,55 +159,21 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 			nameInData: "groupWithOneCollectionVarChildGroup"
 		};
 		let subscriptions = pubSub.getSubscriptions();
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 
 		containsDataTracker.possiblySubscribeOnAddMsg(dataFromMsg, msg);
 
 		let path = ["groupWithOneCollectionVarChildGroup.1"];
-
-		assert.strictEqual(subscriptions.length, 3)
-		assert.strictEqual(subscriptions[2].type, "*");
-		assert.stringifyEqual(subscriptions[2].path, path);
-		assert.strictEqual(subscriptions[2].context, undefined);
-		assert.strictEqual(subscriptions[2].functionToCall,
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[1].type, "*");
+		assert.stringifyEqual(subscriptions[1].path, path);
+		assert.strictEqual(subscriptions[1].context, undefined);
+		assert.strictEqual(subscriptions[1].functionToCall,
 			containsDataTracker.handleMsgToDeterminDataState);
 	});
 
 	test("testSubscribesWhenAdd_OtherIdNotSameNameInDataAttributes", function(assert) {
-//		spec.cPresentation = CORA.coraData({
-//			name: "presentation",
-//			children: [{
-//				name: "recordInfo",
-//				children: [{
-//					name: "id",
-//					value: "somePresentationId"
-//				}, {
-//					name: "type",
-//					children: [{
-//						name: "linkedRecordType",
-//						value: "recordType"
-//					}, {
-//						name: "linkedRecordId",
-//						value: "presentationSurroundingContainer"
-//					}]
-//				}]
-//			}, {
-//				name: "presentationsOf",
-//				children: [{
-//					repeatId: "0",
-//					children: [{
-//						name: "linkedRecordType",
-//						value: "metadata"
-//					}, {
-//						name: "linkedRecordId",
-//						value: "groupWithOneCollectionVarChildAndOneTextChildGroup"
-//					}],
-//					name: "presentationOf"
-//				}]
-//			}
-//			]
-//		});
-		spec.topLevelMetadataIds= ['groupWithOneCollectionVarChildAndOneTextChildGroup'];
+		spec.topLevelMetadataIds = ['groupWithOneCollectionVarChildAndOneTextChildGroup'];
 		let containsDataTracker = createContainsDataTracker();
 
 		let msg = "root/add";
@@ -273,11 +184,11 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 			nameInData: "groupWithOneCollectionVarChildGroup"
 		};
 		let subscriptions = pubSub.getSubscriptions();
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 
 		containsDataTracker.possiblySubscribeOnAddMsg(dataFromMsg, msg);
 
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 	});
 
 	test("testSubscribesWhenAdd_NoSubscriptionForNonHandledMetdataId", function(assert) {
@@ -291,10 +202,10 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 			nameInData: "groupWithOneCollectionVarChildGroup"
 		};
 		let subscriptions = pubSub.getSubscriptions();
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 
 		containsDataTracker.possiblySubscribeOnAddMsg(dataFromMsg, msg);
-		assert.strictEqual(subscriptions.length, 2)
+		assert.strictEqual(subscriptions.length, 1);
 	});
 
 	test("testCallToMethodToCallOnContainsDataChange_onMessageForNewValue", function(assert) {

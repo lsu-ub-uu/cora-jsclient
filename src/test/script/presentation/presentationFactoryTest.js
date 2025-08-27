@@ -296,9 +296,7 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 	assert.strictEqual(dependencies.dataDivider, context.dependencies.dataDivider);
 
 	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
-	assert
-		.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
-			"pRepeatingElement");
+	assert.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(), "pRepeatingElement");
 
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
@@ -312,6 +310,12 @@ CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, co
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
 	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
+
+	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
+	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
+	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
+	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
+	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
 }
 
 CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {
@@ -325,7 +329,6 @@ CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function
 	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
 	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
 	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
-	assert.strictEqual(containsDataTrackerFactory.getProviders(), context.dependencies.providers);
 	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
 	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
 

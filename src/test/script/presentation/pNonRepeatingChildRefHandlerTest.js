@@ -296,7 +296,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			pNonRepeatingChildRefHandler.onlyForTestMethodToCallOnContainsDataChange);
 		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, ["groupWithOneCollectionVarChildGroup"]);
 		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
 	});
 
 	test("testSubscribesWhenAdd_OtherIdSameNameInDataAttributes", function(assert) {

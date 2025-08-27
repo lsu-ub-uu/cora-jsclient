@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingElement = function(dependencies, spec) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
+		const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
 
 		const pChildRefHandler = spec.pChildRefHandler;
 		const pChildRefHandlerView = spec.pChildRefHandlerView;
@@ -31,6 +32,7 @@ var CORA = (function(cora) {
 		const userCanAddBefore = spec.userCanAddBefore;
 		const clickableHeadlineText = spec.clickableHeadlineText;
 		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
+		const mode = spec.mode;
 
 		let presentationSize = spec.presentationSize;
 
@@ -60,52 +62,52 @@ var CORA = (function(cora) {
 		//works for pNonRepeating
 
 
-		//TODO: add new always initialShown after startup is completret
+		//TODO: add new, always initialShown, after startup is completret
 		//TODO: firstshow for initial hidden.... as with alternative
 
 		//TODO: look into tabstops
 
+		//TODO:Bug not new.. 
+		// needs to handle reload metadata.... currently does not show it again... if no value on reload
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
 			possiblyAddClickableHeadline();
-			//SPIKE
-//			createContainsDataTracker();
-			//END SPIKE
+			createContainsDataTracker();
+			updateViewForNoData();
 		};
-		//SPIKE
-//		const createContainsDataTracker = function() {
-//			let providers2 = {
-//				metadataProvider: undefined
-//			};
-//			let dependencies2 = {
-//				pubSub: spec.pubSub
-//			};
-//			let spec2 = {
-//				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
-//				topLevelMetadataIds: spec.metadataId,
-//				parentPath: spec.path,
-//				parentMetadataId: spec.parentMetadataId,
-//				//				cPresentation: spec.cPresentation,
-//			};
-//			console.log("topLevelMetadataIds", spec.metadataId)
-//			return CORA.containsDataTracker(providers2, dependencies2, spec2);
-//		};
-//		const methodToCallOnContainsDataChange = function(state) {
-//			if (state) {
-//				updateViewForData();
-//			} else {
-//				updateViewForNoData();
-//			}
-//		};
-//		const updateViewForData = function() {
-//			view.classList.add("containsData");
-//		}
-//		const updateViewForNoData = function() {
-//			view.classList.remove("containsData");
-//		}
+		
+		const createContainsDataTracker = function() {
+			let containsDataTrackerSpec = {
+				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+				path: spec.path
+			};
+			containsDataTrackerFactory.factor(containsDataTrackerSpec);
+		};
 
-		//END SPIKE
+		const methodToCallOnContainsDataChange = function(state) {
+			if (state) {
+				updateViewForData();
+			} else {
+				updateViewForNoData();
+			}
+		};
+
+		const updateViewForData = function() {
+			view.classList.add("containsData");
+			view.classList.remove("containsNoData");
+			//			if (mode === "output") {
+			show(view);
+			//			}
+		};
+
+		const updateViewForNoData = function() {
+			view.classList.remove("containsData");
+			view.classList.add("containsNoData");
+			if (mode === "output") {
+				hide(view);
+			}
+		};
 
 		const createBaseView = function() {
 			let repeatingElement = CORA.createSpanWithClassName("repeatingElement");
@@ -339,17 +341,34 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const hide = function(element) {
-			if (element) {
+			console.log("spike bugfix in pRepeatingElement")
+//		const hide = function(element) {
+//			if (element) {
+//				element.styleOriginal = element.style.display;
+//				element.style.display = "none";
+//			}
+//		};
+//
+//		const show = function(element) {
+//			if (element) {
+//				if (element.styleOriginal !== undefined) {
+//					element.style.display = element.styleOriginal;
+//				}
+//			}
+//		};
+const hide = function(element) {
+			if (element !== undefined && element.style.display !== "none") {
 				element.styleOriginal = element.style.display;
 				element.style.display = "none";
 			}
 		};
 
 		const show = function(element) {
-			if (element) {
+			if (element !== undefined) {
 				if (element.styleOriginal !== undefined) {
 					element.style.display = element.styleOriginal;
+				} else {
+					element.style.display = "";
 				}
 			}
 		};
@@ -387,7 +406,8 @@ var CORA = (function(cora) {
 			showDragButton: showDragButton,
 			hideAddBeforeButton: hideAddBeforeButton,
 			showAddBeforeButton: showAddBeforeButton,
-			getPath: getPath
+			getPath: getPath,
+			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange
 		});
 		start();
 		view.modelObject = out;

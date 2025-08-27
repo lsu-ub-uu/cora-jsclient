@@ -316,9 +316,6 @@ var CORA = (function(cora) {
 				keepTrackOfBinaryLinkValues(newPath);
 			}
 			let repeatingElement = createRepeatingElement(newPath);
-			//SPIKE
-			//			let repeatingElement = createRepeatingElement(newPath, metadataIdToAdd);
-			// END SPIKE
 			pChildRefHandlerView.addChild(repeatingElement.getView());
 			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
 			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
@@ -373,31 +370,13 @@ var CORA = (function(cora) {
 				userCanRemove: userCanRemove,
 				userCanMove: userCanMove,
 				userCanAddBefore: userCanAddBefore,
+				mode: spec.mode,
 				clickableHeadlineText: spec.clickableHeadlineText,
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
 				presentationSize: spec.presentationSize
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
-		//SPIKE
-		//		const createRepeatingElement = function(path, metadataIdToAdd) {
-		//			let repeatingElementSpec = {
-		//				path: path,
-		//				metadataId: metadataIdToAdd,
-		//				pChildRefHandlerView: pChildRefHandlerView,
-		//				pChildRefHandler: out,
-		//				userCanRemove: userCanRemove,
-		//				userCanMove: userCanMove,
-		//				userCanAddBefore: userCanAddBefore,
-		//				clickableHeadlineText: spec.clickableHeadlineText,
-		//				clickableHeadlineLevel: spec.clickableHeadlineLevel,
-		//				presentationSize: spec.presentationSize,
-		//				
-		//				pubSub: pubSub
-		//			};
-		//			return pRepeatingElementFactory.factor(repeatingElementSpec);
-		//		};
-		//END SPIKE
 
 		const addPresentationsToRepeatingElementsView = function(repeatingElement, metadataIdToAdd) {
 			let path = repeatingElement.getPath();

@@ -222,20 +222,38 @@ var CORA = (function(cora) {
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, valueView);
 		};
-		
-		const hide = function(element) {
-			view.styleOriginal = view.style.display;
-			view.style.display = "none";
-		};
-
-		const show = function(element) {
-			if (view.styleOriginal !== undefined) {
-				view.style.display = view.styleOriginal;
-			} else {
-				view.style.display = "";
+		console.log("spike bugfix in pParentVarView")
+//		const hide = function(element) {
+//			view.styleOriginal = view.style.display;
+//			view.style.display = "none";
+//		};
+//
+//		const show = function(element) {
+//			console.log("pParentVarView styleOriginal", view.styleOriginal)
+//			if (view.styleOriginal !== undefined && view.styleOriginal !== "none") {
+//			console.log("pParentVarView set to original")
+//				view.style.display = view.styleOriginal;
+//			} else {
+//			console.log("pParentVarView set to empty string")
+//				view.style.display = "";
+//			}
+//		};
+const hide = function(view) {
+			if (view !== undefined && view.style.display !== "none") {
+				view.styleOriginal = view.style.display;
+				view.style.display = "none";
 			}
 		};
-		
+
+		const show = function(view) {
+			if (view !== undefined) {
+				if (view.styleOriginal !== undefined) {
+					view.style.display = view.styleOriginal;
+				} else {
+					view.style.display = "";
+				}
+			}
+		};
 		out = Object.freeze({
 			type: "pParentVarView",
 			getDependencies: getDependencies,

@@ -23,6 +23,8 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	let dependencies;
 	let jsBookkeeper;
 	let pubSub;
+	let containsDataTrackerFactory;
+
 	let spec;
 
 	let fixture;
@@ -32,10 +34,12 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		fixture = document.getElementById("qunit-fixture");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		pubSub = CORATEST.pubSubSpy();
+		containsDataTrackerFactory = CORATEST.standardFactorySpy("containsDataTrackerSpy");
 
 		dependencies = {
 			jsBookkeeper: jsBookkeeper,
-			pubSub: pubSub
+			pubSub: pubSub,
+			containsDataTrackerFactory: containsDataTrackerFactory
 		};
 		spec = {
 			path: [],
@@ -43,7 +47,8 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 			pChildRefHandler: CORATEST.pChildRefHandlerSpy(),
 			userCanRemove: true,
 			userCanMove: true,
-			userCanAddBefore: true
+			userCanAddBefore: true,
+			mode: "input"
 		};
 	});
 	hooks.afterEach(() => {
@@ -61,14 +66,14 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 		assert.ok(view.modelObject === pRepeatingElement,
 			"modelObject should be a pointer to the javascript object instance");
 
 		assert.strictEqual(pRepeatingElement.getPath(), spec.path);
 
 		let repeatingElement = view;
-		assert.strictEqual(repeatingElement.className, "repeatingElement");
+		assert.strictEqual(repeatingElement.className, "repeatingElement containsNoData");
 		let buttonView = repeatingElement.childNodes[0];
 		assert.strictEqual(buttonView.className, "buttonView");
 
@@ -87,12 +92,84 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(buttonView.childNodes.length, 3);
 	});
 
+	test("testInit_createsContainsDataTracker", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+
+		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
+			pRepeatingElement.onlyForTestMethodToCallOnContainsDataChange);
+		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, undefined);
+		assert.stringifyEqual(factoredSpec.path, spec.path);
+	});
+
+
+	test("testChangeViewOnContainsDataTracker_output", function(assert) {
+		spec.mode = "output";
+		createAndReturnPRepeatingElementGetAndAttatchView();
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+
+		assert.strictEqual(view.className, "repeatingElement containsNoData");
+		assert.elementHasNotClass(view, "containsData");
+		assert.elementHasClass(view, "containsNoData");
+		assert.notVisible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(false);
+		assert.elementHasNotClass(view, "containsData");
+		assert.elementHasClass(view, "containsNoData");
+		assert.notVisible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+	});
+
+	test("testChangeViewOnContainsDataTracker_input", function(assert) {
+		spec.mode = "input";
+		createAndReturnPRepeatingElementGetAndAttatchView();
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+
+		assert.strictEqual(view.className, "repeatingElement containsNoData");
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(false);
+		assert.elementHasNotClass(view, "containsData");
+		assert.elementHasClass(view, "containsNoData");
+		assert.visible(view);
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.elementHasClass(view, "containsData");
+		assert.elementHasNotClass(view, "containsNoData");
+		assert.visible(view);
+	});
+
 	test("testInitClickableHeadline", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let repeatingElement = view;
-		assert.strictEqual(repeatingElement.className, "repeatingElement");
+		assert.strictEqual(repeatingElement.className, "repeatingElement containsNoData");
 
 		let headline = view.childNodes[0];
 		assert.strictEqual(headline.nodeName, "H2");
@@ -106,7 +183,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		createAndReturnPRepeatingElementGetAndAttatchView();
 
 		let repeatingElement = view;
-		assert.strictEqual(repeatingElement.className, "repeatingElement");
+		assert.strictEqual(repeatingElement.className, "repeatingElement containsNoData");
 
 		let headline = view.childNodes[0];
 		assert.strictEqual(headline.nodeName, "H4");
@@ -119,14 +196,14 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 		assert.ok(view.modelObject === pRepeatingElement,
 			"modelObject should be a pointer to the javascript object instance");
 
 		assert.strictEqual(pRepeatingElement.getPath(), spec.path);
 
 		let repeatingElement = view;
-		assert.strictEqual(repeatingElement.className, "repeatingElement");
+		assert.strictEqual(repeatingElement.className, "repeatingElement containsNoData");
 		let buttonView = repeatingElement.childNodes[0];
 		assert.strictEqual(buttonView.className, "buttonView");
 
@@ -149,14 +226,14 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
 
 		assert.strictEqual(pRepeatingElement.type, "pRepeatingElement");
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 		assert.ok(view.modelObject === pRepeatingElement,
 			"modelObject should be a pointer to the javascript object instance");
 
 		assert.strictEqual(pRepeatingElement.getPath(), spec.path);
 
 		let repeatingElement = view;
-		assert.strictEqual(repeatingElement.className, "repeatingElement");
+		assert.strictEqual(repeatingElement.className, "repeatingElement containsNoData");
 		let buttonView = repeatingElement.childNodes[0];
 		assert.strictEqual(buttonView.className, "buttonView");
 
@@ -239,22 +316,22 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testRemoveButtonHover", function(assert) {
 		createAndReturnPRepeatingElementGetAndAttatchView();
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		let buttonView = view.childNodes[0];
 		let removeButton = buttonView.firstChild;
 
 		let mouseEnterEvent = new Event('mouseenter');
 		removeButton.dispatchEvent(mouseEnterEvent);
-		assert.deepEqual(view.className, "repeatingElement hoverRemove");
+		assert.deepEqual(view.className, "repeatingElement containsNoData hoverRemove");
 
 		let mouseLeaveEvent = new Event('mouseleave');
 		removeButton.dispatchEvent(mouseLeaveEvent);
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		let mouseEnterEvent2 = new Event('mouseenter');
 		removeButton.dispatchEvent(mouseEnterEvent2);
-		assert.deepEqual(view.className, "repeatingElement hoverRemove");
+		assert.deepEqual(view.className, "repeatingElement containsNoData hoverRemove");
 
 	});
 

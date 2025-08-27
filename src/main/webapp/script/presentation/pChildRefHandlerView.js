@@ -23,7 +23,8 @@ var CORA = (function(cora) {
 		let view;
 		let childrenView;
 		let buttonView;
-
+		const mode = spec.mode;
+		
 		let nodeBeeingDragged;
 		let lastChangedWith;
 		let addDragged;
@@ -35,7 +36,7 @@ var CORA = (function(cora) {
 			view = createBaseView();
 			childrenView = createChildrenView();
 			view.appendChild(childrenView);
-			if (spec.mode === "input" && (spec.addMethod !== undefined || spec.upload === "true")) {
+			if (mode === "input" && (spec.addMethod !== undefined || spec.upload === "true")) {
 				createButtonView();
 			};
 		};

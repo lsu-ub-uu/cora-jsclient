@@ -309,14 +309,14 @@ const useLocalhost3 = function() {
 const useSysteOnePreview = function() {
 	name = "SystemOne preview";
 	baseUrl = "https://cora.epc.ub.uu.se/systemone/rest/";
-	appTokenBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
+	loginBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
 	startDependencies();
 };
 
 const useAlvinPreview = function() {
 	name = "ALVIN preview";
-	baseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/rest/";
-	loginBaseUrl = "https://preview.alvin.cora.epc.ub.uu.se/alvin/";
+	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
+	loginBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
 	startDependencies();
 };
 
@@ -335,8 +335,8 @@ const useAlvinPre = function() {
 
 const useDivaPreview = function() {
 	name = "DiVA preview";
-	baseUrl = "https://preview.diva.cora.epc.ub.uu.se/rest/";
-	loginBaseUrl = "https://preview.diva.cora.epc.ub.uu.se/";
+	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
+	loginBaseUrl = "https://cora.epc.ub.uu.se/diva/";
 	startDependencies();
 };
 

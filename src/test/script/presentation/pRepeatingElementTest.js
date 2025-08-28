@@ -135,6 +135,33 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.elementHasNotClass(view, "containsNoData");
 		assert.visible(view);
 	});
+	
+	test("testChangeViewOnContainsDataTracker_presetDisplay_input", function(assert) {
+		spec.mode = "input";
+		createAndReturnPRepeatingElementGetAndAttatchView();
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+		view.style.display = "flex";
+
+		factoredSpec.methodToCallOnContainsDataChange(false);
+		assert.strictEqual(view.style.display, "flex");
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.strictEqual(view.style.display, "flex");
+	});
+
+	test("testChangeViewOnContainsDataTracker_presetDisplay_output", function(assert) {
+		spec.mode = "output";
+		createAndReturnPRepeatingElementGetAndAttatchView();
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+		view.style.display = "flex";
+
+
+		factoredSpec.methodToCallOnContainsDataChange(false);
+		assert.strictEqual(view.style.display, "none");
+
+		factoredSpec.methodToCallOnContainsDataChange(true);
+		assert.strictEqual(view.style.display, "flex");
+	});
 
 	test("testChangeViewOnContainsDataTracker_input", function(assert) {
 		spec.mode = "input";

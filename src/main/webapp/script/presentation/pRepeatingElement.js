@@ -76,7 +76,7 @@ var CORA = (function(cora) {
 			createContainsDataTracker();
 			updateViewForNoData();
 		};
-		
+
 		const createContainsDataTracker = function() {
 			let containsDataTrackerSpec = {
 				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
@@ -96,9 +96,9 @@ var CORA = (function(cora) {
 		const updateViewForData = function() {
 			view.classList.add("containsData");
 			view.classList.remove("containsNoData");
-			//			if (mode === "output") {
-			show(view);
-			//			}
+			if (mode === "output") {
+				show(view);
+			}
 		};
 
 		const updateViewForNoData = function() {
@@ -341,22 +341,7 @@ var CORA = (function(cora) {
 			}
 		};
 
-			console.log("spike bugfix in pRepeatingElement")
-//		const hide = function(element) {
-//			if (element) {
-//				element.styleOriginal = element.style.display;
-//				element.style.display = "none";
-//			}
-//		};
-//
-//		const show = function(element) {
-//			if (element) {
-//				if (element.styleOriginal !== undefined) {
-//					element.style.display = element.styleOriginal;
-//				}
-//			}
-//		};
-const hide = function(element) {
+		const hide = function(element) {
 			if (element !== undefined && element.style.display !== "none") {
 				element.styleOriginal = element.style.display;
 				element.style.display = "none";

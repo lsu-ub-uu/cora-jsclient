@@ -37,34 +37,34 @@ var CORA = (function(cora) {
 			info = createInfo();
 			view.appendChild(info.getButton());
 		};
-		
+
 		const possiblyAddLableTextToView = function() {
-			if(spec.label){
-				if(modeIsInput()){
+			if (spec.label) {
+				if (modeIsInput()) {
 					addLabelForInput();
-				}else{
+				} else {
 					addLabelForOutput();
 				}
 			}
 		};
-		
-		const modeIsInput = function(){
+
+		const modeIsInput = function() {
 			return (spec.mode === "input");
 		};
-		
-		const addLabelForInput = function(){
+
+		const addLabelForInput = function() {
 			let label = document.createElement("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 			label.htmlFor = spec.id;
 		};
 
-		const addLabelForOutput = function(){
+		const addLabelForOutput = function() {
 			let label = CORA.createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
-		
+
 		const createValueView = function() {
 			if (modeIsInput()) {
 				return createInput();
@@ -109,7 +109,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOutput = function() {
-			if(child.useTextOnlyOutput()){
+			if (child.useTextOnlyOutput()) {
 				return createOutputText();
 			}
 			return child.createOutputWithSetValueFunction();
@@ -122,7 +122,7 @@ var CORA = (function(cora) {
 			};
 			return outputNew;
 		};
-		
+
 		const createInfo = function() {
 			let infoSpec = {
 				appendTo: view,
@@ -222,38 +222,6 @@ var CORA = (function(cora) {
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, valueView);
 		};
-		console.log("spike bugfix in pParentVarView")
-//		const hide = function(element) {
-//			view.styleOriginal = view.style.display;
-//			view.style.display = "none";
-//		};
-//
-//		const show = function(element) {
-//			console.log("pParentVarView styleOriginal", view.styleOriginal)
-//			if (view.styleOriginal !== undefined && view.styleOriginal !== "none") {
-//			console.log("pParentVarView set to original")
-//				view.style.display = view.styleOriginal;
-//			} else {
-//			console.log("pParentVarView set to empty string")
-//				view.style.display = "";
-//			}
-//		};
-const hide = function(view) {
-			if (view !== undefined && view.style.display !== "none") {
-				view.styleOriginal = view.style.display;
-				view.style.display = "none";
-			}
-		};
-
-		const show = function(view) {
-			if (view !== undefined) {
-				if (view.styleOriginal !== undefined) {
-					view.style.display = view.styleOriginal;
-				} else {
-					view.style.display = "";
-				}
-			}
-		};
 		out = Object.freeze({
 			type: "pParentVarView",
 			getDependencies: getDependencies,
@@ -263,9 +231,7 @@ const hide = function(view) {
 			updateClassName: updateClassName,
 			setState: setState,
 			disable: disable,
-			addAttributesView: addAttributesView,
-			hide: hide,
-			show: show
+			addAttributesView: addAttributesView
 		});
 		start();
 		return out;

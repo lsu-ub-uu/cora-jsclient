@@ -42,3 +42,11 @@ QUnit.assert.allNotVisible = function(domElements, message) {
 		QUnit.assert.notVisible(domElement, message)
 	});
 };
+
+QUnit.assert.elementHasClass = function(domElement, className) {
+	QUnit.assert.true(domElement.classList.contains(className));
+};
+
+QUnit.assert.elementHasNotClass = function(domElement, className) {
+	QUnit.assert.false(domElement.classList.contains(className));
+};

@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.openGuiItemHandlerSpy = function(dependencies, spec) {
 		let addedManagedGuiItem = [];
 		let getViewCalled = 0;
-		let view = CORA.gui.createSpanWithClassName("openGuiItemHandlerSpy");
+		let view = CORA.createSpanWithClassName("openGuiItemHandlerSpy");
 		
 		let viewRemovedList = [];
 		let showViewList = [];

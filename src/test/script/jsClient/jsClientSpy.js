@@ -53,8 +53,8 @@ var CORATEST = (function(coraTest) {
 			createdManagedGuiItemHandledBy.push(handledBy);
 			let managedGuiItem = {
 				"handledBy" : handledBy,
-				"workView" : CORA.gui.createSpanWithClassName("workView"),
-				"menuView" : CORA.gui.createSpanWithClassName("menuView")
+				"workView" : CORA.createSpanWithClassName("workView"),
+				"menuView" : CORA.createSpanWithClassName("menuView")
 			};
 			createdManagedGuiItem.push(managedGuiItem);
 			return managedGuiItem;

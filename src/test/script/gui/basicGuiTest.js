@@ -32,7 +32,7 @@ QUnit.test("testCreateRemoveButton", function(assert) {
 	let onclick = function() {
 		clicked = true;
 	};
-	let button = CORA.gui.createRemoveButton(onclick);
+	let button = CORA.createRemoveButton(onclick);
 	assert.strictEqual(button.className, "iconButton removeButton");
 
 	CORATESTHELPER.simulateOnclick(button);
@@ -41,19 +41,19 @@ QUnit.test("testCreateRemoveButton", function(assert) {
 });
 
 QUnit.test("testCreateSpanWithClassName", function(assert) {
-	let span = CORA.gui.createSpanWithClassName("className");
+	let span = CORA.createSpanWithClassName("className");
 	assert.strictEqual(span.nodeName, "SPAN");
 	assert.strictEqual(span.className, "className");
 });
 
 QUnit.test("testCreateDivWithClassName", function(assert) {
-	let div = CORA.gui.createDivWithClassName("className");
+	let div = CORA.createDivWithClassName("className");
 	assert.strictEqual(div.nodeName, "DIV");
 	assert.strictEqual(div.className, "className");
 });
 
 QUnit.test("testCreateLabelWithClassName", function(assert) {
-	let div = CORA.gui.createLabelWithClassName("className");
+	let div = CORA.createLabelWithClassName("className");
 	assert.strictEqual(div.nodeName, "LABEL");
 	assert.strictEqual(div.className, "className");
 });

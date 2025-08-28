@@ -24,22 +24,30 @@ var CORA = (function(cora) {
 		const infoFactory = CORA.infoFactory();
 		const pVarViewFactory = CORA.pVarViewFactory();
 		const pMultipleChildrenViewFactory = CORA.pMultipleChildrenViewFactory();
-		
+
+		const containsDataTrackerDependencies = {
+			pubSub: dependencies.pubSub
+		};
+		const containsDataTrackerFactory = CORA.genericFactory("containsDataTracker",
+			containsDataTrackerDependencies);
+
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,
-			jsBookkeeper: dependencies.jsBookkeeper
+			jsBookkeeper: dependencies.jsBookkeeper,
+			pubSub: dependencies.pubSub,
+			containsDataTrackerFactory: containsDataTrackerFactory
 		};
-		
+
 		const pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",
 			pRepeatingElementFactoryDependencies);
 
 		const pRecordLinkViewFactoryDependencies = {
 			infoFactory: infoFactory
 		};
-		
+
 		const pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
 			pRecordLinkViewFactoryDependencies);
-	
+
 		const pChildRefHandlerFactoryDependencies = {
 			metadataProvider: dependencies.providers.metadataProvider,
 			recordTypeProvider: dependencies.providers.recordTypeProvider,
@@ -53,33 +61,32 @@ var CORA = (function(cora) {
 			pRepeatingElementFactory: pRepeatingElementFactory,
 			pChildRefHandlerViewFactory: CORA.genericFactory("pChildRefHandlerView", {})
 		};
-		
+
 		const pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
 			pChildRefHandlerFactoryDependencies);
 
 		const pNonRepeatingChildRefHandlerFactoryDependencies = {
-			pNonRepeatingChildRefHandlerViewFactory: CORA
-				.genericFactory("pNonRepeatingChildRefHandlerView", {}),
+			pNonRepeatingChildRefHandlerViewFactory: CORA.genericFactory("pNonRepeatingChildRefHandlerView", {}),
+			containsDataTrackerFactory: containsDataTrackerFactory,
 			pubSub: dependencies.pubSub,
 			providers: dependencies.providers
 		};
 
-		const pNonRepeatingChildRefHandlerFactory = CORA
-			.genericFactory("pNonRepeatingChildRefHandler",
-				pNonRepeatingChildRefHandlerFactoryDependencies);
+		const pNonRepeatingChildRefHandlerFactory = CORA.genericFactory("pNonRepeatingChildRefHandler",
+			pNonRepeatingChildRefHandlerFactoryDependencies);
 
 		const pMapViewFactoryDependencies = {
 			infoFactory: infoFactory
 		};
-		
+
 		const pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
 
 		const pAttributesDependencies = {
 			metadataProvider: dependencies.providers.metadataProvider,
 			pubSub: dependencies.pubSub,
-			pAttributesViewFactory : CORA.genericFactory("pAttributesView")
-	};
-		
+			pAttributesViewFactory: CORA.genericFactory("pAttributesView")
+		};
+
 		const pAttributesFactory = CORA.genericFactory("pAttributes", pAttributesDependencies);
 
 		const childDependencies = {
@@ -111,11 +118,11 @@ var CORA = (function(cora) {
 		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
 		childDependencies.pParentMultipleChildrenFactory = CORA.genericParentFactory("pParentMultipleChildren", childDependencies);
 		let presentationCounter = 0;
-	
+
 		const factor = function(spec) {
 			presentationCounter++;
 			let specNew = {
-				presentationCounter: presentationFactoryCounter + "-"+presentationCounter,
+				presentationCounter: presentationFactoryCounter + "-" + presentationCounter,
 				path: spec.path,
 				metadataIdUsedInData: spec.metadataIdUsedInData,
 				cPresentation: spec.cPresentation,
@@ -173,7 +180,7 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			factor: factor
 		});
-		
+
 		pChildRefHandlerFactoryDependencies.presentationFactory = self;
 		pNonRepeatingChildRefHandlerFactoryDependencies.presentationFactory = self;
 		pAttributesDependencies.presentationFactory = self;

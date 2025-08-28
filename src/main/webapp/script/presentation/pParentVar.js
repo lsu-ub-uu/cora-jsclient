@@ -48,9 +48,6 @@ var CORA = (function(cora) {
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			initPAttributes();
-			if (mode === "output") {
-				pVarView.hide();
-			}
 		};
 		
 		const setPresentationIdFromCPresentation = function() {
@@ -201,18 +198,8 @@ var CORA = (function(cora) {
 			previousValue = value;
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
-			hideOrShowOutputPresentation(valueForView);
 		};
 		
-		const hideOrShowOutputPresentation = function(valueForView) {
-			if (mode === "output") {
-				if(valueForView !== ""){
-					pVarView.show();
-				} else {
-					pVarView.hide();
-				}
-			}
-		};
 
 		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);

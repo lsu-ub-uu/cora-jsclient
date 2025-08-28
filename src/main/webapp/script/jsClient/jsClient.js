@@ -302,7 +302,7 @@ var CORA = (function(cora) {
 			let definitionManagedGuiItem = createManagedGuiItem(definitionViewer.reloadForMetadataChanges);
 			definitionManagedGuiItem.addWorkPresentation(definitionView);
 			
-			let definitionMenuView = CORA.gui.createSpanWithClassName("definitionViewer");
+			let definitionMenuView = CORA.createSpanWithClassName("definitionViewer");
 			definitionMenuView.innerHTML = "Definition viewer: " + id;
 			definitionManagedGuiItem.addMenuPresentation(definitionMenuView);
 			
@@ -317,7 +317,7 @@ var CORA = (function(cora) {
 			let recursiveDeleteManagedGuiItem = createManagedGuiItem();
 			recursiveDeleteManagedGuiItem.addWorkPresentation(recursiveDeleteView);
 			
-			let recursiveDeleteMenuView = CORA.gui.createSpanWithClassName("recursiveDelete");
+			let recursiveDeleteMenuView = CORA.createSpanWithClassName("recursiveDelete");
 			recursiveDeleteMenuView.innerHTML = "Recursive delete: " + id;
 			recursiveDeleteManagedGuiItem.addMenuPresentation(recursiveDeleteMenuView);
 			

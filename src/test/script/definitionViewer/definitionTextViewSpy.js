@@ -28,7 +28,7 @@ var CORATEST = (function(coraTest) {
 		function createViewForViewModel(viewModel) {
 			viewModels.push(viewModel);
 			
-			let createdView = CORA.gui.createDivWithClassName("fakeFromdefinitionTextViewSpy");
+			let createdView = CORA.createDivWithClassName("fakeFromdefinitionTextViewSpy");
 			createdViews.push(createdView);
 			return createdView;
 		}

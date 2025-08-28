@@ -18,7 +18,7 @@
  */
 var CORA = (function (cora) {
     "use strict";
-    cora.gui.box = function (view) {
+    cora.box = function (view) {
         let boxView = view;
         let box = {};
 

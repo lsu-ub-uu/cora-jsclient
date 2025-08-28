@@ -70,7 +70,7 @@ var CORA = (function(cora) {
 					}
 				}
 			};
-			let optionButton = CORA.gui.button(buttonSpec);
+			let optionButton = CORA.button(buttonSpec);
 			menu.appendChild(optionButton);
 		};
 
@@ -107,7 +107,7 @@ var CORA = (function(cora) {
 					method : logoutOption.call
 				}
 			};
-			let optionButton = CORA.gui.button(buttonSpec);
+			let optionButton = CORA.button(buttonSpec);
 			menu.appendChild(optionButton);
 		}
 

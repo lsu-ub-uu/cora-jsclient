@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		var toolHolder;
 
 		function start() {
-			view = CORA.gui.createSpanWithClassName("workItem " + spec.extraClassName);
+			view = CORA.createSpanWithClassName("workItem " + spec.extraClassName);
 		}
 
 		function addToolViewToToolHolder(toolView) {
@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 		}
 
 		function createTopBarInView() {
-			var topBarNew = CORA.gui.createSpanWithClassName("topBar");
+			var topBarNew = CORA.createSpanWithClassName("topBar");
 			view.insertAdjacentElement("afterbegin", topBarNew);
 
 			return topBarNew;

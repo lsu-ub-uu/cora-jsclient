@@ -229,7 +229,7 @@ QUnit.test("testAddMenuPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addMenuPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedMenuPresentation(0), presentationToAdd);
 });
@@ -238,7 +238,7 @@ QUnit.test("testAddWorkPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addWorkPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedWorkPresentation(0), presentationToAdd);
 });
@@ -247,7 +247,7 @@ QUnit.test("testAddListPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addListPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedListPresentation(0), presentationToAdd);
 });

@@ -1,6 +1,6 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
- *
+ * Copyright 2025 Uppsala University Library
+ * 
  * This file is part of Cora.
  *
  *     Cora is free software: you can redistribute it and/or modify
@@ -18,36 +18,16 @@
  */
 var CORATEST = (function(coraTest) {
 	"use strict";
-	coraTest.uploadManagerSpy = function() {
-		var uploadWasCalled = false;
-		var uploadSpecs = [];
-		var workView = CORA.createSpanWithClassName("workViewSpy");
-		workView.appendChild(CORA.createSpanWithClassName("indexOrders"));
-		var view = {};
-		view.getWorkView = function () {
-			return workView;
+	coraTest.containsDataTrackerSpy = function(prividers, dependencies, spec) {
+		
+		const getSpec = function(){
+			return spec;
 		};
-
-		function upload(uploadSpec) {
-			uploadWasCalled = true;
-			uploadSpecs.push(uploadSpec);
-		}
-
-		function wasUploadCalled() {
-			return uploadWasCalled;
-		}
-		var item = CORATEST.managedGuiItemSpy();
-		function getManagedGuiItem() {
-			return item;
-		}
-		var out = Object.freeze({
-			upload : upload,
-			wasUploadCalled : wasUploadCalled,
-			uploadSpecs : uploadSpecs,
-			view : view,
-			getManagedGuiItem : getManagedGuiItem
+		
+		return Object.freeze({
+			type: "containsDataTrackerSpy",
+			getSpec: getSpec
 		});
-		return out;
 	};
 	return coraTest;
 }(CORATEST || {}));

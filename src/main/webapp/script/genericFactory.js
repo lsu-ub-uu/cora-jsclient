@@ -18,29 +18,50 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.genericFactory = function(typeToFactor, dependencies) {
+	cora.genericFactory = function(typeToFactor, first, second) {
 		let out;
+		let providers = first;
+		let dependencies = second;
+
+		const start = function() {
+			ifOnlyTwoArgumentsUseFistAsDependencies();
+		};
+
+		const ifOnlyTwoArgumentsUseFistAsDependencies = function() {
+			if (second === undefined) {
+				providers = undefined;
+				dependencies = first;
+			}
+		};
 
 		const factor = function(spec) {
-			if(undefined == dependencies){
+			if (undefined == dependencies) {
 				return CORA[typeToFactor](spec);
 			}
-			return CORA[typeToFactor](dependencies, spec);
+			if (undefined == providers) {
+				return CORA[typeToFactor](dependencies, spec);
+			}
+			return CORA[typeToFactor](providers, dependencies, spec);
 		};
 
 		const getTypeToFactor = function() {
 			return typeToFactor;
 		};
 
+		const getProviders = function() {
+			return providers;
+		};
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-
+		start();
 		out = Object.freeze({
-			type : "genericFactory",
-			getTypeToFactor : getTypeToFactor,
-			getDependencies : getDependencies,
-			factor : factor
+			type: "genericFactory",
+			getTypeToFactor: getTypeToFactor,
+			getProviders: getProviders,
+			getDependencies: getDependencies,
+			factor: factor
 		});
 		return out;
 	};

@@ -34,7 +34,7 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
-			let viewNew = CORA.gui.createSpanWithClassName("pRepeatingContainer " + presentationId);
+			let viewNew = CORA.createSpanWithClassName("pRepeatingContainer " + presentationId);
 
 			let presentationChildren = cPresentation.getFirstChildByNameInData("childReferences").children;
 
@@ -48,7 +48,7 @@ var CORA = (function(cora) {
 			let refId = getRefId(presentationChildRef);
 			let cPresentationChild = getMetadataById(refId);
 			if (cPresentationChild.getData().name === "text") {
-				let text = CORA.gui.createSpanWithClassName("text");
+				let text = CORA.createSpanWithClassName("text");
 				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
 				return text;
 			}

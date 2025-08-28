@@ -21,18 +21,18 @@ var CORA = (function(cora) {
 	cora.uploadManagerView = function(spec) {
 		var out;
 
-		var workView = CORA.gui.createSpanWithClassName("workView");
-		workView.appendChild(CORA.gui.createSpanWithClassName("indexOrders"));
+		var workView = CORA.createSpanWithClassName("workView");
+		workView.appendChild(CORA.createSpanWithClassName("indexOrders"));
 		var menuView = createMenuView(spec.textProvider.getTranslation("theClient_uploadMenuText"));
 
 		function createMenuView(text) {
-			var menuViewNew = CORA.gui.createSpanWithClassName("upload");
+			var menuViewNew = CORA.createSpanWithClassName("upload");
 			menuViewNew.textContent = text;
 			return menuViewNew;
 		}
 
 		function addFile(name) {
-			var child = CORA.gui.createSpanWithClassName("listItem");
+			var child = CORA.createSpanWithClassName("listItem");
 			child.textContent = name;
 			workView.appendChild(child);
 

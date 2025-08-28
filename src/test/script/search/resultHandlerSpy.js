@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.resultHandlerSpy = function(dependencies, spec) {
 		var openedRecords = [];
-		var view = CORA.gui.createSpanWithClassName("resultHandlerSpy");
+		var view = CORA.createSpanWithClassName("resultHandlerSpy");
 
 		function getView() {
 			return view;

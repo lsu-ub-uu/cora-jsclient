@@ -27,7 +27,7 @@ var CORATEST = (function(coraTest) {
 		let deletedElement = [];
 		let deleteFailedElement = [];
 		let deleteMethods = [];
-		let view = CORA.gui.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
+		let view = CORA.createDivWithClassName("fakeFromRecursiveDeleteViewSpy");
 
 		const getView = function() {
 			return view;

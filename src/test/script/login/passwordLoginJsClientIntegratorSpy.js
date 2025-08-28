@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.passwordLoginJsClientIntegratorSpy = function(dependencies, spec) {
 		let noOfShowPasswordLoginInJsClient = 0;
 		let noOfRemovePasswordLoginFromJsClient = 0;
-		let view = CORA.gui.createSpanWithClassName("passwordLoginJsClientIntegratorSpy");
+		let view = CORA.createSpanWithClassName("passwordLoginJsClientIntegratorSpy");
 		const getView = function() {
 			return view;
 		};

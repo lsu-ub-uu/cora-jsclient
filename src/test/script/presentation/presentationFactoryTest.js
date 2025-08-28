@@ -43,7 +43,7 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
-		this.presentationFactorySpec = {presentationFactoryCounter: 555};
+		this.presentationFactorySpec = { presentationFactoryCounter: 555 };
 		this.newPresentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
@@ -178,7 +178,7 @@ QUnit.test("testFactorPResourceLink", function(assert) {
 	this.dependencies.providers.textProvider = CORATEST.textProviderSpy();
 	this.newPresentationFactory = CORA.presentationFactory(this.dependencies, this.presentationFactorySpec);
 
-	
+
 	this.setMetadataIdUsedInData("groupIdTwoTextChildRepeat1to5");
 	this.setCPresentation("masterPResLink");
 
@@ -251,7 +251,7 @@ CORATEST.assertCorrectCommonDependencies = function(assert, context, dependencie
 	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.type, "genericFactory");
 	assert.strictEqual(pAttributesDependencies.pAttributesViewFactory.getTypeToFactor(), "pAttributesView");
 	assert.strictEqual(pAttributesDependencies.metadataProvider, context.dependencies.providers.metadataProvider);
-	
+
 	assert.strictEqual(dependencies.pParentVarFactory.type, "genericParentFactory");
 	assert.strictEqual(dependencies.pParentVarFactory.getTypeToFactor(), "pParentVar");
 	let PParentVarFactoyrDependencies = dependencies.pParentVarFactory.getDependencies();
@@ -296,9 +296,7 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 	assert.strictEqual(dependencies.dataDivider, context.dependencies.dataDivider);
 
 	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
-	assert
-		.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(),
-			"pRepeatingElement");
+	assert.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(), "pRepeatingElement");
 
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pChildRefHandlerViewFactory.getTypeToFactor(),
@@ -311,22 +309,35 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
+	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
+
+	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
+	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
+	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
+	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
+	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
 }
 
 CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {
 	assert.strictEqual(dependencies.presentationFactory.type, "presentationFactory");
 	assert.strictEqual(dependencies.presentationFactory, context.newPresentationFactory);
 
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory.type,
-		"genericFactory");
-	assert.strictEqual(dependencies.pNonRepeatingChildRefHandlerViewFactory
-		.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+	const pNonRepeatingChildRefHandlerViewFactory = dependencies.pNonRepeatingChildRefHandlerViewFactory;
+	assert.strictEqual(pNonRepeatingChildRefHandlerViewFactory.type, "genericFactory");
+	assert.strictEqual(pNonRepeatingChildRefHandlerViewFactory.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
+
+	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
+	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
+	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
+	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
+	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
+
 
 	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);
 }
 CORATEST.assertCorrectCommonSpec = function(assert, context, spec) {
-	assert.deepEqual(spec.presentationCounter, "555-"+context.spec.presentationCounter);
+	assert.deepEqual(spec.presentationCounter, "555-" + context.spec.presentationCounter);
 	assert.strictEqual(spec.path, context.spec.path);
 	assert.strictEqual(spec.metadataIdUsedInData, context.spec.metadataIdUsedInData);
 	assert.strictEqual(spec.cPresentation, context.spec.cPresentation);

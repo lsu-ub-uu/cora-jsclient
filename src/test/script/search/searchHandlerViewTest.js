@@ -97,7 +97,7 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 	});
 
 	test("testSetSearchRunningWithPreviousResult", function(assert) {
-		let aResult = CORA.gui.createSpanWithClassName("aResult");
+		let aResult = CORA.createSpanWithClassName("aResult");
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
 
 		assert.strictEqual(searchResultHolder.childNodes.length, 1);
@@ -138,7 +138,7 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 
 	test("testAddPresentationToSearchFormHolder", function(assert) {
 		assertSearchFormHolderHasLength(assert, 1);
-		let aFormPresentation = CORA.gui.createSpanWithClassName("some");
+		let aFormPresentation = CORA.createSpanWithClassName("some");
 
 		searchHandlerView.addPresentationToSearchFormHolder(aFormPresentation);
 
@@ -151,7 +151,7 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 	};
 
 	test("testAddSearchResultToSearchResultHolder", function(assert) {
-		let aResult = CORA.gui.createSpanWithClassName("some");
+		let aResult = CORA.createSpanWithClassName("some");
 		assertSearchResultHolderHasLength(assert, 0);
 
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
@@ -161,8 +161,8 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 	});
 
 	test("testAddTwoSearchResultToSearchResultHolder", function(assert) {
-		let aResult = CORA.gui.createSpanWithClassName("some");
-		let aResult2 = CORA.gui.createSpanWithClassName("other");
+		let aResult = CORA.createSpanWithClassName("some");
+		let aResult2 = CORA.createSpanWithClassName("other");
 		assertSearchResultHolderHasLength(assert, 0);
 
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
@@ -181,7 +181,7 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 	};
 
 	test("testClearResultHolder", function(assert) {
-		let aResult = CORA.gui.createSpanWithClassName("some");
+		let aResult = CORA.createSpanWithClassName("some");
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
 
 		searchHandlerView.clearResultHolder();
@@ -190,8 +190,8 @@ QUnit.module("search/searchHandlerViewTest.js", hooks => {
 	});
 
 	test("testClearResultHolderTwoResults", function(assert) {
-		let aResult = CORA.gui.createSpanWithClassName("some");
-		let aResult2 = CORA.gui.createSpanWithClassName("other");
+		let aResult = CORA.createSpanWithClassName("some");
+		let aResult2 = CORA.createSpanWithClassName("other");
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult);
 		searchHandlerView.addSearchResultToSearchResultHolder(aResult2);
 		assertSearchResultHolderHasLength(assert, 2);

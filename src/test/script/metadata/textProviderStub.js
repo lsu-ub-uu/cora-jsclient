@@ -202,6 +202,8 @@ var CORATEST = (function(coraTest) {
 				return "specifiedHeadlineText_text";
 			case "specifiedLabelText":
 				return "specifiedLabelText_text";
+			case "someHeadlineIdText":
+				return "someHeadlineIdText_text";
 			default:
 				console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");

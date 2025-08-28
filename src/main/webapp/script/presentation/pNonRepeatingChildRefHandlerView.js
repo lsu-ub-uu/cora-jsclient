@@ -21,19 +21,30 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		let view;
+		let headline;
 		let buttonView;
 		let alternativePresentation;
 		let defaultPresentation;
 		let alternativeButton;
 		let defaultButton;
-		let currentDefaultShown = "true";
 		let containsData = false;
-		let originalStyle;
+		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+		//TODO: change to be sent in through dependencies
+		let buttonFactory = CORA.genericFactory("button");
+
+		const clickableHeadlineText = spec.clickableHeadlineText;
+		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
+
+		let presentationSize = spec.presentationSize;
+		let showDefaultPresentationNext = false;
+		let toggleButtonsAreCreated = false;
+
 
 		const start = function() {
 			view = createBaseView();
 			setContainsDataStyle();
+			possiblyAddClickableHeadline();
 		};
 
 		const createBaseView = function() {
@@ -45,67 +56,124 @@ var CORA = (function(cora) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			originalStyle = newClassName;
-			return CORA.gui.createSpanWithClassName(newClassName);
+			return CORA.createSpanWithClassName(newClassName);
 		};
 
 		const setContainsDataStyle = function() {
-			view.className = originalStyle + (containsData ? " containsData" : " containsNoData");
+			let currentContainsStateClass = containsData ? "containsData" : "containsNoData";
+			let notCurrentContainsStateClass = !containsData ? "containsData" : "containsNoData";
+			view.classList.remove(notCurrentContainsStateClass);
+			view.classList.add(currentContainsStateClass);
 		};
+
+		const possiblyAddClickableHeadline = function() {
+			if (clickableHeadlineText) {
+				const level = clickableHeadlineLevel || "h2";
+				addClickableHeadline(clickableHeadlineText, level);
+				createButtonView(presentationSize);
+			}
+		};
+
+		const addClickableHeadline = function(text, level) {
+			headline = document.createElement(level);
+			headline.classList.add("clickableHeadline");
+			headline.addEventListener('click', () => {
+				toggleDefaultShown();
+			});
+			view.insertBefore(headline, buttonView);
+			headline.appendChild(document.createTextNode(text));
+		};
+
 
 		const getView = function() {
 			return view;
 		};
 
 		const addChild = function(child) {
-			child.className += " default";
+			child.classList.add("default");
 			defaultPresentation = child;
 			view.insertBefore(child, buttonView);
-			hide(defaultPresentation);
+			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
 		};
 
-		const addAlternativeChild = function(child, presentationSize) {
-			child.className += " alternative";
+		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
+			if (presentationSize === "singleInitiallyHidden") {
+				showDefaultPresentationNext = false;
+				toggleDefaultShown();
+			}
+			if (presentationSize === "singleInitiallyVisible") {
+				showDefaultPresentationNext = true;
+				toggleDefaultShown();
+			}
+		};
+
+		const addAlternativePresentation = function(child) {
+			child.classList.add("alternative");
 			alternativePresentation = child;
 			createButtonView(presentationSize);
 			view.insertBefore(child, buttonView);
-			hide(alternativePresentation);
+			showDefaultPresentationNext = true;
+			toggleDefaultShown();
 		};
 
 		const createButtonView = function(presentationSize) {
-			let buttonViewNew = CORA.gui.createSpanWithClassName("buttonView");
-			buttonView = buttonViewNew;
-			view.appendChild(buttonViewNew);
-			createDefaultAndAlternativeButtons(presentationSize);
-			hide(buttonView);
+			if (!toggleButtonsAreCreated) {
+				toggleButtonsAreCreated = true;
+				let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+				buttonView = buttonViewNew;
+				view.appendChild(buttonViewNew);
+				createDefaultAndAlternativeButtons(presentationSize);
+			}
 		};
 
 		const createDefaultAndAlternativeButtons = function(presentationSize) {
 			let buttonClasses = getButtonClassName(presentationSize);
-
-			alternativeButton = createAndAddSwapButton(buttonClasses.alternative, "false");
-			defaultButton = createAndAddSwapButton(buttonClasses.default, "true");
+			createAndAddAlternativeButton(buttonClasses);
+			createAndAddDefaultButton(buttonClasses);
 		};
 
-		const createAndAddSwapButton = function(buttonClass, toggleDefaultShownValue) {
+		const createAndAddAlternativeButton = function(buttonClasses) {
+			alternativeButton = createAndAddSwapButton(buttonClasses.alternative, showAlternativePresentation);
+		};
+
+		const createAndAddDefaultButton = function(buttonClasses) {
+			defaultButton = createAndAddSwapButton(buttonClasses.default, showDefaultPresentation);
+		};
+
+		const showAlternativePresentation = function() {
+			showDefaultPresentationNext = false;
+			toggleDefaultShown();
+		};
+
+		const showDefaultPresentation = function() {
+			showDefaultPresentationNext = true;
+			toggleDefaultShown();
+		};
+
+		const createAndAddSwapButton = function(buttonClass, actionMethod) {
 			let buttonSpec = {
-				"className": "iconButton " + buttonClass,
+				className: "iconButton " + buttonClass,
 				action: {
-					method: function() {
-						toggleDefaultShown(toggleDefaultShownValue);
-					},
+					method: actionMethod,
 					onkeydown: {
 						keys: [" ", "Enter"]
 					}
 				}
 			};
-			let button = CORA.gui.button(buttonSpec);
+			let button = buttonFactory.factor(buttonSpec);
 			buttonView.appendChild(button);
 			return button;
 		};
 
 		const getButtonClassName = function(presentationSize) {
-			if (presentationSize === "firstLarger") {
+			//			nameInData: presentationSize
+			//			presentationId: presentationSizePCollVar
+			//			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
+			//			(firstLarger) Första presentationen är större - Första presentationen är större
+			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
+			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
+			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
+			if (presentationSizeIsExpanding(presentationSize)) {
 				return {
 					default: "maximizeButton",
 					alternative: "minimizeButton"
@@ -123,13 +191,18 @@ var CORA = (function(cora) {
 			};
 		};
 
-		const toggleDefaultShown = function(defaultShown) {
-			currentDefaultShown = defaultShown;
-			if (defaultShown !== undefined && defaultShown === "true") {
+		const presentationSizeIsExpanding = function(presentationSize) {
+			return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
+				.includes(presentationSize);
+		};
+
+		const toggleDefaultShown = function() {
+			if (showDefaultPresentationNext === true) {
 				hide(alternativePresentation);
 				show(defaultPresentation);
 				show(alternativeButton);
 				hide(defaultButton);
+				callOnFirstShowOfDefaultPresentation();
 			} else {
 				show(alternativePresentation);
 				hide(defaultPresentation);
@@ -137,6 +210,7 @@ var CORA = (function(cora) {
 				show(defaultButton);
 				callOnFirstShowOfAlternativePresentation();
 			}
+			showDefaultPresentationNext = !showDefaultPresentationNext;
 		};
 
 		const hide = function(element) {
@@ -156,22 +230,26 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const hideContent = function() {
-			hide(defaultPresentation);
-			hide(buttonView);
-			hide(alternativePresentation);
+		const hideView = function() {
+			hide(view);
 		};
 
-		const showContent = function() {
-			show(buttonView);
-			toggleDefaultShown(currentDefaultShown);
+		const showView = function() {
+			show(view);
 		};
 
+		const callOnFirstShowOfDefaultPresentation = function() {
+			if (callOnFirstShowOfDefaultPresentationShouldBeCalled
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
+				callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
+				spec.callOnFirstShowOfPresentation();
+			}
+		};
 		const callOnFirstShowOfAlternativePresentation = function() {
 			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
-				&& spec.callOnFirstShowOfAlternativePresentation !== undefined) {
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
 				callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfAlternativePresentation();
+				spec.callOnFirstShowOfPresentation();
 			}
 		};
 
@@ -181,12 +259,12 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type": "pNonRepeatingChildRefHandlerView",
+			type: "pNonRepeatingChildRefHandlerView",
 			getView: getView,
 			addChild: addChild,
-			addAlternativeChild: addAlternativeChild,
-			hideContent: hideContent,
-			showContent: showContent,
+			addAlternativePresentation: addAlternativePresentation,
+			hideContent: hideView,
+			showContent: showView,
 			setHasDataStyle: setHasDataStyle
 		});
 		start();

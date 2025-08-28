@@ -1,28 +1,28 @@
 :root {
-  --main-color: rgba(0, 130, 200);
-  --second-color: rgba(0, 163, 251);
-  --color-light-grey: #DCDCDC;
-  --color-white: rgba(255, 255, 255);
-  --color-grey: rgba(20,20,20);
-  --black-box-10-shadow: rgba(0, 0, 0, 0.2);
-  --text-shadow-12-trans: rgba(0,0,0,0.12);
-  --black-box-50-shadow: rgba(0, 0, 0, 0.5);
-  --color-h1: var(--main-color);
-  --color-h2: rgba(0, 130, 200, 0.9);
-  --color-h3: rgba(0, 130, 200, 0.8);
-  --color-h4: rgba(0, 130, 200, 0.7);
-  --color-selected-on-menu: black;
-  --inbox-28-shadow: rgba(255,255,255,0.28);
-  --box-sahow-17-trans:rgba(255,255,255,0.17);
-  --menu-2n-color: rgba(167, 114, 166, 0.5);
-  --color-contains: rgba(255, 166, 0);
+	--main-color: rgba(0, 130, 200);
+	--second-color: rgba(0, 163, 251);
+	--color-light-grey: #DCDCDC;
+	--color-white: rgba(255, 255, 255);
+	--color-grey: rgba(20, 20, 20);
+	--black-box-10-shadow: rgba(0, 0, 0, 0.2);
+	--text-shadow-12-trans: rgba(0, 0, 0, 0.12);
+	--black-box-50-shadow: rgba(0, 0, 0, 0.5);
+	--color-h1: var(--main-color);
+	--color-h2: rgba(0, 130, 200, 0.9);
+	--color-h3: rgba(0, 130, 200, 0.8);
+	--color-h4: rgba(0, 130, 200, 0.7);
+	--color-selected-on-menu: black;
+	--inbox-28-shadow: rgba(255, 255, 255, 0.28);
+	--box-sahow-17-trans: rgba(255, 255, 255, 0.17);
+	--menu-2n-color: rgba(167, 114, 166, 0.5);
+	--color-contains: rgba(255, 166, 0);
 }
 
 @font-face {
-    font-family: 'UniversalisADFStdRegular';
-    src: url('../fonts/UniversalisADFStd-Regular.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'UniversalisADFStdRegular';
+	src: url('../fonts/UniversalisADFStd-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 html {
@@ -51,13 +51,13 @@ h1, .h1TextStyle {
 }
 
 .jsClient h2, .jsClient .h2TextStyle {
-	color:var(--color-white);
+	color: var(--color-white);
 	letter-spacing: 2px;
 }
 
-.header select{
-	float:right;
-	margin-top:.4rem;
+.header select {
+	float: right;
+	margin-top: .4rem;
 }
 
 .holder.tool {
@@ -70,8 +70,8 @@ h1, .h1TextStyle {
 	top: 3rem;
 	right: 1rem;
 	min-width: 13rem;
-	flex-direction:column;
-	box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+	flex-direction: column;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 	padding: 0.4em 0 0.4em 0;
 	border-radius: 5px 5px;
 }
@@ -99,21 +99,19 @@ h1, .h1TextStyle {
 
 .holder.tool input {
 	margin: 1rem;
-	margin-bottom:0.5em;
-	margin-top:0.5em;
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
 }
 
 .jsClient.mainView {
 	display: grid;
 	grid-template-columns: min-content 1fr;
 	grid-template-rows: max-content minmax(0, 1fr);
-	grid-template-areas: 
-		"header header"
-		"sideBar workArea";
+	grid-template-areas: "header header" "sideBar workArea";
 	height: 100%;
 	border-color: var(--main-color);
 	position: relative;
-/* 	overflow: hidden; */
+	/* 	overflow: hidden; */
 	background: linear-gradient(to bottom, #f2f2f2 0%, #f9fafb 100%);
 }
 
@@ -134,7 +132,7 @@ h1, .h1TextStyle {
 	background-color: var(--main-color);
 	padding-left: 1rem;
 	padding-right: 1rem;
-	padding-top:0.5rem;
+	padding-top: 0.5rem;
 	/*border-top: 10px solid var(--second-color);*/
 	border-bottom: 1px solid var(--second-color);
 }
@@ -170,13 +168,15 @@ h1, .h1TextStyle {
 	animation-iteration-count: infinite;
 }
 
-@keyframes rotation2 {
-	from { 
-		transform:rotate(0deg);	
-	}
-	to {
-		transform: rotate(359deg);
-	}
+@
+keyframes rotation2 {from { transform:rotate(0deg);
+	
+}
+
+to {
+	transform: rotate(359deg);
+}
+
 }
 .iconButton.loginManagerView {
 	transform: none;
@@ -187,7 +187,8 @@ h1, .h1TextStyle {
 	cursor: pointer;
 }
 
-.iconButton.loginManagerView:before, .iconButton.loginManagerView:after	{
+.iconButton.loginManagerView:before, .iconButton.loginManagerView:after
+	{
 	background: none;
 }
 
@@ -204,7 +205,8 @@ h1, .h1TextStyle {
 	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
 	border-radius: 0px 0px 4px 4px;
 }
-.holder.loginManagerView .menuOption:hover{
+
+.holder.loginManagerView .menuOption:hover {
 	color: var(--main-color);
 }
 
@@ -214,10 +216,9 @@ h1, .h1TextStyle {
 	padding: 5px;
 }
 
-.jsClient > .sideBar {
+.jsClient>.sideBar {
 	grid-area: sideBar;
 	overflow: auto;
-
 	border-right: 1px solid;
 	border-color: inherit;
 	color: var(--color-grey);
@@ -242,7 +243,8 @@ h1, .h1TextStyle {
 	font-weight: bold;
 }
 
-.sideBar .openGuiItemHandlerView > .header, .searchesViewHeadline,  .recordTypeGroupHeadline{
+.sideBar .openGuiItemHandlerView>.header, .searchesViewHeadline,
+	.recordTypeGroupHeadline {
 	color: var(--main-color);
 	font-size: 1.2rem;
 	font-weight: bold;
@@ -281,7 +283,9 @@ h1, .h1TextStyle {
 	position: relative;
 	font-weight: bold;
 }
-.openGuiItemHandlerView>.recordType, .recordTypesView .recordType, .searchesView>.searchRecord {
+
+.openGuiItemHandlerView>.recordType, .recordTypesView .recordType,
+	.searchesView>.searchRecord {
 	display: block;
 	border-color: inherit;
 	width: 100%;
@@ -293,7 +297,8 @@ h1, .h1TextStyle {
 	padding: .2rem;
 }
 
-.openGuiItemHandlerView .changed:before, .recordTypesView .changed:before {
+.openGuiItemHandlerView .changed:before, .recordTypesView .changed:before
+	{
 	content: "* ";
 }
 
@@ -305,27 +310,30 @@ h1, .h1TextStyle {
 .sideBar .menuView:nth-child(2n) {
 	background-color: rgba(0, 130, 201, 0.1);
 }
+
 .sideBar .menuView>.removeButton {
 	position: absolute;
 	right: 0px;
 	top: 2px;
 }
 
-.sideBar .header{
+.sideBar .header {
 	margin-bottom: 1rem;
 	margin-left: .5rem;
 	border-bottom: 1px dashed;
 	border-color: inherit;
 }
 
-.sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover {
+.sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover
+	{
 	text-decoration: underline;
 	cursor: pointer;
 	color: var(--main-color);
 }
 
 .openGuiItemHandlerView .childrenView span, .openGuiItemHandlerView .childrenView div,
-	.recordTypesView .childrenView span, .recordTypesView .childrenView div {
+	.recordTypesView .childrenView span, .recordTypesView .childrenView div
+	{
 	text-decoration: inherit;
 }
 
@@ -362,56 +370,71 @@ h1, .h1TextStyle {
 	content: ">";
 	position: absolute;
 	left: -.6rem;
-}	
+}
 
-.jsClient .sideBar .openGuiItemHandlerView [class*="indicatorClassName"] {
+.jsClient .sideBar .openGuiItemHandlerView [class*="indicatorClassName"]
+	{
 	padding-left: 0.7rem;
 }
 
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName1 {
-    box-shadow: 0px 0px black inset, .5rem 0 #C5C5C5 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #C5C5C5 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName2 {
-    box-shadow: 0px 0px black inset, .5rem 0 #e74c3c inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #e74c3c inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName3 {
-    box-shadow: 0px 0px black inset, .5rem 0 #c0392b inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #c0392b inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName4 {
-    box-shadow: 0px 0px black inset, .5rem 0 #FF7F50 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #FF7F50 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName5 {
-    box-shadow: 0px 0px black inset, .5rem 0 #F0AD4E inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #F0AD4E inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName6 {
-    box-shadow: 0px 0px black inset, .5rem 0 #f39c12 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #f39c12 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName7 {
-    box-shadow: 0px 0px black inset, .5rem 0 #FFD700 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #FFD700 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName8 {
-    box-shadow: 0px 0px black inset, .5rem 0 #5CB85C inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #5CB85C inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName9 {
-    box-shadow: 0px 0px black inset, .5rem 0 #2ecc71 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #2ecc71 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName10 {
-    box-shadow: 0px 0px black inset, .5rem 0 #20B2AA inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #20B2AA inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName11 {
-    box-shadow: 0px 0px black inset, .5rem 0 #5BC0DE inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #5BC0DE inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName12 {
-    box-shadow: 0px 0px black inset, .5rem 0 #0275D8 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #0275D8 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName13 {
-    box-shadow: 0px 0px black inset, .5rem 0 #9370DB inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #9370DB inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName14 {
-    box-shadow: 0px 0px black inset, .5rem 0 #9b59b6 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #9b59b6 inset;
 }
+
 .jsClient .sideBar .openGuiItemHandlerView .indicatorClassName15 {
-    box-shadow: 0px 0px black inset, .5rem 0 #000000 inset;
+	box-shadow: 0px 0px black inset, .5rem 0 #000000 inset;
 }
 
 .openGuiItemHandlerView .menuView, .recordTypesView .recordType  span,
@@ -433,14 +456,14 @@ h1, .h1TextStyle {
 	position: relative;
 }
 
-
-.editView>.presentation, .showView>.presentation{
-	padding-bottom:1rem;
+.editView>.presentation, .showView>.presentation {
+	padding-bottom: 1rem;
 }
+
 .workArea .workView>.workItem {
 	display: flex;
 	flex-wrap: wrap;
-	overflow:hidden;
+	overflow: hidden;
 	height: 100%;
 	align-content: flex-start;
 }
@@ -449,17 +472,15 @@ h1, .h1TextStyle {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: max-content minmax(0, 1fr);
-	grid-template-areas: 
-		"topBar topBar"
-		"editView showView";
+	grid-template-areas: "topBar topBar" "editView showView";
 }
 
 .workArea .workView>.workItem.search {
-	overflow-y:scroll;
+	overflow-y: scroll;
 }
 
 .workArea .workView>.resultHolder {
-	overflow-y:scroll;
+	overflow-y: scroll;
 }
 
 .topBar {
@@ -474,10 +495,9 @@ h1, .h1TextStyle {
 	right: 0.5rem;
 }
 
-
 .jsClient .serverAddress {
-	font-size:0.7em;
-	color:#575757;
+	font-size: 0.7em;
+	color: #575757;
 }
 
 .jsClient .workItem>.searchFormHolder {
@@ -491,6 +511,7 @@ h1, .h1TextStyle {
 .jsClient .editView {
 	grid-area: editView;
 }
+
 .jsClient .showView {
 	grid-area: showView;
 }
@@ -504,9 +525,8 @@ h1, .h1TextStyle {
 	z-index: 1009;
 }
 
-
-.jsClient .workItem > .incomingLinksView {
-	box-shadow: -3px -3px 6px rgba(0,0,0,0.2);
+.jsClient .workItem>.incomingLinksView {
+	box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.2);
 	position: absolute;
 	bottom: 0;
 	width: 100%;
@@ -520,15 +540,17 @@ h1, .h1TextStyle {
 	background-color: rgba(0, 130, 201, 0.1);
 	cursor: pointer;
 }
-.jsClient  .incomingLinksList, .jsClient .incomingLinks, .jsClient .incomingLink {
+
+.jsClient  .incomingLinksList, .jsClient .incomingLinks, .jsClient .incomingLink
+	{
 	display: flex;
 	flex: 0 0 100%;
 	flex-wrap: wrap;
 }
-.jsClient .incomingLink span{
+
+.jsClient .incomingLink span {
 	flex: 1 1 20%;
 }
-
 
 .workArea .workView .presentation {
 	box-shadow: none;
@@ -552,7 +574,7 @@ h1, .h1TextStyle {
 
 .openGuiItemHandlerView .menuView .pVar span, .jsClient .openGuiItemHandlerView .menuView .text,
 	.recordTypesView .menuView .pVar span, .jsClient .recordTypesView .menuView .text
-{
+	{
 	max-width: 95%;
 	overflow: hidden;
 	display: inline-block;
@@ -645,8 +667,8 @@ h1, .h1TextStyle {
 
 .jsClient .listView {
 	width: 100%;
-	padding:0.3rem;
-	cursor:pointer;
+	padding: 0.3rem;
+	cursor: pointer;
 }
 
 .jsClient .listItem {
@@ -683,7 +705,6 @@ h1, .h1TextStyle {
 	background-color: transparent;
 	border: none;
 }
-
 
 .jsClient .listItem [class*='recordInfo'] {
 	font-weight: bold;
@@ -739,25 +760,27 @@ h1, .h1TextStyle {
 	display: block;
 }
 
-.indexOrder{
-	display : block;
+.indexOrder {
+	display: block;
 }
 
-.indexOrder .indexItem{
-	display : block;
+.indexOrder .indexItem {
+	display: block;
 }
 
-.indexOrder input[type="button"]{
+.indexOrder input[type="button"] {
 	margin-left: 1rem;
 }
 
 /* Spike */
-.header .logoHeader, .logoHeaderLogo{
+.header .logoHeader, .logoHeaderLogo {
 	position: absolute;
 }
 
-.presentation .containsData .text.h2TextStyle, .presentation .containsData .text.h3TextStyle {
-  color: var(--color-contains);
+.containsData .pSurroundingContainer>.text:is(.h2TextStyle, .h3TextStyle,
+	.h4TextStyle, .h5TextStyle, .h6TextStyle), .containsData>.clickableHeadline
+	{
+	color: var(--color-contains);
 }
 
 .definitionViewer {
@@ -796,13 +819,13 @@ h1, .h1TextStyle {
 .definitionViewer .details {
 	font-size: 0.8rem;
 	color: #188014;
-/* 	padding-right: 0.2rem; */
+	/* 	padding-right: 0.2rem; */
 }
 
 .definitionViewer .legend {
 	color: #243bb7;
-/* 	font-weight: bold; */
-/* 	margin-right: auto; */
+	/* 	font-weight: bold; */
+	/* 	margin-right: auto; */
 	position: absolute;
 	top: 3rem;
 	right: 3rem;
@@ -812,43 +835,47 @@ h1, .h1TextStyle {
 	box-shadow: 10px 5px 5px #b9b9b9;
 }
 
-.definitionViewer .legend.blink { 
+.definitionViewer .legend.blink {
 	animation: blink-animation 0.2s linear 1;
-} 
-@keyframes blink-animation { 
-	50% { 
-		background-color: #D3D3D3;
-	}
 }
 
+@
+keyframes blink-animation { 50% {
+	background-color: #D3D3D3;
+}
+
+}
 .definitionViewer .storage {
 	color: #2e7af0;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 .definitionViewer .permission {
 	color: #2e7af0;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 .definitionViewer .index {
 	color: #2e7af0;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 .definitionViewer .details .type {
-/* 	color: red; */
-/* 	padding-right: 0.2rem; */
+	/* 	color: red; */
+	/* 	padding-right: 0.2rem; */
+	
 }
 
 .definitionViewer .details .cardinality {
-/* 	color: gren; */
-/* 	padding-right: 0.2rem; */
+	/* 	color: gren; */
+	/* 	padding-right: 0.2rem; */
+	
 }
 
 .definitionViewer .details .constraint {
-/* 	color: blue; */
-/* 	padding-right: 0.2rem; */
+	/* 	color: blue; */
+	/* 	padding-right: 0.2rem; */
+	
 }
 
 .recursiveDelete {
@@ -875,6 +902,7 @@ h1, .h1TextStyle {
 	font-weight: bold;
 	padding-right: 0.2rem;
 }
+
 .recursiveDelete .nameInData {
 	font-size: .9rem;
 	color: #9558C7;
@@ -887,35 +915,83 @@ h1, .h1TextStyle {
 	color: #c84600;
 	padding-right: 0.2rem;
 }
+
 .recursiveDelete .dataDivider {
 	font-size: .7rem;
 	padding-right: 0.2rem;
 }
+
 .recursiveDelete .linked {
 	cursor: pointer;
 }
 
 .recursiveDelete .deleting {
 	animation: blink 1s infinite;
-	position: relative; 
-    will-change: opacity; 
+	position: relative;
+	will-change: opacity;
 }
 
-@keyframes blink {
-	0% {opacity: 1;}
-    50% {opacity: 0.2;}
-    100% {opacity: 1;}
- }
+@
+keyframes blink { 0% {
+	opacity: 1;
+}
 
+50
+
+
+
+
+%
+{
+opacity
+
+
+
+
+:
+
+
+
+
+0
+
+
+.2
+
+
+;
+}
+100
+
+
+
+
+%
+{
+opacity
+
+
+
+
+:
+
+
+
+
+1
+
+
+;
+}
+}
 .workView>.recursiveDelete {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: max-content minmax(0, 1fr);
-	grid-template-areas: 
-		"header"
-		"mainView";
+	grid-template-areas: "header" "mainView";
 	height: 100%;
 }
+
 .recursiveDelete>.header {
 	grid-area: header;
 }
@@ -929,6 +1005,7 @@ h1, .h1TextStyle {
 	background-color: rgb(215, 108, 130);
 	border-radius: 0.5rem;
 }
+
 .recursiveDelete .deleted {
 	background-color: rgb(126, 212, 173);
 	border-radius: 0.5rem;

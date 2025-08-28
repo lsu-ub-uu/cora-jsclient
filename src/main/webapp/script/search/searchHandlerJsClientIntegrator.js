@@ -37,7 +37,7 @@ var CORA = (function(cora) {
 		}
 
 		function createMenuView() {
-			let createdView = CORA.gui.createSpanWithClassName("searchMenu");
+			let createdView = CORA.createSpanWithClassName("searchMenu");
 			createdView.textContent = spec.headerText;
 			return createdView;
 		}

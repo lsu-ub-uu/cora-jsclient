@@ -27,7 +27,7 @@ QUnit.module("gui/buttonTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	let button = CORA.gui.button({});
+	let button = CORA.button({});
 	this.fixture.appendChild(button);
 
 	assert.strictEqual(button.nodeName, "SPAN");
@@ -35,7 +35,7 @@ QUnit.test("testInit", function(assert) {
 });
 
 QUnit.test("testClassNameInSpec", function(assert) {
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		className : "iconButton removeButton"
 	});
 	this.fixture.appendChild(button);
@@ -45,7 +45,7 @@ QUnit.test("testClassNameInSpec", function(assert) {
 
 QUnit.test("testActionOnclickActiveByDefault", function(assert) {
 	let clicked = 0;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				clicked = clicked + 1;
@@ -60,7 +60,7 @@ QUnit.test("testActionOnclickActiveByDefault", function(assert) {
 
 QUnit.test("testActionDisableOnclick", function(assert) {
 	let clicked = false;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				clicked = true;
@@ -82,7 +82,7 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 		clickedParent = true;
 	}
 	let clicked = false;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				clicked = true;
@@ -96,7 +96,7 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 });
 
 QUnit.test("testButtonWithText", function(assert) {
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		text : "someText"
 	});
 	this.fixture.appendChild(button);
@@ -105,7 +105,7 @@ QUnit.test("testButtonWithText", function(assert) {
 
 QUnit.test("testOnkeydownInSpec", function(assert) {
 	let activated = false;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				activated = true;
@@ -125,7 +125,7 @@ QUnit.test("testOnkeydownInSpec", function(assert) {
 
 QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
 	let activated = false;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				activated = true;
@@ -153,7 +153,7 @@ QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
 
 QUnit.test("testOnkeydownInSpecNotCalledForWrongKey", function(assert) {
 	let activated = false;
-	let button = CORA.gui.button({
+	let button = CORA.button({
 		action : {
 			method : function() {
 				activated = true;

@@ -62,7 +62,7 @@ var CORA = (function(cora) {
 		};
 
 		const possiblyCreateAndAddGroupOfRecordTypesToListForOneGroup = function(itemId) {
-			let group = CORA.gui.createSpanWithClassName("recordTypeGroup");
+			let group = CORA.createSpanWithClassName("recordTypeGroup");
 			let cItem = CORA.coraData(metadataProvider.getMetadataById(itemId));
 
 			let groupId = cItem.getFirstAtomicValueByNameInData("nameInData");
@@ -99,7 +99,7 @@ var CORA = (function(cora) {
 		};
 
 		const createTranslatedGroupHeadline = function(cItem) {
-			let groupHeadline = CORA.gui.createSpanWithClassName("recordTypeGroupHeadline");
+			let groupHeadline = CORA.createSpanWithClassName("recordTypeGroupHeadline");
 			let cTextIdGroup = CORA.coraData(cItem.getFirstChildByNameInData("textId"));
 			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			groupHeadline.innerHTML = textProvider.getTranslation(textId);

@@ -18,19 +18,23 @@
  */
 "use strict";
 QUnit.module("genericFactoryTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
+
+		this.providers = {
+			dummy: "providers"
+		};
 
 		this.dependencies = {
-			dummy : "dependencies"
+			dummy: "dependencies"
 		};
 
 		this.spec = {
-			testing : "spec"
+			testing: "spec"
 		};
-	this.genericFactory = CORA.genericFactory("spyToFactor", this.dependencies);
+		this.genericFactory = CORA.genericFactory("spyToFactor", this.dependencies);
 
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
@@ -64,6 +68,19 @@ QUnit.test("factorTestSpec", function(assert) {
 	assert.strictEqual(factoredSpec, this.spec);
 });
 
+QUnit.test("factorTestFactorWithProviders", function(assert) {
+	let genericFactory = CORA.genericFactory("spyToFactorWithProviders", this.providers, this.dependencies);
+	let factored = genericFactory.factor(this.spec);
+
+	assert.strictEqual(factored.type, "spyToFactorWithProviders");
+
+	assert.strictEqual(factored.getProviders(), this.providers);
+
+
+	let factoredSpec = factored.getSpec();
+	assert.strictEqual(factoredSpec, this.spec);
+});
+
 QUnit.test("factorTestFactorWithoutDependencies", function(assert) {
 	let genericFactory = CORA.genericFactory("spyToFactorWithoutDependencies");
 	let factored = genericFactory.factor(this.spec);
@@ -73,6 +90,33 @@ QUnit.test("factorTestFactorWithoutDependencies", function(assert) {
 	assert.strictEqual(factoredSpec, this.spec);
 });
 
+var CORA = (function(cora) {
+	"use strict";
+	cora.spyToFactorWithProviders = function(providers, dependencies, spec) {
+		let out;
+
+		const getProviders = function() {
+			return providers;
+		};
+
+		const getDependencies = function() {
+			return dependencies;
+		};
+
+		const getSpec = function() {
+			return spec;
+		};
+
+		out = Object.freeze({
+			type: "spyToFactorWithProviders",
+			getProviders: getProviders,
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+		});
+		return out;
+	};
+	return cora;
+}(CORA));
 var CORA = (function(cora) {
 	"use strict";
 	cora.spyToFactor = function(dependencies, spec) {
@@ -88,9 +132,9 @@ var CORA = (function(cora) {
 
 
 		out = Object.freeze({
-			type : "spyToFactor",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
+			type: "spyToFactor",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
 		});
 		return out;
 	};
@@ -108,8 +152,8 @@ var CORA = (function(cora) {
 		};
 
 		out = Object.freeze({
-			type : "spyToFactorWithoutDependencies",
-			getSpec : getSpec,
+			type: "spyToFactorWithoutDependencies",
+			getSpec: getSpec,
 		});
 		return out;
 	};

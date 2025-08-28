@@ -25,7 +25,7 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type" : "infoFactory",
+			type : "infoFactory",
 			factor : factor
 		});
 	};

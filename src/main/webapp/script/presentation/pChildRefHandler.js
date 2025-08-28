@@ -25,6 +25,8 @@ var CORA = (function(cora) {
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
 		const isInputMode = spec.mode === "input";
 		const binaryLinkRecordIdValues = {};
+		let mode = spec.mode;
+		let presentationSize = spec.presentationSize;
 
 		let out;
 		let userCanUploadFile = false;
@@ -135,8 +137,8 @@ var CORA = (function(cora) {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
-			pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined,
-				newElementsAdded);
+			pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined, newElementsAdded);
+			pubSub.subscribe("initComplete", [], undefined, initComplete);
 		};
 
 		const calculateUserCanRemove = function() {
@@ -198,18 +200,13 @@ var CORA = (function(cora) {
 				presentationId: presentationId,
 				isRepeating: isRepeating,
 				addText: "+ " + text,
-				mode: spec.mode
+				mode: mode
 			};
-			if (spec.textStyle !== undefined) {
-				pChildRefHandlerViewSpec.textStyle = spec.textStyle;
-			}
-			if (spec.childStyle !== undefined) {
-				pChildRefHandlerViewSpec.childStyle = spec.childStyle;
-			}
+			pChildRefHandlerViewSpec.textStyle = spec.textStyle;
+			pChildRefHandlerViewSpec.childStyle = spec.childStyle;
 			if (showFileUpload()) {
 				pChildRefHandlerViewSpec.upload = "true";
 				pChildRefHandlerViewSpec.handleFilesMethod = handleFiles;
-				//				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			} else if (showAddButton()) {
 				pChildRefHandlerViewSpec.addMethod = sendAdd;
 			}
@@ -320,7 +317,6 @@ var CORA = (function(cora) {
 			if (handlesFilesInInputMode()) {
 				keepTrackOfBinaryLinkValues(newPath);
 			}
-
 			let repeatingElement = createRepeatingElement(newPath);
 			pChildRefHandlerView.addChild(repeatingElement.getView());
 			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
@@ -367,6 +363,11 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
+		const initComplete = function() {
+			if (isInputMode && presentationSize === "singleInitiallyHidden") {
+				presentationSize = "singleInitiallyVisible";
+			}
+		};
 
 		const createRepeatingElement = function(path) {
 			let repeatingElementSpec = {
@@ -375,7 +376,12 @@ var CORA = (function(cora) {
 				pChildRefHandler: out,
 				userCanRemove: userCanRemove,
 				userCanMove: userCanMove,
-				userCanAddBefore: userCanAddBefore
+				userCanAddBefore: userCanAddBefore,
+				mode: mode,
+				clickableHeadlineText: spec.clickableHeadlineText,
+				clickableHeadlineLevel: spec.clickableHeadlineLevel,
+				presentationSize: presentationSize,
+				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -387,9 +393,9 @@ var CORA = (function(cora) {
 			repeatingElement.addPresentation(presentation);
 
 			if (hasAlternativePresentation()) {
-				let presentationMinimized = factorPresentation(path, spec.cAlternativePresentation,
+				let alternativePresentation = factorPresentation(path, spec.cAlternativePresentation,
 					metadataIdToAdd);
-				repeatingElement.addAlternativePresentation(presentationMinimized, spec.presentationSize);
+				repeatingElement.addAlternativePresentation(alternativePresentation);
 			}
 		};
 
@@ -601,24 +607,24 @@ var CORA = (function(cora) {
 						children: [{
 							name: "linkedRecordType",
 							value: "system"
-							}, {
+						}, {
 							name: "linkedRecordId",
 							value: dataDividerLinkedRecordId
-							}]
-						}, {
+						}]
+					}, {
 						name: "validationType",
 						children: [{
 							name: "linkedRecordType",
 							value: "validationType"
-							}, {
+						}, {
 							name: "linkedRecordId",
 							value: "genericBinary"
-							}]
-						},
-						{
-							name: "visibility",
-							value: "unpublished"
-						}
+						}]
+					},
+					{
+						name: "visibility",
+						value: "unpublished"
+					}
 					]
 				}, {
 					name: "originalFileName",
@@ -747,6 +753,13 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const callOnFirstShowOfPresentation = function() {
+			pubSub.publish("presentationShown", {
+				data: "",
+				path: []
+			});
+		};
+
 		start();
 		if (undefined !== possiblyFake) {
 			return possiblyFake;
@@ -764,7 +777,9 @@ var CORA = (function(cora) {
 			childMoved,
 			handleFiles,
 			processNewBinary,
-			newElementsAdded
+			newElementsAdded,
+			onlyForTestCallOnFirstShowOfPresentation: callOnFirstShowOfPresentation,
+			onlyForTestInitComplete: initComplete
 		});
 
 		pChildRefHandlerView.getView().modelObject = out;

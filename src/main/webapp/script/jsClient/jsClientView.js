@@ -41,26 +41,26 @@ var CORA = (function(cora) {
 		}
 
 		function createMainView() {
-			let view = CORA.gui.createSpanWithClassName("jsClient mainView");
-			let serverAddress = CORA.gui.createSpanWithClassName("serverAddress");
+			let view = CORA.createSpanWithClassName("jsClient mainView");
+			let serverAddress = CORA.createSpanWithClassName("serverAddress");
 			serverAddress.textContent = spec.serverAddress;
 
-			header = CORA.gui.createSpanWithClassName("header");
+			header = CORA.createSpanWithClassName("header");
 			header.textContent = spec.name;
 			view.appendChild(header);
 
-			sideBar = CORA.gui.createSpanWithClassName("sideBar");
+			sideBar = CORA.createSpanWithClassName("sideBar");
 			view.appendChild(sideBar);
 
-			searchesView = CORA.gui.createSpanWithClassName("searchesView");
+			searchesView = CORA.createSpanWithClassName("searchesView");
 			sideBar.appendChild(searchesView);
 			clearSearchesView();
 
-			recordTypesView = CORA.gui.createSpanWithClassName("recordTypesView");
+			recordTypesView = CORA.createSpanWithClassName("recordTypesView");
 			sideBar.appendChild(recordTypesView);
 			sideBar.appendChild(serverAddress);
 
-			workArea = CORA.gui.createSpanWithClassName("workArea");
+			workArea = CORA.createSpanWithClassName("workArea");
 			view.appendChild(workArea);
 
 			messageHolder = dependencies.messageHolderFactory.factor();
@@ -69,15 +69,15 @@ var CORA = (function(cora) {
 			return view;
 		}
 		function addReloadProvidersButton() {
-			reloadProvidersButton = CORA.gui.createSpanWithClassName("menuView");
+			reloadProvidersButton = CORA.createSpanWithClassName("menuView");
 			reloadProvidersButton.onclick = spec.reloadProvidersMethod;
 			reloadProvidersButton.textContent = "Ladda om";
 			header.appendChild(reloadProvidersButton);
 		}
 		function addLogoHeader() {
-			logo = CORA.gui.createDivWithClassName("logoHeader");
+			logo = CORA.createDivWithClassName("logoHeader");
 			header.appendChild(logo);
-			logoImage = CORA.gui.createDivWithClassName("logoHeaderLogo");
+			logoImage = CORA.createDivWithClassName("logoHeaderLogo");
 			header.appendChild(logoImage);
 		}
 
@@ -104,7 +104,7 @@ var CORA = (function(cora) {
 		}
 
 		function createSearchesHeadline() {
-			let searchesHeadline = CORA.gui.createDivWithClassName("searchesViewHeadline");
+			let searchesHeadline = CORA.createDivWithClassName("searchesViewHeadline");
 			let searchesText = providers.textProvider.getTranslation("theClient_searchesHeadlineText");
 			searchesHeadline.textContent = searchesText;
 			return searchesHeadline;

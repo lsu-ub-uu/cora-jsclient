@@ -21,7 +21,7 @@ const start = function() {
 	let href = window.location.href;
 	let appTokensMap = createMapWithAppTokens();
 
-	if (hrefContains(href, "preview.systemone")) {
+	if (hrefContains(href, "systemone")) {
 		enableCSS("aClientCSS");
 		useSysteOnePreview();
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin']);
@@ -51,13 +51,13 @@ const start = function() {
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
 			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
-	} else if (hrefContains(href, "preview.alvin")) {
+	} else if (hrefContains(href, "alvin")) {
 		enableCSS("alvinCSS");
 		useAlvinPreview();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin', 'alvinUser']);
 	
-	} else if (hrefContains(href, "preview.diva")) {
+	} else if (hrefContains(href, "diva")) {
 		enableCSS("divaLilaCSS");
 		useDivaPreview();
 		enableIcon("diva");
@@ -308,8 +308,8 @@ const useLocalhost3 = function() {
 
 const useSysteOnePreview = function() {
 	name = "SystemOne preview";
-	baseUrl = "https://preview.systemone.cora.epc.ub.uu.se/rest/";
-	loginBaseUrl = "https://preview.systemone.cora.epc.ub.uu.se/";
+	baseUrl = "https://cora.epc.ub.uu.se/systemone/rest/";
+	appTokenBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
 	startDependencies();
 };
 

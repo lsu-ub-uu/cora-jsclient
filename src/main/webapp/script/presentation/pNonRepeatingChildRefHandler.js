@@ -67,7 +67,7 @@ var CORA = (function(cora) {
 				presentationId: findPresentationId(spec.cPresentation),
 				textStyle: spec.textStyle,
 				childStyle: spec.childStyle,
-				callOnFirstShowOfAlternativePresentation: publishPresentationShown,
+				callOnFirstShowOfPresentation: publishPresentationShown,
 				clickableHeadlineText: spec.clickableHeadlineText,
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
 				presentationSize: spec.presentationSize

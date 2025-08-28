@@ -25,6 +25,8 @@ var CORA = (function(cora) {
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
 		const isInputMode = spec.mode === "input";
 		const binaryLinkRecordIdValues = {};
+		let mode = spec.mode;
+		let presentationSize = spec.presentationSize;
 
 		let out;
 		let userCanUploadFile = false;
@@ -135,8 +137,8 @@ var CORA = (function(cora) {
 				newElementsAddedSubscriptionId = pubSub.subscribe("newElementsAdded",
 					[], undefined, newElementsAdded);
 			}
-			pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined,
-				newElementsAdded);
+			pubSub.subscribe("addUpToMinNumberOfRepeating", [], undefined, newElementsAdded);
+			pubSub.subscribe("initComplete", [], undefined, initComplete);
 		};
 
 		const calculateUserCanRemove = function() {
@@ -198,7 +200,7 @@ var CORA = (function(cora) {
 				presentationId: presentationId,
 				isRepeating: isRepeating,
 				addText: "+ " + text,
-				mode: spec.mode
+				mode: mode
 			};
 			pChildRefHandlerViewSpec.textStyle = spec.textStyle;
 			pChildRefHandlerViewSpec.childStyle = spec.childStyle;
@@ -361,6 +363,11 @@ var CORA = (function(cora) {
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
+		const initComplete = function() {
+			if (isInputMode && presentationSize === "singleInitiallyHidden") {
+				presentationSize = "singleInitiallyVisible";
+			}
+		};
 
 		const createRepeatingElement = function(path) {
 			let repeatingElementSpec = {
@@ -370,10 +377,11 @@ var CORA = (function(cora) {
 				userCanRemove: userCanRemove,
 				userCanMove: userCanMove,
 				userCanAddBefore: userCanAddBefore,
-				mode: spec.mode,
+				mode: mode,
 				clickableHeadlineText: spec.clickableHeadlineText,
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
-				presentationSize: spec.presentationSize
+				presentationSize: presentationSize,
+				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -745,6 +753,13 @@ var CORA = (function(cora) {
 			}
 		};
 
+		const callOnFirstShowOfPresentation = function() {
+			pubSub.publish("presentationShown", {
+				data: "",
+				path: []
+			});
+		};
+
 		start();
 		if (undefined !== possiblyFake) {
 			return possiblyFake;
@@ -762,7 +777,9 @@ var CORA = (function(cora) {
 			childMoved,
 			handleFiles,
 			processNewBinary,
-			newElementsAdded
+			newElementsAdded,
+			onlyForTestCallOnFirstShowOfPresentation: callOnFirstShowOfPresentation,
+			onlyForTestInitComplete: initComplete
 		});
 
 		pChildRefHandlerView.getView().modelObject = out;

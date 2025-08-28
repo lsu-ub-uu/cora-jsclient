@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 		let alternativeButton;
 		let defaultButton;
 		let containsData = false;
+		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		//TODO: change to be sent in through dependencies
 		let buttonFactory = CORA.genericFactory("button");
@@ -201,6 +202,7 @@ var CORA = (function(cora) {
 				show(defaultPresentation);
 				show(alternativeButton);
 				hide(defaultButton);
+				callOnFirstShowOfDefaultPresentation();
 			} else {
 				show(alternativePresentation);
 				hide(defaultPresentation);
@@ -236,11 +238,18 @@ var CORA = (function(cora) {
 			show(view);
 		};
 
+		const callOnFirstShowOfDefaultPresentation = function() {
+			if (callOnFirstShowOfDefaultPresentationShouldBeCalled
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
+				callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
+				spec.callOnFirstShowOfPresentation();
+			}
+		};
 		const callOnFirstShowOfAlternativePresentation = function() {
 			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
-				&& spec.callOnFirstShowOfAlternativePresentation !== undefined) {
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
 				callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfAlternativePresentation();
+				spec.callOnFirstShowOfPresentation();
 			}
 		};
 

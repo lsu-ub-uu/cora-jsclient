@@ -254,12 +254,13 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			presentationId: "somePresentationId",
 			textStyle: "someTextStyle",
 			childStyle: "someChildStyle",
-			callOnFirstShowOfAlternativePresentation: pNonRepeatingChildRefHandler.publishPresentationShown,
+			callOnFirstShowOfPresentation: pNonRepeatingChildRefHandler.publishPresentationShown,
 			clickableHeadlineText: "Some headline text",
 			clickableHeadlineLevel: "h3",
 			presentationSize: "bothEqual"
 		}
 		assert.stringifyEqual(viewSpec, expectedViewSpec);
+		assert.strictEqual(viewSpec.callOnFirstShowOfPresentation, expectedViewSpec.callOnFirstShowOfPresentation);
 	});
 
 	test("testInitWithAlternativeCreatesPresentation", function(assert) {

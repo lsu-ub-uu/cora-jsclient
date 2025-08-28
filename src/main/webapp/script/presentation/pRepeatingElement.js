@@ -48,27 +48,9 @@ var CORA = (function(cora) {
 		let buttonView;
 		let showDefaultPresentationNext = false;
 		let toggleButtonsAreCreated = false;
+		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
+		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 
-
-		//TODO:: defalut hidden för klickbar rubrik
-		//TODO: clickable headline
-		//TODO: handle correct for view side where there is no data from start when
-		//  adding data so it is shown on add  or not depending on initial value
-
-
-		//TODO: Clickable headline should not be shown in view mode if no data...
-		//fixed for pNonRepeating
-		//TODO: data state for headline
-		//works for pNonRepeating
-
-
-		//TODO: add new, always initialShown, after startup is completret
-		//TODO: firstshow for initial hidden.... as with alternative
-
-		//TODO: look into tabstops
-
-		//TODO:Bug not new.. 
-		// needs to handle reload metadata.... currently does not show it again... if no value on reload
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
@@ -246,13 +228,6 @@ var CORA = (function(cora) {
 		};
 
 		const getButtonClassName = function(presentationSize) {
-			//			nameInData: presentationSize
-			//			presentationId: presentationSizePCollVar
-			//			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
-			//			(firstLarger) Första presentationen är större - Första presentationen är större
-			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
-			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
-			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
 			if (presentationSizeIsExpanding(presentationSize)) {
 				return {
 					default: "maximizeButton",
@@ -312,13 +287,30 @@ var CORA = (function(cora) {
 				show(defaultPresentation);
 				show(alternativeButton);
 				hide(defaultButton);
+				callOnFirstShowOfDefaultPresentation();
 			} else {
 				show(alternativePresentation);
 				hide(defaultPresentation);
 				hide(alternativeButton);
 				show(defaultButton);
+				callOnFirstShowOfAlternativePresentation();
 			}
 			showDefaultPresentationNext = !showDefaultPresentationNext;
+		};
+
+		const callOnFirstShowOfDefaultPresentation = function() {
+			if (callOnFirstShowOfDefaultPresentationShouldBeCalled
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
+				callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
+				spec.callOnFirstShowOfPresentation();
+			}
+		};
+		const callOnFirstShowOfAlternativePresentation = function() {
+			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
+				&& spec.callOnFirstShowOfPresentation !== undefined) {
+				callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
+				spec.callOnFirstShowOfPresentation();
+			}
 		};
 
 		const hideRemoveButton = function() {

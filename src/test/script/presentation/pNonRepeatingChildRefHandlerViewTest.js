@@ -78,8 +78,14 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 			dependencies, spec);
 		pNonRepeatingChildRefHandlerView.addChild(defaultChild);
 
-		fixture.appendChild(pNonRepeatingChildRefHandlerView.getView());
+		let view = pNonRepeatingChildRefHandlerView.getView();
+		fixture.appendChild(view);
 
+		let buttonView = view.childNodes[2];
+		if (buttonView) {
+			alternativeButton = buttonView.childNodes[0];
+			defaultButton = buttonView.childNodes[1];
+		}
 		return pNonRepeatingChildRefHandlerView;
 	};
 
@@ -313,7 +319,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		CORATESTHELPER.simulateOnclick(clickableHeadline);
 		assert.visible(alternativeChild, "presentationView should be visible");
 	});
-	
+
 	test("testaddAlternativePresentation_headlineFirstSmaller", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.presentationSize = "firstSmaller";
@@ -344,7 +350,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		CORATESTHELPER.simulateOnclick(clickableHeadline);
 		assert.visible(alternativeChild, "presentationView should be visible");
 	});
-	
+
 	test("testaddAlternativePresentation_headlineFirstLarger", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
 		spec.presentationSize = "firstLarger";
@@ -393,24 +399,65 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 		assert.allNotVisible([alternativeChild, defaultButton]);
 	});
 
-	test("testShowAlterntiveButtonCallsFunction", function(assert) {
+	test("testShowDefaultButtonCallsFunction", function(assert) {
 		let altFuncWasCalled = 0;
 		let altFunc = function() {
 			altFuncWasCalled++;
 		}
-		spec.callOnFirstShowOfAlternativePresentation = altFunc;
+		spec.callOnFirstShowOfPresentation = altFunc;
 		let viewHandler = createHandlerAddChildrenAndReturnHandler();
 
 		viewHandler.showContent();
 
 
-		assert.strictEqual(altFuncWasCalled, 0);
-		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+	});
+
+	test("testButtonFunctions", function(assert) {
+		let altFuncWasCalled = 0;
+		let altFunc = function() {
+			altFuncWasCalled++;
+		}
+		spec.callOnFirstShowOfPresentation = altFunc;
+		spec.presentationSize = "singleInitiallyHidden";
+		spec.clickableHeadlineText = "Some headline text";
+		let viewHandler = createHandlerAddChildAndReturnHandler();
+
+		viewHandler.showContent();
+
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 2);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 2);
+	});
+
+	test("testShowAlterntiveButtonCallsFunction", function(assert) {
+		let altFuncWasCalled = 0;
+		let altFunc = function() {
+			altFuncWasCalled++;
+		}
+		spec.callOnFirstShowOfPresentation = altFunc;
+		let viewHandler = createHandlerAddChildrenAndReturnHandler();
+
+		viewHandler.showContent();
+
+
 		assert.strictEqual(altFuncWasCalled, 1);
 		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.strictEqual(altFuncWasCalled, 2);
 		CORATESTHELPER.simulateOnclick(alternativeButton);
 		CORATESTHELPER.simulateOnclick(alternativeButton);
-		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(alternativeButton);
+		assert.strictEqual(altFuncWasCalled, 2);
 	});
 
 	test("testButtonFunctionsKeyboardSpace", function(assert) {

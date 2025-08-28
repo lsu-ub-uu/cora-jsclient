@@ -337,7 +337,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		// subscription
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "add");
@@ -358,6 +358,11 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(fourthSubscription.type, "addUpToMinNumberOfRepeating");
 		assert.deepEqual(fourthSubscription.path, []);
 		assert.ok(fourthSubscription.functionToCall === pChildRefHandler.newElementsAdded);
+
+		let fifthSubscription = subscriptions[4];
+		assert.strictEqual(fifthSubscription.type, "initComplete");
+		assert.deepEqual(fifthSubscription.path, []);
+		assert.ok(fifthSubscription.functionToCall === pChildRefHandler.onlyForTestInitComplete);
 	});
 
 	test("testInitViewIsFromFactoredView", function(assert) {
@@ -473,7 +478,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		// subscription
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 	});
 
 	test("testInitRepeatingStaticNoOfChildren", function(assert) {
@@ -498,7 +503,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		// subscription
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 	});
 
 	test("testAddButtonFor1toX", function(assert) {
@@ -1145,9 +1150,12 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			callOnFirstShowOfPresentation: pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
+		assert.strictEqual(factoredSpec.callOnFirstShowOfPresentation,
+			pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
 		assert.deepEqual(factoredSpec.path, ["textVariableId"]);
 
@@ -1160,6 +1168,19 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			spec.cParentPresentation);
 		assert.strictEqual(factoredPresentationSpec.recordPartPermissionCalculator,
 			spec.recordPartPermissionCalculator);
+	});
+
+
+	test("testSubscibeToNewElementsAddedWhenMinNumberOfRepeatingToShowIsSet", function(assert) {
+		spec.minNumberOfRepeatingToShow = "1";
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
+		pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation();
+
+		let messages = pubSub.getMessages();
+		assert.deepEqual(messages.length, 1);
+		assert.deepEqual(messages[0].type, "presentationShown");
+		assert.deepEqual(messages[0].message.data, "");
+		assert.deepEqual(messages[0].message.path, []);
 	});
 
 	test("testAddOneChildWithOptionalClickableHeadline", function(assert) {
@@ -1202,8 +1223,33 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			spec.cParentPresentation);
 		assert.strictEqual(factoredPresentationSpec.recordPartPermissionCalculator,
 			spec.recordPartPermissionCalculator);
+	});
 
+	test("testAddOneChildWithOptionalClickableHeadline_afterLoadSwitchToInitiallyVisible", function(assert) {
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h3";
+		spec.presentationSize = "singleInitiallyHidden";
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
 
+		pChildRefHandler.onlyForTestInitComplete();
+		pChildRefHandler.add("textVariableId");
+
+		let factoredSpec = pRepeatingElementFactory.getSpec(0);
+		assert.stringifyEqual(factoredSpec.presentationSize, "singleInitiallyVisible");
+	});
+
+	test("testAddOneChildWithOptionalClickableHeadline_afterLoadSwitchToInitiallyVisibleNotForOutput", function(assert) {
+		spec.mode = "output";
+		spec.clickableHeadlineText = "Some headline text";
+		spec.clickableHeadlineLevel = "h3";
+		spec.presentationSize = "singleInitiallyHidden";
+		let pChildRefHandler = CORA.pChildRefHandler(dependencies, spec);
+
+		pChildRefHandler.onlyForTestInitComplete();
+		pChildRefHandler.add("textVariableId");
+
+		let factoredSpec = pRepeatingElementFactory.getSpec(0);
+		assert.stringifyEqual(factoredSpec.presentationSize, "singleInitiallyHidden");
 	});
 
 	test("testAddOneChildModeOutput", function(assert) {
@@ -1433,9 +1479,9 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		// subscription
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 5);
+		assert.deepEqual(subscriptions.length, 6);
 
-		let firstSubsription = subscriptions[4];
+		let firstSubsription = subscriptions[5];
 
 		assert.strictEqual(firstSubsription.type, "remove");
 		assert.deepEqual(firstSubsription.path, ["textVariableId.one"]);
@@ -1651,7 +1697,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 1);
 
 		// call remove function in pChildRefHandler
-		pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[5].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 3);
@@ -1679,7 +1725,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 		// call remove function in pChildRefHandler
-		pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[5].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 1);
 		assert.strictEqual(factoredView.getShowChildrensAddBeforeButtonCalled(), 0);
@@ -1718,7 +1764,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(factoredView.getHideChildrensAddBeforeButtonCalled(), 0);
 
 		// call remove function in pChildRefHandler
-		pubSub.getSubscriptions()[4].functionToCall();
+		pubSub.getSubscriptions()[5].functionToCall();
 		assert.strictEqual(factoredView.getShowButtonViewCalled(), 3);
 		assert.strictEqual(factoredView.getHideButtonViewCalled(), 0);
 		assert.strictEqual(factoredView.getShowChildrensRemoveButtonCalled(), 1);
@@ -2005,7 +2051,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
 		// subscription
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "add");

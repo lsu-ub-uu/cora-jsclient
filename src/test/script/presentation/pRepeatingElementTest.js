@@ -135,7 +135,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.elementHasNotClass(view, "containsNoData");
 		assert.visible(view);
 	});
-	
+
 	test("testChangeViewOnContainsDataTracker_presetDisplay_input", function(assert) {
 		spec.mode = "input";
 		createAndReturnPRepeatingElementGetAndAttatchView();
@@ -591,14 +591,6 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(presentationView.className, "presentationStub default");
 		assert.notVisible(presentationView, "presentationView should not be visible");
 		assert.strictEqual(view.childNodes.length, 3);
-		//
-		//		let alternativePresentation = CORATEST.presentationStub("minimized");
-		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
-		//		assert.deepEqual(view.className, "repeatingElement");
-		//
-		//		let alternativePresentationView = view.childNodes[1];
-		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
-		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
 
 		// test minimized/maximized button
 		let alternativeButton = buttonView.childNodes[2];
@@ -617,7 +609,6 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 	test("testaddAlternativePresentation_headlineDefaultsToSingleInitiallyHidden", function(assert) {
 		spec.clickableHeadlineText = "Some headline text";
-		//		spec.presentationSize = "singleInitiallyHidden";
 
 		let pRepeatingElement = CORA.pRepeatingElement(dependencies, spec);
 		let view = pRepeatingElement.getView();
@@ -633,14 +624,6 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(presentationView.className, "presentationStub default");
 		assert.notVisible(presentationView, "presentationView should not be visible");
 		assert.strictEqual(view.childNodes.length, 3);
-		//
-		//		let alternativePresentation = CORATEST.presentationStub("minimized");
-		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
-		//		assert.deepEqual(view.className, "repeatingElement");
-		//
-		//		let alternativePresentationView = view.childNodes[1];
-		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
-		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
 
 		// test minimized/maximized button
 		let alternativeButton = buttonView.childNodes[2];
@@ -672,14 +655,6 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(presentationView.className, "presentationStub default");
 		assert.visible(presentationView, "presentationView should be visible");
 		assert.strictEqual(view.childNodes.length, 3);
-		//
-		//		let alternativePresentation = CORATEST.presentationStub("minimized");
-		//		pRepeatingElement.addAlternativePresentation(alternativePresentation);
-		//		assert.deepEqual(view.className, "repeatingElement");
-		//
-		//		let alternativePresentationView = view.childNodes[1];
-		//		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
-		//		assert.notVisible(alternativePresentationView, "alternativePresentationView should be hidden");
 
 		// test minimized/maximized button
 		let alternativeButton = buttonView.childNodes[2];
@@ -779,4 +754,72 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		defaultButton.onclick();
 		assert.deepEqual(view.className, "repeatingElement");
 	});
+
+	////////////////////////////////////////////////////////////
+	test("testShowDefaultButtonCallsFunction", function(assert) {
+		let altFuncWasCalled = 0;
+		let altFunc = function() {
+			altFuncWasCalled++;
+		}
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "singleInitiallyVisible";
+		spec.callOnFirstShowOfPresentation = altFunc;
+		spec.presentationSize = "bothEqual";
+
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		let presentation = CORATEST.presentationStub("maximized");
+		pRepeatingElement.addPresentation(presentation);
+
+
+		let buttonView = view.childNodes[2];
+		assert.strictEqual(buttonView.className, "buttonView")
+
+
+		let alternativeButton = buttonView.childNodes[1];
+		assert.strictEqual(alternativeButton.className, "iconButton alternativeButton")
+		let defaultButton = buttonView.childNodes[2];
+		assert.strictEqual(defaultButton.className, "iconButton defaultButton")
+
+
+		assert.strictEqual(altFuncWasCalled, 0);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+	});
+	
+	test("testShowAlternativeButtonCallsFunction", function(assert) {
+		let altFuncWasCalled = 0;
+		let altFunc = function() {
+			altFuncWasCalled++;
+		}
+		spec.clickableHeadlineText = "Some headline text";
+		spec.presentationSize = "singleInitiallyVisible";
+		spec.callOnFirstShowOfPresentation = altFunc;
+		spec.presentationSize = "bothEqual";
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("maximized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let buttonView = view.childNodes[2];
+
+
+		let alternativeButton = buttonView.childNodes[1];
+		assert.strictEqual(alternativeButton.className, "iconButton alternativeButton")
+		let defaultButton = buttonView.childNodes[2];
+		assert.strictEqual(defaultButton.className, "iconButton defaultButton")
+
+
+		assert.strictEqual(altFuncWasCalled, 0);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		CORATESTHELPER.simulateOnclick(defaultButton);
+		assert.strictEqual(altFuncWasCalled, 1);
+	});
+
 });

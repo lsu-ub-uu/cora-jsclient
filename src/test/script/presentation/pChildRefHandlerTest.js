@@ -1151,7 +1151,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			callOnFirstShowOfPresentation: pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation
+			callOnFirstShowOfPresentation: pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation,
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredSpec.callOnFirstShowOfPresentation,
@@ -1208,7 +1209,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			mode: "input",
 			clickableHeadlineText: "Some headline text",
 			clickableHeadlineLevel: "h3",
-			presentationSize: "singleInitiallyVisible"
+			presentationSize: "singleInitiallyVisible",
+			containsDataShouldBeTracked: true
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
@@ -1272,7 +1274,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "output"
+			mode: "output",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
@@ -1307,7 +1310,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: true,
 			userCanMove: true,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -1340,7 +1344,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1372,7 +1377,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1403,7 +1409,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1439,7 +1446,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: true,
 			userCanMove: true,
 			userCanAddBefore: true,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: true
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1473,7 +1481,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: true,
 			userCanMove: true,
 			userCanAddBefore: true,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1515,7 +1524,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "output"
+			mode: "output",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});
@@ -1541,7 +1551,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: true,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});
@@ -1581,7 +1592,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: true,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredRepeatingSpec, expectedRepeatingSpec);
 	});
@@ -2185,7 +2197,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanRemove: false,
 			userCanMove: false,
 			userCanAddBefore: false,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: false
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});

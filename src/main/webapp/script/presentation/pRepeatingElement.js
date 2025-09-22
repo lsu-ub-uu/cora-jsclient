@@ -60,11 +60,13 @@ var CORA = (function(cora) {
 		};
 
 		const createContainsDataTracker = function() {
-			let containsDataTrackerSpec = {
-				methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
-				path: spec.path
-			};
-			containsDataTrackerFactory.factor(containsDataTrackerSpec);
+			if (spec.containsDataShouldBeTracked === true || mode==="output") {
+				let containsDataTrackerSpec = {
+					methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+					path: spec.path
+				};
+				containsDataTrackerFactory.factor(containsDataTrackerSpec);
+			}
 		};
 
 		const methodToCallOnContainsDataChange = function(state) {

@@ -381,9 +381,15 @@ var CORA = (function(cora) {
 				clickableHeadlineText: spec.clickableHeadlineText,
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
 				presentationSize: presentationSize,
-				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation
+				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation,
+				containsDataShouldBeTracked: containsDataShouldBeTracked()
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
+		};
+
+		const containsDataShouldBeTracked = function() {
+			let attributes = cMetadataElement.getData().attributes;
+			return (attributes.type === "group" || spec.clickableHeadlineText !== undefined);
 		};
 
 		const addPresentationsToRepeatingElementsView = function(repeatingElement, metadataIdToAdd) {

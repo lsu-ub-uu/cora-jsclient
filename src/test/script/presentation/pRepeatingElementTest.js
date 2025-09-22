@@ -48,7 +48,8 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 			userCanRemove: true,
 			userCanMove: true,
 			userCanAddBefore: true,
-			mode: "input"
+			mode: "input",
+			containsDataShouldBeTracked: true
 		};
 	});
 	hooks.afterEach(() => {
@@ -104,6 +105,26 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.stringifyEqual(factoredSpec.path, spec.path);
 	});
 
+	test("testInit_createsContainsDataTracker_notStartedIfSpecPreventsIt", function(assert) {
+		spec.containsDataShouldBeTracked = false;
+		createAndReturnPRepeatingElementGetAndAttatchView();
+
+		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 0);
+	});
+	
+	test("testInit_createsContainsDataTracker_ifOutputEvenIfItIsStatedNotToBestarted", function(assert) {
+		spec.containsDataShouldBeTracked = false;
+		spec.mode = "output";
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
+		let factoredSpec = containsDataTrackerFactory.getSpec(0);
+
+		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
+			pRepeatingElement.onlyForTestMethodToCallOnContainsDataChange);
+		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, undefined);
+		assert.stringifyEqual(factoredSpec.path, spec.path);
+	});
 
 	test("testChangeViewOnContainsDataTracker_output", function(assert) {
 		spec.mode = "output";
@@ -790,7 +811,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		CORATESTHELPER.simulateOnclick(defaultButton);
 		assert.strictEqual(altFuncWasCalled, 1);
 	});
-	
+
 	test("testShowAlternativeButtonCallsFunction", function(assert) {
 		let altFuncWasCalled = 0;
 		let altFunc = function() {

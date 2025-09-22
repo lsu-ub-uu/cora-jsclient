@@ -156,6 +156,21 @@ QUnit.test("testfocusToClass", function(assert) {
 	assert.strictEqual(currentFocus, myInput)
 });
 
+QUnit.test("testfocusToClass_with@inName", function(assert) {
+	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
+	let workView = managedGuiItemView.getWorkView();
+
+	let myInput = CORATEST.createTagFromSpec({tagName: "input", className: "my@Class someOtherClass"});
+	workView.appendChild(myInput);
+	let currentFocus = document.activeElement;
+	
+	assert.strictEqual(currentFocus, document.body);
+	managedGuiItemView.focusToClass("my@Class");
+	
+	currentFocus = document.activeElement;
+	assert.strictEqual(currentFocus, myInput)
+});
+
 QUnit.test("testfocusToClassFirstOneNotVisible", function(assert) {
 	let managedGuiItemView = CORATEST.createManagedGuiItemViewWithSpecAndAddWorkViewToFixture(this.spec);
 	let workView = managedGuiItemView.getWorkView();

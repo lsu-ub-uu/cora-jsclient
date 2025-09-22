@@ -141,7 +141,7 @@ var CORA = (function(cora) {
 		};
 		
 		const focusToClass = function(className){
-			const elements = workView.querySelectorAll("."+className);
+			const elements = workView.querySelectorAll('[class~="'+className+'"]');
 			focusOnFirstVisibleElementInNodeList(elements);
 		};
 

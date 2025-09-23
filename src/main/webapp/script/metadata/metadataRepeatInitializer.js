@@ -21,8 +21,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataRepeatInitializer = function(dependencies, spec) {
-		let metadataProvider = dependencies.metadataProvider;
-		let pubSub = dependencies.pubSub;
+		const metadataProvider = dependencies.metadataProvider;
+		const pubSub = dependencies.pubSub;
 		let metadataId = spec.metadataId;
 		let path = spec.path;
 		let cMetadataElement;

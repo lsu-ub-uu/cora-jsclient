@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 Olov McKie
- * Copyright 2017, 2019, 2020 Uppsala University Library
+ * Copyright 2017, 2019, 2020, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -21,25 +21,27 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.metadataController = function(dependencies, spec) {
+		const pubSub = dependencies.pubSub;
+		const metadataProvider = dependencies.metadataProvider;
+		const metadataChildAndRepeatInitializerFactory = dependencies.metadataChildAndRepeatInitializerFactory;
 		let topLevelMetadataId = spec.metadataId;
 		let topLevelData = spec.data;
 		let topLevelPath = [];
 		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
 		let cMetadataElement;
-		let pubSub = dependencies.pubSub;
-		
+
 		const start = function() {
 			cMetadataElement = getMetadataById(topLevelMetadataId);
 			if (hasAttributes()) {
 				addAttributes();
 			}
 			initializeFirstLevel();
-			dependencies.pubSub.publish("newElementsAdded", {
+			pubSub.publish("newElementsAdded", {
 				data: "",
 				path: []
 			});
-			dependencies.pubSub.publish("initComplete", {
+			pubSub.publish("initComplete", {
 				data: "",
 				path: []
 			});
@@ -84,7 +86,7 @@ var CORA = (function(cora) {
 				possiblySetValueForAttributeWithChoice(attributePath, cCollectionVariable);
 			}
 		};
-		
+
 		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
 			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
 			setValueForAttributeWithPathAndValue(attributePath, value);
@@ -106,7 +108,7 @@ var CORA = (function(cora) {
 			}
 			pubSub.publish("setValue", setValueMessage);
 		};
-		
+
 		const initializeFirstLevel = function() {
 			let topLevelChildReferences = extractTopLevelChildReferences();
 			topLevelChildReferences.children.forEach(function(childReference) {
@@ -120,7 +122,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const possiblyInitializeChild = function(childReference) {
@@ -147,7 +149,7 @@ var CORA = (function(cora) {
 				data: topLevelData,
 				recordPartPermissionCalculator: recordPartPermissionCalculator
 			};
-			let childInitializer = dependencies.metadataChildAndRepeatInitializerFactory
+			let childInitializer = metadataChildAndRepeatInitializerFactory
 				.factorChildInitializer(initializerSpec);
 			let hasWritePermission = hasWritePermissions(childReference);
 			childInitializer.initializeTopLevel(hasWritePermission);
@@ -156,11 +158,12 @@ var CORA = (function(cora) {
 		const hasWritePermissions = function(childReference) {
 			let cRef = getCRef(childReference);
 			return recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
-		}
+		};
 
 		const getSpec = function() {
 			return spec;
 		};
+
 		const getDependencies = function() {
 			return dependencies;
 		};

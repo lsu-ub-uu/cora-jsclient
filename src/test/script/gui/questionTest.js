@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2025  Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,163 +19,162 @@
  */
 "use strict";
 
-QUnit.module("gui/questionTest.js", {
-	beforeEach : function() {
-		this.fixture = document.getElementById("qunit-fixture");
-	},
-	afterEach : function() {
-	}
-});
+QUnit.module("gui/questionTest.js", hooks => {
+	const test = QUnit.test;
+	let fixture;
+	let spec;
 
-QUnit.test("testInitAndButtonClickRemovesQuestion", function(assert) {
-	var done = assert.async();
-	var spec = {
-		"text" : "Are you sure?",
-		"buttons" : [ {
-			"text" : "yes"
-		} ]
+	let question;
+	let view;
+
+	hooks.beforeEach(() => {
+		fixture = document.getElementById("qunit-fixture");
+
+		spec = {
+			text: "Are you sure?",
+			buttons: [{
+				text: "yes"
+			}]
+		};
+	});
+
+	hooks.afterEach(() => { });
+
+	const startQuestion = function() {
+		question = CORA.question(spec);
+		view = question.getView();
+		fixture.appendChild(view);
 	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
 
-	assert.strictEqual(view.modelObject, question);
-	assert.strictEqual(view.className, "question");
+	test("testInitAndButtonClickRemovesQuestion", function(assert) {
+		let done = assert.async();
+		startQuestion();
 
-	assert.visible(view);
+		assert.strictEqual(view.modelObject, question);
+		assert.strictEqual(view.className, "question");
 
-	var questionBox = view.firstChild;
-	assert.strictEqual(questionBox.className, "questionBox");
-	assert.strictEqual(questionBox.firstChild.innerHTML, "Are you sure?");
+		assert.visible(view);
 
-	var button1 = questionBox.childNodes[1];
-	assert.strictEqual(button1.type, "button");
-	assert.strictEqual(button1.value, "yes");
+		let questionBox = view.firstChild;
+		assert.strictEqual(questionBox.className, "questionBox");
+		assert.strictEqual(questionBox.firstChild.innerHTML, "Are you sure?");
 
-	button1.onclick();
+		let button1 = questionBox.childNodes[1];
+		assert.strictEqual(button1.type, "button");
+		assert.strictEqual(button1.value, "yes");
 
-	window.setTimeout(function() {
+		button1.onclick();
+
+		window.setTimeout(function() {
+			assert.notVisible(view);
+			done();
+		}, 1050);
+	});
+
+	test("testHide", function(assert) {
+		startQuestion();
+
+		assert.visible(view);
+		question.hide();
 		assert.notVisible(view);
-		done();
-	}, 1050);
-});
+	});
 
-QUnit.test("testHide", function(assert) {
-	var spec = {
-			"text" : "Are you sure?",
-			"buttons" : [ {
-				"text" : "yes"
-			} ]
-	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
-	
-	assert.visible(view);
-	question.hide();
-	assert.notVisible(view);
-});
-	
-QUnit.test("testInitAndButtonClick", function(assert) {
-	var buttonClicked = false;
-	var clickFunction = function (){
-		buttonClicked = true;
-	};
-	var spec = {
-		"text" : "Are you sure?",
-		"buttons" : [ {
-			"text" : "yes",
-			"onclickFunction":clickFunction
-		} ]
-	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
+	test("testInitAndButtonClick", function(assert) {
+		let buttonClicked = false;
+		let clickFunction = function() {
+			buttonClicked = true;
+		};
+		spec.buttons[0].onclickFunction = clickFunction;
 
+		startQuestion();
 
-	var questionBox = view.firstChild;
-	var button1 = questionBox.childNodes[1];
-	
-	assert.strictEqual(buttonClicked, false);
-	button1.onclick();
-	assert.strictEqual(buttonClicked, true);
-});
+		let questionBox = view.firstChild;
+		let button1 = questionBox.childNodes[1];
 
-QUnit.test("testHideWithEffectEvent", function(assert) {
-	var spec = {
-		"text" : "Are you sure?",
-		"buttons" : [ {
-			"text" : "yes"
-		} ]
-	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
+		assert.strictEqual(buttonClicked, false);
+		button1.onclick();
+		assert.strictEqual(buttonClicked, true);
+	});
 
-	assert.visible(view);
+	test("testMultipleButtonClickShouldOnlyTriggerOnce", function(assert) {
+		let buttonClicked = 0;
+		let clickFunction = function() {
+			buttonClicked++;
+		};
+		spec.buttons.push({ text: "no" });
+		spec.buttons[0].onclickFunction = clickFunction;
+		spec.buttons[1].onclickFunction = clickFunction;
 
-	question.hideWithEffect();
+		startQuestion();
 
-	var event = document.createEvent('Event');
-	event.initEvent('transitionend', true, true);
-	view.dispatchEvent(event);
+		let questionBox = view.firstChild;
+		let button1 = questionBox.childNodes[1];
+		let button2 = questionBox.childNodes[2];
 
-	assert.notVisible(view);
-	
-});
-QUnit.test("testHideWithEffectTransitionendNotCalled", function(assert) {
-	var done = assert.async();
-	var spec = {
-		"text" : "Are you sure?",
-		"buttons" : [ {
-			"text" : "yes"
-		} ]
-	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
+		assert.strictEqual(buttonClicked, 0);
+		button1.onclick();
+		button2.onclick();
+		button1.onclick();
+		button2.onclick();
+		button1.onclick();
+		button2.onclick();
+		assert.strictEqual(buttonClicked, 1);
+	});
 
-	assert.visible(view);
+	test("testHideWithEffectEvent", function(assert) {
+		startQuestion();
 
-	// no question className will make transition rule not affect this, triggering no
-	// fired event
-	view.className = "";
-	question.hideWithEffect();
+		assert.visible(view);
 
-	window.setTimeout(function() {
-		assert.strictEqual(view.className, " toBeRemoved hidden", "if toBeRemoved is still here,"
+		question.hideWithEffect();
+
+		let event = document.createEvent('Event');
+		event.initEvent('transitionend', true, true);
+		view.dispatchEvent(event);
+
+		assert.notVisible(view);
+	});
+
+	test("testHideWithEffectTransitionendNotCalled", function(assert) {
+		let done = assert.async();
+
+		startQuestion();
+
+		assert.visible(view);
+
+		// no question className will make transition rule not affect this, triggering no
+		// fired event
+		view.className = "";
+		question.hideWithEffect();
+
+		window.setTimeout(function() {
+			assert.strictEqual(view.className, " toBeRemoved hidden", "if toBeRemoved is still here,"
 				+ " has the question not been removed by transitionend event");
-		done();
-	}, 1050);
-});
+			done();
+		}, 1050);
+	});
 
-QUnit.test("testTwoButtons", function(assert) {
-	var spec = {
-		"text" : "Are you sure?",
-		"buttons" : [ {
-			"text" : "yes"
-		},{
-			"text" : "no"
-		} ]
-	};
-	var question = CORA.question(spec);
-	var view = question.getView();
-	this.fixture.appendChild(view);
+	test("testTwoButtons", function(assert) {
+		spec.buttons.push({ text: "no" });
 
-	assert.strictEqual(view.modelObject, question);
-	assert.strictEqual(view.className, "question");
+		startQuestion();
 
-	assert.visible(view);
+		assert.strictEqual(view.modelObject, question);
+		assert.strictEqual(view.className, "question");
 
-	var questionBox = view.firstChild;
-	assert.strictEqual(questionBox.className, "questionBox");
-	assert.strictEqual(questionBox.firstChild.innerHTML, "Are you sure?");
+		assert.visible(view);
 
-	var button1 = questionBox.childNodes[1];
-	assert.strictEqual(button1.type, "button");
-	assert.strictEqual(button1.value, "yes");
+		let questionBox = view.firstChild;
+		assert.strictEqual(questionBox.className, "questionBox");
+		assert.strictEqual(questionBox.firstChild.innerHTML, "Are you sure?");
 
-	var button2 = questionBox.childNodes[2];
-	assert.strictEqual(button2.type, "button");
-	assert.strictEqual(button2.value, "no");
+		let button1 = questionBox.childNodes[1];
+		assert.strictEqual(button1.type, "button");
+		assert.strictEqual(button1.value, "yes");
+
+		let button2 = questionBox.childNodes[2];
+		assert.strictEqual(button2.type, "button");
+		assert.strictEqual(button2.value, "no");
+	});
+
 });

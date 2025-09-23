@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2025  Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,40 +20,51 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.question = function(spec) {
-		var view = createView();
-		var box = cora.box(view);
+		let view;
+		let box;
+		let questionBox;
+		let notTriggered = true;
 
-		var questionBox = createTextView();
-		view.appendChild(questionBox);
+		const start = function() {
+			view = createView();
+			box = cora.box(view);
 
-		createAndAddButtons();
+			questionBox = createTextView();
+			view.appendChild(questionBox);
 
-		function createView() {
+			createAndAddButtons();
+		};
+
+		const createView = function() {
 			return CORA.createDivWithClassName("question");
-		}
-		function createTextView() {
-			var viewNew = CORA.createDivWithClassName("questionBox");
-			var textElement = document.createElement("text");
+		};
+
+		const createTextView = function() {
+			let viewNew = CORA.createDivWithClassName("questionBox");
+			let textElement = document.createElement("text");
 			viewNew.appendChild(textElement);
 			textElement.innerHTML = spec.text;
 			return viewNew;
-		}
+		};
 
-		function createAndAddButtons() {
+		const createAndAddButtons = function() {
 			spec.buttons.forEach(function(buttonSpec) {
-				var button = addButton(buttonSpec);
+				let button = addButton(buttonSpec);
 				questionBox.appendChild(button);
 			});
-		}
+		};
 
-		function addButton(buttonSpec) {
-			var button = document.createElement("input");
+		const addButton = function(buttonSpec) {
+			let button = document.createElement("input");
 			button.type = "button";
 			button.value = buttonSpec.text;
 			if (buttonSpec.onclickFunction) {
+
 				button.onclick = function() {
-					buttonSpec.onclickFunction();
-					box.hideWithEffect();
+					if (onlyTriggerOnce()) {
+						buttonSpec.onclickFunction();
+						box.hideWithEffect();
+					}
 				};
 			} else {
 				button.onclick = function() {
@@ -60,13 +72,22 @@ var CORA = (function(cora) {
 				};
 			}
 			return button;
-		}
+		};
 
+		const onlyTriggerOnce = function() {
+			if (notTriggered) {
+				notTriggered = false;
+				return true;
+			}
+			return false;
+		};
 
-		var out = Object.freeze({
-			getView : box.getView,
-			hide : box.hide,
-			hideWithEffect : box.hideWithEffect
+		start();
+
+		let out = Object.freeze({
+			getView: box.getView,
+			hide: box.hide,
+			hideWithEffect: box.hideWithEffect
 		});
 		view.modelObject = out;
 		return out;

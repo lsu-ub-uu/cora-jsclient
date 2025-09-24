@@ -64,13 +64,13 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 		let metadataController = CORA.metadataController(dependencies, spec);
 		assert.strictEqual(metadataController.getSpec(), spec);
 	});
-	
+
 	test("testGetDependencies", function(assert) {
 		let metadataController = CORA.metadataController(dependencies, spec);
 		assert.strictEqual(metadataController.getDependencies(), dependencies);
 	});
 
-	
+
 	test("testCorrectSpecSentToChildIntitilizerFactor", function(assert) {
 		let metadataController = CORA.metadataController(dependencies, spec);
 		assert.ok(metadataController !== undefined);
@@ -193,7 +193,7 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 		});
 		assert.deepEqual(messages[1], {
 			type: "setValue", message: {
-				path: ["@anAttribute"], data: "aFinalValue"
+				path: ["@anAttribute"], dataOrigin: "final", data: "aFinalValue"
 			}
 		});
 		assert.deepEqual(messages[2], {
@@ -209,7 +209,7 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 		});
 		assert.deepEqual(messages[4], {
 			type: "setValue", message: {
-				path: ["@anOtherAttribute"], data: "aOtherFinalValue"
+				path: ["@anOtherAttribute"], dataOrigin: "final", data: "aOtherFinalValue"
 			}
 		});
 		assert.deepEqual(messages[5], {
@@ -254,6 +254,7 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 		assert.deepEqual(messages[1], {
 			type: "setValue", message: {
 				path: ["@anAttributeChoice"],
+				dataOrigin: "startup",
 				data: undefined
 			}
 		});
@@ -270,7 +271,7 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 
 		assert.equal(messages.length, 4);
 	});
-	
+
 	test("testAddAttributes_WithValue", function(assert) {
 		spec.metadataId = "groupIdOneTextChildOneAttributeChoice";
 		spec.data = {
@@ -293,6 +294,7 @@ QUnit.module("metadata/metadataControllerTest.js", hooks => {
 		assert.deepEqual(messages[1], {
 			type: "setValue", message: {
 				path: ["@anAttributeChoice"],
+				dataOrigin: "startup",
 				data: "yes"
 			}
 		});

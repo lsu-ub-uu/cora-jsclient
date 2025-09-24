@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2025 Uppsala University Library
  * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -21,14 +21,25 @@
 QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	const test = QUnit.test;
 	let fixture;
+	let metadataProvider;
+	let clientInstanceProvider;
+	let searchProvider;
+	let textProvider;
+	let providers;
+
 	let dependencies;
 	let spec;
-	let searchProvider;
-	let providers;
 	let searchHandlerFactory;
 	let globalFactories;
 	let pAttributesFactory;
 	let recordPartPermissionCalculatorFactory;
+	let recordGuiFactory;
+	let pRecordLinkViewFactory;
+	let presentationFactory;
+	let ajaxCallFactory;
+
+	let pubSub;
+
 	let dataFromMsgWithLink;
 	let dataFromMsgWithLinkButNoValue;
 	let dataFromMsgWithoutLink;
@@ -51,7 +62,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	};
 
 	const setupProviders = function() {
+		metadataProvider = CORATEST.MetadataProviderStub();
 		searchProvider = CORATEST.searchProviderSpy();
+		textProvider = CORATEST.textProviderStub();
+		clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 		providers = {
 			searchProvider: searchProvider
 		};
@@ -59,28 +73,34 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 	const setupDependencies = function() {
 		pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
+		pRecordLinkViewFactory = CORATEST.standardFactorySpy("pRecordLinkViewSpy");
+		recordGuiFactory = CORATEST.recordGuiFactorySpy();
+		presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
+		pubSub = CORATEST.pubSubSpy();
+		ajaxCallFactory = CORATEST.ajaxCallFactorySpy();
 		dependencies = {
 			providers: providers,
 			globalFactories: globalFactories,
-			clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
-			pRecordLinkViewFactory: CORATEST.standardFactorySpy("pRecordLinkViewSpy"),
+			clientInstanceProvider: clientInstanceProvider,
+			pRecordLinkViewFactory: pRecordLinkViewFactory,
 			pAttributesFactory: pAttributesFactory,
-			metadataProvider: CORATEST.MetadataProviderStub(),
-			pubSub: CORATEST.pubSubSpy(),
-			textProvider: CORATEST.textProviderStub(),
-			presentationFactory: CORATEST.standardFactorySpy("presentationSpy"),
+			metadataProvider: metadataProvider,
+			pubSub: pubSub,
+			textProvider: textProvider,
+			presentationFactory: presentationFactory,
 			jsBookkeeper: CORATEST.jsBookkeeperSpy(),
-			recordGuiFactory: CORATEST.recordGuiFactorySpy(),
-			ajaxCallFactory: CORATEST.ajaxCallFactorySpy(),
+			recordGuiFactory: recordGuiFactory,
+			ajaxCallFactory: ajaxCallFactory,
 			recordTypeProvider: CORATEST.recordTypeProviderSpy()
 		};
 	};
 
 	const setupSpec = function() {
-		recordPartPermissionCalculatorFactory = CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy");
+		recordPartPermissionCalculatorFactory = CORATEST.standardFactorySpy(
+			"recordPartPermissionCalculatorSpy");
 		spec = {
 			path: [],
-			cPresentation: CORA.coraData(dependencies.metadataProvider
+			cPresentation: CORA.coraData(metadataProvider
 				.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink")),
 			recordPartPermissionCalculatorFactory: recordPartPermissionCalculatorFactory
 		};
@@ -147,7 +167,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	};
 
 	const answerCall2 = function(no) {
-		let ajaxCallSpy0 = dependencies.ajaxCallFactory.getFactored(no);
+		let ajaxCallSpy0 = ajaxCallFactory.getFactored(no);
 		let jsonRecord = JSON.stringify({
 			record: CORATEST.recordTypeList.dataList.data[4].record
 		});
@@ -175,7 +195,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkWithImplementingLinkedRecordType", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -184,14 +204,14 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let recordTypeView = pRecordLinkView.getAddedChild(0);
 		assert.strictEqual(recordTypeView.className, "linkedRecordTypeView");
 
 		let recordTypeTextView = recordTypeView.childNodes[0];
-		assert.strictEqual(recordTypeTextView, dependencies.presentationFactory.getFactored(0)
+		assert.strictEqual(recordTypeTextView, presentationFactory.getFactored(0)
 			.getView());
-		let factoredSpecForType = dependencies.presentationFactory.getSpec(0);
+		let factoredSpecForType = presentationFactory.getSpec(0);
 		assert.strictEqual(factoredSpecForType.metadataIdUsedInData, "linkedRecordTypeTextVar");
 
 		let expectedPathForType = ["linkedRecordTypeTextVar"];
@@ -205,10 +225,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(recordIdView.className, "linkedRecordIdView");
 
 		let recordIdTextView = recordIdView.childNodes[0];
-		assert.strictEqual(recordIdTextView, dependencies.presentationFactory.getFactored(1)
+		assert.strictEqual(recordIdTextView, presentationFactory.getFactored(1)
 			.getView());
 
-		let factoredSpec = dependencies.presentationFactory.getSpec(1);
+		let factoredSpec = presentationFactory.getSpec(1);
 		assert.strictEqual(factoredSpec.metadataIdUsedInData, "linkedRecordIdTextVar");
 
 		let expectedPath = ["linkedRecordIdTextVar"];
@@ -220,11 +240,11 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSubscribeToLinkedDataMessages", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 
 		let firstSubsription = subscriptions[0];
@@ -234,11 +254,11 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSubscribeToSetValueOnRecordTypeAndRecordId", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 
 		let firstSubsription1 = subscriptions[1];
@@ -254,10 +274,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSubscribeToSetValueOnRecordTypeAndRecordId", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
 			data: "A new value",
@@ -272,11 +292,11 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSubscribeToSetValueOnRecordId", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let subscriptions = dependencies.pubSub.getSubscriptions();
+		let subscriptions = pubSub.getSubscriptions();
 		assert.deepEqual(subscriptions.length, 4);
 
 		let firstSubsription = subscriptions[3];
@@ -287,10 +307,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testHideOrShowOutputPresentation", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		assert.deepEqual(factoredView.getHideCalled(), 1);
 		assert.deepEqual(factoredView.getShowCalled(), 0);
@@ -315,10 +335,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testNoHideOrShowInputPresentation", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
 			data: "A new value",
@@ -340,20 +360,20 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testGetDependencies", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		assert.strictEqual(pRecordLink.getDependencies(), dependencies);
 	});
 
 	test("testViewIsFactored", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 		assert.strictEqual(pRecordLink.getView(), factoredView.getView());
-		let factoredViewSpec = dependencies.pRecordLinkViewFactory.getSpec(0);
+		let factoredViewSpec = pRecordLinkViewFactory.getSpec(0);
 
 		let expectedViewSpec = {
 			mode: "input",
@@ -393,37 +413,37 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testViewIsFactoredWithoutLabelIfShowLabelFalse", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink"));
 
 		CORA.pRecordLink(dependencies, spec);
 
-		let factoredViewSpec = dependencies.pRecordLinkViewFactory.getSpec(0);
+		let factoredViewSpec = pRecordLinkViewFactory.getSpec(0);
 		assert.deepEqual(factoredViewSpec.label, undefined);
 	});
 
 	test("testViewIsFactoredWithSpecifiedLabelIfSpecifiedLabelTextIsSet", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkSpecifiedLabelTextNoPresentationOfLinkedRecordPLink"));
 
 		CORA.pRecordLink(dependencies, spec);
 
-		let factoredViewSpec = dependencies.pRecordLinkViewFactory.getSpec(0);
+		let factoredViewSpec = pRecordLinkViewFactory.getSpec(0);
 		assert.deepEqual(factoredViewSpec.label, "specifiedLabelText_text");
 	});
 
 	test("testViewIsFactoredWithoutPresentAs", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink"));
 
 		CORA.pRecordLink(dependencies, spec);
 
-		let factoredViewSpec = dependencies.pRecordLinkViewFactory.getSpec(0);
+		let factoredViewSpec = pRecordLinkViewFactory.getSpec(0);
 		assert.deepEqual(factoredViewSpec.presentAs, "link");
 	});
 
 	test("testViewIsFactoredWithPresentAs_WithoutValueView", function(assert) {
-		let presentation = dependencies.metadataProvider
+		let presentation = metadataProvider
 			.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
 		presentation.children.push({
 			name: "presentAs",
@@ -433,17 +453,17 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		CORA.pRecordLink(dependencies, spec);
 
-		let factoredViewSpec = dependencies.pRecordLinkViewFactory.getSpec(0);
+		let factoredViewSpec = pRecordLinkViewFactory.getSpec(0);
 		assert.deepEqual(factoredViewSpec.presentAs, "onlyTranslatedText");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let recordTypeView = pRecordLinkView.getAddedChild(0);
 		assert.strictEqual(recordTypeView, undefined);
 	});
 
 	test("testInitSubscribeToSetValueOnRecordId_translatedTextSet", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
-		let presentation = dependencies.metadataProvider
+		let presentation = metadataProvider
 			.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
 		presentation.children.push({
 			name: "presentAs",
@@ -453,7 +473,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
 			data: "A new value",
@@ -473,7 +493,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 	test("testChangedValueFor_translatedTextSet", function(assert) {
 		dependencies.textProvider = CORATEST.textProviderSpy();
-		let presentation = dependencies.metadataProvider
+		let presentation = metadataProvider
 			.getMetadataById("myLinkNoLabelNoPresentationOfLinkedRecordPLink");
 		presentation.children.push({
 			name: "presentAs",
@@ -483,7 +503,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
-		let factoredView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
 			data: {
@@ -512,7 +532,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let path = [];
 		spec.path = path;
 		CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkViewSpy = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkViewSpy = pRecordLinkViewFactory.getFactored(0);
 
 		let attributesSpec = pAttributesFactory.getSpec(0);
 
@@ -535,7 +555,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSearchHandlerIsFactored", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 
 		CORA.pRecordLink(dependencies, spec);
@@ -545,7 +565,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSearchHandlerIsFactoredWithCorrectSpec", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
@@ -569,7 +589,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSearchHandlerIsFactoredWithCorrectSpec_withResultPresentation", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchAndResultPresentationPLink"));
 
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
@@ -594,41 +614,47 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitSearchHandlerIsAddedToView", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 
 		CORA.pRecordLink(dependencies, spec);
 		let factoredSearchHandler = searchHandlerFactory.getFactored(0);
 		let factoredSearchHandlerView = factoredSearchHandler.getView();
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let addedSearchHandlerView = pRecordLinkView.getAddedSearchHandlerView(0);
 
 		assert.strictEqual(addedSearchHandlerView, factoredSearchHandlerView);
 	});
 
 	test("testChoiceInSearchSendsCorrectMessagesOnPubSub", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let openInfo = CORATEST.openInfoWrittenTextGroupText;
 		pRecordLink.setResultFromSearch(openInfo);
 
-		let message0 = dependencies.pubSub.getMessages()[0];
-		assert.strictEqual(message0.type, "setValue");
-		assert.strictEqual(message0.message.data, "writtenTextGroupText");
+		let expectedMessage0 = {
+			type: "setValue",
+			message: {
+				path: ["linkedRecordIdTextVar"],
+				dataOrigin: "user",
+				data: "writtenTextGroupText"
+			}
+		};
+		assert.deepEqual(pubSub.getMessages()[0], expectedMessage0);
+		
+		let expectedMessage1 = {
+			type: "setValue",
+			message: {
+				path: ["linkedRecordTypeTextVar"],
+				dataOrigin: "user",
+				data: "coraText"
+			}
+		};
+		assert.deepEqual(pubSub.getMessages()[1], expectedMessage1);
 
-		let expectedPath = ["linkedRecordIdTextVar"];
-		assert.stringifyEqual(message0.message.path, expectedPath);
-
-		let messageForType = dependencies.pubSub.getMessages()[1];
-		assert.strictEqual(messageForType.type, "setValue");
-		assert.strictEqual(messageForType.message.data, "coraText");
-
-		let expectedPathForType = ["linkedRecordTypeTextVar"];
-		assert.stringifyEqual(messageForType.message.path, expectedPathForType);
-
-		let message1 = dependencies.pubSub.getMessages()[2];
+		let message1 = pubSub.getMessages()[2];
 		assert.strictEqual(message1.type, "linkedData");
 
 		let typeFromPRecordLinkHandlesLinkingToAbstractType = "coraText";
@@ -653,14 +679,14 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 	test("testChoiceInSearchSendsCorrectLinkedDataMessagesOnPubSubWhenMetadataPointsToAbstract",
 		function(assert) {
-			spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+			spec.cPresentation = CORA.coraData(metadataProvider
 				.getMetadataById("myAbstractLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 			let pRecordLink = CORA.pRecordLink(dependencies, spec);
 			let openInfo = CORATEST.openInfoFilenameTextVar;
 
 			pRecordLink.setResultFromSearch(openInfo);
 
-			let message1 = dependencies.pubSub.getMessages()[2];
+			let message1 = pubSub.getMessages()[2];
 			assert.strictEqual(message1.type, "linkedData");
 
 			let typeFromPRecordLinkHandlesLinkingToAbstractType = "metadataTextVariable";
@@ -684,7 +710,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		});
 
 	test("testInitSearchHandlerNOTFactoredWhenNoSearchLinkInPRecordLink", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 
 		let factoredSearchHandler = searchHandlerFactory.getFactored(0);
@@ -694,7 +720,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 	test("testInitSearchHandlerNOTFactoredWhenNoRightToPerformSearch", function(assert) {
 		spec.cPresentation = CORA
-			.coraData(dependencies.metadataProvider
+			.coraData(metadataProvider
 				.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchNoRightToPerformSearchPLink"));
 
 		let factoredSearchHandler = searchHandlerFactory.getFactored(0);
@@ -703,22 +729,22 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkWithFinalValue", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithFinalValuePLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
 		fixture.appendChild(view);
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let recordIdView = pRecordLinkView.getAddedChild(1);
 		assert.strictEqual(recordIdView.className, "linkedRecordIdView");
 
 		let recordIdTextView = recordIdView.childNodes[0];
 
-		assert.strictEqual(recordIdTextView, dependencies.presentationFactory.getFactored(1)
+		assert.strictEqual(recordIdTextView, presentationFactory.getFactored(1)
 			.getView());
 
-		let factoredSpec = dependencies.presentationFactory.getSpec(1);
+		let factoredSpec = presentationFactory.getSpec(1);
 		assert.strictEqual(factoredSpec.metadataIdUsedInData, "linkedRecordIdTextVar");
 
 		let expectedPath = ["linkedRecordIdTextVar"];
@@ -730,13 +756,13 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkWithPath", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myPathLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
 		fixture.appendChild(view);
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 
 
 		let recordTypeView = pRecordLinkView.getAddedChild(0);
@@ -744,9 +770,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		let recordTypeTextView = recordTypeView.childNodes[0];
 
-		assert.strictEqual(recordTypeTextView, dependencies.presentationFactory.getFactored(0)
+		assert.strictEqual(recordTypeTextView, presentationFactory.getFactored(0)
 			.getView());
-		let factoredSpec1 = dependencies.presentationFactory.getSpec(0);
+		let factoredSpec1 = presentationFactory.getSpec(0);
 		assert.strictEqual(factoredSpec1.metadataIdUsedInData, "linkedRecordTypeTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec1.cPresentation), "linkedRecordTypeOutputPVar");
 		let expectedTypePath = ["linkedRecordTypeTextVar"];
@@ -756,9 +782,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(recordIdView.className, "linkedRecordIdView");
 
 		let recordIdTextView = recordIdView.childNodes[0];
-		assert.strictEqual(recordIdTextView, dependencies.presentationFactory.getFactored(1)
+		assert.strictEqual(recordIdTextView, presentationFactory.getFactored(1)
 			.getView());
-		let factoredSpec = dependencies.presentationFactory.getSpec(1);
+		let factoredSpec = presentationFactory.getSpec(1);
 		assert.strictEqual(factoredSpec.metadataIdUsedInData, "linkedRecordIdTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec.cPresentation), "linkedRecordIdPVar");
 		let expectedPath = ["linkedRecordIdTextVar"];
@@ -769,9 +795,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 
 		let repeatIdTextView2 = repeatIdView.childNodes[0];
-		assert.strictEqual(repeatIdTextView2, dependencies.presentationFactory.getFactored(2)
+		assert.strictEqual(repeatIdTextView2, presentationFactory.getFactored(2)
 			.getView());
-		let factoredSpec2 = dependencies.presentationFactory.getSpec(2);
+		let factoredSpec2 = presentationFactory.getSpec(2);
 		assert.strictEqual(factoredSpec2.metadataIdUsedInData, "linkedRepeatIdTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec2.cPresentation), "linkedRepeatIdPVar");
 		let expectedPath2 = ["linkedRepeatIdTextVar"];
@@ -782,22 +808,22 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkOutput", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
 		fixture.appendChild(view);
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 
 
 		let recordIdView = pRecordLinkView.getAddedChild(1);
 		assert.strictEqual(recordIdView.className, "linkedRecordIdView");
 		let recordIdTextView = recordIdView.childNodes[0];
 
-		assert.strictEqual(recordIdTextView, dependencies.presentationFactory.getFactored(1)
+		assert.strictEqual(recordIdTextView, presentationFactory.getFactored(1)
 			.getView());
-		let factoredSpec = dependencies.presentationFactory.getSpec(1);
+		let factoredSpec = presentationFactory.getSpec(1);
 		assert.strictEqual(factoredSpec.metadataIdUsedInData, "linkedRecordIdTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec.cPresentation), "linkedRecordIdOutputPVar");
 		let expectedPath = ["linkedRecordIdTextVar"];
@@ -808,9 +834,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let recordTypeTextView = recordTypeView.childNodes[0];
 
 
-		assert.strictEqual(recordTypeTextView, dependencies.presentationFactory.getFactored(0)
+		assert.strictEqual(recordTypeTextView, presentationFactory.getFactored(0)
 			.getView());
-		let factoredSpecForType = dependencies.presentationFactory.getSpec(0);
+		let factoredSpecForType = presentationFactory.getSpec(0);
 		assert.strictEqual(factoredSpecForType.metadataIdUsedInData, "linkedRecordTypeTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpecForType.cPresentation), "linkedRecordTypeOutputPVar");
 		let expectedPathForType = ["linkedRecordTypeTextVar"];
@@ -820,13 +846,13 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkWithPathOutput", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myPathLinkNoPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
 		fixture.appendChild(view);
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 
 		let recordTypeView = pRecordLinkView.getAddedChild(0);
 		assert.strictEqual(recordTypeView.className, "linkedRecordTypeView");
@@ -834,9 +860,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let recordTypeTextView = recordTypeView.childNodes[0];
 
 
-		assert.strictEqual(recordTypeTextView, dependencies.presentationFactory.getFactored(0)
+		assert.strictEqual(recordTypeTextView, presentationFactory.getFactored(0)
 			.getView());
-		let factoredSpecRecordType = dependencies.presentationFactory.getSpec(0);
+		let factoredSpecRecordType = presentationFactory.getSpec(0);
 		assert.strictEqual(factoredSpecRecordType.metadataIdUsedInData, "linkedRecordTypeTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpecRecordType.cPresentation), "linkedRecordTypeOutputPVar");
 		assert.stringifyEqual(factoredSpecRecordType.path, ["linkedRecordTypeTextVar"]);
@@ -846,9 +872,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		let recordIdTextView = recordIdView.childNodes[0];
 
-		assert.strictEqual(recordIdTextView, dependencies.presentationFactory.getFactored(1)
+		assert.strictEqual(recordIdTextView, presentationFactory.getFactored(1)
 			.getView());
-		let factoredSpec = dependencies.presentationFactory.getSpec(1);
+		let factoredSpec = presentationFactory.getSpec(1);
 		assert.strictEqual(factoredSpec.metadataIdUsedInData, "linkedRecordIdTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec.cPresentation), "linkedRecordIdOutputPVar");
 		assert.stringifyEqual(factoredSpec.path, ["linkedRecordIdTextVar"]);
@@ -859,9 +885,9 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 
 		let repeatIdTextView2 = repeatIdView.childNodes[0];
-		assert.strictEqual(repeatIdTextView2, dependencies.presentationFactory.getFactored(2)
+		assert.strictEqual(repeatIdTextView2, presentationFactory.getFactored(2)
 			.getView());
-		let factoredSpec2 = dependencies.presentationFactory.getSpec(2);
+		let factoredSpec2 = presentationFactory.getSpec(2);
 		assert.strictEqual(factoredSpec2.metadataIdUsedInData, "linkedRepeatIdTextVar");
 		assert.strictEqual(getIdFromCPresentation(factoredSpec2.cPresentation), "linkedRepeatIdOutputPVar");
 		assert.stringifyEqual(factoredSpec2.path, ["linkedRepeatIdTextVar"]);
@@ -871,7 +897,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroup", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -885,19 +911,19 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 		assert.strictEqual(linkedRecordView.className, "recordViewer");
 
 		assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
 		assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0), undefined);
 
-		assert.strictEqual(dependencies.recordGuiFactory.getSpec(0).metadataId,
+		assert.strictEqual(recordGuiFactory.getSpec(0).metadataId,
 			"metadataTextVariableGroup");
 	});
 
 	test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroupNoData", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -911,7 +937,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 		assert.strictEqual(linkedRecordView, undefined);
 
@@ -920,7 +946,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 	test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroupNoActionLinks", function(
 		assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -932,7 +958,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 		assert.strictEqual(linkedRecordView, undefined);
 
@@ -943,7 +969,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		"testInitRecordLinkOutputWithLinkedRecordPresentationsGroupWrongLinkedRecordType",
 		function(assert) {
 			spec.cPresentation = CORA
-				.coraData(dependencies.metadataProvider
+				.coraData(metadataProvider
 					.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLinkWrongLinkedRecordType"));
 			let pRecordLink = CORA.pRecordLink(dependencies, spec);
 			let view = pRecordLink.getView();
@@ -987,7 +1013,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 			assert.strictEqual(pRecordLink.type, "pRecordLink");
 			assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-			let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+			let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 			let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 			assert.strictEqual(linkedRecordView, undefined);
 
@@ -996,7 +1022,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		});
 
 	test("testRecordLinkWithLinkedRecordPresentationAbstractType", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -1010,22 +1036,22 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 		assert.strictEqual(linkedRecordView.className, "recordViewer");
 
 		assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
 		assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0), undefined);
 
-		assert.strictEqual(dependencies.recordGuiFactory.getSpec(0).metadataId,
+		assert.strictEqual(recordGuiFactory.getSpec(0).metadataId,
 			"metadataTextVariableGroup");
 	});
 
 	test("testHandleMsgWithLinkShowsOpenLinkInView", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let dataFromMsg = dataFromMsgWithLink;
 
 		assert.strictEqual(pRecordLinkView.getShowOpenLinkedRecord(), 0);
@@ -1037,10 +1063,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testHandleMsgWithLinkHidesOpenLinkInViewWhenFirstShown", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let dataFromMsg = dataFromMsgWithoutLink;
 
 		assert.strictEqual(pRecordLinkView.getShowOpenLinkedRecord(), 0);
@@ -1059,10 +1085,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testHandleMsgWithLinkHidesSearch", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let dataFromMsg = dataFromMsgWithLink;
 
 		assert.strictEqual(pRecordLinkView.getHideSearchHandlerView(), 0);
@@ -1072,10 +1098,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testHandleMsgWithLinkButNoValueUsedInCopyAsNewShowsSearch", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordWithSearchPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let dataFromMsg = dataFromMsgWithLinkButNoValue;
 
 		assert.strictEqual(pRecordLinkView.getHideSearchHandlerView(), 0);
@@ -1085,7 +1111,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testOpenLinkedRecord", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordOutputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let dataFromMsg = dataFromMsgWithLink;
@@ -1096,7 +1122,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 			loadInBackground: "false"
 		});
 
-		let jsClient = dependencies.clientInstanceProvider.getJsClient();
+		let jsClient = clientInstanceProvider.getJsClient();
 		let expectedOpenInfo = {
 			readLink: dataFromMsg.data.actionLinks.read,
 			loadInBackground: "false"
@@ -1112,16 +1138,16 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testClearLinkedRecordId", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordInputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 
 		assert.strictEqual(pRecordLinkView.getChildrenShown(), 0);
 
 		pRecordLink.clearLinkedRecordId();
 
-		let message0 = dependencies.pubSub.getMessages()[0];
+		let message0 = pubSub.getMessages()[0];
 		assert.strictEqual(message0.type, "setValue");
 		assert.strictEqual(message0.message.data, "");
 
@@ -1132,7 +1158,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	});
 
 	test("testInitRecordLinkOutputWithLinkedRecordPresentationsGroup", function(assert) {
-		spec.cPresentation = CORA.coraData(dependencies.metadataProvider
+		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkPresentationOfLinkedRecordInputPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 		let view = pRecordLink.getView();
@@ -1146,14 +1172,13 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(pRecordLink.type, "pRecordLink");
 		assert.deepEqual(view.className, "pRecordLinkViewSpyView");
 
-		let pRecordLinkView = dependencies.pRecordLinkViewFactory.getFactored(0);
+		let pRecordLinkView = pRecordLinkViewFactory.getFactored(0);
 		let linkedRecordView = pRecordLinkView.getAddedLinkedPresentation(0);
 		assert.strictEqual(linkedRecordView.className, "recordViewer");
 
 		assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
 
-		assert.strictEqual(dependencies.recordGuiFactory.getSpec(0).metadataId,
-			"metadataTextVariableGroup");
+		assert.strictEqual(recordGuiFactory.getSpec(0).metadataId, "metadataTextVariableGroup");
 
 		assert.strictEqual(pRecordLinkView.getChildrenHidden(), 1);
 		assert.strictEqual(pRecordLinkView.getClearLinkedRecordIdMethods(0),
@@ -1167,7 +1192,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		event.ctrlKey = true;
 		pRecordLink.openTextIdRecord(event);
 
-		let jsClient = dependencies.clientInstanceProvider.getJsClient();
+		let jsClient = clientInstanceProvider.getJsClient();
 		let expectedOpenInfo = {
 			readLink: {
 				requestMethod: "GET",
@@ -1193,7 +1218,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		event.ctrlKey = true;
 		pRecordLink.openDefTextIdRecord(event);
 
-		let jsClient = dependencies.clientInstanceProvider.getJsClient();
+		let jsClient = clientInstanceProvider.getJsClient();
 		let expectedOpenInfo = {
 			readLink: {
 				requestMethod: "GET",
@@ -1220,7 +1245,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		event.ctrlKey = true;
 		pRecordLink.openMetadataIdRecord(event);
 
-		let jsClient = dependencies.clientInstanceProvider.getJsClient();
+		let jsClient = clientInstanceProvider.getJsClient();
 		let expectedOpenInfo = {
 			readLink: {
 				requestMethod: "GET",
@@ -1247,7 +1272,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		event.ctrlKey = true;
 		pRecordLink.openPresentationIdRecord(event);
 
-		let jsClient = dependencies.clientInstanceProvider.getJsClient();
+		let jsClient = clientInstanceProvider.getJsClient();
 		let expectedOpenInfo = {
 			readLink: {
 				requestMethod: "GET",

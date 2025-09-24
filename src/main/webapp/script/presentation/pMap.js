@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2019, 2020 Uppsala University Library
+ * Copyright 2018, 2019, 2020, 2025 Uppsala University Library
  * Copyright 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -20,11 +20,11 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pMap = function(dependencies, spec) {
-		let metadataProvider = dependencies.metadataProvider;
-		let textProvider = dependencies.textProvider;
-		let pubSub = dependencies.pubSub;
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
+		const pubSub = dependencies.pubSub;
 
-		let path = spec.path;
+		const path = spec.path;
 
 		let mapStarted = false;
 		let longitudeValue = "";
@@ -239,14 +239,16 @@ var CORA = (function(cora) {
 
 		const publishLatLngValues = function(lat, lng) {
 			let latitudeData = {
-				data: lat,
-				path: latitudePath
+				path: latitudePath,
+				dataOrigin: "user",
+				data: lat
 			};
 			pubSub.publish("setValue", latitudeData);
 
 			let longitudeData = {
-				data: lng,
-				path: longitudePath
+				path: longitudePath,
+				dataOrigin: "user",
+				data: lng
 			};
 			pubSub.publish("setValue", longitudeData);
 		}

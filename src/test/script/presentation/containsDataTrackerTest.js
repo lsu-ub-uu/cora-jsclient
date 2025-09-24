@@ -81,9 +81,9 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, containsDataTracker.possiblySubscribeOnAddMsg);
 	});
-	
+
 	test("testInitSubscribesToAdd_forRepeatingElementsAkaNoTopLevelMetadataIds", function(assert) {
-		spec.topLevelMetadataIds=undefined;
+		spec.topLevelMetadataIds = undefined;
 		let containsDataTracker = createContainsDataTracker();
 
 		let subscriptions = pubSub.getSubscriptions();
@@ -93,7 +93,7 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, containsDataTracker.handleMsgToDeterminDataState);
 	});
-	
+
 
 	test("testSubscribesWhenAdd_SameId", function(assert) {
 		let containsDataTracker = createContainsDataTracker();
@@ -208,13 +208,14 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 		assert.strictEqual(subscriptions.length, 1);
 	});
 
-	test("testCallToMethodToCallOnContainsDataChange_onMessageForNewValue", function(assert) {
+	test("testCallToMethodToCallOnContainsDataChange_onMessageForNewValue_startup", function(assert) {
 		let containsDataTracker = createContainsDataTracker();
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
-			data: "someValue",
-			path: []
+			path: [],
+			dataOrigin: "startup",
+			data: "someValue"
 		};
 
 		assert.strictEqual(containsData, undefined);
@@ -223,14 +224,49 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		assert.strictEqual(containsData, true);
 	});
+	
+	test("testCallToMethodToCallOnContainsDataChange_onMessageForNewValue_user", function(assert) {
+		let containsDataTracker = createContainsDataTracker();
+
+		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+		let dataFromMsg = {
+			path: [],
+			dataOrigin: "user",
+			data: "someValue"
+		};
+
+		assert.strictEqual(containsData, undefined);
+
+		containsDataTracker.handleMsgToDeterminDataState(dataFromMsg, msg);
+
+		assert.strictEqual(containsData, true);
+	});
+	
+	test("testCallToMethodToCallOnContainsDataChange_onMessageForNewValue_final", function(assert) {
+		let containsDataTracker = createContainsDataTracker();
+
+		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
+		let dataFromMsg = {
+			path: [],
+			dataOrigin: "final",
+			data: "someValue"
+		};
+
+		assert.strictEqual(containsData, undefined);
+
+		containsDataTracker.handleMsgToDeterminDataState(dataFromMsg, msg);
+
+		assert.strictEqual(containsData, undefined);
+	});
 
 	test("testCallToMethodToCallOnContainsDataChange_onMessageForBlank", function(assert) {
 		let containsDataTracker = createContainsDataTracker();
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
-			data: "",
-			path: []
+			path: [],
+			dataOrigin: "startup",
+			data: ""
 		};
 
 		assert.strictEqual(containsData, undefined);
@@ -245,8 +281,9 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
-			data: "someValue",
-			path: []
+			path: [],
+			dataOrigin: "startup",
+			data: "someValue"
 		};
 		assert.strictEqual(containsData, undefined);
 
@@ -265,8 +302,9 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
-			data: "someValue",
-			path: ["groupWithOneCollectionVarChildGroup.1", "someNameInData"]
+			path: ["groupWithOneCollectionVarChildGroup.1", "someNameInData"],
+			dataOrigin: "startup",
+			data: "someValue"
 		};
 
 		assert.strictEqual(containsData, undefined);
@@ -292,6 +330,7 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
+			dataOrigin: "startup",
 			data: "someValue"
 		};
 		assert.strictEqual(containsData, undefined);
@@ -302,6 +341,7 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		let msg2 = "root/groupIdOneTextChild/someNameInData/setValue";
 		let dataFromMsg2 = {
+			dataOrigin: "startup",
 			data: "someValue2"
 		};
 
@@ -330,8 +370,9 @@ QUnit.module("presentation/containsDataTracker.js", hooks => {
 
 		let msg = "root/groupWithOneCollectionVarChildGroup.1/someNameInData/setValue";
 		let dataFromMsg = {
+			path: [],
+			dataOrigin: "startup",
 			data: "someValue",
-			path: []
 		};
 
 		assert.strictEqual(containsData, undefined);

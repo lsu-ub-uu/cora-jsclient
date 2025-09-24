@@ -33,8 +33,10 @@ var CORA = (function(cora) {
 
 		const subscribeToMessagesForPath = function() {
 			if (topLevelMetadataIds) {
+				console.log("subscribe add: ", path)
 				pubSub.subscribe("add", path, undefined, possiblySubscribeOnAddMsg);
 			} else {
+				console.log("subscribe *: ", path)
 				pubSub.subscribe("*", path, undefined, handleMsgToDeterminDataState);
 			}
 		};
@@ -43,6 +45,7 @@ var CORA = (function(cora) {
 			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
 				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
 					dataFromMsg.metadataId, dataFromMsg.repeatId, path);
+				console.log("subscribe * lower: ", newPath)
 				pubSub.subscribe("*", newPath, undefined, handleMsgToDeterminDataState);
 			}
 		};
@@ -74,8 +77,10 @@ var CORA = (function(cora) {
 
 		const handleNewValue = function(dataFromMsg, msgAsArray) {
 			if (dataFromMsg.data !== "") {
-				updateViewForData();
-				findOrAddPathToStored(msgAsArray);
+				if (dataFromMsg.dataOrigin !== "final") {
+					updateViewForData();
+					findOrAddPathToStored(msgAsArray);
+				}
 			} else {
 				removeAndSetState(msgAsArray);
 			}

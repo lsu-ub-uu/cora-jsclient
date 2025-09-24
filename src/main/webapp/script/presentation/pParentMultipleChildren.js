@@ -26,6 +26,8 @@ var CORA = (function(cora) {
 		const cParentPresentation = spec.cParentPresentation;
 		const path = spec.path;
 		const metadataId = child.metadataId;
+		const presentationCounter = spec.presentationCounter;
+		console.log(presentationCounter)
 
 		let presentationId;
 		let view;

@@ -69,8 +69,8 @@ QUnit.module("presentation/pParentVarTest.js", {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pVarViewFactory = CORATEST.standardFactorySpy("pVarViewSpy");
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		
-		
+
+
 		this.dependencies = {
 			clientInstanceProvider: CORATEST.clientInstanceProviderSpy(),
 			metadataProvider: this.metadataProvider,
@@ -88,30 +88,30 @@ QUnit.module("presentation/pParentVarTest.js", {
 			cPresentation: CORA.coraData(this.metadataProvider
 				.getMetadataById("pVarTextVariableId"))
 		};
-		
-		this.createChildSpy = function (){
-			let lastValueSentToValidateTypeSpecificValue="no call to validateTypeSpecificValue";
-			let lastInfoValueForViewMode="";
-			const addTypeSpecificInfoToViewSpec= function (mode, pVarViewSpec) {
+
+		this.createChildSpy = function() {
+			let lastValueSentToValidateTypeSpecificValue = "no call to validateTypeSpecificValue";
+			let lastInfoValueForViewMode = "";
+			const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 				lastInfoValueForViewMode = mode;
 				pVarViewSpec.childExtra = "added by child";
 			};
-			const validateTypeSpecificValue= function (value) {
-				lastValueSentToValidateTypeSpecificValue=value;
+			const validateTypeSpecificValue = function(value) {
+				lastValueSentToValidateTypeSpecificValue = value;
 				return true;
 			};
-			const getLastValueSentToValidateTypeSpecificValue= function (value) {
+			const getLastValueSentToValidateTypeSpecificValue = function(value) {
 				return lastValueSentToValidateTypeSpecificValue;
 			};
-			const autoFormatEnteredValue= function (valueFromView) {
+			const autoFormatEnteredValue = function(valueFromView) {
 				return valueFromView;
 			};
-			let lastTransformValueForViewMode="";
-			const transformValueForView= function (mode, valueFromView) {
-				lastTransformValueForViewMode=mode;
-				return "Transformed "+valueFromView;
+			let lastTransformValueForViewMode = "";
+			const transformValueForView = function(mode, valueFromView) {
+				lastTransformValueForViewMode = mode;
+				return "Transformed " + valueFromView;
 			};
-			const getLastTransformValueForViewMode= function (value) {
+			const getLastTransformValueForViewMode = function(value) {
 				return lastTransformValueForViewMode;
 			};
 			return {
@@ -164,14 +164,14 @@ QUnit.test("testInitText2", function(assert) {
 QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 	this.spec.path = ["one", "two"];
 	let child = this.createChildSpy();
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType pVarTextVariableId",
-		valueViewClassName: "onetwo", 
+		valueViewClassName: "onetwo",
 		label: "Exempel textvariabel",
 		id: "333",
 		mode: "input",
@@ -185,14 +185,14 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 		placeholderText: "Skriv din text här",
 		presentationId: "pVarTextVariableId"
 	};
-	
+
 	expectedPVarViewSpec.childExtra = "added by child";
-	
+
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{
-		text: "textId: textVariableIdText",
-		onclickMethod: pParentVar.openTextIdRecord
-	}, {
+			text: "textId: textVariableIdText",
+			onclickMethod: pParentVar.openTextIdRecord
+		}, {
 		text: "defTextId: textVariableIdDefText",
 		onclickMethod: pParentVar.openDefTextIdRecord
 	}, {
@@ -211,8 +211,8 @@ QUnit.test("testFactoredViewCorrectlyForInputVariable", function(assert) {
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdShowLabelFalse"))
-	
+		.getMetadataById("pVarTextVariableIdShowLabelFalse"))
+
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -222,8 +222,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableShowLabelFalse", functi
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableSpecifiedLabelText", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdSpecifiedLabelText"))
-	
+		.getMetadataById("pVarTextVariableIdSpecifiedLabelText"))
+
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -233,8 +233,8 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableSpecifiedLabelText", fu
 QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyTextId", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdInputPassword"))
-	
+		.getMetadataById("pVarTextVariableIdInputPassword"))
+
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -242,8 +242,9 @@ QUnit.test("testFactoredViewCorrectlyForInputTextVariableNoEmptyTextId", functio
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {
+	this.spec.metadataIdUsedInData = "textVariableWithAnAttribute";
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 
 	let attributesSpec = this.pAttributesFactory.getSpec(0);
@@ -254,11 +255,20 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 	assert.strictEqual(attributesSpec.toShow, "all");
 });
 
+QUnit.test("testFactoredPAttributes_notFactoredIfNoAttributes", function(assert) {
+	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+
+	this.pVarViewFactory.getFactored(0);
+
+	assert.strictEqual(this.pAttributesFactory.getNoOfFactored(), 0);
+});
+
 QUnit.test("testFactoredPAttributes_attributesToShow_sentOnToAttributesFactory", function(assert) {
+	this.spec.metadataIdUsedInData = "textVariableWithAnAttribute";
 	let attributesToShow = {
-							name: "attributesToShow",
-							value: "selectable"
-						};
+		name: "attributesToShow",
+		value: "selectable"
+	};
 	this.spec.cPresentation.getData().children.push(attributesToShow);
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
@@ -274,19 +284,19 @@ QUnit.test("testMetadataIdUsedInData_IsUsedAndNot_PresentationOf", function(asse
 
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableIdSpecifiedLabelText"));
-	
+		.getMetadataById("pVarTextVariableIdSpecifiedLabelText"));
+
 	CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	assert.strictEqual(this.metadataProvider.getRequestedMetadataIds().pop(), "textVariableId");
 });
 
 QUnit.test("testInitTextArea", function(assert) {
 	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
@@ -300,7 +310,7 @@ QUnit.test("testInitTextAreaWithFirstLevelPath", function(assert) {
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
 
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testVariableSubscription(pParentVar, this.dependencies, firstLevelPath, expectedDisablePath, assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
@@ -323,7 +333,7 @@ QUnit.test("testInitWithFirstLevelPathWithRepeatId", function(assert) {
 
 QUnit.test("testTextAreaWithTwoLevelPath", function(assert) {
 	let firstLevelPath = ["recordInfo", "dataDivider"];
-	let expectedDisablePath =firstLevelPath;
+	let expectedDisablePath = firstLevelPath;
 	this.spec.path = firstLevelPath;
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
 
@@ -337,7 +347,7 @@ QUnit.test("testTextAreaWithTwoLevelPath", function(assert) {
 
 QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 	let firstLevelPath = ["recordInfo", "dataDivider", "linkedRecordType"];
-	let expectedDisablePath =firstLevelPath;
+	let expectedDisablePath = firstLevelPath;
 	this.spec.path = firstLevelPath;
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
 
@@ -351,7 +361,7 @@ QUnit.test("testInitTextAreaWithThreeLevelPath", function(assert) {
 
 QUnit.test("testInitTextAreaWithPathWithRepeatId", function(assert) {
 	let firstLevelPath = ["userRole.0", "userRole"];
-	let expectedDisablePath =firstLevelPath;
+	let expectedDisablePath = firstLevelPath;
 	this.spec.path = firstLevelPath;
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
 
@@ -392,16 +402,16 @@ QUnit.test("testInitTextAreaWithPathWithAttribute", function(assert) {
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert) {
-	this.spec.path = ["one","two"];
+	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById("textVariableIdTextAreaPVar"))
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType textVariableIdTextAreaPVar",
-		valueViewClassName: "onetwo", 
+		valueViewClassName: "onetwo",
 		label: "Exempel textvariabel",
 		id: "333",
 		mode: "input",
@@ -416,7 +426,7 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 		presentationId: "textVariableIdTextAreaPVar"
 	};
 	expectedPVarViewSpec.childExtra = "added by child";
-	
+
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -436,17 +446,17 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 });
 
 QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
-	this.spec.path = ["one","two"];
+	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
 		"textVariableIdShowTextAreaFalsePVar"))
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType textVariableIdShowTextAreaFalsePVar",
-		valueViewClassName: "onetwo", 
+		valueViewClassName: "onetwo",
 		label: "Exempel textvariabel",
 		id: "333",
 		mode: "input",
@@ -461,7 +471,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 		presentationId: "textVariableIdShowTextAreaFalsePVar"
 	};
 	expectedPVarViewSpec.childExtra = "added by child";
-	
+
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -478,7 +488,7 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 		onclickMethod: pParentVar.openPresentationIdRecord
 	});
 	assert.deepEqual(pVarViewSpy.getSpec(), expectedPVarViewSpec);
-	
+
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testVariableSubscription(pParentVar, this.dependencies, this.spec.path, this.spec.path, assert);
 	CORATEST.testParentVariableMetadata(pParentVar, assert);
@@ -486,17 +496,17 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 });
 
 QUnit.test("testInitTextInputFormatPassword", function(assert) {
-	this.spec.path = ["one","two"];
+	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
 		"pVarTextVariableIdInputPassword"))
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType pVarTextVariableId",
-		valueViewClassName: "onetwo", 
+		valueViewClassName: "onetwo",
 		label: "Exempel textvariabel",
 		id: "333",
 		mode: "input",
@@ -510,7 +520,7 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 		presentationId: "pVarTextVariableId",
 	};
 	expectedPVarViewSpec.childExtra = "added by child";
-	
+
 	expectedPVarViewSpec.info.technicalInfo.push({
 		text: "textId: textVariableIdText",
 		onclickMethod: pParentVar.openTextIdRecord
@@ -535,20 +545,20 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 });
 
 QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", function(assert) {
-	this.spec.path = ["one","two"];
+	this.spec.path = ["one", "two"];
 	this.spec.cPresentation = CORA.coraData(this.metadataProvider.getMetadataById(
 		"pVarTextVariableIdNoRecordInfoAsInFakePresentationForAttributes"))
-	
+
 	this.spec.path = ["one", "two.0", "three.9"];
 	let child = this.createChildSpy();
-	
+
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.deepEqual(pVarViewSpy.type, "pVarViewSpy");
 	let expectedPVarViewSpec = {
 		className: "pVar fakeChildType",
-		valueViewClassName: "onetwo-0three-9", 
+		valueViewClassName: "onetwo-0three-9",
 		label: "Exempel textvariabel",
 		id: "333",
 		mode: "input",
@@ -561,14 +571,14 @@ QUnit.test("testInitTextInputNoRecordInfoAsInFakePresentationForAttributes", fun
 		onkeyupFunction: pParentVar.onkeyup,
 		placeholderText: "Skriv din text här",
 	};
-	
+
 	expectedPVarViewSpec.childExtra = "added by child";
-	
+
 	expectedPVarViewSpec.info.technicalInfo.push(
 		{
-		text: "textId: textVariableIdText",
-		onclickMethod: pParentVar.openTextIdRecord
-	}, {
+			text: "textId: textVariableIdText",
+			onclickMethod: pParentVar.openTextIdRecord
+		}, {
 		text: "defTextId: textVariableIdDefText",
 		onclickMethod: pParentVar.openDefTextIdRecord
 	}, {
@@ -587,15 +597,15 @@ QUnit.test("testSetValueInput", function(assert) {
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getValue(), "Transformed A Value");
-	
+
 	assert.strictEqual(childSpy.getLastTransformValueForViewMode(), "input");
 });
 
 QUnit.test("testSetValueNoChangeToShowHideInInputMode", function(assert) {
 	const pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	pParentVar.setValue("A Value");
-	
+
 	let spyView = this.pVarViewFactory.getFactored(0);
 	assert.strictEqual(spyView.getShowCalled(), 0);
 	assert.strictEqual(spyView.getHideCalled(), 0);
@@ -616,7 +626,7 @@ QUnit.test("testHandleMessage", function(assert) {
 QUnit.test("testChangedValueEmpty", function(assert) {
 	this.spec.path = ["one", "two"];
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let data = {
 		"data": "notEmpty",
 		"path": ["one", "two"]
@@ -630,42 +640,42 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 
 QUnit.test("testAutoFormatEnteredValueEmptyDoNothing", function(assert) {
 	let child = this.createChildSpy();
-	child.autoFormatEnteredValue= function (valueFromView) {
+	child.autoFormatEnteredValue = function(valueFromView) {
 		return "autoFormatEnteredValue by child";
 	};
 	this.spec.path = ["one", "two"];
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
-	
+
 	let data = {
 		"data": "",
 		"path": ["one", "two"]
 	};
 	pParentVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	
+
 	pParentVar.onBlur("");
-	
+
 	assert.equal(pVarViewSpy.getValue(), "");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
 
 QUnit.test("testAutoFormatEnteredValueEmptyDoNothing", function(assert) {
 	let child = this.createChildSpy();
-	child.autoFormatEnteredValue= function (valueFromView) {
+	child.autoFormatEnteredValue = function(valueFromView) {
 		return "autoFormatEnteredValue by child";
 	};
 	this.spec.path = ["one", "two"];
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, child);
-	
+
 	let data = {
 		"data": "Not empty",
 		"path": ["one", "two"]
 	};
 	pParentVar.handleMsg(data);
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	
+
 	pParentVar.onBlur("some value");
-	
+
 	assert.equal(pVarViewSpy.getValue(), "autoFormatEnteredValue by child");
 	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "autoFormatEnteredValue by child",
 		["one", "two"], assert);
@@ -673,7 +683,7 @@ QUnit.test("testAutoFormatEnteredValueEmptyDoNothing", function(assert) {
 
 QUnit.test("testChangedValueOk", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnblurWithValue("hej");
 	assert.equal(pVarViewSpy.getState(), "ok");
@@ -685,26 +695,26 @@ QUnit.test("testChangedValueOk", function(assert) {
 
 QUnit.test("testChangedValueError", function(assert) {
 	const childSpy = this.createChildSpy();
-	childSpy.validateTypeSpecificValue = function(){return false;}
+	childSpy.validateTypeSpecificValue = function() { return false; }
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, childSpy);
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnblurWithValue("hej####/(&/%&/¤/");
 	assert.equal(pVarViewSpy.getState(), "error");
 	assert.equal(pParentVar.getState(), "error");
 	CORATEST.testJSBookkeeperNoCall(this.jsBookkeeper, assert);
 });
- 
+
 QUnit.test("testHandleValidationError", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let message = {
 		"metadataId": "textVariableId",
 		"path": []
 	};
-	
+
 	pParentVar.handleValidationError(message);
-	
+
 	assert.equal(pParentVar.getState(), "error");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getState(), "error");
@@ -717,9 +727,9 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 		"metadataId": "textVariableId",
 		"path": []
 	};
-	
+
 	pParentVar.handleValidationError(message);
-	
+
 	assert.equal(pParentVar.getState(), "error");
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	assert.equal(pVarViewSpy.getState(), "error");
@@ -735,18 +745,18 @@ QUnit.test("testHandleValidationErrorResetBySetValue", function(assert) {
 
 QUnit.test("testChangedValueEmpty", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	let data = {
 		"data": "notEmpty",
 		"path": []
 	};
-	
+
 	pParentVar.handleMsg(data);
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	
+
 	pVarViewSpy.callOnkeyupWithValue("");
-	
+
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "", [], assert);
@@ -755,25 +765,25 @@ QUnit.test("testChangedValueEmpty", function(assert) {
 QUnit.test("testChangedValueNoCallToChildValidateTypeSpecificValue", function(assert) {
 	const childSpy = this.createChildSpy();
 	CORA.pParentVar(this.dependencies, this.spec, childSpy);
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	
+
 	pVarViewSpy.callOnkeyupWithValue("");
-	
-	assert.strictEqual(childSpy.getLastValueSentToValidateTypeSpecificValue(), 
+
+	assert.strictEqual(childSpy.getLastValueSentToValidateTypeSpecificValue(),
 		"no call to validateTypeSpecificValue");
 });
 
 QUnit.test("testChangedValueOk", function(assert) {
 	const childSpy = this.createChildSpy();
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, childSpy);
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
-	
+
 	pVarViewSpy.callOnkeyupWithValue("hej");
-	
+
 	assert.strictEqual(childSpy.getLastValueSentToValidateTypeSpecificValue(), "hej");
-	
+
 	assert.equal(pVarViewSpy.getState(), "ok");
 	assert.equal(pParentVar.getState(), "ok");
 	CORATEST.testJSBookkeeperOneCallWithValue(this.jsBookkeeper, "hej", [], assert);
@@ -783,9 +793,9 @@ QUnit.test("testChangedValueOk", function(assert) {
 
 QUnit.test("testChangedValueError", function(assert) {
 	const childSpy = this.createChildSpy();
-	childSpy.validateTypeSpecificValue = function(){return false;}
+	childSpy.validateTypeSpecificValue = function() { return false; }
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, childSpy);
-	
+
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
 	pVarViewSpy.callOnkeyupWithValue("hej####/(&/%&/¤/");
 	assert.equal(pVarViewSpy.getState(), "errorStillFocused");
@@ -863,7 +873,7 @@ QUnit.test("testOpenMetadataIdRecord", function(assert) {
 		},
 		"loadInBackground": "false"
 	};
-	
+
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, "true");
 
@@ -885,7 +895,7 @@ QUnit.test("testOpenPresentationIdRecord", function(assert) {
 		readLink: {
 			requestMethod: "GET",
 			rel: "read",
-			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/"
 				+ "pVarTextVariableId",
 			accept: "application/vnd.cora.record+json"
 		},
@@ -905,12 +915,12 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 
 	let event = document.createEvent('Event');
 	let link = {
-			requestMethod: "GET",
-			rel: "read",
-			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
-				+ "pVarTextVariableId",
-			accept: "application/vnd.cora.record+json"
-		};
+		requestMethod: "GET",
+		rel: "read",
+		url: "http://fake.from.metadataproviderstub/rest/record/sometype/"
+			+ "pVarTextVariableId",
+		accept: "application/vnd.cora.record+json"
+	};
 	event.ctrlKey = true;
 	pParentVar.openLinkedRecordForLink(event, link);
 
@@ -919,7 +929,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 		readLink: {
 			requestMethod: "GET",
 			rel: "read",
-			url: "http://fake.from.metadataproviderstub/rest/record/sometype/" 
+			url: "http://fake.from.metadataproviderstub/rest/record/sometype/"
 				+ "pVarTextVariableId",
 			accept: "application/vnd.cora.record+json"
 		},
@@ -936,7 +946,7 @@ QUnit.test("testOpenLinkedRecordForLink", function(assert) {
 
 QUnit.test("testDisable", function(assert) {
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
-	
+
 	pParentVar.disableVar();
 
 	let pVarViewSpy = this.pVarViewFactory.getFactored(0);
@@ -944,6 +954,7 @@ QUnit.test("testDisable", function(assert) {
 });
 
 QUnit.test("testDisableAttributes", function(assert) {
+	this.spec.metadataIdUsedInData = "textVariableWithAnAttribute";
 	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
 
 	let pAttributesSpy = this.pAttributesFactory.getFactored(0);

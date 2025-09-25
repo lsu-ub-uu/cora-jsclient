@@ -47,16 +47,16 @@ var CORA = (function(cora) {
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
-			initPAttributes();
+			possiblyInitPAttributes();
 		};
-		
+
 		const setPresentationIdFromCPresentation = function() {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
 				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			}
 		};
-		
+
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
 			if (cPresentation.containsChildWithNameInData(nameInData)) {
 				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
@@ -73,25 +73,25 @@ var CORA = (function(cora) {
 
 			let pVarViewSpec = {
 				className: getClassName(),
-				valueViewClassName: path.join("").replaceAll('.','-'),
+				valueViewClassName: path.join("").replaceAll('.', '-'),
 				id: "" + spec.presentationCounter,
 				mode: mode,
 				info: {
 					text: text,
 					defText: defText,
 					technicalInfo: [
-					{
-						text: `textId: ${textId}`,
-						onclickMethod: openTextIdRecord
-					}, {
-						text: `defTextId: ${defTextId}`,
-						onclickMethod: openDefTextIdRecord
-					}, {
-						text: `metadataId: ${metadataId}`,
-						onclickMethod: openMetadataIdRecord
-					}, {
-						text: `nameInData: ${nameInData}`,
-					}
+						{
+							text: `textId: ${textId}`,
+							onclickMethod: openTextIdRecord
+						}, {
+							text: `defTextId: ${defTextId}`,
+							onclickMethod: openDefTextIdRecord
+						}, {
+							text: `metadataId: ${metadataId}`,
+							onclickMethod: openMetadataIdRecord
+						}, {
+							text: `nameInData: ${nameInData}`,
+						}
 					]
 				},
 				onblurFunction: onBlur,
@@ -100,34 +100,34 @@ var CORA = (function(cora) {
 			possiblyAddPresentationInfo(pVarViewSpec);
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
-			
+
 			return pVarViewSpec;
 		};
-		
-		const getClassName = function(){
-			if(presentationId){
+
+		const getClassName = function() {
+			if (presentationId) {
 				return "pVar " + child.type + " " + presentationId;
 			}
 			return "pVar " + child.type;
 		};
-		
-		
+
+
 		const possiblyAddPresentationInfo = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
 				addPresentationInfoWhenNotFakePresentationFromAttributes(pVarViewSpec);
 			}
 		};
-		
+
 		const addPresentationInfoWhenNotFakePresentationFromAttributes = function(pVarViewSpec) {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			pVarViewSpec.presentationId=presentationId;
+			pVarViewSpec.presentationId = presentationId;
 			pVarViewSpec.info.technicalInfo.push({
 				text: `presentationId: ${presentationId}`,
 				onclickMethod: openPresentationIdRecord
 			});
 		};
-		
+
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
@@ -136,29 +136,29 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
-			if(labelShouldBeShown()){
+		const possiblyAddLabelToViewSpec = function(pVarViewSpec) {
+			if (labelShouldBeShown()) {
 				addLabelToViewSpec(pVarViewSpec);
 			}
 		};
-		
-		const labelShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showLabel")){
+
+		const labelShouldBeShown = function() {
+			if (!cPresentation.containsChildWithNameInData("showLabel")) {
 				return true;
 			}
 			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
 		};
-		
-		const addLabelToViewSpec = function(pVarViewSpec){
+
+		const addLabelToViewSpec = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
 				let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
 				let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
 				pVarViewSpec.label = specifiedLabelText;
-			}else{
+			} else {
 				pVarViewSpec.label = text;
 			}
 		};
-		
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
@@ -169,19 +169,25 @@ var CORA = (function(cora) {
 
 		const subscribeToPubSub = function() {
 			pubSub.subscribe("setValue", path, undefined, handleMsg);
-		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
 
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: pVarView.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		const possiblyInitPAttributes = function() {
+			if (hasAttributes()) {
+				let pAttributesSpec = {
+					addViewToParent: pVarView.addAttributesView,
+					path: path,
+					mode: mode,
+					toShow: attributesToShow
+				};
+				pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			}
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
@@ -199,7 +205,7 @@ var CORA = (function(cora) {
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
 		};
-		
+
 
 		const handleMsg = function(dataFromMsg) {
 			setValue(dataFromMsg.data);
@@ -224,18 +230,18 @@ var CORA = (function(cora) {
 			pVarView.setValue(valueFromView);
 			handleValueFromView(valueFromView, "error");
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
-			if(valueFromView.length === 0){
+
+		const autoFormatEnteredValue = function(valueFromView) {
+			if (valueFromView.length === 0) {
 				return valueFromView;
 			}
 			return child.autoFormatEnteredValue(valueFromView);
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if(valueFromView.length === 0 || child.validateTypeSpecificValue(valueFromView)){
+			if (valueFromView.length === 0 || child.validateTypeSpecificValue(valueFromView)) {
 				state = "ok";
-			}else{
+			} else {
 				state = errorState;
 			}
 			updateView();
@@ -300,13 +306,15 @@ var CORA = (function(cora) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
 
 		const disableVar = function() {
-			pAttributes.disableExistingAttributes();
+			if (hasAttributes()) {
+				pAttributes.disableExistingAttributes();
+			}
 			pVarView.disable();
 		};
 

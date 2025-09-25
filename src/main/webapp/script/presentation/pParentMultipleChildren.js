@@ -57,7 +57,7 @@ var CORA = (function(cora) {
 				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
 			if ("pSurroundingContainer" !== child.type) {
-				initPAttributes();
+				possiblyInitPAttributes();
 			}
 		};
 
@@ -445,14 +445,20 @@ var CORA = (function(cora) {
 			return getMetadataById(alternativePresRefId);
 		};
 
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: view.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		const possiblyInitPAttributes = function() {
+			if (hasAttributes()) {
+				let pAttributesSpec = {
+					addViewToParent: view.addAttributesView,
+					path: path,
+					mode: mode,
+					toShow: attributesToShow
+				};
+				pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			}
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
 		const addAttributesView = function(attributesView) {

@@ -34,10 +34,13 @@ var CORA = (function(cora) {
 		const subscribeToMessagesForPath = function() {
 			if (topLevelMetadataIds) {
 				console.log("subscribe add: ", path)
-				pubSub.subscribe("add", path, undefined, possiblySubscribeOnAddMsg);
+//				pubSub.subscribe("add", path, undefined, possiblySubscribeOnAddMsg);
 			} else {
-				console.log("subscribe *: ", path)
-				pubSub.subscribe("*", path, undefined, handleMsgToDeterminDataState);
+//				console.log("subscribe *: ", path)
+				console.log("subscribe setvalue + remove: ", path)
+				//				pubSub.subscribe("*", path, undefined, handleMsgToDeterminDataState);
+				pubSub.subscribe("setValue", path, undefined, handleMsgToDeterminDataStateSetValue);
+				pubSub.subscribe("remove", path, undefined, handleMsgToDeterminDataStateRemove);
 			}
 		};
 
@@ -73,6 +76,19 @@ var CORA = (function(cora) {
 			if (msgType === "remove") {
 				removeAndSetState(msgAsArray);
 			}
+		};
+		const handleMsgToDeterminDataStateSetValue = function(dataFromMsg, msg) {
+			console.log("setValueInTracker dataFromMsg", msg)
+			console.log("setValueInTracker msg", msg)
+			let msgAsArray = msg.split("/");
+			let msgType = msgAsArray.pop();
+			handleNewValue(dataFromMsg, msgAsArray);
+		};
+		const handleMsgToDeterminDataStateRemove = function(dataFromMsg, msg) {
+			console.log("removeInTracker", msg)
+			let msgAsArray = msg.split("/");
+			msgAsArray.pop();
+			removeAndSetState(msgAsArray);
 		};
 
 		const handleNewValue = function(dataFromMsg, msgAsArray) {

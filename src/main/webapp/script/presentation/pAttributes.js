@@ -37,7 +37,6 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToPubSub = function() {
-			console.log("pattributes subscribe to path for addAttribute",path)
 			pubSub.subscribe("addAttribute", path, undefined, addAttributePresentation);
 		};
 

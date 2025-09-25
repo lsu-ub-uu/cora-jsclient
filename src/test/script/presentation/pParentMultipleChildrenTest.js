@@ -725,6 +725,7 @@ QUnit.test("testFirstPChildRefHandlerSpecWhenNoConstraints", function(assert) {
 });
 
 QUnit.test("testFactoredPAttributes", function(assert) {
+	this.setMyMetadataId("groupIdOneTextChildOneAttribute");
 	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
 
 	let viewSpy = this.pMultipleChildrenViewFactory.getFactored(0);
@@ -735,7 +736,14 @@ QUnit.test("testFactoredPAttributes", function(assert) {
 	assert.strictEqual(attributesSpec.toShow, "all");
 });
 
+QUnit.test("testFactoredPAttributesNotFactoredIfNoAttributes", function(assert) {
+	let pParentMultipleChildren = this.createAndInitPMultipleChildren();
+
+	assert.strictEqual(this.pAttributesFactory.getNoOfFactored(), 0);
+});
+
 QUnit.test("testFactoredPAttributes_attributesToShow_sentOnToAttributesFactory", function(assert) {
+	this.setMyMetadataId("groupIdOneTextChildOneAttribute");
 	let attributesToShow = {
 		name: "attributesToShow",
 		value: "selectable"

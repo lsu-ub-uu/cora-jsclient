@@ -51,7 +51,7 @@ var CORA = (function(cora) {
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
 			
-			initPAttributes();
+			possiblyInitPAttributes();
 		};
 
 		const setPresentationIdFromCPresentation = function() {
@@ -178,15 +178,20 @@ var CORA = (function(cora) {
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
 
-		const initPAttributes = function() {
-			console.log("initPAttributes")
-			let pAttributesSpec = {
-				addViewToParent: pVarView.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		const possiblyInitPAttributes = function() {
+			if (hasAttributes()) {
+				let pAttributesSpec = {
+					addViewToParent: pVarView.addAttributesView,
+					path: path,
+					mode: mode,
+					toShow: attributesToShow
+				};
+				pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			}
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
@@ -311,7 +316,9 @@ var CORA = (function(cora) {
 		};
 
 		const disableVar = function() {
-			pAttributes.disableExistingAttributes();
+			if (hasAttributes()) {
+				pAttributes.disableExistingAttributes();
+			}
 			pVarView.disable();
 		};
 

@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		const presentationCounter = spec.presentationCounter;
-		console.log(presentationCounter)
+		console.log("presentationCounter",presentationCounter)
 
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
@@ -50,6 +50,7 @@ var CORA = (function(cora) {
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
+			
 			initPAttributes();
 		};
 
@@ -178,6 +179,7 @@ var CORA = (function(cora) {
 		};
 
 		const initPAttributes = function() {
+			console.log("initPAttributes")
 			let pAttributesSpec = {
 				addViewToParent: pVarView.addAttributesView,
 				path: path,

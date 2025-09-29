@@ -60,7 +60,9 @@ var CORA = (function(cora) {
 		};
 
 		const createContainsDataTracker = function() {
-			if (spec.containsDataShouldBeTracked === true || mode==="output") {
+			console.log("shold we create containsdatatracker", path)
+			if (spec.containsDataShouldBeTracked === true || mode === "output") {
+				console.log("create containsdatatracker", path)
 				let containsDataTrackerSpec = {
 					methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 					path: spec.path

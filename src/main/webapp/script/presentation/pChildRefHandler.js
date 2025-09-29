@@ -396,6 +396,7 @@ var CORA = (function(cora) {
 			let path = repeatingElement.getPath();
 
 			let presentation = factorPresentation(path, spec.cPresentation, metadataIdToAdd);
+			console.log("factored presentation",presentation)
 			repeatingElement.addPresentation(presentation);
 
 			if (hasAlternativePresentation()) {

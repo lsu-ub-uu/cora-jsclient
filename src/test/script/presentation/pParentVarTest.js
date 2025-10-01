@@ -60,7 +60,7 @@ var CORATEST = (function(coraTest) {
 	return coraTest;
 }(CORATEST || {}));
 
-QUnit.module("presentation/pParentVarTest.js", {
+QUnit.module.only("presentation/pParentVarTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -85,8 +85,7 @@ QUnit.module("presentation/pParentVarTest.js", {
 			presentationCounter: 333,
 			path: [],
 			metadataIdUsedInData: "textVariableId",
-			cPresentation: CORA.coraData(this.metadataProvider
-				.getMetadataById("pVarTextVariableId"))
+			cPresentation: CORA.coraData(this.metadataProvider.getMetadataById("pVarTextVariableId"))
 		};
 
 		this.createChildSpy = function() {
@@ -963,4 +962,11 @@ QUnit.test("testDisableAttributes", function(assert) {
 	pParentVar.disableVar();
 
 	assert.strictEqual(pAttributesSpy.getNoOfCallsToDisable(), 1);
+});
+
+QUnit.test("testGetPresentationCounter", function(assert) {
+	this.spec.metadataIdUsedInData = "textVariableWithAnAttribute";
+	let pParentVar = CORA.pParentVar(this.dependencies, this.spec, this.createChildSpy());
+
+	assert.strictEqual(pParentVar.getPresentationCounter(), this.spec.presentationCounter);
 });

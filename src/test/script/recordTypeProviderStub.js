@@ -2777,7 +2777,7 @@ var CORATEST = (function (coraTest) {
             } else {
 
                 // default:
-                console.log("Id(" + recordTypeId + ") not found in recordTypeProviderStub");
+                //console.log("Id(" + recordTypeId + ") not found in recordTypeProviderStub");
                 throw new Error("Id(" + recordTypeId + ") not found in recordTypeProviderStub");
             }
         }

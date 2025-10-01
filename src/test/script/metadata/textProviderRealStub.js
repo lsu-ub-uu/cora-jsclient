@@ -86,7 +86,7 @@ var CORATEST = (function(coraTest) {
 			case "resourceLinkDownloadText":
 				return "Ladda ner";	
 			default:
-				console.log("Id(" + textId + ") not found in textProviderRealStub");
+				//console.log("Id(" + textId + ") not found in textProviderRealStub");
 //				throw new Error("Id(" + textId + ") not found in textProviderRealStub");
 			return "TEXT NOT FOUND";
 			}

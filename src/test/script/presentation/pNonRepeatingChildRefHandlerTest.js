@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
+QUnit.module.only("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let metadataProvider;
@@ -58,7 +58,8 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			cPresentation: createPresentation(),
 			cParentPresentation: {
 				type: "fakeCParentPresentationObject"
-			}
+			},
+			parentPresentationCounter: "someParentPresentationCounter"
 		};
 		cAlternativePresentation = createAlternativePresentation();
 

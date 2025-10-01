@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
+QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let jsBookkeeper;
@@ -49,7 +49,8 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: true,
 			mode: "input",
-			containsDataShouldBeTracked: true
+			containsDataShouldBeTracked: true,
+			parentPresentationCounter: "someParentPresentationCounter"
 		};
 	});
 	hooks.afterEach(() => {
@@ -111,7 +112,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 
 		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 0);
 	});
-	
+
 	test("testInit_createsContainsDataTracker_ifOutputEvenIfItIsStatedNotToBestarted", function(assert) {
 		spec.containsDataShouldBeTracked = false;
 		spec.mode = "output";
@@ -842,5 +843,92 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		CORATESTHELPER.simulateOnclick(defaultButton);
 		assert.strictEqual(altFuncWasCalled, 1);
 	});
+
+
+	test("testaddPresentationsTriggersSubscribe", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
+
+		let subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 1);
+		assert.strictEqual(subscriptions[0].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[0].path, "presentationCounterFromSpy");
+		assert.strictEqual(subscriptions[0].context, undefined);
+		assert.strictEqual(subscriptions[0].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
+
+		let alternativePresentation = CORATEST.presentationStub("maximized", "presentationStubMaximized");
+		pRepeatingElement.addAlternativePresentation(alternativePresentation);
+
+		subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[1].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[1].path, "presentationCounterFromSpy");
+		assert.strictEqual(subscriptions[1].context, undefined);
+		assert.strictEqual(subscriptions[1].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIs(assert, 0, "1-34", "visible");
+		assert.visible(view);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_hidden", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIs(assert, 0, "1-34", "hidden");
+		assert.notVisible(view);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
+		assert.notVisible(view);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
+		assert.visible(view);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden");
+		assert.visible(view);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
+		assert.notVisible(view);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
+		assert.notVisible(view);
+		
+		assertNumberOfMessages(assert, 4);
+	});
+
+
+	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter, visibility) {
+		let msg = presentationCounter + "/visibilityChange";
+		let dataFromMsg = {
+			presentationCounter: presentationCounter,
+			visibility: visibility
+		};
+		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+	};
+
+	const assertNumberOfMessages = function(assert, noMessages) {
+		let messages = pubSub.getMessages();
+		assert.strictEqual(messages.length, noMessages);
+	};
+	const assertMessageNumberIs = function(assert, messageNo, presentationCounter, visibility) {
+		let messages = pubSub.getMessages();
+		let message0 = messages[messageNo];
+		assert.strictEqual(message0.type, "visibilityChange");
+		assert.stringifyEqual(message0.message.path, [spec.parentPresentationCounter]);
+		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message0.message.visibility, visibility);
+	};
 
 });

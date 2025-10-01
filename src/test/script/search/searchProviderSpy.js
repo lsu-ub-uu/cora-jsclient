@@ -831,7 +831,7 @@ var CORATEST = (function(coraTest) {
 			} else {
 
 				// default:
-				console.log("Id(" + searchId + ") not found in searchProviderSpy");
+				//console.log("Id(" + searchId + ") not found in searchProviderSpy");
 				throw new Error("Id(" + searchId + ") not found in searchProviderSpy");
 			}
 		};

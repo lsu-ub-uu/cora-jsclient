@@ -53,7 +53,7 @@ var CORA = (function(cora) {
 		
 		const transformValueForView = function(mode, valueForView){
 //TODO: what should happen if we have no right to view resource
-//console.log(valueForView)
+////console.log(valueForView)
 			let url = valueForView.actionLinks.read.url;
 			let newValue = url + "?" + getTokenRequestParameter();
 			return newValue;

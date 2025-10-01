@@ -148,9 +148,9 @@ var CORA = (function(cora) {
 				message.type = "setValue";
 				message.special = "resourceLink";
 				pubSub.publish("setValue", message);
-				//				console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
-				//				console.log("in metadataRepeatInitializer, spec: ",spec )
-				//				console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
+				//				//console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
+				//				//console.log("in metadataRepeatInitializer, spec: ",spec )
+				//				//console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
 				//				publishIfDataIsPresent(nextLevelPath)
 				//				const publishIfDataIsPresent = function(nextLevelPath) {
 				//					if (spec.data !== undefined) {

@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pChildRefHandlerViewTest.js", hooks => {
+QUnit.module.only("presentation/pChildRefHandlerViewTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 
@@ -35,9 +35,10 @@ QUnit.module("presentation/pChildRefHandlerViewTest.js", hooks => {
 		dependencies = {};
 
 		spec = {
-			"presentationId": "pVarTextVariableId",
-			"isRepeating": true,
-			"mode": "input"
+			presentationId: "pVarTextVariableId",
+			isRepeating: true,
+			mode: "input",
+			parentPresentationCounter: "someParentPresentationCounter"
 		};
 	});
 	

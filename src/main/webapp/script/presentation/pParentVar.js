@@ -26,7 +26,7 @@ var CORA = (function(cora) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
 		let path = spec.path;
 		const presentationCounter = spec.presentationCounter;
-		console.log("presentationCounter",presentationCounter)
+		//console.log("presentationCounter", presentationCounter)
 
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
@@ -50,7 +50,7 @@ var CORA = (function(cora) {
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
-			
+
 			possiblyInitPAttributes();
 		};
 
@@ -321,6 +321,10 @@ var CORA = (function(cora) {
 			}
 			pVarView.disable();
 		};
+		
+		const getPresentationCounter = function(){
+			return presentationCounter;
+		};
 
 		start();
 		return Object.freeze({
@@ -341,7 +345,8 @@ var CORA = (function(cora) {
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
 			openLinkedRecordForLink: openLinkedRecordForLink,
-			disableVar: disableVar
+			disableVar: disableVar,
+			getPresentationCounter: getPresentationCounter
 		});
 
 	};

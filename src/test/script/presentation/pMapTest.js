@@ -346,7 +346,7 @@ QUnit.module("presentation/pMapTest.js", hooks => {
 		pMap.publishLatLngValues(12.4, 33.3);
 
 		let messages = pubSub.getMessages();
-		// console.log(messages)
+		// //console.log(messages)
 		assert.strictEqual(messages.length, 2);
 
 		let expectedLatitudeMessage = {

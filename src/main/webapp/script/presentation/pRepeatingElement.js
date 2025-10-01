@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingElement = function(dependencies, spec) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
+		const pubSub = dependencies.pubSub;
 		const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
 
 		const pChildRefHandler = spec.pChildRefHandler;
@@ -33,6 +34,7 @@ var CORA = (function(cora) {
 		const clickableHeadlineText = spec.clickableHeadlineText;
 		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
 		const mode = spec.mode;
+		const parentPresentationCounter = spec.parentPresentationCounter;
 
 		let presentationSize = spec.presentationSize;
 
@@ -60,9 +62,9 @@ var CORA = (function(cora) {
 		};
 
 		const createContainsDataTracker = function() {
-			console.log("shold we create containsdatatracker", path)
+			//console.log("shold we create containsdatatracker", path)
 			if (spec.containsDataShouldBeTracked === true || mode === "output") {
-				console.log("create containsdatatracker", path)
+				//console.log("create containsdatatracker", path)
 				let containsDataTrackerSpec = {
 					methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 					path: spec.path
@@ -70,6 +72,7 @@ var CORA = (function(cora) {
 				containsDataTrackerFactory.factor(containsDataTrackerSpec);
 			}
 		};
+
 
 		const methodToCallOnContainsDataChange = function(state) {
 			if (state) {
@@ -195,11 +198,37 @@ var CORA = (function(cora) {
 		};
 
 		const addPresentation = function(defaultPresentationIn) {
+			pubSub.subscribe("visibilityChange", defaultPresentationIn.getPresentationCounter(),
+				undefined, handleMsgToDeterminVisibilityChange);
 			defaultPresentation = defaultPresentationIn.getView();
 			defaultPresentation.classList.add("default");
 			view.insertBefore(defaultPresentation, buttonView);
 			view.className = "repeatingElement";
 			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
+		};
+
+		let visibilityTracker = {};
+		let lastVisible;
+		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+			visibilityTracker[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			let currentlyVisible = Object.values(visibilityTracker).some(v => v === 'visible');
+
+			if (lastVisible !== currentlyVisible) {
+				lastVisible = currentlyVisible;
+				if (currentlyVisible) {
+					show(view);
+				} else {
+					hide(view);
+				}
+
+				let visibilityData = {
+					path: [parentPresentationCounter],
+					presentationCounter: dataFromMsg.presentationCounter,
+					visibility: dataFromMsg.visibility
+				};
+
+				pubSub.publish("visibilityChange", visibilityData);
+			}
 		};
 
 		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
@@ -214,6 +243,8 @@ var CORA = (function(cora) {
 		};
 
 		const addAlternativePresentation = function(presentation) {
+			pubSub.subscribe("visibilityChange", presentation.getPresentationCounter(),
+				undefined, handleMsgToDeterminVisibilityChange);
 			alternativePresentation = presentation.getView();
 			alternativePresentation.classList.add("alternative");
 			view.insertBefore(alternativePresentation, buttonView);
@@ -388,7 +419,8 @@ var CORA = (function(cora) {
 			hideAddBeforeButton: hideAddBeforeButton,
 			showAddBeforeButton: showAddBeforeButton,
 			getPath: getPath,
-			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange
+			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 		start();
 		view.modelObject = out;

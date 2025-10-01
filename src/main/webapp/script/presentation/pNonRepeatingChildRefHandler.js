@@ -26,7 +26,8 @@ var CORA = (function(cora) {
 		const metadataProvider = dependencies.providers.metadataProvider;
 		const pubSub = dependencies.pubSub;
 		const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
-
+		const parentPresentationCounter = spec.parentPresentationCounter;
+				
 		const start = function() {
 
 			metadataHelper = CORA.metadataHelper({

@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
 		const isInputMode = spec.mode === "input";
 		const binaryLinkRecordIdValues = {};
+		const parentPresentationCounter = spec.parentPresentationCounter;
 		let mode = spec.mode;
 		let presentationSize = spec.presentationSize;
 
@@ -382,7 +383,8 @@ var CORA = (function(cora) {
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
 				presentationSize: presentationSize,
 				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation,
-				containsDataShouldBeTracked: containsDataShouldBeTracked()
+				containsDataShouldBeTracked: containsDataShouldBeTracked(),
+				parentPresentationCounter: parentPresentationCounter
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
 		};
@@ -396,7 +398,7 @@ var CORA = (function(cora) {
 			let path = repeatingElement.getPath();
 
 			let presentation = factorPresentation(path, spec.cPresentation, metadataIdToAdd);
-			console.log("factored presentation",presentation)
+			//console.log("factored presentation", presentation)
 			repeatingElement.addPresentation(presentation);
 
 			if (hasAlternativePresentation()) {

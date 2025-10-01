@@ -27,7 +27,7 @@ var CORA = (function(cora) {
 		const path = spec.path;
 		const metadataId = child.metadataId;
 		const presentationCounter = spec.presentationCounter;
-		console.log("presentationCounter",presentationCounter)
+		//		//console.log("presentationCounter",presentationCounter)
 
 		let presentationId;
 		let view;
@@ -337,7 +337,8 @@ var CORA = (function(cora) {
 				cPresentation: cPresentationChild,
 				cParentPresentation: cParentPresentation,
 				mode: mode,
-				presentationSize: "firstSmaller"
+				presentationSize: "firstSmaller",
+				parentPresentationCounter: presentationCounter
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
@@ -345,7 +346,6 @@ var CORA = (function(cora) {
 			possiblyAddClickableHeadlineInfoToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return childRefHandlerSpec;
 		};
-
 
 		const possiblyAddStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			possiblyAddTextStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
@@ -509,6 +509,10 @@ var CORA = (function(cora) {
 			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
 		};
 
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		start();
 		return Object.freeze({
 			type: "pParentMultipleChildren",
@@ -521,6 +525,7 @@ var CORA = (function(cora) {
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
 			openLinkedRecordForLink: openLinkedRecordForLink,
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return cora;

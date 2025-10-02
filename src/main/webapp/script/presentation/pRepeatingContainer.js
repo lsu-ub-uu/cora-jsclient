@@ -21,6 +21,7 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingContainer = function(dependencies, spec) {
 		let path = spec.path;
+		const presentationCounter = spec.presentationCounter;
 		let cPresentation = spec.cPresentation;
 		let metadataProvider = dependencies.metadataProvider;
 		let textProvider = dependencies.textProvider;
@@ -85,13 +86,19 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		start();
 
 		let out = Object.freeze({
 			type: "pRepeatingContainer",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView
+			getView: getView,
+			getPresentationCounter: getPresentationCounter
 		});
 		view.modelObject = out;
 		return out;

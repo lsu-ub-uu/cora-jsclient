@@ -27,7 +27,9 @@ var CORA = (function(cora) {
 		const pubSub = dependencies.pubSub;
 		const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
 		const parentPresentationCounter = spec.parentPresentationCounter;
-				
+		let presentationVisibilities = {};
+		let pRepeatingElementIsVisible;
+
 		const start = function() {
 
 			metadataHelper = CORA.metadataHelper({
@@ -35,7 +37,7 @@ var CORA = (function(cora) {
 			});
 			createView();
 			calculateHandledTopLevelMetadataIds(spec.cPresentation);
-			createContainsDataTracker();
+			//			createContainsDataTracker();
 			let factoredPresentation = factorPresentation(spec.cPresentation);
 			view.addChild(factoredPresentation.getView());
 			possiblyAddAlternativePresentation();
@@ -114,7 +116,55 @@ var CORA = (function(cora) {
 				cParentPresentation: spec.cParentPresentation,
 				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
-			return dependencies.presentationFactory.factor(presentationSpec);
+			let presentation = dependencies.presentationFactory.factor(presentationSpec);
+
+			console.log("sub visibilityChange", presentation)
+//			console.log("sub visibilityChange", presentation.getPresentationCounter())
+			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
+				undefined, handleMsgToDeterminVisibilityChange);
+			return presentation;
+		};
+
+		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+			//			console.log("handle visibilityChange",dataFromMsg)
+
+			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+
+			if (visibilityChanges(currentlyVisible)) {
+				showOrHideViewBaseOnVisibility(currentlyVisible);
+				publishVisibilityChange(dataFromMsg);
+			}
+		};
+
+		const atLeastOneTrackedPresentationIsVisible = function() {
+			return Object.values(presentationVisibilities).some(v => v === 'visible');
+		};
+
+		const visibilityChanges = function(currentlyVisible) {
+			if (pRepeatingElementIsVisible !== currentlyVisible) {
+				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+
+		const showOrHideViewBaseOnVisibility = function(currentlyVisible) {
+			if (currentlyVisible) {
+				view.showContent();
+			} else {
+				view.hideContent();
+			}
+		};
+
+		const publishVisibilityChange = function(dataFromMsg) {
+			let visibilityData = {
+				path: [parentPresentationCounter],
+				presentationCounter: dataFromMsg.presentationCounter,
+				visibility: dataFromMsg.visibility
+			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const updateViewForData = function() {
@@ -161,7 +211,8 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			getView: getView,
 			publishPresentationShown: publishPresentationShown,
-			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange
+			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
+			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 
 		start();

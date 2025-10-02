@@ -24,7 +24,7 @@ var CORA = (function(cora) {
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
 		const jsBookkeeper = dependencies.jsBookkeeper;
-		let path = spec.path;
+		const path = spec.path;
 		const presentationCounter = spec.presentationCounter;
 		//console.log("presentationCounter", presentationCounter)
 
@@ -172,7 +172,7 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
+			pubSub.subscribe("setValue", path, undefined, handleSetValueMsg);
 			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
@@ -203,22 +203,47 @@ var CORA = (function(cora) {
 			return pVarView.getView();
 		};
 
+		const handleSetValueMsg = function(dataFromMsg) {
+			setValue(dataFromMsg.data);
+			updateViewWithCurrentState();
+		};
+
 		const setValue = function(value) {
 			state = "ok";
 			previousValue = value;
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
+
+			publishVisibilityChange(value);
+		};
+		//		const handleNewValue = function(dataFromMsg, msgAsArray) {
+		//			if (dataFromMsg.data !== "") {
+		//				if (dataFromMsg.dataOrigin !== "final") {
+		//					updateViewForData();
+		//					findOrAddPathToStored(msgAsArray);
+		//				}
+		//			} else {
+		//				removeAndSetState(msgAsArray);
+		//			}
+		//		};
+
+		const publishVisibilityChange = function(value) {
+//			console.log("mode",mode)
+			let visibility = value === "" && mode === "output" ? "hidden" : "visible";
+			let visibilityData = {
+				path: [presentationCounter],
+				presentationCounter: presentationCounter,
+				visibility: visibility
+			};
+//			console.log("publish visibilityChange", visibilityData)
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
-
-		const handleMsg = function(dataFromMsg) {
-			setValue(dataFromMsg.data);
-			updateView();
-		};
 
 		const handleValidationError = function() {
 			state = "error";
-			updateView();
+			updateViewWithCurrentState();
 		};
 
 		const getText = function() {
@@ -248,7 +273,7 @@ var CORA = (function(cora) {
 			} else {
 				state = errorState;
 			}
-			updateView();
+			updateViewWithCurrentState();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
@@ -263,7 +288,7 @@ var CORA = (function(cora) {
 			handleValueFromView(valueFromView, "errorStillFocused");
 		};
 
-		const updateView = function() {
+		const updateViewWithCurrentState = function() {
 			pVarView.setState(state);
 		};
 
@@ -321,8 +346,8 @@ var CORA = (function(cora) {
 			}
 			pVarView.disable();
 		};
-		
-		const getPresentationCounter = function(){
+
+		const getPresentationCounter = function() {
 			return presentationCounter;
 		};
 
@@ -333,7 +358,7 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			getView: getView,
 			setValue: setValue,
-			handleMsg: handleMsg,
+			handleSetValueMsg: handleSetValueMsg,
 			getText: getText,
 			getDefText: getDefText,
 			getState: getState,

@@ -59,7 +59,7 @@ QUnit.module.only("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			cParentPresentation: {
 				type: "fakeCParentPresentationObject"
 			},
-			parentPresentationCounter: "someParentPresentationCounter"
+			parentPresentationCounter: "1-1"
 		};
 		cAlternativePresentation = createAlternativePresentation();
 
@@ -490,4 +490,98 @@ QUnit.module.only("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		};
 		assert.stringifyEqual(firstMessage.message, expectedMessage);
 	});
+
+	//TODO: hre
+	test("testaddPresentationsTriggersSubscribe", function(assert) {
+		spec.cAlternativePresentation = cAlternativePresentation;
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+
+		let subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[0].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[0].path, ["1-123"]);
+		assert.strictEqual(subscriptions[0].context, undefined);
+		assert.strictEqual(subscriptions[0].functionToCall, pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange);
+
+		subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[1].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[1].path, ["1-123"]);
+		assert.strictEqual(subscriptions[1].context, undefined);
+		assert.strictEqual(subscriptions[1].functionToCall, pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible");
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
+
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_hidden", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden");
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "hidden");
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible");
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden");
+		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible");
+		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden");
+		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden");
+		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden");
+		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
+
+		assertNumberOfMessages(assert, 4);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34", "hidden");
+	});
+
+
+	const callHandleMsgForVisibilityChange = function(pNonRepeatingChildRefHandler, presentationCounter, visibility) {
+		let msg = presentationCounter + "/visibilityChange";
+		let dataFromMsg = {
+			presentationCounter: presentationCounter,
+			visibility: visibility
+		};
+		pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+	};
+
+	const assertNumberOfMessages = function(assert, noMessages) {
+		let messages = pubSub.getMessages();
+		assert.strictEqual(messages.length, noMessages);
+	};
+
+	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
+		presentationCounter, visibility) {
+		let messages = pubSub.getMessages();
+		let message0 = messages[messageNo];
+		assert.strictEqual(message0.type, "visibilityChange");
+		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
+		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message0.message.visibility, visibility);
+	};
+
+
 });

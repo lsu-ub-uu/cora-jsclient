@@ -102,7 +102,8 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 			path: [],
 			cPresentation: CORA.coraData(metadataProvider
 				.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink")),
-			recordPartPermissionCalculatorFactory: recordPartPermissionCalculatorFactory
+			recordPartPermissionCalculatorFactory: recordPartPermissionCalculatorFactory,
+			presentationCounter: "5-45"
 		};
 	};
 
@@ -643,7 +644,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 			}
 		};
 		assert.deepEqual(pubSub.getMessages()[0], expectedMessage0);
-		
+
 		let expectedMessage1 = {
 			type: "setValue",
 			message: {
@@ -1291,4 +1292,11 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		pRecordLink.openMetadataIdRecord(event2);
 		assert.strictEqual(jsClient.getOpenInfo(1).loadInBackground, "false");
 	});
+
+	test("testGetPresentationCounter", function(assert) {
+		let pRecordLink = CORA.pRecordLink(dependencies, spec);
+
+		assert.strictEqual(pRecordLink.getPresentationCounter(), spec.presentationCounter);
+	});
+
 });

@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pNumVarTest.js", {
+QUnit.module.only("presentation/pNumVarTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
@@ -80,6 +80,13 @@ QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	let pParentVar = this.pParentVarFactory.getFactored(0);
 	
 	assert.strictEqual(pVar.getView, pParentVar.getView);
+});
+
+QUnit.test("testGetPresentationCounterUsesPParentVar", function(assert) {
+	let pVar = CORA.pNumVar(this.dependencies, this.spec);
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+	
+	assert.strictEqual(pVar.getPresentationCounter, pParentVar.getPresentationCounter);
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {

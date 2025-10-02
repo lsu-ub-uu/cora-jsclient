@@ -35,6 +35,7 @@ var CORA = (function(cora) {
 		const pubSub = dependencies.pubSub;
 
 		const path = spec.path;
+		const presentationCounter = spec.presentationCounter;
 
 		let out;
 		let readLink;
@@ -601,6 +602,10 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		out = Object.freeze({
 			type: "pRecordLink",
 			getDependencies: getDependencies,
@@ -615,7 +620,8 @@ var CORA = (function(cora) {
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
-			hideOrShowOutputPresentation: hideOrShowOutputPresentation
+			hideOrShowOutputPresentation: hideOrShowOutputPresentation,
+			getPresentationCounter: getPresentationCounter
 		});
 		start();
 		return out;

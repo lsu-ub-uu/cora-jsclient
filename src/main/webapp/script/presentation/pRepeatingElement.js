@@ -52,12 +52,15 @@ var CORA = (function(cora) {
 		let toggleButtonsAreCreated = false;
 		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+		let presentationVisibilities = {};
+		let pRepeatingElementIsVisible;
+
 
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
 			possiblyAddClickableHeadline();
-			createContainsDataTracker();
+//			createContainsDataTracker();
 			updateViewForNoData();
 		};
 
@@ -198,7 +201,8 @@ var CORA = (function(cora) {
 		};
 
 		const addPresentation = function(defaultPresentationIn) {
-			pubSub.subscribe("visibilityChange", defaultPresentationIn.getPresentationCounter(),
+//			console.log("sub visibilityChange",defaultPresentationIn.getPresentationCounter())
+			pubSub.subscribe("visibilityChange", [defaultPresentationIn.getPresentationCounter()],
 				undefined, handleMsgToDeterminVisibilityChange);
 			defaultPresentation = defaultPresentationIn.getView();
 			defaultPresentation.classList.add("default");
@@ -207,28 +211,46 @@ var CORA = (function(cora) {
 			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
 		};
 
-		let visibilityTracker = {};
-		let lastVisible;
 		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
-			visibilityTracker[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
-			let currentlyVisible = Object.values(visibilityTracker).some(v => v === 'visible');
+//			console.log("handle visibilityChange",dataFromMsg)
+						
+			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
 
-			if (lastVisible !== currentlyVisible) {
-				lastVisible = currentlyVisible;
-				if (currentlyVisible) {
-					show(view);
-				} else {
-					hide(view);
-				}
-
-				let visibilityData = {
-					path: [parentPresentationCounter],
-					presentationCounter: dataFromMsg.presentationCounter,
-					visibility: dataFromMsg.visibility
-				};
-
-				pubSub.publish("visibilityChange", visibilityData);
+			if (visibilityChanges(currentlyVisible)) {
+				showOrHideViewBaseOnVisibility(currentlyVisible);
+				publishVisibilityChange(dataFromMsg);
 			}
+		};
+
+		const atLeastOneTrackedPresentationIsVisible = function() {
+			return Object.values(presentationVisibilities).some(v => v === 'visible');
+		};
+
+		const visibilityChanges = function(currentlyVisible) {
+			if (pRepeatingElementIsVisible !== currentlyVisible) {
+				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+
+		const showOrHideViewBaseOnVisibility = function(currentlyVisible) {
+			if (currentlyVisible) {
+				show(view);
+			} else {
+				hide(view);
+			}
+		};
+
+		const publishVisibilityChange = function(dataFromMsg) {
+			let visibilityData = {
+				path: [parentPresentationCounter],
+				presentationCounter: dataFromMsg.presentationCounter,
+				visibility: dataFromMsg.visibility
+			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
@@ -243,7 +265,7 @@ var CORA = (function(cora) {
 		};
 
 		const addAlternativePresentation = function(presentation) {
-			pubSub.subscribe("visibilityChange", presentation.getPresentationCounter(),
+			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
 				undefined, handleMsgToDeterminVisibilityChange);
 			alternativePresentation = presentation.getView();
 			alternativePresentation.classList.add("alternative");

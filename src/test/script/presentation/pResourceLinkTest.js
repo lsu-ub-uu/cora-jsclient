@@ -23,8 +23,8 @@ QUnit.module("presentation/pResourceLinkTest.js", {
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.textProvider = CORATEST.textProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
-		
-		
+
+
 		this.dependencies = {
 			metadataProvider: this.metadataProvider,
 			textProvider: this.textProvider,
@@ -60,10 +60,10 @@ QUnit.test("testGetSpec", function(assert) {
 
 QUnit.test("testParentStarted", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
-	
+
 	let pParentVarFactory = this.pParentVarFactory.getSpec(0);
 	assert.strictEqual(pParentVarFactory, this.spec);
-	
+
 	const child = this.pParentVarFactory.getChild(0);
 
 	assert.strictEqual(child.type, "pResourceLink");
@@ -75,27 +75,35 @@ QUnit.test("testParentStarted", function(assert) {
 QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	let resourceLink = CORA.pResourceLink(this.dependencies, this.spec);
 	let pParentVar = this.pParentVarFactory.getFactored(0);
-	
+
 	assert.strictEqual(resourceLink.getView, pParentVar.getView);
 });
+
+QUnit.test("testGetPresentationCounterUsesPParentVar", function(assert) {
+	let pVar = CORA.pResourceLink(this.dependencies, this.spec);
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+
+	assert.strictEqual(pVar.getPresentationCounter, pParentVar.getPresentationCounter);
+});
+
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
-		info:{
-			technicalInfo:[]
+		info: {
+			technicalInfo: []
 		}
 	};
-	
+
 	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
-	
+
 	let expectedSpec = {
 		type: "pResourceLink",
 		outputFormat: "image",
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[
+		info: {
+			technicalInfo: [
 			]
 		}
 	};
@@ -108,19 +116,19 @@ QUnit.test("testFactoredViewCorrectlyForInputTextAreaVariable", function(assert)
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
-		info:{
-			technicalInfo:[]
+		info: {
+			technicalInfo: []
 		}
 	};
-	
+
 	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
-	
+
 	let expectedSpec = {
 		type: "pResourceLink",
 		outputFormat: "text",
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[
+		info: {
+			technicalInfo: [
 			]
 		}
 	};
@@ -134,19 +142,19 @@ QUnit.test("testInitTextNoInputTypeIsShownAsText", function(assert) {
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[]
+		info: {
+			technicalInfo: []
 		}
 	};
-	
+
 	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
-	
+
 	let expectedSpec = {
 		type: "pResourceLink",
 		outputFormat: "text",
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[
+		info: {
+			technicalInfo: [
 			]
 		}
 	};
@@ -160,19 +168,19 @@ QUnit.test("testInitTextInputFormatPassword", function(assert) {
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[]
+		info: {
+			technicalInfo: []
 		}
 	};
-	
+
 	child.addTypeSpecificInfoToViewSpec("input", viewSpec);
-	
+
 	let expectedSpec = {
 		type: "pResourceLink",
 		outputFormat: "text",
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[
+		info: {
+			technicalInfo: [
 			]
 		}
 	};
@@ -186,19 +194,19 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 	const child = this.pParentVarFactory.getChild(0);
 	let viewSpec = {
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[]
+		info: {
+			technicalInfo: []
 		}
 	};
-	
+
 	child.addTypeSpecificInfoToViewSpec("output", viewSpec);
-	
+
 	let expectedSpec = {
 		type: "pResourceLink",
 		outputFormat: "image",
 		downloadText: "Ladda ner",
-	  	info:{
-			technicalInfo:[
+		info: {
+			technicalInfo: [
 			]
 		}
 	};
@@ -208,25 +216,25 @@ QUnit.test("testInitTextOutputFormatImage", function(assert) {
 QUnit.test("testValidateTypeSpecificValueValid", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
-	
+
 	const valid = child.validateTypeSpecificValue("A Value");
-	
+
 	assert.true(valid);
 });
 
 QUnit.test("testAutoFormatEnteredValueDoNothing", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
-	
+
 	const formated = child.autoFormatEnteredValue("Hej hopp");
-	
+
 	assert.strictEqual(formated, "Hej hopp");
 });
 
 QUnit.test("testTransformValueForView_pickUrl", function(assert) {
 	CORA.pResourceLink(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);
-	const value = 	{
+	const value = {
 		children: [
 			{
 				name: "linkedRecordType",
@@ -252,6 +260,6 @@ QUnit.test("testTransformValueForView_pickUrl", function(assert) {
 		name: "large",
 	};
 	const transformed = child.transformValueForView("input", value);
-	
+
 	assert.strictEqual(transformed, "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail?authToken=fitnesseAdminToken");
 });

@@ -50,7 +50,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 			userCanAddBefore: true,
 			mode: "input",
 			containsDataShouldBeTracked: true,
-			parentPresentationCounter: "someParentPresentationCounter"
+			parentPresentationCounter: "1-1"
 		};
 	});
 	hooks.afterEach(() => {
@@ -854,7 +854,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		let subscriptions = pubSub.getSubscriptions();
 		assert.strictEqual(subscriptions.length, 1);
 		assert.strictEqual(subscriptions[0].type, "visibilityChange");
-		assert.stringifyEqual(subscriptions[0].path, "presentationCounterFromSpy");
+		assert.stringifyEqual(subscriptions[0].path, ["presentationCounterFromSpy"]);
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
 
@@ -864,7 +864,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		subscriptions = pubSub.getSubscriptions();
 		assert.strictEqual(subscriptions.length, 2);
 		assert.strictEqual(subscriptions[1].type, "visibilityChange");
-		assert.stringifyEqual(subscriptions[1].path, "presentationCounterFromSpy");
+		assert.stringifyEqual(subscriptions[1].path, ["presentationCounterFromSpy"]);
 		assert.strictEqual(subscriptions[1].context, undefined);
 		assert.strictEqual(subscriptions[1].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
 	});
@@ -876,7 +876,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIs(assert, 0, "1-34", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
 		assert.visible(view);
 	});
 
@@ -886,7 +886,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIs(assert, 0, "1-34", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "hidden");
 		assert.notVisible(view);
 	});
 
@@ -904,8 +904,12 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		assert.notVisible(view);
 		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
 		assert.notVisible(view);
-		
+
 		assertNumberOfMessages(assert, 4);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34", "hidden");
 	});
 
 
@@ -922,11 +926,13 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		let messages = pubSub.getMessages();
 		assert.strictEqual(messages.length, noMessages);
 	};
-	const assertMessageNumberIs = function(assert, messageNo, presentationCounter, visibility) {
+
+	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
+		presentationCounter, visibility) {
 		let messages = pubSub.getMessages();
 		let message0 = messages[messageNo];
 		assert.strictEqual(message0.type, "visibilityChange");
-		assert.stringifyEqual(message0.message.path, [spec.parentPresentationCounter]);
+		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
 		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message0.message.visibility, visibility);
 	};

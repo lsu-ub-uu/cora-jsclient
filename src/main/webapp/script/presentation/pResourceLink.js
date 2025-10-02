@@ -22,14 +22,14 @@ var CORA = (function(cora) {
 	cora.pResourceLink = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
-		
+
 		const cPresentation = spec.cPresentation;
 		let pParentVar;
 
 		const start = function() {
 			pParentVar = pParentVarFactory.factor(spec, self);
 		};
-		
+
 		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 			pVarViewSpec.type = "pResourceLink";
 			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
@@ -42,29 +42,29 @@ var CORA = (function(cora) {
 			}
 			return defaultValue;
 		};
-		
+
 		const validateTypeSpecificValue = function(valueFromView) {
 			return true;
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
+
+		const autoFormatEnteredValue = function(valueFromView) {
 			return valueFromView;
 		};
-		
-		const transformValueForView = function(mode, valueForView){
-//TODO: what should happen if we have no right to view resource
-////console.log(valueForView)
+
+		const transformValueForView = function(mode, valueForView) {
+			//TODO: what should happen if we have no right to view resource
+			////console.log(valueForView)
 			let url = valueForView.actionLinks.read.url;
 			let newValue = url + "?" + getTokenRequestParameter();
 			return newValue;
 		};
-		
+
 		const getTokenRequestParameter = function() {
 			let tokenRequestParamenter = "authToken=";
 			tokenRequestParamenter += dependencies.authTokenHolder.getCurrentAuthToken();
 			return tokenRequestParamenter;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
@@ -86,7 +86,8 @@ var CORA = (function(cora) {
 			type: "pResourceLink",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: pParentVar.getView
+			getView: pParentVar.getView,
+			getPresentationCounter: pParentVar.getPresentationCounter
 		});
 
 	};

@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	cora.pNumVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
-		
+
 		let pParentVar;
 		let cMetadataElement;
 		let min;
@@ -41,47 +41,47 @@ var CORA = (function(cora) {
 
 			pParentVar = pParentVarFactory.factor(spec, self);
 		};
-		
+
 		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
 			pVarViewSpec.type = "pNumVar";
-			
-			pVarViewSpec.info.technicalInfo.push({text: `min: ${min}`});
-			pVarViewSpec.info.technicalInfo.push({text: `max: ${max}`});
-			pVarViewSpec.info.technicalInfo.push({text: `warningMin: ${warningMin}`});
-			pVarViewSpec.info.technicalInfo.push({text: `warningMax: ${warningMax}`});
-			pVarViewSpec.info.technicalInfo.push({text: `numberOfDecimals: ${numberOfDecimals}`});
+
+			pVarViewSpec.info.technicalInfo.push({ text: `min: ${min}` });
+			pVarViewSpec.info.technicalInfo.push({ text: `max: ${max}` });
+			pVarViewSpec.info.technicalInfo.push({ text: `warningMin: ${warningMin}` });
+			pVarViewSpec.info.technicalInfo.push({ text: `warningMax: ${warningMax}` });
+			pVarViewSpec.info.technicalInfo.push({ text: `numberOfDecimals: ${numberOfDecimals}` });
 		};
 
 		const validateTypeSpecificValue = function(valueFromView) {
 			return checkValueBetweenMinAndMaxIfNumber(valueFromView);
 		};
-		
+
 		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView) {
 			let validator = CORA.numberVariableValidator();
 			return validator.validateData(valueFromView, cMetadataElement);
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
-			if(numberOfDecimals > 0){
+
+		const autoFormatEnteredValue = function(valueFromView) {
+			if (numberOfDecimals > 0) {
 				return autoFormatEnteredValueForDecimals(valueFromView);
-			}else {
+			} else {
 				return valueFromView;
 			}
 		};
-		
-		const autoFormatEnteredValueForDecimals = function(valueFromView){
+
+		const autoFormatEnteredValueForDecimals = function(valueFromView) {
 			let updatedValue = valueFromView.replaceAll(",", ".");
-			if(!updatedValue.includes(".")){
-				updatedValue+=".";
+			if (!updatedValue.includes(".")) {
+				updatedValue += ".";
 			}
-			let noDec = updatedValue.length-updatedValue.lastIndexOf('.');
-			for(let i=noDec; i<=numberOfDecimals; i++){
-				updatedValue+="0";
+			let noDec = updatedValue.length - updatedValue.lastIndexOf('.');
+			for (let i = noDec; i <= numberOfDecimals; i++) {
+				updatedValue += "0";
 			}
 			return updatedValue;
 		};
-		
-		const transformValueForView = function(mode, valueForView){
+
+		const transformValueForView = function(mode, valueForView) {
 			return valueForView;
 		};
 
@@ -92,11 +92,11 @@ var CORA = (function(cora) {
 		const getSpec = function() {
 			return spec;
 		};
-		
+
 		const getDependencies = function() {
 			return dependencies;
 		};
-	
+
 		const self = {
 			type: "pNumVar",
 			addTypeSpecificInfoToViewSpec: addTypeSpecificInfoToViewSpec,
@@ -104,14 +104,15 @@ var CORA = (function(cora) {
 			autoFormatEnteredValue: autoFormatEnteredValue,
 			transformValueForView: transformValueForView
 		};
-		
+
 		start();
 
 		return Object.freeze({
 			type: "pNumVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: pParentVar.getView
+			getView: pParentVar.getView,
+			getPresentationCounter: pParentVar.getPresentationCounter
 		});
 	};
 	return cora;

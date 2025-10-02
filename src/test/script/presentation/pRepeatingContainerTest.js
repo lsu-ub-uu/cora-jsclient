@@ -21,39 +21,39 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.attachedPRepeatingContainerFactory = function(metadataProvider, pubSub, textProvider,
-			presentationFactory, jsBookkeeper, fixture) {
+		presentationFactory, jsBookkeeper, fixture) {
 		var factor = function(path, pRepeatingContainerId) {
 			var cPRepeatingContainer = CORA.coraData(metadataProvider
-					.getMetadataById(pRepeatingContainerId));
+				.getMetadataById(pRepeatingContainerId));
 			var dependencies = {
-					"metadataProvider" : metadataProvider,
-					"pubSub" : pubSub,
-					"textProvider" : textProvider,
-					"presentationFactory" : presentationFactory,
-					"jsBookkeeper" : jsBookkeeper
+				"metadataProvider": metadataProvider,
+				"pubSub": pubSub,
+				"textProvider": textProvider,
+				"presentationFactory": presentationFactory,
+				"jsBookkeeper": jsBookkeeper
 			};
 			var spec = {
-				"path" : path,
-				"cPresentation" : cPRepeatingContainer,
+				"path": path,
+				"cPresentation": cPRepeatingContainer,
 			};
 			var pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 			var view = pRepeatingContainer.getView();
 			fixture.appendChild(view);
 			var valueView = view.firstChild;
 			return {
-				pRepeatingContainer : pRepeatingContainer,
-				fixture : fixture,
-				valueView : valueView,
-				metadataProvider : metadataProvider,
-				pubSub : pubSub,
-				textProvider : textProvider,
-				jsBookkeeper : jsBookkeeper,
-				view : view
+				pRepeatingContainer: pRepeatingContainer,
+				fixture: fixture,
+				valueView: valueView,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				jsBookkeeper: jsBookkeeper,
+				view: view
 			};
 
 		};
 		return Object.freeze({
-			factor : factor
+			factor: factor
 		});
 	};
 
@@ -61,7 +61,7 @@ var CORATEST = (function(coraTest) {
 }(CORATEST || {}));
 
 QUnit.module("presentation/pRepeatingContainerTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
@@ -69,24 +69,25 @@ QUnit.module("presentation/pRepeatingContainerTest.js", {
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 		this.pRepeatingContainerFactory = CORATEST.attachedPRepeatingContainerFactory(
-				this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
-				this.jsBookkeeper, this.fixture);
-				
+			this.metadataProvider, this.pubSub, this.textProvider, this.presentationFactory,
+			this.jsBookkeeper, this.fixture);
+
 		this.dependencies = {
-			"metadataProvider" : this.metadataProvider,
-			"pubSub" : this.pubSub,
-			"textProvider" : this.textProvider,
-			"presentationFactory" : this.presentationFactory,
-			"jsBookkeeper" : this.jsBookkeeper
+			"metadataProvider": this.metadataProvider,
+			"pubSub": this.pubSub,
+			"textProvider": this.textProvider,
+			"presentationFactory": this.presentationFactory,
+			"jsBookkeeper": this.jsBookkeeper
 		};
 		this.pRepeatingContainerId = "pTextVariableIdRContainer";
 		this.cPRepeatingContainer = CORA.coraData(this.metadataProvider
-					.getMetadataById(this.pRepeatingContainerId));
+			.getMetadataById(this.pRepeatingContainerId));
 		this.spec = {
-			"path" : [],
-			"cPresentation" : this.cPRepeatingContainer,
+			"path": [],
+			"cPresentation": this.cPRepeatingContainer,
+			presentationCounter: "5-55"
 		};
-			
+
 	},
 });
 
@@ -99,25 +100,29 @@ QUnit.test("testGetSpec", function(assert) {
 	var pRepeatingContainer = CORA.pRepeatingContainer(this.dependencies, this.spec);
 	assert.strictEqual(pRepeatingContainer.getSpec(), this.spec);
 });
+QUnit.test("testGetPresentationCounter", function(assert) {
+	var pRepeatingContainer = CORA.pRepeatingContainer(this.dependencies, this.spec);
+	assert.strictEqual(pRepeatingContainer.getPresentationCounter(), this.spec.presentationCounter);
+});
 
 QUnit.test("testInit",
-		function(assert) {
-			var attachedPRepeatingContainer = this.pRepeatingContainerFactory.factor({},
-					"pTextVariableIdRContainer");
-			assert.strictEqual(attachedPRepeatingContainer.pRepeatingContainer.type,
-					"pRepeatingContainer");
-			assert.deepEqual(attachedPRepeatingContainer.view.className, "pRepeatingContainer "
-					+ "pTextVariableIdRContainer");
-			var view = attachedPRepeatingContainer.view;
-			assert.ok(view.modelObject === attachedPRepeatingContainer.pRepeatingContainer,
-					"modelObject should be a pointer to the javascript object instance");
-			assert.strictEqual(view.childNodes.length, 3);
+	function(assert) {
+		var attachedPRepeatingContainer = this.pRepeatingContainerFactory.factor({},
+			"pTextVariableIdRContainer");
+		assert.strictEqual(attachedPRepeatingContainer.pRepeatingContainer.type,
+			"pRepeatingContainer");
+		assert.deepEqual(attachedPRepeatingContainer.view.className, "pRepeatingContainer "
+			+ "pTextVariableIdRContainer");
+		var view = attachedPRepeatingContainer.view;
+		assert.ok(view.modelObject === attachedPRepeatingContainer.pRepeatingContainer,
+			"modelObject should be a pointer to the javascript object instance");
+		assert.strictEqual(view.childNodes.length, 3);
 
-			assert.strictEqual(view.childNodes[0].textContent, "En rubrik");
+		assert.strictEqual(view.childNodes[0].textContent, "En rubrik");
 
-			var requestedCPresentation = this.presentationFactory.getSpec(1).cPresentation;
-			var recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
+		var requestedCPresentation = this.presentationFactory.getSpec(1).cPresentation;
+		var recordInfo = requestedCPresentation.getFirstChildByNameInData("recordInfo");
 
-			var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			assert.strictEqual(presentationId, "pVarTextVariableIdOutput");
-		});
+		var presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		assert.strictEqual(presentationId, "pVarTextVariableIdOutput");
+	});

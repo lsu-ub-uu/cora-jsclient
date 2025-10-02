@@ -245,6 +245,7 @@ img {
 .buttonView {
 	/* 	needed for tests to see that it is visible */
 	display: inline-block;
+	padding-bottom: 10px;
 }
 
 .buttonView:empty {

@@ -26,9 +26,9 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 			return id;
 		};
 		this.pParentMultipleChildrenFactory = CORATEST.standardParentFactorySpy("pParentMultipleChildrenSpy");
-			
+
 		this.pAttributesFactory = CORATEST.standardFactorySpy("pAttributesSpy");
-		
+
 		this.fixture = document.getElementById("qunit-fixture");
 		this.dependencies = {
 			metadataProvider: CORATEST.MetadataProviderStub(),
@@ -58,46 +58,46 @@ QUnit.module("presentation/pSurroundingContainerTest.js", {
 
 QUnit.test("testInit", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
-	
+
 	assert.strictEqual(pSurroundingContainer.type, "pSurroundingContainer");
 });
 
 QUnit.test("testInitParentFactoryCalled", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
-	
+
 	assert.strictEqual(this.pParentMultipleChildrenFactory.getSpec(0), this.spec);
 	let child = this.pParentMultipleChildrenFactory.getChild(0);
-	
+
 	assert.strictEqual(child.type, "pSurroundingContainer");
 	assert.strictEqual(child.metadataId, this.spec.metadataIdUsedInData);
 });
 
 QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
-	
+
 	let child = this.pParentMultipleChildrenFactory.getChild(0);
 	assert.ok(child.addTypeSpecificInfoToViewSpec);
-	
-	let spec ={
+
+	let spec = {
 		className: "someChildType pgGroupIdOneTextChildMinimized",
 		headline: "Headline",
 		headlineLevel: "h5",
-	  	id: "onetwo",
-	  	info: {
-	    	defText: "groupIdOneTextChildDefText",
-	    	text: "groupIdOneTextChildText",
-	    	technicalInfo: [
-	    	]
-	  	},
-	  	mode: "input",
+		id: "onetwo",
+		info: {
+			defText: "groupIdOneTextChildDefText",
+			text: "groupIdOneTextChildText",
+			technicalInfo: [
+			]
+		},
+		mode: "input",
 		presentationId: "pgGroupIdOneTextChildMinimized"
 	}
 	spec.childExtra = "added by child";
 	spec.info.technicalInfo.push(
 		{
-		text: "textId: groupIdOneTextChildRepeat1to3Text",
-		onclickMethod: pSurroundingContainer.openTextIdRecord
-	}, {
+			text: "textId: groupIdOneTextChildRepeat1to3Text",
+			onclickMethod: pSurroundingContainer.openTextIdRecord
+		}, {
 		text: "defTextId: groupIdOneTextChildRepeat1to3DefText",
 		onclickMethod: pSurroundingContainer.openDefTextIdRecord
 	}, {
@@ -112,28 +112,35 @@ QUnit.test("testAddTypeSpecificInfoToView_WhenAddedToParentAsChild", function(as
 
 
 	child.addTypeSpecificInfoToViewSpec("input", spec);
-	
-	
+
+
 	assert.strictEqual(spec.type, "container");
 	assert.strictEqual(spec.info.text, "surroundingContainer");
 	assert.strictEqual(spec.info.defText, "surroundingContainer");
-	
+
 	assert.strictEqual(spec.headline, undefined);
 	assert.strictEqual(spec.headlineLevel, undefined);
-	
+
 	assert.strictEqual(spec.info.technicalInfo.length, 1);
 	assert.deepEqual(spec.info.technicalInfo[0], {
 		text: "presentationId: pgGroupIdOneTextChildMinimized",
 		onclickMethod: pSurroundingContainer.openPresentationIdRecord
 	});
-	
+
 });
 
 QUnit.test("testGetView", function(assert) {
 	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
 	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
-	
+
 	assert.strictEqual(pSurroundingContainer.getView, parent.getView);
+});
+
+QUnit.test("testGetPresentationCounter", function(assert) {
+	let pSurroundingContainer = CORA.pSurroundingContainer(this.dependencies, this.spec);
+	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
+
+	assert.strictEqual(pSurroundingContainer.getPresentationCounter, parent.getPresentationCounter);
 });
 
 QUnit.test("testGetSpec", function(assert) {

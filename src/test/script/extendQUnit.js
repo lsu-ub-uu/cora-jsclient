@@ -43,10 +43,10 @@ QUnit.assert.allNotVisible = function(domElements, message) {
 	});
 };
 
-QUnit.assert.elementHasClass = function(domElement, className) {
-	QUnit.assert.true(domElement.classList.contains(className));
+QUnit.assert.elementHasClass = function(domElement, className, message) {
+	QUnit.assert.true(domElement.classList.contains(className), message);
 };
 
-QUnit.assert.elementHasNotClass = function(domElement, className) {
-	QUnit.assert.false(domElement.classList.contains(className));
+QUnit.assert.elementHasNotClass = function(domElement, className, message) {
+	QUnit.assert.false(domElement.classList.contains(className), message);
 };

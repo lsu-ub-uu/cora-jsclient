@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pMapTest.js", hooks => {
+QUnit.module.only("presentation/pMapTest.js", hooks => {
 	const test = QUnit.test;
 	let metadataProvider;
 	let textProvider;
@@ -47,6 +47,7 @@ QUnit.module("presentation/pMapTest.js", hooks => {
 			path: [],
 			cPresentation: CORA.coraData(metadataProvider
 				.getMetadataById("coordinatesPGroup")),
+			presentationCounter: "somePresentationCounter"
 		};
 	});
 
@@ -373,5 +374,11 @@ QUnit.module("presentation/pMapTest.js", hooks => {
 		let pMap = CORA.pMap(dependencies, spec);
 		let dependencies2 = pMap.getDependencies();
 		assert.equal(dependencies2, dependencies);
+	});
+
+	test("testGetPresentationCounter", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+
+		assert.strictEqual(pMap.getPresentationCounter(), spec.presentationCounter);
 	});
 });

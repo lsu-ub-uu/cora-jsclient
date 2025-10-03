@@ -22,7 +22,6 @@ var CORA = (function(cora) {
 	cora.pRepeatingElement = function(dependencies, spec) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
 		const pubSub = dependencies.pubSub;
-		const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
 
 		const pChildRefHandler = spec.pChildRefHandler;
 		const pChildRefHandlerView = spec.pChildRefHandlerView;
@@ -54,46 +53,20 @@ var CORA = (function(cora) {
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		let presentationVisibilities = {};
 		let pRepeatingElementIsVisible;
+		let presentationContainsDatas = {};
+		let pRepeatingElementContainsData;
+		let presentationCounterToUseWhenPublishingCombinedStatus;
 
 
 		const start = function() {
 			view = createBaseView();
 			buttonView = createButtonView();
 			possiblyAddClickableHeadline();
-//			createContainsDataTracker();
-			updateViewForNoData();
-		};
-
-		const createContainsDataTracker = function() {
-			//console.log("shold we create containsdatatracker", path)
-			if (spec.containsDataShouldBeTracked === true || mode === "output") {
-				//console.log("create containsdatatracker", path)
-				let containsDataTrackerSpec = {
-					methodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
-					path: spec.path
-				};
-				containsDataTrackerFactory.factor(containsDataTrackerSpec);
-			}
+			updateViewForNoInitialData();
 		};
 
 
-		const methodToCallOnContainsDataChange = function(state) {
-			if (state) {
-				updateViewForData();
-			} else {
-				updateViewForNoData();
-			}
-		};
-
-		const updateViewForData = function() {
-			view.classList.add("containsData");
-			view.classList.remove("containsNoData");
-			if (mode === "output") {
-				show(view);
-			}
-		};
-
-		const updateViewForNoData = function() {
+		const updateViewForNoInitialData = function() {
 			view.classList.remove("containsData");
 			view.classList.add("containsNoData");
 			if (mode === "output") {
@@ -201,35 +174,60 @@ var CORA = (function(cora) {
 		};
 
 		const addPresentation = function(defaultPresentationIn) {
-//			console.log("sub visibilityChange",defaultPresentationIn.getPresentationCounter())
+			presentationCounterToUseWhenPublishingCombinedStatus = defaultPresentationIn.getPresentationCounter();
 			pubSub.subscribe("visibilityChange", [defaultPresentationIn.getPresentationCounter()],
 				undefined, handleMsgToDeterminVisibilityChange);
 			defaultPresentation = defaultPresentationIn.getView();
 			defaultPresentation.classList.add("default");
 			view.insertBefore(defaultPresentation, buttonView);
-			view.className = "repeatingElement";
 			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
 		};
 
 		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
-//			console.log("handle visibilityChange",dataFromMsg)
-						
 			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
 			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+			let visibilityHasChanged = visibilityChanges(currentlyVisible);
+			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
+			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
 
-			if (visibilityChanges(currentlyVisible)) {
+			if (visibilityHasChanged && mode === "output") {
 				showOrHideViewBaseOnVisibility(currentlyVisible);
-				publishVisibilityChange(dataFromMsg);
+			}
+			if (visibilityHasChanged || containsDataHasChanged) {
+				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData);
+			}
+			if (currentlyContainsData) {
+				updateViewForContainsData();
+			} else {
+				updateViewForContainsNoData();
 			}
 		};
 
 		const atLeastOneTrackedPresentationIsVisible = function() {
 			return Object.values(presentationVisibilities).some(v => v === 'visible');
 		};
+		const atLeastOneTrackedPresentationContainsData = function() {
+			return Object.values(presentationContainsDatas).some(v => v === true);
+		};
+
+		const getVisibilityStatus = function() {
+			if (Object.values(presentationVisibilities).some(v => v === 'visible')) {
+				return "visible";
+			}
+			return "hidden";
+		};
 
 		const visibilityChanges = function(currentlyVisible) {
 			if (pRepeatingElementIsVisible !== currentlyVisible) {
 				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+		const containsDataChanges = function(currentlyContainsData) {
+			if (pRepeatingElementContainsData !== currentlyContainsData) {
+				pRepeatingElementContainsData = currentlyContainsData;
 				return true;
 			}
 			return false;
@@ -242,12 +240,22 @@ var CORA = (function(cora) {
 				hide(view);
 			}
 		};
+		const updateViewForContainsData = function() {
+			view.classList.add("containsData");
+			view.classList.remove("containsNoData");
+		};
 
-		const publishVisibilityChange = function(dataFromMsg) {
+		const updateViewForContainsNoData = function() {
+			view.classList.remove("containsData");
+			view.classList.add("containsNoData");
+		};
+
+		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData) {
 			let visibilityData = {
 				path: [parentPresentationCounter],
-				presentationCounter: dataFromMsg.presentationCounter,
-				visibility: dataFromMsg.visibility
+				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
+				visibility: currentlyVisible,
+				containsData: currentlyContainsData
 			};
 
 			pubSub.publish("visibilityChange", visibilityData);
@@ -441,7 +449,6 @@ var CORA = (function(cora) {
 			hideAddBeforeButton: hideAddBeforeButton,
 			showAddBeforeButton: showAddBeforeButton,
 			getPath: getPath,
-			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 		start();

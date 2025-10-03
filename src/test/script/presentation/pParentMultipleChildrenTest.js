@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("presentation/pParentMultipleChildrenTest.js", hooks => {
+QUnit.module("presentation/pParentMultipleChildrenTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let pAttributesFactory;

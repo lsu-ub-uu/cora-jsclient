@@ -25,7 +25,8 @@ var CORA = (function(cora) {
 		const pubSub = dependencies.pubSub;
 
 		const path = spec.path;
-
+		const presentationCounter = spec.presentationCounter;
+				
 		let mapStarted = false;
 		let longitudeValue = "";
 		let latitudeValue = "";
@@ -272,7 +273,11 @@ var CORA = (function(cora) {
 
 		const getSpec = function() {
 			return spec;
-		}
+		};
+		
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
 
 		let out = Object.freeze({
 			type: "pMap",
@@ -283,7 +288,8 @@ var CORA = (function(cora) {
 			handleSetValueLongitude: handleSetValueLongitude,
 			handleSetValueLatitude: handleSetValueLatitude,
 			publishLatLngValues: publishLatLngValues,
-			viewJustMadeVisible: viewJustMadeVisible
+			viewJustMadeVisible: viewJustMadeVisible,
+			getPresentationCounter: getPresentationCounter
 		});
 		start();
 		view.modelObject = out;

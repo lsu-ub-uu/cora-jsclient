@@ -18,12 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
+QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let jsBookkeeper;
 	let pubSub;
-	let containsDataTrackerFactory;
 
 	let spec;
 
@@ -34,12 +33,10 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		fixture = document.getElementById("qunit-fixture");
 		jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		pubSub = CORATEST.pubSubSpy();
-		containsDataTrackerFactory = CORATEST.standardFactorySpy("containsDataTrackerSpy");
 
 		dependencies = {
 			jsBookkeeper: jsBookkeeper,
 			pubSub: pubSub,
-			containsDataTrackerFactory: containsDataTrackerFactory
 		};
 		spec = {
 			path: [],
@@ -49,7 +46,6 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: true,
 			mode: "input",
-			containsDataShouldBeTracked: true,
 			parentPresentationCounter: "1-1"
 		};
 	});
@@ -92,125 +88,6 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(addBeforeButton.className, "iconButton addBeforeButton");
 
 		assert.strictEqual(buttonView.childNodes.length, 3);
-	});
-
-	test("testInit_createsContainsDataTracker", function(assert) {
-		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
-			pRepeatingElement.onlyForTestMethodToCallOnContainsDataChange);
-		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, undefined);
-		assert.stringifyEqual(factoredSpec.path, spec.path);
-	});
-
-	test("testInit_createsContainsDataTracker_notStartedIfSpecPreventsIt", function(assert) {
-		spec.containsDataShouldBeTracked = false;
-		createAndReturnPRepeatingElementGetAndAttatchView();
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 0);
-	});
-
-	test("testInit_createsContainsDataTracker_ifOutputEvenIfItIsStatedNotToBestarted", function(assert) {
-		spec.containsDataShouldBeTracked = false;
-		spec.mode = "output";
-		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
-			pRepeatingElement.onlyForTestMethodToCallOnContainsDataChange);
-		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, undefined);
-		assert.stringifyEqual(factoredSpec.path, spec.path);
-	});
-
-	test("testChangeViewOnContainsDataTracker_output", function(assert) {
-		spec.mode = "output";
-		createAndReturnPRepeatingElementGetAndAttatchView();
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(view.className, "repeatingElement containsNoData");
-		assert.elementHasNotClass(view, "containsData");
-		assert.elementHasClass(view, "containsNoData");
-		assert.notVisible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-		assert.elementHasNotClass(view, "containsData");
-		assert.elementHasClass(view, "containsNoData");
-		assert.notVisible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
-	});
-
-	test("testChangeViewOnContainsDataTracker_presetDisplay_input", function(assert) {
-		spec.mode = "input";
-		createAndReturnPRepeatingElementGetAndAttatchView();
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		view.style.display = "flex";
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-		assert.strictEqual(view.style.display, "flex");
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.strictEqual(view.style.display, "flex");
-	});
-
-	test("testChangeViewOnContainsDataTracker_presetDisplay_output", function(assert) {
-		spec.mode = "output";
-		createAndReturnPRepeatingElementGetAndAttatchView();
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		view.style.display = "flex";
-
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-		assert.strictEqual(view.style.display, "none");
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.strictEqual(view.style.display, "flex");
-	});
-
-	test("testChangeViewOnContainsDataTracker_input", function(assert) {
-		spec.mode = "input";
-		createAndReturnPRepeatingElementGetAndAttatchView();
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(view.className, "repeatingElement containsNoData");
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-		assert.elementHasNotClass(view, "containsData");
-		assert.elementHasClass(view, "containsNoData");
-		assert.visible(view);
-
-		factoredSpec.methodToCallOnContainsDataChange(true);
-		assert.elementHasClass(view, "containsData");
-		assert.elementHasNotClass(view, "containsNoData");
-		assert.visible(view);
 	});
 
 	test("testInitClickableHeadline", function(assert) {
@@ -488,7 +365,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(presentationView.className, "presentationStub default");
 		assert.visible(presentationView, "presentationView should be visible");
 		assert.strictEqual(view.childNodes.length, 2);
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 	});
 
 	test("testAddPresentationNoStyle", function(assert) {
@@ -502,7 +379,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(presentationView.className, "presentationStub default");
 		assert.visible(presentationView, "presentationView should be visible");
 		assert.strictEqual(view.childNodes.length, 2);
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 	});
 
 	test("testaddAlternativePresentationFirstSmaller", function(assert) {
@@ -581,7 +458,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 
 		let alternativePresentation = CORATEST.presentationStub("minimized");
 		pRepeatingElement.addAlternativePresentation(alternativePresentation);
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		let alternativePresentationView = view.childNodes[1];
 		assert.strictEqual(alternativePresentationView.className, "presentationStub alternative");
@@ -761,20 +638,20 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("maximized");
 		pRepeatingElement.addPresentation(presentation);
 
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		let alternativePresentation = CORATEST.presentationStub("minimized maximized");
 		pRepeatingElement.addAlternativePresentation(alternativePresentation);
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		let alternativeButton = buttonView.childNodes[1];
 		let defaultButton = buttonView.childNodes[2];
 
 		alternativeButton.onclick();
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 
 		defaultButton.onclick();
-		assert.deepEqual(view.className, "repeatingElement");
+		assert.deepEqual(view.className, "repeatingElement containsNoData");
 	});
 
 	////////////////////////////////////////////////////////////
@@ -854,7 +731,7 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		let subscriptions = pubSub.getSubscriptions();
 		assert.strictEqual(subscriptions.length, 1);
 		assert.strictEqual(subscriptions[0].type, "visibilityChange");
-		assert.stringifyEqual(subscriptions[0].path, ["presentationCounterFromSpy"]);
+		assert.stringifyEqual(subscriptions[0].path, ["1-34-Spy"]);
 		assert.strictEqual(subscriptions[0].context, undefined);
 		assert.strictEqual(subscriptions[0].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
 
@@ -864,60 +741,124 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 		subscriptions = pubSub.getSubscriptions();
 		assert.strictEqual(subscriptions.length, 2);
 		assert.strictEqual(subscriptions[1].type, "visibilityChange");
-		assert.stringifyEqual(subscriptions[1].path, ["presentationCounterFromSpy"]);
+		assert.stringifyEqual(subscriptions[1].path, ["1-34-Spy"]);
 		assert.strictEqual(subscriptions[1].context, undefined);
 		assert.strictEqual(subscriptions[1].functionToCall, pRepeatingElement.handleMsgToDeterminVisibilityChange);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
 
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
-		assert.visible(view);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", false);
+		assertViewVisibilityAndContainsData(assert, true, false);
 	});
 
-	test("testhandleMsgToDeterminVisibilityChange_hidden", function(assert) {
+	test("testhandleMsgToDeterminVisibilityChange_shown in input", function(assert) {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "hidden");
-		assert.notVisible(view);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_hiddenInOutput", function(assert) {
+		spec.mode = "output";
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true);
+		assertViewVisibilityAndContainsData(assert, false, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
 		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
-		assert.notVisible(view);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible");
-		assert.visible(view);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden");
-		assert.visible(view);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
-		assert.notVisible(view);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden");
-		assert.notVisible(view);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", true);
 
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, true, false);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34-Spy", "hidden", false);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", true);
+
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, true, false);
 		assertNumberOfMessages(assert, 4);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34", "visible");
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34", "hidden");
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34", "visible");
-		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34-Spy", "visible", false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 2);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, true, false);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
+		let pRepeatingElement = createAndReturnPRepeatingElementGetAndAttatchView();
+		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
+		pRepeatingElement.addPresentation(presentation);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 2);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, true, true);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "hidden", true);
 	});
 
 
-	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter, visibility) {
+	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter,
+		visibility, containsData) {
 		let msg = presentationCounter + "/visibilityChange";
 		let dataFromMsg = {
 			presentationCounter: presentationCounter,
-			visibility: visibility
+			visibility: visibility,
+			containsData: containsData
 		};
 		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
 	};
@@ -928,13 +869,28 @@ QUnit.module.only("presentation/pRepeatingElementTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility) {
+		presentationCounter, visibility, containsData) {
 		let messages = pubSub.getMessages();
-		let message0 = messages[messageNo];
-		assert.strictEqual(message0.type, "visibilityChange");
-		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
-		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
-		assert.strictEqual(message0.message.visibility, visibility);
+		let message = messages[messageNo];
+		assert.strictEqual(message.type, "visibilityChange");
+		assert.stringifyEqual(message.message.path, [parentPresentationCounter]);
+		assert.strictEqual(message.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message.message.visibility, visibility);
+		assert.strictEqual(message.message.containsData, containsData);
 	};
 
+	const assertViewVisibilityAndContainsData = function(assert, visible, containsData) {
+		if (visible) {
+			assert.visible(view, "View is not visible, it should be");
+		} else {
+			assert.notVisible(view, "View is visible, it should not be");
+		}
+		if (containsData) {
+			assert.elementHasClass(view, "containsData", "Missing class containsData");
+			assert.elementHasNotClass(view, "containsNoData", "Should not have class containsNoData");
+		} else {
+			assert.elementHasNotClass(view, "containsData", "Should not have class containsData");
+			assert.elementHasClass(view, "containsNoData", "Missing class containsNoData");
+		}
+	};
 });

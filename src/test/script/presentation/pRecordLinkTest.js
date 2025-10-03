@@ -315,6 +315,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		assert.deepEqual(factoredView.getHideCalled(), 1);
 		assert.deepEqual(factoredView.getShowCalled(), 0);
+		assertNumberOfMessages(assert, 0);
 
 		let msg = {
 			data: "A new value",
@@ -324,6 +325,8 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		assert.deepEqual(factoredView.getHideCalled(), 1);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible");
 
 		let msg2 = {
 			data: "",
@@ -333,9 +336,11 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 
 		assert.deepEqual(factoredView.getHideCalled(), 2);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden");
 	});
 
-	test("testNoHideOrShowInputPresentation", function(assert) {
+	test("testHideOrShowInputPresentation", function(assert) {
 		spec.cPresentation = CORA.coraData(metadataProvider
 			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
@@ -348,7 +353,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		pRecordLink.hideOrShowOutputPresentation(msg);
 
 		assert.deepEqual(factoredView.getHideCalled(), 0);
-		assert.deepEqual(factoredView.getShowCalled(), 0);
+		assert.deepEqual(factoredView.getShowCalled(), 1);
 
 		let msg2 = {
 			data: "",
@@ -356,9 +361,37 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		};
 		pRecordLink.hideOrShowOutputPresentation(msg2);
 
-		assert.deepEqual(factoredView.getHideCalled(), 0);
-		assert.deepEqual(factoredView.getShowCalled(), 0);
+		assert.deepEqual(factoredView.getHideCalled(), 1);
+		assert.deepEqual(factoredView.getShowCalled(), 1);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden");
 	});
+
+
+	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter, visibility) {
+		let msg = presentationCounter + "/visibilityChange";
+		let dataFromMsg = {
+			presentationCounter: presentationCounter,
+			visibility: visibility
+		};
+		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+	};
+
+	const assertNumberOfMessages = function(assert, noMessages) {
+		let messages = pubSub.getMessages();
+		assert.strictEqual(messages.length, noMessages);
+	};
+
+	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
+		presentationCounter, visibility) {
+		let messages = pubSub.getMessages();
+		let message0 = messages[messageNo];
+		assert.strictEqual(message0.type, "visibilityChange");
+		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
+		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message0.message.visibility, visibility);
+	};
+
 
 	test("testGetDependencies", function(assert) {
 		spec.cPresentation = CORA.coraData(metadataProvider

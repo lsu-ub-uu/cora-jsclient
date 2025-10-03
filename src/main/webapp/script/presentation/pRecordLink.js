@@ -451,20 +451,28 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToTextVarSetValue = function() {
-			pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
 				hideOrShowOutputPresentation);
 		};
 
 		const hideOrShowOutputPresentation = function(dataFromMsg) {
 			let valueForView = dataFromMsg.data;
-			if (mode === "output") {
-				if (valueForView !== "") {
-					view.show();
-				} else {
-					view.hide();
-				}
+			if (valueForView !== "") {
+				view.show();
+				publishVisibilityChange("visible");
+			} else {
+				view.hide();
+				publishVisibilityChange("hidden");
 			}
+		};
+
+		const publishVisibilityChange = function(visibility) {
+			let visibilityData = {
+				path: [presentationCounter],
+				presentationCounter: presentationCounter,
+				visibility: visibility
+			};
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const initPAttributes = function() {

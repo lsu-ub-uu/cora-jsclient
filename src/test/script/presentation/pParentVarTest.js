@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pParentVarTest.js", hooks => {
+QUnit.module("presentation/pParentVarTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let metadataProvider;
@@ -606,7 +606,12 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 	test("testSetValueInput", function(assert) {
 		const childSpy = createChildSpy();
 		let pParentVar = CORA.pParentVar(dependencies, spec, childSpy);
-		pParentVar.setValue("A Value");
+		let data = {
+			dataOrigin: "final",
+			data: "A Value",
+			path: []
+		};
+		pParentVar.handleSetValueMsg(data);
 
 		let pVarViewSpy = pVarViewFactory.getFactored(0);
 		assert.equal(pVarViewSpy.getValue(), "Transformed A Value");
@@ -616,8 +621,13 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 
 	test("testSetValueNoChangeToShowHideInInputMode", function(assert) {
 		const pParentVar = CORA.pParentVar(dependencies, spec, createChildSpy());
+		let data = {
+			dataOrigin: "startup",
+			data: "A Value",
+			path: []
+		};
+		pParentVar.handleSetValueMsg(data);
 
-		pParentVar.setValue("A Value");
 
 		let spyView = pVarViewFactory.getFactored(0);
 		assert.strictEqual(spyView.getShowCalled(), 0);
@@ -627,6 +637,7 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 	test("testHandleMessage", function(assert) {
 		let pParentVar = CORA.pParentVar(dependencies, spec, createChildSpy());
 		let data = {
+			dataOrigin: "final",
 			data: "A new value",
 			path: []
 		};
@@ -636,20 +647,27 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 		assert.equal(pVarViewSpy.getState(), "ok");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false);
 
+		data.dataOrigin = "startup";
+		data.data = "some other value";
+		pParentVar.handleSetValueMsg(data);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true);
+
+		data.dataOrigin = "user";
 		data.data = "";
 		pParentVar.handleSetValueMsg(data);
-
-		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible");
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "visible", false);
 
 	});
-	test("testHandleMessage", function(assert) {
-		spec.cPresentation= CORA.coraData(metadataProvider.getMetadataById("idTextOutputPVar"));
-		
+	test("testHandleMessage_output", function(assert) {
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("idTextOutputPVar"));
+
 		let pParentVar = CORA.pParentVar(dependencies, spec, createChildSpy());
 		let data = {
+			dataOrigin: "final",
 			data: "A new value",
 			path: []
 		};
@@ -659,16 +677,22 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 		assert.equal(pVarViewSpy.getState(), "ok");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false);
 
+		data.dataOrigin = "startup";
+		data.data = "some other value";
+		pParentVar.handleSetValueMsg(data);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true);
+
+		data.dataOrigin = "user";
 		data.data = "";
 		pParentVar.handleSetValueMsg(data);
-
-		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "hidden");
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "hidden", false);
 
 	});
-	
+
 
 	const assertNumberOfMessages = function(assert, noMessages) {
 		let messages = pubSub.getMessages();
@@ -676,13 +700,14 @@ QUnit.module.only("presentation/pParentVarTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility) {
+		presentationCounter, visibility, containsData) {
 		let messages = pubSub.getMessages();
 		let message0 = messages[messageNo];
 		assert.strictEqual(message0.type, "visibilityChange");
 		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
 		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message0.message.visibility, visibility);
+		assert.strictEqual(message0.message.containsData, containsData, "containsData is wrong");
 	};
 
 	test("testChangedValueEmpty", function(assert) {

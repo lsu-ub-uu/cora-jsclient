@@ -35,7 +35,7 @@ var CORATEST = (function(coraTest) {
 			return view;
 		}
 		const getPresentationCounter = function() {
-			return "presentationCounterFromSpy";
+			return "1-34-Spy";
 		};
 
 		return Object.freeze({

@@ -204,39 +204,29 @@ var CORA = (function(cora) {
 		};
 
 		const handleSetValueMsg = function(dataFromMsg) {
-			setValue(dataFromMsg.data);
+			setValue(dataFromMsg);
 			updateViewWithCurrentState();
 		};
 
-		const setValue = function(value) {
+		const setValue = function(dataFromMsg) {
+			let value = dataFromMsg.data;
 			state = "ok";
 			previousValue = value;
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
-
-			publishVisibilityChange(value);
+			//other possible values are startup or user
+			let containsData = dataFromMsg.dataOrigin !== "final" && value !== "";
+			publishVisibilityChange(value, containsData);
 		};
-		//		const handleNewValue = function(dataFromMsg, msgAsArray) {
-		//			if (dataFromMsg.data !== "") {
-		//				if (dataFromMsg.dataOrigin !== "final") {
-		//					updateViewForData();
-		//					findOrAddPathToStored(msgAsArray);
-		//				}
-		//			} else {
-		//				removeAndSetState(msgAsArray);
-		//			}
-		//		};
 
-		const publishVisibilityChange = function(value) {
-//			console.log("mode",mode)
+		const publishVisibilityChange = function(value, containsData) {
 			let visibility = value === "" && mode === "output" ? "hidden" : "visible";
 			let visibilityData = {
 				path: [presentationCounter],
 				presentationCounter: presentationCounter,
-				visibility: visibility
+				visibility: visibility,
+				containsData: containsData
 			};
-//			console.log("publish visibilityChange", visibilityData)
-
 			pubSub.publish("visibilityChange", visibilityData);
 		};
 
@@ -357,7 +347,6 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			setValue: setValue,
 			handleSetValueMsg: handleSetValueMsg,
 			getText: getText,
 			getDefText: getDefText,

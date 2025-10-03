@@ -20,6 +20,7 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingContainer = function(dependencies, spec) {
+		const pubSub = dependencies.pubSub;
 		let path = spec.path;
 		const presentationCounter = spec.presentationCounter;
 		let cPresentation = spec.cPresentation;
@@ -29,6 +30,12 @@ var CORA = (function(cora) {
 		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		let view;
+
+		let presentationVisibilities = {};
+		let presentationContainsDatas = {};
+		let pRepeatingElementIsVisible;
+		let pRepeatingElementContainsData;
+		let presentationCounterToUseWhenPublishingCombinedStatus;
 
 		const start = function() {
 			view = createBaseView();
@@ -54,11 +61,16 @@ var CORA = (function(cora) {
 				return text;
 			}
 			let presentationSpec = {
-				"path": path,
-				"metadataIdUsedInData": spec.metadataIdUsedInData,
-				"cPresentation": cPresentationChild
+				path: path,
+				metadataIdUsedInData: spec.metadataIdUsedInData,
+				cPresentation: cPresentationChild
 			};
 			let presentation = presentationFactory.factor(presentationSpec);
+			if (presentationCounterToUseWhenPublishingCombinedStatus === undefined) {
+				presentationCounterToUseWhenPublishingCombinedStatus = presentation.getPresentationCounter();
+			}
+			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
+				undefined, handleMsgToDeterminVisibilityChange);
 			return presentation.getView();
 		};
 
@@ -68,6 +80,62 @@ var CORA = (function(cora) {
 				.getFirstChildByNameInData("refGroup"));
 			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
+			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+			let visibilityHasChanged = visibilityChanges(currentlyVisible);
+			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
+			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
+
+			if (visibilityHasChanged || containsDataHasChanged) {
+				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData);
+			}
+		};
+
+		const atLeastOneTrackedPresentationIsVisible = function() {
+			return Object.values(presentationVisibilities).some(v => v === 'visible');
+		};
+
+		const atLeastOneTrackedPresentationContainsData = function() {
+			return Object.values(presentationContainsDatas).some(v => v === true);
+		};
+
+		const getVisibilityStatus = function() {
+			if (Object.values(presentationVisibilities).some(v => v === 'visible')) {
+				return "visible";
+			}
+			return "hidden";
+		};
+
+		const visibilityChanges = function(currentlyVisible) {
+			if (pRepeatingElementIsVisible !== currentlyVisible) {
+				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+
+		const containsDataChanges = function(currentlyContainsData) {
+			if (pRepeatingElementContainsData !== currentlyContainsData) {
+				pRepeatingElementContainsData = currentlyContainsData;
+				return true;
+			}
+			return false;
+		};
+
+		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData) {
+			let visibilityData = {
+				path: [presentationCounter],
+
+				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
+				visibility: currentlyVisible,
+				containsData: currentlyContainsData
+			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const getMetadataById = function(id) {
@@ -98,7 +166,8 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			getPresentationCounter: getPresentationCounter
+			getPresentationCounter: getPresentationCounter,
+			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 		view.modelObject = out;
 		return out;

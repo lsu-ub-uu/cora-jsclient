@@ -281,6 +281,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
+			dataOrigin: "user",
 			data: "A new value",
 			path: []
 		};
@@ -318,6 +319,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assertNumberOfMessages(assert, 0);
 
 		let msg = {
+			dataOrigin: "final",
 			data: "A new value",
 			path: []
 		};
@@ -326,9 +328,10 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 1);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible");
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false);
 
 		let msg2 = {
+			dataOrigin: "user",
 			data: "",
 			path: []
 		};
@@ -337,7 +340,19 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 2);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden", false);
+
+		let msg3 = {
+			dataOrigin: "user",
+			data: "soem data",
+			path: []
+		};
+		pRecordLink.hideOrShowOutputPresentation(msg3);
+
+		assert.deepEqual(factoredView.getHideCalled(), 2);
+		assert.deepEqual(factoredView.getShowCalled(), 2);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true);
 	});
 
 	test("testHideOrShowInputPresentation", function(assert) {
@@ -347,35 +362,42 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let factoredView = pRecordLinkViewFactory.getFactored(0);
 
 		let msg = {
+			dataOrigin: "final",
 			data: "A new value",
 			path: []
 		};
 		pRecordLink.hideOrShowOutputPresentation(msg);
-
+		//
 		assert.deepEqual(factoredView.getHideCalled(), 0);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false);
 
 		let msg2 = {
+			dataOrigin: "user",
 			data: "",
 			path: []
 		};
 		pRecordLink.hideOrShowOutputPresentation(msg2);
 
-		assert.deepEqual(factoredView.getHideCalled(), 1);
+		assert.deepEqual(factoredView.getHideCalled(), 0);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden");
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "visible", false);
+
+		let msg3 = {
+			dataOrigin: "user",
+			data: "some value",
+			path: []
+		};
+		pRecordLink.hideOrShowOutputPresentation(msg3);
+
+		assert.deepEqual(factoredView.getHideCalled(), 0);
+		assert.deepEqual(factoredView.getShowCalled(), 2);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true);
 	});
 
-
-	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter, visibility) {
-		let msg = presentationCounter + "/visibilityChange";
-		let dataFromMsg = {
-			presentationCounter: presentationCounter,
-			visibility: visibility
-		};
-		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
-	};
 
 	const assertNumberOfMessages = function(assert, noMessages) {
 		let messages = pubSub.getMessages();
@@ -383,13 +405,14 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility) {
+		presentationCounter, visibility, containsData) {
 		let messages = pubSub.getMessages();
-		let message0 = messages[messageNo];
-		assert.strictEqual(message0.type, "visibilityChange");
-		assert.stringifyEqual(message0.message.path, [parentPresentationCounter]);
-		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
-		assert.strictEqual(message0.message.visibility, visibility);
+		let message = messages[messageNo];
+		assert.strictEqual(message.type, "visibilityChange");
+		assert.stringifyEqual(message.message.path, [parentPresentationCounter]);
+		assert.strictEqual(message.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message.message.visibility, visibility);
+		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong");
 	};
 
 

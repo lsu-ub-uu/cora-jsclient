@@ -18,14 +18,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pRepeatingContainerTest.js", hooks => {
+QUnit.module("presentation/pRepeatingContainerTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let pubSub;
 
 	let spec;
-	let containsData;
-	let noOfCallsToContainsData;
 
 	let fixture;
 	let metadataProvider;
@@ -142,10 +140,7 @@ QUnit.module.only("presentation/pRepeatingContainerTest.js", hooks => {
 		assert.strictEqual(presentationId, "pVarTextVariableIdOutput");
 	});
 
-	//////////////
 	test("testaddPresentationsTriggersSubscribe", function(assert) {
-		//		spec.cAlternativePresentation = cAlternativePresentation;
-		//		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 		let subscriptions = pubSub.getSubscriptions();
@@ -164,106 +159,70 @@ QUnit.module.only("presentation/pRepeatingContainerTest.js", hooks => {
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
-		//		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		//		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
 
 		assertNumberOfMessages(assert, 1);
 		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", false);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_hiddenInInput", function(assert) {
-		//		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		//		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true);
 
 		assertNumberOfMessages(assert, 1);
 		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "hidden", true);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 	});
 
-	//	test("testhandleMsgToDeterminVisibilityChange_notHiddenInOutput", function(assert) {
-	//		spec.mode = "output";
-	//		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-	//		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-	//		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
-	//				
-	//		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
-	//
-	//		assertNumberOfMessages(assert, 1);
-	//		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "hidden", true);
-	//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, true);
-	//	});
-
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
-		//		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		//		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 		assertNumberOfMessages(assert, 1);
 		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", true);
 
-		//		
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", false);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
 		assertNumberOfMessages(assert, 2);
 		assertMessageNumberIsSentToWithInfo(assert, 1, "5-55", "1-123", "hidden", false);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 		assertNumberOfMessages(assert, 3);
 		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", true);
 
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 		assertNumberOfMessages(assert, 3);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 		assertNumberOfMessages(assert, 3);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
-		//		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
 		assertNumberOfMessages(assert, 4);
 		assertMessageNumberIsSentToWithInfo(assert, 3, "5-55", "1-123", "visible", false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
-		//			let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		//			let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
-		//			assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 		assertNumberOfMessages(assert, 2);
 
 		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
-		//			assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
 		assertNumberOfMessages(assert, 3);
 		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", false);
 	});
 
 		test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
-//			let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-//			let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 			let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
 			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true);
 			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
-//			assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 			assertNumberOfMessages(assert, 2);
 	
 			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
-//			assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
 			assertNumberOfMessages(assert, 3);
 			assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "hidden", true);
 		});
@@ -293,11 +252,6 @@ QUnit.module.only("presentation/pRepeatingContainerTest.js", hooks => {
 		assert.strictEqual(message.message.presentationCounter, presentationCounter, "presentationCounter is wrong");
 		assert.strictEqual(message.message.visibility, visibility);
 		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong in message");
-	};
-
-	const assertViewVisibilityAndContainsData = function(assert, viewHandlerSpy, visible, containsData) {
-		assert.strictEqual(viewHandlerSpy.getIsShown(), visible, "visibility is wrong");
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), containsData, "containsData is wrong in view");
 	};
 
 });

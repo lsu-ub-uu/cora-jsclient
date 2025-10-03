@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pMapTest.js", hooks => {
+QUnit.module("presentation/pMapTest.js", hooks => {
 	const test = QUnit.test;
 	let metadataProvider;
 	let textProvider;

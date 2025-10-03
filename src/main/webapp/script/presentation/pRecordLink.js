@@ -354,8 +354,8 @@ var CORA = (function(cora) {
 
 		const calculateNewPath = function(metadataIdToAdd) {
 			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"parentPath": path
+				metadataIdToAdd: metadataIdToAdd,
+				parentPath: path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -427,11 +427,9 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToSetValueIfLinkedPresentationExists = function() {
-			pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordTypeTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordTypeTextVar"), undefined,
 				valueChangedOnInput);
-			pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
 				valueChangedOnInput);
 		};
 
@@ -457,20 +455,24 @@ var CORA = (function(cora) {
 
 		const hideOrShowOutputPresentation = function(dataFromMsg) {
 			let valueForView = dataFromMsg.data;
+			let containsData = dataFromMsg.dataOrigin !== "final" && valueForView !== "";
 			if (valueForView !== "") {
 				view.show();
-				publishVisibilityChange("visible");
-			} else {
+				publishVisibilityChange("visible", containsData);
+			} else if (mode === "output") {
 				view.hide();
-				publishVisibilityChange("hidden");
+				publishVisibilityChange("hidden", containsData);
+			} else {
+				publishVisibilityChange("visible", containsData);
 			}
 		};
 
-		const publishVisibilityChange = function(visibility) {
+		const publishVisibilityChange = function(visibility, currentlyContainsData) {
 			let visibilityData = {
 				path: [presentationCounter],
 				presentationCounter: presentationCounter,
-				visibility: visibility
+				visibility: visibility,
+				containsData: currentlyContainsData
 			};
 			pubSub.publish("visibilityChange", visibilityData);
 		};
@@ -576,8 +578,8 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
+				readLink: link,
+				loadInBackground: loadInBackground
 			};
 			clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};

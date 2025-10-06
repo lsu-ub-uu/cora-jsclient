@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,453 +18,462 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.jsBookkeeperFactory= function(metadataProvider, pubSub, textProvider) {
+
+
+QUnit.module("metadata/jsBookkeeperTest.js", hooks => {
+	const test = QUnit.test;
+	let metadataProvider;
+	let textProvider;
+	let dataHolder;
+	let pubSub;
+	let metadataChildAndRepeatInitializerFactory;
+	let jsBookkeeperFactory;
+
+	let dependencies;
+	let spec;
+	hooks.beforeEach(() => {
+		metadataChildAndRepeatInitializerFactory = CORATEST.metadataChildAndRepeatInitializerFactorySpy({});
+
+		dependencies = {
+			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
+			metadataChildAndRepeatInitializerFactory: metadataChildAndRepeatInitializerFactory
+		};
+		spec = {
+			metadataId: "groupIdOneTextChild",
+			metadataProvider: CORATEST.MetadataProviderStub(),
+			pubSub: CORATEST.pubSubSpy(),
+			textProvider: CORATEST.textProviderStub(),
+			dataHolder: CORATEST.dataHolderStub()
+		};
+		metadataProvider = CORATEST.MetadataProviderStub();
+		pubSub = CORATEST.pubSubSpy();
+		textProvider = CORATEST.textProviderStub();
+		dataHolder = CORATEST.dataHolderStub();
+		jsBookkeeperFactory = createJsBookkeeperFactorySpy(metadataProvider, pubSub,
+			textProvider);
+	});
+
+	hooks.afterEach(() => { });
+
+
+	const createRefForJsBookkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
+		return {
+			name: "childReference",
+			repeatId: "1",
+			children: [{
+				name: "ref",
+				children: [{
+					name: "linkedRecordType",
+					value: linkedRecordType
+				}, {
+					name: "linkedRecordId",
+					value: linkedRecordId
+				}]
+			}, {
+				name: "repeatMin",
+				value: repeatMin
+			}, {
+				name: "repeatMax",
+				value: repeatMax
+			}]
+		}
+	};
+	
+	const createJsBookkeeperFactorySpy = function(metadataProvider, pubSub, textProvider) {
 		let factor = function(metadataId, dataHolder) {
 			let dependencies = {
-				"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-				metadataChildAndRepeatInitializerFactory : CORATEST.metadataChildAndRepeatInitializerFactorySpy({})
+				recordTypeProvider: CORATEST.recordTypeProviderSpy(),
+				metadataChildAndRepeatInitializerFactory: CORATEST.metadataChildAndRepeatInitializerFactorySpy({})
 			};
 			let spec = {
-				"metadataId" : metadataId,
-				"metadataProvider" : metadataProvider,
-				"pubSub" : pubSub,
-				"textProvider" : textProvider,
-				"dataHolder" : dataHolder
+				metadataId: metadataId,
+				metadataProvider: metadataProvider,
+				pubSub: pubSub,
+				textProvider: textProvider,
+				dataHolder: dataHolder
 			};
 			return CORA.jsBookkeeper(dependencies, spec);
 		};
 		return Object.freeze({
-			factor : factor
+			factor: factor
 		});
 	};
 
-	return coraTest;
-}(CORATEST || {}));
+	test("testInit", function(assert) {
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		assert.strictEqual(jsBookkeeper.type, "jsBookkeeper");
+	});
 
-QUnit.module("metadata/jsBookkeeperTest.js", {
-	beforeEach : function() {
-		this.metadataChildAndRepeatInitializerFactory = CORATEST.metadataChildAndRepeatInitializerFactorySpy({});
-		
-		this.dependencies = {
-			"recordTypeProvider" : CORATEST.recordTypeProviderSpy(),
-			metadataChildAndRepeatInitializerFactory : this.metadataChildAndRepeatInitializerFactory
-		};
-		this.spec = {
-			"metadataId" : "groupIdOneTextChild",
-			"metadataProvider" : CORATEST.MetadataProviderStub(),
-			"pubSub" : CORATEST.pubSubSpy(),
-			"textProvider" : CORATEST.textProviderStub(),
-			"dataHolder" : CORATEST.dataHolderStub()
-		};
-		this.metadataProvider = CORATEST.MetadataProviderStub();
-		this.pubSub = CORATEST.pubSubSpy();
-		this.textProvider = CORATEST.textProviderStub();
-		this.dataHolder = CORATEST.dataHolderStub();
-		this.newJsBookkeeper = CORATEST.jsBookkeeperFactory(this.metadataProvider, this.pubSub,
-				this.textProvider);
-	},
-	afterEach : function() {
-	}
-});
+	test("testGetSpec", function(assert) {
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		assert.strictEqual(jsBookkeeper.getSpec(), spec);
+	});
 
-CORATEST.createRefForJsBookkeeper = function(linkedRecordType, linkedRecordId, repeatMin, repeatMax) {
-	return {
-		"name": "childReference",
-		"repeatId": "1",
-		"children": [{
-			"name": "ref",
-			"children": [{
-				"name": "linkedRecordType",
-				"value": linkedRecordType
+	test("testGetDependencies", function(assert) {
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		assert.strictEqual(jsBookkeeper.getDependencies(), dependencies);
+	});
+
+	test("testSetValue", function(assert) {
+		let jsBookkeeper = jsBookkeeperFactory.factor("groupIdOneTextChild", dataHolder);
+		let data = {
+			data: "a Value",
+			path: []
+		};
+		jsBookkeeper.setValue(data);
+		let messages = pubSub.getMessages();
+
+		let expectedMessage = {
+			type: "setValue",
+			message: {
+				dataOrigin: "user",
+				data: "a Value",
+				path: []
+			}
+		};
+		assert.deepEqual(messages[0], expectedMessage);
+		assert.equal(messages.length, 1);
+	});
+
+	test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable", function(assert) {
+		let childReferenceTextVariableId = createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "1");
+
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		let data = {
+			metadataId: "textVariableId",
+			path: [],
+			childReference: childReferenceTextVariableId,
+			recordPartPermissionCalculator: CORATEST.recordPartPermissionCalculatorSpy()
+		};
+		jsBookkeeper.add(data);
+		let factoredSpec = metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "textVariableId");
+		assert.strictEqual(factoredSpec.path, data.path);
+		assert.strictEqual(factoredSpec.data, undefined);
+		assert.strictEqual(factoredSpec.repeatId, undefined);
+		assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
+
+		let factored = metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
+		assert.ok(factored.getInitializeCalled());
+	});
+
+	test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", function(assert) {
+		let childReferenceTextVariableId = createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "4");
+
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		let data = {
+			metadataId: "textVariableId",
+			path: [],
+			childReference: childReferenceTextVariableId,
+			recordPartPermissionCalculator: CORATEST.recordPartPermissionCalculatorSpy()
+		};
+		jsBookkeeper.add(data);
+		let factoredSpec = metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "textVariableId");
+		assert.strictEqual(factoredSpec.path, data.path);
+		assert.strictEqual(factoredSpec.data, undefined);
+		assert.strictEqual(factoredSpec.repeatId, "1");
+		assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
+
+		let factored = metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
+		assert.ok(factored.getInitializeCalled());
+	});
+
+	test("testAddRepeating", function(assert) {
+		let currentData = {
+			name: "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
+			children: [{
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "one",
+					repeatId: "one"
+				}, {
+					name: "textVar",
+					value: "two",
+					repeatId: "2"
+				}, {
+					name: "textVar",
+					value: "three",
+					repeatId: "1"
+				}],
+				attributes: {
+					anAttribute: "aFinalValue"
+				},
+				repeatId: "1"
 			}, {
-				"name": "linkedRecordId",
-				"value": linkedRecordId
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "three",
+					repeatId: "3"
+				}],
+				attributes: {
+					anAttribute: "aFinalValue"
+				},
+				repeatId: "2"
+			}, {
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "four",
+					repeatId: "4"
+				}],
+				attributes: {
+					anOtherAttribute: "aOtherFinalValue"
+				},
+				repeatId: "3"
 			}]
-		}, {
-			"name": "repeatMin",
-			"value": repeatMin
-		}, {
-			"name": "repeatMax",
-			"value": repeatMax
-		}]
-	}
-};
-
-QUnit.test("testInit", function(assert) {
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	assert.strictEqual(jsBookkeeper.type, "jsBookkeeper");
-});
-
-QUnit.test("testGetSpec", function(assert) {
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	assert.strictEqual(jsBookkeeper.getSpec(), this.spec);
-});
-
-QUnit.test("testGetDependencies", function(assert) {
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	assert.strictEqual(jsBookkeeper.getDependencies(), this.dependencies);
-});
-
-QUnit.test("testSetValue", function(assert) {
-	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
-	let data = {
-		"data" : "a Value",
-		"path" : []
-	};
-	jsBookkeeper.setValue(data);
-	let messages = this.pubSub.getMessages();
-
-	let expectedMessage = {
-		"type" : "setValue",
-		"message" : {
-			"data" : "a Value",
-			"path" : []
-		}
-	};
-	assert.stringifyEqual(messages[0], expectedMessage);
-	assert.equal(messages.length, 1);
-});
-
-QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddNonRepeatable", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "1");
-
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	let data = {
-			"metadataId" : "textVariableId",
-			"path" : [],
-			"childReference" : childReferenceTextVariableId,
-			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
 		};
-	jsBookkeeper.add(data);
-	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "textVariableId");
-	assert.strictEqual(factoredSpec.path, data.path);
-	assert.strictEqual(factoredSpec.data, undefined);
-	assert.strictEqual(factoredSpec.repeatId, undefined);
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
-	
-	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
-	assert.ok(factored.getInitializeCalled());
-});
-
-QUnit.test("testCorrectCallToChildAndRepeatInitializerFactoryOnAddRepeateble", function(assert) {
-	let childReferenceTextVariableId = CORATEST.createRefForJsBookkeeper("metadataTextVariable", "textVariableId", "1", "4");
-
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	let data = {
-			"metadataId" : "textVariableId",
-			"path" : [],
-			"childReference" : childReferenceTextVariableId,
-			"recordPartPermissionCalculator" : CORATEST.recordPartPermissionCalculatorSpy()
+		let foundContainer = {
+			name: "textVarRepeat1to3InGroupOneAttribute",
+			children: [{
+				name: "textVar",
+				value: "one",
+				repeatId: "one"
+			}, {
+				name: "textVar",
+				value: "two",
+				repeatId: "2"
+			}, {
+				name: "textVar",
+				value: "three",
+				repeatId: "1"
+			}],
+			attributes: {
+				anAttribute: "aFinalValue"
+			},
+			repeatId: "1"
 		};
-	jsBookkeeper.add(data);
-	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "textVariableId");
-	assert.strictEqual(factoredSpec.path, data.path);
-	assert.strictEqual(factoredSpec.data, undefined);
-	assert.strictEqual(factoredSpec.repeatId, "1");
-	assert.strictEqual(factoredSpec.recordPartPermissionCalculator, data.recordPartPermissionCalculator);
-	
-	let factored = this.metadataChildAndRepeatInitializerFactory.getFactoredRepeatIntitializers(0);
-	assert.ok(factored.getInitializeCalled());
-});
+		let dataHolder = CORATEST.dataHolderStub(currentData, foundContainer);
+		spec.dataHolder = dataHolder;
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
 
-QUnit.test("testAddRepeating", function(assert) {
-	let currentData = {
-		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
-		"children" : [ {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "one",
-				"repeatId" : "one"
-			}, {
-				"name" : "textVar",
-				"value" : "two",
-				"repeatId" : "2"
-			}, {
-				"name" : "textVar",
-				"value" : "three",
-				"repeatId" : "1"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
-			},
-			"repeatId" : "1"
-		}, {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "three",
-				"repeatId" : "3"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
-			},
-			"repeatId" : "2"
-		}, {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "four",
-				"repeatId" : "4"
-			} ],
-			"attributes" : {
-				"anOtherAttribute" : "aOtherFinalValue"
-			},
-			"repeatId" : "3"
-		} ]
-	};
-	let foundContainer = {
-		"name" : "textVarRepeat1to3InGroupOneAttribute",
-		"children" : [ {
-			"name" : "textVar",
-			"value" : "one",
-			"repeatId" : "one"
-		}, {
-			"name" : "textVar",
-			"value" : "two",
-			"repeatId" : "2"
-		}, {
-			"name" : "textVar",
-			"value" : "three",
-			"repeatId" : "1"
-		} ],
-		"attributes" : {
-			"anAttribute" : "aFinalValue"
-		},
-		"repeatId" : "1"
-	};
-	let dataHolder = CORATEST.dataHolderStub(currentData, foundContainer);
-	this.spec.dataHolder = dataHolder;
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	
-	let data = {
-		"metadataId" : "textVar",
-		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
-		"childReference" : {
-			"name" : "childReference",
-			"repeatId" : "1",
-			"children" : [ {
-				"name" : "ref",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "metadataTextVariable"
+		let data = {
+			metadataId: "textVar",
+			path: ["textVarRepeat1to3InGroupOneAttribute.1"],
+			childReference: {
+				name: "childReference",
+				repeatId: "1",
+				children: [{
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataTextVariable"
+					}, {
+						name: "linkedRecordId",
+						value: "textVar"
+					}],
+					attributes: {
+						type: "textVariable"
+					}
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textVar"
-				} ],
-				"attributes" : {
-					"type" : "textVariable"
-				}
-			}, {
-				"name" : "repeatMin",
-				"value" : "1"
-			}, {
-				"name" : "repeatMax",
-				"value" : "3"
-			} ]
-		}
-	};
-	
-	let startRepeatId = jsBookkeeper.add(data);
-	
-	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "textVar");
-	assert.strictEqual(factoredSpec.path, data.path);
-	assert.strictEqual(factoredSpec.data, undefined);
-	assert.strictEqual(factoredSpec.repeatId, "3");
-	assert.deepEqual(dataHolder.getUsedPath(), ["textVarRepeat1to3InGroupOneAttribute.1"]);
-	assert.strictEqual(startRepeatId, "3");
-
-});
-QUnit.test("testAddBefore", function(assert) {
-	let currentData = {
-		"name" : "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
-		"children" : [ {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "one",
-				"repeatId" : "one"
-			}, {
-				"name" : "textVar",
-				"value" : "two",
-				"repeatId" : "2"
-			}, {
-				"name" : "textVar",
-				"value" : "three",
-				"repeatId" : "1"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
-			},
-			"repeatId" : "1"
-		}, {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "three",
-				"repeatId" : "3"
-			} ],
-			"attributes" : {
-				"anAttribute" : "aFinalValue"
-			},
-			"repeatId" : "2"
-		}, {
-			"name" : "textVarRepeat1to3InGroupOneAttribute",
-			"children" : [ {
-				"name" : "textVar",
-				"value" : "four",
-				"repeatId" : "4"
-			} ],
-			"attributes" : {
-				"anOtherAttribute" : "aOtherFinalValue"
-			},
-			"repeatId" : "3"
-		} ]
-	};
-	let foundContainer = {
-		"name" : "textVarRepeat1to3InGroupOneAttribute",
-		"children" : [ {
-			"name" : "textVar",
-			"value" : "one",
-			"repeatId" : "one"
-		}, {
-			"name" : "textVar",
-			"value" : "two",
-			"repeatId" : "2"
-		}, {
-			"name" : "textVar",
-			"value" : "three",
-			"repeatId" : "1"
-		} ],
-		"attributes" : {
-			"anAttribute" : "aFinalValue"
-		},
-		"repeatId" : "1"
-	};
-	let dataHolder = CORATEST.dataHolderStub(currentData, foundContainer);
-	this.spec.dataHolder = dataHolder;
-	let jsBookkeeper = CORA.jsBookkeeper(this.dependencies, this.spec);
-	let data = {
-		"metadataId" : "textVar",
-		"path" : ["textVarRepeat1to3InGroupOneAttribute.1"],
-		"childReference" : {
-			"name" : "childReference",
-			"repeatId" : "1",
-			"children" : [ {
-				"name" : "ref",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "metadataTextVariable"
+					name: "repeatMin",
+					value: "1"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "textVar"
-				} ],
-				"attributes" : {
-					"type" : "textVariable"
-				}
-			}, {
-				"name" : "repeatMin",
-				"value" : "1"
-			}, {
-				"name" : "repeatMax",
-				"value" : "3"
-			} ]
-		},
-		addBeforePath : ["textVarRepeat1to3InGroupOneAttribute.1", "textVar.one"]
-	};
-	
-	jsBookkeeper.addBefore(data);
-	
-	let factoredSpec = this.metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
-	assert.strictEqual(factoredSpec.metadataId, "textVar");
-	assert.strictEqual(factoredSpec.path, data.path);
-	assert.strictEqual(factoredSpec.data, undefined);
-	assert.strictEqual(factoredSpec.repeatId, "3");
-});
+					name: "repeatMax",
+					value: "3"
+				}]
+			}
+		};
 
-QUnit.test("testRemove", function(assert) {
-	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
-	let data = {
-		"path" : []
-	};
-	jsBookkeeper.remove(data);
-	let messages = this.pubSub.getMessages();
-	let expectedMessage = {
-		"type" : "remove",
-		"message" : {
-			"path" : []
-		}
-	};
-	assert.stringifyEqual(messages[0], expectedMessage);
+		let startRepeatId = jsBookkeeper.add(data);
 
-	assert.equal(messages.length, 1);
+		let factoredSpec = metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "textVar");
+		assert.strictEqual(factoredSpec.path, data.path);
+		assert.strictEqual(factoredSpec.data, undefined);
+		assert.strictEqual(factoredSpec.repeatId, "3");
+		assert.deepEqual(dataHolder.getUsedPath(), ["textVarRepeat1to3InGroupOneAttribute.1"]);
+		assert.strictEqual(startRepeatId, "3");
 
-	let unsubscriptionsPathBelow = this.pubSub.getUnsubscriptionsPathBelow();
-	assert.equal(unsubscriptionsPathBelow.length, 1);
-	assert.stringifyEqual(unsubscriptionsPathBelow[0], []);
-});
-
-QUnit.test("testMove", function(assert) {
-	let jsBookkeeper = this.newJsBookkeeper.factor("groupIdOneTextChild", this.dataHolder);
-	let data = {
-		"path" : [],
-		"moveChild" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVariableId"
-			}, {
-				"name" : "repeatId",
-				"value" : "one"
-			} ]
-		},
-		"basePositionOnChild" : {
-			"name" : "linkedPath",
-			"children" : [ {
-				"name" : "nameInData",
-				"value" : "textVariableId"
-			}, {
-				"name" : "repeatId",
-				"value" : "two"
-			} ]
-		},
-		"newPosition" : "after"
-	};
-	jsBookkeeper.move(data);
-	let messages = this.pubSub.getMessages();
-	let expectedMessage = {
-		"type" : "move",
-		"message" : {
-			"path" : [],
-			"moveChild" : {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "textVariableId"
+	});
+	test("testAddBefore", function(assert) {
+		let currentData = {
+			name: "textVarRepeat1to3InGroupOneAttributeAndOtherAttributeRepeat0to2InGroup",
+			children: [{
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "one",
+					repeatId: "one"
 				}, {
-					"name" : "repeatId",
-					"value" : "one"
-				} ]
-			},
-			"basePositionOnChild" : {
-				"name" : "linkedPath",
-				"children" : [ {
-					"name" : "nameInData",
-					"value" : "textVariableId"
+					name: "textVar",
+					value: "two",
+					repeatId: "2"
 				}, {
-					"name" : "repeatId",
-					"value" : "two"
-				} ]
+					name: "textVar",
+					value: "three",
+					repeatId: "1"
+				}],
+				attributes: {
+					anAttribute: "aFinalValue"
+				},
+				repeatId: "1"
+			}, {
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "three",
+					repeatId: "3"
+				}],
+				attributes: {
+					anAttribute: "aFinalValue"
+				},
+				repeatId: "2"
+			}, {
+				name: "textVarRepeat1to3InGroupOneAttribute",
+				children: [{
+					name: "textVar",
+					value: "four",
+					repeatId: "4"
+				}],
+				attributes: {
+					anOtherAttribute: "aOtherFinalValue"
+				},
+				repeatId: "3"
+			}]
+		};
+		let foundContainer = {
+			name: "textVarRepeat1to3InGroupOneAttribute",
+			children: [{
+				name: "textVar",
+				value: "one",
+				repeatId: "one"
+			}, {
+				name: "textVar",
+				value: "two",
+				repeatId: "2"
+			}, {
+				name: "textVar",
+				value: "three",
+				repeatId: "1"
+			}],
+			attributes: {
+				anAttribute: "aFinalValue"
 			},
-			"newPosition" : "after"
-		}
-	};
-	assert.stringifyEqual(messages[0], expectedMessage);
+			repeatId: "1"
+		};
+		let dataHolder = CORATEST.dataHolderStub(currentData, foundContainer);
+		spec.dataHolder = dataHolder;
+		let jsBookkeeper = CORA.jsBookkeeper(dependencies, spec);
+		let data = {
+			metadataId: "textVar",
+			path: ["textVarRepeat1to3InGroupOneAttribute.1"],
+			childReference: {
+				name: "childReference",
+				repeatId: "1",
+				children: [{
+					name: "ref",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadataTextVariable"
+					}, {
+						name: "linkedRecordId",
+						value: "textVar"
+					}],
+					attributes: {
+						type: "textVariable"
+					}
+				}, {
+					name: "repeatMin",
+					value: "1"
+				}, {
+					name: "repeatMax",
+					value: "3"
+				}]
+			},
+			addBeforePath: ["textVarRepeat1to3InGroupOneAttribute.1", "textVar.one"]
+		};
 
-	assert.equal(messages.length, 1);
+		jsBookkeeper.addBefore(data);
+
+		let factoredSpec = metadataChildAndRepeatInitializerFactory.getRepeatSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "textVar");
+		assert.strictEqual(factoredSpec.path, data.path);
+		assert.strictEqual(factoredSpec.data, undefined);
+		assert.strictEqual(factoredSpec.repeatId, "3");
+	});
+
+	test("testRemove", function(assert) {
+		let jsBookkeeper = jsBookkeeperFactory.factor("groupIdOneTextChild", dataHolder);
+		let data = {
+			path: []
+		};
+		jsBookkeeper.remove(data);
+		let messages = pubSub.getMessages();
+		let expectedMessage = {
+			type: "remove",
+			message: {
+				path: []
+			}
+		};
+		assert.stringifyEqual(messages[0], expectedMessage);
+
+		assert.equal(messages.length, 1);
+
+		let unsubscriptionsPathBelow = pubSub.getUnsubscriptionsPathBelow();
+		assert.equal(unsubscriptionsPathBelow.length, 1);
+		assert.stringifyEqual(unsubscriptionsPathBelow[0], []);
+	});
+
+	test("testMove", function(assert) {
+		let jsBookkeeper = jsBookkeeperFactory.factor("groupIdOneTextChild", dataHolder);
+		let data = {
+			path: [],
+			moveChild: {
+				name: "linkedPath",
+				children: [{
+					name: "nameInData",
+					value: "textVariableId"
+				}, {
+					name: "repeatId",
+					value: "one"
+				}]
+			},
+			basePositionOnChild: {
+				name: "linkedPath",
+				children: [{
+					name: "nameInData",
+					value: "textVariableId"
+				}, {
+					name: "repeatId",
+					value: "two"
+				}]
+			},
+			newPosition: "after"
+		};
+		jsBookkeeper.move(data);
+		let messages = pubSub.getMessages();
+		let expectedMessage = {
+			type: "move",
+			message: {
+				path: [],
+				moveChild: {
+					name: "linkedPath",
+					children: [{
+						name: "nameInData",
+						value: "textVariableId"
+					}, {
+						name: "repeatId",
+						value: "one"
+					}]
+				},
+				basePositionOnChild: {
+					name: "linkedPath",
+					children: [{
+						name: "nameInData",
+						value: "textVariableId"
+					}, {
+						name: "repeatId",
+						value: "two"
+					}]
+				},
+				newPosition: "after"
+			}
+		};
+		assert.stringifyEqual(messages[0], expectedMessage);
+
+		assert.equal(messages.length, 1);
+	});
 });

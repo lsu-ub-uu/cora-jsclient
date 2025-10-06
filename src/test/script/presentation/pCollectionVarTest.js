@@ -86,6 +86,13 @@ QUnit.module("presentation/pCollectionVarTest.js", hooks => {
 		assert.strictEqual(pCollVar.getView, pParentVar.getView);
 	});
 
+	test("testGetPresentationCounterUsesPParentVar", function(assert) {
+		let pVar = CORA.pCollectionVar(dependencies, spec);
+		let pParentVar = pParentVarFactory.getFactored(0);
+
+		assert.strictEqual(pVar.getPresentationCounter, pParentVar.getPresentationCounter);
+	});
+
 	test("testDisableVarUsesPParentVarDisableVar", function(assert) {
 		let pCollVar = CORA.pCollectionVar(dependencies, spec);
 		let pParentVar = pParentVarFactory.getFactored(0);

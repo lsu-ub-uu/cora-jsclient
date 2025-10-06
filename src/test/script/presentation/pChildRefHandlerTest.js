@@ -81,7 +81,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			cParentPresentation: { value: "someDummyDataToSeeThatItIsPassedAlong" },
 			mode: "input",
 			hasWritePermissionsForRecordPart: true,
-			recordPartPermissionCalculator: recordPartPermissionCalculator
+			recordPartPermissionCalculator: recordPartPermissionCalculator,
+			parentPresentationCounter: "someParentPresentationCounter"
 		};
 
 		record = {
@@ -1152,7 +1153,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanAddBefore: false,
 			mode: "input",
 			callOnFirstShowOfPresentation: pChildRefHandler.onlyForTestCallOnFirstShowOfPresentation,
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredSpec.callOnFirstShowOfPresentation,
@@ -1210,7 +1211,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			clickableHeadlineText: "Some headline text",
 			clickableHeadlineLevel: "h3",
 			presentationSize: "singleInitiallyVisible",
-			containsDataShouldBeTracked: true
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
@@ -1275,7 +1276,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "output",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 		assert.strictEqual(factoredView.getAddedChild(0), factored.getView());
@@ -1311,7 +1312,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 
 		assert.stringifyEqual(factoredSpec, expectedSpec);
@@ -1345,7 +1346,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1378,7 +1379,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1410,7 +1411,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1447,7 +1448,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: true,
 			mode: "input",
-			containsDataShouldBeTracked: true
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1482,7 +1483,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: true,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 
@@ -1498,8 +1499,20 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 		firstSubsription.functionToCall();
 
 		assert.deepEqual(factoredView.getRemovedChild(0), factored.getView());
-		assert.deepEqual(pubSub.getUnsubscriptions()[0],
-			firstSubsription.subscriptionId);
+		assert.deepEqual(pubSub.getUnsubscriptions()[0], firstSubsription.subscriptionId);
+
+		let expectedVisibilityMessageOnRemove = {
+			message: {
+				containsData: false,
+				path: ["someParentPresentationCounter"],
+				presentationCounter: "1-123",
+				visibility: false
+			},
+			type: "visibilityChange"
+		};
+		assert.deepEqual(pubSub.getMessages()[0], expectedVisibilityMessageOnRemove);
+
+
 	});
 
 	test("testRepeatingElementOutputMode", function(assert) {
@@ -1525,7 +1538,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "output",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});
@@ -1552,7 +1565,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});
@@ -1593,7 +1606,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: true,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredRepeatingSpec, expectedRepeatingSpec);
 	});
@@ -2198,7 +2211,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 			userCanMove: false,
 			userCanAddBefore: false,
 			mode: "input",
-			containsDataShouldBeTracked: false
+			parentPresentationCounter: spec.parentPresentationCounter
 		};
 		assert.stringifyEqual(factoredSpec, expectedSpec);
 	});

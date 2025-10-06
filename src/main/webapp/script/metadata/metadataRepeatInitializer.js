@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2023 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,7 +23,7 @@ var CORA = (function(cora) {
 	cora.metadataRepeatInitializer = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pubSub = dependencies.pubSub;
-		let metadataId = spec.metadataId;
+		const metadataId = spec.metadataId;
 		let path = spec.path;
 		let cMetadataElement;
 
@@ -60,14 +60,14 @@ var CORA = (function(cora) {
 				addAttributes();
 			}
 		};
-		
+
 		const collectAttributesForMetadataId = function(metadataIdIn) {
 			const metadataHelper = CORA.metadataHelper({
 				metadataProvider: dependencies.metadataProvider
 			});
 			return metadataHelper.collectAttributesAsObjectForMetadataId(metadataIdIn);
 		};
-		
+
 		const hasAttributes = function() {
 			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
@@ -109,7 +109,7 @@ var CORA = (function(cora) {
 
 		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
 			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
-			setValueForAttributeWithPathAndValue(attributePath, value);
+			setValueForAttributeWithPathAndValue(attributePath, "final", value);
 			pubSub.publish("disable", { path: attributePath });
 		};
 
@@ -117,13 +117,14 @@ var CORA = (function(cora) {
 			if (spec.data !== undefined) {
 				let collectionVariableNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
 				let value = spec.data.attributes[collectionVariableNameInData];
-				setValueForAttributeWithPathAndValue(attributePath, value);
+				setValueForAttributeWithPathAndValue(attributePath, "startup", value);
 			}
 		};
 
-		const setValueForAttributeWithPathAndValue = function(attributePath, value) {
+		const setValueForAttributeWithPathAndValue = function(attributePath, dataOrigin, value) {
 			let setValueMessage = {
 				path: attributePath,
+				dataOrigin: dataOrigin,
 				data: value
 			}
 			pubSub.publish("setValue", setValueMessage);
@@ -132,8 +133,9 @@ var CORA = (function(cora) {
 		const initializeForMetadata = function() {
 			let nextLevelPath = createNextLevelPath();
 			let message = {
-				data: spec.data,
-				path: nextLevelPath
+				path: nextLevelPath,
+				dataOrigin: "startup",
+				data: spec.data
 			};
 			if (isGroup()) {
 				initializeMetadataGroup(nextLevelPath);
@@ -141,21 +143,21 @@ var CORA = (function(cora) {
 				initializeMetadataRecordLink(nextLevelPath);
 				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
-//				initializeMetadataResourceLink(nextLevelPath);
+				//				initializeMetadataResourceLink(nextLevelPath);
 				//NOTE, value here is entire data and not a "normal" setValue which is data.value
 				message.type = "setValue";
 				message.special = "resourceLink";
 				pubSub.publish("setValue", message);
-//				console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
-//				console.log("in metadataRepeatInitializer, spec: ",spec )
-//				console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
-//				publishIfDataIsPresent(nextLevelPath)
-//				const publishIfDataIsPresent = function(nextLevelPath) {
-//					if (spec.data !== undefined) {
-//						publishVariableValue(spec.data.value, nextLevelPath);
-//						publishVariableValue(spec.data, nextLevelPath);
-//					}
-//				};
+				//				//console.log("in metadataRepeatInitializer, cMetadataElement: ",cMetadataElement )
+				//				//console.log("in metadataRepeatInitializer, spec: ",spec )
+				//				//console.log("in metadataRepeatInitializer, nextLevelPath: ",nextLevelPath )
+				//				publishIfDataIsPresent(nextLevelPath)
+				//				const publishIfDataIsPresent = function(nextLevelPath) {
+				//					if (spec.data !== undefined) {
+				//						publishVariableValue(spec.data.value, nextLevelPath);
+				//						publishVariableValue(spec.data, nextLevelPath);
+				//					}
+				//				};
 			} else {
 				possiblyPublishVariableValue(nextLevelPath);
 			}
@@ -268,11 +270,11 @@ var CORA = (function(cora) {
 		};
 
 		const initializeLinkedRecordId = function(nextLevelPath) {
-			let recordIdData = spec.data;
+			let recordData = spec.data;
 			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
 				let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
 
-				recordIdData = {
+				recordData = {
 					name: cMetadataElement.getFirstAtomicValueByNameInData("nameInData"),
 					children: [{
 						name: "linkedRecordId",
@@ -281,7 +283,8 @@ var CORA = (function(cora) {
 				};
 			}
 			let recordIdStaticChildReference = createRefWithRef("linkedRecordIdTextVar");
-			createSpecAndInitalizeMetadataChildInitializer(recordIdStaticChildReference, nextLevelPath, recordIdData);
+			createSpecAndInitalizeMetadataChildInitializer(recordIdStaticChildReference,
+				nextLevelPath, recordData);
 		};
 
 		const possiblyInitializeLinkedRepeatId = function(nextLevelPath) {
@@ -309,22 +312,23 @@ var CORA = (function(cora) {
 
 		const setFinalValue = function(nextLevelPath) {
 			let finalValue = cMetadataElement.getFirstAtomicValueByNameInData("finalValue");
-			publishVariableValue(finalValue, nextLevelPath);
-			pubSub.publish("disable", {type:"disable", path: nextLevelPath });
+			publishVariableValue(nextLevelPath, "final", finalValue);
+			pubSub.publish("disable", { type: "disable", path: nextLevelPath });
 		};
 
-		const publishVariableValue = function(value, nextLevelPath) {
+		const publishVariableValue = function(nextLevelPath, dataOrigin, value) {
 			let message = {
-				type: "setValue",
+				path: nextLevelPath,
+				dataOrigin: dataOrigin,
 				data: value,
-				path: nextLevelPath
+				type: "setValue"
 			};
 			pubSub.publish("setValue", message);
 		};
 
 		const publishIfDataIsPresent = function(nextLevelPath) {
 			if (spec.data !== undefined) {
-				publishVariableValue(spec.data.value, nextLevelPath);
+				publishVariableValue(nextLevelPath, "startup", spec.data.value);
 			}
 		};
 

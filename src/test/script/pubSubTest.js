@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,143 +19,201 @@
 
 "use strict";
 
-QUnit.module("pubSubTest.js", {
-	beforeEach : function() {
-		this.pubSub = CORA.pubSub();
-		this.messages = [];
-		this.toCall = function(data, msg) {
-			this.messages.push({
-				"data" : data,
-				"message" : msg
+QUnit.module("pubSubTest.js", hooks => {
+	const test = QUnit.test;
+	let pubSub;
+	let messages;
+	let toCall;
+
+	hooks.beforeEach(() => {
+		pubSub = CORA.pubSub();
+		messages = [];
+		toCall = function(data, msg) {
+			messages.push({
+				data: data,
+				message: msg
 			});
 		};
-	},
-	afterEach : function() {
-	}
-});
+	});
 
-QUnit.test("testInit", function(assert) {
-	assert.strictEqual(this.pubSub.type , "pubSub");
-});
-
-QUnit.test("testSubscribe", function(assert) {
-	var type = "add";
-	var path = [];
-	var functionToCall = function() {
-	};
-	var context = this;
-	var subscribeId = this.pubSub.subscribe(type, path, context, functionToCall);
-	assert.ok(subscribeId !== undefined);
-	assert.ok(this.pubSub !== undefined);
-});
-QUnit.test("testPublish", function(assert) {
-	var type = "add";
-	var path = [];
-	var data = {
-		"metadataId" : "someId",
-		"path" : path,
-		"repeatId" : "someRepeatId"
-	};
-	this.pubSub.publish(type, data);
-	assert.ok(this.pubSub !== undefined);
-});
-QUnit.test("testProblemWhenCallingFunctionToCall", function(assert) {
-	var type = "add";
-	var path = [];
-	var functionToCall = function() {
-		// generate error
-		x + y === z;
-	};
-	var context = this;
-	this.pubSub.subscribe(type, path, context, functionToCall);
-	assert.ok(this.pubSub !== undefined);
-
-	var data = {
-		"metadataId" : "someId",
-		"path" : path,
-		"repeatId" : "someRepeatId"
-	};
-	assert.throws(function() {
-		this.pubSub.publish(type, data);
-	}, "Error");
-});
-
-QUnit.test("testMore", function(assert) {
-	var type = "add";
-	var path = [];
-	var context = this;
-	var functionToCall = this.toCall;
-	this.pubSub.subscribe(type, path, context, functionToCall);
-
-	var data = {
-		"metadataId" : "someId",
-		"path" : path,
-		"repeatId" : "someRepeatId"
-	};
-	this.pubSub.publish(type, data);
-	assert.ok(this.messages.length === 1);
-	assert.deepEqual(this.messages[0].data, data);
-	assert.deepEqual(this.messages[0].message, "root/add");
-});
-
-QUnit.test("testUnsubscribe", function(assert) {
-	var type = "add";
-	var path = [];
-	var context = this;
-	var functionToCall = this.toCall;
-	var subscribeId = this.pubSub.subscribe(type, path, context, functionToCall);
-
-	var data = {
-		"metadataId" : "someId",
-		"path" : path,
-		"repeatId" : "someRepeatId"
-	};
-	this.pubSub.publish(type, data);
-	this.pubSub.unsubscribe(subscribeId);
-	this.pubSub.publish(type, data);
-	assert.strictEqual(this.messages.length, 1);
-	assert.deepEqual(this.messages[0].data, data);
-	assert.deepEqual(this.messages[0].message, "root/add");
-});
-
-QUnit.test("testUnsubscribePathBelow", function(assert) {
-	var type = "add";
-	var path = ["textVarRepeat1to3InGroupOneAttribute.3", "textVar.5"];
-	var removePath = ["textVarRepeat1to3InGroupOneAttribute.3"];
-	var context = this;
-	var functionToCall = this.toCall;
-	this.pubSub.subscribe(type, path, context, functionToCall);
-
-	var data = {
-		"metadataId" : "someId",
-		"path" : path,
-		"repeatId" : "someRepeatId"
-	};
-	this.pubSub.publish(type, data);
-	this.pubSub.unsubscribePathBelow(removePath);
-	this.pubSub.publish(type, data);
-	assert.strictEqual(this.messages.length, 1);
-});
-
-QUnit.test("testConvertPathNameInData", function(assert) {
-	var path = ["someNameInData"];
-	var convertedPath = this.pubSub.convertPathToMsg(path);
-	assert.deepEqual(convertedPath, "root/someNameInData/");
-});
+	hooks.afterEach(() => { });
 
 
-QUnit.test("testConvertPathNameInDataAndRepeatId", function(assert) {
-	var path = ["someNameInData.one"];
-	var convertedPath = this.pubSub.convertPathToMsg(path);
-	assert.deepEqual(convertedPath, "root/someNameInData.one/");
-});
+	test("testInit", function(assert) {
+		assert.strictEqual(pubSub.type, "pubSub");
+	});
+
+	test("testSubscribe", function(assert) {
+		let type = "add";
+		let path = [];
+		let functionToCall = function() { };
+		let context = this;
+
+		let subscribeId = pubSub.subscribe(type, path, context, functionToCall);
+
+		assert.deepEqual(subscribeId, [1]);
+	});
+
+	test("testPublish", function(assert) {
+		let type = "add";
+		let path = [];
+		let data = {
+			metadataId: "someId",
+			path: path,
+			repeatId: "someRepeatId"
+		};
+
+		pubSub.publish(type, data);
+
+		assert.ok(pubSub !== undefined);
+	});
+
+	test("testProblemWhenCallingFunctionToCall", function(assert) {
+		let type = "add";
+		let path = [];
+		let functionToCall = function() {
+			throw new Error("An error");
+		};
+		let context = this;
+
+		pubSub.subscribe(type, path, context, functionToCall);
+
+		let data = {
+			metadataId: "someId",
+			path: path,
+			repeatId: "someRepeatId"
+		};
+
+		assert.throws(function() {
+			pubSub.publish(type, data);
+		}, "Error");
+	});
+
+	test("testMore", function(assert) {
+		let type = "add";
+		let path = [];
+		let context = this;
+		let functionToCall = toCall;
+		pubSub.subscribe(type, path, context, functionToCall);
+
+		let data = {
+			metadataId: "someId",
+			path: path,
+			repeatId: "someRepeatId"
+		};
+
+		pubSub.publish(type, data);
+
+		assert.strictEqual(messages.length, 1);
+		let expectedMessage0 = {
+			message: "root/add",
+			data: data
+		};
+		assert.deepEqual(messages[0], expectedMessage0);
+	});
+
+	test("testUnsubscribe", function(assert) {
+		let type = "add";
+		let path = [];
+		let context = this;
+		let subscribeId = pubSub.subscribe(type, path, context, toCall);
+
+		let data = {
+			metadataId: "someId",
+			path: path,
+			repeatId: "someRepeatId"
+		};
+
+		pubSub.publish(type, data);
+		pubSub.unsubscribe(subscribeId);
+		pubSub.publish(type, data);
+
+		assert.strictEqual(messages.length, 1);
+		let expectedMessage0 = {
+			message: "root/add",
+			data: data
+		};
+		assert.deepEqual(messages[0], expectedMessage0);
+	});
+
+	test("testSubscribeOnPathWithStar", function(assert) {
+		let type = "add";
+		let path = ["one", "two","three"];
+		let context = this;
+		pubSub.subscribe("*", ["one"], context, toCall);
+
+		let data = {
+			path: path,
+			metadataId: "someId",
+			repeatId: "someRepeatId"
+		};
+		pubSub.publish(type, data);
+
+		data.path = ["one"];
+		pubSub.publish("setValue", data);
+
+		assert.strictEqual(messages.length, 2);
+		let expectedMessage0 = {
+			message: "root/one/two/three/add",
+			data: data
+		};
+		assert.deepEqual(messages[0], expectedMessage0);
+		let expectedMessage1 = {
+			message: "root/one/setValue",
+			data: data
+		};
+		assert.deepEqual(messages[1], expectedMessage1);
+	});
+
+	test("testUnsubscribePathBelow", function(assert) {
+		let type = "add";
+		let path = ["textVarRepeat1to3InGroupOneAttribute.3", "textVar.5"];
+		let removePath = ["textVarRepeat1to3InGroupOneAttribute.3"];
+		let context = this;
+		pubSub.subscribe(type, path, context, toCall);
+
+		let data = {
+			metadataId: "someId",
+			path: path,
+			repeatId: "someRepeatId"
+		};
+		pubSub.publish(type, data);
+		pubSub.unsubscribePathBelow(removePath);
+		pubSub.publish(type, data);
+
+		assert.strictEqual(messages.length, 1);
+		let expectedMessage0 = {
+			message: "root/textVarRepeat1to3InGroupOneAttribute.3/textVar.5/add",
+			data: data
+		};
+		assert.deepEqual(messages[0], expectedMessage0);
+	});
+
+	test("testConvertPathNameInData", function(assert) {
+		let path = ["someNameInData"];
+
+		let convertedPath = pubSub.convertPathToMsg(path);
+
+		assert.deepEqual(convertedPath, "root/someNameInData/");
+	});
 
 
-QUnit.test("testConvertPathNameInDataAndAttributesAndRepeatIdTwoLevels", function(assert) {
-	var path = ["someNameInData.1", "someNameInData2.2"];
+	test("testConvertPathNameInDataAndRepeatId", function(assert) {
+		let path = ["someNameInData.one"];
 
-	var convertedPath = this.pubSub.convertPathToMsg(path);
-	assert.deepEqual(convertedPath, "root/"
+		let convertedPath = pubSub.convertPathToMsg(path);
+
+		assert.deepEqual(convertedPath, "root/someNameInData.one/");
+	});
+
+
+	test("testConvertPathNameInDataAndAttributesAndRepeatIdTwoLevels", function(assert) {
+		let path = ["someNameInData.1", "someNameInData2.2"];
+
+		let convertedPath = pubSub.convertPathToMsg(path);
+		assert.deepEqual(convertedPath, "root/"
 			+ "someNameInData.1/"
 			+ "someNameInData2.2/");
+	});
+
 });

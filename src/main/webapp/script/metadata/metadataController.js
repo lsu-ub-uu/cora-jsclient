@@ -24,10 +24,10 @@ var CORA = (function(cora) {
 		const pubSub = dependencies.pubSub;
 		const metadataProvider = dependencies.metadataProvider;
 		const metadataChildAndRepeatInitializerFactory = dependencies.metadataChildAndRepeatInitializerFactory;
-		let topLevelMetadataId = spec.metadataId;
-		let topLevelData = spec.data;
+		const topLevelMetadataId = spec.metadataId;
+		const topLevelData = spec.data;
+		const recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 		let topLevelPath = [];
-		let recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
 
 		let cMetadataElement;
 
@@ -89,21 +89,22 @@ var CORA = (function(cora) {
 
 		const setValueForForAttributeWithFinalValue = function(attributePath, cCollectionVariable) {
 			let value = cCollectionVariable.getFirstAtomicValueByNameInData("finalValue");
-			setValueForAttributeWithPathAndValue(attributePath, value);
+			setValueForAttributeWithPathAndValue(attributePath, "final", value);
 			pubSub.publish("disable", { path: attributePath });
 		};
 
 		const possiblySetValueForAttributeWithChoice = function(attributePath, cCollectionVariable) {
-			if (spec.data !== undefined) {
+			if (topLevelData !== undefined) {
 				let collectionVariableNameInData = cCollectionVariable.getFirstAtomicValueByNameInData("nameInData");
-				let value = spec.data.attributes[collectionVariableNameInData];
-				setValueForAttributeWithPathAndValue(attributePath, value);
+				let value = topLevelData.attributes[collectionVariableNameInData];
+				setValueForAttributeWithPathAndValue(attributePath, "startup", value);
 			}
 		};
 
-		const setValueForAttributeWithPathAndValue = function(attributePath, value) {
+		const setValueForAttributeWithPathAndValue = function(attributePath, dataOrigin, value) {
 			let setValueMessage = {
 				path: attributePath,
+				dataOrigin: dataOrigin,
 				data: value
 			}
 			pubSub.publish("setValue", setValueMessage);

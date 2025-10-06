@@ -23,56 +23,58 @@ var CORA = (function(cora) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
-		
+
 		const cPresentation = spec.cPresentation;
 		let pParentVar;
 		let cMetadataElement;
 		let refCollectionId;
-		
+
 		const start = function() {
 			cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
 			let cRefCollection = CORA.coraData(cMetadataElement
 				.getFirstChildByNameInData("refCollection"));
 			refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
-			
+
 			pParentVar = pParentVarFactory.factor(spec, self);
-		}; 
-		
+		};
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const addTypeSpecificInfoToViewSpec = function(mode, pCollVarViewSpec) {
 			pCollVarViewSpec.type = "pCollVar";
-			pCollVarViewSpec.info.technicalInfo.push({text: `itemCollection: ${refCollectionId}`,
-				onclickMethod: openRefCollectionIdRecord});
+			pCollVarViewSpec.info.technicalInfo.push({
+				text: `itemCollection: ${refCollectionId}`,
+				onclickMethod: openRefCollectionIdRecord
+			});
 			let optionInfo = createOptionsDefTextForCollectionItems();
 			let techInfoWithOptions = pCollVarViewSpec.info.technicalInfo.concat(optionInfo);
 			pCollVarViewSpec.info.technicalInfo = techInfoWithOptions;
 			addOptionsToSpecIfInput(mode, pCollVarViewSpec);
 		};
-		
+
 		const openRefCollectionIdRecord = function(event) {
 			let collectionRecord = metadataProvider.getMetadataRecordById(refCollectionId);
 			pParentVar.openLinkedRecordForLink(event, collectionRecord.actionLinks.read);
 		};
-		
+
 		const addOptionsToSpecIfInput = function(mode, pCollVarViewSpec) {
-			if(mode==="input"){
+			if (mode === "input") {
 				const specOptions = [];
 				possiblyAddOptionForEmptyText(specOptions);
 				addOptionForCollectionItems(specOptions);
 				pCollVarViewSpec.options = specOptions;
 			}
 		};
-			
+
 		const possiblyAddOptionForEmptyText = function(specOptions) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				const emptyOption = createOptionForEmptyText();
 				specOptions.push(emptyOption);
 			}
 		};
-		
+
 		const createOptionForEmptyText = function() {
 			let cEmptyTextId = CORA.coraData(cPresentation
 				.getFirstChildByNameInData("emptyTextId"));
@@ -81,11 +83,11 @@ var CORA = (function(cora) {
 			let optionText = textProvider.getTranslation(emptyTextId);
 			return [optionText, ""];
 		};
-		
+
 		const addOptionForCollectionItems = function(specOptions) {
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
 
-			collectionItemReferencesChildren.forEach((ref)=> {
+			collectionItemReferencesChildren.forEach((ref) => {
 				let option = createOptionForRef(ref);
 				specOptions.push(option);
 			});
@@ -114,13 +116,13 @@ var CORA = (function(cora) {
 			let specOptions = [];
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
 
-			collectionItemReferencesChildren.forEach((ref)=> {
+			collectionItemReferencesChildren.forEach((ref) => {
 				let option = createOptionDefTextForRef(ref);
 				specOptions.push(option);
 			});
 			return specOptions;
 		};
-		
+
 		const createOptionDefTextForRef = function(ref) {
 			let cItemRef = CORA.coraData(ref);
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
@@ -132,35 +134,35 @@ var CORA = (function(cora) {
 			let optionText = textProvider.getTranslation(textIdToTranslate);
 			let defTextIdToTranslate = item.getLinkedRecordIdFromFirstChildLinkWithNameInData("defTextId");
 			let defOptionText = textProvider.getTranslation(defTextIdToTranslate);
-			return {text: `(${value}) ${optionText} - ${defOptionText}`};
+			return { text: `(${value}) ${optionText} - ${defOptionText}` };
 		};
-		
+
 		const validateTypeSpecificValue = function(valueFromView) {
 			return true;
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
+
+		const autoFormatEnteredValue = function(valueFromView) {
 			return valueFromView;
 		};
-		
-		const transformValueForView = function(mode, valueForView){
-			if(mode === "input" || valueForView === ""){
+
+		const transformValueForView = function(mode, valueForView) {
+			if (mode === "input" || valueForView === "") {
 				return valueForView;
 			}
 			return getTranslatedTextForOptionValue(valueForView);
 		};
-		
+
 		const getTranslatedTextForOptionValue = function(value) {
 			let item = findItemForValue(value);
 			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
 			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return textProvider.getTranslation(textIdToTranslate);
 		};
-		
+
 		const findItemForValue = function(value) {
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
 			let item;
-			collectionItemReferencesChildren.find((ref)=> {
+			collectionItemReferencesChildren.find((ref) => {
 				let cItemRef = CORA.coraData(ref);
 				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 				item = getMetadataById(itemRefId);
@@ -169,7 +171,7 @@ var CORA = (function(cora) {
 			});
 			return item;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
@@ -193,7 +195,8 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			getView: pParentVar.getView,
 			disableVar: pParentVar.disableVar,
-			openRefCollectionIdRecord: openRefCollectionIdRecord
+			openRefCollectionIdRecord: openRefCollectionIdRecord,
+			getPresentationCounter: pParentVar.getPresentationCounter
 		});
 
 	};

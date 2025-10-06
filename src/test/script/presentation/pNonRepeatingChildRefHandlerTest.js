@@ -24,7 +24,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	let metadataProvider;
 	let pubSub;
 	let presentationFactory;
-	let containsDataTrackerFactory;
 	let pNonRepeatingChildRefHandlerViewFactory;
 
 	let recordPartPermissionCalculator;
@@ -36,7 +35,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		metadataProvider = CORATEST.MetadataProviderStub();
 		pubSub = CORATEST.pubSubSpy();
 		presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
-		containsDataTrackerFactory = CORATEST.standardFactorySpy("containsDataTrackerSpy");
 		pNonRepeatingChildRefHandlerViewFactory = CORATEST
 			.standardFactorySpy("pNonRepeatingChildRefHandlerViewSpy");
 		dependencies = {
@@ -45,8 +43,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			},
 			presentationFactory: presentationFactory,
 			pNonRepeatingChildRefHandlerViewFactory: pNonRepeatingChildRefHandlerViewFactory,
-			pubSub: pubSub,
-			containsDataTrackerFactory: containsDataTrackerFactory
+			pubSub: pubSub
 		};
 		recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 
@@ -58,7 +55,8 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			cPresentation: createPresentation(),
 			cParentPresentation: {
 				type: "fakeCParentPresentationObject"
-			}
+			},
+			parentPresentationCounter: "1-1"
 		};
 		cAlternativePresentation = createAlternativePresentation();
 
@@ -286,194 +284,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	});
 
 
-
-	test("testInit_createsContainsDataTracker", function(assert) {
-		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
-			pNonRepeatingChildRefHandler.onlyForTestMethodToCallOnContainsDataChange);
-		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, ["groupWithOneCollectionVarChildGroup"]);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-	});
-
-	test("testSubscribesWhenAdd_OtherIdSameNameInDataAttributes", function(assert) {
-		spec.cPresentation = CORA.coraData({
-			name: "presentation",
-			children: [{
-				name: "recordInfo",
-				children: [{
-					name: "id",
-					value: "somePresentationId"
-				}, {
-					name: "type",
-					children: [{
-						name: "linkedRecordType",
-						value: "recordType"
-					}, {
-						name: "linkedRecordId",
-						value: "presentationSurroundingContainer"
-					}]
-				}]
-			}, {
-				name: "presentationsOf",
-				children: [{
-					repeatId: "0",
-					children: [{
-						name: "linkedRecordType",
-						value: "metadata"
-					}, {
-						name: "linkedRecordId",
-						value: "groupWithOneCollectionVarChildGroupOtherIdSameNameInData"
-					}],
-					name: "presentationOf"
-				}]
-			}
-			]
-		});
-
-
-
-		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
-			pNonRepeatingChildRefHandler.onlyForTestMethodToCallOnContainsDataChange);
-		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, ["groupWithOneCollectionVarChildGroup"]);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-	});
-
-	test("testSubscribesWhenAdd_OtherIdNotSameNameInDataAttributes", function(assert) {
-		spec.cPresentation = CORA.coraData({
-			name: "presentation",
-			children: [{
-				name: "recordInfo",
-				children: [{
-					name: "id",
-					value: "somePresentationId"
-				}, {
-					name: "type",
-					children: [{
-						name: "linkedRecordType",
-						value: "recordType"
-					}, {
-						name: "linkedRecordId",
-						value: "presentationSurroundingContainer"
-					}]
-				}]
-			}, {
-				name: "presentationsOf",
-				children: [{
-					repeatId: "0",
-					children: [{
-						name: "linkedRecordType",
-						value: "metadata"
-					}, {
-						name: "linkedRecordId",
-						value: "groupWithOneCollectionVarChildAndOneTextChildGroup"
-					}],
-					name: "presentationOf"
-				}]
-			}
-			]
-		});
-
-		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-
-		assert.strictEqual(containsDataTrackerFactory.getNoOfFactored(), 1);
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-
-		assert.strictEqual(factoredSpec.methodToCallOnContainsDataChange,
-			pNonRepeatingChildRefHandler.onlyForTestMethodToCallOnContainsDataChange);
-		assert.stringifyEqual(factoredSpec.topLevelMetadataIds, []);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-		assert.stringifyEqual(factoredSpec.path, spec.parentPath);
-	});
-
-
-	test("testChangeViewOnMessage", function(assert) {
-		spec.mode = "output";
-		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
-
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		factoredSpec.methodToCallOnContainsDataChange(true);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
-
-		assert.strictEqual(pubSub.getMessages().length, 1);
-		let firstMessage = pubSub.getMessages()[0];
-		assert.strictEqual(firstMessage.type, "presentationShown");
-		let expectedMessage = {
-			data: "",
-			path: []
-		};
-		assert.stringifyEqual(firstMessage.message, expectedMessage);
-
-	});
-
-	test("testChangeViewOnMessageNotShownForSetValueWithBlankValue", function(assert) {
-		spec.mode = "output";
-		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
-
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		factoredSpec.methodToCallOnContainsDataChange(false);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
-
-		assert.strictEqual(pubSub.getMessages().length, 0);
-	});
-
-	test("testChangeViewOnMessageRemovedOnNewBlank", function(assert) {
-		spec.mode = "output";
-		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
-
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		factoredSpec.methodToCallOnContainsDataChange(true);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), false);
-	});
-
-	test("testChangeViewOnMessageRemovedOnNewBlankForInput", function(assert) {
-		spec.mode = "input";
-		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
-		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
-
-		let factoredSpec = containsDataTrackerFactory.getSpec(0);
-		factoredSpec.methodToCallOnContainsDataChange(true);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), true);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
-
-		factoredSpec.methodToCallOnContainsDataChange(false);
-
-		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), false);
-		assert.strictEqual(viewHandlerSpy.getIsShown(), true);
-	});
-
 	test("testpublishPresentationShownPublishMessage", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		assert.strictEqual(pubSub.getMessages().length, 0);
@@ -489,4 +299,155 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		};
 		assert.stringifyEqual(firstMessage.message, expectedMessage);
 	});
+
+	test("testaddPresentationsTriggersSubscribe", function(assert) {
+		spec.cAlternativePresentation = cAlternativePresentation;
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+
+		let subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[0].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[0].path, ["1-123"]);
+		assert.strictEqual(subscriptions[0].context, undefined);
+		assert.strictEqual(subscriptions[0].functionToCall, pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange);
+
+		subscriptions = pubSub.getSubscriptions();
+		assert.strictEqual(subscriptions.length, 2);
+		assert.strictEqual(subscriptions[1].type, "visibilityChange");
+		assert.stringifyEqual(subscriptions[1].path, ["1-123"]);
+		assert.strictEqual(subscriptions[1].context, undefined);
+		assert.strictEqual(subscriptions[1].functionToCall, pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_hiddenInInput", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_notHiddenInOutput", function(assert) {
+		spec.mode = "output";
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, true);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true);
+
+		//		
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true);
+
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		assertNumberOfMessages(assert, 4);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 2);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", false);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 2);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "hidden", true);
+	});
+
+	const callHandleMsgForVisibilityChange = function(pNonRepeatingChildRefHandler, presentationCounter,
+		visibility, containsData) {
+		let msg = presentationCounter + "/visibilityChange";
+		let dataFromMsg = {
+			presentationCounter: presentationCounter,
+			visibility: visibility,
+			containsData: containsData
+		};
+		pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+	};
+
+	const assertNumberOfMessages = function(assert, noMessages) {
+		let messages = pubSub.getMessages();
+		assert.strictEqual(messages.length, noMessages);
+	};
+
+	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
+		presentationCounter, visibility, containsData) {
+		let messages = pubSub.getMessages();
+		let message = messages[messageNo];
+		assert.strictEqual(message.type, "visibilityChange");
+		assert.stringifyEqual(message.message.path, [parentPresentationCounter]);
+		assert.strictEqual(message.message.presentationCounter, presentationCounter);
+		assert.strictEqual(message.message.visibility, visibility);
+		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong in message");
+	};
+
+	const assertViewVisibilityAndContainsData = function(assert, viewHandlerSpy, visible, containsData) {
+		assert.strictEqual(viewHandlerSpy.getIsShown(), visible, "visibility is wrong");
+		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), containsData, "containsData is wrong in view");
+	};
+
 });

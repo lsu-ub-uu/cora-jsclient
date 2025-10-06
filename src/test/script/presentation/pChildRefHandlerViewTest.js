@@ -35,9 +35,10 @@ QUnit.module("presentation/pChildRefHandlerViewTest.js", hooks => {
 		dependencies = {};
 
 		spec = {
-			"presentationId": "pVarTextVariableId",
-			"isRepeating": true,
-			"mode": "input"
+			presentationId: "pVarTextVariableId",
+			isRepeating: true,
+			mode: "input",
+			parentPresentationCounter: "someParentPresentationCounter"
 		};
 	});
 	

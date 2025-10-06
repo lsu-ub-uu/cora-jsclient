@@ -210,7 +210,7 @@ var CORATEST = (function(coraTest) {
 			case "someHeadlineIdText":
 				return "someHeadlineIdText_text";
 			default:
-				console.log("Id(" + textId + ") not found in stub");
+				//console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");
 			}
 

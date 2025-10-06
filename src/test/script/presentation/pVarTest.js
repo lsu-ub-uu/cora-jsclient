@@ -76,6 +76,13 @@ QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	assert.strictEqual(pVar.getView, pParentVar.getView);
 });
 
+QUnit.test("testGetPresentationCounterUsesPParentVar", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+	
+	assert.strictEqual(pVar.getPresentationCounter, pParentVar.getPresentationCounter);
+});
+
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {
 	CORA.pVar(this.dependencies, this.spec);
 	const child = this.pParentVarFactory.getChild(0);

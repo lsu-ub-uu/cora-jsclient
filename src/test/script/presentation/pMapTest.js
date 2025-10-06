@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, 2019, 2020 Uppsala University Library
+ * Copyright 2018, 2019, 2020, 2025 Uppsala University Library
  * Copyright 2018 Olov McKie
  *
  * This file is part of Cora.
@@ -18,409 +18,367 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/pMapTest.js", {
-	beforeEach : function() {
-		this.fixture = document.getElementById("qunit-fixture");
-		var metadataProvider = new MetadataCoordinatesProviderStub();
-		this.dependencies = {
-			metadataProvider : metadataProvider,
-			infoFactory : CORATEST.infoFactorySpy(),
-			pubSub : CORATEST.pubSubSpy(),
-			textProvider : CORATEST.textProviderSpy(),
-			pMapViewFactory : CORATEST.standardFactorySpy("pMapViewSpy"),
-			jsBookkeeper : CORATEST.jsBookkeeperSpy(),
+QUnit.module("presentation/pMapTest.js", hooks => {
+	const test = QUnit.test;
+	let metadataProvider;
+	let textProvider;
+	let pubSub;
+	let pMapViewFactory;
+
+	let dependencies;
+	let spec;
+	let fixture;
+	hooks.beforeEach(() => {
+		fixture = document.getElementById("qunit-fixture");
+		metadataProvider = new MetadataCoordinatesProviderStub();
+		textProvider = CORATEST.textProviderSpy();
+		pubSub = CORATEST.pubSubSpy();
+		pMapViewFactory = CORATEST.standardFactorySpy("pMapViewSpy");
+		dependencies = {
+			metadataProvider: metadataProvider,
+			infoFactory: CORATEST.infoFactorySpy(),
+			pubSub: pubSub,
+			textProvider: textProvider,
+			pMapViewFactory: pMapViewFactory,
+			jsBookkeeper: CORATEST.jsBookkeeperSpy(),
 		};
-		this.spec = {
-			metadataIdUsedInData : "coordinatesGroup",
-			path : [],
-			cPresentation : CORA.coraData(this.dependencies.metadataProvider
-					.getMetadataById("coordinatesPGroup")),
+		spec = {
+			metadataIdUsedInData: "coordinatesGroup",
+			path: [],
+			cPresentation: CORA.coraData(metadataProvider
+				.getMetadataById("coordinatesPGroup")),
+			presentationCounter: "somePresentationCounter"
 		};
-	},
-	afterEach : function() {
-	}
-});
+	});
 
-QUnit.test("testGetDependencies", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	assert.strictEqual(pMap.getDependencies(), this.dependencies);
-});
+	hooks.afterEach(() => { });
 
-QUnit.test("testGetSpec", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	assert.strictEqual(pMap.getSpec(), this.spec);
-});
 
-QUnit.test("testInit", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	assert.strictEqual(pMap.type, "pMap");
+	test("testGetDependencies", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		assert.strictEqual(pMap.getDependencies(), dependencies);
+	});
 
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
-	assert.strictEqual(view, this.dependencies.pMapViewFactory.getFactored(0).getView());
-	assert.ok(view.modelObject === pMap,
+	test("testGetSpec", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		assert.strictEqual(pMap.getSpec(), spec);
+	});
+
+	test("testInit", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		assert.strictEqual(pMap.type, "pMap");
+
+		let view = pMap.getView();
+		fixture.appendChild(view);
+		assert.strictEqual(view, pMapViewFactory.getFactored(0).getView());
+		assert.ok(view.modelObject === pMap,
 			"modelObject should be a pointer to the javascript object instance");
-});
+	});
 
-QUnit.test("testInitSubscribesToInitcompleteMessage", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var subscriptions = this.dependencies.pubSub.getSubscriptions();
-	assert.deepEqual(subscriptions.length, 5);
+	test("testInitSubscribesToInitcompleteMessage", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let subscriptions = pubSub.getSubscriptions();
+		assert.deepEqual(subscriptions.length, 5);
 
-	var newElementsAddedSubscription = subscriptions[0];
-	assert.strictEqual(newElementsAddedSubscription.type, "newElementsAdded");
-	assert.deepEqual(newElementsAddedSubscription.path, []);
-	assert.strictEqual(newElementsAddedSubscription.functionToCall, pMap.newElementsAdded);
+		let newElementsAddedSubscription = subscriptions[0];
+		assert.strictEqual(newElementsAddedSubscription.type, "newElementsAdded");
+		assert.deepEqual(newElementsAddedSubscription.path, []);
+		assert.strictEqual(newElementsAddedSubscription.functionToCall, pMap.newElementsAdded);
 
-	var setLatitudeSubscription = subscriptions[1];
-	assert.strictEqual(setLatitudeSubscription.type, "setValue");
-	var latitudePath = ["latitudeTextVar"];
-	assert.stringifyEqual(setLatitudeSubscription.path, latitudePath);
-	assert.strictEqual(setLatitudeSubscription.functionToCall, pMap.handleSetValueLatitude);
+		let setLatitudeSubscription = subscriptions[1];
+		assert.strictEqual(setLatitudeSubscription.type, "setValue");
+		let latitudePath = ["latitudeTextVar"];
+		assert.stringifyEqual(setLatitudeSubscription.path, latitudePath);
+		assert.strictEqual(setLatitudeSubscription.functionToCall, pMap.handleSetValueLatitude);
 
-	var setLongitudeSubscription = subscriptions[2];
-	assert.strictEqual(setLongitudeSubscription.type, "setValue");
-	var longitudePath = ["longitudeTextVar"];
-	assert.stringifyEqual(setLongitudeSubscription.path, longitudePath);
-	assert.strictEqual(setLongitudeSubscription.functionToCall, pMap.handleSetValueLongitude);
+		let setLongitudeSubscription = subscriptions[2];
+		assert.strictEqual(setLongitudeSubscription.type, "setValue");
+		let longitudePath = ["longitudeTextVar"];
+		assert.stringifyEqual(setLongitudeSubscription.path, longitudePath);
+		assert.strictEqual(setLongitudeSubscription.functionToCall, pMap.handleSetValueLongitude);
 
-	var viewJustMadeVisibleSubscription = subscriptions[3];
-	assert.strictEqual(viewJustMadeVisibleSubscription.type, "viewJustMadeVisible");
-	assert.deepEqual(viewJustMadeVisibleSubscription.path, []);
-	assert.strictEqual(viewJustMadeVisibleSubscription.functionToCall, pMap.viewJustMadeVisible);
+		let viewJustMadeVisibleSubscription = subscriptions[3];
+		assert.strictEqual(viewJustMadeVisibleSubscription.type, "viewJustMadeVisible");
+		assert.deepEqual(viewJustMadeVisibleSubscription.path, []);
+		assert.strictEqual(viewJustMadeVisibleSubscription.functionToCall, pMap.viewJustMadeVisible);
 
-	var presentationShownSubscription = subscriptions[4];
-	assert.strictEqual(presentationShownSubscription.type, "presentationShown");
-	assert.deepEqual(presentationShownSubscription.path, []);
-	assert.strictEqual(presentationShownSubscription.functionToCall, pMap.viewJustMadeVisible);
+		let presentationShownSubscription = subscriptions[4];
+		assert.strictEqual(presentationShownSubscription.type, "presentationShown");
+		assert.deepEqual(presentationShownSubscription.path, []);
+		assert.strictEqual(presentationShownSubscription.functionToCall, pMap.viewJustMadeVisible);
+	});
 
-});
-
-QUnit.test("testnewElementsAddedStartsMapInViewAndUnsubscribesToInitcompleteMessage", function(
+	test("testnewElementsAddedStartsMapInViewAndUnsubscribesToInitcompleteMessage", function(
 		assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
+		let pMap = CORA.pMap(dependencies, spec);
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
 
-	pMap.newElementsAdded();
-	assert.strictEqual(pMapView.getStartMapCalled(), 1);
+		pMap.newElementsAdded();
+		assert.strictEqual(pMapView.getStartMapCalled(), 1);
 
-	// unsubscription
-	var unsubscriptions = this.dependencies.pubSub.getUnsubscriptions();
-	assert.deepEqual(unsubscriptions.length, 1);
-});
+		// unsubscription
+		let unsubscriptions = pubSub.getUnsubscriptions();
+		assert.deepEqual(unsubscriptions.length, 1);
+	});
 
-QUnit.test("testnewElementsAddedDoesNothingIfViewNotCurrentlyVisible", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
+	test("testnewElementsAddedDoesNothingIfViewNotCurrentlyVisible", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
 
-	pMap.newElementsAdded();
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		pMap.newElementsAdded();
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
 
-	// unsubscription
-	var unsubscriptions = this.dependencies.pubSub.getUnsubscriptions();
-	assert.deepEqual(unsubscriptions.length, 0);
-});
+		// unsubscription
+		let unsubscriptions = pubSub.getUnsubscriptions();
+		assert.deepEqual(unsubscriptions.length, 0);
+	});
 
-QUnit.test("testnewElementsAddedStartsMapOnlyOnceNoMatterHowManyTimesItIsCalled", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
+	test("testnewElementsAddedStartsMapOnlyOnceNoMatterHowManyTimesItIsCalled", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
 
-	pMap.newElementsAdded();
-	pMap.newElementsAdded();
-	pMap.newElementsAdded();
-	pMap.newElementsAdded();
-	assert.strictEqual(pMapView.getStartMapCalled(), 1);
+		pMap.newElementsAdded();
+		pMap.newElementsAdded();
+		pMap.newElementsAdded();
+		pMap.newElementsAdded();
+		assert.strictEqual(pMapView.getStartMapCalled(), 1);
 
-	// unsubscription
-	var unsubscriptions = this.dependencies.pubSub.getUnsubscriptions();
-	assert.deepEqual(unsubscriptions.length, 1);
-});
-QUnit
-		.test(
-				"testViewJustMadeVisibleStartsMapInViewOnlyAfternewElementsAddedHasBeenCalledAndViewIsCurrentlyVisible",
-				function(assert) {
-					var pMap = CORA.pMap(this.dependencies, this.spec);
-					pMap.newElementsAdded();
-					var view = pMap.getView();
-					this.fixture.appendChild(view);
+		// unsubscription
+		let unsubscriptions = pubSub.getUnsubscriptions();
+		assert.deepEqual(unsubscriptions.length, 1);
+	});
 
-					var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-					assert.strictEqual(pMapView.getStartMapCalled(), 0);
-					pMap.viewJustMadeVisible();
-					assert.strictEqual(pMapView.getStartMapCalled(), 1);
-				});
-QUnit.test("testViewJustMadeVisibleDoesNothingIfnewElementsAddedHasNotBeenCalled",
+	test(
+		"testViewJustMadeVisibleStartsMapInViewOnlyAfternewElementsAddedHasBeenCalledAndViewIsCurrentlyVisible",
 		function(assert) {
-			var pMap = CORA.pMap(this.dependencies, this.spec);
-			// pMap.newElementsAdded();
-			var view = pMap.getView();
-			this.fixture.appendChild(view);
+			let pMap = CORA.pMap(dependencies, spec);
+			pMap.newElementsAdded();
+			let view = pMap.getView();
+			fixture.appendChild(view);
 
-			var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
+			let pMapView = pMapViewFactory.getFactored(0);
 			assert.strictEqual(pMapView.getStartMapCalled(), 0);
 			pMap.viewJustMadeVisible();
-			assert.strictEqual(pMapView.getStartMapCalled(), 0);
+			assert.strictEqual(pMapView.getStartMapCalled(), 1);
 		});
-QUnit.test("testViewJustMadeVisibleDoesNothingIfViewCurrentlyNotVisible", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	pMap.newElementsAdded();
-	// var view = pMap.getView();
-	// this.fixture.appendChild(view);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
-	pMap.viewJustMadeVisible();
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
-});
-QUnit.test("testViewJustMadeVisibleOnlyStartsMapOnceNoMatterHowManyTimesItIsCalled", function(
+	test("testViewJustMadeVisibleDoesNothingIfnewElementsAddedHasNotBeenCalled", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let view = pMap.getView();
+		fixture.appendChild(view);
+
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		pMap.viewJustMadeVisible();
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
+	});
+
+	test("testViewJustMadeVisibleDoesNothingIfViewCurrentlyNotVisible", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		pMap.newElementsAdded();
+
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		pMap.viewJustMadeVisible();
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
+	});
+
+	test("testViewJustMadeVisibleOnlyStartsMapOnceNoMatterHowManyTimesItIsCalled", function(
 		assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	pMap.newElementsAdded();
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
+		let pMap = CORA.pMap(dependencies, spec);
+		pMap.newElementsAdded();
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getStartMapCalled(), 0);
-	pMap.viewJustMadeVisible();
-	pMap.viewJustMadeVisible();
-	pMap.viewJustMadeVisible();
-	pMap.viewJustMadeVisible();
-	assert.strictEqual(pMapView.getStartMapCalled(), 1);
-});
-
-QUnit.test("testBothValuesSetSetsMarkerInView", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
-
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getMarkerValues(0), undefined);
-
-	var msgLat = {
-		"path" : [],
-		"data" : "60.0"
-	};
-	var msgLng = {
-		"path" : [],
-		"data" : "55.8"
-	};
-
-	pMap.handleSetValueLatitude(msgLat);
-	assert.strictEqual(pMapView.getMarkerValues(0), undefined);
-	pMap.handleSetValueLongitude(msgLng);
-	assert.strictEqual(pMapView.getMarkerValues(0), undefined);
-
-	pMap.newElementsAdded();
-	assert.stringifyEqual(pMapView.getMarkerValues(0), {
-		"lat" : "60.0",
-		"lng" : "55.8"
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getStartMapCalled(), 0);
+		pMap.viewJustMadeVisible();
+		pMap.viewJustMadeVisible();
+		pMap.viewJustMadeVisible();
+		pMap.viewJustMadeVisible();
+		assert.strictEqual(pMapView.getStartMapCalled(), 1);
 	});
-});
 
-QUnit.test("testOneRemovedValueRemovesMarkerFromView", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
+	test("testBothValuesSetSetsMarkerInView", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	var pMapView = this.dependencies.pMapViewFactory.getFactored(0);
-	assert.strictEqual(pMapView.getMarkerValues(0), undefined);
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getMarkerValues(0), undefined);
 
-	var msgLat = {
-		"path" : [],
-		"data" : "60.0"
-	};
-	var msgLng = {
-		"path" : [],
-		"data" : "55.8"
-	};
-	var msgNoValue = {
-		"path" : [],
-		"data" : ""
-	};
+		let msgLat = {
+			path: [],
+			data: "60.0"
+		};
+		let msgLng = {
+			path: [],
+			data: "55.8"
+		};
 
-	pMap.handleSetValueLatitude(msgLat);
-	pMap.handleSetValueLongitude(msgLng);
-	pMap.newElementsAdded();
-	assert.stringifyEqual(pMapView.getMarkerValues(0), {
-		"lat" : "60.0",
-		"lng" : "55.8"
+		pMap.handleSetValueLatitude(msgLat);
+		assert.strictEqual(pMapView.getMarkerValues(0), undefined);
+		pMap.handleSetValueLongitude(msgLng);
+		assert.strictEqual(pMapView.getMarkerValues(0), undefined);
+
+		pMap.newElementsAdded();
+		let expectedMarkerValue0 = {
+			lat: "60.0",
+			lng: "55.8"
+		};
+		assert.stringifyEqual(pMapView.getMarkerValues(0), expectedMarkerValue0);
 	});
-	assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 0);
 
-	pMap.handleSetValueLatitude(msgNoValue);
-	assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
+	test("testOneRemovedValueRemovesMarkerFromView", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	pMap.handleSetValueLatitude(msgNoValue);
-	assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
+		let pMapView = pMapViewFactory.getFactored(0);
+		assert.strictEqual(pMapView.getMarkerValues(0), undefined);
 
-	pMap.handleSetValueLatitude(msgLat);
-	assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
+		let msgLat = {
+			path: [],
+			data: "60.0"
+		};
+		let msgLng = {
+			path: [],
+			data: "55.8"
+		};
+		let msgNoValue = {
+			path: [],
+			data: ""
+		};
 
-	pMap.handleSetValueLongitude(msgNoValue);
-	assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 2);
+		pMap.handleSetValueLatitude(msgLat);
+		pMap.handleSetValueLongitude(msgLng);
+		pMap.newElementsAdded();
+		assert.stringifyEqual(pMapView.getMarkerValues(0), {
+			lat: "60.0",
+			lng: "55.8"
+		});
+		assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 0);
 
-});
+		pMap.handleSetValueLatitude(msgNoValue);
+		assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
 
-QUnit.test("testViewSpecInputMode", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	pMap.newElementsAdded();
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
+		pMap.handleSetValueLatitude(msgNoValue);
+		assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
 
-	// var infoFactory = this.dependencies.infoFactory;
-	// var firstFactoredInfo = infoFactory.getFactored(0);
-	// var firstFactoredInfosButton = firstFactoredInfo.getButton();
-	//
-	// var infoButton = view.childNodes[0];
-	// assert.equal(infoButton, firstFactoredInfosButton);
+		pMap.handleSetValueLatitude(msgLat);
+		assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 1);
 
-	// var expectedInfoSpec = {
-	// "level1" : [ {
-	// "className" : "textView",
-	// "text" : "translated_coordinatesGroupText"
-	// }, {
-	// "className" : "defTextView",
-	// "text" : "translated_coordinatesGroupDefText"
-	// } ],
-	// "level2" : [ {
-	// "className" : "textIdView",
-	// "text" : "textId: coordinatesGroupText"
-	// }, {
-	// "className" : "defTextIdView",
-	// "text" : "defTextId: coordinatesGroupDefText"
-	// }, {
-	// "className" : "metadataIdView",
-	// "text" : "metadataId: coordinatesGroup"
-	// }, {
-	// "className" : "technicalView",
-	// "text" : "nameInData: coordinates"
-	// }, {
-	// "className" : "technicalView",
-	// "text" : "presentationId: coordinatesPGroup"
-	// } ],
-	// "insertAfter" : infoButton
-	// };
-	// var spec = {
-	// "appendTo" : this.fixture,
-	// "level1" : [ {
-	// "className" : "textView",
-	// "text" : "someText"
-	// }, {
-	// "className" : "defTextView",
-	// "text" : "someDefText"
-	// } ],
-	// "level2" : [ {
-	// "className" : "metadataIdView",
-	// "text" : "someMetadataText"
-	// }, {
-	// "className" : "regExView",
-	// "text" : "someRegEx"
-	// } ]
-	// };
-	// assert.stringifyEqual(firstFactoredInfo.getSpec(), expectedInfoSpec);
-	var expectedSpec = {
-		"mode" : "input",
-		// "inputType" : getInputType(),
-		// "outputFormat" : outputFormat,
-		// "presentationId" : presentationId,
-		"info" : {
-			"text" : "translated_coordinatesGroupText",
-			"defText" : "translated_coordinatesGroupDefText",
-			"technicalInfo" : [ {
-				"text" : "textId: coordinatesGroupText",
-			// onclickMethod : openTextIdRecord
-			}, {
-				"text" : "defTextId: coordinatesGroupDefText",
-			// onclickMethod : openDefTextIdRecord
-			}, {
-				"text" : "metadataId: coordinatesGroup",
-			// onclickMethod : openMetadataIdRecord
-			}, {
-				"text" : "nameInData: coordinates"
-			// }, {
-			// "text" : "regEx: " + regEx
-			}, {
-				"text" : "presentationId: coordinatesPGroup"
-			} ]
-		},
-		setLatLngMethod : pMap.publishLatLngValues
-	};
-	assert.stringifyEqual(this.dependencies.pMapViewFactory.getSpec(0), expectedSpec);
-	assert.notStrictEqual(expectedSpec.setLatLngMethod, undefined);
-});
-QUnit.test("testViewSpecOutputMode", function(assert) {
-	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
-			.getMetadataById("coordinatesOutputPGroup"));
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	pMap.newElementsAdded();
-	var view = pMap.getView();
-	this.fixture.appendChild(view);
-	var expectedSpec = {
-		"mode" : "output",
-		// "inputType" : getInputType(),
-		// "outputFormat" : outputFormat,
-		// "presentationId" : presentationId,
-		"info" : {
-			"text" : "translated_coordinatesGroupText",
-			"defText" : "translated_coordinatesGroupDefText",
-			"technicalInfo" : [ {
-				"text" : "textId: coordinatesGroupText",
-			// onclickMethod : openTextIdRecord
-			}, {
-				"text" : "defTextId: coordinatesGroupDefText",
-			// onclickMethod : openDefTextIdRecord
-			}, {
-				"text" : "metadataId: coordinatesGroup",
-			// onclickMethod : openMetadataIdRecord
-			}, {
-				"text" : "nameInData: coordinates"
-			// }, {
-			// "text" : "regEx: " + regEx
-			}, {
-				"text" : "presentationId: coordinatesPGroup"
-			} ]
-		},
-		setLatLngMethod : pMap.publishLatLngValues
-	};
-	assert.stringifyEqual(this.dependencies.pMapViewFactory.getSpec(0), expectedSpec);
-	assert.notStrictEqual(expectedSpec.setLatLngMethod, undefined);
-});
+		pMap.handleSetValueLongitude(msgNoValue);
+		assert.strictEqual(pMapView.getNoOfRemoveMarkerCalls(), 2);
+	});
 
-QUnit.test("testpublishLatLngValuesShouldPublishData", function(assert) {
-	this.spec.cPresentation = CORA.coraData(this.dependencies.metadataProvider
-			.getMetadataById("coordinatesPGroup"));
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	pMap.newElementsAdded();
-	pMap.publishLatLngValues(12.4, 33.3);
+	test("testViewSpecInputMode", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		pMap.newElementsAdded();
+		let view = pMap.getView();
+		fixture.appendChild(view);
 
-	var messages = this.dependencies.pubSub.getMessages();
-	// console.log(messages)
-	assert.strictEqual(messages.length, 2);
+		let expectedSpec = {
+			mode: "input",
+			info: {
+				text: "translated_coordinatesGroupText",
+				defText: "translated_coordinatesGroupDefText",
+				technicalInfo: [{
+					text: "textId: coordinatesGroupText",
+				}, {
+					text: "defTextId: coordinatesGroupDefText",
+				}, {
+					text: "metadataId: coordinatesGroup",
+				}, {
+					text: "nameInData: coordinates"
+				}, {
+					text: "presentationId: coordinatesPGroup"
+				}]
+			},
+			setLatLngMethod: pMap.publishLatLngValues
+		};
+		assert.stringifyEqual(pMapViewFactory.getSpec(0), expectedSpec);
+		assert.notStrictEqual(expectedSpec.setLatLngMethod, undefined);
+	});
 
-	var latitudeMessage = messages[0];
-	assert.strictEqual(latitudeMessage.type, "setValue");
-	assert.strictEqual(latitudeMessage.message.data, 12.4);
-	assert.stringifyEqual(latitudeMessage.message.path, ["latitudeTextVar"]);
+	test("testViewSpecOutputMode", function(assert) {
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("coordinatesOutputPGroup"));
+		let pMap = CORA.pMap(dependencies, spec);
+		pMap.newElementsAdded();
+		let view = pMap.getView();
+		fixture.appendChild(view);
+		let expectedSpec = {
+			mode: "output",
+			info: {
+				text: "translated_coordinatesGroupText",
+				defText: "translated_coordinatesGroupDefText",
+				technicalInfo: [{
+					text: "textId: coordinatesGroupText",
+				}, {
+					text: "defTextId: coordinatesGroupDefText",
+				}, {
+					text: "metadataId: coordinatesGroup",
+				}, {
+					text: "nameInData: coordinates"
+				}, {
+					text: "presentationId: coordinatesPGroup"
+				}]
+			},
+			setLatLngMethod: pMap.publishLatLngValues
+		};
+		assert.stringifyEqual(pMapViewFactory.getSpec(0), expectedSpec);
+		assert.notStrictEqual(expectedSpec.setLatLngMethod, undefined);
+	});
 
-	var longitudeMessage = messages[1];
-	assert.strictEqual(longitudeMessage.type, "setValue");
-	assert.strictEqual(longitudeMessage.message.data, 33.3);
-	assert.stringifyEqual(longitudeMessage.message.path, ["longitudeTextVar"]);
+	test("testpublishLatLngValuesShouldPublishData", function(assert) {
+		spec.cPresentation = CORA.coraData(metadataProvider.getMetadataById("coordinatesPGroup"));
+		let pMap = CORA.pMap(dependencies, spec);
+		pMap.newElementsAdded();
+		pMap.publishLatLngValues(12.4, 33.3);
 
-});
+		let messages = pubSub.getMessages();
+		// //console.log(messages)
+		assert.strictEqual(messages.length, 2);
 
-QUnit.test("testGetDependencies", function(assert) {
-	var pMap = CORA.pMap(this.dependencies, this.spec);
-	var dependencies = pMap.getDependencies();
-	assert.equal(dependencies, this.dependencies);
+		let expectedLatitudeMessage = {
+			type: "setValue",
+			message: {
+				path: ["latitudeTextVar"],
+				dataOrigin: "user",
+				data: 12.4
+			}
+		};
+		assert.deepEqual(messages[0], expectedLatitudeMessage);
+		let expectedLongitudeMessage = {
+			type: "setValue",
+			message: {
+				path: ["longitudeTextVar"],
+				dataOrigin: "user",
+				data: 33.3
+			}
+		};
+		assert.deepEqual(messages[1], expectedLongitudeMessage);
+	});
+
+	test("testGetDependencies", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+		let dependencies2 = pMap.getDependencies();
+		assert.equal(dependencies2, dependencies);
+	});
+
+	test("testGetPresentationCounter", function(assert) {
+		let pMap = CORA.pMap(dependencies, spec);
+
+		assert.strictEqual(pMap.getPresentationCounter(), spec.presentationCounter);
+	});
 });

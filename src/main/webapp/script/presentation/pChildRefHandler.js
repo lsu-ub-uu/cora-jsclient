@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 			pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
 		const isInputMode = spec.mode === "input";
 		const binaryLinkRecordIdValues = {};
+		const parentPresentationCounter = spec.parentPresentationCounter;
 		let mode = spec.mode;
 		let presentationSize = spec.presentationSize;
 
@@ -319,8 +320,8 @@ var CORA = (function(cora) {
 			}
 			let repeatingElement = createRepeatingElement(newPath);
 			pChildRefHandlerView.addChild(repeatingElement.getView());
-			addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
-			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement);
+			let presentationCounter = addPresentationsToRepeatingElementsView(repeatingElement, metadataIdToAdd);
+			subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView(repeatingElement, presentationCounter);
 			updateView();
 		};
 
@@ -382,14 +383,9 @@ var CORA = (function(cora) {
 				clickableHeadlineLevel: spec.clickableHeadlineLevel,
 				presentationSize: presentationSize,
 				callOnFirstShowOfPresentation: callOnFirstShowOfPresentation,
-				containsDataShouldBeTracked: containsDataShouldBeTracked()
+				parentPresentationCounter: parentPresentationCounter
 			};
 			return pRepeatingElementFactory.factor(repeatingElementSpec);
-		};
-
-		const containsDataShouldBeTracked = function() {
-			let attributes = cMetadataElement.getData().attributes;
-			return (attributes.type === "group" || spec.clickableHeadlineText !== undefined);
 		};
 
 		const addPresentationsToRepeatingElementsView = function(repeatingElement, metadataIdToAdd) {
@@ -403,6 +399,7 @@ var CORA = (function(cora) {
 					metadataIdToAdd);
 				repeatingElement.addAlternativePresentation(alternativePresentation);
 			}
+			return presentation.getPresentationCounter();
 		};
 
 		const factorPresentation = function(path, cPresentation, metadataIdToAdd) {
@@ -421,10 +418,12 @@ var CORA = (function(cora) {
 			return spec.cAlternativePresentation !== undefined;
 		};
 
-		const subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView = function(repeatingElement) {
+		const subscribeToRemoveMessageToRemoveRepeatingElementFromChildrenView = function(
+			repeatingElement, presentationCounter) {
 			if (showAddButton()) {
 				let removeInfo = {
-					repeatingElement: repeatingElement
+					repeatingElement: repeatingElement,
+					presentationCounter: presentationCounter
 				};
 				let removeFunction = function() {
 					childRemoved(removeInfo);
@@ -439,10 +438,23 @@ var CORA = (function(cora) {
 		};
 
 		const childRemoved = function(removeInfo) {
+			publishVisibilityChange(removeInfo.presentationCounter, false, false);
 			pChildRefHandlerView.removeChild(removeInfo.repeatingElement.getView());
 			pubSub.unsubscribe(removeInfo.subscribeId);
 			noOfRepeating--;
 			updateView();
+		};
+
+		const publishVisibilityChange = function(presentationCounter, currentlyVisible,
+			currentlyContainsData) {
+			let visibilityData = {
+				path: [parentPresentationCounter],
+				presentationCounter: presentationCounter,
+				visibility: currentlyVisible,
+				containsData: currentlyContainsData
+			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const updateView = function() {

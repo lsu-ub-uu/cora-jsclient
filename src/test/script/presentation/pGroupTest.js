@@ -46,12 +46,12 @@ QUnit.module("presentation/pGroupTest.js", {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		
 		this.spec = {
-			"metadataIdUsedInData" : "groupIdOneTextChild",
-			"path" : [],
-			"cPresentation" : CORA.coraData(this.dependencies.metadataProvider
+			metadataIdUsedInData : "groupIdOneTextChild",
+			path : [],
+			cPresentation : CORA.coraData(this.dependencies.metadataProvider
 					.getMetadataById("pgGroupIdOneTextChild")),
-			"cParentPresentation" : undefined,
-			recordPartPermissionCalculator : this.recordPartPermissionCalculator,
+			cParentPresentation : undefined,
+			recordPartPermissionCalculator : this.recordPartPermissionCalculator
 		};
 	}
 }); 
@@ -89,6 +89,13 @@ QUnit.test("testGetView", function(assert) {
 	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
 	
 	assert.strictEqual(pGroup.getView, parent.getView);
+});
+
+QUnit.test("testGetPresentationCounter", function(assert) {
+	let pGroup = CORA.pGroup(this.dependencies, this.spec);
+	let parent = this.pParentMultipleChildrenFactory.getFactored(0);
+	
+	assert.strictEqual(pGroup.getPresentationCounter, parent.getPresentationCounter);
 });
 
 QUnit.test("testSpec", function(assert) {

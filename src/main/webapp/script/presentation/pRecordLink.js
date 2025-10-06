@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2020 Uppsala University Library
+ * Copyright 2016, 2020, 2025 Uppsala University Library
  * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -20,15 +20,27 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRecordLink = function(dependencies, spec) {
+		const providers = dependencies.providers;
+		const metadataProvider = dependencies.metadataProvider;
+		const textProvider = dependencies.textProvider;
+		const clientInstanceProvider = dependencies.clientInstanceProvider;
 
-		let path = spec.path;
+		const globalFactories = dependencies.globalFactories;
+		const pRecordLinkViewFactory = dependencies.pRecordLinkViewFactory;
+		const recordGuiFactory = dependencies.recordGuiFactory;
+		const ajaxCallFactory = dependencies.ajaxCallFactory;
+		const presentationFactory = dependencies.presentationFactory;
+		const pAttributesFactory = dependencies.pAttributesFactory;
+
+		const pubSub = dependencies.pubSub;
+
+		const path = spec.path;
+		const presentationCounter = spec.presentationCounter;
 
 		let out;
 		let readLink;
 		let openLinkShowing = false;
 		let cPresentation = spec.cPresentation;
-		let metadataProvider = dependencies.metadataProvider;
-		let textProvider = dependencies.textProvider;
 
 		let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
 		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
@@ -53,7 +65,7 @@ var CORA = (function(cora) {
 		let text;
 
 		const start = function() {
-			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
+			pubSub.subscribe("linkedData", path, undefined, handleMsg);
 			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
 			presentAs = getValueFromPresentationOrDefaultTo("presentAs", "link");
 			view = createBaseView();
@@ -111,7 +123,7 @@ var CORA = (function(cora) {
 				pRecordLink: out
 			};
 			possiblyAddLabelToViewSpec(viewSpec);
-			return dependencies.pRecordLinkViewFactory.factor(viewSpec);
+			return pRecordLinkViewFactory.factor(viewSpec);
 		};
 
 		const extractTextId = function(textNameInData) {
@@ -285,8 +297,8 @@ var CORA = (function(cora) {
 				read: readLinkIn,
 				presentationId: linkedPresentationId,
 				metadataId: linkedMetadataId,
-				recordGuiFactory: dependencies.recordGuiFactory,
-				ajaxCallFactory: dependencies.ajaxCallFactory,
+				recordGuiFactory: recordGuiFactory,
+				ajaxCallFactory: ajaxCallFactory,
 				recordPartPermissionCalculatorFactory: spec.recordPartPermissionCalculatorFactory
 			};
 		};
@@ -335,15 +347,15 @@ var CORA = (function(cora) {
 				metadataIdUsedInData: metadataIdUsedInData,
 				cPresentation: cPresentationChild
 			};
-			let pVar = dependencies.presentationFactory.factor(presentationSpec);
+			let pVar = presentationFactory.factor(presentationSpec);
 			childViewNew.appendChild(pVar.getView());
 			view.addChild(childViewNew);
 		};
 
 		const calculateNewPath = function(metadataIdToAdd) {
 			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"parentPath": path
+				metadataIdToAdd: metadataIdToAdd,
+				parentPath: path
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -381,7 +393,7 @@ var CORA = (function(cora) {
 		const getSearchFromSearchProvider = function() {
 			let searchLink = cPresentation.getFirstChildByNameInData("search");
 			let searchId = getRecordIdFromLink(searchLink);
-			return dependencies.providers.searchProvider.getSearchById(searchId);
+			return providers.searchProvider.getSearchById(searchId);
 		};
 
 		const createSearchHandler = function(searchRecord) {
@@ -396,7 +408,7 @@ var CORA = (function(cora) {
 				triggerWhenResultIsChoosen: setResultFromSearch
 			};
 
-			let searchHandler = dependencies.globalFactories.searchHandlerFactory
+			let searchHandler = globalFactories.searchHandlerFactory
 				.factor(searchHandlerSpec);
 			view.addSearchHandlerView(searchHandler.getView());
 		};
@@ -415,11 +427,9 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToSetValueIfLinkedPresentationExists = function() {
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordTypeTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordTypeTextVar"), undefined,
 				valueChangedOnInput);
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
 				valueChangedOnInput);
 		};
 
@@ -439,20 +449,32 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToTextVarSetValue = function() {
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
+			pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
 				hideOrShowOutputPresentation);
 		};
 
 		const hideOrShowOutputPresentation = function(dataFromMsg) {
 			let valueForView = dataFromMsg.data;
-			if (mode === "output") {
-				if (valueForView !== "") {
-					view.show();
-				} else {
-					view.hide();
-				}
+			let containsData = dataFromMsg.dataOrigin !== "final" && valueForView !== "";
+			if (valueForView !== "") {
+				view.show();
+				publishVisibilityChange("visible", containsData);
+			} else if (mode === "output") {
+				view.hide();
+				publishVisibilityChange("hidden", containsData);
+			} else {
+				publishVisibilityChange("visible", containsData);
 			}
+		};
+
+		const publishVisibilityChange = function(visibility, currentlyContainsData) {
+			let visibilityData = {
+				path: [presentationCounter],
+				presentationCounter: presentationCounter,
+				visibility: visibility,
+				containsData: currentlyContainsData
+			};
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const initPAttributes = function() {
@@ -462,7 +484,7 @@ var CORA = (function(cora) {
 				mode: mode,
 				toShow: attributesToShow
 			};
-			dependencies.pAttributesFactory.factor(pAttributesSpec);
+			pAttributesFactory.factor(pAttributesSpec);
 		};
 
 		const getView = function() {
@@ -478,7 +500,7 @@ var CORA = (function(cora) {
 				readLink: readLink,
 				loadInBackground: openInfoFromView.loadInBackground
 			};
-			dependencies.clientInstanceProvider.getJsClient()
+			clientInstanceProvider.getJsClient()
 				.openRecordUsingReadLink(openInfo);
 		};
 
@@ -504,18 +526,20 @@ var CORA = (function(cora) {
 
 		const publishNewValueForRecordId = function(recordId) {
 			let data = {
-				"data": recordId,
-				"path": recordIdPath
+				path: recordIdPath,
+				dataOrigin: "user",
+				data: recordId
 			};
-			dependencies.pubSub.publish("setValue", data);
+			pubSub.publish("setValue", data);
 		};
 
 		const publishNewValueForRecordType = function(recordType) {
 			let data = {
-				data: recordType,
-				path: recordTypePath
+				path: recordTypePath,
+				dataOrigin: "user",
+				data: recordType
 			};
-			dependencies.pubSub.publish("setValue", data);
+			pubSub.publish("setValue", data);
 		};
 
 		const publishNewValueForLinkedData = function(recordId, recordType, openInfo) {
@@ -536,7 +560,7 @@ var CORA = (function(cora) {
 				data: linkedData,
 				path: path
 			};
-			dependencies.pubSub.publish("linkedData", message);
+			pubSub.publish("linkedData", message);
 		};
 
 		const clearLinkedRecordId = function() {
@@ -554,10 +578,10 @@ var CORA = (function(cora) {
 				loadInBackground = "true";
 			}
 			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
+				readLink: link,
+				loadInBackground: loadInBackground
 			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+			clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
 		};
 
 		const openTextIdRecord = function(event) {
@@ -588,6 +612,10 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		out = Object.freeze({
 			type: "pRecordLink",
 			getDependencies: getDependencies,
@@ -602,7 +630,8 @@ var CORA = (function(cora) {
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
-			hideOrShowOutputPresentation: hideOrShowOutputPresentation
+			hideOrShowOutputPresentation: hideOrShowOutputPresentation,
+			getPresentationCounter: getPresentationCounter
 		});
 		start();
 		return out;

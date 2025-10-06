@@ -725,7 +725,7 @@ QUnit.module("metadata/metadataChildValidatorTest.js", hooks => {
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild0);
 
 		let containerChild1 = [containerChild0[0].children[0]];
-		//	console.log(con)
+		//	//console.log(con)
 		dataHolder.addToReturnForFindContainersUsingPathAndMetadataId(containerChild1);
 
 		let containerChild2 = [{

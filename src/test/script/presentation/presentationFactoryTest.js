@@ -310,12 +310,6 @@ CORATEST.assertCorrectPRepeatingElementFactoryDependencies = function(assert, co
 	assert.strictEqual(dependencies.infoFactory.type, "infoFactory");
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
 	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
-
-	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
-	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
-	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
-	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
-	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
 }
 
 CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function(assert, context, dependencies) {
@@ -325,13 +319,6 @@ CORATEST.assertCorrectPNonRepeatingChildRefHandlerFactoryDependencies = function
 	const pNonRepeatingChildRefHandlerViewFactory = dependencies.pNonRepeatingChildRefHandlerViewFactory;
 	assert.strictEqual(pNonRepeatingChildRefHandlerViewFactory.type, "genericFactory");
 	assert.strictEqual(pNonRepeatingChildRefHandlerViewFactory.getTypeToFactor(), "pNonRepeatingChildRefHandlerView");
-
-	const containsDataTrackerFactory = dependencies.containsDataTrackerFactory;
-	assert.strictEqual(containsDataTrackerFactory.type, "genericFactory");
-	assert.strictEqual(containsDataTrackerFactory.getTypeToFactor(), "containsDataTracker");
-	const containsDataTrackerDependencies = containsDataTrackerFactory.getDependencies();
-	assert.strictEqual(containsDataTrackerDependencies.pubSub, context.dependencies.pubSub);
-
 
 	assert.strictEqual(dependencies.pubSub, context.dependencies.pubSub);
 	assert.strictEqual(dependencies.providers, context.dependencies.providers);

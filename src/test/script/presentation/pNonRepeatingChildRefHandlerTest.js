@@ -64,6 +64,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	hooks.afterEach(() => {
 		//no after
 	});
+
 	const createPresentation = function() {
 		return CORA.coraData({
 			name: "presentation",
@@ -106,20 +107,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 					name: "presentationOf"
 				}]
 			}
-				//			, {
-				//				name: "presentationsOf",
-				//				children: [{
-				//					repeatId: "0",
-				//					children: [{
-				//						name: "linkedRecordType",
-				//						value: "metadata"
-				//					}, {
-				//						name: "linkedRecordId",
-				//						value: "groupIdOneTextChild"
-				//					}],
-				//					name: "presentationOf"
-				//				}]
-				//			}
 			]
 		});
 	};
@@ -188,9 +175,88 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			.getSpec(1);
 		assert.strictEqual(factoredAlternativePresentationSpec, undefined);
 		assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
-
 	});
 
+	//TODO: here
+	test.only("testInitWorksIfMetadataMatches", function(assert) {
+		let lessGoodPresentation = createLessGoodPresentation(
+			"groupWithOneCollectionVarChildGroupOtherIdSameNameInData", "groupIdOneTextChild2");
+		spec.cPresentation = lessGoodPresentation;
+		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
+
+		assert.strictEqual(factoredPresentationSpec.path, spec.parentPath);
+		assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
+			spec.parentMetadataId);
+		assert.strictEqual(factoredPresentationSpec.cPresentation, spec.cPresentation);
+		assert.strictEqual(factoredPresentationSpec.cParentPresentation,
+			spec.cParentPresentation);
+
+		let factoredAlternativePresentationSpec = presentationFactory
+			.getSpec(1);
+		assert.strictEqual(factoredAlternativePresentationSpec, undefined);
+		assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
+	});
+	
+	test.only("testInitCreatesFakeIfNoMatchBetweenDataBeeingPresentedAndCurrentMetadata", function(assert) {
+		let lessGoodPresentation = createLessGoodPresentation(
+			"groupWithOneCollectionVarChildAndOneTextChildGroup", "groupIdOneTextChild2");
+		spec.cPresentation = lessGoodPresentation;
+		let pNonRepeatingChildRefHandler =CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
+
+		assert.strictEqual(factoredPresentationSpec,undefined);
+		
+		let view = pNonRepeatingChildRefHandler.getView();
+		assert.strictEqual(view.className, "fakePChildRefHandlerViewAsNoMetadataExistsFor "+
+			"groupWithOneCollectionVarChildAndOneTextChildGroup groupIdOneTextChild2");
+		
+	});
+	const createLessGoodPresentation = function(id1, id2) {
+		return CORA.coraData({
+			name: "presentation",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "id",
+					value: "somePresentationId"
+				}, {
+					name: "type",
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
+					}, {
+						name: "linkedRecordId",
+						value: "presentationSurroundingContainer"
+					}]
+				}]
+			}, {
+				name: "presentationsOf",
+				children: [{
+					repeatId: "0",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
+					}, {
+						name: "linkedRecordId",
+						value: id1
+					}],
+					name: "presentationOf"
+				}, {
+					repeatId: "1",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
+					}, {
+						name: "linkedRecordId",
+						value: id2
+					}],
+					name: "presentationOf"
+				}]
+			}
+			]
+		});
+	};
 	test("testInitPresentationAddedToView", function(assert) {
 		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let factoredPresentation = presentationFactory.getFactored(0);

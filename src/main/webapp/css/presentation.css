@@ -48,7 +48,8 @@ img {
 }
 
 .error input, .error select, .error textarea {
-	background-color: red;
+	background-color: #fbc0c0;
+	border-color: red;
 }
 
 .errorStillFocused input, .errorStillFocused select, .errorStillFocused textarea
@@ -245,6 +246,7 @@ img {
 .buttonView {
 	/* 	needed for tests to see that it is visible */
 	display: inline-block;
+	padding-bottom: 10px;
 }
 
 .buttonView:empty {

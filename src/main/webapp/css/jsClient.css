@@ -168,15 +168,13 @@ h1, .h1TextStyle {
 	animation-iteration-count: infinite;
 }
 
-@
-keyframes rotation2 {from { transform:rotate(0deg);
-	
-}
-
-to {
-	transform: rotate(359deg);
-}
-
+@keyframes rotation2 {
+	from { 
+		transform:rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
 }
 .iconButton.loginManagerView {
 	transform: none;
@@ -838,12 +836,10 @@ to {
 .definitionViewer .legend.blink {
 	animation: blink-animation 0.2s linear 1;
 }
-
-@
-keyframes blink-animation { 50% {
-	background-color: #D3D3D3;
-}
-
+@keyframes blink-animation { 
+	50% {
+		background-color: #D3D3D3;
+	}
 }
 .definitionViewer .storage {
 	color: #2e7af0;
@@ -931,58 +927,10 @@ keyframes blink-animation { 50% {
 	will-change: opacity;
 }
 
-@
-keyframes blink { 0% {
-	opacity: 1;
-}
-
-50
-
-
-
-
-%
-{
-opacity
-
-
-
-
-:
-
-
-
-
-0
-
-
-.2
-
-
-;
-}
-100
-
-
-
-
-%
-{
-opacity
-
-
-
-
-:
-
-
-
-
-1
-
-
-;
-}
+@keyframes blink { 
+	0% {opacity: 1;}
+	50% {opacity: 0.2;}
+	100% {opacity: 1;}
 }
 .workView>.recursiveDelete {
 	display: grid;

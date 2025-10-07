@@ -74,7 +74,7 @@ var CORA = (function(cora) {
 				if (cParentMetadataChildRefPart.getData() !== undefined) {
 					console.log("found")
 					return true;
-				}else{
+				} else {
 					notFoundIds.push(childMetadataIdFromPresentation);
 				}
 			}
@@ -92,14 +92,6 @@ var CORA = (function(cora) {
 				},
 				handleMsgToDeterminVisibilityChange: function() { }
 			};
-		};
-
-		const methodToCallOnContainsDataChange = function(state) {
-			if (state) {
-				updateViewForData();
-			} else {
-				updateViewForNoData();
-			}
 		};
 
 		const createView = function() {
@@ -209,25 +201,6 @@ var CORA = (function(cora) {
 			pubSub.publish("visibilityChange", visibilityData);
 		};
 
-		const updateViewForData = function() {
-			view.setHasDataStyle(true);
-			if (isInOutputMode()) {
-				view.showContent();
-				publishPresentationShown();
-			}
-		};
-
-		const isInOutputMode = function() {
-			return mode === "output";
-		};
-
-		const updateViewForNoData = function() {
-			view.setHasDataStyle(false);
-			if (isInOutputMode()) {
-				view.hideContent();
-			}
-		};
-
 		const possiblyAddAlternativePresentation = function() {
 			if (spec.cAlternativePresentation !== undefined) {
 				let factoredAlternativePresentation = factorPresentation(spec.cAlternativePresentation);
@@ -253,7 +226,6 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			getView: getView,
 			publishPresentationShown: publishPresentationShown,
-			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 

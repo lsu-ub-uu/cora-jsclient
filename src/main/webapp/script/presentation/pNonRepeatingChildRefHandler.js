@@ -22,17 +22,33 @@ var CORA = (function(cora) {
 	cora.pNonRepeatingChildRefHandler = function(dependencies, spec) {
 		let view;
 		const pubSub = dependencies.pubSub;
+		const metadataProvider = dependencies.providers.metadataProvider;
 		const parentPresentationCounter = spec.parentPresentationCounter;
 		const mode = spec.mode;
+		const cPresentation = spec.cPresentation;
 		let presentationVisibilities = {};
 		let presentationContainsDatas = {};
 		let pRepeatingElementIsVisible;
 		let pRepeatingElementContainsData;
 		let presentationCounterToUseWhenPublishingCombinedStatus;
+		let possiblyFake;
+		let metadataHelper;
+		let notFoundIds = [];
 
 		const start = function() {
+			metadataHelper = CORA.metadataHelper({
+				metadataProvider: metadataProvider
+			});
+			if (atLeastOneChildRefFoundInCurrentlyUsedParentMetadata()) {
+				continueWithNormalStartup();
+			} else {
+				possiblyFake = createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith();
+			}
+		};
+
+		const continueWithNormalStartup = function() {
 			createView();
-			let factoredPresentation = factorPresentation(spec.cPresentation);
+			let factoredPresentation = factorPresentation(cPresentation);
 			presentationCounterToUseWhenPublishingCombinedStatus = factoredPresentation.getPresentationCounter();
 
 			view.addChild(factoredPresentation.getView());
@@ -45,17 +61,42 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const methodToCallOnContainsDataChange = function(state) {
-			if (state) {
-				updateViewForData();
-			} else {
-				updateViewForNoData();
+		const atLeastOneChildRefFoundInCurrentlyUsedParentMetadata = function() {
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
+			let presentationsOf = cPresentation.getFirstChildByNameInData("presentationsOf");
+
+			for (const childReference of presentationsOf.children) {
+				let cChildReference = CORA.coraData(childReference);
+				let childMetadataIdFromPresentation = cChildReference.getFirstAtomicValueByNameInData("linkedRecordId");
+				console.log("childMetadataIdFromPresentation", childMetadataIdFromPresentation)
+				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+					cParentMetadata, childMetadataIdFromPresentation);
+				if (cParentMetadataChildRefPart.getData() !== undefined) {
+					console.log("found")
+					return true;
+				} else {
+					notFoundIds.push(childMetadataIdFromPresentation);
+				}
 			}
+			console.log("NOT found")
+			return false;
+		};
+
+		const createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith = function() {
+			return {
+				getView: function() {
+					let spanNew = document.createElement("span");
+					spanNew.className = "fakePChildRefHandlerViewAsNoMetadataExistsFor "
+						+ notFoundIds.join(" ");
+					return spanNew;
+				},
+				handleMsgToDeterminVisibilityChange: function() { }
+			};
 		};
 
 		const createView = function() {
 			let viewSpec = {
-				presentationId: findPresentationId(spec.cPresentation),
+				presentationId: findPresentationId(cPresentation),
 				textStyle: spec.textStyle,
 				childStyle: spec.childStyle,
 				callOnFirstShowOfPresentation: publishPresentationShown,
@@ -160,25 +201,6 @@ var CORA = (function(cora) {
 			pubSub.publish("visibilityChange", visibilityData);
 		};
 
-		const updateViewForData = function() {
-			view.setHasDataStyle(true);
-			if (isInOutputMode()) {
-				view.showContent();
-				publishPresentationShown();
-			}
-		};
-
-		const isInOutputMode = function() {
-			return mode === "output";
-		};
-
-		const updateViewForNoData = function() {
-			view.setHasDataStyle(false);
-			if (isInOutputMode()) {
-				view.hideContent();
-			}
-		};
-
 		const possiblyAddAlternativePresentation = function() {
 			if (spec.cAlternativePresentation !== undefined) {
 				let factoredAlternativePresentation = factorPresentation(spec.cAlternativePresentation);
@@ -204,11 +226,13 @@ var CORA = (function(cora) {
 			getSpec: getSpec,
 			getView: getView,
 			publishPresentationShown: publishPresentationShown,
-			onlyForTestMethodToCallOnContainsDataChange: methodToCallOnContainsDataChange,
 			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 
 		start();
+		if (undefined !== possiblyFake) {
+			return possiblyFake;
+		}
 		return out;
 	};
 

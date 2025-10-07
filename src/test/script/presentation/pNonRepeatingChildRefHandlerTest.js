@@ -64,6 +64,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	hooks.afterEach(() => {
 		//no after
 	});
+
 	const createPresentation = function() {
 		return CORA.coraData({
 			name: "presentation",
@@ -106,20 +107,6 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 					name: "presentationOf"
 				}]
 			}
-				//			, {
-				//				name: "presentationsOf",
-				//				children: [{
-				//					repeatId: "0",
-				//					children: [{
-				//						name: "linkedRecordType",
-				//						value: "metadata"
-				//					}, {
-				//						name: "linkedRecordId",
-				//						value: "groupIdOneTextChild"
-				//					}],
-				//					name: "presentationOf"
-				//				}]
-				//			}
 			]
 		});
 	};
@@ -188,9 +175,88 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 			.getSpec(1);
 		assert.strictEqual(factoredAlternativePresentationSpec, undefined);
 		assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
-
 	});
 
+	//TODO: here
+	test("testInitWorksIfMetadataMatches", function(assert) {
+		let lessGoodPresentation = createLessGoodPresentation(
+			"groupWithOneCollectionVarChildGroupOtherIdSameNameInData", "groupIdOneTextChild2");
+		spec.cPresentation = lessGoodPresentation;
+		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
+
+		assert.strictEqual(factoredPresentationSpec.path, spec.parentPath);
+		assert.strictEqual(factoredPresentationSpec.metadataIdUsedInData,
+			spec.parentMetadataId);
+		assert.strictEqual(factoredPresentationSpec.cPresentation, spec.cPresentation);
+		assert.strictEqual(factoredPresentationSpec.cParentPresentation,
+			spec.cParentPresentation);
+
+		let factoredAlternativePresentationSpec = presentationFactory
+			.getSpec(1);
+		assert.strictEqual(factoredAlternativePresentationSpec, undefined);
+		assert.deepEqual(factoredPresentationSpec.recordPartPermissionCalculator, spec.recordPartPermissionCalculator)
+	});
+
+	test("testInitCreatesFakeIfNoMatchBetweenDataBeeingPresentedAndCurrentMetadata", function(assert) {
+		let lessGoodPresentation = createLessGoodPresentation(
+			"groupWithOneCollectionVarChildAndOneTextChildGroup", "groupIdOneTextChild2");
+		spec.cPresentation = lessGoodPresentation;
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let factoredPresentationSpec = presentationFactory.getSpec(0);
+
+		assert.strictEqual(factoredPresentationSpec, undefined);
+
+		let view = pNonRepeatingChildRefHandler.getView();
+		assert.strictEqual(view.className, "fakePChildRefHandlerViewAsNoMetadataExistsFor " +
+			"groupWithOneCollectionVarChildAndOneTextChildGroup groupIdOneTextChild2");
+	});
+
+	const createLessGoodPresentation = function(id1, id2) {
+		return CORA.coraData({
+			name: "presentation",
+			children: [{
+				name: "recordInfo",
+				children: [{
+					name: "id",
+					value: "somePresentationId"
+				}, {
+					name: "type",
+					children: [{
+						name: "linkedRecordType",
+						value: "recordType"
+					}, {
+						name: "linkedRecordId",
+						value: "presentationSurroundingContainer"
+					}]
+				}]
+			}, {
+				name: "presentationsOf",
+				children: [{
+					repeatId: "0",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
+					}, {
+						name: "linkedRecordId",
+						value: id1
+					}],
+					name: "presentationOf"
+				}, {
+					repeatId: "1",
+					children: [{
+						name: "linkedRecordType",
+						value: "metadata"
+					}, {
+						name: "linkedRecordId",
+						value: id2
+					}],
+					name: "presentationOf"
+				}]
+			}
+			]
+		});
+	};
 	test("testInitPresentationAddedToView", function(assert) {
 		CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let factoredPresentation = presentationFactory.getFactored(0);
@@ -351,6 +417,42 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		assertNumberOfMessages(assert, 1);
 		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true);
 		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, true);
+	});
+
+	test("testhandleMsgToDeterminVisibilityChange_changing_output", function(assert) {
+		spec.mode = "output";
+		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
+		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true);
+
+		//		
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, false);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true);
+
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		assertNumberOfMessages(assert, 4);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {

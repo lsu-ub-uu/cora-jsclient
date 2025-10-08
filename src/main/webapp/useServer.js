@@ -49,7 +49,7 @@ const start = function() {
 		useDivaMigration();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH', 'divaDomainAdminVarldskulturmuseerna']);
 	
 	} else if (hrefContains(href, "alvin")) {
 		enableCSS("alvinCSS");
@@ -62,7 +62,7 @@ const start = function() {
 		useDivaPreview();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH', 'divaDomainAdminVarldskulturmuseerna']);
 	
 	} else if (hrefContains(href, "localhost:38080")) {
 		useLocalhostWithPort("38080", "38180", "SystemOne utveckling", "systemone");
@@ -79,7 +79,7 @@ const start = function() {
 		useLocalhostWithPort("38082", "38182", "DiVA utveckling", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH', 'divaDomainAdminVarldskulturmuseerna']);
 	
 	} else if (hrefContains(href, "116:38080")) {
 		useDevWithPort("38080", "38180", "SystemOne metadata (dev dator)", "systemone");
@@ -200,6 +200,12 @@ const createMapWithAppTokens = function() {
 		type: "appTokenLogin",
 		loginId: "domainAdminKTH@diva.cora.uu.se",
 		appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
+	});
+  appTokens.set('divaDomainAdminVarldskulturmuseerna', {
+		text: "appToken for domainAdminVarldskulturmuseerna",
+		type: "appTokenLogin",
+		loginId: "domainAdminVarldskulturmuseerna@diva.cora.uu.se",
+		appToken: "a5cbff61-5b72-47e5-bb51-5847a5a5824d"
 	});
 
 	return appTokens;

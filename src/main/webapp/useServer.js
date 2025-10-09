@@ -315,10 +315,16 @@ const useSysteOnePreview = function() {
 
 const useAlvinPreview = function() {
 	name = "ALVIN preview";
-	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+	baseUrl = "https://preview.alvin.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.alvin.cora.epc.ub.uu.se/";
 	startDependencies();
 };
+//const useAlvinPreview = function() {
+//	name = "ALVIN preview";
+//	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
+//	loginBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
+//	startDependencies();
+//};
 
 const useAlvinMigration = function() {
 	name = "ALVIN migration";
@@ -335,10 +341,16 @@ const useAlvinPre = function() {
 
 const useDivaPreview = function() {
 	name = "DiVA preview";
-	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/diva/";
+	baseUrl = "https://preview.diva.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.diva.cora.epc.ub.uu.se/";
 	startDependencies();
 };
+//const useDivaPreview = function() {
+//	name = "DiVA preview";
+//	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
+//	loginBaseUrl = "https://cora.epc.ub.uu.se/diva/";
+//	startDependencies();
+//};
 
 const useDivaMigration = function() {
 	name = "DiVA migration";

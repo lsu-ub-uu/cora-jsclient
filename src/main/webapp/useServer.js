@@ -308,8 +308,8 @@ const useLocalhost3 = function() {
 
 const useSysteOnePreview = function() {
 	name = "SystemOne preview";
-	baseUrl = "https://cora.epc.ub.uu.se/systemone/rest/";
-	loginBaseUrl = "https://cora.epc.ub.uu.se/systemone/";
+	baseUrl = "https://preview.systemone.cora.epc.ub.uu.se/rest/";
+	loginBaseUrl = "https://preview.systemone.cora.epc.ub.uu.se/";
 	startDependencies();
 };
 

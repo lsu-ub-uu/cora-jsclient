@@ -68,17 +68,14 @@ var CORA = (function(cora) {
 			for (const childReference of presentationsOf.children) {
 				let cChildReference = CORA.coraData(childReference);
 				let childMetadataIdFromPresentation = cChildReference.getFirstAtomicValueByNameInData("linkedRecordId");
-				console.log("childMetadataIdFromPresentation", childMetadataIdFromPresentation)
 				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
 					cParentMetadata, childMetadataIdFromPresentation);
 				if (cParentMetadataChildRefPart.getData() !== undefined) {
-					console.log("found")
 					return true;
 				} else {
 					notFoundIds.push(childMetadataIdFromPresentation);
 				}
 			}
-			console.log("NOT found")
 			return false;
 		};
 

@@ -644,8 +644,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -1224,8 +1224,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -1913,8 +1913,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -2850,8 +2850,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -3518,8 +3518,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -4186,8 +4186,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -4828,8 +4828,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -5403,8 +5403,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -5999,8 +5999,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -6750,8 +6750,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -7506,8 +7506,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -8174,8 +8174,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -8811,8 +8811,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -9438,8 +9438,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -10344,8 +10344,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -11012,8 +11012,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -11680,8 +11680,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -12348,8 +12348,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -13140,8 +13140,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -13839,8 +13839,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -14373,8 +14373,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -15066,8 +15066,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "true"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -15651,8 +15651,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [
@@ -16433,8 +16433,8 @@ var CORATEST = (function(coraTest) {
 									"name": "listPresentationViewId"
 								},
 								{
-									"name": "userSuppliedId",
-									"value": "false"
+									"name": "idSource",
+									"value": "userSupplied"
 								},
 								{
 									"children": [

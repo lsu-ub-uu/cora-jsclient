@@ -327,8 +327,8 @@ var CORATEST = (function(coraTest) {
 					"name": "listPresentationViewId"
 				},
 				{
-					"name": "userSuppliedId",
-					"value": "true"
+					"name": "idSource",
+					"value": "userSupplied"
 				},
 				{
 					"children": [

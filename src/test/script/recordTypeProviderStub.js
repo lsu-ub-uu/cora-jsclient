@@ -104,8 +104,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "presentationVarFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "presentationVarViewSelfPGroup"
@@ -250,8 +250,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "metadataViewSelfPGroup"
@@ -383,8 +383,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "presentationSurroundingContainerFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "presentationSurroundingContainerViewSelfPGroup"
@@ -524,8 +524,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "textSystemOneFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -627,8 +627,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "recordTypeFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 },{
                     "name": "groupOfRecordType",
                     "value": "metadata",
@@ -757,8 +757,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataGroupFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -899,8 +899,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataCollectionItemFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1041,8 +1041,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "presentationFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 },{
                     "name": "groupOfRecordType",
                     "value": "presentation",
@@ -1171,8 +1171,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataRecordLinkFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "permissionKey",
                     "value": "RECORDTYPE_METADATARECORDLINK"
@@ -1316,8 +1316,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataTextVariableFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1458,8 +1458,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "presentationRepeatingContainerFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1600,8 +1600,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataCollectionVariableFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -1742,8 +1742,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "textFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "selfPresentationViewId",
                     "value": "textViewSelfPGroup"
@@ -1883,8 +1883,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "presentationGroupFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2013,8 +2013,8 @@ var CORATEST = (function (coraTest) {
                     "name": "searchPresentationFormId",
                     "value": "metadataItemCollectionFormSearchPGroup"
                 }, {
-                    "name": "userSuppliedId",
-                    "value": "true"
+                    "name": "idSource",
+                    "value": "userSupplied"
                 }, {
                     "name": "parentId",
                     "children": [
@@ -2185,8 +2185,8 @@ var CORATEST = (function (coraTest) {
                         "value": "imageFormSearchPGroup"
                     },
                     {
-                        "name": "userSuppliedId",
-                        "value": "false"
+                        "name": "idSource",
+                        "value": "userSupplied"
                     }
                     ,{
                         "name": "groupOfRecordType",
@@ -2353,8 +2353,8 @@ var CORATEST = (function (coraTest) {
                         "value": "binaryFormSearchPGroup"
                     },
                     {
-                        "name": "userSuppliedId",
-                        "value": "true"
+                        "name": "idSource",
+                        "value": "userSupplied"
                     },{
                         "name": "groupOfRecordType",
                         "value": "system",
@@ -2533,8 +2533,8 @@ var CORATEST = (function (coraTest) {
                         "value": "genericBinaryFormSearchPGroup"
                     },
                     {
-                        "name": "userSuppliedId",
-                        "value": "false"
+                        "name": "idSource",
+                        "value": "userSupplied"
                     },{
                         "name": "groupOfRecordType",
                         "value": "system",
@@ -2713,8 +2713,8 @@ var CORATEST = (function (coraTest) {
                         "value": "noDataDividerBinaryFormSearchPGroup"
                     },
                     {
-                        "name": "userSuppliedId",
-                        "value": "false"
+                        "name": "idSource",
+                        "value": "userSupplied"
                     },{
                         "name": "groupOfRecordType",
                         "value": "test",

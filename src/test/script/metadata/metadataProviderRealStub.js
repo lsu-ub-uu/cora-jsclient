@@ -3269,8 +3269,8 @@ var CORATEST = (function(coraTest) {
 				"name" : "searchPresentationFormId",
 				"value" : "presentationVarFormSearchPGroup"
 			}, {
-				"name" : "userSuppliedId",
-				"value" : "true"
+				"name" : "idSource",
+				"value" : "userSupplied"
 			}, {
 				"name" : "selfPresentationViewId",
 				"value" : "presentationVarViewSelfPGroup"
@@ -4582,8 +4582,8 @@ var CORATEST = (function(coraTest) {
 				"name" : "searchPresentationFormId",
 				"value" : "presentationGroupFormSearchPGroup"
 			}, {
-				"name" : "userSuppliedId",
-				"value" : "true"
+				"name" : "idSource",
+				"value" : "userSupplied"
 			}, {
 				"name" : "permissionKey",
 				"value" : "RECORDTYPE_PRESENTATIONGROUP"

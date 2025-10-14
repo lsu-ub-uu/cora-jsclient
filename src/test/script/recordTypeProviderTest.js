@@ -712,8 +712,8 @@ QUnit.test("getRecordTypeById", function(assert) {
 								"name": "listPresentationViewId"
 							},
 							{
-								"name": "userSuppliedId",
-								"value": "true"
+								"name": "idSource",
+								"value": "userSupplied"
 							},
 							{
 								"children": [
@@ -931,7 +931,7 @@ QUnit.test("getMetadataByRecordTypeIdAllButValidationTypeInfo", function(assert)
   "menuPresentationViewId": "textMenuPGroup",
   "listPresentationViewId": "textListPGroup",
   "search": "textSearch",
-  "userSuppliedId": "true",
+  "idSource": "userSupplied",
   "actionLinks": {
     "search": {
       "requestMethod": "GET",

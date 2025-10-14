@@ -71,7 +71,7 @@ var CORATEST = (function(coraTest) {
 				"menuPresentationViewId" : recordTypeId + "MenuPGroup",
 				"listPresentationViewId" : recordTypeId + "ListPGroup",
 				"search" : recordTypeId + "Search",
-				"userSuppliedId" : "true",
+				"idSource" : "userSupplied",
 				"actionLinks" : {
 					"search" : {
 						"requestMethod" : "GET",

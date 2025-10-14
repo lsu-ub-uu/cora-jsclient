@@ -113,7 +113,7 @@ var CORA = (function(cora) {
 				"menuPresentationViewId": getLinkValueFromRecord("menuPresentationViewId", cRecord),
 				"listPresentationViewId": getLinkValueFromRecord("listPresentationViewId", cRecord),
 				"search": getLinkValueFromRecord("search", cRecord),
-				"userSuppliedId": cRecord.getFirstAtomicValueByNameInData("userSuppliedId"),
+				"idSource": cRecord.getFirstAtomicValueByNameInData("idSource"),
 				"actionLinks": record.actionLinks
 			};
 			metadata.validationTypes = getValidationTypesForRecordTypeId(recordId);

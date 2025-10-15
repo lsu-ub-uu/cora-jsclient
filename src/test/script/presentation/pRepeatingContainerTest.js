@@ -161,81 +161,87 @@ QUnit.module("presentation/pRepeatingContainerTest.js", hooks => {
 	test("testhandleMsgToDeterminVisibilityChange_visible", function(assert) {
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false, false);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", false, false);
+
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false, true);
+
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-55", "1-123", "visible", false, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_hiddenInInput", function(assert) {
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true, true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "hidden", true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "hidden", true, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true, true);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-55", "1-123", "visible", true, true);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", false, false);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "5-55", "1-123", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-55", "1-123", "hidden", false, false);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", true, true);
 
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
-		assertNumberOfMessages(assert, 3);
-
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true, true);
 		assertNumberOfMessages(assert, 3);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false, false);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false, false);
 		assertNumberOfMessages(assert, 4);
-		assertMessageNumberIsSentToWithInfo(assert, 3, "5-55", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "5-55", "1-123", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
 		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false);
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "visible", false, false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true, true);
 		assertNumberOfMessages(assert, 2);
 
-		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false, false);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "visible", false, false);
 	});
 
-		test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
-			let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
+	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
+		let pRepeatingContainer = CORA.pRepeatingContainer(dependencies, spec);
 
-			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true);
-			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true);
-			assertNumberOfMessages(assert, 2);
-	
-			callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false);
-			assertNumberOfMessages(assert, 3);
-			assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "hidden", true);
-		});
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-34", "hidden", true, true);
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "visible", true, true);
+		assertNumberOfMessages(assert, 2);
 
-	const callHandleMsgForVisibilityChange = function(pNonRepeatingChildRefHandler, presentationCounter,
-		visibility, containsData) {
+		callHandleMsgForVisibilityChange(pRepeatingContainer, "1-35", "hidden", false, false);
+		assertNumberOfMessages(assert, 3);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-55", "1-123", "hidden", true, true);
+	});
+
+	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter,
+		visibility, containsData, containsError) {
 		let msg = presentationCounter + "/visibilityChange";
 		let dataFromMsg = {
 			presentationCounter: presentationCounter,
 			visibility: visibility,
-			containsData: containsData
+			containsData: containsData,
+			containsError: containsError
 		};
-		pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
 	};
 
 	const assertNumberOfMessages = function(assert, noMessages) {
@@ -244,7 +250,7 @@ QUnit.module("presentation/pRepeatingContainerTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility, containsData) {
+		presentationCounter, visibility, containsData, containsError) {
 		let messages = pubSub.getMessages();
 		let message = messages[messageNo];
 		assert.strictEqual(message.type, "visibilityChange");
@@ -252,6 +258,6 @@ QUnit.module("presentation/pRepeatingContainerTest.js", hooks => {
 		assert.strictEqual(message.message.presentationCounter, presentationCounter, "presentationCounter is wrong");
 		assert.strictEqual(message.message.visibility, visibility);
 		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong in message");
+		assert.strictEqual(message.message.containsError, containsError, "containsError is wrong in message");
 	};
-
 });

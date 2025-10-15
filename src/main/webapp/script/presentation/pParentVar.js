@@ -216,16 +216,17 @@ var CORA = (function(cora) {
 			pVarView.setValue(valueForView);
 			//other possible values are startup or user
 			let containsData = dataFromMsg.dataOrigin !== "final" && value !== "";
-			publishVisibilityChange(value, containsData);
+			publishVisibilityChange(value, containsData, false);
 		};
 
-		const publishVisibilityChange = function(value, containsData) {
+		const publishVisibilityChange = function(value, containsData, containsError) {
 			let visibility = value === "" && mode === "output" ? "hidden" : "visible";
 			let visibilityData = {
 				path: [presentationCounter],
 				presentationCounter: presentationCounter,
 				visibility: visibility,
-				containsData: containsData
+				containsData: containsData,
+				containsError: containsError
 			};
 			pubSub.publish("visibilityChange", visibilityData);
 		};
@@ -233,6 +234,7 @@ var CORA = (function(cora) {
 
 		const handleValidationError = function() {
 			state = "error";
+			publishVisibilityChange(previousValue, false, true);
 			updateViewWithCurrentState();
 		};
 

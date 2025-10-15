@@ -55,6 +55,8 @@ var CORA = (function(cora) {
 		let pRepeatingElementIsVisible;
 		let presentationContainsDatas = {};
 		let pRepeatingElementContainsData;
+		let presentationContainsErrors = {};
+		let pRepeatingElementContainsError;
 		let presentationCounterToUseWhenPublishingCombinedStatus;
 
 
@@ -186,29 +188,44 @@ var CORA = (function(cora) {
 		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
 			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
 			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
+			presentationContainsErrors[dataFromMsg.presentationCounter] = dataFromMsg.containsError;
 			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
 			let visibilityHasChanged = visibilityChanges(currentlyVisible);
 			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
 			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
+			let currentlyContainsError = atLeastOneTrackedPresentationContainsError();
+			let containsErrorHasChanged = containsErrorChanges(currentlyContainsError);
 
 			if (visibilityHasChanged && mode === "output") {
 				showOrHideViewBaseOnVisibility(currentlyVisible);
 			}
-			if (visibilityHasChanged || containsDataHasChanged) {
-				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData);
+			if (visibilityHasChanged || containsDataHasChanged || containsErrorHasChanged) {
+				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData,
+					currentlyContainsError);
 			}
 			if (currentlyContainsData) {
 				updateViewForContainsData();
 			} else {
 				updateViewForContainsNoData();
 			}
+
+			if (currentlyContainsError) {
+				updateViewForContainsError();
+			} else {
+				updateViewForContainsNoError();
+			}
 		};
 
 		const atLeastOneTrackedPresentationIsVisible = function() {
 			return Object.values(presentationVisibilities).some(v => v === 'visible');
 		};
+
 		const atLeastOneTrackedPresentationContainsData = function() {
 			return Object.values(presentationContainsDatas).some(v => v === true);
+		};
+
+		const atLeastOneTrackedPresentationContainsError = function() {
+			return Object.values(presentationContainsErrors).some(v => v === true);
 		};
 
 		const getVisibilityStatus = function() {
@@ -225,9 +242,18 @@ var CORA = (function(cora) {
 			}
 			return false;
 		};
+
 		const containsDataChanges = function(currentlyContainsData) {
 			if (pRepeatingElementContainsData !== currentlyContainsData) {
 				pRepeatingElementContainsData = currentlyContainsData;
+				return true;
+			}
+			return false;
+		};
+
+		const containsErrorChanges = function(currentlyContainsError) {
+			if (pRepeatingElementContainsError !== currentlyContainsError) {
+				pRepeatingElementContainsError = currentlyContainsError;
 				return true;
 			}
 			return false;
@@ -240,6 +266,7 @@ var CORA = (function(cora) {
 				hide(view);
 			}
 		};
+
 		const updateViewForContainsData = function() {
 			view.classList.add("containsData");
 			view.classList.remove("containsNoData");
@@ -250,14 +277,23 @@ var CORA = (function(cora) {
 			view.classList.add("containsNoData");
 		};
 
-		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData) {
+		const updateViewForContainsError = function() {
+			view.classList.add("containsError");
+		};
+
+		const updateViewForContainsNoError = function() {
+			view.classList.remove("containsError");
+		};
+
+		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData,
+			currentlyContainsError) {
 			let visibilityData = {
 				path: [parentPresentationCounter],
 				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
 				visibility: currentlyVisible,
-				containsData: currentlyContainsData
+				containsData: currentlyContainsData,
+				containsError: currentlyContainsError
 			};
-
 			pubSub.publish("visibilityChange", visibilityData);
 		};
 

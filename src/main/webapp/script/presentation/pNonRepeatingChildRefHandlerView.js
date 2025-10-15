@@ -28,6 +28,7 @@ var CORA = (function(cora) {
 		let alternativeButton;
 		let defaultButton;
 		let containsData = false;
+		let containsError = false;
 		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		//TODO: change to be sent in through dependencies
@@ -44,6 +45,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			view = createBaseView();
 			setContainsDataStyle();
+			setContainsErrorStyle();
 			possiblyAddClickableHeadline();
 		};
 
@@ -64,6 +66,13 @@ var CORA = (function(cora) {
 			let notCurrentContainsStateClass = !containsData ? "containsData" : "containsNoData";
 			view.classList.remove(notCurrentContainsStateClass);
 			view.classList.add(currentContainsStateClass);
+		};
+		const setContainsErrorStyle = function() {
+			if (containsError) {
+				view.classList.add("containsError");
+			} else {
+				view.classList.remove("containsError");
+			}
 		};
 
 		const possiblyAddClickableHeadline = function() {
@@ -245,6 +254,7 @@ var CORA = (function(cora) {
 				spec.callOnFirstShowOfPresentation();
 			}
 		};
+
 		const callOnFirstShowOfAlternativePresentation = function() {
 			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
 				&& spec.callOnFirstShowOfPresentation !== undefined) {
@@ -258,6 +268,11 @@ var CORA = (function(cora) {
 			setContainsDataStyle();
 		};
 
+		const setHasErrorStyle = function(containsErrorIn) {
+			containsError = containsErrorIn;
+			setContainsErrorStyle();
+		};
+
 		let out = Object.freeze({
 			type: "pNonRepeatingChildRefHandlerView",
 			getView: getView,
@@ -265,7 +280,8 @@ var CORA = (function(cora) {
 			addAlternativePresentation: addAlternativePresentation,
 			hideContent: hideView,
 			showContent: showView,
-			setHasDataStyle: setHasDataStyle
+			setHasDataStyle: setHasDataStyle,
+			setHasErrorStyle: setHasErrorStyle
 		});
 		start();
 		return out;

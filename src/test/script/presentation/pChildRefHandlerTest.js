@@ -1506,7 +1506,8 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 				containsData: false,
 				path: ["someParentPresentationCounter"],
 				presentationCounter: "1-123",
-				visibility: false
+				visibility: false,
+				containsError: false
 			},
 			type: "visibilityChange"
 		};

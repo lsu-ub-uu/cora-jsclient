@@ -647,19 +647,19 @@ QUnit.module("presentation/pParentVarTest.js", hooks => {
 		assert.equal(pVarViewSpy.getState(), "ok");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false, false);
 
 		data.dataOrigin = "startup";
 		data.data = "some other value";
 		pParentVar.handleSetValueMsg(data);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true, false);
 
 		data.dataOrigin = "user";
 		data.data = "";
 		pParentVar.handleSetValueMsg(data);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "visible", false, false);
 
 	});
 	test("testHandleMessage_output", function(assert) {
@@ -677,19 +677,19 @@ QUnit.module("presentation/pParentVarTest.js", hooks => {
 		assert.equal(pVarViewSpy.getState(), "ok");
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false, false);
 
 		data.dataOrigin = "startup";
 		data.data = "some other value";
 		pParentVar.handleSetValueMsg(data);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-333", "1-333", "visible", true, false);
 
 		data.dataOrigin = "user";
 		data.data = "";
 		pParentVar.handleSetValueMsg(data);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-333", "1-333", "hidden", false, false);
 
 	});
 
@@ -700,7 +700,7 @@ QUnit.module("presentation/pParentVarTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility, containsData) {
+		presentationCounter, visibility, containsData, containsError) {
 		let messages = pubSub.getMessages();
 		let message0 = messages[messageNo];
 		assert.strictEqual(message0.type, "visibilityChange");
@@ -708,6 +708,7 @@ QUnit.module("presentation/pParentVarTest.js", hooks => {
 		assert.strictEqual(message0.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message0.message.visibility, visibility);
 		assert.strictEqual(message0.message.containsData, containsData, "containsData is wrong");
+		assert.strictEqual(message0.message.containsError, containsError, "containsError is wrong");
 	};
 
 	test("testChangedValueEmpty", function(assert) {
@@ -805,6 +806,10 @@ QUnit.module("presentation/pParentVarTest.js", hooks => {
 		assert.equal(pParentVar.getState(), "error");
 		let pVarViewSpy = pVarViewFactory.getFactored(0);
 		assert.equal(pVarViewSpy.getState(), "error");
+
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-333", "1-333", "visible", false, true);
+
 	});
 
 	test("testHandleValidationErrorResetBySetValue", function(assert) {

@@ -389,22 +389,27 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false, false);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, false);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false, true);
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "visible", false, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_hiddenInInput", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true, true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_notHiddenInOutput", function(assert) {
@@ -412,11 +417,11 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true, true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "hidden", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, true, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing_output", function(assert) {
@@ -424,111 +429,112 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true, true);
 
 		//		
 		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, false, false, false);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false, false);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true, true);
 
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
-		assertNumberOfMessages(assert, 3);
-
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 3);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, false);
 		assertNumberOfMessages(assert, 4);
-		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-123", "visible", true, true);
 
 		//		
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, false);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-123", "hidden", false, false);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", true, true);
 
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
-		assertNumberOfMessages(assert, 3);
-
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 3);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, false);
 		assertNumberOfMessages(assert, 4);
-		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-123", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false);
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "visible", false, false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 2);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, false, false);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
 		let pNonRepeatingChildRefHandler = CORA.pNonRepeatingChildRefHandler(dependencies, spec);
 		let viewHandlerSpy = pNonRepeatingChildRefHandlerViewFactory.getFactored(0);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true);
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-34", "hidden", true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 2);
 
-		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true);
+		callHandleMsgForVisibilityChange(pNonRepeatingChildRefHandler, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, viewHandlerSpy, true, true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "hidden", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-123", "hidden", true, true);
 	});
 
-	const callHandleMsgForVisibilityChange = function(pNonRepeatingChildRefHandler, presentationCounter,
-		visibility, containsData) {
+	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter,
+		visibility, containsData, containsError) {
 		let msg = presentationCounter + "/visibilityChange";
 		let dataFromMsg = {
 			presentationCounter: presentationCounter,
 			visibility: visibility,
-			containsData: containsData
+			containsData: containsData,
+			containsError: containsError
 		};
-		pNonRepeatingChildRefHandler.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
+		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
 	};
 
 	const assertNumberOfMessages = function(assert, noMessages) {
@@ -537,7 +543,7 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility, containsData) {
+		presentationCounter, visibility, containsData, containsError) {
 		let messages = pubSub.getMessages();
 		let message = messages[messageNo];
 		assert.strictEqual(message.type, "visibilityChange");
@@ -545,11 +551,14 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerTest.js", hooks => {
 		assert.strictEqual(message.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message.message.visibility, visibility);
 		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong in message");
+		assert.strictEqual(message.message.containsError, containsError);
 	};
 
-	const assertViewVisibilityAndContainsData = function(assert, viewHandlerSpy, visible, containsData) {
+	const assertViewVisibilityAndContainsData = function(assert, viewHandlerSpy, visible, containsData,
+		containsError) {
 		assert.strictEqual(viewHandlerSpy.getIsShown(), visible, "visibility is wrong");
 		assert.strictEqual(viewHandlerSpy.getDataHasDataStyle(), containsData, "containsData is wrong in view");
+		assert.strictEqual(viewHandlerSpy.getDataHasErrorStyle(), containsError, "containsError is wrong in view");
 	};
 
 });

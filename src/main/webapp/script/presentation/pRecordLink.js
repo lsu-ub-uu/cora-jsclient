@@ -451,6 +451,14 @@ var CORA = (function(cora) {
 		const subscribeToTextVarSetValue = function() {
 			pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
 				hideOrShowOutputPresentation);
+			//SPIKE
+			pubSub.subscribe("validationError", calculateNewPath("linkedRecordIdTextVar"), undefined,
+				handleValidationError);
+
+		};
+
+		const handleValidationError = function(dataFromMsg, msg) {
+			publishVisibilityChange("visible", false, true);
 		};
 
 		const hideOrShowOutputPresentation = function(dataFromMsg) {
@@ -458,21 +466,22 @@ var CORA = (function(cora) {
 			let containsData = dataFromMsg.dataOrigin !== "final" && valueForView !== "";
 			if (valueForView !== "") {
 				view.show();
-				publishVisibilityChange("visible", containsData);
+				publishVisibilityChange("visible", containsData, false);
 			} else if (mode === "output") {
 				view.hide();
-				publishVisibilityChange("hidden", containsData);
+				publishVisibilityChange("hidden", containsData, false);
 			} else {
-				publishVisibilityChange("visible", containsData);
+				publishVisibilityChange("visible", containsData, false);
 			}
 		};
 
-		const publishVisibilityChange = function(visibility, currentlyContainsData) {
+		const publishVisibilityChange = function(visibility, currentlyContainsData, containsError) {
 			let visibilityData = {
 				path: [presentationCounter],
 				presentationCounter: presentationCounter,
 				visibility: visibility,
-				containsData: currentlyContainsData
+				containsData: currentlyContainsData,
+				containsError: containsError
 			};
 			pubSub.publish("visibilityChange", visibilityData);
 		};

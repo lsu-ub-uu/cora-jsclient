@@ -246,7 +246,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription = subscriptions[0];
 		assert.strictEqual(firstSubsription.type, "linkedData");
@@ -260,7 +260,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription1 = subscriptions[1];
 		assert.strictEqual(firstSubsription1.type, "setValue");
@@ -299,13 +299,30 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		let pRecordLink = CORA.pRecordLink(dependencies, spec);
 
 		let subscriptions = pubSub.getSubscriptions();
-		assert.deepEqual(subscriptions.length, 4);
+		assert.deepEqual(subscriptions.length, 5);
 
 		let firstSubsription = subscriptions[3];
 		assert.strictEqual(firstSubsription.type, "setValue");
 		let expectedPath2 = ["linkedRecordIdTextVar"];
 		assert.deepEqual(firstSubsription.path, expectedPath2);
 		assert.ok(firstSubsription.functionToCall === pRecordLink.hideOrShowOutputPresentation);
+	});
+
+	test("testInitSubscribeHandleValidationError", function(assert) {
+		spec.cPresentation = CORA.coraData(metadataProvider
+			.getMetadataById("myLinkNoPresentationOfLinkedRecordPLink"));
+		let pRecordLink = CORA.pRecordLink(dependencies, spec);
+
+		let subscriptions = pubSub.getSubscriptions();
+		assert.deepEqual(subscriptions.length, 5);
+
+		let firstSubsription = subscriptions[4];
+		assert.strictEqual(firstSubsription.type, "validationError");
+		let expectedPath2 = ["linkedRecordIdTextVar"];
+		assert.deepEqual(firstSubsription.path, expectedPath2);
+		firstSubsription.functionToCall();
+		assertNumberOfMessages(assert, 1);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false, true);
 	});
 
 	test("testHideOrShowOutputPresentation", function(assert) {
@@ -328,7 +345,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 1);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false, false);
 
 		let msg2 = {
 			dataOrigin: "user",
@@ -340,7 +357,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 2);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "hidden", false, false);
 
 		let msg3 = {
 			dataOrigin: "user",
@@ -352,7 +369,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 2);
 		assert.deepEqual(factoredView.getShowCalled(), 2);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true, false);
 	});
 
 	test("testHideOrShowInputPresentation", function(assert) {
@@ -371,7 +388,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 0);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "5-45", "5-45", "visible", false, false);
 
 		let msg2 = {
 			dataOrigin: "user",
@@ -383,7 +400,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 0);
 		assert.deepEqual(factoredView.getShowCalled(), 1);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "5-45", "5-45", "visible", false, false);
 
 		let msg3 = {
 			dataOrigin: "user",
@@ -395,7 +412,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.deepEqual(factoredView.getHideCalled(), 0);
 		assert.deepEqual(factoredView.getShowCalled(), 2);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "5-45", "5-45", "visible", true, false);
 	});
 
 
@@ -405,7 +422,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility, containsData) {
+		presentationCounter, visibility, containsData, containsError) {
 		let messages = pubSub.getMessages();
 		let message = messages[messageNo];
 		assert.strictEqual(message.type, "visibilityChange");
@@ -413,6 +430,7 @@ QUnit.module("presentation/pRecordLinkTest.js", hooks => {
 		assert.strictEqual(message.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message.message.visibility, visibility);
 		assert.strictEqual(message.message.containsData, containsData, "containsData is wrong");
+		assert.strictEqual(message.message.containsError, containsError, "containsError is wrong");
 	};
 
 

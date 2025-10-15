@@ -752,11 +752,17 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		pRepeatingElement.addPresentation(presentation);
 
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false, false);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", false);
-		assertViewVisibilityAndContainsData(assert, true, false);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", false, false);
+		assertViewVisibilityAndContainsData(assert, true, false, false);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false, true);
+
+		assertNumberOfMessages(assert, 2);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34-Spy", "visible", false, true);
+		assertViewVisibilityAndContainsData(assert, true, false, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_shown in input", function(assert) {
@@ -764,11 +770,11 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
 		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true, true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_hiddenInOutput", function(assert) {
@@ -777,11 +783,11 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
 		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true, true);
 
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true);
-		assertViewVisibilityAndContainsData(assert, false, true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "hidden", true, true);
+		assertViewVisibilityAndContainsData(assert, false, true, true);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_changing", function(assert) {
@@ -789,34 +795,34 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
 		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 1);
-		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 0, "1-1", "1-34-Spy", "visible", true, true);
 
 		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, true, false);
+		assertViewVisibilityAndContainsData(assert, true, false, false);
 		assertNumberOfMessages(assert, 2);
-		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34-Spy", "hidden", false);
+		assertMessageNumberIsSentToWithInfo(assert, 1, "1-1", "1-34-Spy", "hidden", false, false);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", true, true);
 
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
-		assertNumberOfMessages(assert, 3);
-
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 3);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, true, false);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false, false);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
+		assertNumberOfMessages(assert, 3);
+
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, true, false, false);
 		assertNumberOfMessages(assert, 4);
-		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34-Spy", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 3, "1-1", "1-34-Spy", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectVisibility", function(assert) {
@@ -824,15 +830,15 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
 		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "visible", false, false);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 2);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, true, false);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, true, false, false);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", false);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "visible", false, false);
 	});
 
 	test("testhandleMsgToDeterminVisibilityChange_sendingCorrectContainsData", function(assert) {
@@ -840,25 +846,26 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		let presentation = CORATEST.presentationStub("minimized", "presentationStubMinimized");
 		pRepeatingElement.addPresentation(presentation);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true);
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-34", "hidden", true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "visible", true, true);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 2);
 
-		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false);
-		assertViewVisibilityAndContainsData(assert, true, true);
+		callHandleMsgForVisibilityChange(pRepeatingElement, "1-35", "hidden", false, false);
+		assertViewVisibilityAndContainsData(assert, true, true, true);
 		assertNumberOfMessages(assert, 3);
-		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "hidden", true);
+		assertMessageNumberIsSentToWithInfo(assert, 2, "1-1", "1-34-Spy", "hidden", true, true);
 	});
 
 
 	const callHandleMsgForVisibilityChange = function(pRepeatingElement, presentationCounter,
-		visibility, containsData) {
+		visibility, containsData, containsError) {
 		let msg = presentationCounter + "/visibilityChange";
 		let dataFromMsg = {
 			presentationCounter: presentationCounter,
 			visibility: visibility,
-			containsData: containsData
+			containsData: containsData,
+			containsError: containsError
 		};
 		pRepeatingElement.handleMsgToDeterminVisibilityChange(dataFromMsg, msg);
 	};
@@ -869,7 +876,7 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 	};
 
 	const assertMessageNumberIsSentToWithInfo = function(assert, messageNo, parentPresentationCounter,
-		presentationCounter, visibility, containsData) {
+		presentationCounter, visibility, containsData, containsError) {
 		let messages = pubSub.getMessages();
 		let message = messages[messageNo];
 		assert.strictEqual(message.type, "visibilityChange");
@@ -877,9 +884,10 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		assert.strictEqual(message.message.presentationCounter, presentationCounter);
 		assert.strictEqual(message.message.visibility, visibility);
 		assert.strictEqual(message.message.containsData, containsData);
+		assert.strictEqual(message.message.containsError, containsError);
 	};
 
-	const assertViewVisibilityAndContainsData = function(assert, visible, containsData) {
+	const assertViewVisibilityAndContainsData = function(assert, visible, containsData, containsError) {
 		if (visible) {
 			assert.visible(view, "View is not visible, it should be");
 		} else {
@@ -891,6 +899,11 @@ QUnit.module("presentation/pRepeatingElementTest.js", hooks => {
 		} else {
 			assert.elementHasNotClass(view, "containsData", "Should not have class containsData");
 			assert.elementHasClass(view, "containsNoData", "Missing class containsNoData");
+		}
+		if (containsError) {
+			assert.elementHasClass(view, "containsError", "Missing class containsError");
+		} else {
+			assert.elementHasNotClass(view, "containsError", "Should not have class containsError");
 		}
 	};
 });

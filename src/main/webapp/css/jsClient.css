@@ -16,6 +16,7 @@
 	--box-sahow-17-trans: rgba(255, 255, 255, 0.17);
 	--menu-2n-color: rgba(167, 114, 166, 0.5);
 	--color-contains: rgba(255, 166, 0);
+	--color-contains-error: red;
 }
 
 @font-face {
@@ -780,6 +781,11 @@ h1, .h1TextStyle {
 	.h4TextStyle, .h5TextStyle, .h6TextStyle), .containsData>.clickableHeadline
 	{
 	color: var(--color-contains);
+}
+.containsError .pSurroundingContainer>.text:is(.h2TextStyle, .h3TextStyle,
+	.h4TextStyle, .h5TextStyle, .h6TextStyle), .containsError>.clickableHeadline
+	{
+	color: var(--color-contains-error);
 }
 
 .definitionViewer {

@@ -135,10 +135,12 @@ QUnit.module("presentation/pNonRepeatingChildRefHandlerViewTest.js", hooks => {
 			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
 
 		viewHandler.setHasDataStyle(true);
+		viewHandler.setHasErrorStyle(true);
 		assert.strictEqual(view.className,
-			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsData");
+			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsData containsError");
 
 		viewHandler.setHasDataStyle(false);
+		viewHandler.setHasErrorStyle(false);
 		assert.strictEqual(view.className,
 			"pNonRepeatingChildRefHandler someTextStyle someChildStyle someSContainer containsNoData");
 		assert.strictEqual(view.childNodes.length, 0);

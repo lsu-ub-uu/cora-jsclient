@@ -438,7 +438,7 @@ var CORA = (function(cora) {
 		};
 
 		const childRemoved = function(removeInfo) {
-			publishVisibilityChange(removeInfo.presentationCounter, false, false);
+			publishVisibilityChange(removeInfo.presentationCounter, false, false, false);
 			pChildRefHandlerView.removeChild(removeInfo.repeatingElement.getView());
 			pubSub.unsubscribe(removeInfo.subscribeId);
 			noOfRepeating--;
@@ -446,12 +446,13 @@ var CORA = (function(cora) {
 		};
 
 		const publishVisibilityChange = function(presentationCounter, currentlyVisible,
-			currentlyContainsData) {
+			currentlyContainsData, currentlyContainsError) {
 			let visibilityData = {
 				path: [parentPresentationCounter],
 				presentationCounter: presentationCounter,
 				visibility: currentlyVisible,
-				containsData: currentlyContainsData
+				containsData: currentlyContainsData,
+				containsError: currentlyContainsError
 			};
 
 			pubSub.publish("visibilityChange", visibilityData);

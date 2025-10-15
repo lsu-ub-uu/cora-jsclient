@@ -46,7 +46,7 @@ var CORATEST = (function(coraTest) {
 		function getAddedAlternativeChild(number) {
 			return addedAlternativeChildren[number];
 		}
-		
+
 		var isShown;
 		function hideContent() {
 			isShown = false;
@@ -65,23 +65,32 @@ var CORATEST = (function(coraTest) {
 		function getDataHasDataStyle() {
 			return dataHasDataStyle;
 		}
+		var dataHasErrorStyle;
+		function setHasErrorStyle(errorStyle) {
+			dataHasErrorStyle = errorStyle;
+		}
+		function getDataHasErrorStyle() {
+			return dataHasErrorStyle;
+		}
 
 		var out = Object.freeze({
-			"type" : "pChildRefHandlerViewSpy",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addChild : addChild,
-			getAddedChild : getAddedChild,
-			addAlternativePresentation : addAlternativePresentation,
-			getAddedAlternativeChild : getAddedAlternativeChild,
+			"type": "pChildRefHandlerViewSpy",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			addChild: addChild,
+			getAddedChild: getAddedChild,
+			addAlternativePresentation: addAlternativePresentation,
+			getAddedAlternativeChild: getAddedAlternativeChild,
 
-			hideContent : hideContent,
-			showContent : showContent,
-			getIsShown : getIsShown,
+			hideContent: hideContent,
+			showContent: showContent,
+			getIsShown: getIsShown,
 
-			setHasDataStyle : setHasDataStyle,
-			getDataHasDataStyle : getDataHasDataStyle
+			setHasDataStyle: setHasDataStyle,
+			getDataHasDataStyle: getDataHasDataStyle,
+			setHasErrorStyle: setHasErrorStyle,
+			getDataHasErrorStyle: getDataHasErrorStyle
 		});
 		return out;
 	};

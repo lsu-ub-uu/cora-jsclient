@@ -171,24 +171,6 @@ const createMapWithAppTokens = function() {
 		loginId: "divaAdmin@cora.epc.ub.uu.se",
 		appToken: "49ce00fb-68b5-4089-a5f7-1c225d3cf156"
 	});
-	appTokens.set('divaUser', {
-		text: "appToken for divaUser",
-		type: "appTokenLogin",
-		loginId: "divaUser@cora.epc.ub.uu.se",
-		appToken: "fa98bc21-830b-4dc7-b952-ebe4cf02e921"
-	});
-	appTokens.set('divaEverything', {
-		text: "appToken for divaEverything",
-		type: "appTokenLogin",
-		loginId: "divaEverything@diva.cora.uu.se",
-		appToken: "77edfec1-e1f1-45d4-a452-411668eba0f0"
-	});
-	appTokens.set('divaSystemAdmin', {
-		text: "appToken for systemAdmin",
-		type: "appTokenLogin",
-		loginId: "systemAdmin@diva.cora.uu.se",
-		appToken: "b5ec82bb-9492-4d9f-9069-c2fac3b49493"
-	});
 	appTokens.set('divaDomainAdminUU', {
 		text: "appToken for dominAdminUU",
 		type: "appTokenLogin",
@@ -200,6 +182,12 @@ const createMapWithAppTokens = function() {
 		type: "appTokenLogin",
 		loginId: "domainAdminKTH@diva.cora.uu.se",
 		appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
+	});
+	appTokens.set('divaUser (Inaktiv)', {
+		text: "appToken for divaUser",
+		type: "appTokenLogin",
+		loginId: "divaUser@cora.epc.ub.uu.se",
+		appToken: "fa98bc21-830b-4dc7-b952-ebe4cf02e921"
 	});
 
 	return appTokens;

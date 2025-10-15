@@ -17,22 +17,6 @@
 	color: var(--main-color);
 }
 
-.loadingDescription {
-	font-family: helvetica;
-	font-size: 0.9em;
-	letter-spacing: 3px;
-	color: #555753;
-	border-bottom: 10px 
-}
-
-.loadingUnderConstruction {
-	font-family: helvetica;
-	font-size: 0.5em;
-	letter-spacing: 3px;
-	color: #dcddda;
-	padding-top: 6px;
-}
-
 .loadingRing {
   display: inline-block;
   position: relative;

@@ -120,7 +120,7 @@ h2, .h2TextStyle {
 	box-shadow: 0 0 10px var(--black-box-10-shadow);
 }
 
-.presentation h1, .presentation .text.h1TextStyle {
+.presentation h1, .presentation .text.h1TextStyle, .workView .presentation .h1TextStyle {
 	color: var(--main-color);
 	font-size: 1.2rem;
 	font-weight: bold;

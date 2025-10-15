@@ -49,7 +49,7 @@ const start = function() {
 		useDivaMigration();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, 
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
 	} else if (hrefContains(href, "alvin")) {
 		enableCSS("alvinCSS");
@@ -62,7 +62,7 @@ const start = function() {
 		useDivaPreview();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
 	} else if (hrefContains(href, "localhost:38080")) {
 		useLocalhostWithPort("38080", "38180", "SystemOne utveckling", "systemone");
@@ -79,7 +79,7 @@ const start = function() {
 		useLocalhostWithPort("38082", "38182", "DiVA utveckling", "diva");
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap,
-			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaEverything', 'divaSystemAdmin', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
+			['systemoneAdmin', 'divaAdmin', 'divaUser', 'divaDomainAdminUU', 'divaDomainAdminKTH']);
 	
 	} else if (hrefContains(href, "116:38080")) {
 		useDevWithPort("38080", "38180", "SystemOne metadata (dev dator)", "systemone");
@@ -183,8 +183,8 @@ const createMapWithAppTokens = function() {
 		loginId: "domainAdminKTH@diva.cora.uu.se",
 		appToken: "cee52dba-56f8-4064-a379-05bd5ceab540"
 	});
-	appTokens.set('divaUser (Inaktiv)', {
-		text: "appToken for divaUser",
+	appTokens.set('divaUser', {
+		text: "appToken for divaUser (Inaktiv)",
 		type: "appTokenLogin",
 		loginId: "divaUser@cora.epc.ub.uu.se",
 		appToken: "fa98bc21-830b-4dc7-b952-ebe4cf02e921"

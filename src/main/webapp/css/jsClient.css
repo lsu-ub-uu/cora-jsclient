@@ -135,7 +135,6 @@ h1, .h1TextStyle {
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top: 0.5rem;
-	/*border-top: 10px solid var(--second-color);*/
 	border-bottom: 1px solid var(--second-color);
 }
 
@@ -246,11 +245,12 @@ h1, .h1TextStyle {
 .sideBar .openGuiItemHandlerView>.header, .searchesViewHeadline,
 	.recordTypeGroupHeadline {
 	color: var(--main-color);
-	font-size: 1.2rem;
+	font-size: 1.1rem;
 	font-weight: bold;
 	margin-top: 1rem;
 	position: relative;
 	border-bottom: none;
+	letter-spacing: -1px;
 }
 
 .searchesView {
@@ -473,6 +473,14 @@ h1, .h1TextStyle {
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: max-content minmax(0, 1fr);
 	grid-template-areas: "topBar topBar" "editView showView";
+}
+
+@media(max-width:74em){
+	.workArea .workView>.workItem.recordHandler {
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr ;
+		grid-template-areas: "topBar" "editView" "showView";
+	}
 }
 
 .workArea .workView>.workItem.search {

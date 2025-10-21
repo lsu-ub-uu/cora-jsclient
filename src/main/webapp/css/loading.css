@@ -1,6 +1,10 @@
 :root {
-  --main-color: #0082c9;
+  --main-color: rgb(109, 158, 185);
   --grey-light-text: #424242;
+}
+
+#alvinLoading, #divaLoading, #alvinLogo, #divaLogo {
+  display: none;
 }
 
 .loader {
@@ -10,31 +14,80 @@
   width: 100%;
   text-align: center;
 }
-.loadingText {
-  font-family: helvetica;
-  font-size: 1.1em;
-  font-weight: bold;
-  letter-spacing: 3px;
-  color: var(--grey-light-text);
+
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.loadingRing {
-  display: inline-block;
-  position: relative;
-  width: 60px;
-  margin: 15px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: 
-    radial-gradient(farthest-side,var(--main-color) 94%,#0000) top/8px 8px no-repeat,
-    conic-gradient(#0000 30%,var(--main-color));
-  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-  animation: l13 1s infinite linear;
-}
-@keyframes l13{ 
-  100%{transform: rotate(1turn)}
+.logo-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--main-color) 0%, #6D9EB9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 4px 16px rgba(0, 82, 204, 0.2);
 }
 
-#alvinLoading, #divaLoading {
-  display: none;
+.logo-text {
+    text-align: center;
+}
+
+.logo-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.logo-subtitle {
+    font-size: 1rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+}
+
+.status-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--main-color);
+    opacity: 0.1;
+    animation: dot-pulse 1.4s ease-in-out infinite;
+}
+
+.status-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.status-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-pulse {
+    0%, 100% {
+        opacity: 0.1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
 }

@@ -76,7 +76,7 @@
 }*/
 .jsClient>.header {
 	text-shadow: none;
-	background-color: var(--color-white);
+	background: var(--color-white);
 	font-family: 'UniversalisADFStdRegular';
 	font-weight: normal;
 	font-style: normal;

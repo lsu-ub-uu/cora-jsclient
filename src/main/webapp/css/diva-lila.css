@@ -1,5 +1,6 @@
 :root {
   --main-color: rgba(117, 89, 142);
+  --main-color-darker: rgba(92, 65, 116);
   --second-color: rgba(142, 115, 167);
   --color-white-90-trans: rgba(252, 252, 252, 0.9);
 /*   --blue-10-trans: rgba(117, 88, 141, 0.07); */

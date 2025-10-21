@@ -1,5 +1,6 @@
 :root {
 	--main-color: rgba(0, 130, 200);
+	--main-color-darker: rgba(0, 105, 172);
 	--second-color: rgba(0, 163, 251);
 	--color-light-grey: #DCDCDC;
 	--color-white: rgba(255, 255, 255);
@@ -131,7 +132,7 @@ h1, .h1TextStyle {
 	font-family: 'UniversalisADFStdRegular';
 	color: white;
 	border-color: inherit;
-	background-color: var(--main-color);
+	background:  linear-gradient(to bottom,var(--main-color),var(--main-color-darker));
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top: 0.5rem;

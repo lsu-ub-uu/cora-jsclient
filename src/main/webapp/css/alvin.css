@@ -13,11 +13,11 @@
   --color-h4: rgba(127, 191, 167, 0.7);
   --color-contains: var(--color-black);
 }
-#systemOneLoading, #divaLoading {
+#systemOneLoading, #systemOneLogo, #divaLogo, #divaLoading {
 	display: none;
 }
 
-#alvinLoading {
+#alvinLogo, #alvinLoading {
 	display: block;
 }
 

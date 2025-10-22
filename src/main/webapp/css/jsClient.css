@@ -193,14 +193,12 @@ h1, .h1TextStyle {
 }
 
 .holder.loginManagerView {
-	min-width: 10rem;
-	min-height: 10rem;
 	position: absolute;
 	z-index: 1015;
 	background: var(--color-white);
 	padding: 10px;
 	/*Calculation of headers height*/
-	top: calc(3rem + 19px);
+	top: calc(3rem + 9px);
 	right: 0rem;
 	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
 	border-radius: 0px 0px 4px 4px;
@@ -479,7 +477,7 @@ h1, .h1TextStyle {
 @media(max-width:74em){
 	.workArea .workView>.workItem.recordHandler {
 		grid-template-columns: 1fr;
-		grid-template-rows: 1fr ;
+		grid-template-rows: max-content minmax(0, 1fr) minmax(0, 1fr);
 		grid-template-areas: "topBar" "editView" "showView";
 	}
 }

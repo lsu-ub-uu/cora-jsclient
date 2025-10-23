@@ -31,6 +31,15 @@ const start = function() {
 		useAlvinPre();
 		enableIcon("alvin");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, []);
+
+	} else if (hrefContains(href, "alvin.pre.test.ub.uu.se")) {
+		enableCSS("alvinCSS");
+		name = "ALVIN Pre K8S";
+		baseUrl = "https://alvin.pre.test.ub.uu.se/rest/";
+		loginBaseUrl = "https://alvin.pre.test.ub.uu.se/";
+		startDependencies();
+		enableIcon("alvin");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, []);
 	
 	} else if (hrefContains(href, "mig.alvin-portal.org")) {
 		enableCSS("alvinCSS");
@@ -41,6 +50,15 @@ const start = function() {
 	} else if (hrefContains(href, "pre.diva-portal.org")) {
 		enableCSS("divaLilaCSS");
 		useDivaPre();
+		enableIcon("diva");
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['divaAdmin']);
+
+	} else if (hrefContains(href, "diva.pre.test.ub.uu.se")) {
+		enableCSS("divaLilaCSS");
+		name = "DiVA PRE K8S";
+		baseUrl = "https://diva.pre.test.ub.uu.se/rest/";
+		loginBaseUrl = "https://diva.pre.test.ub.uu.se/";
+		startDependencies();
 		enableIcon("diva");
 		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['divaAdmin']);
 	

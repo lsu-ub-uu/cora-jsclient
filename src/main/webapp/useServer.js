@@ -39,7 +39,7 @@ const start = function() {
 		loginBaseUrl = "https://alvin.pre.test.ub.uu.se/";
 		startDependencies();
 		enableIcon("alvin");
-		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, []);
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'alvinAdmin']);
 	
 	} else if (hrefContains(href, "mig.alvin-portal.org")) {
 		enableCSS("alvinCSS");
@@ -60,7 +60,7 @@ const start = function() {
 		loginBaseUrl = "https://diva.pre.test.ub.uu.se/";
 		startDependencies();
 		enableIcon("diva");
-		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['divaAdmin']);
+		addAppTokenToAppTokenOptions(appTokenOptions, appTokensMap, ['systemoneAdmin', 'divaAdmin']);
 	
 	} else if (hrefContains(href, "mig.diva-portal.org")) {
 		enableCSS("divaLilaCSS");

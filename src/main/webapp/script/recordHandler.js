@@ -557,8 +557,11 @@ var CORA = (function(cora) {
 		};
 
 		const recordHasUpdateLink = function() {
+//			if(fetchedRecord.actionLinks){
 			let updateLink = fetchedRecord.actionLinks.update;
 			return updateLink !== undefined;
+//			}
+//			return false;
 		};
 
 		const recordHasIndexLink = function() {

@@ -36,6 +36,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 	let recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
 	let recordWithIndexLink;
 	let recordWithoutIndexLink;
+	let recordWithoutActionLinks;
 	let recordWithMetadata;
 	let recordGuiFactorySpy;
 	let recordHandlerViewFactorySpy;
@@ -49,6 +50,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
 		recordWithIndexLink = CORATEST.recordWithIndexLink;
 		recordWithoutIndexLink = CORATEST.recordWithoutIndexLink;
+		recordWithoutActionLinks = CORATEST.recordWithoutActionLinks;
 		recordWithMetadata = CORATEST.recordWithMetadata;
 
 		recordGuiFactorySpy = CORATEST.standardFactorySpy("recordGuiSpy");
@@ -1019,6 +1021,17 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(managedGuiItem.getRemoved(), 1);
 	});
 
+	test("initCheckIncomingLinksButtonForIncomingLinks", function(assert) {
+		spec.createNewRecord = "false";
+		spec.record = recordWithoutActionLinks;
+
+		CORA.recordHandler(dependencies, spec);
+		answerCall(0);
+
+//		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
+//		assert.strictEqual(recordHandlerViewSpy.getShowShowIncomingLinksButton(), true);
+	});
+	
 	test("initCheckNoIncomingLinksButtonForNew", function(assert) {
 		CORA.recordHandler(dependencies, specForNew);
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);

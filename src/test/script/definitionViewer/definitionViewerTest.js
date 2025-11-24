@@ -18,7 +18,7 @@
  */
 "use strict";
 
-QUnit.module.only("definitionViewer/definitionViewerTest.js", {
+QUnit.module("definitionViewer/definitionViewerTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.metadataProviderForDefinitionViewerSpy();
 		this.textProvider = CORATEST.textProviderSpy();

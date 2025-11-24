@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020, 2021, 2024 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2021, 2024, 2025 Uppsala University Library
  * Copyright 2016, 2017, 2023, 2024, 2025 Olov McKie
  *
  * This file is part of Cora.
@@ -190,7 +190,6 @@ var CORA = (function(cora) {
 			}
 		};
 
-
 		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
@@ -260,9 +259,9 @@ var CORA = (function(cora) {
 
 		const addListPresentationToView = function(currentRecordGui, metadataIdUsedInData) {
 			let viewId;
-			if(spec.searchResultPresentationId){
+			if (spec.searchResultPresentationId) {
 				viewId = spec.searchResultPresentationId;
-			}else{
+			} else {
 				viewId = metadataForRecordType.listPresentationViewId;
 			}
 			let presentation = currentRecordGui.getPresentationHolder(viewId, metadataIdUsedInData)
@@ -318,23 +317,25 @@ var CORA = (function(cora) {
 			recordHandlerView.clearViews();
 			initComplete = false;
 			dataIsChanged = false;
-			createNewRecord = "false"; 
+			createNewRecord = "false";
 			managedGuiItem.setChanged(dataIsChanged);
 			processFetchedRecord(answer);
 		};
 
 		const fetchDataFromServer = function(callAfterAnswer) {
-			busy.show();
-			let readLink = actionLinks.read;
-			let callSpec = {
-				requestMethod: readLink.requestMethod,
-				url: readLink.url,
-				contentType: readLink.contentType,
-				accept: readLink.accept,
-				loadMethod: callAfterAnswer,
-				errorMethod: callError
-			};
-			dependencies.ajaxCallFactory.factor(callSpec);
+			if (actionLinks?.read) {
+				busy.show();
+				let readLink = actionLinks.read;
+				let callSpec = {
+					requestMethod: readLink.requestMethod,
+					url: readLink.url,
+					contentType: readLink.contentType,
+					accept: readLink.accept,
+					loadMethod: callAfterAnswer,
+					errorMethod: callError
+				};
+				dependencies.ajaxCallFactory.factor(callSpec);
+			}
 		};
 
 		const processFetchedRecord = function(answer) {
@@ -471,8 +472,7 @@ var CORA = (function(cora) {
 		};
 
 		const recordHasIncomingLinks = function() {
-			let readIncomingLinks = fetchedRecord.actionLinks.read_incoming_links;
-			return readIncomingLinks !== undefined;
+			return recordHasActionLink("read_incoming_links");
 		};
 
 		const possiblyShowShowDefinitionButton = function() {
@@ -552,18 +552,19 @@ var CORA = (function(cora) {
 		};
 
 		const recordHasDeleteLink = function() {
-			let deleteLink = fetchedRecord.actionLinks["delete"];
-			return deleteLink !== undefined;
+			return recordHasActionLink("delete");
+		};
+
+		const recordHasActionLink = function(action) {
+			return fetchedRecord.actionLinks?.[action];
 		};
 
 		const recordHasUpdateLink = function() {
-			let updateLink = fetchedRecord.actionLinks.update;
-			return updateLink !== undefined;
+			return recordHasActionLink("update");
 		};
 
 		const recordHasIndexLink = function() {
-			let indexLink = fetchedRecord.actionLinks["index"];
-			return indexLink !== undefined;
+			return recordHasActionLink("index");
 		};
 
 		const shouldRecordBeDeleted = function() {
@@ -660,7 +661,7 @@ var CORA = (function(cora) {
 			let metadataId = recordGuiSpec.metadataId;
 			let dataDivider = recordGuiSpec.dataDivider;
 			recordGui = createRecordGui(metadataId, data, dataDivider, recordGuiSpec.permissions);
-			
+
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);
 			} else {

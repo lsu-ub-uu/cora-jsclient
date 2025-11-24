@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020, 2021, 2024 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2021, 2024, 2025 Uppsala University Library
  * Copyright 2016, 2017, 2023, 2024, 2025 Olov McKie
  *
  * This file is part of Cora.
@@ -36,6 +36,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 	let recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
 	let recordWithIndexLink;
 	let recordWithoutIndexLink;
+	let recordWithoutActionLinks;
 	let recordWithMetadata;
 	let recordGuiFactorySpy;
 	let recordHandlerViewFactorySpy;
@@ -49,6 +50,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		recordWithReadIncomingLinks = CORATEST.recordWithReadIncomingLinks;
 		recordWithIndexLink = CORATEST.recordWithIndexLink;
 		recordWithoutIndexLink = CORATEST.recordWithoutIndexLink;
+		recordWithoutActionLinks = CORATEST.recordWithoutActionLinks;
 		recordWithMetadata = CORATEST.recordWithMetadata;
 
 		recordGuiFactorySpy = CORATEST.standardFactorySpy("recordGuiSpy");
@@ -126,7 +128,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 
 	};
-	
+
 	const setupSpecForNewList = function() {
 		specForNewList = {
 			fetchLatestDataFromServer: "false",
@@ -137,7 +139,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 			jsClient: CORATEST.jsClientSpy()
 		};
 	};
-	
+
 	const setupSpecForListWithSearchResultPresentationId = function() {
 		specForListWithSearchResultPresentationId = {
 			fetchLatestDataFromServer: "false",
@@ -161,7 +163,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		};
 		ajaxCallSpy0.getSpec().loadMethod(answer);
 	};
-	
+
 	const answerCallWithoutUpdateOrDeleteLink = function(no) {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({
@@ -178,6 +180,18 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
 		let jsonRecord = JSON.stringify({
 			record: recordWithoutDeleteLink
+		});
+		let answer = {
+			spec: ajaxCallSpy0.getSpec(),
+			responseText: jsonRecord
+		};
+		ajaxCallSpy0.getSpec().loadMethod(answer);
+	};
+
+	const answerCallWithoutActionLinks = function(no) {
+		let ajaxCallSpy0 = ajaxCallFactorySpy.getFactored(no);
+		let jsonRecord = JSON.stringify({
+			record: recordWithoutActionLinks
 		});
 		let answer = {
 			spec: ajaxCallSpy0.getSpec(),
@@ -685,6 +699,53 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		let updateButtonSpec = recordHandlerViewSpy.getAddedButton(0);
 		assert.strictEqual(updateButtonSpec, undefined);
+	});
+
+	test("testNoButtonsAndEditFormWhenNoLinks_afterChangingValueSoUserNoLongerSeesRecord", function(assert) {
+		spec.createNewRecord = "false";
+
+		CORA.recordHandler(dependencies, spec);
+		answerCallWithoutActionLinks(0);
+
+		let factoredSpec = dependencies.recordGuiFactory.getSpec(0);
+		assert.strictEqual(factoredSpec.metadataId, "textSystemOneGroup");
+
+		let factoredRecordGui = dependencies.recordGuiFactory.getFactored(0);
+
+		assert.strictEqual(factoredRecordGui.getPresentationIdUsed(0), "textViewPGroup");
+		assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(0), "textGroup");
+
+		assert.strictEqual(factoredRecordGui.getPresentationIdUsed(1), "textMenuPGroup");
+		assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(1), "textGroup");
+
+		assert.strictEqual(factoredRecordGui.getPresentationIdUsed(2), undefined);
+		assert.strictEqual(factoredRecordGui.getMetadataIdsUsedInData(2), undefined);
+
+		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
+
+		let editViewChild = recordHandlerViewSpy.getAddedEditView(0);
+		assert.strictEqual(editViewChild, undefined);
+
+		let showViewChild = recordHandlerViewSpy.getAddedShowView(0);
+		assert.strictEqual(showViewChild.className, "presentationStub");
+
+		let updateButtonSpec = recordHandlerViewSpy.getAddedButton(0);
+		assert.strictEqual(updateButtonSpec, undefined);
+	});
+
+	test("testReloadRecordNoActionLinks_shouldNotCrash", function(assert) {
+		spec.createNewRecord = "false";
+		CORA.recordHandler(dependencies, spec);
+		answerCallWithoutActionLinks(0);
+		
+		
+		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
+		let reloadFunction = recordHandlerViewSpy.getReloadRecordUsingFunction(0);
+		assert.ok(reloadFunction);
+
+		reloadFunction();
+		
+		assert.ok(true);
 	});
 
 	test("testDeleteQuestion", function(assert) {
@@ -1795,20 +1856,20 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		assert.strictEqual(createFormId, "recordTypeNewPGroup");
 		assert.deepEqual(createGuiSpec.permissions, emptyPermissions);
 
-		let permissions ={
-			  "read": [
-			    "someReadVariable",
-			    "someOtherReadVariable"
-			  ],
-			  "write": [
-			    "someWriteVariable",
-			    "someOtherWriteVariable"
-			  ]
-			}
+		let permissions = {
+			"read": [
+				"someReadVariable",
+				"someOtherReadVariable"
+			],
+			"write": [
+				"someWriteVariable",
+				"someOtherWriteVariable"
+			]
+		}
 		let updateGui = dependencies.recordGuiFactory.getFactored(1);
 		let updateGuiSpec = dependencies.recordGuiFactory.getSpec(1);
 		let updateFormId = updateGui.getPresentationIdUsed(0);
-		assert.strictEqual(updateFormId, "recordTypePGroup"); 
+		assert.strictEqual(updateFormId, "recordTypePGroup");
 		assert.deepEqual(updateGuiSpec.permissions, permissions);
 
 		let updateGuiAfterReloadForMetadataChanges = dependencies.recordGuiFactory.getFactored(2);

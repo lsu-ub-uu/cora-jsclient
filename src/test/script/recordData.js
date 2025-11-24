@@ -41,7 +41,7 @@ var CORATEST = (function(coraTest) {
 						}
 					},
 					"name": "metadataId"
-				},{
+				}, {
 					"children": [
 						{
 							"name": "id",
@@ -500,491 +500,17 @@ var CORATEST = (function(coraTest) {
 				"rel": "delete",
 				"url": "https://cora.epc.ub.uu.se/systemone/rest/record/recordType/recordType"
 			}
-			
+
 		}
 	};
 	coraTest.recordWithoutUpdateOrDeleteLink = {
-		"data" : {
-			"children" : [ {
-				"children" : [ {
-					"name" : "id",
-					"value" : "svEnText"
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
 				},
 				{
-	                "children": [
-	                    {
-	                        "name": "linkedRecordType",
-	                        "value": "recordType"
-	                    },
-	                    {
-	                        "name": "linkedRecordId",
-	                        "value": "text"
-	                    }
-	                ],
-	                "name": "type"
-	            },{
-							"children": [
-								{
-									"name": "linkedRecordType",
-									"value": "validationType"
-								},
-								{
-									"name": "linkedRecordId",
-									"value": "textSystemOne"
-								}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
-						}, {
-      				"name" : "createdBy",
-      				"children": [
-      					{
-      						"name": "linkedRecordType",
-      						"value": "user"
-      					},
-      					{
-      						"name": "linkedRecordId",
-      						"value": "userid"
-      					}
-      				]
-      			},
-		        {
-			          "children": [
-			            {
-			              "name": "linkedRecordType",
-			              "value": "system"
-			            },
-			            {
-			              "name": "linkedRecordId",
-			              "value": "cora"
-			            }
-			          ],
-			          "actionLinks": {
-			            "read": {
-			              "requestMethod": "GET",
-			              "rel": "read",
-			              "url": "http://localhost:8080/therest/rest/record/system/cora",
-			              "accept": "application/vnd.cora.record+json"
-			            }
-			          },
-			          "name": "dataDivider"
-			        } ],
-				"name" : "recordInfo"
-			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "En text på både svenska och engelska"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "default",
-					"lang" : "sv"
-				}
-			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "A text both in english and swedish"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "alternative",
-					"lang" : "en"
-				}
-			} ],
-			"name" : "text"
-		},
-		"actionLinks" : {
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-				"accept" : "application/vnd.cora.record+json"
-			}
-		}
-	};
-	coraTest.recordWithReadIncomingLinks= {
-			"data" : {
-				"children" : [ {
-					"children" : [ {
-						"name" : "id",
-						"value" : "svEnText"
-					},
-					{
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "recordType"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "text"
-							}
-							],
-							"name": "type"
-					},{
-							"children": [
-								{
-									"name": "linkedRecordType",
-									"value": "validationType"
-								},
-								{
-									"name": "linkedRecordId",
-									"value": "textSystemOne"
-								}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
-						}, {
-						"name" : "createdBy",
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "user"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "userid"
-							}
-							]
-					},
-					{
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "system"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "cora"
-							}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "http://localhost:8080/therest/rest/record/system/cora",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "dataDivider"
-					} ],
-					"name" : "recordInfo"
-				}, {
-					"children" : [ {
-						"name" : "text",
-						"value" : "En text på både svenska och engelska"
-					} ],
-					"name" : "textPart",
-					"attributes" : {
-						"type" : "default",
-						"lang" : "sv"
-					}
-				}, {
-					"children" : [ {
-						"name" : "text",
-						"value" : "A text both in english and swedish"
-					} ],
-					"name" : "textPart",
-					"attributes" : {
-						"type" : "alternative",
-						"lang" : "en"
-					}
-				} ],
-				"name" : "text"
-			},
-			"actionLinks" : {
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-					"accept" : "application/vnd.cora.record+json"
-				},
-				"read_incoming_links":{
-					"requestMethod" : "GET",
-					"rel" : "read_incoming_links",
-					"url" : "http://localhost:8080/therest/rest/record/coraText/textSystemOne/incomingLinks",
-					"accept" : "application/vnd.cora.recordList+json"
-				}
-			}
-	};
-	coraTest.recordWithoutDeleteLink = {
-		"data" : {
-			"children" : [ {
-				"children" : [ {
-					"name" : "id",
-					"value" : "svEnText"
-				}, {
-	                "children": [
-	                    {
-	                        "name": "linkedRecordType",
-	                        "value": "recordType"
-	                    },
-	                    {
-	                        "name": "linkedRecordId",
-	                        "value": "text"
-	                    }
-	                ],
-	                "name": "type"
-	            },{
-							"children": [
-								{
-									"name": "linkedRecordType",
-									"value": "validationType"
-								},
-								{
-									"name": "linkedRecordId",
-									"value": "textSystemOne"
-								}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
-						}, {
-      				"name" : "createdBy",
-      				"children": [
-      					{
-      						"name": "linkedRecordType",
-      						"value": "user"
-      					},
-      					{
-      						"name": "linkedRecordId",
-      						"value": "userid"
-      					}
-      				]
-      			},
-		        {
-			          "children": [
-			            {
-			              "name": "linkedRecordType",
-			              "value": "system"
-			            },
-			            {
-			              "name": "linkedRecordId",
-			              "value": "cora"
-			            }
-			          ],
-			          "actionLinks": {
-			            "read": {
-			              "requestMethod": "GET",
-			              "rel": "read",
-			              "url": "http://localhost:8080/therest/rest/record/system/cora",
-			              "accept": "application/vnd.cora.record+json"
-			            }
-			          },
-			          "name": "dataDivider"
-			        } ],
-				"name" : "recordInfo"
-			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "En text på både svenska och engelska"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "default",
-					"lang" : "sv"
-				}
-			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "A text both in english and swedish"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "alternative",
-					"lang" : "en"
-				}
-			} ],
-			"name" : "text"
-		},
-		"actionLinks" : {
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.cora.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-				"accept" : "application/vnd.cora.record+json"
-			},
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-				"accept" : "application/vnd.cora.record+json"
-			}
-		}
-	};
-	coraTest.recordWithIndexLink = {
-			"data" : {
-				"children" : [ {
-					"children" : [ {
-						"name" : "id",
-						"value" : "svEnText"
-					}, {
-		                "children": [
-		                    {
-		                        "name": "linkedRecordType",
-		                        "value": "recordType"
-		                    },
-		                    {
-		                        "name": "linkedRecordId",
-		                        "value": "text"
-		                    }
-		                ],
-		                "name": "type"
-		            },{
-							"children": [
-								{
-									"name": "linkedRecordType",
-									"value": "validationType"
-								},
-								{
-									"name": "linkedRecordId",
-									"value": "textSystemOne"
-								}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
-						}, {
-	      				"name" : "createdBy",
-	      				"children": [
-	      					{
-	      						"name": "linkedRecordType",
-	      						"value": "user"
-	      					},
-	      					{
-	      						"name": "linkedRecordId",
-	      						"value": "userid"
-	      					}
-	      				]
-	      			},
-			        {
-				          "children": [
-				            {
-				              "name": "linkedRecordType",
-				              "value": "system"
-				            },
-				            {
-				              "name": "linkedRecordId",
-				              "value": "cora"
-				            }
-				          ],
-				          "actionLinks": {
-				            "read": {
-				              "requestMethod": "GET",
-				              "rel": "read",
-				              "url": "http://localhost:8080/therest/rest/record/system/cora",
-				              "accept": "application/vnd.cora.record+json"
-				            }
-				          },
-				          "name": "dataDivider"
-				        } ],
-					"name" : "recordInfo"
-				}, {
-					"children" : [ {
-						"name" : "text",
-						"value" : "En text på både svenska och engelska"
-					} ],
-					"name" : "textPart",
-					"attributes" : {
-						"type" : "default",
-						"lang" : "sv"
-					}
-				}, {
-					"children" : [ {
-						"name" : "text",
-						"value" : "A text both in english and swedish"
-					} ],
-					"name" : "textPart",
-					"attributes" : {
-						"type" : "alternative",
-						"lang" : "en"
-					}
-				} ],
-				"name" : "text"
-			},
-			"actionLinks" : {
-				"update" : {
-					"requestMethod" : "POST",
-					"rel" : "update",
-					"contentType" : "application/vnd.cora.record+json",
-					"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-					"accept" : "application/vnd.cora.record+json"
-				},
-				"read" : {
-					"requestMethod" : "GET",
-					"rel" : "read",
-					"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-					"accept" : "application/vnd.cora.record+json"
-				},
-				"index": {
-			        "requestMethod": "POST",
-			        "rel": "index",
-			        "body": {
-			          "children": [
-			            {
-			              "children": [
-			                {
-			                  "name": "linkedRecordType",
-			                  "value": "recordType"
-			                },
-			                {
-			                  "name": "linkedRecordId",
-			                  "value": "textSystemOne"
-			                }
-			              ],
-			              "name": "recordType"
-			            },
-			            {
-			              "name": "recordId",
-			              "value": "svEnText"
-			            },
-			            {
-			              "name": "type",
-			              "value": "index"
-			            }
-			          ],
-			          "name": "workOrder"
-			        },
-			        "contentType": "application/vnd.cora.record+json",
-			        "url": "https://epc.ub.uu.se/therest/rest/record/workOrder/",
-			        "accept": "application/vnd.cora.record+json"
-			      }
-			}
-		};
-	coraTest.recordWithoutIndexLink = {
-		"data" : {
-			"children" : [ {
-				"children" : [ {
-					"name" : "id",
-					"value" : "svEnText"
-				}, {
 					"children": [
 						{
 							"name": "linkedRecordType",
@@ -996,28 +522,28 @@ var CORATEST = (function(coraTest) {
 						}
 					],
 					"name": "type"
-				},{
-							"children": [
-								{
-									"name": "linkedRecordType",
-									"value": "validationType"
-								},
-								{
-									"name": "linkedRecordId",
-									"value": "textSystemOne"
-								}
-							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
-						}, {
-					"name" : "createdBy",
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
 					"children": [
 						{
 							"name": "linkedRecordType",
@@ -1029,89 +555,67 @@ var CORATEST = (function(coraTest) {
 						}
 					]
 				},
-					{
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "system"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "cora"
-							}
-						],
-						"actionLinks": {
-							"read": {
-								"requestMethod": "GET",
-								"rel": "read",
-								"url": "http://localhost:8080/therest/rest/record/system/cora",
-								"accept": "application/vnd.cora.record+json"
-							}
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
 						},
-						"name": "dataDivider"
-					} ],
-				"name" : "recordInfo"
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
 			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "En text på både svenska och engelska"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "default",
-					"lang" : "sv"
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
 				}
 			}, {
-				"children" : [ {
-					"name" : "text",
-					"value" : "A text both in english and swedish"
-				} ],
-				"name" : "textPart",
-				"attributes" : {
-					"type" : "alternative",
-					"lang" : "en"
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
 				}
-			} ],
-			"name" : "text"
+			}],
+			"name": "text"
 		},
-		"actionLinks" : {
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.cora.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-				"accept" : "application/vnd.cora.record+json"
-			},
-			"read" : {
-				"requestMethod" : "GET",
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
-				"accept" : "application/vnd.cora.record+json"
+		"actionLinks": {
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
 			}
 		}
 	};
-	coraTest.recordWithMetadata = {
-		"data" : {
-		"children" : [ {
-			"name" : "nameInData",
-			"value" : "textPart"
-		}, {
-			"children" : [ {
-				"name" : "id",
-				"value" : "textPartEnGroup"
-			},  {
-				"name" : "createdBy",
-				"children" : [ {
-					"name" : "linkedRecordType",
-					"value" : "user"
+	coraTest.recordWithoutActionLinks = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
 				}, {
-					"name" : "linkedRecordId",
-					"value" : "userId"
-				} ]
-			}, {
-				"name" : "updatedBy",
-				"value" : "userId"
-			}, { 
 					"children": [
 						{
 							"name": "linkedRecordType",
@@ -1123,108 +627,702 @@ var CORATEST = (function(coraTest) {
 						}
 					],
 					"name": "type"
-				},{
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "user"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "userid"
+						}
+					]
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
+				}
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
+				}
+			}],
+			"name": "text"
+		}
+	};
+
+	coraTest.recordWithReadIncomingLinks = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "recordType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "text"
+						}
+					],
+					"name": "type"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "user"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "userid"
+						}
+					]
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
+				}
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
+				}
+			}],
+			"name": "text"
+		},
+		"actionLinks": {
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			},
+			"read_incoming_links": {
+				"requestMethod": "GET",
+				"rel": "read_incoming_links",
+				"url": "http://localhost:8080/therest/rest/record/coraText/textSystemOne/incomingLinks",
+				"accept": "application/vnd.cora.recordList+json"
+			}
+		}
+	};
+	coraTest.recordWithoutDeleteLink = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "recordType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "text"
+						}
+					],
+					"name": "type"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "user"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "userid"
+						}
+					]
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
+				}
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
+				}
+			}],
+			"name": "text"
+		},
+		"actionLinks": {
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.cora.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			},
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			}
+		}
+	};
+	coraTest.recordWithIndexLink = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "recordType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "text"
+						}
+					],
+					"name": "type"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "user"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "userid"
+						}
+					]
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
+				}
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
+				}
+			}],
+			"name": "text"
+		},
+		"actionLinks": {
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.cora.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			},
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			},
+			"index": {
+				"requestMethod": "POST",
+				"rel": "index",
+				"body": {
+					"children": [
+						{
 							"children": [
 								{
 									"name": "linkedRecordType",
-									"value": "validationType"
+									"value": "recordType"
 								},
 								{
 									"name": "linkedRecordId",
 									"value": "textSystemOne"
 								}
 							],
-							"actionLinks": {
-								"read": {
-									"requestMethod": "GET",
-									"rel": "read",
-									"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
-									"accept": "application/vnd.cora.record+json"
-								}
-							},
-							"name": "validationType"
+							"name": "recordType"
 						},
-					{
-						"children": [
-							{
-								"name": "linkedRecordType",
-								"value": "system"
-							},
-							{
-								"name": "linkedRecordId",
-								"value": "cora"
-							}
-						],
-						"actionLinks": {
-							"read": {
-								"requestMethod": "GET",
-								"rel": "read",
-								"url": "http://localhost:8080/therest/rest/record/system/cora",
-								"accept": "application/vnd.cora.record+json"
-							}
+						{
+							"name": "recordId",
+							"value": "svEnText"
 						},
-						"name": "dataDivider"
-					} ],
-			"name" : "recordInfo"
-		}, {
-			"name" : "textId",
-			"value" : "textPartEnGroupText"
-		}, {
-			"name" : "defTextId",
-			"value" : "textPartEnGroupDefText"
-		}, {
-			"children" : [ {
-				"repeatId" : "1",
-				"children" : [ {
-					"name" : "ref",
-					"children" : [ {
-						"name" : "linkedRecordType",
-						"value" : "metadataTextVariable"
-					}, {
-						"name" : "linkedRecordId",
-						"value" : "textTextVar"
-					} ],
-					"attributes" : {
-						"type" : "textVariable"
-					}
+						{
+							"name": "type",
+							"value": "index"
+						}
+					],
+					"name": "workOrder"
+				},
+				"contentType": "application/vnd.cora.record+json",
+				"url": "https://epc.ub.uu.se/therest/rest/record/workOrder/",
+				"accept": "application/vnd.cora.record+json"
+			}
+		}
+	};
+	coraTest.recordWithoutIndexLink = {
+		"data": {
+			"children": [{
+				"children": [{
+					"name": "id",
+					"value": "svEnText"
 				}, {
-					"name" : "repeatMin",
-					"value" : "1"
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "recordType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "text"
+						}
+					],
+					"name": "type"
 				}, {
-					"name" : "repeatMax",
-					"value" : "1"
-				} ],
-				"name" : "childReference"
-			} ],
-			"name" : "childReferences"
-		}, {
-			"children" : [ {
-				"name" : "ref",
-				"value" : "textPartTypeAlternativeCollectionVar"
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				}, {
+					"name": "createdBy",
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "user"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "userid"
+						}
+					]
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
 			}, {
-				"name" : "ref",
-				"value" : "systemLanguageEnCollectionVar"
-			} ],
-			"name" : "attributeReferences"
-		} ],
-		"name" : "metadata",
-		"attributes" : {
-			"type" : "group"
+				"children": [{
+					"name": "text",
+					"value": "En text på både svenska och engelska"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "default",
+					"lang": "sv"
+				}
+			}, {
+				"children": [{
+					"name": "text",
+					"value": "A text both in english and swedish"
+				}],
+				"name": "textPart",
+				"attributes": {
+					"type": "alternative",
+					"lang": "en"
+				}
+			}],
+			"name": "text"
 		},
-		},
-		"actionLinks" : {
-			"update" : {
-				"requestMethod" : "POST",
-				"rel" : "update",
-				"contentType" : "application/vnd.cora.record+json",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/metadata/textPartEnGroup",
-				"accept" : "application/vnd.cora.record+json"
+		"actionLinks": {
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.cora.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
 			},
-			"read" : {
-				"requestMethod" : "GET", 
-				"rel" : "read",
-				"url" : "http://epc.ub.uu.se/cora/rest/record/metadata/textPartEnGroup",
-				"accept" : "application/vnd.cora.record+json"
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/textSystemOne/svEnText",
+				"accept": "application/vnd.cora.record+json"
+			}
+		}
+	};
+	coraTest.recordWithMetadata = {
+		"data": {
+			"children": [{
+				"name": "nameInData",
+				"value": "textPart"
+			}, {
+				"children": [{
+					"name": "id",
+					"value": "textPartEnGroup"
+				}, {
+					"name": "createdBy",
+					"children": [{
+						"name": "linkedRecordType",
+						"value": "user"
+					}, {
+						"name": "linkedRecordId",
+						"value": "userId"
+					}]
+				}, {
+					"name": "updatedBy",
+					"value": "userId"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "recordType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "text"
+						}
+					],
+					"name": "type"
+				}, {
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "validationType"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "textSystemOne"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "https://cora.epc.ub.uu.se/systemone/rest/record/validationType/recordType",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "validationType"
+				},
+				{
+					"children": [
+						{
+							"name": "linkedRecordType",
+							"value": "system"
+						},
+						{
+							"name": "linkedRecordId",
+							"value": "cora"
+						}
+					],
+					"actionLinks": {
+						"read": {
+							"requestMethod": "GET",
+							"rel": "read",
+							"url": "http://localhost:8080/therest/rest/record/system/cora",
+							"accept": "application/vnd.cora.record+json"
+						}
+					},
+					"name": "dataDivider"
+				}],
+				"name": "recordInfo"
+			}, {
+				"name": "textId",
+				"value": "textPartEnGroupText"
+			}, {
+				"name": "defTextId",
+				"value": "textPartEnGroupDefText"
+			}, {
+				"children": [{
+					"repeatId": "1",
+					"children": [{
+						"name": "ref",
+						"children": [{
+							"name": "linkedRecordType",
+							"value": "metadataTextVariable"
+						}, {
+							"name": "linkedRecordId",
+							"value": "textTextVar"
+						}],
+						"attributes": {
+							"type": "textVariable"
+						}
+					}, {
+						"name": "repeatMin",
+						"value": "1"
+					}, {
+						"name": "repeatMax",
+						"value": "1"
+					}],
+					"name": "childReference"
+				}],
+				"name": "childReferences"
+			}, {
+				"children": [{
+					"name": "ref",
+					"value": "textPartTypeAlternativeCollectionVar"
+				}, {
+					"name": "ref",
+					"value": "systemLanguageEnCollectionVar"
+				}],
+				"name": "attributeReferences"
+			}],
+			"name": "metadata",
+			"attributes": {
+				"type": "group"
+			},
+		},
+		"actionLinks": {
+			"update": {
+				"requestMethod": "POST",
+				"rel": "update",
+				"contentType": "application/vnd.cora.record+json",
+				"url": "http://epc.ub.uu.se/cora/rest/record/metadata/textPartEnGroup",
+				"accept": "application/vnd.cora.record+json"
+			},
+			"read": {
+				"requestMethod": "GET",
+				"rel": "read",
+				"url": "http://epc.ub.uu.se/cora/rest/record/metadata/textPartEnGroup",
+				"accept": "application/vnd.cora.record+json"
 			}
 		}
 	};

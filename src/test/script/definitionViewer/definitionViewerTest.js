@@ -26,8 +26,8 @@ QUnit.module("definitionViewer/definitionViewerTest.js", {
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 
-		this.view = CORATEST.definitionViewerViewSpy()
-		this.textView = CORATEST.definitionTextViewSpy()
+		this.view = CORATEST.definitionViewerViewSpy();
+		this.textView = CORATEST.definitionTextViewSpy();
 
 		this.providers = {
 			metadataProvider: this.metadataProvider,
@@ -99,7 +99,7 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 });
 
 QUnit.test("testViewModel", function(assert) {
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -183,7 +183,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -226,7 +226,7 @@ QUnit.test("testViewModelChildLoop", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd2);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -262,11 +262,11 @@ QUnit.test("testViewModelChildLoop", function(assert) {
 		}
 	};
 	childReference.child.children.push(childReference2);
-	
 
-//	console.log("expected:",JSON.stringify(expected))
-//	console.log("viewModel:",JSON.stringify(viewModel))
-	
+
+	//	console.log("expected:",JSON.stringify(expected))
+	//	console.log("viewModel:",JSON.stringify(viewModel))
+
 	assert.deepEqual(viewModel, expected);
 });
 
@@ -285,7 +285,7 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -335,7 +335,7 @@ QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -398,7 +398,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {

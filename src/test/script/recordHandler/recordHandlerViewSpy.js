@@ -32,14 +32,15 @@ var CORATEST = (function(coraTest) {
 		let showShowIncomingLinks = false;
 		let showIndexButton = false;
 		let objectsAddedToIncomingLinksView = [];
-		
+
 		let functionsAddedAsReloadRecord = [];
-		
+
 		let functionsAddedAsOpenDefinitionViewer = [];
 		let functionsAddedAsOpenDefinitionViewerValidationType = [];
 		let functionsAddedAsOpenDefinitionViewerRecordType = [];
-		
+
 		let functionsAddedAsOpenRecursiveDelete = [];
+		let removeReloadButtonCalled = 0;
 
 		let spyView = document.createElement("span");
 		function getView() {
@@ -53,9 +54,9 @@ var CORATEST = (function(coraTest) {
 		}
 		function addButton(text, onclickMethod, className) {
 			let buttonSpec = {
-				"text" : text,
-				"onclickMethod" : onclickMethod,
-				"className" : className
+				"text": text,
+				"onclickMethod": onclickMethod,
+				"className": className
 			}
 			addedButtons.push(buttonSpec);
 		}
@@ -122,86 +123,95 @@ var CORATEST = (function(coraTest) {
 			return objectsAddedToIncomingLinksView[no];
 		}
 
-		function addReloadRecordFunction(functionToAdd){
+		function addReloadRecordFunction(functionToAdd) {
 			functionsAddedAsReloadRecord.push(functionToAdd);
 		}
-		
-		function getReloadRecordFunction(no){
+
+		function getReloadRecordFunction(no) {
 			return functionsAddedAsReloadRecord[no];
 		}
-		
-		const addDefinitionViewerOpenFunction = function(functionToAdd){
+
+		const addDefinitionViewerOpenFunction = function(functionToAdd) {
 			functionsAddedAsOpenDefinitionViewer.push(functionToAdd);
 		};
-		
-		const getAddDefinitionViewerOpenFunction = function(no){
+
+		const getAddDefinitionViewerOpenFunction = function(no) {
 			return functionsAddedAsOpenDefinitionViewer[no];
 		};
-		
-		const addDefinitionViewerOpenFunctionValidationType = function(functionToAdd){
+
+		const addDefinitionViewerOpenFunctionValidationType = function(functionToAdd) {
 			functionsAddedAsOpenDefinitionViewerValidationType.push(functionToAdd);
 		};
-		
-		const getAddDefinitionViewerOpenFunctionValidationType = function(no){
+
+		const getAddDefinitionViewerOpenFunctionValidationType = function(no) {
 			return functionsAddedAsOpenDefinitionViewerValidationType[no];
 		};
-		
-		const addDefinitionViewerOpenFunctionRecordType = function(functionToAdd){
+
+		const addDefinitionViewerOpenFunctionRecordType = function(functionToAdd) {
 			functionsAddedAsOpenDefinitionViewerRecordType.push(functionToAdd);
 		};
-		
-		const getAddDefinitionViewerOpenFunctionRecordType = function(no){
+
+		const getAddDefinitionViewerOpenFunctionRecordType = function(no) {
 			return functionsAddedAsOpenDefinitionViewerRecordType[no];
 		};
-		
-		const addRecursiveDeleteOpenFunction = function(functionToAdd){
+
+		const addRecursiveDeleteOpenFunction = function(functionToAdd) {
 			functionsAddedAsOpenRecursiveDelete.push(functionToAdd);
 		};
-		
-		const getAddRecursiveDeleteOpenFunction = function(no){
+
+		const getAddRecursiveDeleteOpenFunction = function(no) {
 			return functionsAddedAsOpenRecursiveDelete[no];
 		};
 
+		const removeReloadButton = function() {
+			removeReloadButtonCalled++;
+		};
+		const getRemoveReloadButtonCalledTimes = function() {
+			return removeReloadButtonCalled;
+		};
+
 		const out = Object.freeze({
-			getView : getView,
-			addToShowView : addToShowView,
-			addToEditView : addToEditView,
-			addButton : addButton,
-			clearViews : clearViews,
-			getClearViewsWasCalled : getClearViewsWasCalled,
-			clearDataViews : clearDataViews,
-			getClearDataViewsWasCalled : getClearDataViewsWasCalled,
-			setShowDataFunction : setShowDataFunction,
-			setCopyAsNewFunction : setCopyAsNewFunction,
+			getView: getView,
+			addToShowView: addToShowView,
+			addToEditView: addToEditView,
+			addButton: addButton,
+			clearViews: clearViews,
+			getClearViewsWasCalled: getClearViewsWasCalled,
+			clearDataViews: clearDataViews,
+			getClearDataViewsWasCalled: getClearDataViewsWasCalled,
+			setShowDataFunction: setShowDataFunction,
+			setCopyAsNewFunction: setCopyAsNewFunction,
 
-			getSpec : getSpec,
-			getSpyView : getSpyView,
-			getShowDataFunction : getShowDataFunction,
-			getCopyAsNewFunction : getCopyAsNewFunction,
-			getAddedEditView : getAddedEditView,
-			getAddedShowView : getAddedShowView,
-			getAddedButton : getAddedButton,
-			addObjectToEditView : addObjectToEditView,
-			getObjectAddedToEditView : getObjectAddedToEditView,
+			getSpec: getSpec,
+			getSpyView: getSpyView,
+			getShowDataFunction: getShowDataFunction,
+			getCopyAsNewFunction: getCopyAsNewFunction,
+			getAddedEditView: getAddedEditView,
+			getAddedShowView: getAddedShowView,
+			getAddedButton: getAddedButton,
+			addObjectToEditView: addObjectToEditView,
+			getObjectAddedToEditView: getObjectAddedToEditView,
 
-			addToIncomingLinksView : addToIncomingLinksView,
-			getObjectAddedToIncomingLinksView : getObjectAddedToIncomingLinksView,
-			showShowIncomingLinksButton : showShowIncomingLinksButton,
-			getShowShowIncomingLinksButton : getShowShowIncomingLinksButton,
-			addReloadRecordUsingFunction : addReloadRecordFunction,
-			getReloadRecordUsingFunction : getReloadRecordFunction,
-			
-			addDefinitionViewerOpenFunction : addDefinitionViewerOpenFunction,
-			getAddDefinitionViewerOpenFunction : getAddDefinitionViewerOpenFunction,
-			
+			addToIncomingLinksView: addToIncomingLinksView,
+			getObjectAddedToIncomingLinksView: getObjectAddedToIncomingLinksView,
+			showShowIncomingLinksButton: showShowIncomingLinksButton,
+			getShowShowIncomingLinksButton: getShowShowIncomingLinksButton,
+			addReloadRecordUsingFunction: addReloadRecordFunction,
+			getReloadRecordUsingFunction: getReloadRecordFunction,
+			removeReloadButton: removeReloadButton,
+			getRemoveReloadButtonCalledTimes: getRemoveReloadButtonCalledTimes,
+
+			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction,
+			getAddDefinitionViewerOpenFunction: getAddDefinitionViewerOpenFunction,
+
 			addDefinitionViewerOpenFunctionValidationType: addDefinitionViewerOpenFunctionValidationType,
-			getAddDefinitionViewerOpenFunctionValidationType : getAddDefinitionViewerOpenFunctionValidationType,
-			
+			getAddDefinitionViewerOpenFunctionValidationType: getAddDefinitionViewerOpenFunctionValidationType,
+
 			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType,
-			getAddDefinitionViewerOpenFunctionRecordType : getAddDefinitionViewerOpenFunctionRecordType,
-			
+			getAddDefinitionViewerOpenFunctionRecordType: getAddDefinitionViewerOpenFunctionRecordType,
+
 			addRecursiveDeleteOpenFunction: addRecursiveDeleteOpenFunction,
-			getAddRecursiveDeleteOpenFunction : getAddRecursiveDeleteOpenFunction
+			getAddRecursiveDeleteOpenFunction: getAddRecursiveDeleteOpenFunction
 		});
 		return out;
 	};

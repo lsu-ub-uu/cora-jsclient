@@ -409,8 +409,15 @@ var CORA = (function(cora) {
 			possiblyShowShowDefinitionButton();
 			possiblyShowShowRecursiveDeleteButton();
 			recordHandlerView.addReloadRecordUsingFunction(reloadRecordFromServer);
+			if (!recordHasReadLink()) {
+				recordHandlerView.removeReloadButton();
+			}
 			managedGuiItem.setReloadDataFromServer(reloadRecordFromServer);
 			busy.hideWithEffect();
+		};
+
+		const recordHasReadLink = function() {
+			return recordHasActionLink("read");
 		};
 
 		const createAndAddViewsForExisting = function(recordGuiIn, updateDefinitionId, definitionId) {
@@ -603,8 +610,10 @@ var CORA = (function(cora) {
 		};
 
 		const sendUpdateDataToServer = function() {
-			let updateLink = fetchedRecord.actionLinks.update;
-			validateAndSendDataToServer(updateLink);
+			if (recordHasUpdateLink()) {
+				let updateLink = fetchedRecord.actionLinks.update;
+				validateAndSendDataToServer(updateLink);
+			}
 		};
 
 		const sendIndexDataToServer = function() {

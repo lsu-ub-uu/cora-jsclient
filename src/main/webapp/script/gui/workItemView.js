@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,78 +20,83 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.workItemView = function(dependencies, spec) {
-		var out;
-		var view;
-		var topBar;
-		var toolHolder;
+		let out;
+		let view;
+		let topBar;
+		let toolHolder;
 
-		function start() {
+		const start = function() {
 			view = CORA.createSpanWithClassName("workItem " + spec.extraClassName);
-		}
+		};
 
-		function addToolViewToToolHolder(toolView) {
+		const addToolViewToToolHolder = function(toolView) {
 			possiblyAddTopBarAndToolHolder();
 			toolHolder.getView().appendChild(toolView);
-		}
+		};
 
-		function possiblyAddTopBarAndToolHolder() {
+		const possiblyAddTopBarAndToolHolder = function() {
 			if (firstAddedTool()) {
 				addTopBarAndToolHolder();
 			}
-		}
+		};
 
-		function firstAddedTool() {
+		const firstAddedTool = function() {
 			return topBar === undefined;
-		}
+		};
 
-		function addTopBarAndToolHolder() {
+		const addTopBarAndToolHolder = function() {
 			topBar = createTopBarInView();
 			toolHolder = createToolHolderAndAppendButtonToTopBar();
-		}
+		};
 
-		function createTopBarInView() {
-			var topBarNew = CORA.createSpanWithClassName("topBar");
-			view.insertAdjacentElement("afterbegin", topBarNew);
+		const createTopBarInView = function() {
+			let topBarNew = CORA.createSpanWithClassName("topBar");
+			view.prepend(topBarNew);
 
 			return topBarNew;
-		}
+		};
 
-		function createToolHolderAndAppendButtonToTopBar() {
-			var toolHolderNew = createToolHolderAndAppendToView();
+		const createToolHolderAndAppendButtonToTopBar = function() {
+			let toolHolderNew = createToolHolderAndAppendToView();
 			topBar.appendChild(toolHolderNew.getButton());
 			return toolHolderNew;
-		}
+		};
 
-		function createToolHolderAndAppendToView() {
+		const createToolHolderAndAppendToView = function() {
 			return dependencies.holderFactory.factor({
-				"className" : "tool",
-				"insertAfter" : topBar
+				className: "tool",
+				insertAfter: topBar
 			});
-		}
+		};
 
-		function getView() {
+		const getView = function() {
 			return view;
-		}
+		};
 
-		function addViewToView(viewToAdd) {
+		const removeToolViewFromToolHolder = function(toolView) {
+			toolView.remove();
+		};
+
+		const addViewToView = function(viewToAdd) {
 			view.appendChild(viewToAdd);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
-		function getSpec() {
+		const getSpec = function() {
 			return spec;
-		}
+		};
 
 		out = Object.freeze({
-			"type" : "workItemView",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addToolViewToToolHolder : addToolViewToToolHolder,
-			addViewToView : addViewToView
+			type: "workItemView",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			addToolViewToToolHolder: addToolViewToToolHolder,
+			removeToolViewFromToolHolder: removeToolViewFromToolHolder,
+			addViewToView: addViewToView
 		});
 		start();
 		return out;

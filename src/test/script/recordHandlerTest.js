@@ -731,20 +731,39 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		let updateButtonSpec = recordHandlerViewSpy.getAddedButton(0);
 		assert.strictEqual(updateButtonSpec, undefined);
+
+		assert.strictEqual(recordHandlerViewSpy.getRemoveReloadButtonCalledTimes(), 1);
+
+
 	});
 
 	test("testReloadRecordNoActionLinks_shouldNotCrash", function(assert) {
 		spec.createNewRecord = "false";
 		CORA.recordHandler(dependencies, spec);
 		answerCallWithoutActionLinks(0);
-		
-		
+
+
 		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
 		let reloadFunction = recordHandlerViewSpy.getReloadRecordUsingFunction(0);
 		assert.ok(reloadFunction);
 
 		reloadFunction();
-		
+
+		assert.ok(true);
+	});
+	
+	test("testUpdateRecordNoActionLinks_shouldNotCrash", function(assert) {
+		spec.createNewRecord = "false";
+		let recordHandler = CORA.recordHandler(dependencies, spec);
+		answerCallWithoutActionLinks(0);
+
+
+		let recordHandlerViewSpy = recordHandlerViewFactorySpy.getFactored(0);
+		let reloadFunction = recordHandlerViewSpy.getReloadRecordUsingFunction(0);
+		assert.ok(reloadFunction);
+
+		recordHandler.sendUpdateDataToServer();
+
 		assert.ok(true);
 	});
 

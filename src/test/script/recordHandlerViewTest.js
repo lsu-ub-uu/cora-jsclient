@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2020 Uppsala University Library
+ * Copyright 2016, 2020, 2025 Uppsala University Library
  * Copyright 2016, 2020, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -19,477 +19,498 @@
  */
 "use strict";
 
-QUnit.module("recordHandlerViewTest.js", {
-	beforeEach : function() {
-        this.fixture = document.getElementById("qunit-fixture");
-		this.workItemViewFactory = CORATEST.workItemViewFactorySpy();
-		this.dependencies = {
-			workItemViewFactory : this.workItemViewFactory,
+QUnit.module("recordHandlerViewTest.js", hooks => {
+	const test = QUnit.test;
+	let fixture;
+	let workItemViewFactory;
+	let dependencies;
+	let spec;
+	let recordHandlerView;
+
+	hooks.beforeEach(() => {
+		fixture = document.getElementById("qunit-fixture");
+		workItemViewFactory = CORATEST.workItemViewFactorySpy();
+		dependencies = {
+			workItemViewFactory: workItemViewFactory,
 			holderFactory: CORATEST.standardFactorySpy("holderSpy")
 		};
-		this.spec = {
-			"extraClassName" : "extraClassName2",
-			"showDataMethod" : function() {
+		spec = {
+			extraClassName: "extraClassName2",
+			showDataMethod: function() {
 			},
-			"copyDataMethod" : function() {
+			copyDataMethod: function() {
 			},
-			"showIncomingLinksMethod" : function() {
+			showIncomingLinksMethod: function() {
 			},
-			"indexMethod" : function() {
+			indexMethod: function() {
 			},
-			texts : {
-				showDefinitionViewer : "showDefinitionViewer",	
-				showDefinitionViewerValidationType : "showDefinitionViewerValidationType",	
-				showDefinitionViewerRecordType : "showDefinitionViewerRecordType",	
-				showRecursiveDelete : "showRecursiveDelete"	
+			texts: {
+				showDefinitionViewer: "showDefinitionViewer",
+				showDefinitionViewerValidationType: "showDefinitionViewerValidationType",
+				showDefinitionViewerRecordType: "showDefinitionViewerRecordType",
+				showRecursiveDelete: "showRecursiveDelete"
 			}
 		};
-		this.specWithoutShowIncomingLinks = {
-			"extraClassName" : "extraClassName2",
-			"showDataMethod" : function() {
-			},
-			"copyDataMethod" : function() {
-			}
+	});
+
+	const getWorkItemViewSpy = function() {
+		return workItemViewFactory.getFactored(0);
+	};
+	const getViewsToolAddedToView = function() {
+		return getWorkItemViewSpy().getToolViewsAddedToView();
+	};
+	const getViewsToolRemovedFromView = function() {
+		return getWorkItemViewSpy().getToolViewsRemovedFromView();
+	};
+	const getEditView = function() {
+		return getWorkItemViewSpy().getViewsAddedToView(0);
+	};
+	const getShowView = function() {
+		return getWorkItemViewSpy().getViewsAddedToView(1);
+	};
+
+	const getButtonView = function() {
+		return getWorkItemViewSpy().getViewsAddedToView(2);
+	};
+	const getIncomingLinksView = function() {
+		return getWorkItemViewSpy().getViewsAddedToView(3);
+	};
+	hooks.afterEach(() => {
+		//no after
+	});
+
+
+	test("init", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		fixture.appendChild(recordHandlerView.getView());
+
+		let workItemViewSpy = getWorkItemViewSpy();
+
+		let factoredWorkItemViewSpec = workItemViewSpy.getSpec();
+		assert.strictEqual(factoredWorkItemViewSpec.extraClassName, "extraClassName2");
+
+		assert.strictEqual(workItemViewSpy.getViewsAddedToView(4), undefined);
+
+		let editView = workItemViewSpy.getViewsAddedToView(0);
+		assert.strictEqual(editView.nodeName, "SPAN");
+		assert.strictEqual(editView.className, "editView");
+
+		let showView = workItemViewSpy.getViewsAddedToView(1);
+		assert.strictEqual(showView.nodeName, "SPAN");
+		assert.strictEqual(showView.className, "showView");
+
+		let buttonView = workItemViewSpy.getViewsAddedToView(2);
+		assert.strictEqual(buttonView.nodeName, "SPAN");
+		assert.strictEqual(buttonView.className, "buttonView");
+
+		let holderFactory = dependencies.holderFactory;
+		let holder = holderFactory.getFactored(0);
+		assert.ok(holder);
+		assert.strictEqual(holderFactory.getSpec(0).className, "incomingLinksView");
+
+		let incomingLinksView = workItemViewSpy.getViewsAddedToView(3);
+		assert.strictEqual(incomingLinksView, holder.getView());
+	});
+
+	test("testGetView", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let workItemViewSpy = workItemViewFactory.getFactored(0);
+		assert.strictEqual(recordHandlerView.getView(), workItemViewSpy.getSpyView());
+	});
+
+	test("testInitButtonCreatedForShowDataAsJSON", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let button = getViewsToolAddedToView()[0];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, spec.showDataMethod);
+		assert.strictEqual(button.className, "showData");
+		assert.strictEqual(button.value, "Show data as JSON");
+	});
+
+	test("testInitButtonCreatedForCopyAsNew", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let button = getViewsToolAddedToView()[1];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, spec.copyDataMethod);
+		assert.strictEqual(button.className, "copyAsNew");
+		assert.strictEqual(button.value, "Copy as new");
+	});
+
+	test("testAddButtonForReloadData", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let reloadDataMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod);
+
+		let button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, reloadDataMethod);
+		assert.strictEqual(button.className, "reload");
+		assert.strictEqual(button.value, "Reload record");
+
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForReloadDataIsOnlyAddedOnceButUsesNewFunction", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let reloadDataMethod = function() {
+			//empty method
+		};
+		let reloadDataMethod2 = function() {
+			//empty method
+		};
+		recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod);
+		let reloadButton = getViewsToolAddedToView()[2];
+		assert.strictEqual(reloadButton.onclick, reloadDataMethod);
+		recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod2);
+		assert.strictEqual(reloadButton.onclick, reloadDataMethod2);
+
+		let button = getViewsToolAddedToView()[3];
+		assert.strictEqual(button, undefined);
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testRemoveButtonForReloadData", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let reloadDataMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod);
+
+		let viewsAddedToView = getViewsToolAddedToView();
+		let button = viewsAddedToView[2];
+		assert.strictEqual(viewsAddedToView.length, 3);
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, reloadDataMethod);
+		assert.strictEqual(button.className, "reload");
+		assert.strictEqual(button.value, "Reload record");
+		
+		recordHandlerView.removeReloadButton();
+		assert.strictEqual(getViewsToolRemovedFromView()[0],button);
+	});
+
+	test("testAddButtonForDefinitionViewer", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		const openDefinitionViewerDataMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod);
+
+		const button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+		assert.strictEqual(button.className, "definitionViewer");
+		assert.strictEqual(button.value, "showDefinitionViewer");
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForDefinitionViewerIsOnlyAddedOnceButUsesNewFunction", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let openDefinitionViewerDataMethod = function() {
+			//empty method
+		};
+		let openDefinitionViewerDataMethod2 = function() {
+			//empty method
 		};
 
-		this.getWorkItemViewSpy = function() {
-			return this.workItemViewFactory.getFactored(0);
+		recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod);
+
+		let button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+
+		recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod2);
+
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+		let button2 = getViewsToolAddedToView()[3];
+		assert.strictEqual(button2, undefined);
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForDefinitionViewerValidationType", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		const openDefinitionViewerDataMethod = function() {
+			//empty method
 		};
-		this.getViewsToolAddedToView = function() {
-			return this.getWorkItemViewSpy().getToolViewsAddedToView();
+		recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
+
+		const button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+		assert.strictEqual(button.className, "definitionViewer");
+		assert.strictEqual(button.value, "showDefinitionViewerValidationType");
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForDefinitionViewerValidationType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let openDefinitionViewerDataMethod = function() {
+			//empty method
 		};
-		this.getEditView = function() {
-			return this.getWorkItemViewSpy().getViewsAddedToView(0);
-		};
-		this.getShowView = function() {
-			return this.getWorkItemViewSpy().getViewsAddedToView(1);
+		let openDefinitionViewerDataMethod2 = function() {
+			//empty method
 		};
 
-		this.getButtonView = function() {
-			return this.getWorkItemViewSpy().getViewsAddedToView(2);
+		recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
+
+		let button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+
+		recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod2);
+
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+		let button2 = getViewsToolAddedToView()[3];
+		assert.strictEqual(button2, undefined);
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForDefinitionViewerRecordType", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		const openDefinitionViewerDataMethod = function() {
+			//empty method
 		};
-		this.getIncomingLinksView = function() {
-			return this.getWorkItemViewSpy().getViewsAddedToView(3);
+		recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
+
+		const button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
+		assert.strictEqual(button.className, "definitionViewer");
+		assert.strictEqual(button.value, "showDefinitionViewerRecordType");
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
+
+	test("testAddButtonForDefinitionViewerRecordType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let openDefinitionViewerDataMethod = function() {
+			//empty method
 		};
-	},
-	afterEach : function() {
-	}
-});
+		let openDefinitionViewerDataMethod2 = function() {
+			//empty method
+		};
 
-QUnit.test("init", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	this.fixture.appendChild(this.recordHandlerView.getView());
+		recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
 
-	let workItemViewSpy = this.getWorkItemViewSpy();
+		let button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
 
-	let factoredWorkItemViewSpec = workItemViewSpy.getSpec();
-	assert.strictEqual(factoredWorkItemViewSpec.extraClassName, "extraClassName2");
+		recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod2);
 
-	assert.strictEqual(workItemViewSpy.getViewsAddedToView(4), undefined);
+		assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
+		let button2 = getViewsToolAddedToView()[3];
+		assert.strictEqual(button2, undefined);
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
 
-	let editView = workItemViewSpy.getViewsAddedToView(0);
-	assert.strictEqual(editView.nodeName, "SPAN");
-	assert.strictEqual(editView.className, "editView");
+	test("testAddButtonForRecursiveDelete", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		const openRecursiveDeleteMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
 
-	let showView = workItemViewSpy.getViewsAddedToView(1);
-	assert.strictEqual(showView.nodeName, "SPAN");
-	assert.strictEqual(showView.className, "showView");
+		const button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
+		assert.strictEqual(button.className, "recursiveDelete");
+		assert.strictEqual(button.value, "showRecursiveDelete");
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
 
-	let buttonView = workItemViewSpy.getViewsAddedToView(2);
-	assert.strictEqual(buttonView.nodeName, "SPAN");
-	assert.strictEqual(buttonView.className, "buttonView");
+	test("testAddButtonForRecursiveDelete_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let openRecursiveDeleteMethod = function() {
+			//empty method
+		};
+		let openRecursiveDeleteMethod2 = function() {
+			//empty method
+		};
 
-    let holderFactory = this.dependencies.holderFactory;
-    let holder = holderFactory.getFactored(0);
-	assert.ok(holder);
-	assert.strictEqual(holderFactory.getSpec(0).className, "incomingLinksView");
+		recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
 
-	let incomingLinksView = workItemViewSpy.getViewsAddedToView(3);
-    assert.strictEqual(incomingLinksView, holder.getView());
-});
+		let button = getViewsToolAddedToView()[2];
+		assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
 
-QUnit.test("testGetView", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let workItemViewSpy = this.workItemViewFactory.getFactored(0);
-	assert.strictEqual(this.recordHandlerView.getView(), workItemViewSpy.getSpyView());
-});
+		recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod2);
 
-QUnit.test("testInitButtonCreatedForShowDataAsJSON", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let button = this.getViewsToolAddedToView()[0];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, this.spec.showDataMethod);
-	assert.strictEqual(button.className, "showData");
-	assert.strictEqual(button.value, "Show data as JSON");
-});
+		assert.strictEqual(button.onclick, openRecursiveDeleteMethod2);
+		let button2 = getViewsToolAddedToView()[3];
+		assert.strictEqual(button2, undefined);
+		assert.strictEqual(getViewsToolAddedToView().length, 3);
+	});
 
-QUnit.test("testInitButtonCreatedForCopyAsNew", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let button = this.getViewsToolAddedToView()[1];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, this.spec.copyDataMethod);
-	assert.strictEqual(button.className, "copyAsNew");
-	assert.strictEqual(button.value, "Copy as new");
-});
+	test("testAddToEditView", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let someView = document.createElement("span");
+		recordHandlerView.addToEditView(someView);
 
-QUnit.test("testAddButtonForReloadData", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let reloadDataMethod= function() {
-		//empty method
-	};
-	this.recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod);
+		assert.strictEqual(getEditView().firstChild, someView);
+	});
+
+	test("testAddObjectToEditView", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let someObject = {
+			test: "data"
+		};
+		recordHandlerView.addObjectToEditView(someObject);
+
+		assert.strictEqual(getEditView().firstChild.textContent, JSON.stringify(someObject));
+	});
+
+	test("addToShow", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let someView = document.createElement("span");
+		recordHandlerView.addToShowView(someView);
+
+		assert.strictEqual(getShowView().firstChild, someView);
+	});
+
+	test("addButton", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let onclickMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addButton("text", onclickMethod);
+
+		let button = getButtonView().childNodes[0];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, onclickMethod);
+		assert.strictEqual(button.className, '');
+	});
+
+	test("addButtonWithClassName", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let onclickMethod = function() {
+			//empty method
+		};
+		recordHandlerView.addButton("text", onclickMethod, "someClass");
+
+		let button = getButtonView().childNodes[0];
+		assert.strictEqual(button.nodeName, "INPUT");
+		assert.strictEqual(button.type, "button");
+		assert.strictEqual(button.onclick, onclickMethod);
+		assert.strictEqual(button.className, "someClass");
+	});
+
+	test("testClearViews", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+
+		recordHandlerView.addButton("text", undefined);
+
+		let someView = document.createElement("span");
+		recordHandlerView.addToEditView(someView);
+
+		let someView2 = document.createElement("span");
+		recordHandlerView.addToShowView(someView2);
+
+		assert.strictEqual(getEditView().childNodes.length, 1);
+		assert.strictEqual(getShowView().childNodes.length, 1);
+		assert.strictEqual(getButtonView().childNodes.length, 1);
+
+		recordHandlerView.clearViews();
+		assert.strictEqual(getEditView().childNodes.length, 0);
+		assert.strictEqual(getShowView().childNodes.length, 0);
+		assert.strictEqual(getButtonView().childNodes.length, 0);
+	});
 	
-	let button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, reloadDataMethod);
-	assert.strictEqual(button.className, "reload");
-	assert.strictEqual(button.value, "Reload record");
-	
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-	
+	test("testClearDataViews", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+
+		recordHandlerView.addButton("text", undefined);
+
+		let someView = document.createElement("span");
+		recordHandlerView.addToEditView(someView);
+
+		let someView2 = document.createElement("span");
+		recordHandlerView.addToShowView(someView2);
+
+		assert.strictEqual(getEditView().childNodes.length, 1);
+		assert.strictEqual(getShowView().childNodes.length, 1);
+		assert.strictEqual(getButtonView().childNodes.length, 1);
+
+		recordHandlerView.clearDataViews();
+		assert.strictEqual(getEditView().childNodes.length, 0);
+		assert.strictEqual(getShowView().childNodes.length, 0);
+		assert.strictEqual(getButtonView().childNodes.length, 1);
+	});
+
+	test("testAddToIncomingLinksView", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let someView = document.createElement("span");
+
+		recordHandlerView.addToIncomingLinksView(someView);
+
+		assert.strictEqual(getIncomingLinksView().firstChild, someView);
+	});
+
+	test("testAddDuplicateIncomingLinksView", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		let someView = document.createElement("span");
+
+		recordHandlerView.addToIncomingLinksView(someView);
+
+		assert.strictEqual(getIncomingLinksView().firstChild, someView);
+
+		let someOtherView1 = document.createElement("span");
+		let someOtherView2 = document.createElement("span");
+		let someOtherView3 = document.createElement("span");
+		recordHandlerView.addToIncomingLinksView(someOtherView1);
+		recordHandlerView.addToIncomingLinksView(someOtherView2);
+		recordHandlerView.addToIncomingLinksView(someOtherView3);
+
+		assert.strictEqual(getIncomingLinksView().childNodes.length, 1);
+
+	});
+
+	test("testAddShowIncomingLinksButton", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		assert.strictEqual(getButtonView().childNodes.length, 0);
+
+		recordHandlerView.showShowIncomingLinksButton();
+
+		assert.strictEqual(getButtonView().childNodes.length, 1);
+		let showIncomingLinksButton = getButtonView().childNodes[0];
+		assert.strictEqual(showIncomingLinksButton.value, "INCOMING LINKS");
+		assert.strictEqual(showIncomingLinksButton.className, "showIncomingLinks");
+	});
+
+	test("testIncomingLinksButton", function(assert) {
+		let wasCalled = false;
+		spec.showIncomingLinksMethod = function() {
+			wasCalled = true;
+		};
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		recordHandlerView.showShowIncomingLinksButton();
+		let showIncomingLinksButton = getButtonView().childNodes[0];
+		let holderFactory = dependencies.holderFactory;
+		let holder = holderFactory.getFactored(0);
+		assert.strictEqual(holder.getToggleCalled(), 0);
+
+		CORATESTHELPER.simulateOnclick(showIncomingLinksButton);
+		assert.strictEqual(wasCalled, true);
+		assert.strictEqual(holder.getToggleCalled(), 1);
+
+		CORATESTHELPER.simulateOnclick(showIncomingLinksButton);
+		assert.strictEqual(wasCalled, true);
+		assert.strictEqual(holder.getToggleCalled(), 2);
+	});
+
+	test("testAddShowNoIncomingLinksButton", function(assert) {
+		recordHandlerView = CORA.recordHandlerView(dependencies, spec);
+		assert.strictEqual(getButtonView().childNodes.length, 0);
+
+		recordHandlerView.showShowIncomingLinksButton();
+		assert.strictEqual(getButtonView().childNodes.length, 1);
+
+		recordHandlerView.hideShowIncomingLinksButton();
+		assert.strictEqual(getButtonView().childNodes.length, 0);
+	});
 });
-
-QUnit.test("testAddButtonForReloadDataIsOnlyAddedOnceButUsesNewFunction", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let reloadDataMethod= function() {
-		//empty method
-	};
-	let reloadDataMethod2= function() {
-		//empty method
-	};
-	this.recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod);
-	let reloadButton = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(reloadButton.onclick, reloadDataMethod);
-	this.recordHandlerView.addReloadRecordUsingFunction(reloadDataMethod2);
-	assert.strictEqual(reloadButton.onclick, reloadDataMethod2);
-	
-	let button = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button, undefined);
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-
-QUnit.test("testAddButtonForDefinitionViewer", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	const openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	this.recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod);
-	
-	const button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-	assert.strictEqual(button.className, "definitionViewer");
-	assert.strictEqual(button.value, "showDefinitionViewer");
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForDefinitionViewerIsOnlyAddedOnceButUsesNewFunction", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	let openDefinitionViewerDataMethod2= function() {
-		//empty method
-	};
-	
-	this.recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod);
-	
-	let button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-
-	this.recordHandlerView.addDefinitionViewerOpenFunction(openDefinitionViewerDataMethod2);
-
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
-	let button2 = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button2, undefined);
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForDefinitionViewerValidationType", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	const openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
-	
-	const button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-	assert.strictEqual(button.className, "definitionViewer");
-	assert.strictEqual(button.value, "showDefinitionViewerValidationType");
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForDefinitionViewerValidationType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	let openDefinitionViewerDataMethod2= function() {
-		//empty method
-	};
-	
-	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod);
-	
-	let button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-
-	this.recordHandlerView.addDefinitionViewerOpenFunctionValidationType(openDefinitionViewerDataMethod2);
-
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
-	let button2 = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button2, undefined);
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForDefinitionViewerRecordType", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	const openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
-	
-	const button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-	assert.strictEqual(button.className, "definitionViewer");
-	assert.strictEqual(button.value, "showDefinitionViewerRecordType");
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForDefinitionViewerRecordType_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let openDefinitionViewerDataMethod= function() {
-		//empty method
-	};
-	let openDefinitionViewerDataMethod2= function() {
-		//empty method
-	};
-	
-	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod);
-	
-	let button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod);
-
-	this.recordHandlerView.addDefinitionViewerOpenFunctionRecordType(openDefinitionViewerDataMethod2);
-
-	assert.strictEqual(button.onclick, openDefinitionViewerDataMethod2);
-	let button2 = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button2, undefined);
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForRecursiveDelete", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	const openRecursiveDeleteMethod= function() {
-		//empty method
-	};
-	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
-
-	const button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
-	assert.strictEqual(button.className, "recursiveDelete");
-	assert.strictEqual(button.value, "showRecursiveDelete");
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddButtonForRecursiveDelete_IsOnlyAddedOnceButUsesNewFunction", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let openRecursiveDeleteMethod= function() {
-		//empty method
-	};
-	let openRecursiveDeleteMethod2= function() {
-		//empty method
-	};
-	
-	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod);
-	
-	let button = this.getViewsToolAddedToView()[2];
-	assert.strictEqual(button.onclick, openRecursiveDeleteMethod);
-
-	this.recordHandlerView.addRecursiveDeleteOpenFunction(openRecursiveDeleteMethod2);
-
-	assert.strictEqual(button.onclick, openRecursiveDeleteMethod2);
-	let button2 = this.getViewsToolAddedToView()[3];
-	assert.strictEqual(button2, undefined);
-	assert.strictEqual(this.getViewsToolAddedToView().length, 3);
-});
-
-QUnit.test("testAddToEditView", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let someView = document.createElement("span");
-	this.recordHandlerView.addToEditView(someView);
-
-	assert.strictEqual(this.getEditView().firstChild, someView);
-});
-
-QUnit.test("testAddObjectToEditView", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let someObject = {
-		"test" : "data"
-	};
-	this.recordHandlerView.addObjectToEditView(someObject);
-
-	assert.strictEqual(this.getEditView().firstChild.textContent, JSON.stringify(someObject));
-});
-
-QUnit.test("addToShow", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let someView = document.createElement("span");
-	this.recordHandlerView.addToShowView(someView);
-
-	assert.strictEqual(this.getShowView().firstChild, someView);
-});
-
-QUnit.test("addButton", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let onclickMethod = function() {
-		//empty method
-	};
-	this.recordHandlerView.addButton("text", onclickMethod);
-
-	let button = this.getButtonView().childNodes[0];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, onclickMethod);
-	assert.strictEqual(button.className, '');
-});
-
-QUnit.test("addButtonWithClassName", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let onclickMethod = function() {
-		//empty method
-	};
-	this.recordHandlerView.addButton("text", onclickMethod, "someClass");
-
-	let button = this.getButtonView().childNodes[0];
-	assert.strictEqual(button.nodeName, "INPUT");
-	assert.strictEqual(button.type, "button");
-	assert.strictEqual(button.onclick, onclickMethod);
-	assert.strictEqual(button.className, "someClass");
-});
-
-QUnit.test("testClearViews", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let recordHandlerView = this.recordHandlerView;
-
-	this.recordHandlerView.addButton("text", undefined);
-
-	let someView = document.createElement("span");
-	recordHandlerView.addToEditView(someView);
-
-	let someView2 = document.createElement("span");
-	recordHandlerView.addToShowView(someView2);
-
-	assert.strictEqual(this.getEditView().childNodes.length, 1);
-	assert.strictEqual(this.getShowView().childNodes.length, 1);
-	assert.strictEqual(this.getButtonView().childNodes.length, 1);
-
-	recordHandlerView.clearViews();
-	assert.strictEqual(this.getEditView().childNodes.length, 0);
-	assert.strictEqual(this.getShowView().childNodes.length, 0);
-	assert.strictEqual(this.getButtonView().childNodes.length, 0);
-});
-QUnit.test("testClearDataViews", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let recordHandlerView = this.recordHandlerView;
-
-	this.recordHandlerView.addButton("text", undefined);
-
-	let someView = document.createElement("span");
-	recordHandlerView.addToEditView(someView);
-
-	let someView2 = document.createElement("span");
-	recordHandlerView.addToShowView(someView2);
-
-	assert.strictEqual(this.getEditView().childNodes.length, 1);
-	assert.strictEqual(this.getShowView().childNodes.length, 1);
-	assert.strictEqual(this.getButtonView().childNodes.length, 1);
-
-	recordHandlerView.clearDataViews();
-	assert.strictEqual(this.getEditView().childNodes.length, 0);
-	assert.strictEqual(this.getShowView().childNodes.length, 0);
-	assert.strictEqual(this.getButtonView().childNodes.length, 1);
-});
-
-QUnit.test("testAddToIncomingLinksView", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	let someView = document.createElement("span");
-
-	this.recordHandlerView.addToIncomingLinksView(someView);
-
-	assert.strictEqual(this.getIncomingLinksView().firstChild, someView);
-});
-
-QUnit.test("testAddDuplicateIncomingLinksView", function(assert) {
-    this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-    let someView = document.createElement("span");
-
-    this.recordHandlerView.addToIncomingLinksView(someView);
-
-    assert.strictEqual(this.getIncomingLinksView().firstChild, someView);
-
-    let someOtherView1 = document.createElement("span");
-    let someOtherView2 = document.createElement("span");
-    let someOtherView3 = document.createElement("span");
-    this.recordHandlerView.addToIncomingLinksView(someOtherView1);
-    this.recordHandlerView.addToIncomingLinksView(someOtherView2);
-    this.recordHandlerView.addToIncomingLinksView(someOtherView3);
-
-    assert.strictEqual(this.getIncomingLinksView().childNodes.length, 1);
-
-});
-
-QUnit.test("testAddShowIncomingLinksButton", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(this.getButtonView().childNodes.length, 0);
-
-	this.recordHandlerView.showShowIncomingLinksButton();
-
-	assert.strictEqual(this.getButtonView().childNodes.length, 1);
-	let showIncomingLinksButton = this.getButtonView().childNodes[0];
-	assert.strictEqual(showIncomingLinksButton.value, "INCOMING LINKS");
-	assert.strictEqual(showIncomingLinksButton.className, "showIncomingLinks");
-});
-
-QUnit.test("testIncomingLinksButton", function(assert) {
-    let wasCalled = false;
-	this.spec.showIncomingLinksMethod = function(){
-    	wasCalled = true;
-	};
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-    this.recordHandlerView.showShowIncomingLinksButton();
-    let showIncomingLinksButton = this.getButtonView().childNodes[0];
-    let holderFactory = this.dependencies.holderFactory;
-    let holder = holderFactory.getFactored(0);
-    assert.strictEqual(holder.getToggleCalled(),0);
-
-    CORATESTHELPER.simulateOnclick(showIncomingLinksButton);
-    assert.strictEqual(wasCalled, true);
-    assert.strictEqual(holder.getToggleCalled(),1);
-
-    CORATESTHELPER.simulateOnclick(showIncomingLinksButton);
-    assert.strictEqual(wasCalled, true);
-    assert.strictEqual(holder.getToggleCalled(),2);
-});
-
-QUnit.test("testAddShowNoIncomingLinksButton", function(assert) {
-	this.recordHandlerView = CORA.recordHandlerView(this.dependencies, this.spec);
-	assert.strictEqual(this.getButtonView().childNodes.length, 0);
-
-	this.recordHandlerView.showShowIncomingLinksButton();
-	assert.strictEqual(this.getButtonView().childNodes.length, 1);
-
-	this.recordHandlerView.hideShowIncomingLinksButton();
-	assert.strictEqual(this.getButtonView().childNodes.length, 0);
-});
-

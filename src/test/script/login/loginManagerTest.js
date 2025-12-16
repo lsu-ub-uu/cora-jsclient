@@ -60,7 +60,8 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 			afterLogoutMethod: afterLogoutMethod,
 			setInfoMessage: setInfoMessage,
 			setErrorMessage: setErrorMessage,
-			loginBaseUrl: "someAppTokenBaseUrl/",
+			appTokenLogin: "http://epc.ub.uu.se/login/rest/apptoken/",
+			passwordLogin: "http://epc.ub.uu.se/login/rest/password/",
 			baseUrl: "http://epc.ub.uu.se/cora/rest/",
 			jsClient: CORATEST.jsClientSpy()
 		};
@@ -357,7 +358,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.ok(factored1);
 		let spec0 = dependencies.appTokenLoginFactory.getSpec(0);
 		assert.strictEqual(spec0.requestMethod, "POST");
-		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/apptoken");
+		assert.strictEqual(spec0.url, "http://epc.ub.uu.se/login/rest/apptoken/");
 		assert.strictEqual(spec0.contentType, "application/vnd.cora.login");
 		assert.strictEqual(spec0.accept, "application/vnd.cora.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
@@ -638,7 +639,7 @@ QUnit.module("login/loginManagerTest.js", hooks => {
 		assert.strictEqual(spec0.presentationId, "somePresentationId");
 		assert.strictEqual(spec0.jsClient, spec.jsClient);
 		assert.strictEqual(spec0.requestMethod, "POST");
-		assert.strictEqual(spec0.url, "someAppTokenBaseUrl/login/rest/password/");
+		assert.strictEqual(spec0.url, "http://epc.ub.uu.se/login/rest/password/");
 		assert.strictEqual(spec0.accept, "application/vnd.cora.authentication+json");
 		assert.strictEqual(spec0.loadMethod, loginManager.handleNewAuthTokenAnswer);
 		assert.strictEqual(spec0.errorCallback, loginManager.passwordErrorCallback);

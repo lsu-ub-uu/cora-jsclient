@@ -18,7 +18,49 @@
  */
 addStandardAppTokensToLoginMenu = true;
 const start = function() {
-	let href = window.location.href;
+	let callSpec = 	{
+		requestMethod : "GET",
+		url : serverRestUrl,
+		accept : "application/vnd.cora.deploymentInfo+json",
+		loadMethod: deploymentInfoFetched,
+		errorMethod: callError,
+	};
+	ajaxCallFactory.factor(callSpec);
+};
+const deploymentInfoFetched = function(answer){
+	let deploymentInfo = JSON.parse(answer.responseText);
+	name = deploymentInfo.deploymentName;
+	baseUrl = deploymentInfo.urls.REST;
+
+	appTokenLogin= deploymentInfo.urls.appTokenLogin;
+	passwordLogin= deploymentInfo.urls.passwordLogin;
+	for(const exampleUser of deploymentInfo.exampleUsers){
+		let user = {
+				text: exampleUser.name,
+				type: exampleUser.type,
+				loginId: exampleUser.loginId,
+				appToken: exampleUser.appToken
+			};
+		appTokenOptions.push(user);
+	}
+	switch(deploymentInfo.applicationName){
+	  case "alvin":
+		enableCSS("alvinCSS");
+		enableIcon("alvin");
+	    break;
+	  case "diva":
+		enableCSS("divaLilaCSS");
+		enableIcon("diva");
+	    break;
+	  default:
+		enableCSS("aClientCSS");
+		enableIcon("cora");
+	}
+	startDependencies();
+};
+
+const start2 = function() {	
+	let href = globalThis.location.href;
 	let appTokensMap = createMapWithAppTokens();
 
 	if (hrefContains(href, "systemone")) {
@@ -325,12 +367,6 @@ const useAlvinPreview = function() {
 	loginBaseUrl = "https://preview.alvin.cora.epc.ub.uu.se/";
 	startDependencies();
 };
-//const useAlvinPreview = function() {
-//	name = "ALVIN preview";
-//	baseUrl = "https://cora.epc.ub.uu.se/alvin/rest/";
-//	loginBaseUrl = "https://cora.epc.ub.uu.se/alvin/";
-//	startDependencies();
-//};
 
 const useAlvinMigration = function() {
 	name = "ALVIN migration";
@@ -351,12 +387,6 @@ const useDivaPreview = function() {
 	loginBaseUrl = "https://preview.diva.cora.epc.ub.uu.se/";
 	startDependencies();
 };
-//const useDivaPreview = function() {
-//	name = "DiVA preview";
-//	baseUrl = "https://cora.epc.ub.uu.se/diva/rest/";
-//	loginBaseUrl = "https://cora.epc.ub.uu.se/diva/";
-//	startDependencies();
-//};
 
 const useDivaMigration = function() {
 	name = "DiVA migration";

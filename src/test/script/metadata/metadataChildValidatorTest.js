@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("metadata/metadataChildValidatorTest.js", hooks => {
+QUnit.module("metadata/metadataChildValidatorTest.js", hooks => {
     let test = QUnit.test;
     let metadataProvider;
     let pubSub;

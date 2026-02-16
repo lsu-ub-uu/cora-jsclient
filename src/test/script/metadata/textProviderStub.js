@@ -181,6 +181,10 @@ var CORATEST = (function(coraTest) {
 				return "myLinkText";
 			case "myLinkDefText":
 				return "myLinkDefText";
+			case "myAnyTypeLinkText":
+				return "myAnyTypeLinkText";
+			case "myAnyTypeLinkDefText":
+				return "myAnyTypeLinkDefText";
 			case "myPathLinkText":
 				return "myPathLinkText";
 			case "myPathLinkDefText":

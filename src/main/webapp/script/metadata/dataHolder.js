@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016, 2017, 2024 Olov McKie
- * Copyright 2015, 2016, 2020, 2024 Uppsala University Library
+ * Copyright 2015, 2016, 2020, 2024, 2026 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -59,8 +59,9 @@ var CORA = (function(cora) {
 		const addChildrenOrValueOfAtomic = function(dataContainerPart, cMetadataElement) {
 			let type = getDataType(cMetadataElement);
 			if(isResourceLink(type)){
-			}else if (isChild(type)) {
-				addGroupParts(dataContainerPart);
+				// Do nothing
+			}else if (containerForTypeHasChildren(type)) {
+				addChildrenArray(dataContainerPart);
 			} else {
 				dataContainerPart.value = "";
 			}
@@ -70,15 +71,15 @@ var CORA = (function(cora) {
 			return cMetadataElement.getData().attributes.type;
 		};
 
-		const isChild = function(type) {
-			return isGroup(type) || isRecordLink(type);
+		const containerForTypeHasChildren = function(type) {
+			return isGroup(type) || isRecordLink(type) || isAnyTypeRecordLink(type);
 		};
 
 		const isGroup = function(type) {
 			return type === "group";
 		};
 
-		const addGroupParts = function(dataContainerPart) {
+		const addChildrenArray = function(dataContainerPart) {
 			dataContainerPart.children = [];
 		};
 
@@ -114,6 +115,10 @@ var CORA = (function(cora) {
 
 		const isRecordLink = function(type) {
 			return type === "recordLink";
+		};
+		
+		const isAnyTypeRecordLink = function(type) {
+			return type === "anyTypeRecordLink";
 		};
 
 		const subscribeToAddAndSetValueAndRemoveAndMoveMessagesForAllPaths = function() {

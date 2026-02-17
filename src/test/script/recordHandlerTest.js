@@ -19,7 +19,7 @@
  */
 "use strict";
 
-QUnit.module("recordHandlerTest.js", hooks => {
+QUnit.module.only("recordHandlerTest.js", hooks => {
 	const test = QUnit.test;
 	let dependencies;
 	let spec;
@@ -881,7 +881,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		let factoredSpec = dependencies.recordGuiFactory.getSpec(0);
 		assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
-		assert.strictEqual(factoredSpec.dataDivider, undefined);
+		assert.deepEqual(factoredSpec.recordData, {});
 
 		let emptyPermissions = {
 			write: [],
@@ -958,7 +958,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		let factoredSpec = dependencies.recordGuiFactory.getSpec(0);
 		assert.strictEqual(factoredSpec.metadataId, "recordTypeNewGroup");
-		assert.strictEqual(factoredSpec.dataDivider, undefined);
+		assert.deepEqual(factoredSpec.recordData, {});
 
 		let emptyPermissions = {
 			write: [],
@@ -1404,7 +1404,8 @@ QUnit.module("recordHandlerTest.js", hooks => {
 
 		let dataDividerWeSentAsPartOfAnswer = CORATEST
 			.getDataDividerFromData(recordWeSendAsPartOfAnswer);
-		assert.strictEqual(recordGuiSpec.dataDivider, dataDividerWeSentAsPartOfAnswer);
+		let recordData = {dataDivider: dataDividerWeSentAsPartOfAnswer};
+		assert.deepEqual(recordGuiSpec.recordData, recordData);
 	});
 
 	CORATEST.getDataDividerFromData = function(recordWeSendAsPartOfAnswer) {
@@ -1533,7 +1534,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let factoredRecordGuiSpec1 = dependencies.recordGuiFactory.getSpec(1);
 
 		assert.strictEqual(factoredRecordGuiSpec1.metadataId, factoredRecordGuiSpec0.metadataId);
-		assert.strictEqual(factoredRecordGuiSpec1.dataDivider, factoredRecordGuiSpec0.dataDivider);
+		assert.deepEqual(factoredRecordGuiSpec1.recordData, factoredRecordGuiSpec0.recordData);
 
 		let presentationFormIdUsed = factoredRecordGui1.getPresentationIdUsed(0);
 		assert.strictEqual(presentationFormIdUsed, "recordTypePGroup");
@@ -1820,7 +1821,7 @@ QUnit.module("recordHandlerTest.js", hooks => {
 		let reloadedRecordGuiSpec = dependencies.recordGuiFactory.getSpec(1);
 		let specFromFirstRecordGuiSpy = firstRecordGui.getSpec();
 		assert.strictEqual(reloadedRecordGuiSpec.metadataId, specFromFirstRecordGuiSpy.metadataId);
-		assert.strictEqual(reloadedRecordGuiSpec.dataDivider, specFromFirstRecordGuiSpy.dataDivider);
+		assert.strictEqual(reloadedRecordGuiSpec.recordData, specFromFirstRecordGuiSpy.recordData);
 		assert.stringifyEqual(reloadedRecordGuiSpec.data, firstRecordGui.dataHolder
 			.getDataWithActionLinks());
 		assert.strictEqual(reloadedRecordGui.getInitCalled(), 1);

@@ -29,7 +29,7 @@ var CORA = (function(cora) {
 
 		let factor = function(spec) {
 			let metadataId = spec.metadataId;
-			let dataDivider = spec.dataDivider;
+			let recordData = spec.recordData;
 
 			let pubSub = CORA.pubSub();
 
@@ -76,7 +76,7 @@ var CORA = (function(cora) {
 				pubSub : pubSub,
 				jsBookkeeper : jsBookkeeper,
 				recordGuiFactory : self,
-				dataDivider : dataDivider,
+				recordData : recordData,
 				uploadManager : dependencies.uploadManager,
 				ajaxCallFactory : dependencies.ajaxCallFactory,
 				recordPartPermissionCalculatorFactory : CORA.genericFactory(

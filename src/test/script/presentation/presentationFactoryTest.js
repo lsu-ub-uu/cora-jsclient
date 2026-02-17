@@ -18,14 +18,14 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module("presentation/presentationFactoryTest.js", {
+QUnit.module.only("presentation/presentationFactoryTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
-		this.dataDivider = "systemX";
+		this.recordData = {dataDivider:"someDataDivider",someOtherInfo:"other"};
 
 		this.dependencies = {
 			providers: {
@@ -39,7 +39,7 @@ QUnit.module("presentation/presentationFactoryTest.js", {
 			},
 			pubSub: this.pubSub,
 			jsBookkeeper: this.jsBookkeeper,
-			dataDivider: this.dataDivider,
+			recordData: this.recordData,
 			pChildRefHandlerFactory: CORATEST.standardFactorySpy("pChildRefHandlerSpy"),
 			recordPartPermissionCalculatorFactory: CORATEST.standardFactorySpy("recordPartPermissionCalculatorSpy")
 		};
@@ -293,7 +293,7 @@ CORATEST.assertCorrectPChildRefHandlerFactoryDependencies = function(assert, con
 	assert.strictEqual(dependencies.jsBookkeeper, context.dependencies.jsBookkeeper);
 	assert.strictEqual(dependencies.uploadManager, context.dependencies.uploadManager);
 	assert.strictEqual(dependencies.ajaxCallFactory, context.dependencies.ajaxCallFactory);
-	assert.strictEqual(dependencies.dataDivider, context.dependencies.dataDivider);
+	assert.strictEqual(dependencies.recordData, context.dependencies.recordData);
 
 	assert.strictEqual(dependencies.pRepeatingElementFactory.type, "genericFactory");
 	assert.strictEqual(dependencies.pRepeatingElementFactory.getTypeToFactor(), "pRepeatingElement");

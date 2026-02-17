@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2023 Olov McKie
- * Copyright 2020, 2025 Uppsala University Library
+ * Copyright 2020, 2025, 2026 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -142,6 +142,9 @@ var CORA = (function(cora) {
 			} else if (isRecordLink()) {
 				initializeMetadataRecordLink(nextLevelPath);
 				pubSub.publish("linkedData", message);
+			} else if (isAnyTypeRecordLink()) {
+				initializeMetadataAnyTypeRecordLink(nextLevelPath);
+				pubSub.publish("linkedData", message);
 			} else if (isResourceLink()) {
 				//				initializeMetadataResourceLink(nextLevelPath);
 				//NOTE, value here is entire data and not a "normal" setValue which is data.value
@@ -221,11 +224,19 @@ var CORA = (function(cora) {
 		const isRecordLink = function() {
 			return "recordLink" === getType();
 		};
+		const isAnyTypeRecordLink = function() {
+			return "anyTypeRecordLink"===getType();
+		};
 
 		const initializeMetadataRecordLink = function(nextLevelPath) {
 			initializeLinkedRecordType(nextLevelPath);
 			initializeLinkedRecordId(nextLevelPath);
 			possiblyInitializeLinkedRepeatId(nextLevelPath);
+		};
+		
+		const initializeMetadataAnyTypeRecordLink = function(nextLevelPath) {
+			initializeAnyTypeLinkedRecordType(nextLevelPath);
+			initializeLinkedRecordId(nextLevelPath);
 		};
 
 		const initializeLinkedRecordType = function(nextLevelPath) {
@@ -244,6 +255,12 @@ var CORA = (function(cora) {
 			};
 			createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference,
 				nextLevelPath, recordTypeData);
+		};
+		const initializeAnyTypeLinkedRecordType = function(nextLevelPath) {
+			let recordData = spec.data;
+						let recordTypeStaticChildReference = createRefWithRef("linkedRecordTypeTextVar");
+			createSpecAndInitalizeMetadataChildInitializer(recordTypeStaticChildReference,
+				nextLevelPath, recordData);
 		};
 
 		const createRefWithRef = function(ref) {

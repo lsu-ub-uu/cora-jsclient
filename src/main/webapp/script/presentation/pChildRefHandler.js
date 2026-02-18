@@ -647,10 +647,10 @@ var CORA = (function(cora) {
                         name: "hostRecord",
                         children: [{
                             name: "linkedRecordType",
-                            value: "someType"
+                            value: recordData.recordType
                         }, {
                             name: "linkedRecordId",
-                            value: "someId"
+                            value: recordData.recordId
                         }]
                     }
                     ]

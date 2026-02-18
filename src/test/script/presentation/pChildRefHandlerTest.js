@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
+QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
     const test = QUnit.test;
     let fixture;
     let dependencies;
@@ -66,7 +66,11 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
             ajaxCallFactory: ajaxCallFactory,
             pChildRefHandlerViewFactory: pChildRefHandlerViewFactory,
             pRepeatingElementFactory: pRepeatingElementFactory,
-            recordData: { dataDivider: "systemY", recordType: "someRecordType", recordId: "someRecordId" }
+            recordData: {
+                dataDivider: "systemY",
+                recordType: "someRecordTypeFromDep",
+                recordId: "someRecordIdFromDep"
+            }
         };
         recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 
@@ -194,10 +198,10 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
                     name: "hostRecord",
                     children: [{
                         name: "linkedRecordType",
-                        value: "someType"
+                        value: "someRecordTypeFromDep"
                     }, {
                         name: "linkedRecordId",
-                        value: "someId"
+                        value: "someRecordIdFromDep"
                     }]
                 }
                 ]
@@ -243,10 +247,10 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
                     name: "hostRecord",
                     children: [{
                         name: "linkedRecordType",
-                        value: "someType"
+                        value: "someRecordTypeFromDep"
                     }, {
                         name: "linkedRecordId",
-                        value: "someId"
+                        value: "someRecordIdFromDep"
                     }]
                 }
                 ]
@@ -292,10 +296,10 @@ QUnit.module.only("presentation/pChildRefHandlerTest.js", hooks => {
                     name: "hostRecord",
                     children: [{
                         name: "linkedRecordType",
-                        value: "someType"
+                        value: "someRecordTypeFromDep"
                     }, {
                         name: "linkedRecordId",
-                        value: "someId"
+                        value: "someRecordIdFromDep"
                     }]
                 }
                 ]

@@ -18,7 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-QUnit.module.only("presentation/presentationFactoryTest.js", {
+QUnit.module("presentation/presentationFactoryTest.js", {
 	beforeEach: function() {
 		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();

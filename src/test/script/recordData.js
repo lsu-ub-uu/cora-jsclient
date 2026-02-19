@@ -45,7 +45,7 @@ var CORATEST = (function(coraTest) {
 					"children": [
 						{
 							"name": "id",
-							"value": "recordType"
+							"value": "recordId"
 						},
 						{
 							"children": [

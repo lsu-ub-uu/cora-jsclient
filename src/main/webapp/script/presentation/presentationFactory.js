@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 			jsBookkeeper: dependencies.jsBookkeeper,
 			uploadManager: dependencies.uploadManager,
 			ajaxCallFactory: dependencies.ajaxCallFactory,
-			dataDivider: dependencies.dataDivider,
+			recordData: dependencies.recordData,
 
 			pRepeatingElementFactory: pRepeatingElementFactory,
 			pChildRefHandlerViewFactory: CORA.genericFactory("pChildRefHandlerView", {})

@@ -169,7 +169,7 @@ var CORA = (function(cora) {
 			definitionId = metadataForRecordType.metadataId;
 
 			let permissions = createEmptyPermissions();
-			recordGui = createRecordGui(createDefinitionId, copiedData, undefined, permissions);
+			recordGui = createRecordGui(createDefinitionId, copiedData, {}, permissions);
 			createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 			dataIsChanged = true;
@@ -190,11 +190,11 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const createRecordGui = function(metadataId, data, dataDivider, permissions) {
+		const createRecordGui = function(metadataId, data, recordData, permissions) {
 			let recordGuiSpec = {
 				metadataId: metadataId,
 				data: data,
-				dataDivider: dataDivider,
+				recordData: recordData,
 				permissions: permissions
 			};
 
@@ -393,15 +393,18 @@ var CORA = (function(cora) {
 
 		const tryToProcessFetchedRecordData = function(data, permissions) {
 			let cData = CORA.coraData(data);
-			let dataDivider = getDataDividerFromData(cData);
-			recordTypeId = getRecordTypeIdFromData(cData);
+			let recordData = {};
+			recordData.dataDivider = getDataDividerFromData(cData);
+			recordData.recordType = getRecordTypeFromData(cData);
+			recordData.recordId = getRecordIdFromData(cData);
+			recordTypeId = getRecordTypeFromData(cData);
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 			validationTypeId = getValidationTypeIdFromData(cData);
 			let validationType = metadataForRecordType.validationTypes[validationTypeId];
 			updateDefinitionId = validationType.updateDefinitionId;
 
 			definitionId = metadataForRecordType.metadataId;
-			recordGui = createRecordGui(updateDefinitionId, data, dataDivider, permissions);
+			recordGui = createRecordGui(updateDefinitionId, data, recordData, permissions);
 			createAndAddViewsForExisting(recordGui, updateDefinitionId, definitionId);
 			recordGui.initMetadataControllerStartingGui();
 			addEditButtonsToView();
@@ -441,9 +444,13 @@ var CORA = (function(cora) {
 			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("dataDivider");
 		};
 
-		const getRecordTypeIdFromData = function(cData) {
+		const getRecordTypeFromData = function(cData) {
 			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("type");
+		};
+		const getRecordIdFromData = function(cData) {
+			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const getValidationTypeIdFromData = function(cData) {
@@ -668,8 +675,8 @@ var CORA = (function(cora) {
 			let recordGuiSpec = recordGui.getSpec();
 
 			let metadataId = recordGuiSpec.metadataId;
-			let dataDivider = recordGuiSpec.dataDivider;
-			recordGui = createRecordGui(metadataId, data, dataDivider, recordGuiSpec.permissions);
+			let recordData = recordGuiSpec.recordData;
+			recordGui = createRecordGui(metadataId, data, recordData, recordGuiSpec.permissions);
 
 			if ("true" === createNewRecord) {
 				createAndAddViewsForNew(recordGui, createDefinitionId, definitionId);

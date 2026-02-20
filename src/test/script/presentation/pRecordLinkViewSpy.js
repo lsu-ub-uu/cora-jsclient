@@ -25,7 +25,7 @@ var CORATEST = (function(coraTest) {
 		var childrenHidden = 0;
 		var childrenShown = 0;
 		var showDataF = null;
-		var view = CORA.gui.createSpanWithClassName("pRecordLinkViewSpyView");
+		var view = CORA.createSpanWithClassName("pRecordLinkViewSpyView");
 		var state;
 		var value;
 

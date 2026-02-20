@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,35 +19,37 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ajaxCall = function(spec) {
+		const defaultTimeoutMS = 90000;
+		const timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
+		let intervalId;
+		let xhr;
+		let intervalStart;
+		let timeProgress;
 
-		var defaultTimeoutMS = 90000;
-		var timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
-		var intervalId;
-		var xhr = factorXmlHttpRequestUsingFactoryFromSpec();
-		var intervalStart;
-		var timeProgress;
+		const start = function() {
+			xhr = factorXmlHttpRequestUsingFactoryFromSpec();
+			addListenersToXmlHttpRequest();
+			open();
+			setTimeout();
+			setHeadersSpecifiedInSpec();
+			setResponseTypeSpecifiedInSpec();
+			sendRequest();
+		};
 
-		addListenersToXmlHttpRequest();
-		open();
-		setTimeout();
-		setHeadersSpecifiedInSpec();
-		setResponseTypeSpecifiedInSpec();
-		sendRequest();
-
-		function factorXmlHttpRequestUsingFactoryFromSpec() {
+		const factorXmlHttpRequestUsingFactoryFromSpec = function() {
 			return spec.xmlHttpRequestFactory.factor();
-		}
+		};
 
-		function addListenersToXmlHttpRequest() {
+		const addListenersToXmlHttpRequest = function() {
 			xhr.addEventListener("load", handleLoadEvent);
 			xhr.addEventListener("error", handleErrorEvent);
 			addDownloadProgressListnerIfSpecifiedInSpec();
 			xhr.addEventListener("progress", updateProgressTime);
 			addUploadProgressListnerIfSpecifiedInSpec();
 			xhr.upload.addEventListener("progress", updateProgressTime);
-		}
+		};
 
-		function handleLoadEvent() {
+		const handleLoadEvent = function() {
 			window.clearInterval(intervalId);
 
 			if (statusIsOk()) {
@@ -55,101 +57,101 @@ var CORA = (function(cora) {
 			} else {
 				createReturnObjectAndCallErrorMethodFromSpec();
 			}
-		}
+		};
 
-		function statusIsOk() {
+		const statusIsOk = function() {
 			return xhr.status === 200 || xhr.status === 201;
-		}
+		};
 
-		function createReturnObjectAndCallLoadMethodFromSpec() {
+		const createReturnObjectAndCallLoadMethodFromSpec = function() {
 			spec.loadMethod(createReturnObject());
-		}
+		};
 
-		function createReturnObject() {
-			var returnObject = {
-				"spec" : spec,
-				"status" : xhr.status,
-				"response" : xhr.response
+		const createReturnObject = function() {
+			let returnObject = {
+				spec: spec,
+				status: xhr.status,
+				response: xhr.response
 			};
-			var responseType = spec.responseType;
+			let responseType = spec.responseType;
 			if (responseType === undefined || responseType === 'document') {
 				returnObject.responseText = xhr.responseText;
 			}
 			return returnObject;
-		}
+		};
 
-		function handleErrorEvent() {
+		const handleErrorEvent = function() {
 			window.clearInterval(intervalId);
 			createReturnObjectAndCallErrorMethodFromSpec();
-		}
+		};
 
-		function createReturnObjectAndCallErrorMethodFromSpec() {
+		const createReturnObjectAndCallErrorMethodFromSpec = function() {
 			spec.errorMethod(createReturnObject());
-		}
+		};
 
-		function addDownloadProgressListnerIfSpecifiedInSpec() {
+		const addDownloadProgressListnerIfSpecifiedInSpec = function() {
 			if (spec.downloadProgressMethod !== undefined) {
 				xhr.addEventListener("progress", spec.downloadProgressMethod);
 			}
-		}
+		};
 
-		function updateProgressTime() {
+		const updateProgressTime = function() {
 			timeProgress = performance.now();
-		}
+		};
 
-		function addUploadProgressListnerIfSpecifiedInSpec() {
+		const addUploadProgressListnerIfSpecifiedInSpec = function() {
 			if (spec.uploadProgressMethod !== undefined) {
 				xhr.upload.addEventListener("progress", spec.uploadProgressMethod);
 			}
-		}
+		};
 
-		function open() {
+		const open = function() {
 			if (spec.requestMethod === "GET") {
 				xhr.open(spec.requestMethod, createUrl());
 			} else {
 				xhr.open(spec.requestMethod, spec.url);
 			}
 			startTimers();
-		}
+		};
 
-		function createUrl() {
-			var url = spec.url + "?";
+		const createUrl = function() {
+			let url = spec.url + "?";
 			url += possiblyCreateUrlParameters();
 			url += "preventCache=" + (new Date()).getTime();
 			return url;
-		}
+		};
 
-		function possiblyCreateUrlParameters() {
+		const possiblyCreateUrlParameters = function() {
 			if (spec.parameters !== undefined) {
 				return createUrlParameters();
 			}
 			return "";
-		}
+		};
 
-		function createUrlParameters() {
-			var url = "";
-			var keys = Object.keys(spec.parameters);
-			for (var i = 0; i < keys.length; i++) {
-				url += createUrlParameter(keys[i]);
+		const createUrlParameters = function() {
+			let url = "";
+			let keys = Object.keys(spec.parameters);
+			for (const element of keys) {
+				url += createUrlParameter(element);
 			}
 			return url;
-		}
+		};
 
-		function createUrlParameter(key) {
+		const createUrlParameter = function(key) {
 			return key + "=" + encodeURIComponent(spec.parameters[key]) + "&";
-		}
+		};
 
-		function startTimers() {
+		const startTimers = function() {
 			timeProgress = performance.now();
 			intervalStart = timeProgress;
-		}
+		};
 
-		function setTimeout() {
+		const setTimeout = function() {
 			intervalId = window.setInterval(handleTimeout, timeoutTime);
-		}
+		};
 
-		function handleTimeout() {
-			var progressAfterStartTime = timeProgress - intervalStart;
+		const handleTimeout = function() {
+			let progressAfterStartTime = timeProgress - intervalStart;
 			if (progressAfterStartTime > 0) {
 				intervalStart = performance.now();
 			} else {
@@ -157,40 +159,41 @@ var CORA = (function(cora) {
 				xhr.abort();
 				spec.timeoutMethod(createReturnObject());
 			}
-		}
+		};
 
-		function setHeadersSpecifiedInSpec() {
+		const setHeadersSpecifiedInSpec = function() {
 			if (spec.requestHeaders) {
-				var keys = Object.keys(spec.requestHeaders);
-				for (var i = 0; i < keys.length; i++) {
-					xhr.setRequestHeader(keys[i], spec.requestHeaders[keys[i]]);
+				let keys = Object.keys(spec.requestHeaders);
+				for (const element of keys) {
+					xhr.setRequestHeader(element, spec.requestHeaders[element]);
 				}
 			}
-		}
+		};
 
-		function setResponseTypeSpecifiedInSpec() {
+		const setResponseTypeSpecifiedInSpec = function() {
 			if (spec.responseType) {
 				xhr.responseType = spec.responseType;
 			}
-		}
+		};
 
-		function sendRequest() {
+		const sendRequest = function() {
 			if (spec.data !== undefined) {
 				xhr.send(spec.data);
 			} else {
 				xhr.send();
 			}
-		}
+		};
 
-		function getCurrentTimeout() {
+		const getCurrentTimeout = function() {
 			return timeoutTime;
-		}
+		};
 
+		start();
 		return Object.freeze({
-			"type" : "ajaxCall",
-			xhr : xhr,
-			spec : spec,
-			getCurrentTimeout : getCurrentTimeout
+			type: "ajaxCall",
+			xhr: xhr,
+			spec: spec,
+			getCurrentTimeout: getCurrentTimeout
 		});
 	};
 	return cora;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2024 Uppsala University Library
  * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -76,13 +76,6 @@ var CORA = (function(cora) {
 		
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
-		
-		const getValueFromMetadatanOrDefaultTo = function(nameInData, defaultValue) {
-			if (cMetadataElement.containsChildWithNameInData(nameInData)) {
-				return cMetadataElement.getFirstAtomicValueByNameInData(nameInData);
-			}
-			return defaultValue;
 		};
 		
 		const createAttributePresentation = function(attributeMetadataId) {

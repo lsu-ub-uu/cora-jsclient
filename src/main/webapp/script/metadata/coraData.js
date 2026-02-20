@@ -1,6 +1,6 @@
 /*
  * Copyright 2015, 2016 Olov McKie
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -22,61 +22,58 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.coraData = function(dataIn) {
 		const NOT_FOUND_IN_CHILDREN = ") not found in children to coraData";
-		var data = dataIn;
-		var children = data && data.children;
+		let data = dataIn;
+		let children = data?.children;
 
-		function getData() {
+		const getData = function() {
 			return data;
-		}
+		};
 
-		function containsChildWithNameInData(nameInData) {
-			var filter = createNameInDataFilter(nameInData);
+		const containsChildWithNameInData = function(nameInData) {
+			let filter = createNameInDataFilter(nameInData);
 			return children.some(filter);
-		}
+		};
 
-		function createNameInDataFilter(nameInDataIn) {
+		const createNameInDataFilter = function(nameInDataIn) {
 			return function(child) {
 				return child.name === nameInDataIn;
 			};
-		}
+		};
 
-		function getFirstChildByNameInData(nameInData) {
+		const getFirstChildByNameInData = function(nameInData) {
 			return getFirstChildFromDataByNameInData(data, nameInData);
-		}
+		};
 
-		function getFirstAtomicValueByNameInData(name) {
+		const getFirstAtomicValueByNameInData = function(name) {
 			return getFirstChildByNameInData(name).value;
-		}
+		};
 
-		function getNoOfChildrenWithNameInData(nameInData) {
-			var filter = createNameInDataFilter(nameInData);
-			var childrenWithNameInData = children.filter(filter);
+		const getNoOfChildrenWithNameInData = function(nameInData) {
+			let filter = createNameInDataFilter(nameInData);
+			let childrenWithNameInData = children.filter(filter);
 			return childrenWithNameInData.length;
-		}
+		};
 
-		function containsChildWithNameInDataAndAttributes(nameInData, attributes) {
-			var filter = createNameInDataAndAttributesFilter(nameInData, attributes);
+		const containsChildWithNameInDataAndAttributes = function(nameInData, attributes) {
+			let filter = createNameInDataAndAttributesFilter(nameInData, attributes);
 			return children.some(filter);
-		}
+		};
 
-		function createNameInDataAndAttributesFilter(nameInDataIn, attributes) {
-			var filter = createNameInDataFilter(nameInDataIn);
-			var attributesFilter = createAttributesFilter(attributes);
+		const createNameInDataAndAttributesFilter = function(nameInDataIn, attributes) {
+			let filter = createNameInDataFilter(nameInDataIn);
+			let attributesFilter = createAttributesFilter(attributes);
 			return function(child) {
-				if (filter(child) && attributesFilter(child)) {
-					return true;
-				}
-				return false;
+				return (filter(child) && attributesFilter(child));
 			};
-		}
+		};
 
-		function createAttributesFilter(attributes) {
+		const createAttributesFilter = function(attributes) {
 			return function(child) {
 				return containerIsSpecifiedByAttributes(child, attributes);
 			};
-		}
+		};
 
-		function getChildrenByNameInData(nameInData) {
+		const getChildrenByNameInData = function(nameInData) {
 			return getChildrenToContainerByNameInData(children, nameInData);
 		}
 
@@ -87,107 +84,110 @@ var CORA = (function(cora) {
 				return foundChildren;
 			}
 			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
-		}
+		};
 
 
-		function getChildrenByNameInDataAndAttributes(nameInData, attributes) {
-			var foundContainers = findContainersSpecifiedByNameInDataAndAttributes(nameInData,
+		const getChildrenByNameInDataAndAttributes = function(nameInData, attributes) {
+			let foundContainers = findContainersSpecifiedByNameInDataAndAttributes(nameInData,
 				attributes);
 			if (foundContainers.length > 0) {
 				return foundContainers;
 			}
-			throw new Error("nameInData(" + nameInData + ") and attributes ("
-				+ JSON.stringify(attributes) + ") not found in coraData");
-		}
+			throw new Error(`nameInData(${nameInData}) and attributes \
+				(${JSON.stringify(attributes)}) not found in coraData`);
+		};
 
-		function getFirstChildByNameInDataAndAttributes(nameInData, attributes) {
-			var filter = createNameInDataAndAttributesFilter(nameInData, attributes);
-			var foundChild = children.find(filter);
+		const getFirstChildByNameInDataAndAttributes = function(nameInData, attributes) {
+			let filter = createNameInDataAndAttributesFilter(nameInData, attributes);
+			let foundChild = children.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
-			throw new Error("nameInData(" + nameInData + ") and attributes ("
-				+ JSON.stringify(attributes) + ") not found in coraData");
-		}
+			throw new Error(`nameInData(${nameInData}) and attributes \
+				(${JSON.stringify(attributes)}) not found in coraData`);
+		};
 
-		function findContainersSpecifiedByNameInDataAndAttributes(nameInData, attributes) {
-			var filter = createNameInDataAndAttributesFilter(nameInData, attributes);
+		const findContainersSpecifiedByNameInDataAndAttributes = function(nameInData, attributes) {
+			let filter = createNameInDataAndAttributesFilter(nameInData, attributes);
 			return children.filter(filter);
-		}
+		};
 
-		function containerIsSpecifiedByAttributes(container, attributes) {
+		const containerIsSpecifiedByAttributes = function(container, attributes) {
 			if (containerAndPathHasAttributes(container, attributes)) {
 				return containerHasSameAttributesAsPath(container, attributes);
 			}
-			if (containerAndPathDoesNotHaveAttributes(container, attributes)) {
-				return true;
-			}
-			return false;
-		}
+			return containerAndPathDoesNotHaveAttributes(container, attributes);
+		};
 
-		function containerAndPathHasAttributes(container, attributes) {
+		const containerAndPathHasAttributes = function(container, attributes) {
 			return attributesContainsAttributes(attributes) && containerHasAttributes(container);
-		}
+		};
 
-		function containerAndPathDoesNotHaveAttributes(container, attributes) {
+		const containerAndPathDoesNotHaveAttributes = function(container, attributes) {
 			return attributesConatainsNoAttributes(attributes)
 				&& containerDoesNotHaveAttributes(container);
-		}
+		};
 
-		function containerHasSameAttributesAsPath(container, attributes) {
-			var containerAttributes = container.attributes;
-			var pathAttributes = attributes.children;
+		const containerHasSameAttributesAsPath = function(container, attributes) {
+			let containerAttributes = container.attributes;
+			let pathAttributes = attributes.children;
 			return containerHasAllPathAttributes(containerAttributes, pathAttributes)
 				&& pathHasAllContainerAttributes(containerAttributes, pathAttributes);
-		}
+		};
 
-		function containerHasAllPathAttributes(containerAttributes, pathAttributes) {
+		const containerHasAllPathAttributes = function(containerAttributes, pathAttributes) {
 			return pathAttributes.every(function(pathAttribute) {
-				var pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-					"attributeName");
-				var pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
-					"attributeValue");
-				if (!Array.isArray(pathAttributeValue)) {
-					return containerAttributes[pathAttributeKey] === pathAttributeValue;
-				} else {
-					return pathAttributeValue.some(function(value) {
-						return containerAttributes[pathAttributeKey] === value;
-					});
-				}
+				return containerAttributesContainsPathAttribute(containerAttributes, pathAttribute);
 			});
-		}
-		function getFirstAtomicValueFromDataByNameInData(dataStructure, name) {
-			return getFirstChildFromDataByNameInData(dataStructure, name).value;
-		}
+		};
 
-		function getFirstChildFromDataByNameInData(dataStructure, nameInData) {
-			var dataStructureChildren = dataStructure.children;
-			var filter = createNameInDataFilter(nameInData);
-			var foundChild = dataStructureChildren.find(filter);
+		const containerAttributesContainsPathAttribute = function(containerAttributes, pathAttribute) {
+			let pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
+				"attributeName");
+			let pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
+				"attributeValue");
+			if (!Array.isArray(pathAttributeValue)) {
+				return containerAttributes[pathAttributeKey] === pathAttributeValue;
+			} else {
+				return pathAttributeValue.some(function(value) {
+					return containerAttributes[pathAttributeKey] === value;
+				});
+			}
+		};
+
+		const getFirstAtomicValueFromDataByNameInData = function(dataStructure, name) {
+			return getFirstChildFromDataByNameInData(dataStructure, name).value;
+		};
+
+		const getFirstChildFromDataByNameInData = function(dataStructure, nameInData) {
+			let dataStructureChildren = dataStructure.children;
+			let filter = createNameInDataFilter(nameInData);
+			let foundChild = dataStructureChildren.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
 
 			throw new Error("name(" + nameInData + NOT_FOUND_IN_CHILDREN);
-		}
-		function pathHasAllContainerAttributes(containerAttributes, pathAttributes) {
-			var containerAttributeKeys = Object.keys(containerAttributes);
+		};
+
+		const pathHasAllContainerAttributes = function(containerAttributes, pathAttributes) {
+			let containerAttributeKeys = Object.keys(containerAttributes);
 			return containerAttributeKeys.every(function(containerAttributeKey) {
-				var containerAttributeValue = containerAttributes[containerAttributeKey];
+				let containerAttributeValue = containerAttributes[containerAttributeKey];
 				return pathAttributesHasNameAndValue(pathAttributes, containerAttributeKey,
 					containerAttributeValue);
 			});
-		}
+		};
 
-		function pathAttributesHasNameAndValue(pathAttributes, name, value) {
+		const pathAttributesHasNameAndValue = function(pathAttributes, name, value) {
 			return pathAttributes.some(function(pathAttribute) {
-				var pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
+				let pathAttributeKey = getFirstAtomicValueFromDataByNameInData(pathAttribute,
 					"attributeName");
-				var pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
+				let pathAttributeValue = getFirstAtomicValueFromDataByNameInData(pathAttribute,
 					"attributeValue");
 				return pathAttributeKey === name && evaluateAttributeValues(pathAttributeValue, value);
 			});
-		}
+		};
 
 		const evaluateAttributeValues = function(pathAttributeValue, value) {
 			if (!Array.isArray(pathAttributeValue)) {
@@ -199,36 +199,34 @@ var CORA = (function(cora) {
 			}
 		};
 
-		function attributesConatainsNoAttributes(attributes) {
+		const attributesConatainsNoAttributes = function(attributes) {
 			return !attributesContainsAttributes(attributes);
-		}
+		};
 
-		function attributesContainsAttributes(attributes) {
-			if (attributes === undefined) {
+		const attributesContainsAttributes = function(attributes) {
+			let length = attributes?.children?.length;
+			if (length === undefined) {
 				return false;
 			}
-			if (attributes.children !== undefined && attributes.children.length === 0) {
-				return false;
-			}
-			return true;
-		}
+			return length !== 0;
+		};
 
-		function containerHasAttributes(container) {
+		const containerHasAttributes = function(container) {
 			return container.attributes !== undefined;
-		}
+		};
 
-		function containerDoesNotHaveAttributes(container) {
+		const containerDoesNotHaveAttributes = function(container) {
 			return !containerHasAttributes(container);
-		}
+		};
 
-		function containsChildWithNameInDataAndIndex(nameInData, index) {
-			var filter = createNameInDataAndIndexFilter(nameInData, index);
+		const containsChildWithNameInDataAndIndex = function(nameInData, index) {
+			let filter = createNameInDataAndIndexFilter(nameInData, index);
 			return children.some(filter);
-		}
+		};
 
-		function createNameInDataAndIndexFilter(nameInDataIn, index) {
-			var found = 0;
-			var filter = createNameInDataFilter(nameInDataIn);
+		const createNameInDataAndIndexFilter = function(nameInDataIn, index) {
+			let found = 0;
+			let filter = createNameInDataFilter(nameInDataIn);
 			return function(child) {
 				if (filter(child)) {
 					if (found === index) {
@@ -238,90 +236,84 @@ var CORA = (function(cora) {
 				}
 				return false;
 			};
-		}
+		};
 
-		function getChildByNameInDataAndIndex(nameInData, index) {
-			var filter = createNameInDataAndIndexFilter(nameInData, index);
-			var foundChild = children.find(filter);
+		const getChildByNameInDataAndIndex = function(nameInData, index) {
+			let filter = createNameInDataAndIndexFilter(nameInData, index);
+			let foundChild = children.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with index (" + index
 				+ NOT_FOUND_IN_CHILDREN);
-		}
+		};
 
-		function getAtomicValueByNameInDataAndIndex(name, index) {
+		const getAtomicValueByNameInDataAndIndex = function(name, index) {
 			return getChildByNameInDataAndIndex(name, index).value;
-		}
+		};
 
-		function containsChildWithNameInDataAndRepeatId(nameInData, repeatId) {
-			var filter = createNameInDataAndRepeatIdFilter(nameInData, repeatId);
+		const containsChildWithNameInDataAndRepeatId = function(nameInData, repeatId) {
+			let filter = createNameInDataAndRepeatIdFilter(nameInData, repeatId);
 			return children.some(filter);
-		}
+		};
 
-		function createNameInDataAndRepeatIdFilter(nameInDataIn, repeatId) {
-			var filter = createNameInDataFilter(nameInDataIn);
-			var repeatIdFilter = createRepeatIdFilter(repeatId);
+		const createNameInDataAndRepeatIdFilter = function(nameInDataIn, repeatId) {
+			let filter = createNameInDataFilter(nameInDataIn);
+			let repeatIdFilter = createRepeatIdFilter(repeatId);
 			return function(child) {
-				if (filter(child) && repeatIdFilter(child)) {
-					return true;
-				}
-				return false;
+				return filter(child) && repeatIdFilter(child);
 			};
-		}
+		};
 
-		function createRepeatIdFilter(repeatId) {
+		const createRepeatIdFilter = function(repeatId) {
 			return function(child) {
 				return child.repeatId === repeatId;
 			};
-		}
+		};
 
-		function getFirstChildByNameInDataAndRepeatId(nameInData, repeatId) {
-			var filter = createNameInDataAndRepeatIdFilter(nameInData, repeatId);
-			var foundChild = children.find(filter);
+		const getFirstChildByNameInDataAndRepeatId = function(nameInData, repeatId) {
+			let filter = createNameInDataAndRepeatIdFilter(nameInData, repeatId);
+			let foundChild = children.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with repeatId (" + repeatId
 				+ NOT_FOUND_IN_CHILDREN);
-		}
+		};
 
-		function containsChildWithNameInDataAndAttributesAndRepeatId(nameInData, attributes,
+		const containsChildWithNameInDataAndAttributesAndRepeatId = function(nameInData, attributes,
 			repeatId) {
-			var filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
+			let filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
 				repeatId);
 			return children.some(filter);
-		}
+		};
 
-		function createNameInDataAndAttributesAndRepeatIdFilter(nameInDataIn, attributes, repeatId) {
-			var filter = createNameInDataFilter(nameInDataIn);
-			var attributesFilter = createAttributesFilter(attributes);
-			var repeatIdFilter = createRepeatIdFilter(repeatId);
+		const createNameInDataAndAttributesAndRepeatIdFilter = function(nameInDataIn, attributes, repeatId) {
+			let filter = createNameInDataFilter(nameInDataIn);
+			let attributesFilter = createAttributesFilter(attributes);
+			let repeatIdFilter = createRepeatIdFilter(repeatId);
 			return function(child) {
-				if (filter(child) && attributesFilter(child) && repeatIdFilter(child)) {
-					return true;
-				}
-				return false;
+				return filter(child) && attributesFilter(child) && repeatIdFilter(child);
 			};
-		}
+		};
 
-		function getFirstChildByNameInDataAndAttributesAndRepeatId(nameInData, attributes, repeatId) {
-			var filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
+		const getFirstChildByNameInDataAndAttributesAndRepeatId = function(nameInData, attributes, repeatId) {
+			let filter = createNameInDataAndAttributesAndRepeatIdFilter(nameInData, attributes,
 				repeatId);
-			var foundChild = children.find(filter);
+			let foundChild = children.find(filter);
 			if (foundChild !== undefined) {
 				return foundChild;
 			}
 			throw new Error("name(" + nameInData + ") with attributes ("
 				+ JSON.stringify(attributes) + ") and repeatId (" + repeatId
 				+ NOT_FOUND_IN_CHILDREN);
-		}
+		};
 
 		const getLinkedRecordIdFromFirstChildLinkWithNameInData = function(nameInData) {
 			let child = getFirstChildByNameInData(nameInData);
 			let linkedRecordId = getChildrenToContainerByNameInData(child.children, "linkedRecordId");
 			return linkedRecordId[0].value;
-		}
+		};
 
 		return Object
 			.freeze({

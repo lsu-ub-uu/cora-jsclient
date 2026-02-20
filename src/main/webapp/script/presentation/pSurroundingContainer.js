@@ -38,15 +38,15 @@ var CORA = (function(cora) {
 			viewSpec.type = "container";
 			viewSpec.info.text = "surroundingContainer";
 			viewSpec.info.defText = "surroundingContainer";
-			viewSpec.info.technicalInfo.splice(0, 4); 
+			viewSpec.info.technicalInfo.splice(0, 4);
 			removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines(viewSpec);
 		};
-		
+
 		const removeHeadlineInfoAsSurroundingContainerDoesNotHaveHeadlines = function(viewSpec) {
 			viewSpec.headline = undefined;
 			viewSpec.headlineLevel = undefined;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
@@ -61,7 +61,7 @@ var CORA = (function(cora) {
 			type: "pSurroundingContainer",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView
+			getView: parent.getView, getPresentationCounter: parent.getPresentationCounter
 		});
 
 		parent.getView().modelObject = out;

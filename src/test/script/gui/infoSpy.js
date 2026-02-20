@@ -29,7 +29,7 @@ var CORATEST = (function(coraTest) {
 				method : addBaseViewAccordingToSpec
 			}
 		};
-		var button = CORA.gui.button(infoButtonSpec);
+		var button = CORA.button(infoButtonSpec);
 
 		function addBaseViewAccordingToSpec() {
 			if (spec.appendTo !== undefined) {

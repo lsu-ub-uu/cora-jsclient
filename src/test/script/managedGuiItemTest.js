@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2016, 2018, 2024 Uppsala University Library
  * Copyright 2016, 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -22,7 +22,7 @@ QUnit.module("managedGuiItemTest.js", {
 	beforeEach : function() {
 		this.fixture = document.getElementById("qunit-fixture");
 
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			managedGuiItemViewFactory : CORATEST.standardFactorySpy("managedGuiItemViewSpy"),
 		};
@@ -229,7 +229,7 @@ QUnit.test("testAddMenuPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addMenuPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedMenuPresentation(0), presentationToAdd);
 });
@@ -238,7 +238,7 @@ QUnit.test("testAddWorkPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addWorkPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedWorkPresentation(0), presentationToAdd);
 });
@@ -247,7 +247,7 @@ QUnit.test("testAddListPresentationPassedOnToView", function(assert) {
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	let factoredView = this.dependencies.managedGuiItemViewFactory.getFactored(0);
 
-	let presentationToAdd = CORA.gui.createSpanWithClassName("somePresentation");
+	let presentationToAdd = CORA.createSpanWithClassName("somePresentation");
 	managedGuiItem.addListPresentation(presentationToAdd);
 	assert.strictEqual(factoredView.getAddedListPresentation(0), presentationToAdd);
 });
@@ -312,7 +312,7 @@ QUnit.test("testToggleNextColor", function(assert) {
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName8"
+		indicatorClassName : "indicatorClassName15"
 	});
 	
 	managedGuiItem.togglePreviousIndicator();
@@ -323,9 +323,16 @@ QUnit.test("testToggleNextColor", function(assert) {
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName4"
+		indicatorClassName : "indicatorClassName11"
 	});
 	
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
+	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
 	managedGuiItem.togglePreviousIndicator();
@@ -344,12 +351,19 @@ QUnit.test("testToggleNextColor", function(assert) {
 	managedGuiItem.toggleNextIndicator();
 	managedGuiItem.toggleNextIndicator();
 	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
 		changed : false,
-		indicatorClassName : "indicatorClassName8"
+		indicatorClassName : "indicatorClassName9"
 	});
 	
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
+	managedGuiItem.toggleNextIndicator();
 	managedGuiItem.toggleNextIndicator();
 	assert.stringifyEqual(factoredViewSpy.getState(), {
 		active : false,
@@ -443,5 +457,24 @@ QUnit.test("testSendDataToServerNotSet", function(assert) {
 	this.spec.sendDataToServerMethod = undefined;
 	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
 	managedGuiItem.sendDataToServer();
+	assert.ok(true);
+});
+
+QUnit.test("testReloadDataFromServer", function(assert) {
+	let called = false;
+	let reloadDataFromServerMethod = function() {
+		called = true;
+	}
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	managedGuiItem.setReloadDataFromServer(reloadDataFromServerMethod);
+	managedGuiItem.reloadDataFromServer();
+
+	assert.strictEqual(called, true);
+});
+
+QUnit.test("testReloadDataFromServerNotSet", function(assert) {
+	this.spec.reloadDataFromServerMethod = undefined;
+	let managedGuiItem = CORA.managedGuiItem(this.dependencies, this.spec);
+	managedGuiItem.reloadDataFromServer();
 	assert.ok(true);
 });

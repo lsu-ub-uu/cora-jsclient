@@ -1,6 +1,6 @@
 /*
  * Copyright 2017, 2021 Uppsala University Library
- * Copyright 2017 Olov McKie
+ * Copyright 2017, 2024 Olov McKie
  * 
  * This file is part of Cora.
  *
@@ -27,7 +27,7 @@ var CORATEST = (function(coraTest) {
 					"requestMethod": "GET",
 					"rel": "read",
 					"url": "http://localhost:8080/therest/rest/record/recordType/writtenText",
-					"accept": "application/vnd.uub.record+json"
+					"accept": "application/vnd.cora.record+json"
 				}
 			}
 		};
@@ -69,6 +69,9 @@ var CORATEST = (function(coraTest) {
 			pathsAndMetadataId.push({ path: path, metadataId: metadataId });
 			let toReturn = containerPathNoRepeatId[returnNo];
 			returnNo++;
+			if (toReturn === undefined){
+				return [];
+			}
 			return toReturn;
 		};
 		
@@ -78,6 +81,14 @@ var CORATEST = (function(coraTest) {
 		
 		const getRequestedPathAndMetadataId = function(callNo) {
 			return pathsAndMetadataId[callNo];
+		};
+		
+		const onlyForTestGetContainerPath = function() {
+			return {"form dataHolderSpy":""};
+		};
+
+		const onlyForTestGetContainerPathNoRepeatId = function() {
+			return {"form dataHolderSpy":""};
 		};
 		
 		return Object.freeze({
@@ -90,7 +101,9 @@ var CORATEST = (function(coraTest) {
 			getRequestedPath: getRequestedPath,
 			findContainersUsingPathAndMetadataId: findContainersUsingPathAndMetadataId,
 			addToReturnForFindContainersUsingPathAndMetadataId: addToReturnForFindContainersUsingPathAndMetadataId,
-			getRequestedPathAndMetadataId: getRequestedPathAndMetadataId
+			getRequestedPathAndMetadataId: getRequestedPathAndMetadataId,
+			onlyForTestGetContainerPath: onlyForTestGetContainerPath,
+			onlyForTestGetContainerPathNoRepeatId: onlyForTestGetContainerPathNoRepeatId
 		});
 	};
 	return coraTest;

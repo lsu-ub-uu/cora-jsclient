@@ -45,11 +45,11 @@ var CORA = (function(cora) {
 		}
 
 		const createView = function() {
-			return CORA.gui.createDivWithClassName("message " + spec.type.className);
+			return CORA.createDivWithClassName("message " + spec.type.className);
 		}
 
 		const createMessageText = function() {
-			var textNew = CORA.gui.createSpanWithClassName("messageText");
+			var textNew = CORA.createSpanWithClassName("messageText");
 			if (renderHtml) {
 				textNew.innerHTML = spec.message;
 			} else {
@@ -62,7 +62,7 @@ var CORA = (function(cora) {
 			var removeFunction = function() {
 				view.modelObject.hideWithEffect();
 			};
-			return CORA.gui.createRemoveButton(removeFunction);
+			return CORA.createRemoveButton(removeFunction);
 		}
 
 		const possiblySetHideTimeout = function() {

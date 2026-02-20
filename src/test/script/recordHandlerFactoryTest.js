@@ -21,7 +21,7 @@
 
 QUnit.module("recordHandlerFactoryTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 
 		this.recordGuiFactorySpy = {
 			"factor": function(metadataId, data, dataDivider) {
@@ -91,6 +91,9 @@ QUnit.test("factorTestDependencies", function(assert) {
 	assert.strictEqual(factoredDependencies.questionFactory.getTypeToFactor(), "question");
 	assert.strictEqual(factoredDependencies.questionFactory.getDependencies(), undefined);
 	assert.strictEqual(factoredDependencies.textProvider, this.dependencies.textProvider);
+	assert.strictEqual(factoredDependencies.busyFactory.type, "genericFactory");
+	assert.strictEqual(factoredDependencies.busyFactory.getTypeToFactor(), "busy");
+	assert.strictEqual(factoredDependencies.busyFactory.getDependencies(), undefined);
 });
 
 QUnit.test("factorTestType", function(assert) {

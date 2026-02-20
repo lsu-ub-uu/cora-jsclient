@@ -30,16 +30,16 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return CORA.gui.createSpanWithClassName("resultHolder");
+			return CORA.createSpanWithClassName("resultHolder");
 		};
 
 		const createResultsHolder = function() {
-			resultsHolder = CORA.gui.createSpanWithClassName("resultsHolderPage");
+			resultsHolder = CORA.createSpanWithClassName("resultsHolderPage");
 			view.appendChild(resultsHolder);
 		};
 
 		const createInfo = function() {
-			let infoHolder = CORA.gui.createSpanWithClassName("infoHolder");
+			let infoHolder = CORA.createSpanWithClassName("infoHolder");
 			view.appendChild(infoHolder);
 			infoHolder.textContent = spec.fromNo + " - " + spec.toNo + " " + spec.ofText + " "
 				+ spec.totalNo;
@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 		};
 
 		const createRecordView = function(record) {
-			let newView = CORA.gui.createSpanWithClassName("listItem");
+			let newView = CORA.createSpanWithClassName("listItem");
 			newView.onclick = function(event) {
 				let loadInBackground = "false";
 				if (event.ctrlKey) {

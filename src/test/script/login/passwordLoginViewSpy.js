@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.passwordLoginViewSpy = function() {
 
-		let view = CORA.gui.createSpanWithClassName("spyView");
+		let view = CORA.createSpanWithClassName("spyView");
 		let presentationsAddedToLoginForm = [];
 		
 		const getView = function() {

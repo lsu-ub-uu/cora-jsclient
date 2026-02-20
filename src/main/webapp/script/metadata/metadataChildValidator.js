@@ -1,6 +1,6 @@
 /*
- * Copyright 2015, 2016 Olov McKie
- * Copyright 2016, 2020 Uppsala University Library
+ * Copyright 2015, 2016, 2024 Olov McKie
+ * Copyright 2016, 2020, 2024 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,6 +25,7 @@ var CORA = (function(cora) {
 		let pubSub = dependencies.pubSub;
 		let path = spec.path;
 		let result = {
+			onlyFinalValues: true,
 			everythingOkBelow: true,
 			containsValuableData: false
 		};
@@ -45,17 +46,17 @@ var CORA = (function(cora) {
 			return result;
 		};
 
-		const createNextLevelPath = function(repeatId) {
-			let pathSpec = {
-				metadataIdToAdd: ref,
-				repeatId: repeatId,
-				parentPath: path
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
-
 		const getDataChildrenForMetadata = function(metadataId) {
 			return dataHolder.findContainersUsingPathAndMetadataId(path, metadataId);
+		};
+
+		const calculateMinRepeat = function() {
+			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
+			let noOfData = dataChildrenForMetadata.length;
+			if (noOfData > repeatMin) {
+				repeatMin = noOfData;
+			}
+			return repeatMin;
 		};
 
 		const validateAndCategorizeChildInstances = function() {
@@ -69,16 +70,42 @@ var CORA = (function(cora) {
 
 		const validateAndCategorizeChildInstance = function(index) {
 			let childInstanceValidationResult = validateRepeatingChildInstanceWithData(index);
+			if (!childInstanceValidationResult.onlyFinalValues) {
+				result.onlyFinalValues = false;
+			}
 			setValuableDataInResult(childInstanceValidationResult);
 			updateNumberOfChildrenOk(childInstanceValidationResult);
 			categorizeChildInstance(childInstanceValidationResult);
 		};
 
+		const validateRepeatingChildInstanceWithData = function(index) {
+			let dataChild = dataChildrenForMetadata[index];
+			let repeatId = dataChild.repeatId;
+			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
+		};
+
+		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
+			let nextPath = createNextLevelPath(repeatId);
+			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
+				pubSub);
+		};
+
+		const createNextLevelPath = function(repeatId) {
+			let pathSpec = {
+				metadataIdToAdd: ref,
+				repeatId: repeatId,
+				parentPath: path
+			};
+			return CORA.calculatePathForNewElement(pathSpec);
+		};
+
+		// if any child of the group has valuable data then the validation result has valuable data
 		const setValuableDataInResult = function(childInstanceValidationResult) {
 			if (childInstanceValidationResult.containsValuableData) {
 				result.containsValuableData = true;
 			}
 		};
+
 
 		const updateNumberOfChildrenOk = function(childInstanceValidationResult) {
 			if (childInstanceValidationResult.everythingOkBelow) {
@@ -117,6 +144,7 @@ var CORA = (function(cora) {
 		const removeEmptyChildren = function() {
 			let childrenNotRemovable = numberOfChildrenOk + childInstancesCanNotBeRemoved.length;
 			let noChildrenNeededForRepeatMin = calculateNeededNoChildrenForRepeatMin(childrenNotRemovable);
+
 			sendRemoveForEmptyChildren(childInstancesCanBeRemoved, noChildrenNeededForRepeatMin);
 		};
 
@@ -136,23 +164,24 @@ var CORA = (function(cora) {
 		};
 
 		const removeAllEmptyChildren = function(childrenCanBeRemoved) {
-			childrenCanBeRemoved.forEach(function(errorMessage) {
-				sendRemoveForEmptyChild(errorMessage);
-				childrenCanBeRemoved.shift();
+			childrenCanBeRemoved.forEach(function(removableChildAnswer) {
+				sendRemoveForEmptyChild(removableChildAnswer);
 			});
+			childrenCanBeRemoved.splice(0, childrenCanBeRemoved.length)
 		};
 
 		const removeExceedingEmptyChildren = function(childrenCanBeRemoved, noChildrenNeededForRepeatMin) {
 			let noToRemove = childrenCanBeRemoved.length - noChildrenNeededForRepeatMin;
 			for (let i = 0; i < noToRemove; i++) {
-				sendRemoveForEmptyChild(childrenCanBeRemoved.pop());
+				let popped = childrenCanBeRemoved.pop();
+				sendRemoveForEmptyChild(popped);
 			}
 		};
 
-		const sendRemoveForEmptyChild = function(errorMessage) {
+		const sendRemoveForEmptyChild = function(removableChildAnswer) {
 			let removeMessage = {
 				type: "remove",
-				path: errorMessage.validationMessage.path
+				path: removableChildAnswer.validationMessage.path
 			};
 			pubSub.publish("remove", removeMessage);
 		};
@@ -167,27 +196,6 @@ var CORA = (function(cora) {
 
 		const sendValidationErrorToEmptyChild = function(errorMessage) {
 			pubSub.publish("validationError", errorMessage);
-		};
-
-		const calculateMinRepeat = function() {
-			let repeatMin = childReference.getFirstAtomicValueByNameInData("repeatMin");
-			let noOfData = dataChildrenForMetadata.length;
-			if (noOfData > repeatMin) {
-				repeatMin = noOfData;
-			}
-			return repeatMin;
-		};
-
-		const validateRepeatingChildInstanceWithData = function(index) {
-			let dataChild = dataChildrenForMetadata[index];
-			let repeatId = dataChild.repeatId;
-			return validateForMetadataWithIdAndDataAndRepeatId(dataChild, repeatId);
-		};
-
-		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
-			let nextPath = createNextLevelPath(repeatId);
-			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
-				pubSub);
 		};
 
 		const getDependencies = function() {

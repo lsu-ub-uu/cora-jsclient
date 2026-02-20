@@ -28,7 +28,7 @@ var CORATEST = (function(coraTest) {
 		var unsubscriptionsPathBelow = [];
 
 		function publish(type, message) {
-//			console.log("publish "+JSON.stringify(message));
+//			//console.log("publish "+JSON.stringify(message));
 			messages.push({
 				"type" : type,
 				"message" : message

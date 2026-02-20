@@ -29,6 +29,7 @@ var CORATEST = (function(coraTest) {
 		let openInfos = [];
 		let setCurrentLangs = [];
 		let openDefinitionIds = [];
+		let openRecursiveDeleteIds = [];
 
 		function getRecordTypesClearedNoOfTimes() {
 			return recordTypesClearedNoOfTimes;
@@ -52,8 +53,8 @@ var CORATEST = (function(coraTest) {
 			createdManagedGuiItemHandledBy.push(handledBy);
 			let managedGuiItem = {
 				"handledBy" : handledBy,
-				"workView" : CORA.gui.createSpanWithClassName("workView"),
-				"menuView" : CORA.gui.createSpanWithClassName("menuView")
+				"workView" : CORA.createSpanWithClassName("workView"),
+				"menuView" : CORA.createSpanWithClassName("menuView")
 			};
 			createdManagedGuiItem.push(managedGuiItem);
 			return managedGuiItem;
@@ -70,39 +71,39 @@ var CORATEST = (function(coraTest) {
 				"menuPresentationViewId" : recordTypeId + "MenuPGroup",
 				"listPresentationViewId" : recordTypeId + "ListPGroup",
 				"search" : recordTypeId + "Search",
-				"userSuppliedId" : "true",
+				"idSource" : "userSupplied",
 				"actionLinks" : {
 					"search" : {
 						"requestMethod" : "GET",
 						"rel" : "search",
 						"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-						"accept" : "application/vnd.uub.recordList+json"
+						"accept" : "application/vnd.cora.recordList+json"
 					},
 					"read" : {
 						"requestMethod" : "GET",
 						"rel" : "read",
 						"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-						"accept" : "application/vnd.uub.record+json"
+						"accept" : "application/vnd.cora.record+json"
 					},
 					"update" : {
 						"requestMethod" : "POST",
 						"rel" : "update",
-						"contentType" : "application/vnd.uub.record+json",
+						"contentType" : "application/vnd.cora.record+json",
 						"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/textSystemOne",
-						"accept" : "application/vnd.uub.record+json"
+						"accept" : "application/vnd.cora.record+json"
 					},
 					"create" : {
 						"requestMethod" : "POST",
 						"rel" : "create",
-						"contentType" : "application/vnd.uub.record+json",
+						"contentType" : "application/vnd.cora.record+json",
 						"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-						"accept" : "application/vnd.uub.record+json"
+						"accept" : "application/vnd.cora.record+json"
 					},
 					"list" : {
 						"requestMethod" : "GET",
 						"rel" : "list",
 						"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-						"accept" : "application/vnd.uub.recordList+json"
+						"accept" : "application/vnd.cora.recordList+json"
 					},
 					"delete" : {
 						"requestMethod" : "DELETE",
@@ -180,6 +181,13 @@ var CORATEST = (function(coraTest) {
 			return openDefinitionIds[number];
 		}
 		
+		function openRecursiveDeleteForId(id) {
+			openRecursiveDeleteIds.push(id);
+		}
+		function getOpenRecursiveDeleteForIds(number) {
+			return openRecursiveDeleteIds[number];
+		}
+		
 		let out = Object.freeze({
 			"type" : "jsClientSpy",
 			showView : showView,
@@ -200,7 +208,10 @@ var CORATEST = (function(coraTest) {
 			getSetCurrentLang : getSetCurrentLang,
 			
 			openDefinitionViewerForId : openDefinitionViewerForId,
-			getOpenDefinitionIds : getOpenDefinitionIds
+			getOpenDefinitionIds : getOpenDefinitionIds,
+
+			openRecursiveDeleteForId : openRecursiveDeleteForId,
+			getOpenRecursiveDeleteForIds : getOpenRecursiveDeleteForIds
 		});
 
 		return out;

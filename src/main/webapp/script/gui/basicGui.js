@@ -19,29 +19,29 @@
  */
 var CORA = (function(cora) {
 	"use strict";
-	cora.gui.createRemoveButton = function(onclick) {
+	cora.createRemoveButton = function(onclick) {
 		let spec = {
-			"className" : "iconButton removeButton",
+			className : "iconButton removeButton",
 			action : {
 				method : onclick
 			}
 		};
-		return CORA.gui.button(spec);
+		return CORA.button(spec);
 	};
 
-	cora.gui.createSpanWithClassName = function(className) {
+	cora.createSpanWithClassName = function(className) {
 		let spanNew = document.createElement("span");
 		spanNew.className = className;
 		return spanNew;
 	};
 
-	cora.gui.createDivWithClassName = function(className) {
+	cora.createDivWithClassName = function(className) {
 		let divNew = document.createElement("div");
 		divNew.className = className;
 		return divNew;
 	};
 
-	cora.gui.createLabelWithClassName = function(className) {
+	cora.createLabelWithClassName = function(className) {
 		let titleNew = document.createElement("label");
 		titleNew.className = className;
 		return titleNew;

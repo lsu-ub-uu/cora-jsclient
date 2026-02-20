@@ -77,7 +77,7 @@ QUnit.module("presentation/pParentVarViewTest.js", {
 				return true;
 			};
 			const createOutputWithSetValueFunction = function(){
-				let outputNew = CORA.gui.createSpanWithClassName("from child spy");
+				let outputNew = CORA.createSpanWithClassName("from child spy");
 				outputNew.setValue = function(value) {
 					outputNew.textContent = value;
 				};
@@ -347,36 +347,4 @@ QUnit.test("testAddAttributesView", function(assert) {
 
 	pParentVarView.addAttributesView(fakeView);
 	assert.strictEqual(pParentVarView.getView().childNodes[1], fakeView);
-});
-
-QUnit.test("testHideShow", function(assert) {
-	let pParentVarView = this.getpParentVarView();
-	let view = pParentVarView.getView();
-	
-	assert.strictEqual(view.style.display, "");
-	
-	pParentVarView.hide();
-	
-	assert.strictEqual(view.style.display, "none");
-	
-	pParentVarView.show();
-	
-	assert.strictEqual(view.style.display, "");
-});
-
-QUnit.test("testHideShowWithDisplaySetFromStart", function(assert) {
-	let pParentVarView = this.getpParentVarView();
-	let view = pParentVarView.getView();
-	view.style.display = "flex";
-	
-	
-	assert.strictEqual(view.style.display, "flex");
-	
-	pParentVarView.hide();
-	
-	assert.strictEqual(view.style.display, "none");
-	
-	pParentVarView.show();
-	
-	assert.strictEqual(view.style.display, "flex");
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2024 Uppsala University Library
  * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -18,31 +18,35 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
+QUnit.module("presentation/pAttributesTest.js", hooks => {
+	const test = QUnit.test;
+	let metadataProvider;
+	let pubSub;
+	let presentationFactory;
+	let pAttributesViewFactory;
+	let dependencies;
+	let spec;
+	let addViewFunctionCalled;
+	let addedView;
+	let pAttributes;
 
-QUnit.module("presentation/pAttributesTest.js", {
-	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
-		
-		this.pubSub = CORATEST.pubSubSpy();
-		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
-		this.pAttributesViewFactory = CORATEST.standardFactorySpy("pAttributesViewSpy");
+	hooks.beforeEach(() => {
+		metadataProvider = CORATEST.MetadataProviderStub();
 
-		let addViewFunctionCalled = 0;
-		let addedView = undefined;
-		this.getAddViewFunctionCalled = function() {
-			return addViewFunctionCalled;
-		};
-		this.getAddedView = function() {
-			return addedView;
-		};
+		pubSub = CORATEST.pubSubSpy();
+		presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
+		pAttributesViewFactory = CORATEST.standardFactorySpy("pAttributesViewSpy");
 
-		this.dependencies = {
-			metadataProvider : this.metadataProvider,
-			pubSub: this.pubSub,
-			presentationFactory: this.presentationFactory,
-			pAttributesViewFactory: this.pAttributesViewFactory
+		addViewFunctionCalled = 0;
+		addedView = undefined;
+
+		dependencies = {
+			metadataProvider: metadataProvider,
+			pubSub: pubSub,
+			presentationFactory: presentationFactory,
+			pAttributesViewFactory: pAttributesViewFactory
 		};
-		this.spec = {
+		spec = {
 			path: ["whatEverPathToPresentationUsingAttributes"],
 			mode: "input",
 			toShow: "all",
@@ -51,191 +55,195 @@ QUnit.module("presentation/pAttributesTest.js", {
 				addedView = viewToAdd;
 			}
 		};
-	}
-});
-
-QUnit.test("testInit", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	assert.strictEqual(this.pAttributes.type, "pAttributes");
-});
-
-QUnit.test("testGetDependencies", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	assert.strictEqual(this.pAttributes.getDependencies(), this.dependencies);
-});
-
-QUnit.test("testGetSpec", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	assert.strictEqual(this.pAttributes.getSpec(), this.spec);
-});
-
-QUnit.test("testViewFactored", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.strictEqual(pAttributesViewSpy.type, "pAttributesViewSpy");
-	assert.strictEqual(this.pAttributesViewFactory.getSpec(0), undefined);
-});
-
-QUnit.test("testSubscribeToAddAttribute", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let subscriptions = this.pubSub.getSubscriptions();
-
-	let attributeSubsription = subscriptions[0];
-	assert.strictEqual(attributeSubsription.type, "addAttribute");
-	assert.stringifyEqual(attributeSubsription.path, this.spec.path);
-	assert.ok(attributeSubsription.functionToCall === this.pAttributes.addAttributePresentation);
-	assert.ok(attributeSubsription.functionToCall != undefined);
-
-	assert.deepEqual(subscriptions.length, 1);
-});
-
-QUnit.test("testAddAttributePresentation", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributes = this.pAttributes;
-	let metadataId = "anAttribute";
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
-
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
-
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttribute"]);
-	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
-	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
-
-	let expectedAttributePresentation = {
-		view: this.presentationFactory.getFactored(0).getView(),
+	});
+	hooks.afterEach(() => {
+		//no after
+	});
+	const getAddViewFunctionCalled = function() {
+		return addViewFunctionCalled;
 	};
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
-});
+	const getAddedView = function() {
+		return addedView;
+	};
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.createAddAttributeMsg = function(metadataId) {
+
+	test("testInit", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		assert.strictEqual(pAttributes.type, "pAttributes");
+	});
+
+	test("testGetDependencies", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		assert.strictEqual(pAttributes.getDependencies(), dependencies);
+	});
+
+	test("testGetSpec", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		assert.strictEqual(pAttributes.getSpec(), spec);
+	});
+
+	test("testViewFactored", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.strictEqual(pAttributesViewSpy.type, "pAttributesViewSpy");
+		assert.strictEqual(pAttributesViewFactory.getSpec(0), undefined);
+	});
+
+	test("testSubscribeToAddAttribute", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let subscriptions = pubSub.getSubscriptions();
+
+		let attributeSubsription = subscriptions[0];
+		assert.strictEqual(attributeSubsription.type, "addAttribute");
+		assert.stringifyEqual(attributeSubsription.path, spec.path);
+		assert.ok(attributeSubsription.functionToCall === pAttributes.addAttributePresentation);
+		assert.ok(attributeSubsription.functionToCall != undefined);
+
+		assert.deepEqual(subscriptions.length, 1);
+	});
+
+	test("testAddAttributePresentation", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let metadataId = "anAttribute";
+		pAttributes.addAttributePresentation(createAddAttributeMsg(metadataId));
+
+		let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, spec.mode);
+
+		let presentationSpec = presentationFactory.getSpec(0);
+		assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttribute"]);
+		assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+		assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+
+		let expectedAttributePresentation = {
+			view: presentationFactory.getFactored(0).getView(),
+		};
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+	});
+
+	//	var CORATEST = (function(coraTest) {
+	//		"use strict";
+	const createAddAttributeMsg = function(metadataId) {
 		return {
 			metadataId: metadataId,
 			path: ["whatEverPathToPresentationUsingAttributes"],
 			nameInData: metadataId
 		};
 	};
-	return coraTest;
-}(CORATEST || {}));
+	//		return coraTest;
+	//	}(CORATEST || {}));
 
-QUnit.test("testAddAttributeOutputPresentation", function(assert) {
-	this.spec.mode = "output";
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributes = this.pAttributes;
-	let metadataId = "anAttribute";
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
+	test("testAddAttributeOutputPresentation", function(assert) {
+		spec.mode = "output";
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let metadataId = "anAttribute";
+		pAttributes.addAttributePresentation(createAddAttributeMsg(metadataId));
 
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
+		let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, spec.mode);
 
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttribute"]);
-	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
-	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+		let presentationSpec = presentationFactory.getSpec(0);
+		assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttribute"]);
+		assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+		assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
 
-	let expectedAttributePresentation = {
-		view: this.presentationFactory.getFactored(0).getView(),
-	};
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
-});
+		let expectedAttributePresentation = {
+			view: presentationFactory.getFactored(0).getView(),
+		};
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+	});
 
-const buildExpectedPresentationForAttribute = function(metadataId, mode) {
-	return {
-		name: "presentation",
-		children: [{
-			name: "presentationOf",
-			children: [
-				{
-					name: "linkedRecordId",
-					value: metadataId
-				}]
-		}, {
-			name: "mode",
-			value: mode
-		}, {
-			name: "emptyTextId",
-			children: [
-				{
-					name: "linkedRecordId",
-					value: "initialEmptyValueText"
-				}]
-		}],
-		attributes: {
-			type: "pCollVar"
+	const buildExpectedPresentationForAttribute = function(metadataId, mode) {
+		return {
+			name: "presentation",
+			children: [{
+				name: "presentationOf",
+				children: [
+					{
+						name: "linkedRecordId",
+						value: metadataId
+					}]
+			}, {
+				name: "mode",
+				value: mode
+			}, {
+				name: "emptyTextId",
+				children: [
+					{
+						name: "linkedRecordId",
+						value: "initialEmptyValueText"
+					}]
+			}],
+			attributes: {
+				type: "pCollVar"
+			}
 		}
-	}
-};
-
-
-QUnit.test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
-	this.spec.toShow = "selectable";
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributes = this.pAttributes;
-	let metadataId = "anAttribute";
-	
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
-
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
-
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), undefined);
-});			
-
-QUnit.test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
-	this.spec.toShow = "selectable";
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributes = this.pAttributes;
-	let metadataId = "anAttributeChoice";
-	
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg(metadataId));
-
-	let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, this.spec.mode);
-
-	let presentationSpec = this.presentationFactory.getSpec(0);
-	
-	assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttributeChoice"]);
-	assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
-	assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
-
-	let expectedAttributePresentation = {
-		view: this.presentationFactory.getFactored(0).getView(),
 	};
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
-});			
 
 
-QUnit.test("testAttributesViewAddedUsingAddViewFunction", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	assert.strictEqual(this.getAddViewFunctionCalled(), 0);
+	test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
+		spec.toShow = "selectable";
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let metadataId = "anAttribute";
 
-	this.pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
-	this.pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
+		pAttributes.addAttributePresentation(createAddAttributeMsg(metadataId));
 
-	assert.strictEqual(this.getAddViewFunctionCalled(), 1);
-	let pAttributesViewSpy = this.pAttributesViewFactory.getFactored(0);
-	assert.strictEqual(this.getAddedView(), pAttributesViewSpy.getView());
-});
+		let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, spec.mode);
+
+		let presentationSpec = presentationFactory.getSpec(0);
+
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), undefined);
+	});
+
+	test("testAddAttributePresentation_withFinalValue_notAdded_selectable", function(assert) {
+		spec.toShow = "selectable";
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		let metadataId = "anAttributeChoice";
+
+		pAttributes.addAttributePresentation(createAddAttributeMsg(metadataId));
+
+		let presentationForAttribute = buildExpectedPresentationForAttribute(metadataId, spec.mode);
+
+		let presentationSpec = presentationFactory.getSpec(0);
+
+		assert.deepEqual(presentationSpec.path, ["whatEverPathToPresentationUsingAttributes", "@anAttributeChoice"]);
+		assert.deepEqual(presentationSpec.metadataIdUsedInData, metadataId);
+		assert.deepEqual(presentationSpec.cPresentation.getData(), presentationForAttribute);
+
+		let expectedAttributePresentation = {
+			view: presentationFactory.getFactored(0).getView(),
+		};
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.deepEqual(pAttributesViewSpy.getAddedAttributePresentation(0), expectedAttributePresentation);
+	});
 
 
-QUnit.test("testDisableAttributes", function(assert) {
-	this.pAttributes = CORA.pAttributes(this.dependencies, this.spec);
-	let pAttributes = this.pAttributes;
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anAttribute"));
-	pAttributes.addAttributePresentation(CORATEST.createAddAttributeMsg("anOtherAttribute"));
+	test("testAttributesViewAddedUsingAddViewFunction", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		assert.strictEqual(getAddViewFunctionCalled(), 0);
 
-	let factoredAttributePVar1 = this.presentationFactory.getFactored(0);
-	let factoredAttributePVar2 = this.presentationFactory.getFactored(1);
-	assert.false(factoredAttributePVar1.getDisableVarStatus());
-	assert.false(factoredAttributePVar2.getDisableVarStatus());
+		pAttributes.addAttributePresentation(createAddAttributeMsg("anAttribute"));
+		pAttributes.addAttributePresentation(createAddAttributeMsg("anAttribute"));
 
-	pAttributes.disableExistingAttributes();
+		assert.strictEqual(getAddViewFunctionCalled(), 1);
+		let pAttributesViewSpy = pAttributesViewFactory.getFactored(0);
+		assert.strictEqual(getAddedView(), pAttributesViewSpy.getView());
+	});
 
-	assert.true(factoredAttributePVar1.getDisableVarStatus());
-	assert.true(factoredAttributePVar2.getDisableVarStatus());
+	test("testDisableAttributes", function(assert) {
+		pAttributes = CORA.pAttributes(dependencies, spec);
+		pAttributes.addAttributePresentation(createAddAttributeMsg("anAttribute"));
+		pAttributes.addAttributePresentation(createAddAttributeMsg("anOtherAttribute"));
+
+		let factoredAttributePVar1 = presentationFactory.getFactored(0);
+		let factoredAttributePVar2 = presentationFactory.getFactored(1);
+		assert.false(factoredAttributePVar1.getDisableVarStatus());
+		assert.false(factoredAttributePVar2.getDisableVarStatus());
+
+		pAttributes.disableExistingAttributes();
+
+		assert.true(factoredAttributePVar1.getDisableVarStatus());
+		assert.true(factoredAttributePVar2.getDisableVarStatus());
+	});
 });

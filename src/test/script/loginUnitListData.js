@@ -45,7 +45,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/system/cora",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "dataDivider"
@@ -63,7 +63,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/recordType/loginUnit",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "type"
@@ -113,7 +113,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/uuwr",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "login"
@@ -131,7 +131,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/coraText/uuLoginUnitText",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "loginDescription"
@@ -145,7 +145,7 @@ var CORATEST = (function(coraTest) {
 									"requestMethod" : "GET",
 									"rel" : "read",
 									"url" : "http://localhost:8080/therest/rest/record/loginUnit/uuLoginUnit",
-									"accept" : "application/vnd.uub.record+json"
+									"accept" : "application/vnd.cora.record+json"
 								}
 							}
 						}
@@ -173,7 +173,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/system/cora",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "dataDivider"
@@ -191,7 +191,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/recordType/loginUnit",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "type"
@@ -241,7 +241,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/loginWebRedirect/testwr",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "login"
@@ -259,7 +259,7 @@ var CORATEST = (function(coraTest) {
 																"requestMethod" : "GET",
 																"rel" : "read",
 																"url" : "http://localhost:8080/therest/rest/record/coraText/testLoginUnitText",
-																"accept" : "application/vnd.uub.record+json"
+																"accept" : "application/vnd.cora.record+json"
 															}
 														},
 														"name" : "loginDescription"
@@ -273,7 +273,7 @@ var CORATEST = (function(coraTest) {
 									"requestMethod" : "GET",
 									"rel" : "read",
 									"url" : "http://localhost:8080/therest/rest/record/loginUnit/testLoginUnit",
-									"accept" : "application/vnd.uub.record+json"
+									"accept" : "application/vnd.cora.record+json"
 								}
 							}
 						}
@@ -304,7 +304,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/system/systemOne",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "dataDivider"
@@ -325,7 +325,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/recordType/loginUnit",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "type"
@@ -391,7 +391,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/loginLDAP/uppsalaLDAP",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "login"
@@ -412,7 +412,7 @@ var CORATEST = (function(coraTest) {
 				                        "requestMethod": "GET",
 				                        "rel": "read",
 				                        "url": "http://localhost:8080/therest/rest/record/coraText/uuSystemOneLDAPLoginUnitText",
-				                        "accept": "application/vnd.uub.record+json"
+				                        "accept": "application/vnd.cora.record+json"
 				                      }
 				                    },
 				                    "name": "loginDescription"
@@ -428,7 +428,7 @@ var CORATEST = (function(coraTest) {
 				              "requestMethod": "GET",
 				              "rel": "read",
 				              "url": "http://localhost:8080/therest/rest/record/loginUnit/uuSystemOneLDAPLoginUnit",
-				              "accept": "application/vnd.uub.record+json"
+				              "accept": "application/vnd.cora.record+json"
 				            }
 				          }
 				        }

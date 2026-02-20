@@ -26,7 +26,7 @@ QUnit.module("metadata/reloadableTextProviderTest.js", {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/text/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		this.spec = {
 			"textListLink" : textListLink,

@@ -20,7 +20,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.resultHandlerViewSpy = function() {
 
-		var view = CORA.gui.createSpanWithClassName("spyView");
+		var view = CORA.createSpanWithClassName("spyView");
 		var presentationsAdded = [];
 		var addedButton;
 

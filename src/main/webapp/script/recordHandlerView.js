@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2017, 2020 Uppsala University Library
+ * Copyright 2016, 2017, 2020, 2025 Uppsala University Library
  * Copyright 2016, 2017, 2020, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -33,7 +33,8 @@ var CORA = (function(cora) {
 		let definitionViewerButton;
 		let definitionViewerButtonValidationType;
 		let definitionViewerButtonRecordType;
-		
+		let recursiveDeleteButton;
+
 		const start = function() {
 			let workItemViewSpec = {
 				"extraClassName": spec.extraClassName
@@ -42,11 +43,11 @@ var CORA = (function(cora) {
 			workItemView = dependencies.workItemViewFactory.factor(workItemViewSpec);
 			view = workItemView.getView();
 
-			editView = CORA.gui.createSpanWithClassName("editView");
+			editView = CORA.createSpanWithClassName("editView");
 			workItemView.addViewToView(editView);
-			showView = CORA.gui.createSpanWithClassName("showView");
+			showView = CORA.createSpanWithClassName("showView");
 			workItemView.addViewToView(showView);
-			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			buttonView = CORA.createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 
 			setShowDataFunction(spec.showDataMethod);
@@ -143,7 +144,7 @@ var CORA = (function(cora) {
 				"definitionViewer");
 			workItemView.addToolViewToToolHolder(definitionViewerButton);
 		};
-		
+
 		const addDefinitionViewerOpenFunctionValidationType = function(functionToCall) {
 			if (undefined === definitionViewerButtonValidationType) {
 				createNewDefinitionViewerOpenFunctionValidationType(functionToCall);
@@ -151,13 +152,13 @@ var CORA = (function(cora) {
 				definitionViewerButtonValidationType.onclick = functionToCall;
 			}
 		};
-		
+
 		const createNewDefinitionViewerOpenFunctionValidationType = function(functionToCall) {
-			definitionViewerButtonValidationType = createButton(texts.showDefinitionViewerValidationType, 
+			definitionViewerButtonValidationType = createButton(texts.showDefinitionViewerValidationType,
 				functionToCall, "definitionViewer");
 			workItemView.addToolViewToToolHolder(definitionViewerButtonValidationType);
 		};
-		
+
 		const addDefinitionViewerOpenFunctionRecordType = function(functionToCall) {
 			if (undefined === definitionViewerButtonRecordType) {
 				createNewDefinitionViewerOpenFunctionRecordType(functionToCall);
@@ -165,11 +166,25 @@ var CORA = (function(cora) {
 				definitionViewerButtonRecordType.onclick = functionToCall;
 			}
 		};
-		
+
 		const createNewDefinitionViewerOpenFunctionRecordType = function(functionToCall) {
-			definitionViewerButtonRecordType = createButton(texts.showDefinitionViewerRecordType, 
+			definitionViewerButtonRecordType = createButton(texts.showDefinitionViewerRecordType,
 				functionToCall, "definitionViewer");
 			workItemView.addToolViewToToolHolder(definitionViewerButtonRecordType);
+		};
+
+		const addRecursiveDeleteOpenFunction = function(functionToCall) {
+			if (undefined === recursiveDeleteButton) {
+				createNewRecursiveDeleteButton(functionToCall);
+			} else {
+				recursiveDeleteButton.onclick = functionToCall;
+			}
+		};
+
+		const createNewRecursiveDeleteButton = function(functionToCall) {
+			recursiveDeleteButton = createButton(texts.showRecursiveDelete, functionToCall,
+				"recursiveDelete");
+			workItemView.addToolViewToToolHolder(recursiveDeleteButton);
 		};
 
 		const addObjectToEditView = function(objectToAdd) {
@@ -188,6 +203,10 @@ var CORA = (function(cora) {
 
 		const hideShowIncomingLinksButton = function() {
 			buttonView.removeChild(showIncomingLinksButton);
+		};
+
+		const removeReloadButton = function() {
+			workItemView.removeToolViewFromToolHolder(reloadButton);
 		};
 
 		const getDependencies = function() {
@@ -215,9 +234,11 @@ var CORA = (function(cora) {
 			showShowIncomingLinksButton: showShowIncomingLinksButton,
 			hideShowIncomingLinksButton: hideShowIncomingLinksButton,
 			addReloadRecordUsingFunction: addReloadRecordFunction,
+			removeReloadButton: removeReloadButton,
 			addDefinitionViewerOpenFunction: addDefinitionViewerOpenFunction,
 			addDefinitionViewerOpenFunctionValidationType: addDefinitionViewerOpenFunctionValidationType,
-			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType
+			addDefinitionViewerOpenFunctionRecordType: addDefinitionViewerOpenFunctionRecordType,
+			addRecursiveDeleteOpenFunction: addRecursiveDeleteOpenFunction
 		});
 	};
 	return cora;

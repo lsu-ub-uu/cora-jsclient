@@ -26,7 +26,7 @@ var CORATEST = (function(coraTest) {
 		
 		const getView = function(){
 			numberOfCalls++;
-			return CORA.gui.createSpanWithClassName("definitionViewerSpy");	
+			return CORA.createSpanWithClassName("definitionViewerSpy");	
 		};
 		
 		const getNumberOfCallsToGetView = function(){

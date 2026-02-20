@@ -69,7 +69,7 @@ var CORATEST = (function(coraTest) {
 					"menuPresentationViewId" : "metadataMenuPGroup",
 					"listPresentationViewId" : "metadataListPGroup",
 					"search" : "metadataSearch",
-					"userSuppliedId" : "false",
+					"idSource" : "userSupplied",
 					"actionLinks" : undefined
 				};
 			}

@@ -18,8 +18,7 @@
  */
 "use strict";
 
-QUnit
-		.module(
+QUnit.module(
 				"incomingLinksListHandlerTest.js",
 				{
 					beforeEach : function() {
@@ -41,7 +40,7 @@ QUnit
 								"requestMethod" : "GET",
 								"rel" : "read_incoming_links",
 								"url" : "http://localhost:8080/therest/rest/record/coraText/workOrderRecordIdTextVarText/incomingLinks",
-								"accept" : "application/vnd.uub.incomingLinksList+json"
+								"accept" : "application/vnd.cora.incomingLinksList+json"
 							}
 						};
 
@@ -86,7 +85,7 @@ QUnit.test("init", function(assert) {
 	assert.strictEqual(ajaxCallSpec.url, "http://localhost:8080/therest/rest/record/"
 			+ "coraText/workOrderRecordIdTextVarText/incomingLinks");
 	assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.incomingLinksList+json");
+	assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.incomingLinksList+json");
 	assert.strictEqual(ajaxCallSpec.contentType, undefined);
 	assert.strictEqual(ajaxCallSpec.data, undefined);
 	assert.strictEqual(ajaxCallSpec.loadMethod,
@@ -137,21 +136,21 @@ QUnit.test("testHandleAnswerWithIncomingLinksList", function(assert) {
 			"rel" : "read",
 			"url" : "http://localhost:8080/therest/rest/record"
 					+ "/metadataTextVariable/newPresentationFormIdTextVar",
-			"accept" : "application/vnd.uub.record+json"
+			"accept" : "application/vnd.cora.record+json"
 		}
 	};
 	assert.stringifyEqual(incomingLinkAddedToView, expectedLInkForView);
 
 	var incomingLinkAddedToView1 = factoredView.getAddedIncomingLink(1);
 	var expectedLInkForView1 = {
-		"linkedRecordType" : "presentationGroup",
+		"linkedRecordType" : "presentation",
 		"linkedRecordId" : "recordTypeFormPGroup",
 		"readLink" : {
 			"requestMethod" : "GET",
 			"rel" : "read",
 			"url" : "http://localhost:8080/therest/rest/record"
 					+ "/presentationGroup/recordTypeFormPGroup",
-			"accept" : "application/vnd.uub.record+json"
+			"accept" : "application/vnd.cora.record+json"
 		}
 	};
 	assert.stringifyEqual(incomingLinkAddedToView1, expectedLInkForView1);

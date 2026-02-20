@@ -1,6 +1,6 @@
 /*
  * Copyright 2016, 2018 Olov McKie
- * Copyright 2020 Uppsala University Library
+ * Copyright 2020, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,6 +23,7 @@ var CORA = (function(cora) {
 		let pubSub = spec.pubSub;
 
 		const setValue = function(data) {
+			data.dataOrigin = "user";
 			pubSub.publish("setValue", data);
 		};
 
@@ -39,21 +40,21 @@ var CORA = (function(cora) {
 			let repeatMax = cChildReference.getFirstAtomicValueByNameInData('repeatMax');
 
 			let initializerSpec = {
-				"metadataId" : ref,
-				"path" : path,
-				"data" : undefined,
-				"recordPartPermissionCalculator" : data.recordPartPermissionCalculator
+				metadataId: ref,
+				path: path,
+				data: undefined,
+				recordPartPermissionCalculator: data.recordPartPermissionCalculator
 			};
 			if (repeatMax === "1") {
 				initializerSpec.repeatId = undefined;
 				let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
-						.factorRepeatInitializer(initializerSpec);
+					.factorRepeatInitializer(initializerSpec);
 				repeatInitializer.initialize();
 			} else {
 				let startRepeatId = calculateStartRepeatId(currentData.children);
 				initializerSpec.repeatId = String(startRepeatId);
 				let repeatInitializer = dependencies.metadataChildAndRepeatInitializerFactory
-						.factorRepeatInitializer(initializerSpec);
+					.factorRepeatInitializer(initializerSpec);
 				repeatInitializer.initialize();
 				return String(startRepeatId);
 			}
@@ -67,7 +68,7 @@ var CORA = (function(cora) {
 			let currentMaxRepeatId = 0;
 			dataChildrenForMetadata.forEach(function(child) {
 				currentMaxRepeatId = calculateMaxRepeatFromChildAndCurrentMaxRepeat(child,
-						currentMaxRepeatId);
+					currentMaxRepeatId);
 			});
 			return currentMaxRepeatId;
 		};
@@ -98,26 +99,26 @@ var CORA = (function(cora) {
 			let parentPath = data.path;
 
 			let moveData = {
-				"path" : parentPath,
-				"metadataId" : data.metadataId,
-				"moveChild" : newPath,
-				"basePositionOnChild" : data.addBeforePath,
-				"newPosition" : "before"
+				path: parentPath,
+				metadataId: data.metadataId,
+				moveChild: newPath,
+				basePositionOnChild: data.addBeforePath,
+				newPosition: "before"
 			};
 			move(moveData);
 		};
 
 		const calculateNewPath = function(metadataIdToAdd, parentPath, repeatId) {
 			return calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(metadataIdToAdd,
-					repeatId, parentPath);
+				repeatId, parentPath);
 		};
 
 		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd,
-				repeatId, parentPath) {
+			repeatId, parentPath) {
 			let pathSpec = {
-				"metadataIdToAdd" : metadataIdToAdd,
-				"repeatId" : repeatId,
-				"parentPath" : parentPath
+				metadataIdToAdd: metadataIdToAdd,
+				repeatId: repeatId,
+				parentPath: parentPath
 			};
 			return CORA.calculatePathForNewElement(pathSpec);
 		};
@@ -131,14 +132,14 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			"type" : "jsBookkeeper",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			setValue : setValue,
-			add : add,
-			remove : remove,
-			move : move,
-			addBefore : addBefore
+			type: "jsBookkeeper",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			setValue: setValue,
+			add: add,
+			remove: remove,
+			move: move,
+			addBefore: addBefore
 		});
 	};
 	return cora;

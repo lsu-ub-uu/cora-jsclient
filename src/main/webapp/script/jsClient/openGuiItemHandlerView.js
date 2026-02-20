@@ -26,17 +26,17 @@ var CORA = (function(cora) {
 		let childrenView;
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName("openGuiItemHandlerView");
+			view = CORA.createSpanWithClassName("openGuiItemHandlerView");
 
 			header = createHeader();
 			view.appendChild(header);
 
-			childrenView = CORA.gui.createSpanWithClassName("childrenView");
+			childrenView = CORA.createSpanWithClassName("childrenView");
 			view.appendChild(childrenView);
 		};
 
 		const createHeader = function() {
-			let headerNew = CORA.gui.createSpanWithClassName("header");
+			let headerNew = CORA.createSpanWithClassName("header");
 			headerNew.onclick = spec.openSearchMethod;
 			headerNew.textContent = spec.headerText;
 			return headerNew;

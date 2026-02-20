@@ -21,8 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.pNonRepeatingChildRefHandlerViewSpy = function(dependencies, spec) {
 		var addedChildren = [];
 		var addedAlternativeChildren = [];
-		var view = CORA.gui.createSpanWithClassName("pNonRepeatingChildRefHandlerViewSpyView");
-		var presentationSize;
+		var view = CORA.createSpanWithClassName("pNonRepeatingChildRefHandlerViewSpyView");
 		//
 
 		function getView() {
@@ -41,18 +40,13 @@ var CORATEST = (function(coraTest) {
 		function getAddedChild(number) {
 			return addedChildren[number];
 		}
-		function addAlternativeChild(childToAdd, presentationSizeIn) {
+		function addAlternativePresentation(childToAdd) {
 			addedAlternativeChildren.push(childToAdd);
-			presentationSize = presentationSizeIn;
 		}
 		function getAddedAlternativeChild(number) {
 			return addedAlternativeChildren[number];
 		}
-		
-		function getPresentationSize(){
-			return presentationSize;
-		}
-		
+
 		var isShown;
 		function hideContent() {
 			isShown = false;
@@ -71,24 +65,32 @@ var CORATEST = (function(coraTest) {
 		function getDataHasDataStyle() {
 			return dataHasDataStyle;
 		}
+		var dataHasErrorStyle;
+		function setHasErrorStyle(errorStyle) {
+			dataHasErrorStyle = errorStyle;
+		}
+		function getDataHasErrorStyle() {
+			return dataHasErrorStyle;
+		}
 
 		var out = Object.freeze({
-			"type" : "pChildRefHandlerViewSpy",
-			getDependencies : getDependencies,
-			getSpec : getSpec,
-			getView : getView,
-			addChild : addChild,
-			getAddedChild : getAddedChild,
-			addAlternativeChild : addAlternativeChild,
-			getAddedAlternativeChild : getAddedAlternativeChild,
-			getPresentationSize : getPresentationSize,
+			"type": "pChildRefHandlerViewSpy",
+			getDependencies: getDependencies,
+			getSpec: getSpec,
+			getView: getView,
+			addChild: addChild,
+			getAddedChild: getAddedChild,
+			addAlternativePresentation: addAlternativePresentation,
+			getAddedAlternativeChild: getAddedAlternativeChild,
 
-			hideContent : hideContent,
-			showContent : showContent,
-			getIsShown : getIsShown,
+			hideContent: hideContent,
+			showContent: showContent,
+			getIsShown: getIsShown,
 
-			setHasDataStyle : setHasDataStyle,
-			getDataHasDataStyle : getDataHasDataStyle
+			setHasDataStyle: setHasDataStyle,
+			getDataHasDataStyle: getDataHasDataStyle,
+			setHasErrorStyle: setHasErrorStyle,
+			getDataHasErrorStyle: getDataHasErrorStyle
 		});
 		return out;
 	};

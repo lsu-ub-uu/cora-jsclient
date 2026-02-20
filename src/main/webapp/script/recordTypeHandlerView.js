@@ -25,18 +25,18 @@ var CORA = (function(cora) {
 		var buttonView;
 
 		function start() {
-			view = CORA.gui.createSpanWithClassName("recordType");
+			view = CORA.createSpanWithClassName("recordType");
 
 			header = createHeader();
 			view.appendChild(header);
 
-			buttonView = CORA.gui.createSpanWithClassName("buttonView");
+			buttonView = CORA.createSpanWithClassName("buttonView");
 			view.appendChild(buttonView);
 			possiblyCreateCreateButton();
 		}
 
 		function createHeader() {
-			var headerNew = CORA.gui.createSpanWithClassName("header");
+			var headerNew = CORA.createSpanWithClassName("header");
 			if (specHasFetchListMethod()) {
 				headerNew.className = headerNew.className + " clickable";
 				headerNew.onclick = spec.fetchListMethod;
@@ -64,7 +64,7 @@ var CORA = (function(cora) {
 					}
 				}
 			};
-			return CORA.gui.button(buttonSpec);
+			return CORA.button(buttonSpec);
 		}
 
 		function getView() {

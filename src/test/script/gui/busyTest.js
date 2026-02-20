@@ -19,16 +19,16 @@
 "use strict";
 
 QUnit.module("gui/busyTest.js", {
-	beforeEach : function() {
+	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
 	},
-	afterEach : function() {
+	afterEach: function() {
 	}
 });
 
 QUnit.test("testInit", function(assert) {
-	var busy = CORA.busy();
-	var view = busy.getView();
+	let busy = CORA.busy();
+	let view = busy.getView();
 	this.fixture.appendChild(view);
 
 	assert.strictEqual(view.modelObject, busy);
@@ -38,8 +38,8 @@ QUnit.test("testInit", function(assert) {
 });
 
 QUnit.test("testShowAndHide", function(assert) {
-	var busy = CORA.busy();
-	var view = busy.getView();
+	let busy = CORA.busy();
+	let view = busy.getView();
 	this.fixture.appendChild(view);
 
 	busy.show();
@@ -50,8 +50,8 @@ QUnit.test("testShowAndHide", function(assert) {
 });
 
 QUnit.test("testHideWithEffect", function(assert) {
-	var busy = CORA.busy();
-	var view = busy.getView();
+	let busy = CORA.busy();
+	let view = busy.getView();
 	this.fixture.appendChild(view);
 
 	busy.show();
@@ -59,16 +59,16 @@ QUnit.test("testHideWithEffect", function(assert) {
 
 	busy.hideWithEffect();
 
-	var event = document.createEvent('Event');
+	let event = document.createEvent('Event');
 	event.initEvent('transitionend', true, true);
 	view.dispatchEvent(event);
 
 	assert.notVisible(view);
 });
 QUnit.test("testHideWithEffectTransitionendNotCalled", function(assert) {
-	var done = assert.async();
-	var busy = CORA.busy();
-	var view = busy.getView();
+	let done = assert.async();
+	let busy = CORA.busy();
+	let view = busy.getView();
 	this.fixture.appendChild(view);
 
 	busy.show();
@@ -81,16 +81,16 @@ QUnit.test("testHideWithEffectTransitionendNotCalled", function(assert) {
 
 	window.setTimeout(function() {
 		assert.strictEqual(view.className, " toBeRemoved hidden", "if toBeRemoved is still here,"
-				+ " has the busy not been removed by transitionend event");
+			+ " has the busy not been removed by transitionend event");
 		done();
 	}, 1050);
 });
 
 QUnit.test("testAddBeforeShowFunction", function(assert) {
-	var busy = CORA.busy();
-	var view = busy.getView();
+	let busy = CORA.busy();
+	let view = busy.getView();
 	this.fixture.appendChild(view);
-	var called = false;
+	let called = false;
 	busy.addBeforeShowFunction(function() {
 		called = true;
 	});

@@ -24,7 +24,10 @@ var CORA = (function(cora) {
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
 		const jsBookkeeper = dependencies.jsBookkeeper;
-		let path = spec.path;
+		const path = spec.path;
+		const presentationCounter = spec.presentationCounter;
+		//console.log("presentationCounter", presentationCounter)
+
 		let cMetadataElement;
 		let cPresentation = spec.cPresentation;
 		const metadataId = spec.metadataIdUsedInData;
@@ -47,19 +50,17 @@ var CORA = (function(cora) {
 			child.addTypeSpecificInfoToViewSpec(mode, pVarViewSpec);
 			pVarView = dependencies.pVarViewFactory.factor(pVarViewSpec);
 			subscribeToPubSub();
-			initPAttributes();
-			if (mode === "output") {
-				pVarView.hide();
-			}
+
+			possiblyInitPAttributes();
 		};
-		
+
 		const setPresentationIdFromCPresentation = function() {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
 				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			}
 		};
-		
+
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
 			if (cPresentation.containsChildWithNameInData(nameInData)) {
 				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
@@ -76,25 +77,25 @@ var CORA = (function(cora) {
 
 			let pVarViewSpec = {
 				className: getClassName(),
-				valueViewClassName: path.join("").replaceAll('.','-'),
-				id: "" + spec.presentationCounter,
+				valueViewClassName: path.join("").replaceAll('.', '-'),
+				id: "" + presentationCounter,
 				mode: mode,
 				info: {
 					text: text,
 					defText: defText,
 					technicalInfo: [
-					{
-						text: `textId: ${textId}`,
-						onclickMethod: openTextIdRecord
-					}, {
-						text: `defTextId: ${defTextId}`,
-						onclickMethod: openDefTextIdRecord
-					}, {
-						text: `metadataId: ${metadataId}`,
-						onclickMethod: openMetadataIdRecord
-					}, {
-						text: `nameInData: ${nameInData}`,
-					}
+						{
+							text: `textId: ${textId}`,
+							onclickMethod: openTextIdRecord
+						}, {
+							text: `defTextId: ${defTextId}`,
+							onclickMethod: openDefTextIdRecord
+						}, {
+							text: `metadataId: ${metadataId}`,
+							onclickMethod: openMetadataIdRecord
+						}, {
+							text: `nameInData: ${nameInData}`,
+						}
 					]
 				},
 				onblurFunction: onBlur,
@@ -103,34 +104,34 @@ var CORA = (function(cora) {
 			possiblyAddPresentationInfo(pVarViewSpec);
 			possiblyAddPlaceHolderText(pVarViewSpec);
 			possiblyAddLabelToViewSpec(pVarViewSpec);
-			
+
 			return pVarViewSpec;
 		};
-		
-		const getClassName = function(){
-			if(presentationId){
+
+		const getClassName = function() {
+			if (presentationId) {
 				return "pVar " + child.type + " " + presentationId;
 			}
 			return "pVar " + child.type;
 		};
-		
-		
+
+
 		const possiblyAddPresentationInfo = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
 				addPresentationInfoWhenNotFakePresentationFromAttributes(pVarViewSpec);
 			}
 		};
-		
+
 		const addPresentationInfoWhenNotFakePresentationFromAttributes = function(pVarViewSpec) {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			pVarViewSpec.presentationId=presentationId;
+			pVarViewSpec.presentationId = presentationId;
 			pVarViewSpec.info.technicalInfo.push({
 				text: `presentationId: ${presentationId}`,
 				onclickMethod: openPresentationIdRecord
 			});
 		};
-		
+
 		const possiblyAddPlaceHolderText = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("emptyTextId")) {
 				let emptyTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("emptyTextId");
@@ -139,29 +140,29 @@ var CORA = (function(cora) {
 			}
 		};
 
-		const possiblyAddLabelToViewSpec = function(pVarViewSpec){
-			if(labelShouldBeShown()){
+		const possiblyAddLabelToViewSpec = function(pVarViewSpec) {
+			if (labelShouldBeShown()) {
 				addLabelToViewSpec(pVarViewSpec);
 			}
 		};
-		
-		const labelShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showLabel")){
+
+		const labelShouldBeShown = function() {
+			if (!cPresentation.containsChildWithNameInData("showLabel")) {
 				return true;
 			}
 			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
 		};
-		
-		const addLabelToViewSpec = function(pVarViewSpec){
+
+		const addLabelToViewSpec = function(pVarViewSpec) {
 			if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
 				let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
 				let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
 				pVarViewSpec.label = specifiedLabelText;
-			}else{
+			} else {
 				pVarViewSpec.label = text;
 			}
 		};
-		
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
@@ -171,20 +172,26 @@ var CORA = (function(cora) {
 		};
 
 		const subscribeToPubSub = function() {
-			pubSub.subscribe("setValue", path, undefined, handleMsg);
-		 	pubSub.subscribe("validationError", path, undefined, handleValidationError);
+			pubSub.subscribe("setValue", path, undefined, handleSetValueMsg);
+			pubSub.subscribe("validationError", path, undefined, handleValidationError);
 			let disablePath = ensureNoRepeatIdInLowestLevelOfPath();
 			pubSub.subscribe("disable", disablePath, undefined, disableVar);
 		};
 
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: pVarView.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		const possiblyInitPAttributes = function() {
+			if (hasAttributes()) {
+				let pAttributesSpec = {
+					addViewToParent: pVarView.addAttributesView,
+					path: path,
+					mode: mode,
+					toShow: attributesToShow
+				};
+				pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			}
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
@@ -196,32 +203,39 @@ var CORA = (function(cora) {
 			return pVarView.getView();
 		};
 
-		const setValue = function(value) {
+		const handleSetValueMsg = function(dataFromMsg) {
+			setValue(dataFromMsg);
+			updateViewWithCurrentState();
+		};
+
+		const setValue = function(dataFromMsg) {
+			let value = dataFromMsg.data;
 			state = "ok";
 			previousValue = value;
 			const valueForView = child.transformValueForView(mode, value);
 			pVarView.setValue(valueForView);
-			hideOrShowOutputPresentation(valueForView);
-		};
-		
-		const hideOrShowOutputPresentation = function(valueForView) {
-			if (mode === "output") {
-				if(valueForView !== ""){
-					pVarView.show();
-				} else {
-					pVarView.hide();
-				}
-			}
+			//other possible values are startup or user
+			let containsData = dataFromMsg.dataOrigin !== "final" && value !== "";
+			publishVisibilityChange(value, containsData, false);
 		};
 
-		const handleMsg = function(dataFromMsg) {
-			setValue(dataFromMsg.data);
-			updateView();
+		const publishVisibilityChange = function(value, containsData, containsError) {
+			let visibility = value === "" && mode === "output" ? "hidden" : "visible";
+			let visibilityData = {
+				path: [presentationCounter],
+				presentationCounter: presentationCounter,
+				visibility: visibility,
+				containsData: containsData,
+				containsError: containsError
+			};
+			pubSub.publish("visibilityChange", visibilityData);
 		};
+
 
 		const handleValidationError = function() {
 			state = "error";
-			updateView();
+			publishVisibilityChange(previousValue, false, true);
+			updateViewWithCurrentState();
 		};
 
 		const getText = function() {
@@ -237,21 +251,21 @@ var CORA = (function(cora) {
 			pVarView.setValue(valueFromView);
 			handleValueFromView(valueFromView, "error");
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
-			if(valueFromView.length === 0){
+
+		const autoFormatEnteredValue = function(valueFromView) {
+			if (valueFromView.length === 0) {
 				return valueFromView;
 			}
 			return child.autoFormatEnteredValue(valueFromView);
 		};
 
 		const handleValueFromView = function(valueFromView, errorState) {
-			if(valueFromView.length === 0 || child.validateTypeSpecificValue(valueFromView)){
+			if (valueFromView.length === 0 || child.validateTypeSpecificValue(valueFromView)) {
 				state = "ok";
-			}else{
+			} else {
 				state = errorState;
 			}
-			updateView();
+			updateViewWithCurrentState();
 			if (state === "ok" && valueHasChanged(valueFromView)) {
 				let data = {
 					data: valueFromView,
@@ -266,7 +280,7 @@ var CORA = (function(cora) {
 			handleValueFromView(valueFromView, "errorStillFocused");
 		};
 
-		const updateView = function() {
+		const updateViewWithCurrentState = function() {
 			pVarView.setState(state);
 		};
 
@@ -313,14 +327,20 @@ var CORA = (function(cora) {
 		const getDependencies = function() {
 			return dependencies;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
 
 		const disableVar = function() {
-			pAttributes.disableExistingAttributes();
+			if (hasAttributes()) {
+				pAttributes.disableExistingAttributes();
+			}
 			pVarView.disable();
+		};
+
+		const getPresentationCounter = function() {
+			return presentationCounter;
 		};
 
 		start();
@@ -329,8 +349,7 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			setValue: setValue,
-			handleMsg: handleMsg,
+			handleSetValueMsg: handleSetValueMsg,
 			getText: getText,
 			getDefText: getDefText,
 			getState: getState,
@@ -342,7 +361,8 @@ var CORA = (function(cora) {
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
 			openLinkedRecordForLink: openLinkedRecordForLink,
-			disableVar: disableVar
+			disableVar: disableVar,
+			getPresentationCounter: getPresentationCounter
 		});
 
 	};

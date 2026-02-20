@@ -52,7 +52,7 @@ var CORA = (function(cora) {
 		}
 
 		function createIndexOrderView() {
-			indexOrderView = CORA.gui.createSpanWithClassName("indexOrder");
+			indexOrderView = CORA.createSpanWithClassName("indexOrder");
 			indexOrderView.textContent = dependencies.textProvider
 				.getTranslation("theClient_indexedText");
 		}
@@ -83,7 +83,7 @@ var CORA = (function(cora) {
 
 		function indexingFinished() {
 			numberOfIndexRecords++;
-			var child = CORA.gui.createSpanWithClassName("indexItem");
+			var child = CORA.createSpanWithClassName("indexItem");
 			child.textContent = numberOfIndexRecords + ". " + getChildInfo();
 
 			indexOrderView.appendChild(child);
@@ -130,7 +130,7 @@ var CORA = (function(cora) {
 		}
 
 		function timeoutMethod() {
-			var child = CORA.gui.createSpanWithClassName("indexItem");
+			var child = CORA.createSpanWithClassName("indexItem");
 			child.textContent = "TIMEOUT";
 			indexOrderView.appendChild(child);
 

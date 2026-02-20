@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 		var addedChildren = [];
 		var removedChildren = [];
 		var movedChildren = [];
-		var view = CORA.gui.createSpanWithClassName("pChildRefHandlerViewSpyView");
+		var view = CORA.createSpanWithClassName("pChildRefHandlerViewSpyView");
 
 		var showButtonViewCalled = 0;
 		var hideButtonViewCalled = 0;

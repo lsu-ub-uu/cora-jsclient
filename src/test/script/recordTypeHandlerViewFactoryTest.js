@@ -20,7 +20,7 @@
 
 QUnit.module("recordTypeHandlerViewFactoryTest.js", {
 	beforeEach : function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {};
 		this.spec = {
 			"presentationId" : "pVarTextVariableId"

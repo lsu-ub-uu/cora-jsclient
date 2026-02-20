@@ -23,7 +23,7 @@ var CORATEST = (function(coraTest) {
 		var addedToolViews = [];
 		var showDataF = null;
 		// var view = document.createElement("span");
-		var view = CORA.gui.createSpanWithClassName("pChildRefHandlerSpyView");
+		var view = CORA.createSpanWithClassName("pChildRefHandlerSpyView");
 		var state;
 		var value;
 		var sendAddBeforeDataArray = [];

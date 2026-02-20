@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, 2018 Uppsala University Library
+ * Copyright 2017, 2018, 2024 Uppsala University Library
  * Copyright 2017, 2021 Olov McKie
  *
  * This file is part of Cora.
@@ -56,6 +56,7 @@ var CORA = (function(cora) {
 			let recordHandlerSpec = {
 				fetchLatestDataFromServer: "false",
 				partOfList: "true",
+				searchResultPresentationId: spec.searchResultPresentationId,
 				createNewRecord: "false",
 				record: result,
 				jsClient: dependencies.jsClient

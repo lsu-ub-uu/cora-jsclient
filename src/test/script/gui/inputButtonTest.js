@@ -28,7 +28,7 @@ QUnit.module("gui/inputButtonTest.js", {
 });
 
 QUnit.test("testInit", function(assert) {
-	var button = CORA.gui.inputButton({});
+	var button = CORA.inputButton({});
 	this.fixture.appendChild(button);
 
 	assert.strictEqual(button.nodeName, "INPUT");
@@ -37,7 +37,7 @@ QUnit.test("testInit", function(assert) {
 });
 
 QUnit.test("testClassNameInSpec", function(assert) {
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		className : "iconButton removeButton"
 	});
 	this.fixture.appendChild(button);
@@ -49,7 +49,7 @@ QUnit.test("testGetSpec", function(assert) {
 	var spec = {
 		className : "iconButton removeButton"
 	};
-	var button = CORA.gui.inputButton(spec);
+	var button = CORA.inputButton(spec);
 	this.fixture.appendChild(button);
 
 	assert.strictEqual(button.modelObject.getSpec(), spec);
@@ -57,7 +57,7 @@ QUnit.test("testGetSpec", function(assert) {
 
 QUnit.test("testActionOnclickActiveByDefault", function(assert) {
 	var clicked = 0;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				clicked = clicked + 1;
@@ -72,7 +72,7 @@ QUnit.test("testActionOnclickActiveByDefault", function(assert) {
 
 QUnit.test("testActionDisableOnclick", function(assert) {
 	var clicked = false;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				clicked = true;
@@ -94,7 +94,7 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 		clickedParent = true;
 	}
 	var clicked = false;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				clicked = true;
@@ -108,7 +108,7 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 });
 
 QUnit.test("testButtonWithText", function(assert) {
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		text : "someText"
 	});
 	this.fixture.appendChild(button);
@@ -117,7 +117,7 @@ QUnit.test("testButtonWithText", function(assert) {
 
 QUnit.test("testOnkeydownInSpec", function(assert) {
 	var activated = false;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				activated = true;
@@ -137,7 +137,7 @@ QUnit.test("testOnkeydownInSpec", function(assert) {
 
 QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
 	var activated = false;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				activated = true;
@@ -165,7 +165,7 @@ QUnit.test("testOnkeydownWithMoreKeysInSpec", function(assert) {
 
 QUnit.test("testOnkeydownInSpecNotCalledForWrongKey", function(assert) {
 	var activated = false;
-	var button = CORA.gui.inputButton({
+	var button = CORA.inputButton({
 		action : {
 			method : function() {
 				activated = true;

@@ -68,9 +68,9 @@ QUnit.test("factorTestProviders", function(assert) {
 
 QUnit.test("factorTestDependencies", function(assert) {
 	let definitionViewer = this.definitionViewerFactory.factor(this.spec);
-	
-	assert.deepEqual(definitionViewer.onlyForTestGetDependencies().view.type, 
-		CORA.definitionViewerView().type);
+	let createdDependencies = definitionViewer.onlyForTestGetDependencies();
+	assert.deepEqual(createdDependencies.view.type, CORA.definitionViewerView().type);
+	assert.deepEqual(createdDependencies.textView.type,	CORA.definitionViewerText().type);
 });
 
 QUnit.test("factorTestSpec", function(assert) {

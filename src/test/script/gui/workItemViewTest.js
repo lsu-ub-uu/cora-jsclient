@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Olov McKie
+ * Copyright 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,112 +19,119 @@
  */
 "use strict";
 
-QUnit.module("gui/workItemViewTest.js", {
-	beforeEach : function() {
-		this.dependencies = {
-			"holderFactory" : CORATEST.standardFactorySpy("holderSpy")
+QUnit.module("gui/workItemViewTest.js", hooks => {
+	const test = QUnit.test;
+	let dependencies;
+	let workItemViewSpec;
+	let workItemView;
+	let view;
+
+	hooks.beforeEach(() => {
+		dependencies = {
+			holderFactory: CORATEST.standardFactorySpy("holderSpy")
 		};
 
-		this.workItemViewSpec = {
-			"extraClassName" : "extraClassName"
+		workItemViewSpec = {
+			extraClassName: "extraClassName"
 		};
-	},
-	afterEach : function() {
-	}
-});
+		workItemView = CORA.workItemView(dependencies, workItemViewSpec);
+		view = workItemView.getView();
+	});
+	hooks.afterEach(() => {
 
-QUnit.test("testInit", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	assert.strictEqual(workItemView.type, "workItemView");
-});
+	});
 
-QUnit.test("getDependencies", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	assert.strictEqual(workItemView.getDependencies(), this.dependencies);
-});
 
-QUnit.test("getSpec", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	assert.strictEqual(workItemView.getSpec(), this.workItemViewSpec);
-});
+	test("testInit", function(assert) {
+		assert.strictEqual(workItemView.type, "workItemView");
+	});
 
-QUnit.test("init", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var view = workItemView.getView();
-	assert.strictEqual(view.nodeName, "SPAN");
-	assert.strictEqual(view.className, "workItem extraClassName");
+	test("getDependencies", function(assert) {
+		assert.strictEqual(workItemView.getDependencies(), dependencies);
+	});
 
-	assert.strictEqual(view.childNodes.length, 0);
+	test("getSpec", function(assert) {
+		assert.strictEqual(workItemView.getSpec(), workItemViewSpec);
+	});
 
-	var factoredToolHolderSpec = this.dependencies.holderFactory.getSpec(0);
-	assert.strictEqual(factoredToolHolderSpec, undefined);
-});
+	test("init", function(assert) {
+		assert.strictEqual(view.nodeName, "SPAN");
+		assert.strictEqual(view.className, "workItem extraClassName");
 
-QUnit.test("addToolViewToToolHolderMakeSureTopBarAndToolHolderExists", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var someToolView = document.createElement("span");
-	var view = workItemView.getView();
-	workItemView.addToolViewToToolHolder(someToolView);
+		assert.strictEqual(view.childNodes.length, 0);
 
-	var topBar = view.childNodes[0];
-	assert.strictEqual(topBar.nodeName, "SPAN");
-	assert.strictEqual(topBar.className, "topBar");
-	assert.strictEqual(topBar.childNodes.length, 1);
+		let factoredToolHolderSpec = dependencies.holderFactory.getSpec(0);
+		assert.strictEqual(factoredToolHolderSpec, undefined);
+	});
 
-	var factoredToolHolderSpec = this.dependencies.holderFactory.getSpec(0);
-	assert.strictEqual(factoredToolHolderSpec.className, "tool");
-	assert.strictEqual(factoredToolHolderSpec.appendTo, undefined);
-	assert.strictEqual(factoredToolHolderSpec.insertAfter, topBar);
+	test("addToolViewToToolHolderMakeSureTopBarAndToolHolderExists", function(assert) {
+		let someToolView = document.createElement("span");
+		workItemView.addToolViewToToolHolder(someToolView);
 
-	var toolHolderButton = this.dependencies.holderFactory.getFactored(0).getButton();
-	assert.strictEqual(toolHolderButton, topBar.childNodes[0]);
-});
+		let topBar = view.childNodes[0];
+		assert.strictEqual(topBar.nodeName, "SPAN");
+		assert.strictEqual(topBar.className, "topBar");
+		assert.strictEqual(topBar.childNodes.length, 1);
 
-QUnit.test("addToolViewToToolHolderMakeSureTopBarAndToolHolderIsAddedFirst", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var someToolView = document.createElement("span");
-	var view = workItemView.getView();
-	var someView = document.createElement("span");
-	workItemView.addViewToView(someView);
+		let factoredToolHolderSpec = dependencies.holderFactory.getSpec(0);
+		assert.strictEqual(factoredToolHolderSpec.className, "tool");
+		assert.strictEqual(factoredToolHolderSpec.appendTo, undefined);
+		assert.strictEqual(factoredToolHolderSpec.insertAfter, topBar);
 
-	workItemView.addToolViewToToolHolder(someToolView);
+		let toolHolderButton = dependencies.holderFactory.getFactored(0).getButton();
+		assert.strictEqual(toolHolderButton, topBar.childNodes[0]);
+	});
 
-	var topBar = view.childNodes[0];
-	assert.strictEqual(topBar.className, "topBar");
-});
+	test("addToolViewToToolHolderMakeSureTopBarAndToolHolderIsAddedFirst", function(assert) {
+		let someToolView = document.createElement("span");
+		let someView = document.createElement("span");
+		workItemView.addViewToView(someView);
 
-QUnit.test("addToolViewToToolHolderMakeSureTopBarAndToolHolderIsCreatedOnce", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var someToolView = document.createElement("span");
-	var view = workItemView.getView();
-	workItemView.addToolViewToToolHolder(someToolView);
+		workItemView.addToolViewToToolHolder(someToolView);
 
-	var someToolView2 = document.createElement("span");
-	workItemView.addToolViewToToolHolder(someToolView2);
+		let topBar = view.childNodes[0];
+		assert.strictEqual(topBar.className, "topBar");
+	});
 
-	assert.strictEqual(view.childNodes.length, 1);
+	test("addToolViewToToolHolderMakeSureTopBarAndToolHolderIsCreatedOnce", function(assert) {
+		let someToolView = document.createElement("span");
+		workItemView.addToolViewToToolHolder(someToolView);
 
-	var toolHolder = this.dependencies.holderFactory.getFactored(1);
-	assert.strictEqual(toolHolder, undefined);
-});
+		let someToolView2 = document.createElement("span");
+		workItemView.addToolViewToToolHolder(someToolView2);
 
-QUnit.test("addToolViewToToolHolder", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var someToolView = document.createElement("span");
-	var view = workItemView.getView();
-	workItemView.addToolViewToToolHolder(someToolView);
+		assert.strictEqual(view.childNodes.length, 1);
 
-	var toolHolder = this.dependencies.holderFactory.getFactored(0).getView();
-	assert.strictEqual(toolHolder.childNodes.length, 1);
-	assert.strictEqual(toolHolder.childNodes[0], someToolView);
-});
+		let toolHolder = dependencies.holderFactory.getFactored(1);
+		assert.strictEqual(toolHolder, undefined);
+	});
 
-QUnit.test("addViewToView", function(assert) {
-	var workItemView = CORA.workItemView(this.dependencies, this.workItemViewSpec);
-	var someView = document.createElement("span");
-	workItemView.addViewToView(someView);
+	test("addToolViewToToolHolder", function(assert) {
+		let someToolView = document.createElement("span");
+		workItemView.addToolViewToToolHolder(someToolView);
 
-	var view = workItemView.getView();
-	assert.strictEqual(view.childNodes.length, 1);
-	assert.strictEqual(view.childNodes[0], someView);
+		let toolHolder = dependencies.holderFactory.getFactored(0).getView();
+		assert.strictEqual(toolHolder.childNodes.length, 1);
+		assert.strictEqual(toolHolder.childNodes[0], someToolView);
+	});
+
+	test("addToolViewToToolHolder_thenRemoveIt", function(assert) {
+		let someToolView = document.createElement("span");
+		workItemView.addToolViewToToolHolder(someToolView);
+
+		let toolHolder = dependencies.holderFactory.getFactored(0).getView();
+		assert.strictEqual(toolHolder.childNodes.length, 1);
+		assert.strictEqual(toolHolder.childNodes[0], someToolView);
+		
+		workItemView.removeToolViewFromToolHolder(someToolView);
+		assert.strictEqual(toolHolder.childNodes.length, 0);
+	});
+
+	test("addViewToView", function(assert) {
+		let someView = document.createElement("span");
+		workItemView.addViewToView(someView);
+
+		assert.strictEqual(view.childNodes.length, 1);
+		assert.strictEqual(view.childNodes[0], someView);
+	});
 });

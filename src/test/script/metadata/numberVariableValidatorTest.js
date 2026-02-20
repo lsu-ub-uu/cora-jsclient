@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("metadata/numberVariableValidatorTest.js", {
 	beforeEach : function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.cMetadataElement = CORA.coraData(this.metadataProvider.getMetadataById("numVariableId"));
 		
 		this.numberValidator = CORA.numberVariableValidator();

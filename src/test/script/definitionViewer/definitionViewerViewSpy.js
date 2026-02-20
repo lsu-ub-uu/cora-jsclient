@@ -21,13 +21,14 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.definitionViewerViewSpy = function() {
 
-		var viewModels = [];
-		var createdViews = [];
+		let viewModels = [];
+		let createdViews = [];
+		let textCopierMethods = [];
 
 		function createViewForViewModel(viewModel) {
 			viewModels.push(viewModel);
 			
-			let createdView = CORA.gui.createDivWithClassName("fakeFromDefinitionViewerViewSpy");
+			let createdView = CORA.createDivWithClassName("fakeFromDefinitionViewerViewSpy");
 			createdViews.push(createdView);
 			return createdView;
 		}
@@ -44,11 +45,21 @@ var CORATEST = (function(coraTest) {
 			viewModels.push(viewModel);
 		}
 		
+		const setTextCopierMethod = function(method){
+			textCopierMethods.push(method);
+		};
+		
+		const getTextCopierMethods = function(method){
+			return textCopierMethods;
+		};
+		
 		return Object.freeze({
 			createViewForViewModel : createViewForViewModel,
 			getViewModelForCallNo : getViewModelForCallNo,
 			getCreatedViewForCallNo : getCreatedViewForCallNo,
-			updateViewForViewModel: updateViewForViewModel
+			updateViewForViewModel : updateViewForViewModel,
+			setTextCopierMethod : setTextCopierMethod,
+			getTextCopierMethods : getTextCopierMethods
 		});
 	};
 	return coraTest;

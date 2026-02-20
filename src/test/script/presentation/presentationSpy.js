@@ -19,8 +19,9 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.presentationSpy = function(dependencies, spec) {
-		var view = CORA.gui.createSpanWithClassName("presentationSpyView");
+		let view = CORA.createSpanWithClassName("presentationSpyView");
 		let disableIsCalled = false;
+		let presentationCounter = "1-123";
 		function getView() {
 			return view;
 		}
@@ -33,12 +34,16 @@ var CORATEST = (function(coraTest) {
 		const getDisableVarStatus = function() {
 			return disableIsCalled;
 		};
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
 		return Object.freeze({
 			type: "presentationSpy",
 			getView: getView,
 			getText: getText,
 			disableVar: disableVar,
-			getDisableVarStatus: getDisableVarStatus
+			getDisableVarStatus: getDisableVarStatus,
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return coraTest;

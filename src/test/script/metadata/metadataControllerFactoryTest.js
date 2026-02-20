@@ -22,7 +22,7 @@ QUnit.module("metadata/metadataControllerFactoryTest.js", {
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.dependencies = {
 			recordTypeProvider: CORATEST.recordTypeProviderSpy(),
-			metadataProvider: new MetadataProviderStub(),
+			metadataProvider: CORATEST.MetadataProviderStub(),
 			pubSub: CORATEST.pubSubSpy()
 		};
 		this.spec = {

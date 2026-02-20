@@ -20,7 +20,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.recordTypeHandlerViewSpy = function(dependencies, spec) {
 		var getViewCalled = 0;
-		var view = CORA.gui.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
+		var view = CORA.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
 		function getView() {
 			getViewCalled++;
 			return view;

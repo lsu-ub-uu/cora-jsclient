@@ -20,8 +20,8 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.ajaxCallFactory = function(dependencies) {
-		function factor(ajaxCallSpecIn) {
-			var ajaxCallSpec = ajaxCallSpecIn;
+		const factor = function(ajaxCallSpecIn) {
+			let ajaxCallSpec = ajaxCallSpecIn;
 			ajaxCallSpec.requestHeaders = {};
 			if (ajaxCallSpec.contentType) {
 				ajaxCallSpec.requestHeaders["Content-Type"] = ajaxCallSpec.contentType;
@@ -32,34 +32,35 @@ var CORA = (function(cora) {
 			addXmlHttpRequestFactoryToSpec(ajaxCallSpec);
 			possiblyAddAuthTokenToSpec(ajaxCallSpec);
 			return createNewAjaxCallUsingSpec(ajaxCallSpec);
-		}
+		};
 
-		function addXmlHttpRequestFactoryToSpec(ajaxCallSpec) {
+		const addXmlHttpRequestFactoryToSpec = function(ajaxCallSpec) {
 			ajaxCallSpec.xmlHttpRequestFactory = dependencies.xmlHttpRequestFactory;
-		}
+		};
 
-		function possiblyAddAuthTokenToSpec(ajaxCallSpec) {
+		const possiblyAddAuthTokenToSpec = function(ajaxCallSpec) {
 			if (factoryHasToken()) {
 				ajaxCallSpec.requestHeaders.authToken = dependencies.authTokenHolder
-						.getCurrentAuthToken();
+					.getCurrentAuthToken();
 			}
-		}
+		};
 
-		function factoryHasToken() {
+		const factoryHasToken = function() {
 			return dependencies.authTokenHolder.hasCurrentAuthToken();
-		}
-		function createNewAjaxCallUsingSpec(ajaxCallSpec) {
+		};
+		
+		const createNewAjaxCallUsingSpec = function(ajaxCallSpec) {
 			return CORA.ajaxCall(ajaxCallSpec);
-		}
+		};
 
-		function getDependencies() {
+		const getDependencies = function() {
 			return dependencies;
-		}
+		};
 
 		return Object.freeze({
-			"type" : "ajaxCallFactory",
-			getDependencies : getDependencies,
-			factor : factor
+			type: "ajaxCallFactory",
+			getDependencies: getDependencies,
+			factor: factor
 		});
 	};
 	return cora;

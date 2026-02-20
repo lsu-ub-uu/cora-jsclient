@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Olov McKie
+ * Copyright 2023, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -24,14 +24,17 @@ var CORA = (function(cora) {
 		let textProvider = providers.textProvider;
 		let jsClient = providers.clientInstanceProvider.getJsClient();
 		let view = dependencies.view;
+		let textView = dependencies.textView;
 		let id;
+		let model;
 
 		const start = function() {
 			id = spec.id;
+			view.setTextCopierMethod(out.copyViewToClipboard)
 		};
 
 		const reloadForMetadataChanges = function() {
-			let model = getViewModelForMetadataId(id);
+			model = getViewModelForMetadataId(id, new Set());
 			view.updateViewForViewModel(model);
 		};
 
@@ -40,30 +43,36 @@ var CORA = (function(cora) {
 		};
 
 		const getViewForMetadataId = function(metadataGroupId) {
-			let model = getViewModelForMetadataId(metadataGroupId);
+			model = getViewModelForMetadataId(metadataGroupId, new Set());
 			return view.createViewForViewModel(model);
 		};
-		
-		const getViewModelForMetadataId = function(metadataId) {
+
+		const getViewModelForMetadataId = function(metadataId, parents) {
+
 			let cDataRecordGroup = getCMetadataById(metadataId);
 			let model = getBasicModelFromCDataRecordGroup(cDataRecordGroup);
 
 			if (cDataRecordGroup.containsChildWithNameInData("attributeReferences")) {
 				model.attributes = collectAttributes(cDataRecordGroup);
 			}
-			if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
-				model.children = collectChildren(cDataRecordGroup);
+			if (parents.has(metadataId)) {
+				model.children = [];
+			}else{
+				let parentsPlusCurrent = new Set(parents).add(metadataId);
+				if (cDataRecordGroup.containsChildWithNameInData("childReferences")) {
+					model.children = collectChildren(cDataRecordGroup, parentsPlusCurrent);
+				}
 			}
 			return model;
 		};
-		
+
 		const getBasicModelFromCDataRecordGroup = function(cDataRecordGroup) {
 			let id = getIdFromCDataGroup(cDataRecordGroup);
 			let type = cDataRecordGroup.getData().attributes["type"];
 			let nameInData = cDataRecordGroup.getFirstAtomicValueByNameInData("nameInData");
 			let text = getTranslations(cDataRecordGroup, "textId");
 			let defText = getTranslations(cDataRecordGroup, "defTextId");
-			
+
 			let basic = {
 				id: id,
 				type: type,
@@ -72,10 +81,10 @@ var CORA = (function(cora) {
 				defText: defText,
 				methodOpenDefiningRecord: out.openDefiningRecordUsingEventAndId
 			};
-			
+
 			if (cDataRecordGroup.containsChildWithNameInData("finalValue")) {
 				basic.finalValue = cDataRecordGroup.getFirstAtomicValueByNameInData("finalValue");
-			}				
+			}
 			return basic;
 		};
 
@@ -92,8 +101,8 @@ var CORA = (function(cora) {
 			}
 			return attributes;
 		};
-		
-		const collectCollectionItems = function(cAttribute){
+
+		const collectCollectionItems = function(cAttribute) {
 			let collectionLink = cAttribute.getFirstChildByNameInData("refCollection");
 			let cCollectionLink = CORA.coraData(collectionLink);
 			let collectionId = cCollectionLink.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -109,8 +118,8 @@ var CORA = (function(cora) {
 			}
 			return collectionItems;
 		};
-		
-		const collectChildren = function(cDataRecordGroup) {
+
+		const collectChildren = function(cDataRecordGroup, parents) {
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
 			for (let childReference of childReferences.children) {
@@ -122,14 +131,14 @@ var CORA = (function(cora) {
 					repeatMin: repeatMin,
 					repeatMax: repeatMax,
 					recordPartConstraint: "noConstraint",
-					child: getViewModelForMetadataId(refId)
+					child: getViewModelForMetadataId(refId, parents)
 				};
-				if(cChildReference.containsChildWithNameInData("recordPartConstraint")){
+				if (cChildReference.containsChildWithNameInData("recordPartConstraint")) {
 					childRef.recordPartConstraint = cChildReference.getFirstAtomicValueByNameInData("recordPartConstraint");
 				}
-				let indexAttributes=createAttributesWithNameAndValueAndRepeatId("type", "index");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",indexAttributes)){
-					let indexs = cChildReference.getChildrenByNameInDataAndAttributes("childRefCollectTerm",indexAttributes);
+				let indexAttributes = createAttributesWithNameAndValueAndRepeatId("type", "index");
+				if (cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm", indexAttributes)) {
+					let indexs = cChildReference.getChildrenByNameInDataAndAttributes("childRefCollectTerm", indexAttributes);
 					let indexTerms = [];
 					for (let index of indexs) {
 						let cIndex = CORA.coraData(index);
@@ -138,18 +147,18 @@ var CORA = (function(cora) {
 					}
 					childRef.collectIndexTerms = indexTerms;
 				}
-				let storageAttributes=createAttributesWithNameAndValueAndRepeatId("type", "storage");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",storageAttributes)){
-					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",storageAttributes);
-						let cIndex = CORA.coraData(index);
-						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
+				let storageAttributes = createAttributesWithNameAndValueAndRepeatId("type", "storage");
+				if (cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm", storageAttributes)) {
+					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm", storageAttributes);
+					let cIndex = CORA.coraData(index);
+					let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
 					childRef.collectStorageTerm = collectTermId;
 				}
-				let permissionAttributes=createAttributesWithNameAndValueAndRepeatId("type", "permission");
-				if(cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm",permissionAttributes)){
-					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm",permissionAttributes);
-						let cIndex = CORA.coraData(index);
-						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
+				let permissionAttributes = createAttributesWithNameAndValueAndRepeatId("type", "permission");
+				if (cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm", permissionAttributes)) {
+					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm", permissionAttributes);
+					let cIndex = CORA.coraData(index);
+					let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
 					childRef.collectPermissionTerm = collectTermId;
 				}
 
@@ -157,13 +166,13 @@ var CORA = (function(cora) {
 			}
 			return children;
 		};
-		
+
 		const createAttributesWithNameAndValueAndRepeatId = function(attributeName, attributeValue, repeatId) {
 			let attributes = {
 				name: "attributes",
 				children: []
 			};
-			let attribute =  {
+			let attribute = {
 				name: "attribute",
 				repeatId: repeatId || "1",
 				children: [{
@@ -193,13 +202,13 @@ var CORA = (function(cora) {
 			let textId = cDataRecordGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData(name);
 			return textProvider.getAllTranslations(textId);
 		};
-		
+
 		const openDefiningRecordUsingEventAndId = function(event, id) {
-			let metadataRecord = metadataProvider.getMetadataRecordById(id); 
+			let metadataRecord = metadataProvider.getMetadataRecordById(id);
 			let readLink = metadataRecord.actionLinks.read;
 			openLinkedRecordForLink(event, readLink);
-		};		
-		
+		};
+
 		const openLinkedRecordForLink = function(event, link) {
 			let loadInBackground = "false";
 			if (event.ctrlKey) {
@@ -211,7 +220,19 @@ var CORA = (function(cora) {
 			};
 			jsClient.openRecordUsingReadLink(openInfo);
 		};
-		
+
+		const copyViewToClipboard = function() {
+			let createdTextView = textView.createViewAsText(model);
+			copyToClipboard(createdTextView);
+			return createdTextView;
+		};
+
+		const copyToClipboard = async function(createdTextView) {
+			try {
+				await navigator.clipboard.writeText(createdTextView);
+			} catch (error) { }
+		};
+
 		const onlyForTestGetProviders = function() {
 			return providers;
 		};
@@ -229,6 +250,7 @@ var CORA = (function(cora) {
 			getView: getView,
 			reloadForMetadataChanges: reloadForMetadataChanges,
 			openDefiningRecordUsingEventAndId: openDefiningRecordUsingEventAndId,
+			copyViewToClipboard: copyViewToClipboard,
 			onlyForTestGetProviders: onlyForTestGetProviders,
 			onlyForTestGetDependencies: onlyForTestGetDependencies,
 			onlyForTestGetSpec: onlyForTestGetSpec

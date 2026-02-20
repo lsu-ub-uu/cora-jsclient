@@ -33,6 +33,7 @@ var CORA = (function(cora) {
 			managedGuiItemFactory: dependencies.managedGuiItemFactory,
 			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
 			questionFactory: CORA.genericFactory("question", undefined),
+			busyFactory: CORA.genericFactory("busy", undefined),
 			textProvider : dependencies.textProvider
 		};
 		const factor = function(recordHandlerSpec) {

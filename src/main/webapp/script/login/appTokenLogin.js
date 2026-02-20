@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,47 +24,22 @@ var CORA = (function(cora) {
 
 		const login = function(loginIdIn, appToken) {
 			loginId = loginIdIn;
-			let callSpec = createCallSpec(loginId,appToken);
+			let callSpec = createCallSpec(loginId, appToken);
 			ajaxCallFactory.factor(callSpec);
 		};
 
-		const createCallSpec = function(loginId,appToken) {
+		const createCallSpec = function(loginId, appToken) {
 			return {
-				requestMethod : spec.requestMethod,
-				url : spec.url,
-				contentType : spec.contentType,
-				accept : spec.accept,
-				loadMethod : handleResponse,
-				errorMethod : errorMethod,
-				timeoutMethod : timeoutMethod,
-				data : loginId+'\n'+appToken,
-				timeoutInMS : 15000
+				requestMethod: spec.requestMethod,
+				url: spec.url,
+				contentType: spec.contentType,
+				accept: spec.accept,
+				loadMethod: spec.loadMethod,
+				errorMethod: spec.errorCallback,
+				timeoutMethod: spec.timeoutCallback,
+				data: loginId + '\n' + appToken,
+				timeoutInMS: 15000
 			};
-		};
-
-		const errorMethod = function(answer) {
-			spec.errorCallback(answer);
-		};
-
-		const timeoutMethod = function(answer) {
-			spec.timeoutCallback(answer);
-		};
-
-		const handleResponse = function(answer) {
-			let everything = JSON.parse(answer.responseText);
-			let data = everything.data;
-			let cData = CORA.coraData(data);
-			let token = cData.getFirstAtomicValueByNameInData("token");
-			let userId = cData.getFirstAtomicValueByNameInData("userId");
-			let validForNoSeconds = cData.getFirstAtomicValueByNameInData("validForNoSeconds");
-			let authInfo = {
-				userId : userId,
-				loginId : loginId,
-				token : token,
-				validForNoSeconds : validForNoSeconds,
-				actionLinks : everything.actionLinks
-			};
-			spec.authInfoCallback(authInfo);
 		};
 
 		const getDependencies = function() {
@@ -78,11 +53,10 @@ var CORA = (function(cora) {
 		};
 
 		return Object.freeze({
-			type : "appTokenLogin",
-			login : login,
-			handleResponse : handleResponse,
-			getDependencies : getDependencies,
-			getSpec : getSpec
+			type: "appTokenLogin",
+			login: login,
+			getDependencies: getDependencies,
+			getSpec: getSpec
 		});
 	};
 

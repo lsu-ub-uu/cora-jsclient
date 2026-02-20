@@ -21,6 +21,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.workItemViewSpy = function(spec) {
 		var addedViews = [];
 		var addedToolViews = [];
+		var removedToolViews = [];
 		var showDataF = null;
 		var spyView = document.createElement("span");
 		function getView() {
@@ -28,6 +29,9 @@ var CORATEST = (function(coraTest) {
 		}
 		function addToolViewToToolHolder(viewToAdd) {
 			addedToolViews.push(viewToAdd);
+		}
+		function removeToolViewFromToolHolder(viewToRemove) {
+			removedToolViews.push(viewToRemove);
 		}
 		function addViewToView(viewToAdd) {
 			addedViews.push(viewToAdd);
@@ -47,6 +51,9 @@ var CORATEST = (function(coraTest) {
 		function getToolViewsAddedToView() {
 			return addedToolViews;
 		}
+		function getToolViewsRemovedFromView() {
+			return removedToolViews;
+		}
 
 		function getShowDataFunction() {
 			return showDataF;
@@ -57,15 +64,17 @@ var CORATEST = (function(coraTest) {
 		}
 
 		var out = Object.freeze({
-			getView : getView,
-			addToolViewToToolHolder : addToolViewToToolHolder,
-			addViewToView : addViewToView,
+			getView: getView,
+			addToolViewToToolHolder: addToolViewToToolHolder,
+			removeToolViewFromToolHolder: removeToolViewFromToolHolder,
+			addViewToView: addViewToView,
 
-			getSpec : getSpec,
-			getViewsAddedToView : getViewsAddedToView,
-			getToolViewsAddedToView : getToolViewsAddedToView,
-			getShowDataFunction : getShowDataFunction,
-			getSpyView : getSpyView
+			getSpec: getSpec,
+			getViewsAddedToView: getViewsAddedToView,
+			getToolViewsAddedToView: getToolViewsAddedToView,
+			getToolViewsRemovedFromView: getToolViewsRemovedFromView,
+			getShowDataFunction: getShowDataFunction,
+			getSpyView: getSpyView
 		});
 		return out;
 	};

@@ -23,7 +23,7 @@ QUnit.module("recordGui/recordGuiFactoryTest.js", {
 		this.dependencies = {
 			providers : {
 				clientInstanceProvider : CORATEST.clientInstanceProviderSpy(),
-				metadataProvider : new MetadataProviderStub(),
+				metadataProvider : CORATEST.MetadataProviderStub(),
 				textProvider : CORATEST.textProviderStub(),
 				recordTypeProvider :CORATEST.recordTypeProviderSpy()
 			},
@@ -39,7 +39,7 @@ QUnit.module("recordGui/recordGuiFactoryTest.js", {
 		this.spec = {
 			metadataId : "groupIdOneTextChild",
 			data : {},
-			dataDivider : "someDataDivider",
+			recordData : {dataDivider:"someDataDivider",someOtherInfo:"other"},
 			permissions : {some: "permission"}
 		};
 		this.recordGuiFactory = CORA.recordGuiFactory(this.dependencies);
@@ -151,7 +151,7 @@ QUnit.test("testFactorDependencyPresentationFactory", function(assert) {
 	assert.strictEqual(dependenciesPF.pubSub, recordGui.getDependencies().pubSub);
 	assert.strictEqual(dependenciesPF.jsBookkeeper, recordGui.getDependencies().jsBookkeeper);
 	assert.strictEqual(dependenciesPF.recordGuiFactory, this.recordGuiFactory);
-	assert.strictEqual(dependenciesPF.dataDivider, this.spec.dataDivider);
+	assert.strictEqual(dependenciesPF.recordData, this.spec.recordData);
 	assert.strictEqual(dependenciesPF.uploadManager, this.dependencies.uploadManager);
 	assert.strictEqual(dependenciesPF.ajaxCallFactory, this.dependencies.ajaxCallFactory);
 	assert.strictEqual(dependenciesPF.recordPartPermissionCalculatorFactory.type,

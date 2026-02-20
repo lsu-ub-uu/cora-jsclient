@@ -20,7 +20,7 @@
 "use strict";
 QUnit.module("presentation/pVarTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pParentVarFactory = CORATEST.standardParentFactorySpy("pParentVarSpy");
 		
 		
@@ -74,6 +74,13 @@ QUnit.test("testGetViewUsesPParentVarGetView", function(assert) {
 	let pParentVar = this.pParentVarFactory.getFactored(0);
 	
 	assert.strictEqual(pVar.getView, pParentVar.getView);
+});
+
+QUnit.test("testGetPresentationCounterUsesPParentVar", function(assert) {
+	let pVar = CORA.pVar(this.dependencies, this.spec);
+	let pParentVar = this.pParentVarFactory.getFactored(0);
+	
+	assert.strictEqual(pVar.getPresentationCounter, pParentVar.getPresentationCounter);
 });
 
 QUnit.test("testFactoredViewCorrectlyForInputTextVariable", function(assert) {

@@ -39,7 +39,12 @@ var CORATEST = (function(coraTest) {
 			case "textVariableId2DefText":
 				return "Detta är en exempeldefinition för en textvariabel.";
 				// This is an example definition for a text variable.
-
+			
+			case "textVariableWithAnAttributeText":
+				return "textVariableWithAnAttributeText";
+			case "textVariableWithAnAttributeDefText":
+				return "textVariableWithAnAttributeDefText";
+			
 			case "textVarText":
 				return "Exempel textvar";
 				// "Example text variable"
@@ -176,6 +181,10 @@ var CORATEST = (function(coraTest) {
 				return "myLinkText";
 			case "myLinkDefText":
 				return "myLinkDefText";
+			case "myAnyTypeLinkText":
+				return "myAnyTypeLinkText";
+			case "myAnyTypeLinkDefText":
+				return "myAnyTypeLinkDefText";
 			case "myPathLinkText":
 				return "myPathLinkText";
 			case "myPathLinkDefText":
@@ -202,8 +211,10 @@ var CORATEST = (function(coraTest) {
 				return "specifiedHeadlineText_text";
 			case "specifiedLabelText":
 				return "specifiedLabelText_text";
+			case "someHeadlineIdText":
+				return "someHeadlineIdText_text";
 			default:
-				console.log("Id(" + textId + ") not found in stub");
+				//console.log("Id(" + textId + ") not found in stub");
 				throw new Error("Id(" + textId + ") not found in stub");
 			}
 

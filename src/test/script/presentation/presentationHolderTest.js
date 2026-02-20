@@ -22,7 +22,7 @@ QUnit.module("presentation/presentationHolderTest.js", {
 		this.presentationFactory = CORATEST.standardFactorySpy("presentationSpy");
 
 		this.dependencies = {
-			"metadataProvider": new MetadataProviderStub(),
+			"metadataProvider": CORATEST.MetadataProviderStub(),
 			"pubSub": CORATEST.pubSubSpy(),
 			"textProvider": CORATEST.textProviderStub(),
 			"presentationFactory": this.presentationFactory,
@@ -37,7 +37,7 @@ QUnit.module("presentation/presentationHolderTest.js", {
 		};
 
 		this.fixture = document.getElementById("qunit-fixture");
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.textProvider = CORATEST.textProviderStub();
 		this.jsBookkeeper = CORATEST.jsBookkeeperSpy();

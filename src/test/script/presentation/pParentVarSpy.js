@@ -19,29 +19,40 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.pParentVarSpy = function() {
-		const getDependencies = function(){
+		let presentationCounter = "1-123";
+		const getDependencies = function() {
 			return "fakeDependencies from pParentVarSpy";
 		};
-		
-		const getView = function(){
+
+		const getView = function() {
 			return "fakeView from pParentVarSpy";
 		};
-		
+
+		const disableVar = function() {
+			//fake method doing nothing
+		};
+
 		let openLinkedRecordForLinkCalls = [];
-		const openLinkedRecordForLink = function(event, readLink){
+		const openLinkedRecordForLink = function(event, readLink) {
 			openLinkedRecordForLinkCalls.push([event, readLink]);
 		};
 
-		const getOpenLinkedRecordForLink = function(no){
+		const getOpenLinkedRecordForLink = function(no) {
 			return openLinkedRecordForLinkCalls[no];
+		};
+
+		const getPresentationCounter = function() {
+			return presentationCounter;
 		};
 
 		return Object.freeze({
 			type: "pParentVarSpy",
 			getDependencies: getDependencies,
 			getView: getView,
+			disableVar: disableVar,
 			openLinkedRecordForLink: openLinkedRecordForLink,
-			getOpenLinkedRecordForLink: getOpenLinkedRecordForLink
+			getOpenLinkedRecordForLink: getOpenLinkedRecordForLink,
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return coraTest;

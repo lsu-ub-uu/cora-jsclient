@@ -18,9 +18,9 @@
  */
 var CORA = (function (cora) {
     "use strict";
-    cora.gui.box = function (view) {
-        var boxView = view;
-        var box = {};
+    cora.box = function (view) {
+        let boxView = view;
+        let box = {};
 
         box.clearHideTimeout = function () {
             if (box.hideIfTransitionendNotCalled) {

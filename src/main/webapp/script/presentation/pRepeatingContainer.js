@@ -20,7 +20,9 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pRepeatingContainer = function(dependencies, spec) {
+		const pubSub = dependencies.pubSub;
 		let path = spec.path;
+		const presentationCounter = spec.presentationCounter;
 		let cPresentation = spec.cPresentation;
 		let metadataProvider = dependencies.metadataProvider;
 		let textProvider = dependencies.textProvider;
@@ -29,12 +31,20 @@ var CORA = (function(cora) {
 		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		let view;
 
+		let presentationVisibilities = {};
+		let presentationContainsDatas = {};
+		let pRepeatingElementIsVisible;
+		let pRepeatingElementContainsData;
+		let presentationContainsErrors = {};
+		let pRepeatingElementContainsError;
+		let presentationCounterToUseWhenPublishingCombinedStatus;
+
 		const start = function() {
 			view = createBaseView();
 		};
 
 		const createBaseView = function() {
-			let viewNew = CORA.gui.createSpanWithClassName("pRepeatingContainer " + presentationId);
+			let viewNew = CORA.createSpanWithClassName("pRepeatingContainer " + presentationId);
 
 			let presentationChildren = cPresentation.getFirstChildByNameInData("childReferences").children;
 
@@ -48,16 +58,21 @@ var CORA = (function(cora) {
 			let refId = getRefId(presentationChildRef);
 			let cPresentationChild = getMetadataById(refId);
 			if (cPresentationChild.getData().name === "text") {
-				let text = CORA.gui.createSpanWithClassName("text");
+				let text = CORA.createSpanWithClassName("text");
 				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
 				return text;
 			}
 			let presentationSpec = {
-				"path": path,
-				"metadataIdUsedInData": spec.metadataIdUsedInData,
-				"cPresentation": cPresentationChild
+				path: path,
+				metadataIdUsedInData: spec.metadataIdUsedInData,
+				cPresentation: cPresentationChild
 			};
 			let presentation = presentationFactory.factor(presentationSpec);
+			if (presentationCounterToUseWhenPublishingCombinedStatus === undefined) {
+				presentationCounterToUseWhenPublishingCombinedStatus = presentation.getPresentationCounter();
+			}
+			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
+				undefined, handleMsgToDeterminVisibilityChange);
 			return presentation.getView();
 		};
 
@@ -67,6 +82,80 @@ var CORA = (function(cora) {
 				.getFirstChildByNameInData("refGroup"));
 			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+		};
+
+		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
+			presentationContainsErrors[dataFromMsg.presentationCounter] = dataFromMsg.containsError;
+			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+			let visibilityHasChanged = visibilityChanges(currentlyVisible);
+			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
+			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
+			let currentlyContainsError = atLeastOneTrackedPresentationContainsError();
+			let containsErrorHasChanged = containsErrorChanges(currentlyContainsError);
+
+			if (visibilityHasChanged || containsDataHasChanged || containsErrorHasChanged) {
+				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData,
+					currentlyContainsError);
+			}
+		};
+
+		const atLeastOneTrackedPresentationIsVisible = function() {
+			return Object.values(presentationVisibilities).some(v => v === 'visible');
+		};
+
+		const atLeastOneTrackedPresentationContainsData = function() {
+			return Object.values(presentationContainsDatas).some(v => v === true);
+		};
+
+		const atLeastOneTrackedPresentationContainsError = function() {
+			return Object.values(presentationContainsErrors).some(v => v === true);
+		};
+
+		const getVisibilityStatus = function() {
+			if (Object.values(presentationVisibilities).some(v => v === 'visible')) {
+				return "visible";
+			}
+			return "hidden";
+		};
+
+		const visibilityChanges = function(currentlyVisible) {
+			if (pRepeatingElementIsVisible !== currentlyVisible) {
+				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+
+		const containsDataChanges = function(currentlyContainsData) {
+			if (pRepeatingElementContainsData !== currentlyContainsData) {
+				pRepeatingElementContainsData = currentlyContainsData;
+				return true;
+			}
+			return false;
+		};
+
+		const containsErrorChanges = function(currentlyContainsError) {
+			if (pRepeatingElementContainsError !== currentlyContainsError) {
+				pRepeatingElementContainsError = currentlyContainsError;
+				return true;
+			}
+			return false;
+		};
+
+		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData,
+			currentlyContainsError) {
+			let visibilityData = {
+				path: [presentationCounter],
+
+				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
+				visibility: currentlyVisible,
+				containsData: currentlyContainsData,
+				containsError: currentlyContainsError
+			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const getMetadataById = function(id) {
@@ -85,13 +174,20 @@ var CORA = (function(cora) {
 			return spec;
 		};
 
+
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		start();
 
 		let out = Object.freeze({
 			type: "pRepeatingContainer",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: getView
+			getView: getView,
+			getPresentationCounter: getPresentationCounter,
+			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 		view.modelObject = out;
 		return out;

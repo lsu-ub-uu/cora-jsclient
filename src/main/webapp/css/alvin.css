@@ -13,11 +13,11 @@
   --color-h4: rgba(127, 191, 167, 0.7);
   --color-contains: var(--color-black);
 }
-#systemOneLoading, #divaLoading {
+#systemOneLoading, #systemOneLogo, #divaLogo, #divaLoading {
 	display: none;
 }
 
-#alvinLoading {
+#alvinLogo, #alvinLoading {
 	display: block;
 }
 
@@ -76,7 +76,7 @@
 }*/
 .jsClient>.header {
 	text-shadow: none;
-	background-color: var(--color-white);
+	background: var(--color-white);
 	font-family: 'UniversalisADFStdRegular';
 	font-weight: normal;
 	font-style: normal;
@@ -104,6 +104,10 @@
 .jsClient h2, .jsClient h3, .jsClient h4, .jsClient .h2TextStyle, .jsClient .h3TextStyle, 
 	.jsClient .h4TextStyle {
   color: var(--color-black);
+}
+
+.holder.loginManagerView {
+	top: calc(3rem + 19px);
 }
 
 .removeButton, .infoButton, .openLinkedRecordButton, .showSearchButton {

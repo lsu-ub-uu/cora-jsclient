@@ -25,25 +25,25 @@ QUnit.module("metadata/metadataProviderFactoryTest.js", {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/metadata/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var presentationListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/presentation/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var textListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/text/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var guiElementListLink = {
 				"requestMethod" : "GET",
 				"rel" : "list",
 				"url" : "http://epc.ub.uu.se/cora/rest/record/guiElement/",
-				"accept" : "application/vnd.uub.recordList+json"
+				"accept" : "application/vnd.cora.recordList+json"
 			};
 		this.spec = {
 			"metadataListLink" : metadataListLink,

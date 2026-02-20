@@ -334,3 +334,35 @@ QUnit.test("testChildWithStoragePermissionIndex", function(assert) {
 	
 	updateViewForViewModelAndAssertSameContent(assert,this.definitionViewerView, this.viewModel, view);
 });
+
+QUnit.test("testSetTextCopierMethod", function(assert) {
+	let x = 0;
+	let method = function(){
+		x++;
+	}
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	let legend = view.childNodes[2];
+	
+	this.definitionViewerView.setTextCopierMethod(method);
+	CORATESTHELPER.simulateOnclick(legend, { altKey: true });
+	
+	assert.strictEqual(x, 1);
+});
+
+QUnit.test("testBlink", function(assert) {
+	let method = function(){}
+	
+	let view = this.definitionViewerView.createViewForViewModel(this.viewModel);
+	let legend = view.childNodes[2];
+	
+	this.definitionViewerView.setTextCopierMethod(method);
+	CORATESTHELPER.simulateOnclick(legend, { altKey: true });
+	
+	assert.ok(legend.classList.contains("blink"));
+	const done = assert.async(); 
+	setTimeout(() => { 
+		assert.notOk(legend.classList.contains("blink")); 
+		done(); 
+		}, 300);
+	
+});

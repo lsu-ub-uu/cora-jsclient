@@ -58,9 +58,8 @@ var CORATEST = (function(coraTest) {
 			};
 		}
 
-		var metadataArray = [];
+		let metadataArray = {};
 
-		// switch (metadataId) {
 		metadataArray["defaultItem"] = {
 			"children" : [ {
 				"children" : [ {
@@ -3270,8 +3269,8 @@ var CORATEST = (function(coraTest) {
 				"name" : "searchPresentationFormId",
 				"value" : "presentationVarFormSearchPGroup"
 			}, {
-				"name" : "userSuppliedId",
-				"value" : "true"
+				"name" : "idSource",
+				"value" : "userSupplied"
 			}, {
 				"name" : "selfPresentationViewId",
 				"value" : "presentationVarViewSelfPGroup"
@@ -4583,8 +4582,8 @@ var CORATEST = (function(coraTest) {
 				"name" : "searchPresentationFormId",
 				"value" : "presentationGroupFormSearchPGroup"
 			}, {
-				"name" : "userSuppliedId",
-				"value" : "true"
+				"name" : "idSource",
+				"value" : "userSupplied"
 			}, {
 				"name" : "permissionKey",
 				"value" : "RECORDTYPE_PRESENTATIONGROUP"
@@ -8860,21 +8859,21 @@ var CORATEST = (function(coraTest) {
 				          ],
 				          "repeatId": "2"
 				        }
-//				        ,
-//				        {
-//				          "name": "ref",
-//				          "children": [
-//				            {
-//				              "name": "linkedRecordType",
-//				              "value": "metadataCollectionItem"
-//				            },
-//				            {
-//				              "name": "linkedRecordId",
-//				              "value": "permissionItem"
-//				            }
-//				          ],
-//				          "repeatId": "3"
-//				        },
+				        ,
+				        {
+				          "name": "ref",
+				          "children": [
+				            {
+				              "name": "linkedRecordType",
+				              "value": "metadataCollectionItem"
+				            },
+				            {
+				              "name": "linkedRecordId",
+				              "value": "testItem"
+				            }
+				          ],
+				          "repeatId": "3"
+				        },
 //				        {
 //				          "name": "ref",
 //				          "children": [
@@ -9180,6 +9179,79 @@ var CORATEST = (function(coraTest) {
 				        {
 				          "name": "linkedRecordId",
 				          "value": "authorityItemDefText"
+				        }
+				      ]
+				    }
+				  ],
+				  "attributes": {
+				    "type": "collectionItem"
+				  }
+				};
+		metadataArray["testItem"] = {
+				  "name": "metadata",
+				  "children": [
+				    {
+				      "name": "recordInfo",
+				      "children": [
+				        {
+				          "name": "id",
+				          "value": "testItem"
+				        },
+				        {
+				          "name": "type",
+				          "children": [
+				            {
+				              "name": "linkedRecordType",
+				              "value": "recordType"
+				            },
+				            {
+				              "name": "linkedRecordId",
+				              "value": "metadataCollectionItem"
+				            }
+				          ]
+				        },
+				        {
+				          "name": "dataDivider",
+				          "children": [
+				            {
+				              "name": "linkedRecordType",
+				              "value": "system"
+				            },
+				            {
+				              "name": "linkedRecordId",
+				              "value": "bibsys"
+				            }
+				          ]
+				        }
+				      ]
+				    },
+				    {
+				      "name": "nameInData",
+				      "value": "test"
+				    },
+				    {
+				      "name": "textId",
+				      "children": [
+				        {
+				          "name": "linkedRecordType",
+				          "value": "coraText"
+				        },
+				        {
+				          "name": "linkedRecordId",
+				          "value": "testItemText"
+				        }
+				      ]
+				    },
+				    {
+				      "name": "defTextId",
+				      "children": [
+				        {
+				          "name": "linkedRecordType",
+				          "value": "coraText"
+				        },
+				        {
+				          "name": "linkedRecordId",
+				          "value": "testItemDefText"
 				        }
 				      ]
 				    }

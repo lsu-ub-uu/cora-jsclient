@@ -37,16 +37,16 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseViewHolder = function() {
-			return CORA.gui.createDivWithClassName("presentation " + presentationId);
+			return CORA.createDivWithClassName("presentation " + presentationId);
 		};
 
 		const createViewForTopPGroup = function() {
 			let cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
 			let metadataIdUsedInData = spec.metadataIdUsedInData;
 			let presentationSpec = {
-				"path" : [],
-				"metadataIdUsedInData" : metadataIdUsedInData,
-				"cPresentation" : cPresentation,
+				path : [],
+				metadataIdUsedInData : metadataIdUsedInData,
+				cPresentation : cPresentation,
 				recordPartPermissionCalculator : spec.recordPartPermissionCalculator
 			};
 

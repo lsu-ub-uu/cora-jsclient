@@ -31,25 +31,25 @@ QUnit.module("metadata/metadataProviderTest.js", {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/metadata/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var presentationListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/presentation/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var textListLink = {
 			"requestMethod" : "GET",
 			"rel" : "list",
 			"url" : "http://epc.ub.uu.se/cora/rest/record/text/",
-			"accept" : "application/vnd.uub.recordList+json"
+			"accept" : "application/vnd.cora.recordList+json"
 		};
 		var guiElementListLink = {
 				"requestMethod" : "GET",
 				"rel" : "list",
 				"url" : "http://epc.ub.uu.se/cora/rest/record/guiElement/",
-				"accept" : "application/vnd.uub.recordList+json"
+				"accept" : "application/vnd.cora.recordList+json"
 			};
 		var spec = {
 			"metadataListLink" : metadataListLink,
@@ -96,7 +96,7 @@ QUnit.test("initCorrectAjaxCallsMade", function(assert) {
 		assert.strictEqual(ajaxCallSpec.url, "http://epc.ub.uu.se/cora/rest/record/" + recordType
 				+ "/");
 		assert.strictEqual(ajaxCallSpec.requestMethod, "GET");
-		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.uub.recordList+json");
+		assert.strictEqual(ajaxCallSpec.accept, "application/vnd.cora.recordList+json");
 		assert.strictEqual(ajaxCallSpec.loadMethod, metadataProvider.processFetchedMetadata);
 		assert.ok(ajaxCallSpec.errorMethod);
 //		assert.strictEqual(ajaxCallSpec.errorMethod, metadataProvider.processErrorAnswer);
@@ -406,10 +406,10 @@ QUnit.test("getMetadataRecordById", function(assert) {
 		}
 	},"actionLinks":{"read":{"requestMethod":"GET","rel":"read",
 	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
-	"accept":"application/vnd.uub.record+json"},"update":{"requestMethod":"POST","rel":"update",
-	"contentType":"application/vnd.uub.record+json",
+	"accept":"application/vnd.cora.record+json"},"update":{"requestMethod":"POST","rel":"update",
+	"contentType":"application/vnd.cora.record+json",
 	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup",
-	"accept":"application/vnd.uub.record+json"},"delete":{"requestMethod":"DELETE","rel":"delete",
+	"accept":"application/vnd.cora.record+json"},"delete":{"requestMethod":"DELETE","rel":"delete",
 	"url":"http://localhost:8080/therest/rest/record/metadataGroup/textPartEnGroup"}}
 	};
 	var x = metadataProvider.getMetadataRecordById("textPartEnGroup");

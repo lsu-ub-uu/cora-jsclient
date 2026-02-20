@@ -20,15 +20,20 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.pParentMultipleChildrenSpy = function(dependencies, spec) {
 		let view = document.createElement("span");
+		let presentationCounter = "1-123";
 
 		const getView = function() {
 			return view;
 		};
+		
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
 
 		return Object.freeze({
-			"type": "pParentMultipleChildrenSpy",
+			type: "pParentMultipleChildrenSpy",
 			getView: getView,
-			
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return coraTest;

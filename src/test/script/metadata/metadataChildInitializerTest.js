@@ -20,7 +20,7 @@
 
 QUnit.module("metadata/metadataChildInitializerTest.js", {
 	beforeEach: function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.recordPartPermissionCalculator = CORATEST.recordPartPermissionCalculatorSpy();
 		this.dependencies = {

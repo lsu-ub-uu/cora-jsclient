@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2020 Uppsala University Library
+ * Copyright 2016, 2020, 2025, 2026 Uppsala University Library
  * Copyright 2017, 2023, 2024 Olov McKie
  *
  * This file is part of Cora.
@@ -18,589 +18,649 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 var CORA = (function(cora) {
-	"use strict";
-	cora.pRecordLink = function(dependencies, spec) {
+    "use strict";
+    cora.pRecordLink = function(dependencies, spec) {
+        const providers = dependencies.providers;
+        const metadataProvider = dependencies.metadataProvider;
+        const textProvider = dependencies.textProvider;
+        const clientInstanceProvider = dependencies.clientInstanceProvider;
 
-		let path = spec.path;
+        const globalFactories = dependencies.globalFactories;
+        const pRecordLinkViewFactory = dependencies.pRecordLinkViewFactory;
+        const recordGuiFactory = dependencies.recordGuiFactory;
+        const ajaxCallFactory = dependencies.ajaxCallFactory;
+        const presentationFactory = dependencies.presentationFactory;
+        const pAttributesFactory = dependencies.pAttributesFactory;
 
-		let out;
-		let readLink;
-		let openLinkShowing = false;
-		let cPresentation = spec.cPresentation;
-		let metadataProvider = dependencies.metadataProvider;
-		let textProvider = dependencies.textProvider;
+        const pubSub = dependencies.pubSub;
 
-		let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
-		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		let	presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-		let cPresentationGroup = CORA.coraData(presentationGroup);
-		let metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+        const path = spec.path;
+        const presentationCounter = spec.presentationCounter;
 
-		let cMetadataElement = getMetadataById(metadataId);
-		let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
-		let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
-		let attributesToShow;
-		let hasLinkedRepeatId = cMetadataElement.containsChildWithNameInData("linkedPath");
-		let presentAs;
+        let out;
+        let readLink;
+        let openLinkShowing = false;
+        let cPresentation = spec.cPresentation;
 
-		let recordIdPath = "";
-		let recordTypePath = "";
+        let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
+        let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
+        let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+        let cPresentationGroup = CORA.coraData(presentationGroup);
+        let metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
-		let cRecordTypeGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("linkedRecordType"));
-		let linkedRecordType = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+        let cMetadataElement = getMetadataById(metadataId);
+        let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
+        let mode = cPresentation.getFirstAtomicValueByNameInData("mode");
+        let attributesToShow;
+        let hasLinkedRepeatId = cMetadataElement.containsChildWithNameInData("linkedPath");
+        let presentAs;
 
-		let view;
-		let text;
+        let recordIdPath = "";
+        let recordTypePath = "";
 
-		const start = function() {
-			dependencies.pubSub.subscribe("linkedData", path, undefined, handleMsg);
-			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
-			presentAs = getValueFromPresentationOrDefaultTo("presentAs", "link");
-			view = createBaseView();
-			if(!presentAsOnlyTranslatedText()){
-				createValueView();
-			}			
-			possiblyCreateSearchHandler();
-			subscribeToSetValueIfLinkedPresentationExists();
-			subscribeToTextVarSetValue();
-			if (mode === "output") {
-				view.hide();
-			}
-			initPAttributes();
-		};
+        let linkedRecordType;
+        let type = cMetadataElement.getData().attributes.type;
 
-		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
-			if (cPresentation.containsChildWithNameInData(nameInData)) {
-				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
-			}
-			return defaultValue;
-		};
+        if (type === 'recordLink') {
+            let cRecordTypeGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("linkedRecordType"));
+            linkedRecordType = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+        }
 
-		const createBaseView = function() {
-			let textId = extractTextId("textId");
-			text = textProvider.getTranslation(textId);
+        let view;
+        let text;
 
-			let defTextId = extractTextId("defTextId");
-			let defText = textProvider.getTranslation(defTextId);
+        const start = function() {
+            pubSub.subscribe("linkedData", path, undefined, handleMsg);
+            attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
+            presentAs = getValueFromPresentationOrDefaultTo("presentAs", "link");
+            view = createBaseView();
+            if (!presentAsOnlyTranslatedText()) {
+                createValueView();
+            }
+            possiblyCreateSearchHandler();
+            subscribeToSetValueIfLinkedPresentationExists();
+            subscribeToTextVarSetValue();
+            if (mode === "output") {
+                view.hide();
+            }
+            initPAttributes();
+        };
 
-			let viewSpec = {
-				mode: "input",
-				info: {
-					text: text,
-					defText: defText,
-					technicalInfo: [{
-						text: `textId: ${textId}`,
-						onclickMethod: openTextIdRecord
-					}, {
-						text: `defTextId: ${defTextId}`,
-						onclickMethod: openDefTextIdRecord
-					}, {
-						text: `metadataId: ${metadataId}`,
-						onclickMethod: openMetadataIdRecord
-					}, {
-						text: `nameInData: ${nameInData}`,
-					}, {
-						text: `linkedRecordType: ${linkedRecordType}`,
-					}, {
-						text: `presentationId: ${presentationId}`,
-						onclickMethod: openPresentationIdRecord
-					} 
-					]
-				},
-				presentAs: presentAs,
-				pRecordLink: out
-			};
-			possiblyAddLabelToViewSpec(viewSpec);
-			return dependencies.pRecordLinkViewFactory.factor(viewSpec);
-		};
+        const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
+            if (cPresentation.containsChildWithNameInData(nameInData)) {
+                return cPresentation.getFirstAtomicValueByNameInData(nameInData);
+            }
+            return defaultValue;
+        };
 
-		const extractTextId = function(textNameInData) {
-			let cTextIdGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
-			return cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
+        const createBaseView = function() {
+            let textId = extractTextId("textId");
+            text = textProvider.getTranslation(textId);
+
+            let defTextId = extractTextId("defTextId");
+            let defText = textProvider.getTranslation(defTextId);
+
+            let viewSpec = {
+                mode: "input",
+                info: {
+                    text: text,
+                    defText: defText,
+                    technicalInfo: [{
+                        text: `textId: ${textId}`,
+                        onclickMethod: openTextIdRecord
+                    }, {
+                        text: `defTextId: ${defTextId}`,
+                        onclickMethod: openDefTextIdRecord
+                    }, {
+                        text: `metadataId: ${metadataId}`,
+                        onclickMethod: openMetadataIdRecord
+                    }, {
+                        text: `nameInData: ${nameInData}`,
+                    }, {
+                        text: `linkedRecordType: ${linkedRecordType}`,
+                    }, {
+                        text: `presentationId: ${presentationId}`,
+                        onclickMethod: openPresentationIdRecord
+                    }
+                    ]
+                },
+                presentAs: presentAs,
+                pRecordLink: out
+            };
+			
+            removeTechnicalInfoLinkedRecordTypeIfAnyTypeRecordLink(viewSpec);
+
+            possiblyAddLabelToViewSpec(viewSpec);
+            return pRecordLinkViewFactory.factor(viewSpec);
+
+        };
+
+        const removeTechnicalInfoLinkedRecordTypeIfAnyTypeRecordLink = function(viewSpec) {
+            if (type === "anyTypeRecordLink") {
+                viewSpec.info.technicalInfo.splice(4, 1);
+            }
+        }
 		
-		const possiblyAddLabelToViewSpec = function(viewSpec){
-			if(labelShouldBeShown()){
-				addLabelToViewSpec(viewSpec);
-			}
-		};
-		
-		const labelShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showLabel")){
-				return true;
-			}
-			return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
-		};
-		
-		const addLabelToViewSpec = function(viewSpec){
-			if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
-				let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
-				let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
-				viewSpec.label = specifiedLabelText;
-			}else{
-				viewSpec.label = text;
-			}
-		};
-		
-		const presentAsOnlyTranslatedText = function() {
-			return "onlyTranslatedText"==presentAs;
-		};
-		
-		const createValueView = function() {
-			if (isInInputMode()) {
-				createAndAddInputs();
-			} else {
-				createAndAddOutput();
-			}
-		};
+        const extractTextId = function(textNameInData) {
+            let cTextIdGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
+            return cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+        };
 
-		const isInInputMode = function() {
-			return mode === "input";
-		};
+        const possiblyAddLabelToViewSpec = function(viewSpec) {
+            if (labelShouldBeShown()) {
+                addLabelToViewSpec(viewSpec);
+            }
+        };
 
-		const handleMsg = function(payloadFromMsg) {
-			if (msgContainsDataWithValueForRecordId(payloadFromMsg)) {
-				handleMsgWithData(payloadFromMsg);
-			}
-		};
+        const labelShouldBeShown = function() {
+            if (!cPresentation.containsChildWithNameInData("showLabel")) {
+                return true;
+            }
+            return (cPresentation.getFirstAtomicValueByNameInData("showLabel") !== "false");
+        };
 
-		const msgContainsDataWithValueForRecordId = function(payloadFromMsg) {
-			if (payloadFromMsg.data === undefined) {
-				return false;
-			}
-			let cData = CORA.coraData(payloadFromMsg.data);
-			let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
+        const addLabelToViewSpec = function(viewSpec) {
+            if (cPresentation.containsChildWithNameInData("specifiedLabelText")) {
+                let specifiedLabelTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedLabelText");
+                let specifiedLabelText = textProvider.getTranslation(specifiedLabelTextId);
+                viewSpec.label = specifiedLabelText;
+            } else {
+                viewSpec.label = text;
+            }
+        };
 
-			return linkedRecordId !== "";
-		};
+        const presentAsOnlyTranslatedText = function() {
+            return "onlyTranslatedText" == presentAs;
+        };
 
-		const handleMsgWithData = function(payloadFromMsg) {
-			closeSearchIfThereIsOne();
-			if(presentAsOnlyTranslatedText()){
-				let cData = CORA.coraData(payloadFromMsg.data);
-				let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
-				addTranslatedTextNodeToView(linkedRecordId);
-			}else{
-				createLinkedRecordPresentationView(payloadFromMsg);
-				showOrHideOpenLinkedRecordButton(payloadFromMsg);
-			}
-		};
+        const createValueView = function() {
+            if (isInInputMode()) {
+                createAndAddInputs();
+            } else {
+                createAndAddOutput();
+            }
+        };
 
-		const closeSearchIfThereIsOne = function() {
-			view.hideSearchHandlerView();
-		};
+        const isInInputMode = function() {
+            return mode === "input";
+        };
 
-		const createLinkedRecordPresentationView = function(payloadFromMsg) {
-			if (linkedRecordShouldBePresentedCanBeRead(payloadFromMsg)) {
-				let data = payloadFromMsg.data;
-				readLink = data.actionLinks.read;
-				possiblyCreateRecordViewerForLinkedRecord(data);
-			}
-		};
+        const handleMsg = function(payloadFromMsg) {
+            if (msgContainsDataWithValueForRecordId(payloadFromMsg)) {
+                handleMsgWithData(payloadFromMsg);
+            }
+        };
 
-		const linkedRecordShouldBePresentedCanBeRead = function(payloadFromMsg) {
-			return cPresentation
-				.containsChildWithNameInData("linkedRecordPresentations")
-				&& messageContainsDataWithActionLinks(payloadFromMsg);
-		};
+        const msgContainsDataWithValueForRecordId = function(payloadFromMsg) {
+            if (payloadFromMsg.data === undefined) {
+                return false;
+            }
+            let cData = CORA.coraData(payloadFromMsg.data);
+            let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
 
-		const messageContainsDataWithActionLinks = function(payloadFromMsg) {
-			return undefined !== payloadFromMsg.data.actionLinks;
-		};
+            return linkedRecordId !== "";
+        };
 
-		const possiblyCreateRecordViewerForLinkedRecord = function(data) {
-			let linkedRecordPresentation = findPresentationForRecordType(data);
-			if (presentationExistsForLinkedRecordType(linkedRecordPresentation)) {
-				removeIdPresentations();
-				createRecordViewerUsingChosenPresentationForLinkedRecord(linkedRecordPresentation);
-			}
-		};
+        const handleMsgWithData = function(payloadFromMsg) {
+            closeSearchIfThereIsOne();
+            if (presentAsOnlyTranslatedText()) {
+                let cData = CORA.coraData(payloadFromMsg.data);
+                let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
+                addTranslatedTextNodeToView(linkedRecordId);
+            } else {
+                createLinkedRecordPresentationView(payloadFromMsg);
+                showOrHideOpenLinkedRecordButton(payloadFromMsg);
+            }
+        };
 
-		const findPresentationForRecordType = function(data) {
-			let filter = createLinkedRecordTypeFilter(data);
+        const closeSearchIfThereIsOne = function() {
+            view.hideSearchHandlerView();
+        };
 
-			let linkedRecordPresentations = cPresentation
-				.getFirstChildByNameInData("linkedRecordPresentations");
-			return linkedRecordPresentations.children.find(filter);
-		};
+        const createLinkedRecordPresentationView = function(payloadFromMsg) {
+            if (linkedRecordShouldBePresentedCanBeRead(payloadFromMsg)) {
+                let data = payloadFromMsg.data;
+                readLink = data.actionLinks.read;
+                possiblyCreateRecordViewerForLinkedRecord(data);
+            }
+        };
 
-		const createLinkedRecordTypeFilter = function(data) {
-			let cData = CORA.coraData(data);
-			let recordTypeIdInData = cData
-				.getFirstAtomicValueByNameInData("linkedRecordType");
+        const linkedRecordShouldBePresentedCanBeRead = function(payloadFromMsg) {
+            return cPresentation
+                .containsChildWithNameInData("linkedRecordPresentations")
+                && messageContainsDataWithActionLinks(payloadFromMsg);
+        };
 
-			return function(child) {
-				let cChild = CORA.coraData(child);
-				let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
-				return isSameRecordType(recordTypeIdInData, cPresentedRecordType);
-			};
-		};
+        const messageContainsDataWithActionLinks = function(payloadFromMsg) {
+            return undefined !== payloadFromMsg.data.actionLinks;
+        };
 
-		const presentationExistsForLinkedRecordType = function(linkedRecordPresentation) {
-			return linkedRecordPresentation !== undefined;
-		};
+        const possiblyCreateRecordViewerForLinkedRecord = function(data) {
+            let linkedRecordPresentation = findPresentationForRecordType(data);
+            if (presentationExistsForLinkedRecordType(linkedRecordPresentation)) {
+                removeIdPresentations();
+                createRecordViewerUsingChosenPresentationForLinkedRecord(linkedRecordPresentation);
+            }
+        };
 
-		const isSameRecordType = function(recordTypeIdInData, cPresentedRecordType) {
-			let recordTypeIdInLink = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
-			let sameRecordType = recordTypeIdInLink === recordTypeIdInData;
-			return sameRecordType;
-		}
+        const findPresentationForRecordType = function(data) {
+            let filter = createLinkedRecordTypeFilter(data);
 
-		const showOrHideOpenLinkedRecordButton = function(payloadFromMsg) {
-			if (messageContainsDataWithActionLinks(payloadFromMsg)) {
-				readLink = payloadFromMsg.data.actionLinks.read;
-				view.showOpenLinkedRecordButton();
-				openLinkShowing = true;
-			} else if (openLinkShowing) {
-				view.hideOpenLinkedRecordButton();
-				openLinkShowing = false;
-			}
-		};
+            let linkedRecordPresentations = cPresentation
+                .getFirstChildByNameInData("linkedRecordPresentations");
+            return linkedRecordPresentations.children.find(filter);
+        };
 
-		const removeIdPresentations = function() {
-			view.hideChildren();
-			if (isInInputMode()) {
-				view.showClearLinkedRecordIdButton(clearLinkedRecordId);
-			}
-		};
+        const createLinkedRecordTypeFilter = function(data) {
+            let cData = CORA.coraData(data);
+            let recordTypeIdInData = cData
+                .getFirstAtomicValueByNameInData("linkedRecordType");
 
-		const createRecordViewerUsingChosenPresentationForLinkedRecord = function(
-			linkedRecordPresentation) {
-			let linkedPresentationId = extractPresentationIdFromPresentation(linkedRecordPresentation);
-			let recordViewerSpec = createRecordViewerSpec(readLink, linkedPresentationId);
-			let recordViewer = CORA.recordViewer(recordViewerSpec);
-			let recordViewerView = recordViewer.getView();
+            return function(child) {
+                let cChild = CORA.coraData(child);
+                let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
+                return isSameRecordType(recordTypeIdInData, cPresentedRecordType);
+            };
+        };
 
-			view.addLinkedPresentation(recordViewerView);
-		};
+        const presentationExistsForLinkedRecordType = function(linkedRecordPresentation) {
+            return linkedRecordPresentation !== undefined;
+        };
 
-		const createRecordViewerSpec = function(readLinkIn, linkedPresentationId) {
-			let cLinkedRecordPresentation = getMetadataById(linkedPresentationId);
+        const isSameRecordType = function(recordTypeIdInData, cPresentedRecordType) {
+            let recordTypeIdInLink = cPresentedRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
+            let sameRecordType = recordTypeIdInLink === recordTypeIdInData;
+            return sameRecordType;
+        }
 
-			let presentationOfLink = cLinkedRecordPresentation
-				.getFirstChildByNameInData("presentationOf");
-			let cPresentationOfLink = CORA.coraData(presentationOfLink);
-			let linkedMetadataId = cPresentationOfLink.getFirstAtomicValueByNameInData("linkedRecordId");
-			return {
-				read: readLinkIn,
-				presentationId: linkedPresentationId,
-				metadataId: linkedMetadataId,
-				recordGuiFactory: dependencies.recordGuiFactory,
-				ajaxCallFactory: dependencies.ajaxCallFactory,
-				recordPartPermissionCalculatorFactory: spec.recordPartPermissionCalculatorFactory
-			};
-		};
+        const showOrHideOpenLinkedRecordButton = function(payloadFromMsg) {
+            if (messageContainsDataWithActionLinks(payloadFromMsg)) {
+                readLink = payloadFromMsg.data.actionLinks.read;
+                view.showOpenLinkedRecordButton();
+                openLinkShowing = true;
+            } else if (openLinkShowing) {
+                view.hideOpenLinkedRecordButton();
+                openLinkShowing = false;
+            }
+        };
 
-		const extractPresentationIdFromPresentation = function(presentation) {
-			let cChildPresentation = CORA.coraData(presentation);
-			let cLinkedPresentationAsGroup = CORA.coraData(cChildPresentation
-				.getFirstChildByNameInData("presentation"));
-			return cLinkedPresentationAsGroup.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
+        const removeIdPresentations = function() {
+            view.hideChildren();
+            if (isInInputMode()) {
+                view.showClearLinkedRecordIdButton(clearLinkedRecordId);
+            }
+        };
 
-		const createAndAddInputs = function() {
-			createInputForLinkedRecordType();
-			createInputForLinkedRecordId();
+        const createRecordViewerUsingChosenPresentationForLinkedRecord = function(
+            linkedRecordPresentation) {
+            let linkedPresentationId = extractPresentationIdFromPresentation(linkedRecordPresentation);
+            let recordViewerSpec = createRecordViewerSpec(readLink, linkedPresentationId);
+            let recordViewer = CORA.recordViewer(recordViewerSpec);
+            let recordViewerView = recordViewer.getView();
 
-			if (hasLinkedRepeatId) {
-				createChildView("linkedRepeatId", "linkedRepeatIdPVar");
-			}
-		};
+            view.addLinkedPresentation(recordViewerView);
+        };
 
-		const createInputForLinkedRecordType = function() {
-			let recordTypePVarId = "linkedRecordTypeOutputPVar";
-			recordTypePath = calculateNewPath("linkedRecordTypeTextVar");
-			createChildView("linkedRecordType", recordTypePVarId);
-		};
+        const createRecordViewerSpec = function(readLinkIn, linkedPresentationId) {
+            let cLinkedRecordPresentation = getMetadataById(linkedPresentationId);
 
-		const createInputForLinkedRecordId = function() {
-			let recordIdPVarId = "linkedRecordIdPVar";
-			if (cMetadataElement.containsChildWithNameInData("finalValue")) {
-				recordIdPVarId = "linkedRecordIdOutputPVar";
-			}
-			recordIdPath = calculateNewPath("linkedRecordIdTextVar");
-			createChildView("linkedRecordId", recordIdPVarId);
-		};
+            let presentationOfLink = cLinkedRecordPresentation
+                .getFirstChildByNameInData("presentationOf");
+            let cPresentationOfLink = CORA.coraData(presentationOfLink);
+            let linkedMetadataId = cPresentationOfLink.getFirstAtomicValueByNameInData("linkedRecordId");
+            return {
+                read: readLinkIn,
+                presentationId: linkedPresentationId,
+                metadataId: linkedMetadataId,
+                recordGuiFactory: recordGuiFactory,
+                ajaxCallFactory: ajaxCallFactory,
+                recordPartPermissionCalculatorFactory: spec.recordPartPermissionCalculatorFactory
+            };
+        };
 
-		const createChildView = function(id, presentationIdToFactor) {
-			let metadataIdUsedInData = id + "TextVar";
-			let childViewNew = document.createElement("span");
-			childViewNew.className = id + "View";
+        const extractPresentationIdFromPresentation = function(presentation) {
+            let cChildPresentation = CORA.coraData(presentation);
+            let cLinkedPresentationAsGroup = CORA.coraData(cChildPresentation
+                .getFirstChildByNameInData("presentation"));
+            return cLinkedPresentationAsGroup.getFirstAtomicValueByNameInData("linkedRecordId");
+        };
 
-			let childParentPath = calculateNewPath(id + "TextVar");
-			let cPresentationChild = CORA.coraData(metadataProvider
-				.getMetadataById(presentationIdToFactor));
-			let presentationSpec = {
-				"path": childParentPath,
-				"metadataIdUsedInData": metadataIdUsedInData,
-				"cPresentation": cPresentationChild
-			};
-			let pVar = dependencies.presentationFactory.factor(presentationSpec);
-			childViewNew.appendChild(pVar.getView());
-			view.addChild(childViewNew);
-		};
+        const createAndAddInputs = function() {
+            createInputForLinkedRecordType();
+            createInputForLinkedRecordId();
 
-		const calculateNewPath = function(metadataIdToAdd) {
-			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"parentPath": path
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
+            if (hasLinkedRepeatId) {
+                createChildView("linkedRepeatId", "linkedRepeatIdPVar");
+            }
+        };
 
-		const createAndAddOutput = function() {
-			createChildView("linkedRecordType", "linkedRecordTypeOutputPVar");
-			createChildView("linkedRecordId", "linkedRecordIdOutputPVar");
+        const createInputForLinkedRecordType = function() {
+            let recordTypePVarId = "linkedRecordTypeOutputPVar";
+            if (type === "anyTypeRecordLink") {
+                recordTypePVarId = "linkedRecordTypePVar";
+            }
+            recordTypePath = calculateNewPath("linkedRecordTypeTextVar");
+            createChildView("linkedRecordType", recordTypePVarId);
+        };
 
-			if (hasLinkedRepeatId) {
-				createChildView("linkedRepeatId", "linkedRepeatIdOutputPVar");
-			}
-		};
+        const createInputForLinkedRecordId = function() {
+            let recordIdPVarId = "linkedRecordIdPVar";
+            if (cMetadataElement.containsChildWithNameInData("finalValue")) {
+                recordIdPVarId = "linkedRecordIdOutputPVar";
+            }
+            recordIdPath = calculateNewPath("linkedRecordIdTextVar");
+            createChildView("linkedRecordId", recordIdPVarId);
+        };
 
-		const possiblyCreateSearchHandler = function() {
-			if (pRecordLinkHasLinkedSearch()) {
-				possiblyCreateSearchHandlerForPRecordLinkWithLinkedSearch();
-			}
-		};
+        const createChildView = function(id, presentationIdToFactor) {
+            let metadataIdUsedInData = id + "TextVar";
+            let childViewNew = document.createElement("span");
+            childViewNew.className = id + "View";
 
-		const pRecordLinkHasLinkedSearch = function() {
-			return cPresentation.containsChildWithNameInData("search");
-		};
+            let childParentPath = calculateNewPath(id + "TextVar");
+            let cPresentationChild = CORA.coraData(metadataProvider
+                .getMetadataById(presentationIdToFactor));
+            let presentationSpec = {
+                path: childParentPath,
+                metadataIdUsedInData: metadataIdUsedInData,
+                cPresentation: cPresentationChild
+            };
+            let pVar = presentationFactory.factor(presentationSpec);
+            childViewNew.appendChild(pVar.getView());
+            view.addChild(childViewNew);
+        };
 
-		const possiblyCreateSearchHandlerForPRecordLinkWithLinkedSearch = function() {
-			let searchRecord = getSearchFromSearchProvider();
-			if (userCanPerformSearch(searchRecord)) {
-				createSearchHandler(searchRecord);
-			}
-		};
+        const calculateNewPath = function(metadataIdToAdd) {
+            let pathSpec = {
+                metadataIdToAdd: metadataIdToAdd,
+                parentPath: path
+            };
+            return CORA.calculatePathForNewElement(pathSpec);
+        };
 
-		const userCanPerformSearch = function(searchRecord) {
-			return searchRecord.actionLinks.search !== undefined;
-		};
+        const createAndAddOutput = function() {
+            createChildView("linkedRecordType", "linkedRecordTypeOutputPVar");
+            createChildView("linkedRecordId", "linkedRecordIdOutputPVar");
 
-		const getSearchFromSearchProvider = function() {
-			let searchLink = cPresentation.getFirstChildByNameInData("search");
-			let searchId = getRecordIdFromLink(searchLink);
-			return dependencies.providers.searchProvider.getSearchById(searchId);
-		};
+            if (hasLinkedRepeatId) {
+                createChildView("linkedRepeatId", "linkedRepeatIdOutputPVar");
+            }
+        };
 
-		const createSearchHandler = function(searchRecord) {
-			let cSearch = CORA.coraData(searchRecord.data);
-			let metadataLink = cSearch.getFirstChildByNameInData("metadataId");
-			let searchMetadataId = getRecordIdFromLink(metadataLink);
-			let presentationLink = cSearch.getFirstChildByNameInData("presentationId");
-			let searchPresentationId = getRecordIdFromLink(presentationLink);
+        const possiblyCreateSearchHandler = function() {
+            if (pRecordLinkHasLinkedSearch()) {
+                createSearchHandlerForPRecordLinkWithLinkedSearch();
+            }
+        };
 
-			let searchSearchLink = searchRecord.actionLinks.search;
+        const pRecordLinkHasLinkedSearch = function() {
+            return cPresentation.containsChildWithNameInData("search");
+        };
 
-			let searchHandlerSpec = {
-				"metadataId": searchMetadataId,
-				"presentationId": searchPresentationId,
-				"searchLink": searchSearchLink,
-				"triggerWhenResultIsChoosen": setResultFromSearch
-			};
-			let searchHandler = dependencies.globalFactories.searchHandlerFactory
-				.factor(searchHandlerSpec);
-			view.addSearchHandlerView(searchHandler.getView());
-		};
+        const createSearchHandlerForPRecordLinkWithLinkedSearch = function() {
+            let searchRecord = getSearchFromSearchProvider();
+            if (userCanPerformSearch(searchRecord)) {
+                createSearchHandler(searchRecord);
+            }
+        };
 
-		const getRecordIdFromLink = function(metadataLink) {
-			let cMetadataLink = CORA.coraData(metadataLink);
-			return cMetadataLink.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
+        const userCanPerformSearch = function(searchRecord) {
+            return searchRecord.actionLinks.search !== undefined;
+        };
 
-		const subscribeToSetValueIfLinkedPresentationExists = function() {
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordTypeTextVar"), undefined,
-				valueChangedOnInput);
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
-				valueChangedOnInput);
-		};
+        const getSearchFromSearchProvider = function() {
+            let searchLink = cPresentation.getFirstChildByNameInData("search");
+            let searchId = getRecordIdFromLink(searchLink);
+            return providers.searchProvider.getSearchById(searchId);
+        };
 
-		const valueChangedOnInput = function(dataFromMsg) {
-			view.removeLinkedPresentation();
-			view.hideOpenLinkedRecordButton();
-			view.hideClearLinkedRecordIdButton();
-			if(presentAsOnlyTranslatedText()){
-				addTranslatedTextNodeToView(dataFromMsg.data);
-			}
-		};
-		
-		const addTranslatedTextNodeToView = function(textId){
-			let translatedText = textProvider.getTranslation(textId);
-			let textNodeWithTranslatedText = document.createTextNode(translatedText);
-			view.addLinkedPresentation(textNodeWithTranslatedText);
-		};
-		
-		const subscribeToTextVarSetValue = function() {
-			dependencies.pubSub.subscribe("setValue",
-				calculateNewPath("linkedRecordIdTextVar"), undefined,
-				hideOrShowOutputPresentation);
-		};
-		
-		const hideOrShowOutputPresentation = function(dataFromMsg) {
-			let valueForView = dataFromMsg.data;
-			if (mode === "output") {
-				if(valueForView !== ""){
-					view.show();
-				} else {
-					view.hide();
-				}
-			}
-		};
+        const createSearchHandler = function(searchRecord) {
+            let cSearch = CORA.coraData(searchRecord.data);
+            let searchSearchLink = searchRecord.actionLinks.search;
 
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: view.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			dependencies.pAttributesFactory.factor(pAttributesSpec);
-		};
+            let searchHandlerSpec = {
+                metadataId: getLinkValueFromSearchRecord(cSearch, "metadataId"),
+                presentationId: getLinkValueFromSearchRecord(cSearch, "presentationId"),
+                searchResultPresentationId: getLinkValueFromSearchRecord(cSearch, "searchResultPresentation"),
+                searchLink: searchSearchLink,
+                triggerWhenResultIsChoosen: setResultFromSearch
+            };
 
-		const getView = function() {
-			return view.getView();
-		};
+            let searchHandler = globalFactories.searchHandlerFactory
+                .factor(searchHandlerSpec);
+            view.addSearchHandlerView(searchHandler.getView());
+        };
 
-		function getMetadataById(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		}
+        const getLinkValueFromSearchRecord = function(cSearchRecordData, id) {
+            if (!cSearchRecordData.containsChildWithNameInData(id)) {
+                return undefined;
+            }
+            let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+            return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
+        };
 
-		const openLinkedRecord = function(openInfoFromView) {
-			let openInfo = {
-				"readLink": readLink,
-				"loadInBackground": openInfoFromView.loadInBackground
-			};
-			dependencies.clientInstanceProvider.getJsClient()
-				.openRecordUsingReadLink(openInfo);
-		};
+        const getRecordIdFromLink = function(metadataLink) {
+            let cMetadataLink = CORA.coraData(metadataLink);
+            return cMetadataLink.getFirstAtomicValueByNameInData("linkedRecordId");
+        };
 
-		const setResultFromSearch = function(openInfo) {
-			let cRecordInfo = getRecordInfoFromOpenInfo(openInfo);
-			let recordId = cRecordInfo.getFirstAtomicValueByNameInData("id");
-			let recordType = extractRecordTypeFromRecordInfo(cRecordInfo);
-			publishNewValueForRecordId(recordId);
-			publishNewValueForRecordType(recordType);
-			publishNewValueForLinkedData(recordId, recordType, openInfo);
-		};
+        const subscribeToSetValueIfLinkedPresentationExists = function() {
+            pubSub.subscribe("setValue", calculateNewPath("linkedRecordTypeTextVar"), undefined,
+                valueChangedOnInput);
+            pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
+                valueChangedOnInput);
+        };
 
-		const getRecordInfoFromOpenInfo = function(openInfo) {
-			let cGroup = CORA.coraData(openInfo.record.data);
-			return CORA.coraData(cGroup.getFirstChildByNameInData("recordInfo"));
-		};
+        const valueChangedOnInput = function(dataFromMsg) {
+            view.removeLinkedPresentation();
+            view.hideOpenLinkedRecordButton();
+            view.hideClearLinkedRecordIdButton();
+            if (presentAsOnlyTranslatedText()) {
+                addTranslatedTextNodeToView(dataFromMsg.data);
+            }
+        };
 
-		const extractRecordTypeFromRecordInfo = function(cRecordInfo) {
-			let cRecordType = CORA.coraData(cRecordInfo
-				.getFirstChildByNameInData("type"));
-			return cRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
-		};
+        const addTranslatedTextNodeToView = function(textId) {
+            let translatedText = textProvider.getTranslation(textId);
+            let textNodeWithTranslatedText = document.createTextNode(translatedText);
+            view.addLinkedPresentation(textNodeWithTranslatedText);
+        };
 
-		const publishNewValueForRecordId = function(recordId) {
-			let data = {
-				"data": recordId,
-				"path": recordIdPath
-			};
-			dependencies.pubSub.publish("setValue", data);
-		};
+        const subscribeToTextVarSetValue = function() {
+            pubSub.subscribe("setValue", calculateNewPath("linkedRecordIdTextVar"), undefined,
+                hideOrShowOutputPresentation);
+            pubSub.subscribe("validationError", calculateNewPath("linkedRecordIdTextVar"), undefined,
+                handleValidationError);
 
-		const publishNewValueForRecordType = function(recordType) {
-			let data = {
-				"data": recordType,
-				"path": recordTypePath
-			};
-			dependencies.pubSub.publish("setValue", data);
-		};
+        };
 
-		const publishNewValueForLinkedData = function(recordId, recordType, openInfo) {
-			let linkedData = {
-				"children": [{
-					"name": "linkedRecordType",
-					"value": recordType
-				}, {
-					"name": "linkedRecordId",
-					"value": recordId
-				}],
-				"actionLinks": {
-					"read": openInfo.record.actionLinks.read
-				},
-				"name": nameInData
-			};
-			let message = {
-				"data": linkedData,
-				"path": path
-			};
-			dependencies.pubSub.publish("linkedData", message);
-		};
+        const handleValidationError = function(dataFromMsg, msg) {
+            publishVisibilityChange("visible", false, true);
+        };
 
-		const clearLinkedRecordId = function() {
-			publishNewValueForRecordId("");
-			showIdPresentations();
-		};
+        const hideOrShowOutputPresentation = function(dataFromMsg) {
+            let valueForView = dataFromMsg.data;
+            let containsData = dataFromMsg.dataOrigin !== "final" && valueForView !== "";
+            if (valueForView !== "") {
+                view.show();
+                publishVisibilityChange("visible", containsData, false);
+            } else if (mode === "output") {
+                view.hide();
+                publishVisibilityChange("hidden", containsData, false);
+            } else {
+                publishVisibilityChange("visible", containsData, false);
+            }
+        };
 
-		const showIdPresentations = function() {
-			view.showChildren();
-		};
-		
-		const openLinkedRecordForLink = function(event, link) {
-			let loadInBackground = "false";
-			if (event.ctrlKey) {
-				loadInBackground = "true";
-			}
-			let openInfo = {
-				"readLink": link,
-				"loadInBackground": loadInBackground
-			};
-			dependencies.clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
-		};
+        const publishVisibilityChange = function(visibility, currentlyContainsData, containsError) {
+            let visibilityData = {
+                path: [presentationCounter],
+                presentationCounter: presentationCounter,
+                visibility: visibility,
+                containsData: currentlyContainsData,
+                containsError: containsError
+            };
+            pubSub.publish("visibilityChange", visibilityData);
+        };
 
-		const openTextIdRecord = function(event) {
-			openLinkedRecordForLink(event,
-				cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
-		};
+        const initPAttributes = function() {
+            let pAttributesSpec = {
+                addViewToParent: view.addAttributesView,
+                path: path,
+                mode: mode,
+                toShow: attributesToShow
+            };
+            pAttributesFactory.factor(pAttributesSpec);
+        };
 
-		const openDefTextIdRecord = function(event) {
-			openLinkedRecordForLink(event,
-				cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
-		};
+        const getView = function() {
+            return view.getView();
+        };
 
-		const openMetadataIdRecord = function(event) {
-			openLinkedRecordForLink(event, cPresentation
-				.getFirstChildByNameInData("presentationOf").actionLinks.read);
-		};
+        function getMetadataById(id) {
+            return CORA.coraData(metadataProvider.getMetadataById(id));
+        }
 
-		const openPresentationIdRecord = function(event) {
-			let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
-			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
-		};
+        const openLinkedRecord = function(openInfoFromView) {
+            let openInfo = {
+                readLink: readLink,
+                loadInBackground: openInfoFromView.loadInBackground
+            };
+            clientInstanceProvider.getJsClient()
+                .openRecordUsingReadLink(openInfo);
+        };
 
-		const getDependencies = function() {
-			return dependencies;
-		};
+        const setResultFromSearch = function(openInfo) {
+            let cRecordInfo = getRecordInfoFromOpenInfo(openInfo);
+            let recordId = cRecordInfo.getFirstAtomicValueByNameInData("id");
+            let recordType = extractRecordTypeFromRecordInfo(cRecordInfo);
+            publishNewValueForRecordId(recordId);
+            publishNewValueForRecordType(recordType);
+            publishNewValueForLinkedData(recordId, recordType, openInfo);
+        };
 
-		const getSpec = function() {
-			return spec;
-		};
+        const getRecordInfoFromOpenInfo = function(openInfo) {
+            let cGroup = CORA.coraData(openInfo.record.data);
+            return CORA.coraData(cGroup.getFirstChildByNameInData("recordInfo"));
+        };
 
-		out = Object.freeze({
-			type: "pRecordLink",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			getView: getView,
-			handleMsg: handleMsg,
-			openLinkedRecord: openLinkedRecord,
-			setResultFromSearch: setResultFromSearch,
-			valueChangedOnInput: valueChangedOnInput,
-			clearLinkedRecordId: clearLinkedRecordId,
-			openTextIdRecord: openTextIdRecord,
-			openDefTextIdRecord: openDefTextIdRecord,
-			openMetadataIdRecord: openMetadataIdRecord,
-			openPresentationIdRecord: openPresentationIdRecord,
-			hideOrShowOutputPresentation: hideOrShowOutputPresentation
-		});
-		start();
-		return out;
-	};
-	return cora;
+        const extractRecordTypeFromRecordInfo = function(cRecordInfo) {
+            let cRecordType = CORA.coraData(cRecordInfo
+                .getFirstChildByNameInData("type"));
+            return cRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
+        };
+
+        const publishNewValueForRecordId = function(recordId) {
+            let data = {
+                path: recordIdPath,
+                dataOrigin: "user",
+                data: recordId
+            };
+            pubSub.publish("setValue", data);
+        };
+
+        const publishNewValueForRecordType = function(recordType) {
+            let data = {
+                path: recordTypePath,
+                dataOrigin: "user",
+                data: recordType
+            };
+            pubSub.publish("setValue", data);
+        };
+
+        const publishNewValueForLinkedData = function(recordId, recordType, openInfo) {
+            let linkedData = {
+                children: [{
+                    name: "linkedRecordType",
+                    value: recordType
+                }, {
+                    name: "linkedRecordId",
+                    value: recordId
+                }],
+                actionLinks: {
+                    read: openInfo.record.actionLinks.read
+                },
+                name: nameInData
+            };
+            let message = {
+                data: linkedData,
+                path: path
+            };
+            pubSub.publish("linkedData", message);
+        };
+
+        const clearLinkedRecordId = function() {
+            publishNewValueForRecordId("");
+            showIdPresentations();
+        };
+
+        const showIdPresentations = function() {
+            view.showChildren();
+        };
+
+        const openLinkedRecordForLink = function(event, link) {
+            let loadInBackground = "false";
+            if (event.ctrlKey) {
+                loadInBackground = "true";
+            }
+            let openInfo = {
+                readLink: link,
+                loadInBackground: loadInBackground
+            };
+            clientInstanceProvider.getJsClient().openRecordUsingReadLink(openInfo);
+        };
+
+        const openTextIdRecord = function(event) {
+            openLinkedRecordForLink(event,
+                cMetadataElement.getFirstChildByNameInData("textId").actionLinks.read);
+        };
+
+        const openDefTextIdRecord = function(event) {
+            openLinkedRecordForLink(event,
+                cMetadataElement.getFirstChildByNameInData("defTextId").actionLinks.read);
+        };
+
+        const openMetadataIdRecord = function(event) {
+            openLinkedRecordForLink(event, cPresentation
+                .getFirstChildByNameInData("presentationOf").actionLinks.read);
+        };
+
+        const openPresentationIdRecord = function(event) {
+            let presentationRecord = metadataProvider.getMetadataRecordById(presentationId);
+            openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
+        };
+
+        const getDependencies = function() {
+            return dependencies;
+        };
+
+        const getSpec = function() {
+            return spec;
+        };
+
+        const getPresentationCounter = function() {
+            return presentationCounter;
+        };
+
+        out = Object.freeze({
+            type: "pRecordLink",
+            getDependencies: getDependencies,
+            getSpec: getSpec,
+            getView: getView,
+            handleMsg: handleMsg,
+            openLinkedRecord: openLinkedRecord,
+            setResultFromSearch: setResultFromSearch,
+            valueChangedOnInput: valueChangedOnInput,
+            clearLinkedRecordId: clearLinkedRecordId,
+            openTextIdRecord: openTextIdRecord,
+            openDefTextIdRecord: openDefTextIdRecord,
+            openMetadataIdRecord: openMetadataIdRecord,
+            openPresentationIdRecord: openPresentationIdRecord,
+            hideOrShowOutputPresentation: hideOrShowOutputPresentation,
+            getPresentationCounter: getPresentationCounter
+        });
+        start();
+        return out;
+    };
+    return cora;
 }(CORA));

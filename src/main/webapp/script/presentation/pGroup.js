@@ -49,7 +49,8 @@ var CORA = (function(cora) {
 			type: "pGroup",
 			getSpec: getSpec,
 			getDependencies: getDependencies,
-			getView: parent.getView
+			getView: parent.getView,
+			getPresentationCounter: parent.getPresentationCounter
 		});
 
 	};

@@ -40,6 +40,19 @@ var CORATEST = (function(coraTest) {
 			assert.equal(element.textContent, textContent);
 		}			
 	};
+	
+	coraTest.assertElementHasIdTypeClassText = function(element, type, id,  className, textContent, assert) {
+		assert.equal(element.nodeName, type);
+		if(id){
+			assert.equal(element.id, id);
+		}
+		if(className){
+			assert.equal(element.className, className);
+		}
+		if(textContent){
+			assert.equal(element.textContent, textContent);
+		}			
+	};
 
 	return coraTest;
 }(CORATEST || {}));

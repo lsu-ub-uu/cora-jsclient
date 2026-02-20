@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Uppsala University Library
+ * Copyright 2017, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,17 +24,6 @@ var CORATEST = (function(cora) {
 		const login = function(loginIdIn, appToken) {
 			loginIds.push(loginIdIn);
 			appTokens.push(appToken);
-			let authInfo = {
-					userId : "fakeUserId",
-					loginId : loginIdIn,
-					token : "fake authToken from appTokenLoginSpy",
-					validForNoSeconds : "131"
-				};
-			spec.authInfoCallback(authInfo);
-		};
-
-		const handleResponse = function(answer) {
-			//nothing
 		};
 
 		const getDependencies = function() {
@@ -56,7 +45,6 @@ var CORATEST = (function(cora) {
 		return Object.freeze({
 			type : "appTokenLoginSpy",
 			login : login,
-			handleResponse : handleResponse,
 			getDependencies : getDependencies,
 			getSpec : getSpec,
 			getLoginId : getLoginId,

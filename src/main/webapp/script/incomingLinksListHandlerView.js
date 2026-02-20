@@ -30,16 +30,16 @@ var CORA = (function(cora) {
 		}
 
 		function createView() {
-			return CORA.gui.createSpanWithClassName("incomingLinksList");
+			return CORA.createSpanWithClassName("incomingLinksList");
 		}
 
 		function createNumberOfLinks() {
-			numberOfIncomingLinksView = CORA.gui.createSpanWithClassName("numberOfLinks");
+			numberOfIncomingLinksView = CORA.createSpanWithClassName("numberOfLinks");
 			view.appendChild(numberOfIncomingLinksView);
 		}
 
 		function createincomingLinks() {
-			incomingLinks = CORA.gui.createSpanWithClassName("incomingLinks");
+			incomingLinks = CORA.createSpanWithClassName("incomingLinks");
 			view.appendChild(incomingLinks);
 		}
 
@@ -49,16 +49,16 @@ var CORA = (function(cora) {
 		}
 
 		function createViewForIncomingLink(incomingLink) {
-			var incomingLinkView = CORA.gui.createSpanWithClassName("incomingLink");
+			var incomingLinkView = CORA.createSpanWithClassName("incomingLink");
 			incomingLinkView.onclick = function(event) {
 				openRecordUsingLink(incomingLink, event);
 			};
 
-			var recordTypeView = CORA.gui.createSpanWithClassName("recordType");
+			var recordTypeView = CORA.createSpanWithClassName("recordType");
 			recordTypeView.textContent = incomingLink.linkedRecordType;
 			incomingLinkView.appendChild(recordTypeView);
 
-			var recordIdView = CORA.gui.createSpanWithClassName("recordId");
+			var recordIdView = CORA.createSpanWithClassName("recordId");
 			recordIdView.textContent = incomingLink.linkedRecordId;
 			incomingLinkView.appendChild(recordIdView);
 			return incomingLinkView;

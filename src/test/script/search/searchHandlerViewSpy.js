@@ -21,7 +21,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.searchHandlerViewSpy = function() {
 
-		var view = CORA.gui.createSpanWithClassName("spyView");
+		var view = CORA.createSpanWithClassName("spyView");
 		var presentationsAddedToSearchForm = [];
 		var searchResultsAddedToSearchResultHolder = [];
 

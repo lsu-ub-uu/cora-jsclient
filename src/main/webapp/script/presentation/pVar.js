@@ -22,7 +22,7 @@ var CORA = (function(cora) {
 	cora.pVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
-		
+
 		const cPresentation = spec.cPresentation;
 		let regEx;
 		let pParentVar;
@@ -30,10 +30,10 @@ var CORA = (function(cora) {
 		const start = function() {
 			let cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
 			regEx = cMetadataElement.getFirstAtomicValueByNameInData("regEx");
-			
+
 			pParentVar = pParentVarFactory.factor(spec, self);
 		};
-		
+
 		const getMetadataById = function(id) {
 			return CORA.coraData(metadataProvider.getMetadataById(id));
 		};
@@ -43,8 +43,8 @@ var CORA = (function(cora) {
 			pVarViewSpec.inputType = getValueFromPresentationOrDefaultTo("inputType", "input");
 			pVarViewSpec.inputFormat = getValueFromPresentationOrDefaultTo("inputFormat", "text");
 			pVarViewSpec.outputFormat = getValueFromPresentationOrDefaultTo("outputFormat", "text");
-			
-			pVarViewSpec.info.technicalInfo.push({text: `regEx: ${regEx}`});
+
+			pVarViewSpec.info.technicalInfo.push({ text: `regEx: ${regEx}` });
 		};
 
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
@@ -53,19 +53,19 @@ var CORA = (function(cora) {
 			}
 			return defaultValue;
 		};
-		
+
 		const validateTypeSpecificValue = function(valueFromView) {
 			return new RegExp(regEx).test(valueFromView);
 		};
-		
-		const autoFormatEnteredValue = function(valueFromView){
+
+		const autoFormatEnteredValue = function(valueFromView) {
 			return valueFromView;
 		};
-		
-		const transformValueForView = function(mode, valueForView){
+
+		const transformValueForView = function(mode, valueForView) {
 			return valueForView;
 		};
-		
+
 		const getSpec = function() {
 			return spec;
 		};
@@ -87,7 +87,8 @@ var CORA = (function(cora) {
 			type: "pVar",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
-			getView: pParentVar.getView
+			getView: pParentVar.getView,
+			getPresentationCounter: pParentVar.getPresentationCounter
 		});
 
 	};

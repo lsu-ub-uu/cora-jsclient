@@ -24,7 +24,7 @@ var CORATEST = (function(coraTest) {
 		let logoutOptions;
 		let state;
 		let noOfCallsToCloseHolder = 0;
-		let html = CORA.gui.createSpanWithClassName("loginManagerViewSpy");
+		let html = CORA.createSpanWithClassName("loginManagerViewSpy");
 		const getHtml = function() {
 			return html;
 		};

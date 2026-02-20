@@ -41,7 +41,7 @@ var CORA = (function(cora) {
 		const collectAttributesFromMetadata = function(cMetadataElement) {
 			let collectedAttributes = {};
 			let attributeReferences = cMetadataElement
-					.getFirstChildByNameInData("attributeReferences");
+				.getFirstChildByNameInData("attributeReferences");
 			attributeReferences.children.forEach(function(attributeReference) {
 				collectAttributesForAttributeReference(attributeReference, collectedAttributes);
 			});
@@ -52,12 +52,12 @@ var CORA = (function(cora) {
 			let ref = getRefValueFromAttributeRef(attributeReference);
 			let cCollectionVariable = getMetadataById(ref);
 			let attributeNameInData = cCollectionVariable
-					.getFirstAtomicValueByNameInData("nameInData");
+				.getFirstAtomicValueByNameInData("nameInData");
 			let attributeValues = collectAttributeValuesFromVariable(cCollectionVariable);
 			collectedAttributes[attributeNameInData] = attributeValues;
 		};
 
-		const getRefValueFromAttributeRef = function(attributeReference){
+		const getRefValueFromAttributeRef = function(attributeReference) {
 			let cAttributeReference = CORA.coraData(attributeReference);
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
@@ -74,7 +74,7 @@ var CORA = (function(cora) {
 		};
 
 		const getFinalValueFromVariable = function(cCollectionVariable) {
-			return [ cCollectionVariable.getFirstAtomicValueByNameInData("finalValue") ];
+			return [cCollectionVariable.getFirstAtomicValueByNameInData("finalValue")];
 		};
 
 		const getAllValuesFromVariable = function(cCollectionVariable) {
@@ -95,10 +95,10 @@ var CORA = (function(cora) {
 
 		const getCollectionItemReferencesFor = function(cCollectionVariable) {
 			let cAttributeRefCollection = CORA.coraData(cCollectionVariable
-					.getFirstChildByNameInData("refCollection"));
+				.getFirstChildByNameInData("refCollection"));
 
 			let attributeRefCollectionId = cAttributeRefCollection
-					.getFirstAtomicValueByNameInData("linkedRecordId");
+				.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cAttributeItemCollection = getMetadataById(attributeRefCollectionId);
 			return cAttributeItemCollection.getFirstChildByNameInData("collectionItemReferences");
 		};
@@ -107,13 +107,12 @@ var CORA = (function(cora) {
 			let cMetadataToFind = getMetadataById(metadataIdToFind);
 			let nameInDataToFind = cMetadataToFind.getFirstAtomicValueByNameInData("nameInData");
 			let attributesToFind = collectAttributesAsObjectForMetadataId(metadataIdToFind);
-
 			let findFunction = function(metadataChildRef) {
 				let childMetadataId = getMetadataIdFromRef(metadataChildRef);
 				let childAttributesToFind = collectAttributesAsObjectForMetadataId(childMetadataId);
 				let childNameInData = getNameInDataFromMetadataChildRef(metadataChildRef);
 				return childNameInData === nameInDataToFind
-						&& firstAttributesExistsInSecond(childAttributesToFind, attributesToFind);
+					&& firstAttributesExistsInSecond(childAttributesToFind, attributesToFind);
 			};
 
 			let children = cMetadata.getFirstChildByNameInData("childReferences").children;
@@ -135,9 +134,9 @@ var CORA = (function(cora) {
 
 		const firstAttributesExistsInSecond = function(attributes1, attributes2) {
 			let attributeKeys1 = attributes1 !== undefined ? Object.keys(attributes1) : Object
-					.keys({});
+				.keys({});
 			let attributeKeys2 = attributes2 !== undefined ? Object.keys(attributes2) : Object
-					.keys({});
+				.keys({});
 
 			if (notSameNumberOfKeys(attributeKeys1, attributeKeys2)) {
 				return false;
@@ -181,9 +180,9 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			collectAttributesAsObjectForMetadataId : collectAttributesAsObjectForMetadataId,
-			getChildRefPartOfMetadata : getChildRefPartOfMetadata,
-			firstAttributesExistsInSecond : firstAttributesExistsInSecond
+			collectAttributesAsObjectForMetadataId: collectAttributesAsObjectForMetadataId,
+			getChildRefPartOfMetadata: getChildRefPartOfMetadata,
+			firstAttributesExistsInSecond: firstAttributesExistsInSecond
 		});
 	};
 	return cora;

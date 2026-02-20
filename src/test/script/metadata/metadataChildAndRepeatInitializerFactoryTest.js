@@ -19,7 +19,7 @@
 "use strict";
 QUnit.module("metadata/metadataChildAndRepeatInitializerFactoryTest.js", {
 	beforeEach : function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.pubSub = CORATEST.pubSubSpy();
 		this.dependencies = {
 			recordTypeProvider : CORATEST.recordTypeProviderSpy(),

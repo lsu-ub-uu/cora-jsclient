@@ -21,8 +21,8 @@ var CORATEST = (function(coraTest) {
 	coraTest.uploadManagerSpy = function() {
 		var uploadWasCalled = false;
 		var uploadSpecs = [];
-		var workView = CORA.gui.createSpanWithClassName("workViewSpy");
-		workView.appendChild(CORA.gui.createSpanWithClassName("indexOrders"));
+		var workView = CORA.createSpanWithClassName("workViewSpy");
+		workView.appendChild(CORA.createSpanWithClassName("indexOrders"));
 		var view = {};
 		view.getWorkView = function () {
 			return workView;

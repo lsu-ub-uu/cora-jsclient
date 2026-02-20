@@ -119,7 +119,7 @@ var CORA = (function(cora) {
 		};
 
 		let out = Object.freeze({
-			"type": "metadataProvider",
+			type: "metadataProvider",
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getMetadataById: getMetadataById,

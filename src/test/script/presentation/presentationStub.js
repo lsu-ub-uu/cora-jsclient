@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 	coraTest.presentationStub = function(id, className) {
 		var view = document.createElement("span");
 		view.className = "presentationStub";
-		if(undefined !== className){
+		if (undefined !== className) {
 			view.className = className;
 		}
 		if (id !== undefined) {
@@ -34,9 +34,13 @@ var CORATEST = (function(coraTest) {
 		function getView() {
 			return view;
 		}
+		const getPresentationCounter = function() {
+			return "1-34-Spy";
+		};
 
 		return Object.freeze({
-			getView : getView
+			getView: getView,
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return coraTest;

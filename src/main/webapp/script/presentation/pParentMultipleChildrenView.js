@@ -30,7 +30,7 @@ var CORA = (function(cora) {
 		
 		const start = function() {
 			baseClassName = spec.className;
-			view = CORA.gui.createDivWithClassName(baseClassName);
+			view = CORA.createDivWithClassName(baseClassName);
 			possiblyAddHeadlineTextToView();
 			info = createInfo();
 			view.appendChild(info.getButton());

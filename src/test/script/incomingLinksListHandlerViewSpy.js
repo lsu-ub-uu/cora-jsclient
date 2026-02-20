@@ -20,7 +20,7 @@ var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.incomingLinksListHandlerViewSpy = function(dependencies, spec) {
 		var addedIncomingLink = [];
-		var view = CORA.gui.createSpanWithClassName("incomingLinksListHandlerViewSpy");
+		var view = CORA.createSpanWithClassName("incomingLinksListHandlerViewSpy");
 
 		var numberOfIncomingLinks;
 

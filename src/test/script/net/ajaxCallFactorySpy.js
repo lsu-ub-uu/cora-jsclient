@@ -20,21 +20,26 @@
 var CORATEST = (function(coraTest) {
 	"use strict";
 	coraTest.ajaxCallFactorySpy = function(spec) {
-		var factoredAjaxCalls = [];
-		function factor(ajaxCallSpec) {
-			var factoredAjaxCall = CORATEST.ajaxCallSpy({}, ajaxCallSpec);
+		let factoredAjaxCalls = [];
+		
+		const factor = function(ajaxCallSpec) {
+			let factoredAjaxCall = CORATEST.ajaxCallSpy({}, ajaxCallSpec);
 			factoredAjaxCalls.push(factoredAjaxCall);
 			return factoredAjaxCall;
-		}
+		};
 
-		function getFactored(number) {
+		const getFactored = function(number) {
 			return factoredAjaxCalls[number];
-		}
+		};
+		
+		const getFactoredNoOfAjaxCalls = function(){
+			return factoredAjaxCalls.length;
+		};
 
-		var out = Object.freeze({
-			factor : factor,
-			getFactored : getFactored,
-			callCount: factoredAjaxCalls.length
+		let out = Object.freeze({
+			factor: factor,
+			getFactored: getFactored,
+			getFactoredNoOfAjaxCalls: getFactoredNoOfAjaxCalls
 		});
 		return out;
 	};

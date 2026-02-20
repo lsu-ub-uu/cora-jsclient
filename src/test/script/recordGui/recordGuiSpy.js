@@ -30,7 +30,7 @@ var CORATEST = (function(coraTest) {
 		let spec = {
 			"metadataId": "recordTypeGroup",
 			"data": {},
-			"dataDivider": "cora",
+			recordData: {dataDivider:"someDataDivider",recordType:"someRecordType",recordId:"someRecordId"},
 			"permissions": {
 				"write": [],
 				"read": []

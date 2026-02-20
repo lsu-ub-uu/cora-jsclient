@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Uppsala University Library
+ * Copyright 2016, 2025 Uppsala University Library
  * Copyright 2016 Olov McKie
  *
  * This file is part of Cora.
@@ -21,17 +21,17 @@
 var CORA = (function(cora) {
 	"use strict";
 	cora.pubSub = function() {
-		var arbiter = Arbiter.create();
+		let arbiter = Arbiter.create();
 
 		function subscribe(type, path, context, functionToCall) {
 			return arbiter.subscribe(convertPathToMsg(path) + type, null, context, functionToCall);
 		}
 
 		function publish(type, data) {
-			var convertedPath = convertPathToMsg(data.path) + type;
-			var everyThingOk = arbiter.publish(convertedPath, data);
+			let convertedPath = convertPathToMsg(data.path) + type;
+			let everyThingOk = arbiter.publish(convertedPath, data);
 			if (!everyThingOk) {
-				var errorMessage = "";
+				let errorMessage = "";
 				arbiter.getErrorArray().forEach(function(error) {
 					errorMessage += " " + error.message;
 					errorMessage += " " + error.stack;
@@ -49,7 +49,7 @@ var CORA = (function(cora) {
 		}
 
 		function convertAndAddPathToMsg(path, msgPart) {
-			var extendedMsgPart = msgPart + "/";
+			let extendedMsgPart = msgPart + "/";
 			for (let pathPart in path) {
 				extendedMsgPart += path[pathPart] + "/";
 			}
@@ -61,7 +61,7 @@ var CORA = (function(cora) {
 		}
 
 		return Object.freeze({
-			"type": "pubSub",
+			type: "pubSub",
 			subscribe: subscribe,
 			unsubscribe: unsubscribe,
 			unsubscribePathBelow: unsubscribePathBelow,

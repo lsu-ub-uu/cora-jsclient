@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Olov McKie
+ * Copyright 2023, 2025 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -26,7 +26,8 @@ QUnit.module("definitionViewer/definitionViewerTest.js", {
 		this.recordTypeProvider = CORATEST.recordTypeProviderStub();
 		this.clientInstanceProvider = CORATEST.clientInstanceProviderSpy();
 
-		this.view = CORATEST.definitionViewerViewSpy()
+		this.view = CORATEST.definitionViewerViewSpy();
+		this.textView = CORATEST.definitionTextViewSpy();
 
 		this.providers = {
 			metadataProvider: this.metadataProvider,
@@ -37,7 +38,8 @@ QUnit.module("definitionViewer/definitionViewerTest.js", {
 		};
 
 		this.dependencies = {
-			view: this.view
+			view: this.view,
+			textView: this.textView
 		}
 		this.spec = {
 			id: "minimalGroupId"
@@ -78,6 +80,17 @@ QUnit.test("testTopLevelMetadataGroupFetchedFromProvider", function(assert) {
 	assert.strictEqual(this.metadataProvider.getFetchedMetadataId(0), "minimalGroupId");
 });
 
+QUnit.test("testSetTextCopierMethod_setToCopyViewToClipboard", function(assert) {
+	assert.ok(this.view.getTextCopierMethods()[0]);
+	assert.strictEqual(this.view.getTextCopierMethods()[0], this.definitionViewer.copyViewToClipboard);
+	assert.notOk(this.view.getTextCopierMethods()[1]);
+});
+
+QUnit.test("testCopyViewToClipboard", function(assert) {
+	let viewAsText = this.definitionViewer.copyViewToClipboard();
+	assert.strictEqual(viewAsText, "text from definitionTextViewSpy");
+});
+
 QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 	let generatedView = this.definitionViewer.getView();
 
@@ -86,7 +99,7 @@ QUnit.test("testViewerViewIsCalledAndAnswerFromViewReturned", function(assert) {
 });
 
 QUnit.test("testViewModel", function(assert) {
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -95,7 +108,7 @@ QUnit.test("testViewModel", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId
 	};
 	assert.deepEqual(viewModel, expected);
 });
@@ -110,7 +123,7 @@ QUnit.test("testReloadForMetadataChanges", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId
 	};
 	assert.deepEqual(viewModel, expected);
 });
@@ -119,16 +132,18 @@ QUnit.test("testOpenDefiningRecordUsingEventAndId", function(assert) {
 	let event = document.createEvent('Event');
 	event.ctrlKey = true;
 	let id = "someMetadataId";
-	
+	let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
+	this.metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
+
 	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
-	
+
 	let jsClient = this.clientInstanceProvider.getJsClient();
 	let openInfo = jsClient.getOpenInfo(0);
 	let expected = {
-		readLink : {
-			fakeLinkFetchedById:"someMetadataId"
+		readLink: {
+			fakeLinkFetchedById: "someMetadataId"
 		},
-		loadInBackground : "true"
+		loadInBackground: "true"
 	};
 	assert.deepEqual(openInfo, expected);
 });
@@ -137,132 +152,28 @@ QUnit.test("testOpenDefiningRecordUsingEventAndIdNoCtrl", function(assert) {
 	let event = document.createEvent('Event');
 	event.ctrlKey = false;
 	let id = "someMetadataId";
-	
+	let responseFromMetadataRecord = { actionLinks: { read: { fakeLinkFetchedById: id } } };
+	this.metadataProvider.addMetadataRecordById(id, responseFromMetadataRecord);
+
 	this.definitionViewer.openDefiningRecordUsingEventAndId(event, id);
-	
+
 	let jsClient = this.clientInstanceProvider.getJsClient();
 	let openInfo = jsClient.getOpenInfo(0);
 	let expected = {
-		readLink : {
-			fakeLinkFetchedById:"someMetadataId"
+		readLink: {
+			fakeLinkFetchedById: "someMetadataId"
 		},
-		loadInBackground : "false"
+		loadInBackground: "false"
 	};
 	assert.deepEqual(openInfo, expected);
 });
-
-
-
-//QUnit.test("testViewModelAttributeReferences", function(assert) {
-//	let attributeReferences = {
-//      name: "attributeReferences",
-//      children: [
-//        {
-//          name: "ref",
-//          repeatId: "0",
-//          children: [
-//            {
-//              name: "linkedRecordType",
-//              value: "metadataCollectionVariable"
-//            },
-//            {
-//              name: "linkedRecordId",
-//              value: "someCollectionVar"
-//            }
-//          ]
-//        },{
-//          name: "ref",
-//          repeatId: "1",
-//          children: [
-//            {
-//              name: "linkedRecordType",
-//              value: "metadataCollectionVariable"
-//            },
-//            {
-//              name: "linkedRecordId",
-//              value: "otherCollectionVar"
-//            }
-//          ]
-//        }
-//      ]
-//    };
-//	this.minimalGroup.children.push(attributeReferences);
-//	this.metadataProvider.addMetadataById("minimalGroupId", this.minimalGroup);
-//		
-//	let generatedView = this.definitionViewer.getViewForMetadataId("minimalGroupId");
-//	
-//	let viewModel = this.view.getViewModelForCallNo(0);
-//	let expected = {
-//		id: "minimalGroupId",
-//		type: "group",
-//		nameInData: "minimalGroup",
-//		text : {sv : "translated_sv_minimalGroupIdText", en : "translated_en_minimalGroupIdText"}
-//	};
-//	assert.deepEqual(viewModel, expected);
-//});
-
-
-
-//{
-//              "name": "recordPartConstraint",
-//              "value": ""
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectStorageTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "storage"
-//              }
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectPermissionTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "permission"
-//              }
-//            },
-//            {
-//              "name": "childRefCollectTerm",
-//              "repeatId": "0",
-//              "children": [
-//                {
-//                  "name": "linkedRecordType",
-//                  "value": "collectIndexTerm"
-//                },
-//                {
-//                  "name": "linkedRecordId",
-//                  "value": ""
-//                }
-//              ],
-//              "attributes": {
-//                "type": "index"
-//              }
-//            }
 
 QUnit.test("testViewModelOneChild", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId"}]
+		children: [{ repeatMin: "1", repeatMax: "10", refId: "textVarId" }]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
 	let toAddTextVar = {
@@ -272,7 +183,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -281,7 +192,7 @@ QUnit.test("testViewModelOneChild", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		children: []
 	};
 	let childReference = {
@@ -291,19 +202,80 @@ QUnit.test("testViewModelOneChild", function(assert) {
 			nameInData: "textVarName",
 			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
 			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		}
 	};
 	expected.children.push(childReference);
 
 	assert.deepEqual(viewModel, expected);
 });
+
+QUnit.test("testViewModelChildLoop", function(assert) {
+	let toAdd = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		children: [{ repeatMin: "1", repeatMax: "10", refId: "minimalGroupId2" }]
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
+	let toAdd2 = {
+		id: "minimalGroupId2",
+		type: "group",
+		nameInData: "minimalGroupName",
+		children: [{ repeatMin: "1", repeatMax: "10", refId: "minimalGroupId" }]
+	};
+	this.metadataProvider.addMetadataByCompactDefinition(toAdd2);
+
+	this.definitionViewer.getView();
+
+	let viewModel = this.view.getViewModelForCallNo(0);
+	let expected = {
+		id: "minimalGroupId",
+		type: "group",
+		nameInData: "minimalGroupName",
+		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
+		children: []
+	};
+	let childReference = {
+		repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
+			id: "minimalGroupId2",
+			type: "group",
+			nameInData: "minimalGroupName",
+			text: { sv: "translated_sv_minimalGroupId2Text", en: "translated_en_minimalGroupId2Text" },
+			defText: { sv: "translated_sv_minimalGroupId2DefText", en: "translated_en_minimalGroupId2DefText" },
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
+			children: []
+		}
+	};
+	expected.children.push(childReference);
+	let childReference2 = {
+		repeatMin: "1", repeatMax: "10", recordPartConstraint: "noConstraint", child: {
+			id: "minimalGroupId",
+			type: "group",
+			nameInData: "minimalGroupName",
+			text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
+			defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
+			children: []
+		}
+	};
+	childReference.child.children.push(childReference2);
+
+
+	//	console.log("expected:",JSON.stringify(expected))
+	//	console.log("viewModel:",JSON.stringify(viewModel))
+
+	assert.deepEqual(viewModel, expected);
+});
+
 QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", refId: "textVarId"}]
+		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", refId: "textVarId" }]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
 	let toAddTextVar = {
@@ -313,7 +285,7 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -322,7 +294,7 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		children: []
 	};
 	let childReference = {
@@ -332,26 +304,29 @@ QUnit.test("testViewModelOneChildWithConstraint", function(assert) {
 			nameInData: "textVarName",
 			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
 			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		}
 	};
 	expected.children.push(childReference);
 
 	assert.deepEqual(viewModel, expected);
 });
+
 QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
 	let toAdd = {
 		id: "minimalGroupId",
 		type: "group",
 		nameInData: "minimalGroupName",
-		children: [{ repeatMin: "1", repeatMax: "10", recordPartConstraint: "read", 
+		children: [{
+			repeatMin: "1", repeatMax: "10", recordPartConstraint: "read",
 			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
-			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
-			refId: "textVarId"}]
+			collectStorageTerm: "collectStorageTerm", collectPermissionTerm: "collectPermissionTerm",
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
+			refId: "textVarId"
+		}]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
-	
+
 	let toAddTextVar = {
 		id: "textVarId",
 		type: "textVariable",
@@ -360,7 +335,7 @@ QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
 	this.metadataProvider.addMetadataByCompactDefinition(toAddTextVar);
 
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -369,20 +344,20 @@ QUnit.test("testViewModelOneChildWithCollectTerms", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		children: []
 	};
 	let childReference = {
 		repeatMin: "1", repeatMax: "10", recordPartConstraint: "read",
-			collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
-			collectStorageTerm: "collectStorageTerm", collectPermissionTerm:"collectPermissionTerm",
-			child: {
+		collectIndexTerms: ["collectIndexTerm1", "collectIndexTerm2"],
+		collectStorageTerm: "collectStorageTerm", collectPermissionTerm: "collectPermissionTerm",
+		child: {
 			id: "textVarId",
 			type: "textVariable",
 			nameInData: "textVarName",
 			text: { sv: "translated_sv_textVarIdText", en: "translated_en_textVarIdText" },
 			defText: { sv: "translated_sv_textVarIdDefText", en: "translated_en_textVarIdDefText" },
-			methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId
+			methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId
 		}
 	};
 	expected.children.push(childReference);
@@ -396,7 +371,6 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		type: "group",
 		nameInData: "minimalGroupName",
 		attributes: ["attributeCollectionVarId"],
-		//		children : [{repeatMin: "1", repeatMax: "10", refId : "textVarId"}] 
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAdd);
 
@@ -405,7 +379,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		type: "collectionVariable",
 		nameInData: "collectionVarName",
 		finalValue: "someFinalValue",
-		itemCollectionId : "itemCollectionId"
+		itemCollectionId: "itemCollectionId"
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(toAddCollectionVar);
 
@@ -416,7 +390,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		refIds: ["collectionItemId"]
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(addToItemCollection);
-	
+
 	let addToCollectionItem = {
 		id: "collectionItemId",
 		type: "collectionItem",
@@ -424,7 +398,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 	};
 	this.metadataProvider.addMetadataByCompactDefinition(addToCollectionItem);
 
-	let generatedView = this.definitionViewer.getView();
+	this.definitionViewer.getView();
 
 	let viewModel = this.view.getViewModelForCallNo(0);
 	let expected = {
@@ -433,7 +407,7 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		nameInData: "minimalGroupName",
 		text: { sv: "translated_sv_minimalGroupIdText", en: "translated_en_minimalGroupIdText" },
 		defText: { sv: "translated_sv_minimalGroupIdDefText", en: "translated_en_minimalGroupIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
 		attributes: []
 	};
 	let attribute = {
@@ -443,8 +417,8 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		finalValue: "someFinalValue",
 		text: { sv: "translated_sv_attributeCollectionVarIdText", en: "translated_en_attributeCollectionVarIdText" },
 		defText: { sv: "translated_sv_attributeCollectionVarIdDefText", en: "translated_en_attributeCollectionVarIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId,
-		collectionItems : []
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId,
+		collectionItems: []
 	};
 	expected.attributes.push(attribute);
 	let collectionItem = {
@@ -453,10 +427,9 @@ QUnit.test("testViewModelAttributes", function(assert) {
 		nameInData: "collectionItemName",
 		text: { sv: "translated_sv_collectionItemIdText", en: "translated_en_collectionItemIdText" },
 		defText: { sv: "translated_sv_collectionItemIdDefText", en: "translated_en_collectionItemIdDefText" },
-		methodOpenDefiningRecord : this.definitionViewer.openDefiningRecordUsingEventAndId
+		methodOpenDefiningRecord: this.definitionViewer.openDefiningRecordUsingEventAndId
 	};
 	attribute.collectionItems.push(collectionItem);
-	
+
 	assert.deepEqual(viewModel, expected);
 });
-

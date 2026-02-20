@@ -22,7 +22,7 @@ var CORATEST = (function(coraTest) {
 		var addedViews = [];
 		var addedToolViews = [];
 		var showDataF = null;
-		var view = CORA.gui.createDivWithClassName("pMapViewSpy");
+		var view = CORA.createDivWithClassName("pMapViewSpy");
 		var content = document.createTextNode(JSON
 				.stringify("content needed for span to be visible in chrome"));
 		view.appendChild(content);

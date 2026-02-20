@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, 2019 Uppsala University Library
+ * Copyright 2016, 2019, 2024, 2025 Uppsala University Library
  * Copyright 2017, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -38,7 +38,7 @@ QUnit.module("jsClient/jsClientTest.js", {
 			ajaxCallFactory: this.ajaxCallFactorySpy,
 			loginManagerFactory: this.loginManagerFactory,
 			recordHandlerFactory: this.recordHandlerFactory,
-			managedGuiItemFactory : CORATEST.standardFactorySpy("managedGuiItemSpy")
+			managedGuiItemFactory: CORATEST.standardFactorySpy("managedGuiItemSpy")
 		};
 
 		this.metadataProvider = CORATEST.metadataProviderRealStub();
@@ -80,12 +80,15 @@ QUnit.module("jsClient/jsClientTest.js", {
 			uploadManager: CORATEST.uploadManagerSpy(),
 			recordTypeMenu: this.recordTypeMenu,
 			definitionViewerFactory: CORATEST.standardFactorySpy("definitionViewerSpy"),
-			
+			recursiveDeleteFactory: CORATEST.standardFactorySpy("recursiveDeleteSpy")
+
 		}
 		this.spec = {
 			name: "The Client",
 			baseUrl: "http://epc.ub.uu.se/cora/rest/",
-			appTokenBaseUrl: "someAppTokenBaseUrl/"
+			appTokenLogin: "http://epc.ub.uu.se/login/rest/apptoken/",
+			passwordLogin: "http://epc.ub.uu.se/login/rest/password/"
+						
 		};
 		let addedEvents = [];
 		this.addedEvents = addedEvents;
@@ -98,7 +101,7 @@ QUnit.module("jsClient/jsClientTest.js", {
 		}
 		this.oldAddEventListener = document.addEventListener;
 		document.addEventListener = this.addEvent;
-	
+
 
 	},
 	afterEach: function() {
@@ -158,23 +161,25 @@ QUnit.test("testUploadManagerAddedToView", function(assert) {
 		.getManagedGuiItem().getMenuView());
 });
 
-QUnit.test("testInitCreatesALoginManager",
-	function(assert) {
-		let jsClient = CORA.jsClient(this.dependencies, this.spec);
-		let factored = this.loginManagerFactory.getFactored(0);
-		assert.ok(factored !== undefined);
-		assert.strictEqual(this.loginManagerFactory.getSpec(0).afterLoginMethod,
-			jsClient.afterLogin);
-		assert.strictEqual(this.loginManagerFactory.getSpec(0).afterLogoutMethod,
-			jsClient.afterLogout);
-		assert.strictEqual(this.loginManagerFactory.getSpec(0).baseUrl, this.spec.baseUrl);
-		assert.strictEqual(this.loginManagerFactory.getSpec(0).appTokenBaseUrl,
-			"someAppTokenBaseUrl/");
-		assert.strictEqual(this.loginManagerFactory.getSpec(0).jsClient, jsClient);
+QUnit.test("testInitCreatesALoginManager", function(assert) {
+	let jsClient = CORA.jsClient(this.dependencies, this.spec);
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	let factored = this.loginManagerFactory.getFactored(0);
+	let loginManagerSpec = this.loginManagerFactory.getSpec(0);
 
-		assert.strictEqual(this.dependencies.globalInstances.loginManager, factored);
+	assert.strictEqual(loginManagerSpec.afterLoginMethod, jsClient.afterLogin);
+	assert.strictEqual(loginManagerSpec.afterLogoutMethod, jsClient.afterLogout);
+	assert.strictEqual(loginManagerSpec.setInfoMessage, jsClientView.addInfoMessage);
+	assert.strictEqual(loginManagerSpec.setErrorMessage, jsClientView.addErrorMessage);
 
-	});
+	assert.strictEqual(loginManagerSpec.baseUrl, this.spec.baseUrl);
+	assert.strictEqual(loginManagerSpec.appTokenLogin, "http://epc.ub.uu.se/login/rest/apptoken/");
+	assert.strictEqual(loginManagerSpec.passwordLogin, "http://epc.ub.uu.se/login/rest/password/");
+	assert.strictEqual(loginManagerSpec.jsClient, jsClient);
+
+	assert.strictEqual(this.dependencies.globalInstances.loginManager, factored);
+
+});
 
 QUnit.test("testInitCreatesALoginManagerAndAddsItsHtmlToTheHeader", function(assert) {
 	CORA.jsClient(this.dependencies, this.spec);
@@ -299,7 +304,14 @@ QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasAc
 	assert.strictEqual(childrenOfGroup2.length, 3);
 
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 });
 
 QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasNoActions", function(
@@ -330,8 +342,16 @@ QUnit.test("initFactoresRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHasNo
 	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
 	assert.strictEqual(childrenOfGroup2.length, 1);
 
+
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 });
 
 QUnit.test("requestGroupsOfRecordTypes", function(assert) {
@@ -404,7 +424,7 @@ QUnit.test("testViewRemoved", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
-	
+
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
 
@@ -430,7 +450,7 @@ QUnit.test("testViewRemoved", function(assert) {
 	jsClient.viewRemoved(aThirdView);
 	assert.strictEqual(openGuiItemHandler.getViewRemovedList(0), aThirdView);
 	assert.strictEqual(jsClientView.getRemovedWorkView(0), aThirdView.getWorkView());
-	
+
 
 	jsClient.viewRemoved(aDifferentView);
 	assert.strictEqual(openGuiItemHandler.getViewRemovedList(1), aDifferentView);
@@ -493,7 +513,7 @@ QUnit.test("testAfterReloadRecordTypeHandlersAsGroupsAndAddsToViewIfRecordTypeHa
 		jsClient.afterRecordTypeProviderReload();
 
 		assert.strictEqual(jsClientView.getRecordTypesClearedNoOfTimes(), 1);
-		CORATEST.assertRecordTypesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
+		CORATEST.assertRecordTypesHasBeenLoadedCorrectly2(assert, this, jsClient, 1);
 	});
 
 CORATEST.assertRecordTypesHasBeenLoadedCorrectly = function(assert, test, jsClient,
@@ -521,8 +541,18 @@ CORATEST.assertRecordTypesHasBeenLoadedCorrectly = function(assert, test, jsClie
 	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
 	assert.strictEqual(childrenOfGroup2.length, 3);
 
+//	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+//	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+
 	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
-	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+
+	let fourthGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(3 + extra);
+	assert.strictEqual(fourthGroupOfRecordTypes, undefined);
 }
 QUnit.test("testAfterReloadSearchProviderViewIsReloaded", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
@@ -569,7 +599,7 @@ QUnit.test("testOpenRecordUsingReadLinkInBackground", function(assert) {
 		requestMethod: "GET",
 		rel: "read",
 		url: "http://epc.ub.uu.se/cora/rest/record/recordType/presentationVar",
-		accept: "application/vnd.uub.record+json"
+		accept: "application/vnd.cora.record+json"
 	};
 	let openInfo = {
 		readLink: readLink,
@@ -601,23 +631,54 @@ QUnit.test("testOpenDefinitionViewerForId", function(assert) {
 
 	let definitionViewer = this.dependencies.definitionViewerFactory.getFactored(0);
 	let id = this.dependencies.definitionViewerFactory.getSpec(0);
-	
-	assert.deepEqual(id, {id:"someId"});
-	
+
+	assert.deepEqual(id, { id: "someId" });
+
 	let managedGui = this.dependencies.globalFactories.managedGuiItemFactory.getFactored(0);
 	let managedGuiSpec = managedGui.getSpec();
-	
+
 	assert.strictEqual(managedGuiSpec.activateMethod, jsClient.showView);
 	assert.strictEqual(managedGuiSpec.removeMethod, jsClient.viewRemoved);
 	assert.strictEqual(managedGuiSpec.callOnMetadataReloadMethod, definitionViewer.reloadForMetadataChanges);
-	
+
 	assert.deepEqual(managedGui.getAddedWorkPresentation(0), definitionViewer.getView());
-	
+
 	let menuPresentation = managedGui.getAddedMenuPresentation(0);
 	assert.deepEqual(menuPresentation.tagName, "SPAN");
 	assert.deepEqual(menuPresentation.className, "definitionViewer");
 	assert.deepEqual(menuPresentation.innerHTML, "Definition viewer: someId");
-	
+
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
+	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
+
+	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
+	assert.strictEqual(jsClientView.getAddedWorkView(0), managedGui.getWorkView());
+});
+
+QUnit.test("testOpenRecursiveDeleteForId", function(assert) {
+	let jsClient = CORA.jsClient(this.dependencies, this.spec);
+
+	jsClient.openRecursiveDeleteForId("someId");
+
+	let recursiveDelete = this.dependencies.recursiveDeleteFactory.getFactored(0);
+	let id = this.dependencies.recursiveDeleteFactory.getSpec(0);
+
+	assert.deepEqual(id, { id: "someId" });
+
+	let managedGui = this.dependencies.globalFactories.managedGuiItemFactory.getFactored(0);
+	let managedGuiSpec = managedGui.getSpec();
+
+	assert.strictEqual(managedGuiSpec.activateMethod, jsClient.showView);
+	assert.strictEqual(managedGuiSpec.removeMethod, jsClient.viewRemoved);
+
+	assert.deepEqual(managedGui.getAddedWorkPresentation(0), recursiveDelete.getView());
+
+	let menuPresentation = managedGui.getAddedMenuPresentation(0);
+	assert.deepEqual(menuPresentation.tagName, "SPAN");
+	assert.deepEqual(menuPresentation.className, "recursiveDelete");
+	assert.deepEqual(menuPresentation.innerHTML, "Recursive delete: someId");
+
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	assert.strictEqual(openGuiItemHandler.getAddedManagedGuiItem(0), managedGui);
 	assert.strictEqual(openGuiItemHandler.getShowViewList(0), managedGui);
@@ -722,7 +783,7 @@ QUnit.test("testReloadProvidersReloadsManagedGuiItem", function(assert) {
 
 
 	jsClient.reloadProviders();
-	
+
 	this.metadataProvider.callWhenReloadedMethod();
 	this.textProvider.callWhenReloadedMethod();
 	this.recordTypeProvider.callWhenReloadedMethod();
@@ -753,11 +814,46 @@ QUnit.test("testReloadProvidersReloadsRecordTypesAndSearches", function(assert) 
 	this.searchProvider.callWhenReloadedMethod();
 
 	assert.strictEqual(jsClientView.getRecordTypesClearedNoOfTimes(), 1);
-	CORATEST.assertRecordTypesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
+	CORATEST.assertRecordTypesHasBeenLoadedCorrectly2(assert, this, jsClient, 1);
 	assert.strictEqual(jsClientView.getSearchesClearedNoOfTimes(), 1);
 	CORATEST.assertSearchesHasBeenLoadedCorrectly(assert, this, jsClient, 1);
 });
+CORATEST.assertRecordTypesHasBeenLoadedCorrectly2 = function(assert, test, jsClient,
+	noOfPreviousReloads) {
+	let extra = noOfPreviousReloads * 2;
+	let jsClientView = test.dependencies.jsClientViewFactory.getFactored(0);
 
+	let firstGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(0 + extra);
+	assert.notEqual(firstGroupOfRecordTypes, undefined);
+	assert.strictEqual(firstGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(firstGroupOfRecordTypes.firstChild.className,
+		"recordTypeGroupHeadline");
+	assert.strictEqual(firstGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_testItemText");
+	let childrenOfGroup1 = firstGroupOfRecordTypes.children;
+	assert.strictEqual(childrenOfGroup1.length, 2);
+
+	let secondGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(1 + extra);
+	assert.notEqual(secondGroupOfRecordTypes, undefined);
+	assert.strictEqual(secondGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(secondGroupOfRecordTypes.firstChild.className,
+		"recordTypeGroupHeadline");
+	assert.strictEqual(secondGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_typeOfResourceItemText");
+	let childrenOfGroup2 = secondGroupOfRecordTypes.children;
+	assert.strictEqual(childrenOfGroup2.length, 3);
+
+//	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+//	assert.strictEqual(thirdGroupOfRecordTypes, undefined);
+
+	let thirdGroupOfRecordTypes = jsClientView.getGroupOfRecordTypes(2 + extra);
+	assert.notEqual(thirdGroupOfRecordTypes, undefined);
+	assert.strictEqual(thirdGroupOfRecordTypes.className, "recordTypeGroup");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.className, "recordTypeGroupHeadline");
+	assert.strictEqual(thirdGroupOfRecordTypes.firstChild.innerHTML,
+		"translated_authorityItemText");
+
+}
 QUnit.test("testSetCurrentLangReloadsManagedGuiItem", function(assert) {
 	this.metadataProvider = CORATEST.metadataProviderSpy();
 	this.dependencies.providers.metadataProvider = this.metadataProvider;
@@ -765,11 +861,11 @@ QUnit.test("testSetCurrentLangReloadsManagedGuiItem", function(assert) {
 	this.dependencies.providers.recordTypeProvider = this.recordTypeProvider;
 
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
-	
+
 	let aGuiItem = CORATEST.managedGuiItemSpy();
 	jsClient.showView(aGuiItem);
 	let aGuiItem2 = CORATEST.managedGuiItemSpy();
-	jsClient.showView(aGuiItem2);	
+	jsClient.showView(aGuiItem2);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	openGuiItemHandler.setGetItemList([aGuiItem, aGuiItem2]);
 
@@ -783,7 +879,7 @@ QUnit.test("testSetCurrentLangReloadsManagedGuiItem", function(assert) {
 
 QUnit.test("testAddedEventListener_forKeyDown", function(assert) {
 	let jsClient = CORA.jsClient(this.dependencies, this.spec);
-	
+
 	let firstAddedListener = this.addedEvents[0];
 	assert.strictEqual(firstAddedListener.type, "keydown");
 	assert.strictEqual(firstAddedListener.listener, jsClient.onKeyDown);
@@ -794,14 +890,14 @@ QUnit.test("testOnKeyDown_forKey_altKey+s_noShowingGuiItem", function(assert) {
 	let blurCalledBeforeSaveToSetValueOfCurrentSelect = false;
 	let input = document.createElement("input");
 	this.fixture.appendChild(input);
-	input.addEventListener("blur", ()=>{blurCalledBeforeSaveToSetValueOfCurrentSelect=true;});
+	input.addEventListener("blur", () => { blurCalledBeforeSaveToSetValueOfCurrentSelect = true; });
 	input.focus();
 
 	CORA.jsClient(this.dependencies, this.spec);
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "s";
 	eventSpy.altKey = true;
@@ -809,7 +905,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+s_noShowingGuiItem", function(assert) {
 	openGuiItemHandler.setGetShowingGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getCallsToSendDataToServer(), 0);
 	assert.true(blurCalledBeforeSaveToSetValueOfCurrentSelect);
@@ -820,7 +916,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+s", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "s";
 	eventSpy.altKey = true;
@@ -828,9 +924,43 @@ QUnit.test("testOnKeyDown_forKey_altKey+s", function(assert) {
 	openGuiItemHandler.setGetShowingGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getCallsToSendDataToServer(), 1);
+});
+
+QUnit.test("testOnKeyDown_forKey_altKey+r_noShowingGuiItem", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "r";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(undefined);
+
+	onKeyDown(eventSpy);
+
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getCallsToReloadDataFromServer(), 0);
+});
+
+QUnit.test("testOnKeyDown_forKey_altKey+r", function(assert) {
+	CORA.jsClient(this.dependencies, this.spec);
+	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
+	let onKeyDown = this.addedEvents[0].listener;
+
+	let eventSpy = CORATEST.eventSpy();
+	eventSpy.key = "r";
+	eventSpy.altKey = true;
+	let aView = CORATEST.managedGuiItemSpy();
+	openGuiItemHandler.setGetShowingGuiItem(aView);
+
+	onKeyDown(eventSpy);
+
+	assert.true(eventSpy.preventDefaultWasCalled());
+	assert.strictEqual(aView.getCallsToReloadDataFromServer(), 1);
 });
 
 QUnit.test("testOnKeyDown_forKey_altKey+w_noShowingGuiItem", function(assert) {
@@ -838,7 +968,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+w_noShowingGuiItem", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "w";
 	eventSpy.altKey = true;
@@ -846,10 +976,10 @@ QUnit.test("testOnKeyDown_forKey_altKey+w_noShowingGuiItem", function(assert) {
 	openGuiItemHandler.setGetShowingGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(openGuiItemHandler.getViewRemovedList(0), undefined);
-	assert.strictEqual(jsClientView.getRemovedWorkView(0),undefined);
+	assert.strictEqual(jsClientView.getRemovedWorkView(0), undefined);
 });
 
 QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
@@ -857,7 +987,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "w";
 	eventSpy.altKey = true;
@@ -865,7 +995,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+w", function(assert) {
 	openGuiItemHandler.setGetShowingGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(openGuiItemHandler.getViewRemovedList(0), aView);
 	assert.strictEqual(jsClientView.getRemovedWorkView(0), aView.getWorkView());
@@ -876,7 +1006,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", function(a
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowRight";
 	eventSpy.altKey = true;
@@ -884,7 +1014,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_noShowingGuiItem", function(a
 	openGuiItemHandler.setGetShowingGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
@@ -895,7 +1025,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", function(ass
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowRight";
 	eventSpy.altKey = true;
@@ -903,7 +1033,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowRight_showingGuiItem", function(ass
 	openGuiItemHandler.setGetShowingGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 1);
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
@@ -914,7 +1044,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", function(as
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowLeft";
 	eventSpy.altKey = true;
@@ -922,7 +1052,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_noShowingGuiItem", function(as
 	openGuiItemHandler.setGetShowingGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 0);
@@ -933,7 +1063,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_showingGuiItem", function(asse
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowLeft";
 	eventSpy.altKey = true;
@@ -941,7 +1071,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowLeft_showingGuiItem", function(asse
 	openGuiItemHandler.setGetShowingGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(aView.getNoCallsToToggleNextIndicator(), 0);
 	assert.strictEqual(aView.getNoCallsToTogglePreviousIndicator(), 1);
@@ -954,7 +1084,7 @@ QUnit.test("testOnKeyDown_forKey_ctrlKey+altKey+ArrowUp", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowUp";
 	eventSpy.ctrlKey = true;
@@ -963,7 +1093,7 @@ QUnit.test("testOnKeyDown_forKey_ctrlKey+altKey+ArrowUp", function(assert) {
 	openGuiItemHandler.setGetPreviousGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(openGuiItemHandler.getCallsToMoveCurrentMenuViewUp(), 1);
 	assert.strictEqual(openGuiItemHandler.getCallsToMoveCurrentMenuViewDown(), 0);
@@ -976,7 +1106,7 @@ QUnit.test("testOnKeyDown_forKey_ctrlKey+altKey+ArrowDown", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowDown";
 	eventSpy.ctrlKey = true;
@@ -985,7 +1115,7 @@ QUnit.test("testOnKeyDown_forKey_ctrlKey+altKey+ArrowDown", function(assert) {
 	openGuiItemHandler.setGetPreviousGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 	assert.strictEqual(openGuiItemHandler.getCallsToMoveCurrentMenuViewUp(), 0);
 	assert.strictEqual(openGuiItemHandler.getCallsToMoveCurrentMenuViewDown(), 1);
@@ -998,14 +1128,14 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowUp_noPreviousItem", function(assert
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowUp";
 	eventSpy.altKey = true;
 	openGuiItemHandler.setGetPreviousGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
@@ -1017,7 +1147,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowUp", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowUp";
 	eventSpy.altKey = true;
@@ -1025,7 +1155,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowUp", function(assert) {
 	openGuiItemHandler.setGetPreviousGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), aView.getWorkView());
@@ -1037,14 +1167,14 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowDown_noPreviousItem", function(asse
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowDown";
 	eventSpy.altKey = true;
 	openGuiItemHandler.setGetNextGuiItem(undefined);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), undefined);
@@ -1056,7 +1186,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowDown", function(assert) {
 	let jsClientView = this.dependencies.jsClientViewFactory.getFactored(0);
 	let openGuiItemHandler = this.dependencies.openGuiItemHandlerFactory.getFactored(0);
 	let onKeyDown = this.addedEvents[0].listener;
-	
+
 	let eventSpy = CORATEST.eventSpy();
 	eventSpy.key = "ArrowDown";
 	eventSpy.altKey = true;
@@ -1064,7 +1194,7 @@ QUnit.test("testOnKeyDown_forKey_altKey+ArrowDown", function(assert) {
 	openGuiItemHandler.setGetNextGuiItem(aView);
 
 	onKeyDown(eventSpy);
-	
+
 	assert.true(eventSpy.preventDefaultWasCalled());
 
 	assert.strictEqual(jsClientView.getAddedWorkView(0), aView.getWorkView());

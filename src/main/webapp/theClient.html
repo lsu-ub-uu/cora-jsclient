@@ -35,13 +35,18 @@
 <link rel="stylesheet" type="text/css" href="css/lib/minimap.css"></link>
 
 <link href="css/default.css" rel="stylesheet" type="text/css" title="A Client" id="aClientCSS">
-<link href="css/systemOne.css" rel="alternate stylesheet" type="text/css" title="System One" id="systemOneCSS">
+<link href="css/systemOne.css" rel="alternate stylesheet" type="text/css" title="System One"
+	id="systemOneCSS">
 <link href="css/alvin.css" rel="alternate stylesheet" type="text/css" title="Alvin" id="alvinCSS">
 <link href="css/diva.css" rel="alternate stylesheet" type="text/css" title="DiVA" id="divaCSS">
-<link href="css/diva-lila.css" rel="alternate stylesheet" type="text/css" title="DiVA-lila" id="divaLilaCSS">
-<link href="css/student-1.css" rel="alternate stylesheet" type="text/css" title="Student 1" id="student1CSS">
-<link href="css/student-2.css" rel="alternate stylesheet" type="text/css" title="Student 2" id="student2CSS">
-<link href="css/student-3.css" rel="alternate stylesheet" type="text/css" title="Student 3" id="student3CSS">
+<link href="css/diva-lila.css" rel="alternate stylesheet" type="text/css" title="DiVA-lila"
+	id="divaLilaCSS">
+<link href="css/student-1.css" rel="alternate stylesheet" type="text/css" title="Student 1"
+	id="student1CSS">
+<link href="css/student-2.css" rel="alternate stylesheet" type="text/css" title="Student 2"
+	id="student2CSS">
+<link href="css/student-3.css" rel="alternate stylesheet" type="text/css" title="Student 3"
+	id="student3CSS">
 
 <script type="text/javascript" src="script/aCoraNameSpace.js"></script>
 <script type="text/javascript" src="script/pubSub.js"></script>
@@ -57,6 +62,13 @@
 <script type="text/javascript" src="script/definitionViewer/definitionViewerFactory.js"></script>
 <script type="text/javascript" src="script/definitionViewer/definitionViewerView.js"></script>
 <script type="text/javascript" src="script/definitionViewer/definitionViewerViewFactory.js"></script>
+<script type="text/javascript" src="script/definitionViewer/definitionViewerText.js"></script>
+<script type="text/javascript" src="script/definitionViewer/definitionViewerTextFactory.js"></script>
+
+<script type="text/javascript" src="script/recursiveDelete/recursiveDelete.js"></script>
+<script type="text/javascript" src="script/recursiveDelete/recursiveDeleteFactory.js"></script>
+<script type="text/javascript" src="script/recursiveDelete/recursiveDeleteView.js"></script>
+<script type="text/javascript" src="script/recursiveDelete/recursiveDeleteDeleter.js"></script>
 
 <script type="text/javascript" src="script/jsClient/clientInstanceProvider.js"></script>
 <script type="text/javascript" src="script/jsClient/jsClient.js"></script>
@@ -211,47 +223,58 @@
 <script type="text/javascript" src="script/recordGui/recordGui.js"></script>
 <script type="text/javascript" src="script/recordGui/recordGuiFactory.js"></script>
 
+<script type="text/javascript" src="serverRestUrl.jsp"></script>
 <script type="text/javascript" src="useServer.js"></script>
 
 
 <script type="text/javascript">
 	window.onload = start;
 
-	var name = "A Client";
-	var baseUrl = "http://epc.ub.uu.se/cora/rest/";
-	var appTokenBaseUrl = "http://epc.ub.uu.se/";
-	var jsClientSpec;
-	var jsClientDependencies;
-	var jsClient;
-	var jsClientView;
-	var authTokenHolder;
-	var xmlHttpRequestFactory;
-	var ajaxCallFactory;
-	var metadataProvider;
-	var textProvider;
-	var searchProvider;
-	var recordTypeProvider;
-	var uploadManager;
+	let name = "A Client";
+	let baseUrl = "http://epc.ub.uu.se/cora/rest/";
+	let appTokenLogin;
+	let passwordLogin;
+	let jsClientSpec;
+	let jsClientDependencies;
+	let jsClient;
+	let jsClientView;
+	let authTokenHolder;
+	let xmlHttpRequestFactory;
+	let ajaxCallFactory;
+	let metadataProvider;
+	let textProvider;
+	let searchProvider;
+	let recordTypeProvider;
+	let uploadManager;
+	
+	authTokenHolder = CORA.authTokenHolder();
+	xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
 
-	var metadataProviderStarted = false;
+	let ajaxCallFactoryDependencies = {
+		"xmlHttpRequestFactory" : xmlHttpRequestFactory,
+		"authTokenHolder" : authTokenHolder
+	};
+	ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
+	
+	let metadataProviderStarted = false;
 	function metadataProviderReady() {
 		metadataProviderStarted = true;
 		possiblyStartJsClient();
 	}
 
-	var textProviderStarted = false;
+	let textProviderStarted = false;
 	function textProviderReady() {
 		textProviderStarted = true;
 		possiblyStartJsClient();
 	}
 
-	var searchProviderStarted = false;
+	let searchProviderStarted = false;
 	function searchProviderReady() {
 		searchProviderStarted = true;
 		possiblyStartJsClient();
 	}
 
-	var recordTypeProviderStarted = false;
+	let recordTypeProviderStarted = false;
 	function recordTypeProviderReady() {
 		recordTypeProviderStarted = true;
 		possiblyStartJsClient();
@@ -263,68 +286,30 @@
 			startJsClient();
 		}
 	}
-
+	
 	function startDependencies() {
 		tryToPreventAccidentialLeavOfPage();
 
-		authTokenHolder = CORA.authTokenHolder();
-		xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
+		let metadataListLink = createListActionLink("metadata");
+		let validationTypeListLink = createListActionLink("validationType");
+		let presentationListLink = createListActionLink("presentation");
+		let textListLink = createListActionLink("text");
+		let guiElementListLink = createListActionLink("guiElement");
 
-		var ajaxCallFactoryDependencies = {
-			"xmlHttpRequestFactory" : xmlHttpRequestFactory,
-			"authTokenHolder" : authTokenHolder
-		};
-		ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
-
-		var dependencies = {
-			"ajaxCallFactory" : ajaxCallFactory,
-			"authTokenHolder" : authTokenHolder
-		};
-		var metadataListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/metadata/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var validationTypeListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/validationType/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var presentationListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/presentation/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var textListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/text/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var guiElementListLink = {
-				"requestMethod" : "GET",
-				"rel" : "list",
-				"url" : baseUrl + "record/guiElement/",
-				"accept" : "application/vnd.uub.recordList+json"
-			};
-
-		var textProviderSpec = {
+		let textProviderSpec = {
 			"textListLink" : textListLink,
 			"lang" : "sv",
 			"callWhenReady" : textProviderReady
 		};
-		var dependenciesTextProviderFactory = {
+		let dependenciesTextProviderFactory = {
 			"ajaxCallFactory" : ajaxCallFactory
 		};
-		var dependenciesTextProvider = {
+		let dependenciesTextProvider = {
 			"textProviderFactory" : CORA.textProviderFactory(dependenciesTextProviderFactory)
 		};
 		textProvider = CORA.reloadableTextProvider(dependenciesTextProvider, textProviderSpec);
 
-		var metadataProviderSpec = {
+		let metadataProviderSpec = {
 			"metadataListLink" : metadataListLink,
 			"textListLink" : textListLink,
 			"presentationListLink" : presentationListLink,
@@ -332,52 +317,43 @@
 			"callWhenReady" : metadataProviderReady
 		};
 
-		var dependenciesMetadataProviderFactory = {
+		let dependenciesMetadataProviderFactory = {
 			"textProvider" : textProvider,
 			"ajaxCallFactory" : ajaxCallFactory
 		};
-		var dependenciesMetadataProvider = {
+		let dependenciesMetadataProvider = {
 			"metadataProviderFactory" : CORA
 					.metadataProviderFactory(dependenciesMetadataProviderFactory)
 		};
 		metadataProvider = CORA.reloadableMetadataProvider(dependenciesMetadataProvider,
 				metadataProviderSpec);
 
-		var dependenciesSearchProviderFactory = {
+		let dependenciesSearchProviderFactory = {
 			"ajaxCallFactory" : ajaxCallFactory
 		};
 
-		var dependenciesSearchProvider = {
+		let dependenciesSearchProvider = {
 			"searchProviderFactory" : CORA.searchProviderFactory(dependenciesSearchProviderFactory)
 		};
 
-		var searchRecordListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/search/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var specSearchProvider = {
+		let searchRecordListLink = createListActionLink("search");
+		let specSearchProvider = {
 			"searchRecordListLink" : searchRecordListLink,
 			"callWhenReady" : searchProviderReady
 		};
 		searchProvider = CORA.reloadableSearchProvider(dependenciesSearchProvider,
 				specSearchProvider);
 
-		var dependenciesRecordTypeProviderFactory = {
+		let dependenciesRecordTypeProviderFactory = {
 			"ajaxCallFactory" : ajaxCallFactory
 		};
-		var dependenciesReloadableRecordTypeProvider = {
+		let dependenciesReloadableRecordTypeProvider = {
 			"recordTypeProviderFactory" : CORA
 					.recordTypeProviderFactory(dependenciesRecordTypeProviderFactory)
 		};
-		var recordTypeListLink = {
-			"requestMethod" : "GET",
-			"rel" : "list",
-			"url" : baseUrl + "record/recordType/",
-			"accept" : "application/vnd.uub.recordList+json"
-		};
-		var recordTypeProviderSpec = {
+		
+		let recordTypeListLink = createListActionLink("recordType");
+		let recordTypeProviderSpec = {
 			"recordTypeListLink" : recordTypeListLink,
 			"validationTypeListLink" : validationTypeListLink,
 			"callWhenReady" : recordTypeProviderReady
@@ -385,18 +361,27 @@
 		recordTypeProvider = CORA.reloadableRecordTypeProvider(
 				dependenciesReloadableRecordTypeProvider, recordTypeProviderSpec);
 	}
-
+	
 	function tryToPreventAccidentialLeavOfPage() {
 		window.addEventListener("beforeunload", function(e) {
-			var confirmationMessage = "\o/";
+			let confirmationMessage = "\o/";
 			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
 			return confirmationMessage; //Webkit, Safari, Chrome etc.
 		});
 
 	}
-
+	
+	const createListActionLink = function(recordType) {
+		return {
+			requestMethod : "GET",
+			rel : "list",
+			url : baseUrl + "record/"+recordType+"/",
+			accept : "application/vnd.cora.recordList+json"
+		};
+	};
+	
 	function startJsClient() {
-		var providers = {
+		let providers = {
 			"metadataProvider" : metadataProvider,
 			"textProvider" : textProvider,
 			"searchProvider" : searchProvider,
@@ -406,34 +391,47 @@
 		jsClientSpec = {
 			"name" : name,
 			"baseUrl" : baseUrl,
-			"appTokenBaseUrl" : appTokenBaseUrl
+			appTokenLogin: appTokenLogin,
+			passwordLogin: passwordLogin
+			
 		};
-		var dependencies = {
+		let dependencies = {
 			"authTokenHolder" : authTokenHolder
 		};
-		var jsClientFactory = CORA.jsClientFactory(providers, dependencies);
+		let jsClientFactory = CORA.jsClientFactory(providers, dependencies);
 		jsClient = jsClientFactory.factor(jsClientSpec);
 		jsClientView = jsClient.getView();
 		document.body.appendChild(jsClient.getView());
 	}
 
 	function callError(error) {
-		console.log(error);
+		//console.log(error);
 	}
 
 	function callAfterAnswer() {
 	}
 </script>
 </head>
+
 <body>
-	<div class="loader">
-		<div class="loadingRing"><div></div><div></div><div></div><div></div></div>
-		<div class="loadingText" id="systemOneLoading">Laddar SystemOnes metadata</div>
-		<div class="loadingText" id="alvinLoading">Laddar Alvins metadata</div>
-		<div class="loadingText" id="divaLoading">Laddar DiVAs metadata</div>
-		<div class="loadingDescription">Det kan ta upp till en minut att ladda in metadatat.</div>
-		<div class="loadingUnderConstruction">(Ja, vi vet att laddningstiden är oacceptabelt lång just nu)</div>
-	</div>
+    <div class="loader">
+        <div class="logo-section">
+            <div class="logo-icon" id="systemOneLogo">S</div>
+            <div class="logo-icon" id="alvinLogo">A</div>
+            <div class="logo-icon" id="divaLogo">D</div>    
+            <div class="logo-text">
+                <div class="logo-title" id="systemOneLoading">SystemOne</div>
+                <div class="logo-title" id="alvinLoading">Alvin</div>
+                <div class="logo-title" id="divaLoading">DiVA</div>
+                <div class="logo-subtitle">Laddar Metadata</div>
+                <div class="status-dots">
+                    <div class="status-dot"></div>
+                    <div class="status-dot"></div>
+                    <div class="status-dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 

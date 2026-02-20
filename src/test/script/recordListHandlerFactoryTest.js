@@ -20,7 +20,7 @@
 
 QUnit.module("recordListHandlerFactoryTest.js", {
 	beforeEach : function() {
-		this.metadataProvider = new MetadataProviderStub();
+		this.metadataProvider = CORATEST.MetadataProviderStub();
 		this.dependencies = {
 			"factories" : {
 				"ajaxCallFactory" : CORATEST.ajaxCallFactorySpy(),
@@ -41,7 +41,7 @@ QUnit.module("recordListHandlerFactoryTest.js", {
 				"requestMethod" : "GET",
 				"rel" : "list",
 				"url" : "http://epc.ub.uu.se/cora/rest/record/recordType/",
-				"accept" : "application/vnd.uub.recordList+json"
+				"accept" : "application/vnd.cora.recordList+json"
 			},
 			"listPresentationViewId" : "metadataCollectionItemListPGroup"
 		};

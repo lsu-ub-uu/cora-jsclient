@@ -30,41 +30,41 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.gui.createSpanWithClassName(baseClassName);
+			view = CORA.createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
 			info = createInfo();
 			view.appendChild(info.getButton());
 		};
-		
+
 		const possiblyAddLableTextToView = function() {
-			if(spec.label){
-				if(modeIsInput()){
+			if (spec.label) {
+				if (modeIsInput()) {
 					addLabelForInput();
-				}else{
+				} else {
 					addLabelForOutput();
 				}
 			}
 		};
-		
-		const modeIsInput = function(){
+
+		const modeIsInput = function() {
 			return (spec.mode === "input");
 		};
-		
-		const addLabelForInput = function(){
+
+		const addLabelForInput = function() {
 			let label = document.createElement("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 			label.htmlFor = spec.id;
 		};
 
-		const addLabelForOutput = function(){
-			let label = CORA.gui.createSpanWithClassName("label");
+		const addLabelForOutput = function() {
+			let label = CORA.createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
-		
+
 		const createValueView = function() {
 			if (modeIsInput()) {
 				return createInput();
@@ -109,20 +109,20 @@ var CORA = (function(cora) {
 		};
 
 		const createOutput = function() {
-			if(child.useTextOnlyOutput()){
+			if (child.useTextOnlyOutput()) {
 				return createOutputText();
 			}
 			return child.createOutputWithSetValueFunction();
 		};
 
 		const createOutputText = function() {
-			let outputNew = CORA.gui.createSpanWithClassName("value");
+			let outputNew = CORA.createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};
 			return outputNew;
 		};
-		
+
 		const createInfo = function() {
 			let infoSpec = {
 				appendTo: view,
@@ -222,20 +222,6 @@ var CORA = (function(cora) {
 		const addAttributesView = function(attributesView) {
 			view.insertBefore(attributesView, valueView);
 		};
-		
-		const hide = function(element) {
-			view.styleOriginal = view.style.display;
-			view.style.display = "none";
-		};
-
-		const show = function(element) {
-			if (view.styleOriginal !== undefined) {
-				view.style.display = view.styleOriginal;
-			} else {
-				view.style.display = "";
-			}
-		};
-		
 		out = Object.freeze({
 			type: "pParentVarView",
 			getDependencies: getDependencies,
@@ -245,9 +231,7 @@ var CORA = (function(cora) {
 			updateClassName: updateClassName,
 			setState: setState,
 			disable: disable,
-			addAttributesView: addAttributesView,
-			hide: hide,
-			show: show
+			addAttributesView: addAttributesView
 		});
 		start();
 		return out;

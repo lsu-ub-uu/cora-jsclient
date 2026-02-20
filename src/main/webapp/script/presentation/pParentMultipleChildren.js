@@ -26,21 +26,22 @@ var CORA = (function(cora) {
 		const cParentPresentation = spec.cParentPresentation;
 		const path = spec.path;
 		const metadataId = child.metadataId;
-		
+		const presentationCounter = spec.presentationCounter;
+
 		let presentationId;
 		let view;
 		let cMetadataElement;
-		
+
 		let mode = "input";
 		let attributesToShow = "all";
-		let pAttributes; 
+		let pAttributes;
 		let text;
 
 		const start = function() {
 			cMetadataElement = getMetadataById(child.metadataId);
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
 			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-			
+
 			let viewSpec = intializeViewSpec();
 			child.addTypeSpecificInfoToViewSpec(mode, viewSpec);
 			view = dependencies.pMultipleChildrenViewFactory.factor(viewSpec, child);
@@ -50,24 +51,24 @@ var CORA = (function(cora) {
 			}
 			mode = getValueFromPresentationOrDefaultTo("mode", "input");
 			attributesToShow = getValueFromPresentationOrDefaultTo("attributesToShow", "all");
-			
+
 			if (cPresentation.containsChildWithNameInData("childReferences")) {
 				let presentationChildren = cPresentation
 					.getFirstChildByNameInData("childReferences").children;
 				presentationChildren.forEach(createAndAppendChildForPresentationChildRef);
 			}
 			if ("pSurroundingContainer" !== child.type) {
-				initPAttributes();
+				possiblyInitPAttributes();
 			}
 		};
-		
+
 		const getValueFromPresentationOrDefaultTo = function(nameInData, defaultValue) {
 			if (cPresentation.containsChildWithNameInData(nameInData)) {
 				return cPresentation.getFirstAtomicValueByNameInData(nameInData);
 			}
 			return defaultValue;
 		};
-		
+
 		const intializeViewSpec = function() {
 			let nameInData = cMetadataElement.getFirstAtomicValueByNameInData("nameInData");
 			let textId = getTextId(cMetadataElement, "textId");
@@ -103,54 +104,54 @@ var CORA = (function(cora) {
 				},
 			};
 			possiblyAddHeadlineToViewSpec(viewSpec);
-			
+
 			return viewSpec;
 		};
-		
-		const possiblyAddHeadlineToViewSpec = function(viewSpec){
-			if(headlineShouldBeShown()){
+
+		const possiblyAddHeadlineToViewSpec = function(viewSpec) {
+			if (headlineShouldBeShown()) {
 				addHeadlineToViewSpec(viewSpec);
 			}
 		};
-		
-		const headlineShouldBeShown = function (){
-			if(!cPresentation.containsChildWithNameInData("showHeadline")){
+
+		const headlineShouldBeShown = function() {
+			if (!cPresentation.containsChildWithNameInData("showHeadline")) {
 				return true;
 			}
 			return (cPresentation.getFirstAtomicValueByNameInData("showHeadline") !== "false");
 		};
-		
-		const addHeadlineToViewSpec = function(viewSpec){
+
+		const addHeadlineToViewSpec = function(viewSpec) {
 			if (cPresentation.containsChildWithNameInData("specifiedHeadlineText")) {
 				let specifiedHeadlineTextId = cPresentation.getLinkedRecordIdFromFirstChildLinkWithNameInData("specifiedHeadlineText");
 				let specifiedHeadlineText = textProvider.getTranslation(specifiedHeadlineTextId);
 				viewSpec.headline = specifiedHeadlineText;
-			}else{
+			} else {
 				viewSpec.headline = text;
 			}
 			if (cPresentation.containsChildWithNameInData("specifiedHeadlineLevel")) {
 				viewSpec.headlineLevel = cPresentation.getFirstAtomicValueByNameInData("specifiedHeadlineLevel");
-			}else{
+			} else {
 				viewSpec.headlineLevel = "h2";
 			}
 		};
 
-		const getClassName = function(){
+		const getClassName = function() {
 			let possiblePresentationStyle = getPresentationStyle();
-			return child.type +" "+possiblePresentationStyle + presentationId;
+			return child.type + " " + possiblePresentationStyle + presentationId;
 		};
-		
+
 		const getPresentationStyle = function() {
 			if (cPresentation.containsChildWithNameInData("presentationStyle")) {
-				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle") +" ";
+				return cPresentation.getFirstAtomicValueByNameInData("presentationStyle") + " ";
 			}
 			return "";
 		};
-		
+
 		const getTextId = function(cMetadataElementIn, textNameInData) {
 			return cMetadataElementIn.getLinkedRecordIdFromFirstChildLinkWithNameInData(textNameInData);
 		};
-		
+
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
 			let cPresentationChildRef = CORA.coraData(presentationChildRef);
 			let refId = extractRefId(presentationChildRef);
@@ -287,7 +288,7 @@ var CORA = (function(cora) {
 				textClassName += " "
 					+ cPresentationChildRef.getFirstAtomicValueByNameInData("childStyle");
 			}
-			let textSpan = CORA.gui.createSpanWithClassName(textClassName);
+			let textSpan = CORA.createSpanWithClassName(textClassName);
 			textSpan.appendChild(document.createTextNode(textProvider.getTranslation(presRef)));
 			return textSpan;
 		};
@@ -335,18 +336,29 @@ var CORA = (function(cora) {
 				cPresentation: cPresentationChild,
 				cParentPresentation: cParentPresentation,
 				mode: mode,
-				presentationSize: "bothEqual"
+				presentationSize: "firstSmaller",
+				parentPresentationCounter: presentationCounter
 			};
 			possiblyAddStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
 			possiblyAddAlternativePresentationToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblySetNonDefaultPresentationSize(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddClickableHeadlineInfoToSpec(cPresentationChildRef, childRefHandlerSpec);
 			return childRefHandlerSpec;
 		};
 
 		const possiblyAddStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
+			possiblyAddTextStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
+			possiblyAddChildStyleToSpec(cPresentationChildRef, childRefHandlerSpec);
+		};
+
+		const possiblyAddTextStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("textStyle")) {
 				childRefHandlerSpec.textStyle = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("textStyle");
 			}
+		};
+
+		const possiblyAddChildStyleToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
 			if (cPresentationChildRef.containsChildWithNameInData("childStyle")) {
 				childRefHandlerSpec.childStyle = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("childStyle");
@@ -358,7 +370,6 @@ var CORA = (function(cora) {
 			if (childHasAlternativePresentation(cPresentationChildRef)) {
 				let cAlternativePresentation = getAlternativePresentation(cPresentationChildRef);
 				childRefHandlerSpec.cAlternativePresentation = cAlternativePresentation;
-				possiblySetNonDefaultPresentationSize(cPresentationChildRef, childRefHandlerSpec);
 			}
 		};
 
@@ -367,11 +378,30 @@ var CORA = (function(cora) {
 			if (cPresentationChildRef.containsChildWithNameInData("presentationSize")) {
 				childRefHandlerSpec.presentationSize = cPresentationChildRef
 					.getFirstAtomicValueByNameInData("presentationSize");
+				//					(firstSmaller) Första presentationen är mindre
+				//					(firstLarger) Första presentationen är större
+				//					(bothEqual) Båda är likvärdiga
+				//					(singleInitiallyHidden) Enstaka är dold initialt
+				//					(singleInitiallyVisible) Enstaka visas initialt
 			}
 		};
+		//		"titleLink" länk till klickbar titel
+		//		"titleHeadlineLevel" rubriknivå h1-h6
 
 		const childHasAlternativePresentation = function(cChildRef) {
 			return cChildRef.getNoOfChildrenWithNameInData("refGroup") === 2;
+		};
+
+		const possiblyAddClickableHeadlineInfoToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
+			if (cPresentationChildRef.containsChildWithNameInData("title")) {
+				let elementTextId = cPresentationChildRef.getLinkedRecordIdFromFirstChildLinkWithNameInData("title");
+				let clickableHeadlineText = textProvider.getTranslation(elementTextId);
+				childRefHandlerSpec.clickableHeadlineText = clickableHeadlineText;
+			}
+			if (cPresentationChildRef.containsChildWithNameInData("titleHeadlineLevel")) {
+				childRefHandlerSpec.clickableHeadlineLevel = cPresentationChildRef
+					.getFirstAtomicValueByNameInData("titleHeadlineLevel");
+			}
 		};
 
 		const possiblyAddAddTextToSpec = function(cPresentationChildRef, childRefHandlerSpec) {
@@ -416,14 +446,20 @@ var CORA = (function(cora) {
 			return getMetadataById(alternativePresRefId);
 		};
 
-		const initPAttributes = function() {
-			let pAttributesSpec = {
-				addViewToParent: view.addAttributesView,
-				path: path,
-				mode: mode,
-				toShow: attributesToShow
-			};
-			pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+		const possiblyInitPAttributes = function() {
+			if (hasAttributes()) {
+				let pAttributesSpec = {
+					addViewToParent: view.addAttributesView,
+					path: path,
+					mode: mode,
+					toShow: attributesToShow
+				};
+				pAttributes = dependencies.pAttributesFactory.factor(pAttributesSpec);
+			}
+		};
+
+		const hasAttributes = function() {
+			return cMetadataElement.containsChildWithNameInData("attributeReferences");
 		};
 
 		const addAttributesView = function(attributesView) {
@@ -472,18 +508,23 @@ var CORA = (function(cora) {
 			openLinkedRecordForLink(event, presentationRecord.actionLinks.read);
 		};
 
+		const getPresentationCounter = function() {
+			return presentationCounter;
+		};
+
 		start();
 		return Object.freeze({
 			type: "pParentMultipleChildren",
 			getPresentationId: getPresentationId,
 			getView: view.getView,
 			addAttributesView: addAttributesView,
-			
+
 			openTextIdRecord: openTextIdRecord,
 			openDefTextIdRecord: openDefTextIdRecord,
 			openMetadataIdRecord: openMetadataIdRecord,
 			openPresentationIdRecord: openPresentationIdRecord,
 			openLinkedRecordForLink: openLinkedRecordForLink,
+			getPresentationCounter: getPresentationCounter
 		});
 	};
 	return cora;

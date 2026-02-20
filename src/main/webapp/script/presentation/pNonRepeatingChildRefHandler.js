@@ -21,42 +21,95 @@ var CORA = (function(cora) {
 	"use strict";
 	cora.pNonRepeatingChildRefHandler = function(dependencies, spec) {
 		let view;
-		let topLevelMetadataIds = {};
-		let storedValuePositions = {};
-		let metadataHelper;
+		const pubSub = dependencies.pubSub;
 		const metadataProvider = dependencies.providers.metadataProvider;
+		const parentPresentationCounter = spec.parentPresentationCounter;
+		const mode = spec.mode;
+		const cPresentation = spec.cPresentation;
+		let presentationVisibilities = {};
+		let presentationContainsDatas = {};
+		let pRepeatingElementIsVisible;
+		let pRepeatingElementContainsData;
+		let presentationContainsErrors = {};
+		let pRepeatingElementContainsError;
+		let presentationCounterToUseWhenPublishingCombinedStatus;
+		let possiblyFake;
+		let metadataHelper;
+		let notFoundIds = [];
+
 		const start = function() {
 			metadataHelper = CORA.metadataHelper({
 				metadataProvider: metadataProvider
 			});
+			if (atLeastOneChildRefFoundInCurrentlyUsedParentMetadata()) {
+				continueWithNormalStartup();
+			} else {
+				possiblyFake = createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith();
+			}
+		};
+
+		const continueWithNormalStartup = function() {
 			createView();
-			calculateHandledTopLevelMetadataIds(spec.cPresentation);
-			subscribeToAddMessagesForParentPath();
-			let factoredPresentation = factorPresentation(spec.cPresentation);
+			let factoredPresentation = factorPresentation(cPresentation);
+			presentationCounterToUseWhenPublishingCombinedStatus = factoredPresentation.getPresentationCounter();
+
 			view.addChild(factoredPresentation.getView());
 			possiblyAddAlternativePresentation();
 			view.setHasDataStyle(false);
-			if (spec.mode === "input") {
+			if (mode === "input") {
 				view.showContent();
 			} else {
 				view.hideContent();
 			}
 		};
 
+		const atLeastOneChildRefFoundInCurrentlyUsedParentMetadata = function() {
+			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
+			let presentationsOf = cPresentation.getFirstChildByNameInData("presentationsOf");
+
+			for (const childReference of presentationsOf.children) {
+				let cChildReference = CORA.coraData(childReference);
+				let childMetadataIdFromPresentation = cChildReference.getFirstAtomicValueByNameInData("linkedRecordId");
+				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
+					cParentMetadata, childMetadataIdFromPresentation);
+				if (cParentMetadataChildRefPart.getData() !== undefined) {
+					return true;
+				} else {
+					notFoundIds.push(childMetadataIdFromPresentation);
+				}
+			}
+			return false;
+		};
+
+		const createFakePChildRefHandlerAsWeDoNotHaveMetadataToWorkWith = function() {
+			return {
+				getView: function() {
+					let spanNew = document.createElement("span");
+					spanNew.className = "fakePChildRefHandlerViewAsNoMetadataExistsFor "
+						+ notFoundIds.join(" ");
+					return spanNew;
+				},
+				handleMsgToDeterminVisibilityChange: function() { }
+			};
+		};
+
 		const createView = function() {
 			let viewSpec = {
-				presentationId: findPresentationId(spec.cPresentation),
+				presentationId: findPresentationId(cPresentation),
 				textStyle: spec.textStyle,
 				childStyle: spec.childStyle,
-				"callOnFirstShowOfAlternativePresentation": publishPresentationShown
+				callOnFirstShowOfPresentation: publishPresentationShown,
+				clickableHeadlineText: spec.clickableHeadlineText,
+				clickableHeadlineLevel: spec.clickableHeadlineLevel,
+				presentationSize: spec.presentationSize
 			};
 			view = dependencies.pNonRepeatingChildRefHandlerViewFactory.factor(viewSpec);
 		};
 
 		const publishPresentationShown = function() {
-			dependencies.pubSub.publish("presentationShown", {
-				"data": "",
-				"path": []
+			pubSub.publish("presentationShown", {
+				data: "",
+				path: []
 			});
 		};
 
@@ -65,23 +118,6 @@ var CORA = (function(cora) {
 			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		};
 
-		const calculateHandledTopLevelMetadataIds = function(cPresentation) {
-			let cPresentationsOf = CORA.coraData(cPresentation
-				.getFirstChildByNameInData("presentationsOf"));
-			let listPresentationOf = cPresentationsOf.getChildrenByNameInData("presentationOf");
-			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId))
-			listPresentationOf.forEach(function(child) {
-				let cChild = CORA.coraData(child);
-				let presentationOfId = cChild.getFirstAtomicValueByNameInData("linkedRecordId");
-				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
-					cParentMetadata, presentationOfId);
-				if(cParentMetadataChildRefPart.getData() != undefined){
-					let cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
-					let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
-					topLevelMetadataIds[metadataId] = "exists";
-				}
-			});
-		};
 
 		const factorPresentation = function(cPresentation) {
 			let presentationSpec = {
@@ -91,138 +127,102 @@ var CORA = (function(cora) {
 				cParentPresentation: spec.cParentPresentation,
 				recordPartPermissionCalculator: spec.recordPartPermissionCalculator
 			};
-			return dependencies.presentationFactory.factor(presentationSpec);
+			let presentation = dependencies.presentationFactory.factor(presentationSpec);
+
+			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
+				undefined, handleMsgToDeterminVisibilityChange);
+			return presentation;
 		};
 
-		const subscribeToAddMessagesForParentPath = function() {
-			dependencies.pubSub.subscribe("add", spec.parentPath, undefined, possiblySubscribeOnAddMsg);
-		};
-
-		const possiblySubscribeOnAddMsg = function(dataFromMsg) {
-			if (messageIsHandledByThisPNonRepeatingChildRefHandler(dataFromMsg)) {
-				let newPath = calculateNewPathForMetadataIdUsingRepeatIdAndParentPath(
-					dataFromMsg.metadataId, dataFromMsg.repeatId, spec.parentPath);
-				dependencies.pubSub
-					.subscribe("*", newPath, undefined, handleMsgToDeterminDataState);
-			}
-		};
-
-		const messageIsHandledByThisPNonRepeatingChildRefHandler = function(dataFromMsg) {
-			return topLevelMetadataIds[dataFromMsg.metadataId] !== undefined;
-		};
-
-		const calculateNewPathForMetadataIdUsingRepeatIdAndParentPath = function(metadataIdToAdd, repeatId,
-			parentPath) {
-			let pathSpec = {
-				"metadataIdToAdd": metadataIdToAdd,
-				"repeatId": repeatId,
-				"parentPath": parentPath
-			};
-			return CORA.calculatePathForNewElement(pathSpec);
-		};
-
-		const handleMsgToDeterminDataState = function(dataFromMsg, msg) {
-			let msgAsArray = msg.split("/");
-			let msgType = msgAsArray.pop();
-			if (msgType === "setValue") {
-				handleNewValue(dataFromMsg, msgAsArray);
-			}
-			if (msgType === "remove") {
-				removeAndSetState(msgAsArray);
-			}
-		};
-
-		const handleNewValue = function(dataFromMsg, msgAsArray) {
-			if (dataFromMsg.data !== "") {
-				updateViewForData();
-				findOrAddPathToStored(msgAsArray);
-			} else {
-				removeAndSetState(msgAsArray);
-			}
-		};
-
-		const updateViewForData = function() {
-			view.setHasDataStyle(true);
-			if (isInOutputMode()) {
+		const showOrHideViewBaseOnVisibility = function(currentlyVisible) {
+			if (currentlyVisible) {
 				view.showContent();
-				publishPresentationShown();
-			}
-		};
-
-		const isInOutputMode = function() {
-			return spec.mode === "output";
-		};
-
-		const removeAndSetState = function(msgAsArray) {
-			removeValuePosition(msgAsArray);
-			if (noValuesExistForPresentedData()) {
-				updateViewForNoData();
-			}
-		};
-
-		const removeValuePosition = function(pathAsArray) {
-			let currentPartOfStoredValuePositions = findOrAddPathToStored(pathAsArray);
-			removeFromBottom(currentPartOfStoredValuePositions);
-		};
-
-		const removeFromBottom = function(currentPartOfStoredValuePositions) {
-			let parent = currentPartOfStoredValuePositions.getParent();
-			delete parent[currentPartOfStoredValuePositions.name];
-			if (parentContainsNoValues(parent)) {
-				removeFromBottom(parent);
-			}
-		};
-
-		const parentContainsNoValues = function(parent) {
-			return Object.keys(parent).length === 2;
-		};
-
-		const noValuesExistForPresentedData = function() {
-			return Object.keys(storedValuePositions).length === 0;
-		};
-
-		const updateViewForNoData = function() {
-			view.setHasDataStyle(false);
-			if (isInOutputMode()) {
+			} else {
 				view.hideContent();
 			}
 		};
 
-		const findOrAddPathToStored = function(pathAsArray) {
-			let currentPartOfStoredValuePositions = storedValuePositions;
-			for (let pathPart of pathAsArray) {
-				currentPartOfStoredValuePositions = returnOrCreatePathPart(
-					currentPartOfStoredValuePositions, pathPart);
+		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
+			presentationContainsErrors[dataFromMsg.presentationCounter] = dataFromMsg.containsError;
+			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+			let visibilityHasChanged = visibilityChanges(currentlyVisible);
+			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
+			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
+			let currentlyContainsError = atLeastOneTrackedPresentationContainsError();
+			let containsErrorHasChanged = containsErrorChanges(currentlyContainsError);
+
+			if (visibilityHasChanged && mode === "output") {
+				showOrHideViewBaseOnVisibility(currentlyVisible);
 			}
-			return currentPartOfStoredValuePositions;
-		};
-
-		const returnOrCreatePathPart = function(currentPartOfStoredValuePositions, partPath) {
-			if (currentPartOfStoredValuePositions[partPath] !== undefined) {
-				return currentPartOfStoredValuePositions[partPath];
+			if (visibilityHasChanged || containsDataHasChanged || containsErrorHasChanged) {
+				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData,
+					currentlyContainsError);
 			}
-			return createAndSetPartPath(currentPartOfStoredValuePositions, partPath);
+			view.setHasDataStyle(currentlyContainsData);
+			view.setHasErrorStyle(currentlyContainsError);
 		};
 
-		const createAndSetPartPath = function(currentPartOfStoredValuePositions, partPath) {
-			let newLevel = createPartPath(currentPartOfStoredValuePositions, partPath);
-			currentPartOfStoredValuePositions[partPath] = newLevel;
-			return newLevel;
+		const atLeastOneTrackedPresentationIsVisible = function() {
+			return Object.values(presentationVisibilities).some(v => v === 'visible');
 		};
 
-		const createPartPath = function(currentPartOfStoredValuePositions, partPath) {
-			return {
-				name: partPath,
-				getParent: function() {
-					return currentPartOfStoredValuePositions;
-				}
+		const atLeastOneTrackedPresentationContainsData = function() {
+			return Object.values(presentationContainsDatas).some(v => v === true);
+		};
+
+		const atLeastOneTrackedPresentationContainsError = function() {
+			return Object.values(presentationContainsErrors).some(v => v === true);
+		};
+
+		const getVisibilityStatus = function() {
+			if (Object.values(presentationVisibilities).some(v => v === 'visible')) {
+				return "visible";
+			}
+			return "hidden";
+		};
+
+		const visibilityChanges = function(currentlyVisible) {
+			if (pRepeatingElementIsVisible !== currentlyVisible) {
+				pRepeatingElementIsVisible = currentlyVisible;
+				return true;
+			}
+			return false;
+		};
+		const containsDataChanges = function(currentlyContainsData) {
+			if (pRepeatingElementContainsData !== currentlyContainsData) {
+				pRepeatingElementContainsData = currentlyContainsData;
+				return true;
+			}
+			return false;
+		};
+
+		const containsErrorChanges = function(currentlyContainsError) {
+			if (pRepeatingElementContainsError !== currentlyContainsError) {
+				pRepeatingElementContainsError = currentlyContainsError;
+				return true;
+			}
+			return false;
+		};
+
+		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData,
+			currentlyContainsError) {
+			let visibilityData = {
+				path: [parentPresentationCounter],
+				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
+				visibility: currentlyVisible,
+				containsData: currentlyContainsData,
+				containsError: currentlyContainsError
 			};
+
+			pubSub.publish("visibilityChange", visibilityData);
 		};
 
 		const possiblyAddAlternativePresentation = function() {
 			if (spec.cAlternativePresentation !== undefined) {
 				let factoredAlternativePresentation = factorPresentation(spec.cAlternativePresentation);
-				view.addAlternativeChild(factoredAlternativePresentation.getView(), spec.presentationSize);
+				view.addAlternativePresentation(factoredAlternativePresentation.getView());
 			}
 		};
 
@@ -243,12 +243,14 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies,
 			getSpec: getSpec,
 			getView: getView,
-			possiblySubscribeOnAddMsg: possiblySubscribeOnAddMsg,
-			handleMsgToDeterminDataState: handleMsgToDeterminDataState,
-			publishPresentationShown: publishPresentationShown
+			publishPresentationShown: publishPresentationShown,
+			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
 		});
 
 		start();
+		if (undefined !== possiblyFake) {
+			return possiblyFake;
+		}
 		return out;
 	};
 

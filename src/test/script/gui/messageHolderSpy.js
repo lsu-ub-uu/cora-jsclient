@@ -22,7 +22,7 @@ var CORATEST = (function(cora) {
 		var view = createView();
 		var createdMessages = [];
 		function createView() {
-			return CORA.gui.createDivWithClassName("messageHolderSpy");
+			return CORA.createDivWithClassName("messageHolderSpy");
 		}
 
 		function createMessage(messageSpec) {

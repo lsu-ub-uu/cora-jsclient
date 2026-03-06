@@ -22,7 +22,7 @@
     gap: 20px;
 }
 
-.logo-icon {
+.logo-icon-text {
     width: 64px;
     height: 64px;
     border-radius: 12px;
@@ -34,6 +34,15 @@
     font-weight: 700;
     color: white;
     box-shadow: 0 4px 16px rgba(0, 82, 204, 0.2);
+}
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
 }
 
 .logo-text {

@@ -1,23 +1,35 @@
 :root {
-	--main-color: rgba(0, 130, 200);
-	--main-color-darker: rgba(0, 105, 172);
-	--second-color: rgba(0, 163, 251);
-	--color-light-grey: #DCDCDC;
-	--color-white: rgba(255, 255, 255);
+	--main-color: #0369a1;
+	--main-color-darker: #075985;
+	--second-color: #0ea5e9;
+	--color-light-grey: #e2e8f0;
+	--color-white: #ffffff;
 	--color-grey: rgba(20, 20, 20);
-	--black-box-10-shadow: rgba(0, 0, 0, 0.2);
-	--text-shadow-12-trans: rgba(0, 0, 0, 0.12);
-	--black-box-50-shadow: rgba(0, 0, 0, 0.5);
+	--black-box-10-shadow: rgba(0, 0, 0, 0.08);
+	--text-shadow-12-trans: rgba(0, 0, 0, 0.06);
+	--black-box-50-shadow: rgba(0, 0, 0, 0.18);
 	--color-h1: var(--main-color);
-	--color-h2: rgba(0, 130, 200, 0.9);
-	--color-h3: rgba(0, 130, 200, 0.8);
-	--color-h4: rgba(0, 130, 200, 0.7);
-	--color-selected-on-menu: black;
+	--color-h2: #0284c7;
+	--color-h3: #0369a1;
+	--color-h4: #0c4a6e;
+	--color-selected-on-menu: #0f172a;
 	--inbox-28-shadow: rgba(255, 255, 255, 0.28);
 	--box-sahow-17-trans: rgba(255, 255, 255, 0.17);
-	--menu-2n-color: rgba(167, 114, 166, 0.5);
-	--color-contains: rgba(255, 166, 0);
-	--color-contains-error: red;
+	--menu-2n-color: rgba(148, 163, 184, 0.15);
+	--color-contains: #f59e0b;
+	--color-contains-error: #dc2626;
+	--color-border: #e2e8f0;
+	--color-surface: #f8fafc;
+	--color-text: #334155;
+	--color-text-secondary: #64748b;
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+	--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+	--transition-fast: 150ms ease;
+	--transition-normal: 250ms ease;
 }
 
 @font-face {
@@ -28,24 +40,28 @@
 }
 
 html {
-	margin: 0px;
-	height: calc(100%);
-	padding: 0px;
+	margin: 0;
+	height: 100%;
+	padding: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
-	margin: 0px;
+	margin: 0;
 	height: 100%;
-	padding: 0px;
+	padding: 0;
 	font-family: 'Open Sans', sans-serif;
+	color: var(--color-text);
+	line-height: 1.5;
 }
 
 .jsClient .headline {
-	color: #575757;
+	color: var(--color-text);
 }
 
 .jsClient .text {
-	color: #575757;
+	color: var(--color-text);
 }
 
 h1, .h1TextStyle {
@@ -61,29 +77,48 @@ h1, .h1TextStyle {
 .header select {
 	float: right;
 	margin-top: .4rem;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.15);
+	color: white;
+	border-radius: var(--radius-sm);
+	padding: 0.2rem 0.4rem;
+	font-size: 0.8rem;
+	cursor: pointer;
+	outline: none;
+	transition: background var(--transition-fast);
+}
+
+.header select:hover {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.header select option {
+	color: var(--color-text);
+	background: white;
 }
 
 .holder.tool {
-	background-color: var(--second-color);
+	background-color: var(--color-white);
 	display: flex;
 	min-height: 5rem;
 	position: absolute;
 	overflow: hidden;
 	z-index: 1010;
-	top: 3rem;
+	top: 3.5rem;
 	right: 1rem;
 	min-width: 13rem;
 	flex-direction: column;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-	padding: 0.4em 0 0.4em 0;
-	border-radius: 5px 5px;
+	box-shadow: var(--shadow-lg);
+	padding: 0.5rem 0;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--color-border);
 }
 
 .holder.tool:before {
 	background: url("../images/icons3.svg") no-repeat scroll;
 	content: "";
 	background-position: -144px -0px;
-	opacity: .4;
+	opacity: .06;
 	height: 16px;
 	width: 16px;
 	transform: scale(10, 10);
@@ -112,10 +147,9 @@ h1, .h1TextStyle {
 	grid-template-rows: max-content minmax(0, 1fr);
 	grid-template-areas: "header header" "sideBar workArea";
 	height: 100%;
-	border-color: var(--main-color);
+	border-color: var(--color-border);
 	position: relative;
-	/* 	overflow: hidden; */
-	background: linear-gradient(to bottom, #f2f2f2 0%, #f9fafb 100%);
+	background: var(--color-surface);
 }
 
 .progress {
@@ -132,11 +166,14 @@ h1, .h1TextStyle {
 	font-family: 'UniversalisADFStdRegular';
 	color: white;
 	border-color: inherit;
-	background:  linear-gradient(to bottom,var(--main-color),var(--main-color-darker));
+	background: linear-gradient(135deg, var(--main-color), var(--main-color-darker));
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top: 0.5rem;
-	border-bottom: 1px solid var(--second-color);
+	border-bottom: none;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	z-index: 10;
+	position: relative;
 }
 
 .jsClient>.header .menuView {
@@ -196,35 +233,39 @@ h1, .h1TextStyle {
 	position: absolute;
 	z-index: 1015;
 	background: var(--color-white);
-	padding: 10px;
-	/*Calculation of headers height*/
+	padding: 0.5rem;
 	top: calc(3rem + 9px);
 	right: 0rem;
-	box-shadow: -10px 10px 10px var(--black-box-10-shadow);
-	border-radius: 0px 0px 4px 4px;
+	box-shadow: var(--shadow-lg);
+	border-radius: 0 0 var(--radius-md) var(--radius-md);
+	border: 1px solid var(--color-border);
+	border-top: none;
 }
 
 .holder.loginManagerView .menuOption:hover {
 	color: var(--main-color);
+	background: var(--color-surface);
 }
 
 .loginManagerView .menuOption {
 	display: block;
 	cursor: pointer;
-	padding: 5px;
+	padding: 0.4rem 0.8rem;
+	border-radius: var(--radius-sm);
+	transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .jsClient>.sideBar {
 	grid-area: sideBar;
 	overflow: auto;
-	border-right: 1px solid;
+	border-right: 1px solid var(--color-border);
 	border-color: inherit;
-	color: var(--color-grey);
+	color: var(--color-text);
 	background: var(--color-white);
 	display: inline-block;
 	padding: 0rem .5rem;
 	width: 20rem;
-	border-left: 1px solid;
+	border-left: none;
 }
 
 .openGuiItemHandlerView, .searchesView {
@@ -244,12 +285,13 @@ h1, .h1TextStyle {
 .sideBar .openGuiItemHandlerView>.header, .searchesViewHeadline,
 	.recordTypeGroupHeadline {
 	color: var(--main-color);
-	font-size: 1.1rem;
-	font-weight: bold;
+	font-size: 0.75rem;
+	font-weight: 700;
 	margin-top: 1rem;
 	position: relative;
 	border-bottom: none;
-	letter-spacing: -1px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
 }
 
 .searchesView {
@@ -304,10 +346,12 @@ h1, .h1TextStyle {
 .sideBar .menuView {
 	min-height: 1rem;
 	position: relative;
+	border-radius: var(--radius-sm);
+	transition: background var(--transition-fast);
 }
 
 .sideBar .menuView:nth-child(2n) {
-	background-color: rgba(0, 130, 201, 0.1);
+	background-color: var(--menu-2n-color);
 }
 
 .sideBar .menuView>.removeButton {
@@ -319,15 +363,16 @@ h1, .h1TextStyle {
 .sideBar .header {
 	margin-bottom: 1rem;
 	margin-left: .5rem;
-	border-bottom: 1px dashed;
+	border-bottom: 1px solid var(--color-border);
 	border-color: inherit;
 }
 
 .sideBar .header.clickable:hover, .sideBar .childrenView .menuView:hover
 	{
-	text-decoration: underline;
+	text-decoration: none;
 	cursor: pointer;
 	color: var(--main-color);
+	background: rgba(3, 105, 161, 0.06);
 }
 
 .openGuiItemHandlerView .childrenView span, .openGuiItemHandlerView .childrenView div,
@@ -340,16 +385,17 @@ h1, .h1TextStyle {
 	display: block;
 	width: 100%;
 	border-color: inherit;
-	background-color: rgba(180, 216, 216, 0.07);
+	background-color: transparent;
 	font-size: .8rem;
 }
 
 .sideBar .childrenView>span {
-	border-left: 1px solid;
-	border-right: 1px solid;
+	border-left: 2px solid var(--color-border);
+	border-right: none;
 	border-color: inherit;
-	padding: .2rem;
-	padding-left: .4rem;
+	padding: .3rem;
+	padding-left: .6rem;
+	transition: background var(--transition-fast);
 }
 
 .sideBar .childrenView>span:nth-child(even) {
@@ -357,7 +403,7 @@ h1, .h1TextStyle {
 }
 
 .sideBar .childrenView>span:last-child {
-	border-bottom: 1px solid;
+	border-bottom: none;
 	border-color: inherit;
 }
 
@@ -366,9 +412,14 @@ h1, .h1TextStyle {
 }
 
 .sideBar .childrenView .active::after {
-	content: ">";
+	content: "";
 	position: absolute;
-	left: -.6rem;
+	left: -2px;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: var(--main-color);
+	border-radius: 0 2px 2px 0;
 }
 
 .jsClient .sideBar .openGuiItemHandlerView [class*="indicatorClassName"]
@@ -493,7 +544,8 @@ h1, .h1TextStyle {
 .topBar {
 	grid-area: topBar;
 	height: 2rem;
-	border-bottom: 1px solid var(--main-color);
+	border-bottom: 1px solid var(--color-border);
+	background: var(--color-white);
 }
 
 .topBar .iconButton {
@@ -504,7 +556,7 @@ h1, .h1TextStyle {
 
 .jsClient .serverAddress {
 	font-size: 0.7em;
-	color: #575757;
+	color: var(--color-text-secondary);
 }
 
 .jsClient .workItem>.searchFormHolder {
@@ -527,24 +579,29 @@ h1, .h1TextStyle {
 	position: absolute;
 	bottom: 0rem;
 	right: 1rem;
-	background-color: var(--main-color);
-	padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+	background-color: var(--color-white);
+	padding: 0.4rem;
 	z-index: 1009;
+	border-radius: var(--radius-md) var(--radius-md) 0 0;
+	box-shadow: var(--shadow-md);
+	border: 1px solid var(--color-border);
+	border-bottom: none;
 }
 
 .jsClient .workItem>.incomingLinksView {
-	box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	background-color: #f6f6f7;
+	background-color: var(--color-white);
 	height: 30%;
 	z-index: 12;
 	overflow: auto;
+	border-top: 1px solid var(--color-border);
 }
 
 .jsClient .incomingLink:hover {
-	background-color: rgba(0, 130, 201, 0.1);
+	background-color: rgba(3, 105, 161, 0.06);
 	cursor: pointer;
 }
 
@@ -682,16 +739,19 @@ h1, .h1TextStyle {
 	font-size: .8rem;
 	counter-increment: record;
 	display: flex;
-	border-bottom: 1px dashed;
-	padding: 0.3rem;
+	border-bottom: 1px solid var(--color-border);
+	padding: 0.4rem 0.3rem;
+	transition: background var(--transition-fast);
 }
 
 .jsClient .listItem::before {
 	content: counter(record) ".";
-	font-size: 2rem;
+	font-size: 1.6rem;
 	display: block;
 	left: 0rem;
 	padding-right: 0.5rem;
+	color: var(--color-text-secondary);
+	font-weight: 300;
 }
 
 .jsClient .listItem .presentation {
@@ -802,7 +862,7 @@ h1, .h1TextStyle {
 
 .definitionViewer .header {
 	font-size: 2rem;
-	color: #243bb7;
+	color: var(--main-color);
 }
 
 .definitionViewer .nameInData {
@@ -835,16 +895,15 @@ h1, .h1TextStyle {
 }
 
 .definitionViewer .legend {
-	color: #243bb7;
-	/* 	font-weight: bold; */
-	/* 	margin-right: auto; */
+	color: var(--main-color);
 	position: absolute;
 	top: 3rem;
 	right: 3rem;
-	border: 1px solid gray;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
-	box-shadow: 10px 5px 5px #b9b9b9;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	padding: 0.75rem;
+	box-shadow: var(--shadow-md);
+	background: var(--color-white);
 }
 
 .definitionViewer .legend.blink {
@@ -964,21 +1023,21 @@ h1, .h1TextStyle {
 }
 
 .recursiveDelete .failed {
-	background-color: rgb(215, 108, 130);
-	border-radius: 0.5rem;
+	background-color: #fecaca;
+	border-radius: var(--radius-md);
 }
 
 .recursiveDelete .deleted {
-	background-color: rgb(126, 212, 173);
-	border-radius: 0.5rem;
+	background-color: #bbf7d0;
+	border-radius: var(--radius-md);
 }
 
 .recursiveDelete li.recursiveDeleteItemCollection {
 	max-height: 15rem;
 	overflow: scroll;
-	border: 1px dotted black;
+	border: 1px solid var(--color-border);
 	width: fit-content;
-	border-radius: 5px;
+	border-radius: var(--radius-sm);
 }
 
 .recursiveDelete>input {

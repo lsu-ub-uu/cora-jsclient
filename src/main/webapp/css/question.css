@@ -1,5 +1,5 @@
 .question {
-	background-color: RGBA(0, 0, 0, 0.4);
+	background-color: rgba(15, 23, 42, 0.5);
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -9,6 +9,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	backdrop-filter: blur(4px);
 }
 
 .question.hidden {
@@ -17,27 +18,30 @@
 
 .question.toBeRemoved {
 	opacity: 0.0;
-	transition: opacity .7s;
+	transition: opacity .4s ease;
 }
 
 .question .questionBox {
-	background-color: #ffb300;;
-	width: calc(100% - 2em);
+	background-color: var(--color-white, #ffffff);
+	width: calc(100% - 4em);
+	max-width: 32rem;
 	margin: 1em;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
-	padding-bottom: 1em;
-	border: 1px solid black;
-	border-radius: 10px 10px;
+	padding: 1.5em;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-lg, 12px);
+	box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.08));
 }
 
 .question .questionBox text {
 	display: block;
 	text-align: center;
 	padding: 1em;
-	font-weight: bold;
-	flex: 100%
+	font-weight: 600;
+	flex: 100%;
+	color: var(--color-text, #334155);
 }
 
 .question .questionBox :last-child {
@@ -45,5 +49,5 @@
 }
 
 .question input {
-	margin: 0 1rem;
+	margin: 0 0.5rem;
 }

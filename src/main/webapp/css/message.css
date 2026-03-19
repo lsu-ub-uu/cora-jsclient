@@ -1,6 +1,6 @@
 .removeButton:hover::after {
 	opacity: 1;
-    animation: rotation 1s  linear;
+    animation: rotation 0.6s ease;
 }
 
 @keyframes rotation {
@@ -9,8 +9,8 @@
 }
 
 .messageHolder {
-	color: black;
-	top: 5em;
+	color: var(--color-text, #334155);
+	top: 4em;
 	position: absolute;
 	font-size: 1rem;
 	left: 5em;
@@ -19,10 +19,10 @@
 }
 
 .messageHolder .toBeRemoved, .message.toBeRemoved {
-	background-color: black;
+	background-color: transparent;
 	opacity: 0.0;
 	height: 0px;
-	transition: opacity .7s, height .7s;
+	transition: opacity .5s ease, height .5s ease;
 	overflow: hidden;
 	margin-top: 0px;
 	border: 0px;
@@ -32,10 +32,10 @@
 	border: 1px solid;
 	margin: 4px;
 	min-height: 19px;
-	padding: .5rem;
+	padding: .6rem .8rem;
 	width: auto;
-	border-radius: 10px 10px;
-	box-shadow: 10px 10px 10px var(--black-box-10-shadow);
+	border-radius: var(--radius-md, 8px);
+	box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.07));
 }
 
 .messageHolder .messageText {
@@ -43,23 +43,27 @@
 }
 
 .messageHolder .error {
-	color: #D8000C;
-	background-color: #FFBABA;
+	color: #991b1b;
+	background-color: #fef2f2;
+	border-color: #fecaca;
 }
 
 .messageHolder .warning {
-	color: #9F6000;
-	background-color: #FEEFB3;
+	color: #92400e;
+	background-color: #fffbeb;
+	border-color: #fde68a;
 }
 
 .messageHolder .info {
-	color: #00529B;
-	background-color: #BDE5F8;
+	color: #1e40af;
+	background-color: #eff6ff;
+	border-color: #bfdbfe;
 }
 
 .messageHolder .positive {
-	color: #4F8A10;
-	background-color: #DFF2BF;
+	color: #166534;
+	background-color: #f0fdf4;
+	border-color: #bbf7d0;
 }
 
 .message {

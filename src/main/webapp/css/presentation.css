@@ -1,5 +1,5 @@
 :root {
-	--color-presentation-grey: #868686;
+	--color-presentation-grey: #94a3b8;
 }
 
 /* var(--color-presentation-grey) */
@@ -10,7 +10,8 @@
 .presentation {
 	min-height: 13px;
 	min-width: 13px;
-	border: 1px solid rgba(140, 140, 140, 0.58);
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-sm, 4px);
 }
 
 img {
@@ -48,13 +49,13 @@ img {
 }
 
 .error input, .error select, .error textarea {
-	background-color: #fbc0c0;
-	border-color: red;
+	background-color: #fef2f2;
+	border-color: #ef4444;
 }
 
 .errorStillFocused input, .errorStillFocused select, .errorStillFocused textarea
 	{
-	border-color: orange;
+	border-color: #f59e0b;
 }
 
 .iconButton {
@@ -228,21 +229,11 @@ img {
 	/* 	chrome can not hadle css changes on dragging :( */
 	transform: scale(0.8);
 	opacity: sacle(0.9);
-	border: 1px solid rgba(0, 0, 0, 0.5);
-	border-radius: 12px;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-md, 8px);
 	padding: 10px;
-	
-	box-shadow:
-		0 4px 8px rgba(0, 0, 0, 0.08),
-		0 12px 24px rgba(0, 0, 0, 0.12);
-	
-	background: linear-gradient(
-		145deg,
-	rgba(255,255,255,0.95),
-	rgba(245,245,245,0.85)
-	);
-	
-	
+	box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.08));
+	background: var(--color-white, #ffffff);
 }
 
 .jsClient .beeingDragged span, .jsClient .beeingDragged div {
@@ -283,8 +274,8 @@ img {
 .pVar:hover, .pNumVar:hover, .pCollVar:hover, .pMap:hover, .pGroup:hover,
 	.pSurroundingContainer:hover, .repeatingElement:hover, .pRecordLink:hover,
 	.pNonRepeatingChildRefHandler:hover {
-	background-color: rgba(0, 129, 198, 0.08);
-	transition: background-color 0.5s linear;
+	background-color: rgba(3, 105, 161, 0.04);
+	transition: background-color var(--transition-normal, 250ms ease);
 }
 
 /* .infoActive { */
@@ -292,8 +283,8 @@ img {
 	.pGroup.infoActive, .pSurroundingContainer.infoActive,
 	.repeatingElement.infoActive, .pRecordLink.infoActive,
 	.pNonRepeatingChildRefHandler.infoActive {
-	background-color: rgba(60, 150, 255, 0.3);
-	transition: background-color 0.5s linear;
+	background-color: rgba(14, 165, 233, 0.12);
+	transition: background-color var(--transition-normal, 250ms ease);
 }
 
 .infoActive>.infoButton::before, .infoActive>.buttonView .infoButton::before,
@@ -366,10 +357,12 @@ textarea {
 }
 
 .workItem .presentation>.pGroup {
-	border-radius: 5px;
+	border-radius: var(--radius-md, 8px);
 	padding: 0rem 1rem 1rem 1rem;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+	box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.07));
 	margin: 1rem;
+	background: var(--color-white, #ffffff);
+	border: 1px solid var(--color-border, #e2e8f0);
 }
 
 .searchButton {
@@ -445,8 +438,9 @@ textarea {
 }
 
 .workView .pRecordLink.searchActive {
-	border: 1px dashed var(--color-presentation-grey);
-	border-radius: 10px 10px;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-md, 8px);
+	background: var(--color-surface, #f8fafc);
 }
 
 .workView .pRecordLink>.infoView {
@@ -477,12 +471,13 @@ textarea {
 
 .jsClient .workView .recordViewer {
 	flex: 10 1 80%;
-	border: 1px dashed var(--color-presentation-grey);
-	border-radius: 10px 10px;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-md, 8px);
 	position: relative;
 	overflow: hidden;
 	z-index: 0;
 	order: 1;
+	background: var(--color-white, #ffffff);
 }
 
 .workView .presentation>.pGroup>.infoButton {
@@ -577,8 +572,9 @@ textarea {
 }
 
 .pRepeatingContainer {
-	border: 1px dashed green;
+	border: 1px solid var(--color-border, #e2e8f0);
 	display: block;
+	border-radius: var(--radius-sm, 4px);
 }
 
 .workView .twelveChildStyle {
@@ -656,7 +652,7 @@ textarea {
 
 h1, h2, h3, h4, h5, h6 {
 	width: 100%;
-	color: #575757;
+	color: var(--color-text, #334155);
 	font-weight: normal;
 	margin-top: .5rem;
 	margin-bottom: 0rem;
@@ -669,7 +665,7 @@ h1, h2, h3, .h1TextStyle, .h2TextStyle, .h3TextStyle {
 }
 
 h2, h3, .h2TextStyle, .h3TextStyle {
-	border-radius: 4px;
+	border-radius: var(--radius-sm, 4px);
 }
 
 h3, .h3TextStyle {
@@ -677,15 +673,17 @@ h3, .h3TextStyle {
 }
 
 h1, .presentation .h1TextStyle {
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 	color: var(--color-white);
 	background-color: var(--color-h1);
 	margin: 0 -1rem 0 -1rem;
-	padding: 0.2rem 1rem 0.2rem 1rem;
+	padding: 0.4rem 1rem;
 	position: sticky;
 	top: 0rem;
 	z-index: 1001;
-	border-radius: 4px 4px 0px 0px;
+	border-radius: var(--radius-md, 8px) var(--radius-md, 8px) 0 0;
+	font-weight: 600;
+	letter-spacing: 0.01em;
 }
 
 h2, .presentation .h2TextStyle {
@@ -702,8 +700,9 @@ h3, .presentation .h3TextStyle {
 
 h4, .presentation .h4TextStyle {
 	font-size: 0.9rem;
-	font-weight: bold;
+	font-weight: 600;
 	margin-left: 0px;
+	color: var(--color-text, #334155);
 }
 
 h5, .presentation .h5TextStyle {
@@ -721,9 +720,9 @@ h6, .presentation .h6TextStyle {
 }
 
 label, .label {
-	/* 	font-style: italic; */
-	font-weight: bold;
-	color: #575757;
+	font-weight: 600;
+	color: var(--color-text, #334155);
+	font-size: 0.85rem;
 }
 
 .pRecordLink .label {
@@ -759,7 +758,7 @@ label::after, .label:after {
 }
 
 .repeatingElement:first-child {
-	border-top: 1px dashed var(--main-color);
+	border-top: 1px solid var(--color-border, #e2e8f0);
 }
 
 .workView .repeatingElement {
@@ -818,7 +817,7 @@ label::after, .label:after {
 }
 
 .jsClient .repeatingElement.hoverRemove {
-	background-color: #ffc6c6;
+	background-color: #fef2f2;
 }
 
 .repeatingElement:first-child:last-child {
@@ -837,7 +836,7 @@ label::after, .label:after {
 }
 
 .jsClient .showView .frame.pGroup {
-	border: 1px solid gray;
+	border: 1px solid var(--color-border, #e2e8f0);
 }
 
 #coraMap, .coraMap {
@@ -855,7 +854,7 @@ label::after, .label:after {
 
 .specificationTextStyle, .specificationNormalTextStyle,
 	.specificationChildStyle>.childrenView .value {
-	color: #999;
+	color: var(--color-text-secondary, #64748b);
 }
 
 .specificationTextStyle::before, .specificationNormalTextStyle::before,
@@ -882,13 +881,15 @@ label::after, .label:after {
 
 .highlight>.pChildRefHandler>.childrenView>.repeatingElement:nth-child(2n+1)
 	{
-	background: #d9e9f2;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	background: #e0f2fe;
+	box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 	padding: 4px;
+	border-radius: var(--radius-sm, 4px);
 }
 
 .frameChildStyle {
-	border: dotted 1px red;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-sm, 4px);
 }
 
 @font-face {
@@ -911,4 +912,80 @@ label::after, .label:after {
 	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
 		U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
 		U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+input[type="text"], input[type="number"], input[type="password"],
+	input[type="email"], input[type="url"], input[type="search"],
+	textarea, select {
+	font-family: inherit;
+	font-size: 0.875rem;
+	padding: 0.4rem 0.6rem;
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: var(--radius-sm, 4px);
+	background: var(--color-white, #ffffff);
+	color: var(--color-text, #334155);
+	transition: border-color var(--transition-fast, 150ms ease),
+		box-shadow var(--transition-fast, 150ms ease);
+	outline: none;
+	line-height: 1.5;
+}
+
+input[type="text"]:focus, input[type="number"]:focus,
+	input[type="password"]:focus, input[type="email"]:focus,
+	input[type="url"]:focus, input[type="search"]:focus,
+	textarea:focus, select:focus {
+	border-color: var(--main-color, #0369a1);
+	box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.12);
+}
+
+input[type="button"], input[type="submit"] {
+	font-family: inherit;
+	font-size: 0.85rem;
+	font-weight: 600;
+	padding: 0.4rem 1rem;
+	border: 1px solid var(--main-color, #0369a1);
+	border-radius: var(--radius-sm, 4px);
+	background: var(--main-color, #0369a1);
+	color: var(--color-white, #ffffff);
+	cursor: pointer;
+	transition: background var(--transition-fast, 150ms ease),
+		box-shadow var(--transition-fast, 150ms ease);
+	line-height: 1.5;
+}
+
+input[type="button"]:hover, input[type="submit"]:hover {
+	background: var(--main-color-darker, #075985);
+	box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+input[type="button"]:active, input[type="submit"]:active {
+	transform: translateY(1px);
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-light-grey, #e2e8f0) transparent;
+}
+
+*::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--color-light-grey, #e2e8f0);
+	border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background-color: var(--color-presentation-grey, #94a3b8);
+}
+
+::selection {
+	background: rgba(3, 105, 161, 0.2);
+	color: var(--color-text, #334155);
 }

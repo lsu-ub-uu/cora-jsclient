@@ -19,85 +19,103 @@
  */
 
 var CORA = (function(cora) {
-	"use strict";
-	cora.metadataValidator = function(dependencies, spec) {
-		let topLevelMetadataId = spec.metadataId;
-		let topLevelPath = [];
-		let metadataProvider = dependencies.metadataProvider;
-		let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
-		let childrenResult = true;
+    "use strict";
+    cora.metadataValidator = function(dependencies, spec) {
+        let metadataProvider = dependencies.metadataProvider;
+        let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
+        let pubSub = dependencies.pubSub;
+        let topLevelMetadataId = spec.metadataId;
+        let topLevelPath = [];
+        let childrenResult = true;
 
-		const validateFirstLevel = function() {
-			let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
-			let topLevelChildReferences = topLevelMetadataElement
-				.getFirstChildByNameInData('childReferences');
-			return validateTopLevelChildren(topLevelChildReferences);
-		};
+        const validateFirstLevel = function() {
+            let topLevelMetadataElement = getMetadataById(topLevelMetadataId);
+            let topLevelChildReferences = topLevelMetadataElement
+                .getFirstChildByNameInData('childReferences');
+            return validateTopLevelChildren(topLevelChildReferences);
+        };
 
-		const validateTopLevelChildren = function(topLevelChildReferences) {
-			childrenResult = true;
-			topLevelChildReferences.children.forEach(function(childReference) {
-				possiblyValidateDataChildrenToChildRef(childReference);
-			});
-			return childrenResult;
-		};
+        const validateTopLevelChildren = function(topLevelChildReferences) {
+            childrenResult = true;
+            topLevelChildReferences.children.forEach(function(childReference) {
+                possiblyValidateDataChildrenToChildRef(childReference);
+            });
+            return childrenResult;
+        };
 
-		const possiblyValidateDataChildrenToChildRef = function(childReference) {
-			if (shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions(childReference)) {
-				validateDataChildForChildRefInvalid(childReference);
-			}
-		};
+        const possiblyValidateDataChildrenToChildRef = function(childReference) {
+            if (shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions(childReference)) {
+                validateDataChildForChildRefInvalid(childReference);
+            } else {
+                removeDataOnValidateIfNoWritePermission(childReference);
+            }
+        };
 
-		const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(
-			childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			if (childHasRecordPartConstraints(cChildReference)) {
-				return userHasRecordPartPermission(cChildReference);
-			}
-			return true;
-		};
+        const removeDataOnValidateIfNoWritePermission = function(childReference) {
+            let cchildReference = CORA.coraData(childReference);
+            let cRef = CORA.coraData(cchildReference.getFirstChildByNameInData("ref"));
+            let id = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
+            try {
+                let removeMessage = {
+                    type: "remove",
+                    path: [id]
+                };
+                pubSub.publish("remove", removeMessage);
+            } catch (e) {
+                // if no data, remove might fail, this is ok
+            }
+        };
 
-		const childHasRecordPartConstraints = function(cChildReference) {
-			return cChildReference.containsChildWithNameInData("recordPartConstraint")
-		};
+        const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(
+            childReference) {
+            let cChildReference = CORA.coraData(childReference);
+            if (childHasRecordPartConstraints(cChildReference)) {
+                return userHasRecordPartPermission(cChildReference);
+            }
+            return true;
+        };
 
-		const userHasRecordPartPermission = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
-			return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
-		};
+        const childHasRecordPartConstraints = function(cChildReference) {
+            return cChildReference.containsChildWithNameInData("recordPartConstraint")
+        };
+
+        const userHasRecordPartPermission = function(cChildReference) {
+            let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+            return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
+        };
 
 
-		const validateDataChildForChildRefInvalid = function(childReference) {
-			let childValidatorSpec = {
-				path: topLevelPath,
-				dataHolder: spec.dataHolder,
-				childReference: childReference
-			};
-			let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
-			let childResult = childValidator.validate();
-			if (!childResult.everythingOkBelow) {
-				childrenResult = false;
-			}
-		};
+        const validateDataChildForChildRefInvalid = function(childReference) {
+            let childValidatorSpec = {
+                path: topLevelPath,
+                dataHolder: spec.dataHolder,
+                childReference: childReference
+            };
+            let childValidator = metadataChildValidatorFactory.factor(childValidatorSpec);
+            let childResult = childValidator.validate();
+            if (!childResult.everythingOkBelow) {
+                childrenResult = false;
+            }
+        };
 
-		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
-		};
+        const getMetadataById = function(id) {
+            return CORA.coraData(metadataProvider.getMetadataById(id));
+        };
 
-		const getDependencies = function() {
-			return dependencies;
-		};
+        const getDependencies = function() {
+            return dependencies;
+        };
 
-		const getSpec = function() {
-			return spec;
-		};
+        const getSpec = function() {
+            return spec;
+        };
 
-		return Object.freeze({
-			type: "metadataValidator",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			validate: validateFirstLevel
-		});
-	};
-	return cora;
+        return Object.freeze({
+            type: "metadataValidator",
+            getDependencies: getDependencies,
+            getSpec: getSpec,
+            validate: validateFirstLevel
+        });
+    };
+    return cora;
 }(CORA));

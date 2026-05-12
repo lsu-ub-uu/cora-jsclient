@@ -17,31 +17,32 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 var CORA = (function(cora) {
-	"use strict";
-	cora.metadataValidatorFactory = function(dependencies) {
+    "use strict";
+    cora.metadataValidatorFactory = function(dependencies) {
 
-		const factor = function(spec) {
-			let childValidatorDependencies = {
-					metadataProvider: dependencies.metadataProvider,
-					pubSub: dependencies.pubSub
-			};
-			let validatorDependencies = {
-				metadataProvider: dependencies.metadataProvider,
-				metadataChildValidatorFactory : CORA.genericFactory("metadataChildValidator",
-						childValidatorDependencies)
-			};
-			return CORA.metadataValidator(validatorDependencies, spec);
-		};
+        const factor = function(spec) {
+            let childValidatorDependencies = {
+                metadataProvider: dependencies.metadataProvider,
+                pubSub: dependencies.pubSub
+            };
+            let validatorDependencies = {
+                metadataProvider: dependencies.metadataProvider,
+                pubSub: dependencies.pubSub,
+                metadataChildValidatorFactory: CORA.genericFactory("metadataChildValidator",
+                    childValidatorDependencies)
+            };
+            return CORA.metadataValidator(validatorDependencies, spec);
+        };
 
-		const getDependencies = function() {
-			return dependencies;
-		};
+        const getDependencies = function() {
+            return dependencies;
+        };
 
-		return Object.freeze({
-			type: "metadataValidatorFactory",
-			getDependencies: getDependencies,
-			factor: factor
-		});
-	};
-	return cora;
+        return Object.freeze({
+            type: "metadataValidatorFactory",
+            getDependencies: getDependencies,
+            factor: factor
+        });
+    };
+    return cora;
 }(CORA));

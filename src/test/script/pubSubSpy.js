@@ -26,13 +26,18 @@ var CORATEST = (function(coraTest) {
 		var subscriptionId = 0;
 		var unsubscriptions = [];
 		var unsubscriptionsPathBelow = [];
+		var throwError = false;
 
 		function publish(type, message) {
 //			//console.log("publish "+JSON.stringify(message));
-			messages.push({
+			let payLoad = {
 				"type" : type,
 				"message" : message
-			});
+			};
+			messages.push(payLoad);
+			if(throwError){
+				throw new Error("error from pubSubSpy: "+ payLoad);
+			}
 		}
 
 		function getMessages() {
@@ -71,6 +76,10 @@ var CORATEST = (function(coraTest) {
 			return unsubscriptionsPathBelow;
 		}
 		
+		function setThrowError() {
+			throwError=true;;
+		}
+		
 		return Object.freeze({
 			type : "pubSubSpy",
 			publish : publish,
@@ -80,7 +89,8 @@ var CORATEST = (function(coraTest) {
 			unsubscribe : unsubscribe,
 			getUnsubscriptions : getUnsubscriptions,
 			unsubscribePathBelow : unsubscribePathBelow,
-			getUnsubscriptionsPathBelow : getUnsubscriptionsPathBelow
+			getUnsubscriptionsPathBelow : getUnsubscriptionsPathBelow,
+			setThrowError:setThrowError
 		});
 	};
 	return coraTest;

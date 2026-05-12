@@ -20,7 +20,8 @@
 QUnit.module("metadata/metadataValidatorFactoryTest.js", {
 	beforeEach: function() {
 		this.dependencies = {
-			metadataProvider: CORATEST.metadataProviderSpy()
+			metadataProvider: CORATEST.metadataProviderSpy(),
+			pubSub: CORATEST.pubSubSpy()
 		};
 		this.spec = {
 			metadataId: "groupIdOneTextChild",
@@ -63,6 +64,8 @@ QUnit.test("testDependencies", function(assert) {
 	let metadataValidator = this.metadataValidatorFactory.factor(this.spec);
 	let factoredDependencies = metadataValidator.getDependencies();
 	assert.strictEqual(factoredDependencies.metadataProvider, this.dependencies.metadataProvider);
+	assert.strictEqual(factoredDependencies.pubSub, this.dependencies.pubSub
+	);
 
 	assert.strictEqual(factoredDependencies.metadataChildValidatorFactory.type,
 	"genericFactory");

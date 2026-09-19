@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.holder = function(spec) {
+
+import { button as buttonImported } from "./button.js";
+import { createSpanWithClassName } from "./basicGui.js";
+
+export const holder = function(spec) {
 		var status;
 		var button = createButton();
 		var view = createBaseView();
@@ -36,7 +38,7 @@ var CORA = (function(cora) {
 				},
 				"text" : spec.buttonText
 			};
-			return CORA.button(holderButtonSpec);
+			return buttonImported(holderButtonSpec);
 		}
 
 		function getClassNameFromSpec() {
@@ -47,7 +49,7 @@ var CORA = (function(cora) {
 		}
 
 		function toggleHolder(event) {
-			if (status === cora.holder.OPEN) {
+			if (status === holder.OPEN) {
 				close(event);
 			} else {
 				open(event);
@@ -55,7 +57,7 @@ var CORA = (function(cora) {
 		}
 
 		function open(event) {
-			status = cora.holder.OPEN;
+			status = holder.OPEN;
 			view.style.display = view.previousDisplay;
 			possiblyCallAfterOpenClose(event);
 		}
@@ -65,7 +67,7 @@ var CORA = (function(cora) {
 			}
 		}
 		function close(event) {
-			status = cora.holder.CLOSED;
+			status = holder.CLOSED;
 			if (view.style.display !== "none") {
 				view.previousDisplay = view.style.display;
 			}
@@ -74,7 +76,7 @@ var CORA = (function(cora) {
 		}
 
 		function createBaseView() {
-			return CORA.createSpanWithClassName("holder" + getClassNameFromSpec());
+			return createSpanWithClassName("holder" + getClassNameFromSpec());
 		}
 
 		function addBaseViewAccordingToSpec() {
@@ -112,7 +114,5 @@ var CORA = (function(cora) {
 			getStatus : getStatus
 		});
 	};
-	cora.holder.CLOSED = 0;
-	cora.holder.OPEN = 1;
-	return cora;
-}(CORA));
+	holder.CLOSED = 0;
+	holder.OPEN = 1;

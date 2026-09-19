@@ -19,9 +19,12 @@
  */
 "use strict";
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.dependenciesFactory = function(metadataProvider, pubSub, textProvider) {
+import CORATEST from "../aCoratestNameSpace.js";
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.dependenciesFactory = function(metadataProvider, pubSub, textProvider) {
 		var factor = function(metadataId, presentationId, metadataIdUsedInData) {
 			let specDataHolder = {
 				"metadataId": metadataId,
@@ -101,9 +104,6 @@ var CORATEST = (function(coraTest) {
 			factor: factor
 		});
 	};
-
-	return coraTest;
-}(CORATEST || {}));
 
 QUnit.module("jsClient/jsClientIntegrationTest.js", {
 	beforeEach: function() {

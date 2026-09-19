@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordHandlerView = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "./gui/basicGui.js";
+
+export const recordHandlerView = function(dependencies, spec) {
 		const texts = spec.texts;
 		let showIncomingLinksButton;
 		let incomingLinksView;
@@ -43,11 +44,11 @@ var CORA = (function(cora) {
 			workItemView = dependencies.workItemViewFactory.factor(workItemViewSpec);
 			view = workItemView.getView();
 
-			editView = CORA.createSpanWithClassName("editView");
+			editView = createSpanWithClassName("editView");
 			workItemView.addViewToView(editView);
-			showView = CORA.createSpanWithClassName("showView");
+			showView = createSpanWithClassName("showView");
 			workItemView.addViewToView(showView);
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 
 			setShowDataFunction(spec.showDataMethod);
@@ -241,5 +242,4 @@ var CORA = (function(cora) {
 			addRecursiveDeleteOpenFunction: addRecursiveDeleteOpenFunction
 		});
 	};
-	return cora;
-}(CORA));
+

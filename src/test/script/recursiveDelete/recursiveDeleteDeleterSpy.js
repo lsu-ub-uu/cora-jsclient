@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recursiveDeleteDeleterSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recursiveDeleteDeleterSpy = function() {
 
 		let deleteElements = [];
 		let modelAndUrl;
@@ -50,5 +52,5 @@ var CORATEST = (function(coraTest) {
 			getDeleteElement: getDeleteElement
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

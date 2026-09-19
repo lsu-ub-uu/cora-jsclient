@@ -16,15 +16,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchProviderFactory = function(dependencies) {
+
+import { searchProvider } from "./searchProvider.js";
+
+export const searchProviderFactory = function(dependencies) {
 
 		function factor(spec) {
 			var dep = {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory
 			};
-			return CORA.searchProvider(dep, spec);
+			return searchProvider(dep, spec);
 		}
 
 		function getDependencies() {
@@ -37,5 +38,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

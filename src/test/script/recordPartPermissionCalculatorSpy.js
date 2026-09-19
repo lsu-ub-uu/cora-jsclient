@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recordPartPermissionCalculatorSpy = function() {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recordPartPermissionCalculatorSpy = function() {
 
 		let readRequestedIds = [];
 		let writeRequestedIds = [];
@@ -106,5 +108,5 @@ var CORATEST = (function(coraTest) {
 			addIdToReturnFalseForWrite: addIdToReturnFalseForWrite
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

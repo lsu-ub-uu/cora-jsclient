@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.jsClientView = function(providers, dependencies, spec) {
+
+import { createDivWithClassName } from "../gui/basicGui.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { message } from "../gui/message.js";
+
+export const jsClientView = function(providers, dependencies, spec) {
 		let out;
 		let mainView;
 		let header;
@@ -41,26 +44,26 @@ var CORA = (function(cora) {
 		}
 
 		function createMainView() {
-			let view = CORA.createSpanWithClassName("jsClient mainView");
-			let serverAddress = CORA.createSpanWithClassName("serverAddress");
+			let view = createSpanWithClassName("jsClient mainView");
+			let serverAddress = createSpanWithClassName("serverAddress");
 			serverAddress.textContent = spec.serverAddress;
 
-			header = CORA.createSpanWithClassName("header");
+			header = createSpanWithClassName("header");
 			header.textContent = spec.name;
 			view.appendChild(header);
 
-			sideBar = CORA.createSpanWithClassName("sideBar");
+			sideBar = createSpanWithClassName("sideBar");
 			view.appendChild(sideBar);
 
-			searchesView = CORA.createSpanWithClassName("searchesView");
+			searchesView = createSpanWithClassName("searchesView");
 			sideBar.appendChild(searchesView);
 			clearSearchesView();
 
-			recordTypesView = CORA.createSpanWithClassName("recordTypesView");
+			recordTypesView = createSpanWithClassName("recordTypesView");
 			sideBar.appendChild(recordTypesView);
 			sideBar.appendChild(serverAddress);
 
-			workArea = CORA.createSpanWithClassName("workArea");
+			workArea = createSpanWithClassName("workArea");
 			view.appendChild(workArea);
 
 			messageHolder = dependencies.messageHolderFactory.factor();
@@ -69,15 +72,15 @@ var CORA = (function(cora) {
 			return view;
 		}
 		function addReloadProvidersButton() {
-			reloadProvidersButton = CORA.createSpanWithClassName("menuView");
+			reloadProvidersButton = createSpanWithClassName("menuView");
 			reloadProvidersButton.onclick = spec.reloadProvidersMethod;
 			reloadProvidersButton.textContent = "Ladda om";
 			header.appendChild(reloadProvidersButton);
 		}
 		function addLogoHeader() {
-			logo = CORA.createDivWithClassName("logoHeader");
+			logo = createDivWithClassName("logoHeader");
 			header.appendChild(logo);
-			logoImage = CORA.createDivWithClassName("logoHeaderLogo");
+			logoImage = createDivWithClassName("logoHeaderLogo");
 			header.appendChild(logoImage);
 		}
 
@@ -104,7 +107,7 @@ var CORA = (function(cora) {
 		}
 
 		function createSearchesHeadline() {
-			let searchesHeadline = CORA.createDivWithClassName("searchesViewHeadline");
+			let searchesHeadline = createDivWithClassName("searchesViewHeadline");
 			let searchesText = providers.textProvider.getTranslation("theClient_searchesHeadlineText");
 			searchesHeadline.textContent = searchesText;
 			return searchesHeadline;
@@ -157,7 +160,7 @@ var CORA = (function(cora) {
 		const addInfoMessage = function(infoText, timeout) {
 			let messageSpec = {
 				message: infoText,
-				type: CORA.message.INFO,
+				type: message.INFO,
 				timeout:timeout
 			};
 			messageHolder.createMessage(messageSpec);
@@ -165,7 +168,7 @@ var CORA = (function(cora) {
 		function addErrorMessage(errorText) {
 			let messageSpec = {
 				"message": errorText,
-				"type": CORA.message.ERROR
+				"type": message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		}
@@ -232,5 +235,4 @@ var CORA = (function(cora) {
 
 		return out;
 	};
-	return cora;
-}(CORA));
+

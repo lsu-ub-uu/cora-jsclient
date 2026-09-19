@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordTypeProvider = function(dependencies, spec) {
+
+import { coraData } from "./metadata/coraData.js";
+import { recordTypeSorter } from "./recordTypeSorter.js";
+
+export const recordTypeProvider = function(dependencies, spec) {
 
 		let callWhenReady = spec.callWhenReady;
 		let allRecordTypes = [];
@@ -100,13 +102,13 @@ var CORA = (function(cora) {
 		};
 
 		const getIdFromRecordData = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+			let cRecord = coraData(recordData);
+			let cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const addToMetadataByRecordTypeId = function(recordId, record) {
-			let cRecord = CORA.coraData(record.data);
+			let cRecord = coraData(record.data);
 			let metadata = {
 				"metadataId": getLinkValueFromRecord("metadataId", cRecord),
 				"presentationViewId": getLinkValueFromRecord("presentationViewId", cRecord),
@@ -125,7 +127,7 @@ var CORA = (function(cora) {
 			let listOfAllValidationTypesAsRecords = JSON.parse(validationTypesAnswer.responseText).dataList.data;
 			listOfAllValidationTypesAsRecords.forEach(function(recordContainer) {
 				let validationType = recordContainer.record;
-				let cValidationType = CORA.coraData(validationType.data);
+				let cValidationType = coraData(validationType.data);
 				if(recordId==getLinkValueFromRecord("validatesRecordType", cValidationType)){
 					let validationTypeCompact = convertValidationRecordToCompactForm(recordId, cValidationType);
 					validationTypes[validationTypeCompact.id]= validationTypeCompact;
@@ -149,7 +151,7 @@ var CORA = (function(cora) {
 		const getLinkValueFromRecord = function(id, cRecord) {
 			if (cRecord.containsChildWithNameInData(id)) {
 
-				let cRecordLink = CORA.coraData(cRecord.getFirstChildByNameInData(id));
+				let cRecordLink = coraData(cRecord.getFirstChildByNameInData(id));
 				return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
 			}
 		};
@@ -167,7 +169,7 @@ var CORA = (function(cora) {
 		};
 
 		const sortListUsingNameInData = function(listToSort, nameInData) {
-			let sorter = CORA.recordTypeSorter();
+			let sorter = recordTypeSorter();
 			return sorter.sortListUsingChildWithNameInData(listToSort, nameInData);
 		};
 
@@ -211,5 +213,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

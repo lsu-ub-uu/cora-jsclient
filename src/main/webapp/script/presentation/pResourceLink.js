@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pResourceLink = function(dependencies, spec) {
+
+export const pResourceLink = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
 
@@ -91,5 +90,4 @@ var CORA = (function(cora) {
 		});
 
 	};
-	return cora;
-}(CORA));
+

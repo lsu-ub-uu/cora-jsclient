@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 QUnit.module("genericFactoryTest.js", {
 	beforeEach: function() {
@@ -90,9 +92,9 @@ QUnit.test("factorTestFactorWithoutDependencies", function(assert) {
 	assert.strictEqual(factoredSpec, this.spec);
 });
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.spyToFactorWithProviders = function(providers, dependencies, spec) {
+{
+const cora = CORA;
+cora.spyToFactorWithProviders = function(providers, dependencies, spec) {
 		let out;
 
 		const getProviders = function() {
@@ -115,11 +117,10 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
-var CORA = (function(cora) {
-	"use strict";
-	cora.spyToFactor = function(dependencies, spec) {
+}
+{
+const cora = CORA;
+cora.spyToFactor = function(dependencies, spec) {
 		let out;
 
 		const getDependencies = function() {
@@ -138,13 +139,12 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
+}
 
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.spyToFactorWithoutDependencies = function(spec) {
+{
+const cora = CORA;
+cora.spyToFactorWithoutDependencies = function(spec) {
 		let out;
 
 		const getSpec = function() {
@@ -157,5 +157,6 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
+}
+
+export {};

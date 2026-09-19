@@ -18,9 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.coraData = function(dataIn) {
+export const coraData = function(dataIn) {
 		const NOT_FOUND_IN_CHILDREN = ") not found in children to coraData";
 		let data = dataIn;
 		let children = data?.children;
@@ -337,5 +335,3 @@ var CORA = (function(cora) {
 			});
 	};
 
-	return cora;
-}(CORA));

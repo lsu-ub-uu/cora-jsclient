@@ -16,12 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.messageHolderFactory = function() {
+
+import { messageHolder } from "./messageHolder.js";
+
+export const messageHolderFactory = function() {
 
 		function factor() {
-			return CORA.messageHolder();
+			return messageHolder();
 		}
 
 		return Object.freeze({
@@ -29,5 +30,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

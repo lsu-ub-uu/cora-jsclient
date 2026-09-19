@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.incomingLinksListHandlerView = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "./gui/basicGui.js";
+
+export const incomingLinksListHandlerView = function(dependencies, spec) {
 		var view;
 		var incomingLinks;
 		var numberOfIncomingLinksView;
@@ -30,16 +31,16 @@ var CORA = (function(cora) {
 		}
 
 		function createView() {
-			return CORA.createSpanWithClassName("incomingLinksList");
+			return createSpanWithClassName("incomingLinksList");
 		}
 
 		function createNumberOfLinks() {
-			numberOfIncomingLinksView = CORA.createSpanWithClassName("numberOfLinks");
+			numberOfIncomingLinksView = createSpanWithClassName("numberOfLinks");
 			view.appendChild(numberOfIncomingLinksView);
 		}
 
 		function createincomingLinks() {
-			incomingLinks = CORA.createSpanWithClassName("incomingLinks");
+			incomingLinks = createSpanWithClassName("incomingLinks");
 			view.appendChild(incomingLinks);
 		}
 
@@ -49,16 +50,16 @@ var CORA = (function(cora) {
 		}
 
 		function createViewForIncomingLink(incomingLink) {
-			var incomingLinkView = CORA.createSpanWithClassName("incomingLink");
+			var incomingLinkView = createSpanWithClassName("incomingLink");
 			incomingLinkView.onclick = function(event) {
 				openRecordUsingLink(incomingLink, event);
 			};
 
-			var recordTypeView = CORA.createSpanWithClassName("recordType");
+			var recordTypeView = createSpanWithClassName("recordType");
 			recordTypeView.textContent = incomingLink.linkedRecordType;
 			incomingLinkView.appendChild(recordTypeView);
 
-			var recordIdView = CORA.createSpanWithClassName("recordId");
+			var recordIdView = createSpanWithClassName("recordId");
 			recordIdView.textContent = incomingLink.linkedRecordId;
 			incomingLinkView.appendChild(recordIdView);
 			return incomingLinkView;
@@ -103,5 +104,4 @@ var CORA = (function(cora) {
 			setNumberOfIncomingLinks : setNumberOfIncomingLinks
 		});
 	};
-	return cora;
-}(CORA));
+

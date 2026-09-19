@@ -17,17 +17,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.question = function(spec) {
+
+import { createDivWithClassName } from "./basicGui.js";
+import { box as boxImported } from "./box.js";
+
+export const question = function(spec) {
 		let view;
-		let box;
+		let questionContainer;
 		let questionBox;
 		let notTriggered = true;
 
 		const start = function() {
 			view = createView();
-			box = cora.box(view);
+			questionContainer = boxImported(view);
 
 			questionBox = createTextView();
 			view.appendChild(questionBox);
@@ -36,11 +38,11 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return CORA.createDivWithClassName("question");
+			return createDivWithClassName("question");
 		};
 
 		const createTextView = function() {
-			let viewNew = CORA.createDivWithClassName("questionBox");
+			let viewNew = createDivWithClassName("questionBox");
 			let textElement = document.createElement("text");
 			viewNew.appendChild(textElement);
 			textElement.innerHTML = spec.text;
@@ -63,12 +65,12 @@ var CORA = (function(cora) {
 				button.onclick = function() {
 					if (onlyTriggerOnce()) {
 						buttonSpec.onclickFunction();
-						box.hideWithEffect();
+						questionContainer.hideWithEffect();
 					}
 				};
 			} else {
 				button.onclick = function() {
-					box.hideWithEffect();
+					questionContainer.hideWithEffect();
 				};
 			}
 			return button;
@@ -85,13 +87,10 @@ var CORA = (function(cora) {
 		start();
 
 		let out = Object.freeze({
-			getView: box.getView,
-			hide: box.hide,
-			hideWithEffect: box.hideWithEffect
+			getView: questionContainer.getView,
+			hide: questionContainer.hide,
+			hideWithEffect: questionContainer.hideWithEffect
 		});
 		view.modelObject = out;
 		return out;
 	};
-
-	return cora;
-}(CORA));

@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.presentationStub = function(id, className) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.presentationStub = function(id, className) {
 		var view = document.createElement("span");
 		view.className = "presentationStub";
 		if (undefined !== className) {
@@ -43,5 +45,5 @@ var CORATEST = (function(coraTest) {
 			getPresentationCounter: getPresentationCounter
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATESTHELPER = (function(coraTestHelper) {
-	"use strict";
-	coraTestHelper.simulateOnclick = function(object, spec) {
+import CORATESTHELPER from "./aCoratestHelperNameSpace.js";
+
+const coraTestHelper = CORATESTHELPER;
+
+coraTestHelper.simulateOnclick = function(object, spec) {
 		let event = document.createEvent('Event');
 		event.initEvent('click', true, true);
 		if (spec !== undefined && spec.ctrlKey) {
@@ -67,5 +69,4 @@ var CORATESTHELPER = (function(coraTestHelper) {
 	    element.dispatchEvent(event);
 	};
 
-	return coraTestHelper;
-}(CORATESTHELPER || {}));
+export default CORATESTHELPER;

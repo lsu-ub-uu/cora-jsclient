@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(cora) {
-	"use strict";
-	cora.appTokenLoginSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const cora = CORATEST;
+
+cora.appTokenLoginSpy = function(dependencies, spec) {
 		let loginIds = [];
 		let appTokens = [];
 		const login = function(loginIdIn, appToken) {
@@ -52,5 +54,4 @@ var CORATEST = (function(cora) {
 		});
 	};
 
-	return cora;
-}(CORATEST || {}));
+export default CORATEST;

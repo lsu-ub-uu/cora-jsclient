@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.busySpy = function(spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.busySpy = function(spec) {
 		let spyView = document.createElement("span");
 		spyView.className = "busySpySpan";
 		let showIsCalledNoOfTimes = 0;
@@ -61,5 +63,5 @@ var CORATEST = (function(coraTest) {
 			getShowIsCalledNoOfTimes: getShowIsCalledNoOfTimes
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

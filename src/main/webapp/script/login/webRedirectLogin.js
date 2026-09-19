@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.webRedirectLogin = function(dependencies, spec) {
+
+export const webRedirectLogin = function(dependencies, spec) {
 		let openedWindow;
 		const start = function() {
 			openedWindow = dependencies.window.open(spec.url, "CoraHelperWindow");
@@ -46,5 +45,3 @@ var CORA = (function(cora) {
 		});
 	};
 
-	return cora;
-}(CORA));

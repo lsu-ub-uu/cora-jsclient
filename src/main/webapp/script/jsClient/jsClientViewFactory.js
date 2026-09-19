@@ -16,15 +16,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.jsClientViewFactory = function(providers) {
+
+import { jsClientView } from "./jsClientView.js";
+import { messageHolderFactory } from "../gui/messageHolderFactory.js";
+
+export const jsClientViewFactory = function(providers) {
 
 		function factor(spec) {
 			let dependencies = {
-					"messageHolderFactory" : CORA.messageHolderFactory()
+					"messageHolderFactory" : messageHolderFactory()
 			};
-			return CORA.jsClientView(providers, dependencies, spec);
+			return jsClientView(providers, dependencies, spec);
 		}
 
 		return Object.freeze({
@@ -33,5 +35,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

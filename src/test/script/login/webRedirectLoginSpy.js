@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(cora) {
-	"use strict";
-	cora.webRedirectLoginSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const cora = CORATEST;
+
+cora.webRedirectLoginSpy = function(dependencies, spec) {
 		let fakeOpenedWindow = CORATEST.windowSpy();
 
 		const getDependencies = function() {
@@ -42,5 +44,4 @@ var CORATEST = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORATEST || {}));
+export default CORATEST;

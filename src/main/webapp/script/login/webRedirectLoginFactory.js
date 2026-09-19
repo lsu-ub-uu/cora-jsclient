@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.webRedirectLoginFactory = function(dependencies) {
+
+import { webRedirectLogin } from "./webRedirectLogin.js";
+
+export const webRedirectLoginFactory = function(dependencies) {
 
 		const getDependencies = function() {
 			return dependencies;
@@ -28,7 +29,7 @@ var CORA = (function(cora) {
 			let loginManagerDependencies = {
 					window : window
 			};
-			return CORA.webRedirectLogin(loginManagerDependencies, loginManagerSpec);
+			return webRedirectLogin(loginManagerDependencies, loginManagerSpec);
 		};
 
 		return Object.freeze({
@@ -37,5 +38,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

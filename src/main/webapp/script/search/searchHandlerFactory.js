@@ -17,9 +17,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandlerFactory = function(dependencies) {
+
+import { recordHandlerFactory as recordHandlerFactoryImported } from "../recordHandlerFactory.js";
+import { recordHandlerViewFactory } from "../recordHandlerViewFactory.js";
+import { resultHandlerFactory } from "./resultHandlerFactory.js";
+import { searchHandler } from "./searchHandler.js";
+import { searchHandlerViewFactory } from "./searchHandlerViewFactory.js";
+
+export const searchHandlerFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let viewDep = {
@@ -27,7 +32,7 @@ var CORA = (function(cora) {
 			};
 
 			let depRecordHandlerFactory = {
-				recordHandlerViewFactory : CORA.recordHandlerViewFactory(),
+				recordHandlerViewFactory : recordHandlerViewFactory(),
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
@@ -35,7 +40,7 @@ var CORA = (function(cora) {
 				textProvider : dependencies.providers.textProvider
 			};
 
-			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);
+			let recordHandlerFactory = recordHandlerFactoryImported(depRecordHandlerFactory);
 
 			let depResultHandler = {
 				textProvider : dependencies.providers.textProvider,
@@ -45,14 +50,14 @@ var CORA = (function(cora) {
 			};
 
 			let dep = {
-				searchHandlerViewFactory : CORA.searchHandlerViewFactory(viewDep),
+				searchHandlerViewFactory : searchHandlerViewFactory(viewDep),
 				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
-				resultHandlerFactory : CORA.resultHandlerFactory(depResultHandler),
+				resultHandlerFactory : resultHandlerFactory(depResultHandler),
 				jsClient : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
-			return CORA.searchHandler(dep, spec);
+			return searchHandler(dep, spec);
 		}
 
 		const getDependencies = function() {
@@ -65,5 +70,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

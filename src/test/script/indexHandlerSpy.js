@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.indexHandlerSpy = function(dependencies, spec) {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.indexHandlerSpy = function(dependencies, spec) {
 		var indexDataListWasCalled = false;
 		var indexedRecords = [];
 		var numberOfIndexedRecords = 0;
@@ -68,5 +70,5 @@ var CORATEST = (function(coraTest) {
 			indexOrderViewAdded : indexOrderViewAdded 
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

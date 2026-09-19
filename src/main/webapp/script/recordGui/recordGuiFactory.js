@@ -17,9 +17,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordGuiFactory = function(dependencies) {
+
+import { dataHolder as dataHolderImported } from "../metadata/dataHolder.js";
+import { genericFactory } from "../genericFactory.js";
+import { jsBookkeeper as jsBookkeeperImported } from "../metadata/jsBookkeeper.js";
+import { metadataChildAndRepeatInitializerFactory } from "../metadata/metadataChildAndRepeatInitializerFactory.js";
+import { metadataControllerFactory as metadataControllerFactoryImported } from "../metadata/metadataControllerFactory.js";
+import { metadataValidatorFactory as metadataValidatorFactoryImported } from "../metadata/metadataValidatorFactory.js";
+import { presentationFactory as presentationFactoryImported } from "../presentation/presentationFactory.js";
+import { presentationHolderFactory } from "../presentation/presentationHolderFactory.js";
+import { pubSub as pubSubImported } from "../pubSub.js";
+import { recordGui } from "./recordGui.js";
+import { recordPartPermissionCalculator } from "../recordPartPermissionCalculator.js";
+
+export const recordGuiFactory = function(dependencies) {
 		const metadataProvider = dependencies.providers.metadataProvider;
 		const textProvider = dependencies.providers.textProvider;
 		const recordTypeProvider = dependencies.providers.recordTypeProvider;
@@ -31,7 +42,7 @@ var CORA = (function(cora) {
 			let metadataId = spec.metadataId;
 			let recordData = spec.recordData;
 
-			let pubSub = CORA.pubSub();
+			let pubSub = pubSubImported();
 
 			let specDataHolder = {
 				metadataId : metadataId,
@@ -39,7 +50,7 @@ var CORA = (function(cora) {
 				pubSub : pubSub
 			};
 
-			let dataHolder = CORA.dataHolder(specDataHolder);
+			let dataHolder = dataHolderImported(specDataHolder);
 
 			let specJSBookkeeper = {
 				metadataId : metadataId,
@@ -55,15 +66,15 @@ var CORA = (function(cora) {
 				pubSub : pubSub
 			};
 
-			let metadataChildAndRepeatInitializerFactory = CORA
-					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+			let metadataChildAndRepeatInitializerFactoryNew = metadataChildAndRepeatInitializerFactory(
+					metadataChildAndRepeatInitializerDep);
 
 			let depJSBookkeeper = {
 				recordTypeProvider : recordTypeProvider,
-				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactoryNew
 			};
 
-			let jsBookkeeper = CORA.jsBookkeeper(depJSBookkeeper, specJSBookkeeper);
+			let jsBookkeeper = jsBookkeeperImported(depJSBookkeeper, specJSBookkeeper);
 
 			let calculatorFactoryDep = {
 				metadataProvider : metadataProvider
@@ -79,8 +90,8 @@ var CORA = (function(cora) {
 				recordData : recordData,
 				uploadManager : dependencies.uploadManager,
 				ajaxCallFactory : dependencies.ajaxCallFactory,
-				recordPartPermissionCalculatorFactory : CORA.genericFactory(
-						"recordPartPermissionCalculator", calculatorFactoryDep)
+				recordPartPermissionCalculatorFactory : genericFactory(
+						recordPartPermissionCalculator, calculatorFactoryDep)
 			};
 
 			let dependenciesCF = {
@@ -94,10 +105,10 @@ var CORA = (function(cora) {
 				pubSub : pubSub
 			};
 
-			let metadataValidatorFactory = CORA.metadataValidatorFactory(dependenciesMV);
+			let metadataValidatorFactory = metadataValidatorFactoryImported(dependenciesMV);
 			recordGuiCounter++
 			let presentationFactorySpec = {presentationFactoryCounter: recordGuiCounter};
-			let presentationFactory = CORA.presentationFactory(dependenciesPresentationFactory,
+			let presentationFactory = presentationFactoryImported(dependenciesPresentationFactory,
 				presentationFactorySpec);
 
 			let dependenciesPHF = {
@@ -106,7 +117,7 @@ var CORA = (function(cora) {
 				pubSub : pubSub
 			};
 
-			let metadataControllerFactory = CORA.metadataControllerFactory(dependenciesCF);
+			let metadataControllerFactory = metadataControllerFactoryImported(dependenciesCF);
 
 			let dependenciesRG = {
 				metadataProvider : metadataProvider,
@@ -117,12 +128,12 @@ var CORA = (function(cora) {
 				presentationFactory : presentationFactory,
 				metadataControllerFactory : metadataControllerFactory,
 				metadataValidatorFactory : metadataValidatorFactory,
-				presentationHolderFactory : CORA.presentationHolderFactory(dependenciesPHF)
+				presentationHolderFactory : presentationHolderFactory(dependenciesPHF)
 			};
 			spec.recordPartPermissionCalculator = createRecordPartPermissionCalculator(metadataId, 
 				spec.permissions);
 			
-			return CORA.recordGui(dependenciesRG, spec);
+			return recordGui(dependenciesRG, spec);
 		};
 		
 		const createRecordPartPermissionCalculator = function(metadataId, permissions) {
@@ -146,5 +157,3 @@ var CORA = (function(cora) {
 		self = out;
 		return out;
 	};
-	return cora;
-}(CORA));

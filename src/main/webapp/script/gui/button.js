@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.button = function(spec) {
+
+import { createSpanWithClassName } from "./basicGui.js";
+
+export const button = function(spec) {
 		const action = spec.action;
 		let view;
 		let actionMethod;
@@ -32,7 +33,7 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return CORA.createSpanWithClassName(getClassNameOrEmptyFromSpec());
+			return createSpanWithClassName(getClassNameOrEmptyFromSpec());
 		};
 
 		const getClassNameOrEmptyFromSpec = function() {
@@ -112,5 +113,3 @@ var CORA = (function(cora) {
 		return out.getView();
 	};
 
-	return cora;
-}(CORA));

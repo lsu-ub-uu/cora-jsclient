@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pMapView = function(dependencies, spec) {
+
+import { createDivWithClassName } from "../gui/basicGui.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const pMapView = function(dependencies, spec) {
 		var mode = spec.mode;
 
 		var out;
@@ -34,7 +36,7 @@ var CORA = (function(cora) {
 		var marker;
 
 		function start() {
-			view = CORA.createSpanWithClassName(baseClassName);
+			view = createSpanWithClassName(baseClassName);
 			info = createInfo();
 
 			view.appendChild(info.getButton());
@@ -100,7 +102,7 @@ var CORA = (function(cora) {
 		}
 
 		function createValueView() {
-			valueView = CORA.createDivWithClassName("coraMap");
+			valueView = createDivWithClassName("coraMap");
 			view.appendChild(valueView);
 		}
 
@@ -229,5 +231,4 @@ var CORA = (function(cora) {
 
 		return out;
 	};
-	return cora;
-}(CORA));
+

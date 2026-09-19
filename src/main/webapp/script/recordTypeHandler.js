@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordTypeHandler = function(dependencies, spec) {
+
+import { coraData } from "./metadata/coraData.js";
+
+export const recordTypeHandler = function(dependencies, spec) {
 
 		let recordId;
 		let view;
@@ -47,7 +48,7 @@ var CORA = (function(cora) {
 		}
 
 		const getHeadlineText = function(recordTypeRecord) {
-			let cData = CORA.coraData(recordTypeRecord.data);
+			let cData = coraData(recordTypeRecord.data);
 			if (textIdIsMissingInData(cData)) {
 				return recordId;
 			}
@@ -59,14 +60,14 @@ var CORA = (function(cora) {
 		}
 
 		const getTranslatedText = function(cData) {
-			let cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
+			let cTextIdGroup = coraData(cData.getFirstChildByNameInData("textId"));
 			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return dependencies.textProvider.getTranslation(textId);
 		}
 
 		const getIdFromRecord = function(record) {
-			let cData = CORA.coraData(record.data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cData = coraData(record.data);
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		}
 
@@ -133,5 +134,4 @@ var CORA = (function(cora) {
 			hasCreateOrListAction: hasCreateOrListAction
 		});
 	};
-	return cora;
-}(CORA));
+

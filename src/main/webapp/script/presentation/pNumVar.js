@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pNumVar = function(dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+import { numberVariableValidator } from "../metadata/numberVariableValidator.js";
+
+export const pNumVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
 
@@ -57,7 +59,7 @@ var CORA = (function(cora) {
 		};
 
 		const checkValueBetweenMinAndMaxIfNumber = function(valueFromView) {
-			let validator = CORA.numberVariableValidator();
+			let validator = numberVariableValidator();
 			return validator.validateData(valueFromView, cMetadataElement);
 		};
 
@@ -86,7 +88,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getSpec = function() {
@@ -115,5 +117,4 @@ var CORA = (function(cora) {
 			getPresentationCounter: pParentVar.getPresentationCounter
 		});
 	};
-	return cora;
-}(CORA));
+

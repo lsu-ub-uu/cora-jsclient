@@ -16,23 +16,24 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.uploadManagerView = function(spec) {
+
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const uploadManagerView = function(spec) {
 		var out;
 
-		var workView = CORA.createSpanWithClassName("workView");
-		workView.appendChild(CORA.createSpanWithClassName("indexOrders"));
+		var workView = createSpanWithClassName("workView");
+		workView.appendChild(createSpanWithClassName("indexOrders"));
 		var menuView = createMenuView(spec.textProvider.getTranslation("theClient_uploadMenuText"));
 
 		function createMenuView(text) {
-			var menuViewNew = CORA.createSpanWithClassName("upload");
+			var menuViewNew = createSpanWithClassName("upload");
 			menuViewNew.textContent = text;
 			return menuViewNew;
 		}
 
 		function addFile(name) {
-			var child = CORA.createSpanWithClassName("listItem");
+			var child = createSpanWithClassName("listItem");
 			child.textContent = name;
 			workView.appendChild(child);
 
@@ -92,5 +93,3 @@ var CORA = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORA));

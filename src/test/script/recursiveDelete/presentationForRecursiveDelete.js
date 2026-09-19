@@ -1,3 +1,5 @@
+import CORATEST from "../aCoratestNameSpace.js";
+
 CORATEST.recursiveDeletePresentationWithChildren = {
   "children": [
     {
@@ -234,3 +236,5 @@ CORATEST.recursiveDeleteGuiElementChildFromPresentation = {
 	"name": "guiElement",
 	"attributes": { "type": "guiElementLink" }
 };
+
+export {};

@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pCollectionVar = function(dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+
+export const pCollectionVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
@@ -31,7 +32,7 @@ var CORA = (function(cora) {
 
 		const start = function() {
 			cMetadataElement = getMetadataById(spec.metadataIdUsedInData);
-			let cRefCollection = CORA.coraData(cMetadataElement
+			let cRefCollection = coraData(cMetadataElement
 				.getFirstChildByNameInData("refCollection"));
 			refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
 
@@ -39,7 +40,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const addTypeSpecificInfoToViewSpec = function(mode, pCollVarViewSpec) {
@@ -76,7 +77,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOptionForEmptyText = function() {
-			let cEmptyTextId = CORA.coraData(cPresentation
+			let cEmptyTextId = coraData(cPresentation
 				.getFirstChildByNameInData("emptyTextId"));
 			let emptyTextId = cEmptyTextId.getFirstAtomicValueByNameInData("linkedRecordId");
 
@@ -101,7 +102,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOptionForRef = function(ref) {
-			let cItemRef = CORA.coraData(ref);
+			let cItemRef = coraData(ref);
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 
 			let item = getMetadataById(itemRefId);
@@ -124,7 +125,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOptionDefTextForRef = function(ref) {
-			let cItemRef = CORA.coraData(ref);
+			let cItemRef = coraData(ref);
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 
 			let item = getMetadataById(itemRefId);
@@ -154,7 +155,7 @@ var CORA = (function(cora) {
 
 		const getTranslatedTextForOptionValue = function(value) {
 			let item = findItemForValue(value);
-			let cTextIdGroup = CORA.coraData(item.getFirstChildByNameInData("textId"));
+			let cTextIdGroup = coraData(item.getFirstChildByNameInData("textId"));
 			let textIdToTranslate = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return textProvider.getTranslation(textIdToTranslate);
 		};
@@ -163,7 +164,7 @@ var CORA = (function(cora) {
 			let collectionItemReferencesChildren = getCollectionItemReferencesChildren();
 			let item;
 			collectionItemReferencesChildren.find((ref) => {
-				let cItemRef = CORA.coraData(ref);
+				let cItemRef = coraData(ref);
 				let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 				item = getMetadataById(itemRefId);
 				let refValue = item.getFirstAtomicValueByNameInData("nameInData");
@@ -200,5 +201,4 @@ var CORA = (function(cora) {
 		});
 
 	};
-	return cora;
-}(CORA));
+

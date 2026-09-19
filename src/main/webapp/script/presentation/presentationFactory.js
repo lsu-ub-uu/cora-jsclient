@@ -17,13 +17,38 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.presentationFactory = function(dependencies, spec) {
+
+import { genericFactory } from "../genericFactory.js";
+import { genericParentFactory } from "../genericParentFactory.js";
+import { infoFactory as infoFactoryImported } from "../gui/infoFactory.js";
+import { pAttributes } from "./pAttributes.js";
+import { pAttributesView } from "./pAttributesView.js";
+import { pChildRefHandler } from "./pChildRefHandler.js";
+import { pChildRefHandlerView } from "./pChildRefHandlerView.js";
+import { pCollectionVar } from "./pCollectionVar.js";
+import { pGroup } from "./pGroup.js";
+import { pMap } from "./pMap.js";
+import { pMapView } from "./pMapView.js";
+import { pMultipleChildrenViewFactory as pMultipleChildrenViewFactoryImported } from "./pMultipleChildrenViewFactory.js";
+import { pNonRepeatingChildRefHandler } from "./pNonRepeatingChildRefHandler.js";
+import { pNonRepeatingChildRefHandlerView } from "./pNonRepeatingChildRefHandlerView.js";
+import { pNumVar } from "./pNumVar.js";
+import { pParentMultipleChildren } from "./pParentMultipleChildren.js";
+import { pParentVar } from "./pParentVar.js";
+import { pRecordLink } from "./pRecordLink.js";
+import { pRecordLinkView } from "./pRecordLinkView.js";
+import { pRepeatingContainer } from "./pRepeatingContainer.js";
+import { pRepeatingElement } from "./pRepeatingElement.js";
+import { pResourceLink } from "./pResourceLink.js";
+import { pSurroundingContainer } from "./pSurroundingContainer.js";
+import { pVar } from "./pVar.js";
+import { pVarViewFactory as pVarViewFactoryImported } from "./pVarViewFactory.js";
+
+export const presentationFactory = function(dependencies, spec) {
 		const presentationFactoryCounter = spec.presentationFactoryCounter;
-		const infoFactory = CORA.infoFactory();
-		const pVarViewFactory = CORA.pVarViewFactory();
-		const pMultipleChildrenViewFactory = CORA.pMultipleChildrenViewFactory();
+		const infoFactory = infoFactoryImported();
+		const pVarViewFactory = pVarViewFactoryImported();
+		const pMultipleChildrenViewFactory = pMultipleChildrenViewFactoryImported();
 
 		const pRepeatingElementFactoryDependencies = {
 			infoFactory: infoFactory,
@@ -31,14 +56,14 @@ var CORA = (function(cora) {
 			pubSub: dependencies.pubSub
 		};
 
-		const pRepeatingElementFactory = CORA.genericFactory("pRepeatingElement",
+		const pRepeatingElementFactory = genericFactory(pRepeatingElement,
 			pRepeatingElementFactoryDependencies);
 
 		const pRecordLinkViewFactoryDependencies = {
 			infoFactory: infoFactory
 		};
 
-		const pRecordLinkViewFactory = CORA.genericFactory("pRecordLinkView",
+		const pRecordLinkViewFactory = genericFactory(pRecordLinkView,
 			pRecordLinkViewFactoryDependencies);
 
 		const pChildRefHandlerFactoryDependencies = {
@@ -52,34 +77,34 @@ var CORA = (function(cora) {
 			recordData: dependencies.recordData,
 
 			pRepeatingElementFactory: pRepeatingElementFactory,
-			pChildRefHandlerViewFactory: CORA.genericFactory("pChildRefHandlerView", {})
+			pChildRefHandlerViewFactory: genericFactory(pChildRefHandlerView, {})
 		};
 
-		const pChildRefHandlerFactory = CORA.genericFactory("pChildRefHandler",
+		const pChildRefHandlerFactory = genericFactory(pChildRefHandler,
 			pChildRefHandlerFactoryDependencies);
 
 		const pNonRepeatingChildRefHandlerFactoryDependencies = {
-			pNonRepeatingChildRefHandlerViewFactory: CORA.genericFactory("pNonRepeatingChildRefHandlerView", {}),
+			pNonRepeatingChildRefHandlerViewFactory: genericFactory(pNonRepeatingChildRefHandlerView, {}),
 			pubSub: dependencies.pubSub,
 			providers: dependencies.providers
 		};
 
-		const pNonRepeatingChildRefHandlerFactory = CORA.genericFactory("pNonRepeatingChildRefHandler",
+		const pNonRepeatingChildRefHandlerFactory = genericFactory(pNonRepeatingChildRefHandler,
 			pNonRepeatingChildRefHandlerFactoryDependencies);
 
 		const pMapViewFactoryDependencies = {
 			infoFactory: infoFactory
 		};
 
-		const pMapViewFactory = CORA.genericFactory("pMapView", pMapViewFactoryDependencies);
+		const pMapViewFactory = genericFactory(pMapView, pMapViewFactoryDependencies);
 
 		const pAttributesDependencies = {
 			metadataProvider: dependencies.providers.metadataProvider,
 			pubSub: dependencies.pubSub,
-			pAttributesViewFactory: CORA.genericFactory("pAttributesView")
+			pAttributesViewFactory: genericFactory(pAttributesView)
 		};
 
-		const pAttributesFactory = CORA.genericFactory("pAttributes", pAttributesDependencies);
+		const pAttributesFactory = genericFactory(pAttributes, pAttributesDependencies);
 
 		const childDependencies = {
 			providers: dependencies.providers,
@@ -107,8 +132,8 @@ var CORA = (function(cora) {
 			pNonRepeatingChildRefHandlerFactory: pNonRepeatingChildRefHandlerFactory,
 			pAttributesFactory: pAttributesFactory
 		};
-		childDependencies.pParentVarFactory = CORA.genericParentFactory("pParentVar", childDependencies);
-		childDependencies.pParentMultipleChildrenFactory = CORA.genericParentFactory("pParentMultipleChildren", childDependencies);
+		childDependencies.pParentVarFactory = genericParentFactory(pParentVar, childDependencies);
+		childDependencies.pParentMultipleChildrenFactory = genericParentFactory(pParentMultipleChildren, childDependencies);
 		let presentationCounter = 0;
 
 		const factor = function(spec) {
@@ -123,34 +148,34 @@ var CORA = (function(cora) {
 
 			let type = spec.cPresentation.getData().attributes.type;
 			if (type === "pVar") {
-				return CORA.pVar(childDependencies, specNew);
+				return pVar(childDependencies, specNew);
 			}
 			if (type === "pCollVar") {
-				return CORA.pCollectionVar(childDependencies, specNew);
+				return pCollectionVar(childDependencies, specNew);
 			}
 			if (type === "pNumVar") {
-				return CORA.pNumVar(childDependencies, specNew);
+				return pNumVar(childDependencies, specNew);
 			}
 			if (type === "pGroup") {
 				if (shouldBePresentedAsMap(spec.cPresentation)) {
-					return CORA.pMap(childDependencies, specNew);
+					return pMap(childDependencies, specNew);
 				}
 				specNew.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
-				return CORA.pGroup(childDependencies, specNew);
+				return pGroup(childDependencies, specNew);
 			}
 			if (type === "pRecordLink") {
 				specNew.recordPartPermissionCalculatorFactory = dependencies.recordPartPermissionCalculatorFactory;
-				return CORA.pRecordLink(childDependencies, specNew);
+				return pRecordLink(childDependencies, specNew);
 			}
 			if (type === "pResourceLink") {
-				return CORA.pResourceLink(childDependencies, specNew);
+				return pResourceLink(childDependencies, specNew);
 			}
 			let repeat = spec.cPresentation.getData().attributes.repeat;
 			if (repeat === "this") {
-				return CORA.pRepeatingContainer(childDependencies, specNew);
+				return pRepeatingContainer(childDependencies, specNew);
 			}
 			specNew.recordPartPermissionCalculator = spec.recordPartPermissionCalculator;
-			return CORA.pSurroundingContainer(childDependencies, specNew);
+			return pSurroundingContainer(childDependencies, specNew);
 		};
 
 		const shouldBePresentedAsMap = function(cPresentation) {
@@ -180,5 +205,4 @@ var CORA = (function(cora) {
 
 		return self;
 	};
-	return cora;
-}(CORA));
+

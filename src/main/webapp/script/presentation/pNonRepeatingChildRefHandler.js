@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pNonRepeatingChildRefHandler = function(dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+import { metadataHelper as metadataHelperImported } from "../metadata/metadataHelper.js";
+
+export const pNonRepeatingChildRefHandler = function(dependencies, spec) {
 		let view;
 		const pubSub = dependencies.pubSub;
 		const metadataProvider = dependencies.providers.metadataProvider;
@@ -38,7 +40,7 @@ var CORA = (function(cora) {
 		let notFoundIds = [];
 
 		const start = function() {
-			metadataHelper = CORA.metadataHelper({
+			metadataHelper = metadataHelperImported({
 				metadataProvider: metadataProvider
 			});
 			if (atLeastOneChildRefFoundInCurrentlyUsedParentMetadata()) {
@@ -64,11 +66,11 @@ var CORA = (function(cora) {
 		};
 
 		const atLeastOneChildRefFoundInCurrentlyUsedParentMetadata = function() {
-			let cParentMetadata = CORA.coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
+			let cParentMetadata = coraData(metadataProvider.getMetadataById(spec.parentMetadataId));
 			let presentationsOf = cPresentation.getFirstChildByNameInData("presentationsOf");
 
 			for (const childReference of presentationsOf.children) {
-				let cChildReference = CORA.coraData(childReference);
+				let cChildReference = coraData(childReference);
 				let childMetadataIdFromPresentation = cChildReference.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cParentMetadataChildRefPart = metadataHelper.getChildRefPartOfMetadata(
 					cParentMetadata, childMetadataIdFromPresentation);
@@ -115,7 +117,7 @@ var CORA = (function(cora) {
 
 		const findPresentationId = function(cPresentation) {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			return coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		};
 
 
@@ -254,5 +256,3 @@ var CORA = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORA));

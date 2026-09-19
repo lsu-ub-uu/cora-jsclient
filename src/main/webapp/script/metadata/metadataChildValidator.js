@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataChildValidator = function(dependencies, spec) {
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+import { metadataRepeatValidator } from "./metadataRepeatValidator.js";
+
+export const metadataChildValidator = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
 		let path = spec.path;
@@ -35,8 +37,8 @@ var CORA = (function(cora) {
 		let childInstancesCanNotBeRemoved = [];
 		let childInstancesCanBeRemoved = [];
 		let numberOfChildrenOk = 0;
-		let childReference = CORA.coraData(spec.childReference);
-		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
+		let childReference = coraData(spec.childReference);
+		let cRef = coraData(childReference.getFirstChildByNameInData("ref"));
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
@@ -86,7 +88,7 @@ var CORA = (function(cora) {
 
 		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
 			let nextPath = createNextLevelPath(repeatId);
-			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
+			return metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
 				pubSub);
 		};
 
@@ -96,7 +98,7 @@ var CORA = (function(cora) {
 				repeatId: repeatId,
 				parentPath: path
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		// if any child of the group has valuable data then the validation result has valuable data
@@ -213,5 +215,4 @@ var CORA = (function(cora) {
 			validate: validate
 		});
 	};
-	return cora;
-}(CORA));
+

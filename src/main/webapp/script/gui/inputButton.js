@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.inputButton = function(spec) {
+
+export const inputButton = function(spec) {
 		var view;
 		var action;
 
@@ -121,5 +120,3 @@ var CORA = (function(cora) {
 		return out.getView();
 	};
 
-	return cora;
-}(CORA));

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.loginManagerFactory = function(dependencies) {
+
+import { loginManager } from "./loginManager.js";
+import { loginManagerViewFactory } from "./loginManagerViewFactory.js";
+
+export const loginManagerFactory = function(dependencies) {
 
 		const getDependencies = function() {
 			return dependencies;
@@ -30,15 +32,14 @@ var CORA = (function(cora) {
 			};
 			let loginManagerDependencies = {
 				textProvider : dependencies.textProvider,
-				loginManagerViewFactory : CORA
-						.loginManagerViewFactory(loginManagerViewFactoryDependencies),
+				loginManagerViewFactory : loginManagerViewFactory(loginManagerViewFactoryDependencies),
 				appTokenLoginFactory : dependencies.appTokenLoginFactory,
 				webRedirectLoginFactory : dependencies.webRedirectLoginFactory,
 				passwordLoginJsClientIntegratorFactory : dependencies.passwordLoginJsClientIntegratorFactory,
 				authTokenHolder : dependencies.authTokenHolder,
 				ajaxCallFactory : dependencies.ajaxCallFactory
 			};
-			return CORA.loginManager(loginManagerDependencies, loginManagerSpec);
+			return loginManager(loginManagerDependencies, loginManagerSpec);
 		};
 
 		return Object.freeze({
@@ -47,5 +48,3 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));

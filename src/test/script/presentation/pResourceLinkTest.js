@@ -17,6 +17,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "../aCoratestNameSpace.js";
 "use strict";
 QUnit.module("presentation/pResourceLinkTest.js", {
 	beforeEach: function() {
@@ -263,3 +266,5 @@ QUnit.test("testTransformValueForView_pickUrl", function(assert) {
 
 	assert.strictEqual(transformed, "http://localhost:38080/systemone/rest/record/binary/binary:49671507525818/thumbnail?authToken=fitnesseAdminToken");
 });
+
+export {};

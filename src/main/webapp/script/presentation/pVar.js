@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pVar = function(dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+
+export const pVar = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pParentVarFactory = dependencies.pParentVarFactory;
 
@@ -35,7 +36,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const addTypeSpecificInfoToViewSpec = function(mode, pVarViewSpec) {
@@ -92,5 +93,4 @@ var CORA = (function(cora) {
 		});
 
 	};
-	return cora;
-}(CORA));
+

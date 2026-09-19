@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.clientInstanceProvider = function() {
+
+export const clientInstanceProvider = function() {
 		var jsClient;
 
 		function setJsClient(jsClientToSet) {
@@ -35,5 +34,4 @@ var CORA = (function(cora) {
 			getJsClient : getJsClient
 		});
 	};
-	return cora;
-}(CORA));
+

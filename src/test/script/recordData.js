@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recordWithAllLinks = {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recordWithAllLinks = {
 		"data": {
 			"children": [
 				{
@@ -1326,5 +1328,5 @@ var CORATEST = (function(coraTest) {
 			}
 		}
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

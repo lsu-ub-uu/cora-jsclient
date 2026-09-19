@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pChildRefHandlerView = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const pChildRefHandlerView = function(dependencies, spec) {
 		let view;
 		let childrenView;
 		let buttonView;
@@ -50,7 +51,7 @@ var CORA = (function(cora) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			return CORA.createSpanWithClassName(newClassName);
+			return createSpanWithClassName(newClassName);
 		};
 
 		const getView = function() {
@@ -58,7 +59,7 @@ var CORA = (function(cora) {
 		};
 
 		const createButtonView = function() {
-			let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+			let buttonViewNew = createSpanWithClassName("buttonView");
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
@@ -102,7 +103,7 @@ var CORA = (function(cora) {
 		};
 
 		const createChildrenView = function() {
-			let childrenViewNew = CORA.createSpanWithClassName("childrenView");
+			let childrenViewNew = createSpanWithClassName("childrenView");
 			if (spec.isRepeating) {
 				addDragEventHandlers(childrenViewNew);
 			}
@@ -351,5 +352,4 @@ var CORA = (function(cora) {
 		view.viewObject = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+

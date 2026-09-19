@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pRepeatingElement = function(dependencies, spec) {
+
+import { button } from "../gui/button.js";
+import { createRemoveButton as createRemoveButtonImported } from "../gui/basicGui.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const pRepeatingElement = function(dependencies, spec) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
 		const pubSub = dependencies.pubSub;
 
@@ -77,7 +80,7 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
-			let repeatingElement = CORA.createSpanWithClassName("repeatingElement");
+			let repeatingElement = createSpanWithClassName("repeatingElement");
 			if (userCanMove) {
 				repeatingElement.ondragenter = ondragenterHandler;
 			}
@@ -89,7 +92,7 @@ var CORA = (function(cora) {
 		};
 
 		const createButtonView = function() {
-			let newButtonView = CORA.createSpanWithClassName("buttonView");
+			let newButtonView = createSpanWithClassName("buttonView");
 			view.appendChild(newButtonView);
 			if (userCanRemove) {
 				removeButton = createRemoveButton();
@@ -115,7 +118,7 @@ var CORA = (function(cora) {
 				};
 				jsBookkeeper.remove(data);
 			};
-			let newRemoveButton = CORA.createRemoveButton(removeFunction);
+			let newRemoveButton = createRemoveButtonImported(removeFunction);
 			newRemoveButton.addEventListener("mouseenter", function() {
 				view.classList.add("hoverRemove");
 			});
@@ -126,7 +129,7 @@ var CORA = (function(cora) {
 		};
 
 		const createDragButton = function() {
-			let createdDragButton = CORA.createSpanWithClassName("iconButton dragButton");
+			let createdDragButton = createSpanWithClassName("iconButton dragButton");
 			createdDragButton.onmousedown = function() {
 				view.draggable = "true";
 			};
@@ -149,7 +152,7 @@ var CORA = (function(cora) {
 					method: addBeforeFunction
 				}
 			};
-			return CORA.button(buttonSpec);
+			return button(buttonSpec);
 		};
 
 		const possiblyAddClickableHeadline = function() {
@@ -353,7 +356,7 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAddAlternativeButton = function(buttonClasses) {
-			alternativeButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.alternative);
+			alternativeButton = createSpanWithClassName("iconButton " + buttonClasses.alternative);
 			alternativeButton.onclick = showAlternativePresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(alternativeButton, dragButton);
@@ -363,7 +366,7 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAddDefaultButton = function(buttonClasses) {
-			defaultButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.default);
+			defaultButton = createSpanWithClassName("iconButton " + buttonClasses.default);
 			defaultButton.onclick = showDefaultPresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(defaultButton, dragButton);
@@ -491,5 +494,4 @@ var CORA = (function(cora) {
 		view.modelObject = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+

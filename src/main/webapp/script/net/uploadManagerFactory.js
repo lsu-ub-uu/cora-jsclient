@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.uploadManagerFactory = function(dependencies) {
+
+import { uploadManager } from "./uploadManager.js";
+
+export const uploadManagerFactory = function(dependencies) {
 
 		function factor(uploadManagerSpec) {
 			var dep = {
@@ -27,7 +28,7 @@ var CORA = (function(cora) {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory,
 				"managedGuiItemFactory" : dependencies.managedGuiItemFactory
 			};
-			return CORA.uploadManager(dep, uploadManagerSpec);
+			return uploadManager(dep, uploadManagerSpec);
 		}
 
 		function getDependencies() {
@@ -40,5 +41,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

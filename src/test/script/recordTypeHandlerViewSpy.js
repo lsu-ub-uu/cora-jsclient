@@ -16,9 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recordTypeHandlerViewSpy = function(dependencies, spec) {
+import CORATEST from "./aCoratestNameSpace.js";
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recordTypeHandlerViewSpy = function(dependencies, spec) {
 		var getViewCalled = 0;
 		var view = CORA.createSpanWithClassName("recordTypeFromRecordTypeHandlerSpy");
 		function getView() {
@@ -35,5 +38,5 @@ var CORATEST = (function(coraTest) {
 			getGetViewCalled : getGetViewCalled,
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

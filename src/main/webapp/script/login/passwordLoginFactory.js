@@ -16,9 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.passwordLoginFactory = function(dependencies) {
+
+import { genericFactory } from "../genericFactory.js";
+import { passwordLogin } from "./passwordLogin.js";
+import { passwordLoginViewFactory } from "./passwordLoginViewFactory.js";
+import { recordPartPermissionCalculator } from "../recordPartPermissionCalculator.js";
+
+export const passwordLoginFactory = function(dependencies) {
 		const providers = dependencies.providers;
 		const globalFactories = dependencies.globalFactories;
 		
@@ -35,12 +39,12 @@ var CORA = (function(cora) {
 				managedGuiItemFactory : globalFactories.managedGuiItemFactory,
 				recordGuiFactory : globalFactories.recordGuiFactory,
 				ajaxCallFactory : globalFactories.ajaxCallFactory,
-				passwordLoginViewFactory : CORA.passwordLoginViewFactory(viewDep),
-				recordPartPermissionCalculatorFactory: CORA.genericFactory("recordPartPermissionCalculator"
+				passwordLoginViewFactory : passwordLoginViewFactory(viewDep),
+				recordPartPermissionCalculatorFactory: genericFactory(recordPartPermissionCalculator
 					, calculatorFactoryDep),
 //				"jsClient" : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
-			return CORA.passwordLogin(dep, spec);
+			return passwordLogin(dep, spec);
 		};
 
 		const getDependencies = function() {
@@ -53,5 +57,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

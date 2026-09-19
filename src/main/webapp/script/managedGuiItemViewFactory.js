@@ -16,12 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.managedGuiItemViewFactory = function() {
+
+import { managedGuiItemView } from "./managedGuiItemView.js";
+
+export const managedGuiItemViewFactory = function() {
 
 		function factor(managedGuiItemViewSpec) {
-			return CORA.managedGuiItemView( managedGuiItemViewSpec);
+			return managedGuiItemView( managedGuiItemViewSpec);
 		}
 
 		return Object.freeze({
@@ -29,5 +30,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

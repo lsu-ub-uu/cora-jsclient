@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recordTypeProviderSpy = function() {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recordTypeProviderSpy = function() {
 
 		var recordTypeArray = [];
 		var callWhenReloadedMethod;
@@ -110,5 +112,5 @@ var CORATEST = (function(coraTest) {
 			setMetadata: setMetadata
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

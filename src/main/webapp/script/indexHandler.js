@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function (cora) {
-    "use strict";
-    cora.indexHandler = function (dependencies, spec) {
+
+export const indexHandler = function (dependencies, spec) {
 
 
         function indexData(dataRecord) {
@@ -67,5 +66,3 @@ var CORA = (function (cora) {
             handleCallError: handleCallError
         });
     };
-    return cora;
-}(CORA));

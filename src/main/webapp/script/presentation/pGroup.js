@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pGroup = function(dependencies, spec) {
+
+export const pGroup = function(dependencies, spec) {
 		let parent;
 
 		const start = function() {
@@ -54,5 +53,4 @@ var CORA = (function(cora) {
 		});
 
 	};
-	return cora;
-}(CORA));
+

@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordGui = function(dependencies, spec) {
+
+export const recordGui = function(dependencies, spec) {
 		const pubSub = dependencies.pubSub;
 		const dataHolder = dependencies.dataHolder;
 		const jsBookkeeper = dependencies.jsBookkeeper;
@@ -83,5 +82,4 @@ var CORA = (function(cora) {
 			validateData : validateData
 		});
 	};
-	return cora;
-}(CORA));
+

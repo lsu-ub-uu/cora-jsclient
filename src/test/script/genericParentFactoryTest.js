@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("genericParentFactoryTest.js", {
@@ -106,9 +108,9 @@ QUnit.test("factorTestChildWithoutDependencies", function(assert) {
 	assert.strictEqual(factoredChild, this.child);
 });
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.spyParentToFactor = function(dependencies, spec, child) {
+{
+const cora = CORA;
+cora.spyParentToFactor = function(dependencies, spec, child) {
 		let out;
 
 		const getDependencies = function() {
@@ -131,12 +133,11 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
+}
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.spyParentToFactorWithoutDependencies = function(spec, child) {
+{
+const cora = CORA;
+cora.spyParentToFactorWithoutDependencies = function(spec, child) {
 		let out;
 
 		const getSpec = function() {
@@ -154,5 +155,6 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
+}
+
+export {};

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pRepeatingElementSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pRepeatingElementSpy = function(dependencies, spec) {
 		var view = document.createElement("span");
 		view.className = "repeatingElement";
 		var parentModelObject;
@@ -131,5 +133,5 @@ var CORATEST = (function(coraTest) {
 		view.ondragenter = out.ondragenter;
 		return out;
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

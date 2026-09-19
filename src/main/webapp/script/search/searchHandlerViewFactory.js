@@ -17,19 +17,24 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandlerViewFactory = function(dependencies) {
+
+import { busy } from "../gui/busy.js";
+import { genericFactory } from "../genericFactory.js";
+import { messageHolderFactory } from "../gui/messageHolderFactory.js";
+import { searchHandlerView } from "./searchHandlerView.js";
+import { workItemViewFactory } from "../gui/workItemViewFactory.js";
+
+export const searchHandlerViewFactory = function(dependencies) {
 
 		var dep = {
 			"textProvider" : dependencies.textProvider,
-			"workItemViewFactory" : CORA.workItemViewFactory(),
-			"messageHolderFactory" : CORA.messageHolderFactory(),
-			busyFactory : CORA.genericFactory("busy")
+			"workItemViewFactory" : workItemViewFactory(),
+			"messageHolderFactory" : messageHolderFactory(),
+			busyFactory : genericFactory(busy)
 		};
 
 		function factor(spec) {
-			return CORA.searchHandlerView(dep, spec);
+			return searchHandlerView(dep, spec);
 		}
 
 		function getDependencies() {
@@ -42,5 +47,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

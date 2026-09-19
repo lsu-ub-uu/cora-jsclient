@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.xmlHttpRequestFactory = function() {
+
+export const xmlHttpRequestFactory = function() {
 		function factor() {
 			return new XMLHttpRequest();
 		}
@@ -27,5 +26,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

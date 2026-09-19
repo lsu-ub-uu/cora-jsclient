@@ -31,3 +31,5 @@ function Hi()
         return "Hi! " + this.echo;
     }
 }
+
+export { Hi };

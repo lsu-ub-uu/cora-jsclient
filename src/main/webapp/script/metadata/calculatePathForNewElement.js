@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.calculatePathForNewElement = function(spec) {
+
+export const calculatePathForNewElement = function(spec) {
 		var metadataId = spec.metadataIdToAdd;
 		var repeatId = spec.repeatId;
 
@@ -72,5 +71,4 @@ var CORA = (function(cora) {
 
 		return newPath;
 	};
-	return cora;
-}(CORA));
+

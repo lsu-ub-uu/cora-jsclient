@@ -17,6 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = {
-	gui: {}
-};
+const globalWindow = typeof window !== "undefined" ? window : undefined;
+const coraNamespace = globalWindow?.CORA ?? {};
+
+if (globalWindow !== undefined) {
+	globalWindow.CORA = coraNamespace;
+}
+
+export default coraNamespace;

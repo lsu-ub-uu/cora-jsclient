@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.authTokenHolder = function() {
+
+export const authTokenHolder = function() {
 		let out;
 		let authToken = "";
 
@@ -42,5 +41,4 @@ var CORA = (function(cora) {
 		});
 		return out;
 	};
-	return cora;
-}(CORA));
+

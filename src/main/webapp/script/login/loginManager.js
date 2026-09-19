@@ -76,6 +76,8 @@ export const addStandardAppTokenOption = function(option) {
 export const clearStandardAppTokenOptions = function() {
 	appTokenOptions = [];
 };
+export const LOGGEDOUT = 0;
+export const LOGGEDIN = 1;
 export const loginManager = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let out;
@@ -557,5 +559,5 @@ export const loginManager = function(dependencies, spec) {
 		start();
 		return out;
 	};
-	loginManager.LOGGEDOUT = 0;
-	loginManager.LOGGEDIN = 1;
+	loginManager.LOGGEDOUT = LOGGEDOUT;
+	loginManager.LOGGEDIN = LOGGEDIN;

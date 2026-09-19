@@ -19,7 +19,7 @@
 
 import { button } from "../gui/button.js";
 import { holder as holderImported } from "../gui/holder.js";
-import { loginManager } from "./loginManager.js";
+import { LOGGEDIN } from "./loginManager.js";
 
 export const loginManagerView = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
@@ -88,7 +88,7 @@ export const loginManagerView = function(dependencies, spec) {
 
 		const setState = function(stateIn) {
 			holder.closeHolder();
-			if (loginManager.LOGGEDIN === stateIn) {
+			if (LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
 				let logoutOptions = [ {
 					text : textProvider.getTranslation("theClient_logoutMenuText"),
@@ -128,4 +128,3 @@ export const loginManagerView = function(dependencies, spec) {
 		start();
 		return out;
 	};
-

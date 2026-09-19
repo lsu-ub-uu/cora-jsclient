@@ -20,6 +20,7 @@
 
 import { managedGuiItemFactory } from "../managedGuiItemFactory.js";
 import { messageHolderFactory } from "../gui/messageHolderFactory.js";
+import { searchHandlerJsClientIntegratorFactory } from "./searchHandlerJsClientIntegratorFactory.js";
 import { searchRecordHandler } from "./searchRecordHandler.js";
 import { searchRecordHandlerViewFactory } from "./searchRecordHandlerViewFactory.js";
 
@@ -42,8 +43,8 @@ export const searchRecordHandlerFactory = function(dependencies) {
 				"managedGuiItemFactory" : managedGuiItemFactory(),
 				"jsClient" : spec.jsClient,
 				"textProvider" : dependencies.textProvider,
-				"searchHandlerJSClientIntegratorFactory" : CORA
-						.searchHandlerJsClientIntegratorFactory(searchHandlerJsClientIntegratorDep)
+				"searchHandlerJSClientIntegratorFactory" : searchHandlerJsClientIntegratorFactory(
+						searchHandlerJsClientIntegratorDep)
 			};
 			return searchRecordHandler(searchRecordHandlerDependencies, spec);
 		}
@@ -54,4 +55,3 @@ export const searchRecordHandlerFactory = function(dependencies) {
 			factor : factor
 		});
 	};
-

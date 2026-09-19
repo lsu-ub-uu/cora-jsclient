@@ -21,12 +21,14 @@
 import { dataHolder as dataHolderImported } from "../metadata/dataHolder.js";
 import { genericFactory } from "../genericFactory.js";
 import { jsBookkeeper as jsBookkeeperImported } from "../metadata/jsBookkeeper.js";
+import { metadataChildAndRepeatInitializerFactory } from "../metadata/metadataChildAndRepeatInitializerFactory.js";
 import { metadataControllerFactory as metadataControllerFactoryImported } from "../metadata/metadataControllerFactory.js";
 import { metadataValidatorFactory as metadataValidatorFactoryImported } from "../metadata/metadataValidatorFactory.js";
 import { presentationFactory as presentationFactoryImported } from "../presentation/presentationFactory.js";
 import { presentationHolderFactory } from "../presentation/presentationHolderFactory.js";
 import { pubSub as pubSubImported } from "../pubSub.js";
 import { recordGui } from "./recordGui.js";
+import { recordPartPermissionCalculator } from "../recordPartPermissionCalculator.js";
 
 export const recordGuiFactory = function(dependencies) {
 		const metadataProvider = dependencies.providers.metadataProvider;
@@ -64,12 +66,12 @@ export const recordGuiFactory = function(dependencies) {
 				pubSub : pubSub
 			};
 
-			let metadataChildAndRepeatInitializerFactory = CORA
-					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+			let metadataChildAndRepeatInitializerFactoryNew = metadataChildAndRepeatInitializerFactory(
+					metadataChildAndRepeatInitializerDep);
 
 			let depJSBookkeeper = {
 				recordTypeProvider : recordTypeProvider,
-				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactoryNew
 			};
 
 			let jsBookkeeper = jsBookkeeperImported(depJSBookkeeper, specJSBookkeeper);
@@ -89,7 +91,7 @@ export const recordGuiFactory = function(dependencies) {
 				uploadManager : dependencies.uploadManager,
 				ajaxCallFactory : dependencies.ajaxCallFactory,
 				recordPartPermissionCalculatorFactory : genericFactory(
-						"recordPartPermissionCalculator", calculatorFactoryDep)
+						recordPartPermissionCalculator, calculatorFactoryDep)
 			};
 
 			let dependenciesCF = {
@@ -155,4 +157,3 @@ export const recordGuiFactory = function(dependencies) {
 		self = out;
 		return out;
 	};
-

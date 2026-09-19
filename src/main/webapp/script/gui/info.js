@@ -21,7 +21,7 @@ import { button as buttonImported } from "./button.js";
 import { createSpanWithClassName } from "./basicGui.js";
 
 export const info = function(spec) {
-		let infoLevel = cora.info.NONE;
+		let infoLevel = info.NONE;
 		let button;
 		let view;
 
@@ -52,14 +52,14 @@ export const info = function(spec) {
 		};
 
 		const showInfo = function(event) {
-			if (infoLevel === cora.info.NONE) {
+			if (infoLevel === info.NONE) {
 				createAndAddBaseView();
 				createLevelView(spec.level1);
 			}
-			if (infoLevel === cora.info.TEXT) {
+			if (infoLevel === info.TEXT) {
 				createLevelView(spec.level2);
 			}
-			if (infoLevel === cora.info.ALL) {
+			if (infoLevel === info.ALL) {
 				resetInfo();
 			} else {
 				infoLevel++;
@@ -136,7 +136,6 @@ export const info = function(spec) {
 		});
 	};
 
-	cora.info.NONE = 0;
-	cora.info.TEXT = 1;
-	cora.info.ALL = 2;
-
+	info.NONE = 0;
+	info.TEXT = 1;
+	info.ALL = 2;

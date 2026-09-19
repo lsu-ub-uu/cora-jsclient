@@ -49,5 +49,3 @@ export const box = function (view) {
         return box;
 
     };
-
-export default CORA;

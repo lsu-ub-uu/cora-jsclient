@@ -22,19 +22,26 @@ import { ajaxCallFactory as ajaxCallFactoryImported } from "../net/ajaxCallFacto
 import { appTokenLoginFactory as appTokenLoginFactoryImported } from "../login/appTokenLoginFactory.js";
 import { definitionViewerFactory } from "../definitionViewer/definitionViewerFactory.js";
 import { genericFactory } from "../genericFactory.js";
+import { incomingLinksListHandler } from "../incomingLinksListHandler.js";
+import { incomingLinksListHandlerView } from "../incomingLinksListHandlerView.js";
 import { jsClient as jsClientImported } from "./jsClient.js";
 import { jsClientViewFactory } from "./jsClientViewFactory.js";
 import { loginManagerFactory as loginManagerFactoryImported } from "../login/loginManagerFactory.js";
 import { managedGuiItemFactory as managedGuiItemFactoryImported } from "../managedGuiItemFactory.js";
+import { openGuiItemHandlerFactory } from "./openGuiItemHandlerFactory.js";
 import { passwordLoginFactory } from "../login/passwordLoginFactory.js";
+import { passwordLoginJsClientIntegrator } from "../login/passwordLoginJsClientIntegrator.js";
 import { recordGuiFactory as recordGuiFactoryImported } from "../recordGui/recordGuiFactory.js";
 import { recordHandlerFactory as recordHandlerFactoryImported } from "../recordHandlerFactory.js";
 import { recordListHandlerFactory as recordListHandlerFactoryImported } from "../recordListHandlerFactory.js";
+import { recordPartPermissionCalculator } from "../recordPartPermissionCalculator.js";
 import { recordTypeHandlerFactory as recordTypeHandlerFactoryImported } from "../recordTypeHandlerFactory.js";
 import { recordTypeHandlerViewFactory as recordTypeHandlerViewFactoryImported } from "../recordTypeHandlerViewFactory.js";
+import { recursiveDeleteFactory } from "../recursiveDelete/recursiveDeleteFactory.js";
 import { recordTypeMenu as recordTypeMenuImported } from "./recordTypeMenu.js";
 import { resultHandlerFactory as resultHandlerFactoryImported } from "../search/resultHandlerFactory.js";
 import { searchHandlerFactory } from "../search/searchHandlerFactory.js";
+import { searchRecordHandlerFactory } from "../search/searchRecordHandlerFactory.js";
 import { searchRecordHandlerViewFactory as searchRecordHandlerViewFactoryImported } from "../search/searchRecordHandlerViewFactory.js";
 import { uploadManagerFactory as uploadManagerFactoryImported } from "../net/uploadManagerFactory.js";
 import { webRedirectLoginFactory as webRedirectLoginFactoryImported } from "../login/webRedirectLoginFactory.js";
@@ -71,7 +78,7 @@ export const jsClientFactory = function(providers, dependencies) {
 				managedGuiItemFactory : managedGuiItemFactoryImported()
 			};
 			let passwordLoginJsClientIntegratorFactory = genericFactory(
-					"passwordLoginJsClientIntegrator", passwordLoginJsClientIntegratorDep);
+					passwordLoginJsClientIntegrator, passwordLoginJsClientIntegratorDep);
 
 			let loginManagerFactoryDependencies = {
 				authTokenHolder : authTokenHolder,
@@ -86,8 +93,7 @@ export const jsClientFactory = function(providers, dependencies) {
 			let openGuiItemHandlerFactoryDep = {
 				textProvider : providers.textProvider
 			};
-			let openGuiItemHandlerFactory = CORA
-					.openGuiItemHandlerFactory(openGuiItemHandlerFactoryDep);
+			let openGuiItemHandlerFactoryNew = openGuiItemHandlerFactory(openGuiItemHandlerFactoryDep);
 
 			let managedGuiItemFactory = managedGuiItemFactoryImported();
 			let uploadManagerDep = {
@@ -111,7 +117,7 @@ export const jsClientFactory = function(providers, dependencies) {
 				authTokenHolder : authTokenHolder,
 				uploadManager : uploadManager,
 				recordPartPermissionCalculatorFactory : genericFactory(
-						"recordPartPermissionCalculator", calculatorFactoryDep)
+						recordPartPermissionCalculator, calculatorFactoryDep)
 			};
 			let recordGuiFactory = recordGuiFactoryImported(recordGuiFactoryDep);
 
@@ -142,8 +148,7 @@ export const jsClientFactory = function(providers, dependencies) {
 				ajaxCallFactory : ajaxCallFactory,
 				recordGuiFactory : recordGuiFactory
 			};
-			let searchRecordHandlerFactory = CORA
-					.searchRecordHandlerFactory(searchRecordHandlerFactoryDep);
+			let searchRecordHandlerFactoryNew = searchRecordHandlerFactory(searchRecordHandlerFactoryDep);
 
 			let depRecordListHandler = {
 				factories : globalFactories
@@ -169,11 +174,11 @@ export const jsClientFactory = function(providers, dependencies) {
 			globalFactories.ajaxCallFactory = ajaxCallFactory;
 			globalFactories.appTokenLoginFactory = appTokenLoginFactory;
 			globalFactories.webRedirectLoginFactory = webRedirectLoginFactory;
-			globalFactories.openGuiItemHandlerFactory = openGuiItemHandlerFactory;
+			globalFactories.openGuiItemHandlerFactory = openGuiItemHandlerFactoryNew;
 			globalFactories.managedGuiItemFactory = managedGuiItemFactory;
 			globalFactories.recordGuiFactory = recordGuiFactory;
 			globalFactories.resultHandlerFactory = resultHandlerFactory;
-			globalFactories.searchRecordHandlerFactory = searchRecordHandlerFactory;
+			globalFactories.searchRecordHandlerFactory = searchRecordHandlerFactoryNew;
 			globalFactories.searchRecordHandlerViewFactory = searchRecordHandlerViewFactory;
 			globalFactories.recordTypeHandlerFactory = recordTypeHandlerFactory;
 			globalFactories.recordHandlerFactory = recordHandlerFactory;
@@ -188,9 +193,9 @@ export const jsClientFactory = function(providers, dependencies) {
 				globalFactories : globalFactories
 			};
 			globalFactories.incomingLinksListHandlerFactory = genericFactory(
-					"incomingLinksListHandler", genericDependencies);
+					incomingLinksListHandler, genericDependencies);
 			globalFactories.incomingLinksListHandlerViewFactory = genericFactory(
-					"incomingLinksListHandlerView", genericDependencies);
+					incomingLinksListHandlerView, genericDependencies);
 
 			let menuDependencies = {
 				recordTypeHandlerFactory : recordTypeHandlerFactory
@@ -204,8 +209,7 @@ export const jsClientFactory = function(providers, dependencies) {
 				globalFactories : globalFactories
 			};
 			
-			let recursiveDeleteFactory = CORA
-								.recursiveDeleteFactory(providers, dependenciesRD);
+			let recursiveDeleteFactoryNew = recursiveDeleteFactory(providers, dependenciesRD);
 			
 			let dep = {
 				providers : providers,
@@ -217,12 +221,12 @@ export const jsClientFactory = function(providers, dependencies) {
 				authTokenHolder : authTokenHolder,
 				jsClientViewFactory : jsClientViewFactory(providers),
 				appTokenLoginFactory : appTokenLoginFactory,
-				openGuiItemHandlerFactory : openGuiItemHandlerFactory,
+				openGuiItemHandlerFactory : openGuiItemHandlerFactoryNew,
 				uploadManager : uploadManager,
-				searchRecordHandlerFactory : searchRecordHandlerFactory,
+				searchRecordHandlerFactory : searchRecordHandlerFactoryNew,
 				recordTypeHandlerFactory : recordTypeHandlerFactory,
 				definitionViewerFactory : definitionViewerFactory(providers),
-				recursiveDeleteFactory : recursiveDeleteFactory,
+				recursiveDeleteFactory : recursiveDeleteFactoryNew,
 				recordTypeMenu : recordTypeMenu
 			};
 
@@ -235,4 +239,3 @@ export const jsClientFactory = function(providers, dependencies) {
 			factor : factor
 		});
 	};
-

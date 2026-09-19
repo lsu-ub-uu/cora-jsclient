@@ -18,12 +18,13 @@
  */
 
 import { createDivWithClassName } from "./basicGui.js";
+import { box } from "./box.js";
 
 export const busy = function() {
 		let view = createView();
 		let beforeShowFunction;
 
-		let box = cora.box(view);
+		let busyBox = box(view);
 
 		function createView() {
 			return createDivWithClassName("busy hidden");
@@ -48,13 +49,12 @@ export const busy = function() {
 		}
 
 		let out = Object.freeze({
-			getView: box.getView,
+			getView: busyBox.getView,
 			show: show,
-			hide: box.hide,
-			hideWithEffect: box.hideWithEffect,
+			hide: busyBox.hide,
+			hideWithEffect: busyBox.hideWithEffect,
 			addBeforeShowFunction: addBeforeShowFunction
 		});
 		view.modelObject = out;
 		return out;
 	};
-

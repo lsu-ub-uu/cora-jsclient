@@ -1,3 +1,4 @@
+import CORA from "./aCoraNameSpace.js";
 import { ajaxCall } from "./net/ajaxCall.js";
 import { ajaxCallFactory } from "./net/ajaxCallFactory.js";
 import { appTokenLogin } from "./login/appTokenLogin.js";
@@ -320,7 +321,7 @@ export { workItemView };
 export { workItemViewFactory };
 export { xmlHttpRequestFactory };
 
-const CORA = {
+Object.assign(CORA, {
 	ajaxCall,
 	ajaxCallFactory,
 	appTokenLogin,
@@ -481,6 +482,6 @@ const CORA = {
 	workItemView,
 	workItemViewFactory,
 	xmlHttpRequestFactory,
-};
+});
 
 export default CORA;

@@ -123,20 +123,19 @@ export const message = function(spec) {
 		return out;
 	};
 
-	cora.message.ERROR = {
+	message.ERROR = {
 		"className": "error",
 		"defaultTimeout": 0
 	};
-	cora.message.WARNING = {
+	message.WARNING = {
 		"className": "warning",
 		"defaultTimeout": 10000
 	};
-	cora.message.INFO = {
+	message.INFO = {
 		"className": "info",
 		"defaultTimeout": 5000
 	};
-	cora.message.POSITIVE = {
+	message.POSITIVE = {
 		"className": "positive",
 		"defaultTimeout": 3000
 	};
-

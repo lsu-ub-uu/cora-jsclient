@@ -18,6 +18,7 @@
  */
 
 import { metadataController } from "./metadataController.js";
+import { metadataChildAndRepeatInitializerFactory } from "./metadataChildAndRepeatInitializerFactory.js";
 
 export const metadataControllerFactory = function(dependencies) {
 
@@ -28,14 +29,14 @@ export const metadataControllerFactory = function(dependencies) {
 				pubSub : dependencies.pubSub
 			};
 
-			let metadataChildAndRepeatInitializerFactory = CORA
-					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+			let metadataChildAndRepeatInitializerFactoryNew = metadataChildAndRepeatInitializerFactory(
+					metadataChildAndRepeatInitializerDep);
 
 			let controllerDependencies = {
 				recordTypeProvider : dependencies.recordTypeProvider,
 				metadataProvider : dependencies.metadataProvider,
 				pubSub : dependencies.pubSub,
-				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactoryNew
 			};
 			return metadataController(controllerDependencies, spec);
 		};
@@ -50,4 +51,3 @@ export const metadataControllerFactory = function(dependencies) {
 			factor : factor
 		});
 	};
-

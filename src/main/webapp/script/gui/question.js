@@ -19,16 +19,17 @@
  */
 
 import { createDivWithClassName } from "./basicGui.js";
+import { box as boxImported } from "./box.js";
 
 export const question = function(spec) {
 		let view;
-		let box;
+		let questionContainer;
 		let questionBox;
 		let notTriggered = true;
 
 		const start = function() {
 			view = createView();
-			box = cora.box(view);
+			questionContainer = boxImported(view);
 
 			questionBox = createTextView();
 			view.appendChild(questionBox);
@@ -64,12 +65,12 @@ export const question = function(spec) {
 				button.onclick = function() {
 					if (onlyTriggerOnce()) {
 						buttonSpec.onclickFunction();
-						box.hideWithEffect();
+						questionContainer.hideWithEffect();
 					}
 				};
 			} else {
 				button.onclick = function() {
-					box.hideWithEffect();
+					questionContainer.hideWithEffect();
 				};
 			}
 			return button;
@@ -86,11 +87,10 @@ export const question = function(spec) {
 		start();
 
 		let out = Object.freeze({
-			getView: box.getView,
-			hide: box.hide,
-			hideWithEffect: box.hideWithEffect
+			getView: questionContainer.getView,
+			hide: questionContainer.hide,
+			hideWithEffect: questionContainer.hideWithEffect
 		});
 		view.modelObject = out;
 		return out;
 	};
-

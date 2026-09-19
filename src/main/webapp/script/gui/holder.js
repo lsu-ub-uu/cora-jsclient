@@ -49,7 +49,7 @@ export const holder = function(spec) {
 		}
 
 		function toggleHolder(event) {
-			if (status === cora.holder.OPEN) {
+			if (status === holder.OPEN) {
 				close(event);
 			} else {
 				open(event);
@@ -57,7 +57,7 @@ export const holder = function(spec) {
 		}
 
 		function open(event) {
-			status = cora.holder.OPEN;
+			status = holder.OPEN;
 			view.style.display = view.previousDisplay;
 			possiblyCallAfterOpenClose(event);
 		}
@@ -67,7 +67,7 @@ export const holder = function(spec) {
 			}
 		}
 		function close(event) {
-			status = cora.holder.CLOSED;
+			status = holder.CLOSED;
 			if (view.style.display !== "none") {
 				view.previousDisplay = view.style.display;
 			}
@@ -114,6 +114,5 @@ export const holder = function(spec) {
 			getStatus : getStatus
 		});
 	};
-	cora.holder.CLOSED = 0;
-	cora.holder.OPEN = 1;
-
+	holder.CLOSED = 0;
+	holder.OPEN = 1;

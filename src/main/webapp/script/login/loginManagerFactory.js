@@ -18,6 +18,7 @@
  */
 
 import { loginManager } from "./loginManager.js";
+import { loginManagerViewFactory } from "./loginManagerViewFactory.js";
 
 export const loginManagerFactory = function(dependencies) {
 
@@ -31,8 +32,7 @@ export const loginManagerFactory = function(dependencies) {
 			};
 			let loginManagerDependencies = {
 				textProvider : dependencies.textProvider,
-				loginManagerViewFactory : CORA
-						.loginManagerViewFactory(loginManagerViewFactoryDependencies),
+				loginManagerViewFactory : loginManagerViewFactory(loginManagerViewFactoryDependencies),
 				appTokenLoginFactory : dependencies.appTokenLoginFactory,
 				webRedirectLoginFactory : dependencies.webRedirectLoginFactory,
 				passwordLoginJsClientIntegratorFactory : dependencies.passwordLoginJsClientIntegratorFactory,
@@ -48,4 +48,3 @@ export const loginManagerFactory = function(dependencies) {
 			factor : factor
 		});
 	};
-

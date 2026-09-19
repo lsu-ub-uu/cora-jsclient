@@ -536,6 +536,5 @@ export const loginManager = function(dependencies, spec) {
 		start();
 		return out;
 	};
-	cora.loginManager.LOGGEDOUT = 0;
-	cora.loginManager.LOGGEDIN = 1;
-
+	loginManager.LOGGEDOUT = 0;
+	loginManager.LOGGEDIN = 1;

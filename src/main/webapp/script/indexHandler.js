@@ -66,5 +66,3 @@ export const indexHandler = function (dependencies, spec) {
             handleCallError: handleCallError
         });
     };
-
-export default CORA;

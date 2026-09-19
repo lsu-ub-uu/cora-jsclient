@@ -22,7 +22,11 @@ const resolveTypeToFactor = function(typeToFactor) {
 	if (typeof typeToFactor === "function") {
 		return typeToFactor;
 	}
-	return coraNamespace[typeToFactor];
+	const resolvedTypeToFactor = coraNamespace[typeToFactor];
+	if (resolvedTypeToFactor === undefined) {
+		throw new Error("Could not resolve parent factory from CORA namespace: " + typeToFactor);
+	}
+	return resolvedTypeToFactor;
 };
 
 export const genericParentFactory = function(typeToFactor, dependencies) {

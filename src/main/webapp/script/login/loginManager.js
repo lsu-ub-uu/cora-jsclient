@@ -18,6 +18,7 @@
  */
 
 import { coraData } from "../metadata/coraData.js";
+import coraNamespace from "../aCoraNameSpace.js";
 
 let addStandardAppTokensToLoginMenu = false;
 let appTokenOptions = [];
@@ -43,6 +44,26 @@ if (typeof window !== "undefined") {
 		}
 	});
 }
+
+Object.defineProperty(coraNamespace, "addStandardAppTokensToLoginMenu", {
+	configurable : true,
+	get : function() {
+		return addStandardAppTokensToLoginMenu;
+	},
+	set : function(value) {
+		addStandardAppTokensToLoginMenu = value;
+	}
+});
+
+Object.defineProperty(coraNamespace, "appTokenOptions", {
+	configurable : true,
+	get : function() {
+		return appTokenOptions;
+	},
+	set : function(value) {
+		appTokenOptions = value;
+	}
+});
 
 export const enableStandardAppTokenLoginOptions = function() {
 	addStandardAppTokensToLoginMenu = true;

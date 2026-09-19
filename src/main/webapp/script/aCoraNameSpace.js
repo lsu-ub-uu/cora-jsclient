@@ -17,9 +17,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-const CORA = window.CORA || {
+const browserWindow = typeof window !== "undefined" ? window : undefined;
+
+const CORA = (browserWindow && browserWindow.CORA) || {
 	gui: {}
 };
-window.CORA = CORA;
+if (browserWindow) {
+	browserWindow.CORA = CORA;
+}
 
 export default CORA;

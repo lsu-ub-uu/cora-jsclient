@@ -16,7 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-const CORATEST = window.CORATEST || {};
-window.CORATEST = CORATEST;
+const browserWindow = typeof window !== "undefined" ? window : undefined;
+
+const CORATEST = (browserWindow && browserWindow.CORATEST) || {};
+if (browserWindow) {
+	browserWindow.CORATEST = CORATEST;
+}
 
 export default CORATEST;

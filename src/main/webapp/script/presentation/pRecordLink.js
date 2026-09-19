@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { calculatePathForNewElement } from "../metadata/calculatePathForNewElement.js";
+import { coraData } from "../metadata/coraData.js";
+import { recordViewer as recordViewerImported } from "../recordViewer.js";
 
-cora.pRecordLink = function(dependencies, spec) {
+export const pRecordLink = function(dependencies, spec) {
         const providers = dependencies.providers;
         const metadataProvider = dependencies.metadataProvider;
         const textProvider = dependencies.textProvider;
@@ -46,8 +47,8 @@ cora.pRecordLink = function(dependencies, spec) {
 
         let presentationGroup = cPresentation.getFirstChildByNameInData("presentationOf");
         let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-        let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
-        let cPresentationGroup = CORA.coraData(presentationGroup);
+        let presentationId = coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+        let cPresentationGroup = coraData(presentationGroup);
         let metadataId = cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 
         let cMetadataElement = getMetadataById(metadataId);
@@ -64,7 +65,7 @@ cora.pRecordLink = function(dependencies, spec) {
         let type = cMetadataElement.getData().attributes.type;
 
         if (type === 'recordLink') {
-            let cRecordTypeGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("linkedRecordType"));
+            let cRecordTypeGroup = coraData(cMetadataElement.getFirstChildByNameInData("linkedRecordType"));
             linkedRecordType = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
         }
 
@@ -144,7 +145,7 @@ cora.pRecordLink = function(dependencies, spec) {
         }
 		
         const extractTextId = function(textNameInData) {
-            let cTextIdGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
+            let cTextIdGroup = coraData(cMetadataElement.getFirstChildByNameInData(textNameInData));
             return cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
@@ -197,7 +198,7 @@ cora.pRecordLink = function(dependencies, spec) {
             if (payloadFromMsg.data === undefined) {
                 return false;
             }
-            let cData = CORA.coraData(payloadFromMsg.data);
+            let cData = coraData(payloadFromMsg.data);
             let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
 
             return linkedRecordId !== "";
@@ -206,7 +207,7 @@ cora.pRecordLink = function(dependencies, spec) {
         const handleMsgWithData = function(payloadFromMsg) {
             closeSearchIfThereIsOne();
             if (presentAsOnlyTranslatedText()) {
-                let cData = CORA.coraData(payloadFromMsg.data);
+                let cData = coraData(payloadFromMsg.data);
                 let linkedRecordId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
                 addTranslatedTextNodeToView(linkedRecordId);
             } else {
@@ -254,13 +255,13 @@ cora.pRecordLink = function(dependencies, spec) {
         };
 
         const createLinkedRecordTypeFilter = function(data) {
-            let cData = CORA.coraData(data);
+            let cData = coraData(data);
             let recordTypeIdInData = cData
                 .getFirstAtomicValueByNameInData("linkedRecordType");
 
             return function(child) {
-                let cChild = CORA.coraData(child);
-                let cPresentedRecordType = CORA.coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
+                let cChild = coraData(child);
+                let cPresentedRecordType = coraData(cChild.getFirstChildByNameInData("presentedRecordType"));
                 return isSameRecordType(recordTypeIdInData, cPresentedRecordType);
             };
         };
@@ -297,7 +298,7 @@ cora.pRecordLink = function(dependencies, spec) {
             linkedRecordPresentation) {
             let linkedPresentationId = extractPresentationIdFromPresentation(linkedRecordPresentation);
             let recordViewerSpec = createRecordViewerSpec(readLink, linkedPresentationId);
-            let recordViewer = CORA.recordViewer(recordViewerSpec);
+            let recordViewer = recordViewerImported(recordViewerSpec);
             let recordViewerView = recordViewer.getView();
 
             view.addLinkedPresentation(recordViewerView);
@@ -308,7 +309,7 @@ cora.pRecordLink = function(dependencies, spec) {
 
             let presentationOfLink = cLinkedRecordPresentation
                 .getFirstChildByNameInData("presentationOf");
-            let cPresentationOfLink = CORA.coraData(presentationOfLink);
+            let cPresentationOfLink = coraData(presentationOfLink);
             let linkedMetadataId = cPresentationOfLink.getFirstAtomicValueByNameInData("linkedRecordId");
             return {
                 read: readLinkIn,
@@ -321,8 +322,8 @@ cora.pRecordLink = function(dependencies, spec) {
         };
 
         const extractPresentationIdFromPresentation = function(presentation) {
-            let cChildPresentation = CORA.coraData(presentation);
-            let cLinkedPresentationAsGroup = CORA.coraData(cChildPresentation
+            let cChildPresentation = coraData(presentation);
+            let cLinkedPresentationAsGroup = coraData(cChildPresentation
                 .getFirstChildByNameInData("presentation"));
             return cLinkedPresentationAsGroup.getFirstAtomicValueByNameInData("linkedRecordId");
         };
@@ -360,7 +361,7 @@ cora.pRecordLink = function(dependencies, spec) {
             childViewNew.className = id + "View";
 
             let childParentPath = calculateNewPath(id + "TextVar");
-            let cPresentationChild = CORA.coraData(metadataProvider
+            let cPresentationChild = coraData(metadataProvider
                 .getMetadataById(presentationIdToFactor));
             let presentationSpec = {
                 path: childParentPath,
@@ -377,7 +378,7 @@ cora.pRecordLink = function(dependencies, spec) {
                 metadataIdToAdd: metadataIdToAdd,
                 parentPath: path
             };
-            return CORA.calculatePathForNewElement(pathSpec);
+            return calculatePathForNewElement(pathSpec);
         };
 
         const createAndAddOutput = function() {
@@ -417,7 +418,7 @@ cora.pRecordLink = function(dependencies, spec) {
         };
 
         const createSearchHandler = function(searchRecord) {
-            let cSearch = CORA.coraData(searchRecord.data);
+            let cSearch = coraData(searchRecord.data);
             let searchSearchLink = searchRecord.actionLinks.search;
 
             let searchHandlerSpec = {
@@ -437,12 +438,12 @@ cora.pRecordLink = function(dependencies, spec) {
             if (!cSearchRecordData.containsChildWithNameInData(id)) {
                 return undefined;
             }
-            let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+            let cRecordLink = coraData(cSearchRecordData.getFirstChildByNameInData(id));
             return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
         const getRecordIdFromLink = function(metadataLink) {
-            let cMetadataLink = CORA.coraData(metadataLink);
+            let cMetadataLink = coraData(metadataLink);
             return cMetadataLink.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
@@ -520,7 +521,7 @@ cora.pRecordLink = function(dependencies, spec) {
         };
 
         function getMetadataById(id) {
-            return CORA.coraData(metadataProvider.getMetadataById(id));
+            return coraData(metadataProvider.getMetadataById(id));
         }
 
         const openLinkedRecord = function(openInfoFromView) {
@@ -542,12 +543,12 @@ cora.pRecordLink = function(dependencies, spec) {
         };
 
         const getRecordInfoFromOpenInfo = function(openInfo) {
-            let cGroup = CORA.coraData(openInfo.record.data);
-            return CORA.coraData(cGroup.getFirstChildByNameInData("recordInfo"));
+            let cGroup = coraData(openInfo.record.data);
+            return coraData(cGroup.getFirstChildByNameInData("recordInfo"));
         };
 
         const extractRecordTypeFromRecordInfo = function(cRecordInfo) {
-            let cRecordType = CORA.coraData(cRecordInfo
+            let cRecordType = coraData(cRecordInfo
                 .getFirstChildByNameInData("type"));
             return cRecordType.getFirstAtomicValueByNameInData("linkedRecordId");
         };
@@ -665,4 +666,3 @@ cora.pRecordLink = function(dependencies, spec) {
         return out;
     };
 
-export default CORA;

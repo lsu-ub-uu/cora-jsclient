@@ -16,30 +16,35 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { genericParentFactory } from "../genericParentFactory.js";
+import { infoFactory } from "../gui/infoFactory.js";
+import { pCollectionVarView } from "./pCollectionVarView.js";
+import { pNumVarView } from "./pNumVarView.js";
+import { pParentVarView } from "./pParentVarView.js";
+import { pResourceLinkView } from "./pResourceLinkView.js";
+import { pVarView } from "./pVarView.js";
 
-cora.pVarViewFactory = function() {
+export const pVarViewFactory = function() {
 		const childDependencies = {
-			infoFactory: CORA.infoFactory(),
+			infoFactory: infoFactory(),
 		};
 		
 		const dependencies = {
-			pParentVarViewFactory: CORA.genericParentFactory("pParentVarView", childDependencies)
+			pParentVarViewFactory: genericParentFactory(pParentVarView, childDependencies)
 		};
 		
 		function factor(spec) {
 			if(spec.type === "pNumVar"){
-				return CORA.pNumVarView(dependencies, spec);
+				return pNumVarView(dependencies, spec);
 			}
 			if(spec.type === "pCollVar"){
-				return CORA.pCollectionVarView(dependencies, spec);
+				return pCollectionVarView(dependencies, spec);
 			}
 			if(spec.type === "pResourceLink"){
-				return CORA.pResourceLinkView(dependencies, spec);
+				return pResourceLinkView(dependencies, spec);
 			}
-			return CORA.pVarView(dependencies, spec);
+			return pVarView(dependencies, spec);
 		}
 
 		return Object.freeze({
@@ -48,4 +53,3 @@ cora.pVarViewFactory = function() {
 		});
 	};
 
-export default CORA;

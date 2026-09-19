@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
+import { recordTypeSorter } from "../recordTypeSorter.js";
 
-cora.searchProvider = function(dependencies, spec) {
+export const searchProvider = function(dependencies, spec) {
 		var callWhenReady = spec.callWhenReady;
 
 		var recordTypes = {};
@@ -60,14 +60,14 @@ cora.searchProvider = function(dependencies, spec) {
 		}
 
 		function getIdFromRecordData(recordData) {
-			var cRecord = CORA.coraData(recordData);
-			var cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+			var cRecord = coraData(recordData);
+			var cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		}
 
 		function createSortedRecordList(){
 			var searchList = [];
-			var sorter = CORA.recordTypeSorter();
+			var sorter = recordTypeSorter();
 			Object.keys(recordTypes).forEach(function(id) {
 				searchList.push(recordTypes[id]);
 			});
@@ -122,4 +122,3 @@ cora.searchProvider = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

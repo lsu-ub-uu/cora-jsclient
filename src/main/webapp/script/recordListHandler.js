@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "./gui/basicGui.js";
+import { message } from "./gui/message.js";
+import { messageHolder as messageHolderImported } from "./gui/messageHolder.js";
 
-cora.recordListHandler = function(dependencies, spec) {
+export const recordListHandler = function(dependencies, spec) {
 		let managedGuiItem;
 
 		const start = function() {
@@ -50,7 +51,7 @@ cora.recordListHandler = function(dependencies, spec) {
 		};
 
 		const addTextToMenuView = function() {
-			let menuPresentation = CORA.createSpanWithClassName("listMenu");
+			let menuPresentation = createSpanWithClassName("listMenu");
 			menuPresentation.textContent = "List (" + spec.headerText + ")";
 			managedGuiItem.addMenuPresentation(menuPresentation);
 		};
@@ -78,11 +79,11 @@ cora.recordListHandler = function(dependencies, spec) {
 		};
 
 		const callError = function(answer) {
-			let messageHolder = CORA.messageHolder();
+			let messageHolder = messageHolderImported();
 			managedGuiItem.addWorkPresentation(messageHolder.getView());
 			let messageSpec = {
 				message : answer.status,
-				type : CORA.message.ERROR
+				type : message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -108,4 +109,3 @@ cora.recordListHandler = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

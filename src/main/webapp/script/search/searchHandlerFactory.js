@@ -17,11 +17,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { recordHandlerFactory as recordHandlerFactoryImported } from "../recordHandlerFactory.js";
+import { recordHandlerViewFactory } from "../recordHandlerViewFactory.js";
+import { resultHandlerFactory } from "./resultHandlerFactory.js";
+import { searchHandler } from "./searchHandler.js";
+import { searchHandlerViewFactory } from "./searchHandlerViewFactory.js";
 
-cora.searchHandlerFactory = function(dependencies) {
+export const searchHandlerFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let viewDep = {
@@ -29,7 +32,7 @@ cora.searchHandlerFactory = function(dependencies) {
 			};
 
 			let depRecordHandlerFactory = {
-				recordHandlerViewFactory : CORA.recordHandlerViewFactory(),
+				recordHandlerViewFactory : recordHandlerViewFactory(),
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
@@ -37,7 +40,7 @@ cora.searchHandlerFactory = function(dependencies) {
 				textProvider : dependencies.providers.textProvider
 			};
 
-			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandlerFactory);
+			let recordHandlerFactory = recordHandlerFactoryImported(depRecordHandlerFactory);
 
 			let depResultHandler = {
 				textProvider : dependencies.providers.textProvider,
@@ -47,14 +50,14 @@ cora.searchHandlerFactory = function(dependencies) {
 			};
 
 			let dep = {
-				searchHandlerViewFactory : CORA.searchHandlerViewFactory(viewDep),
+				searchHandlerViewFactory : searchHandlerViewFactory(viewDep),
 				managedGuiItemFactory : dependencies.globalFactories.managedGuiItemFactory,
 				recordGuiFactory : dependencies.globalFactories.recordGuiFactory,
 				ajaxCallFactory : dependencies.globalFactories.ajaxCallFactory,
-				resultHandlerFactory : CORA.resultHandlerFactory(depResultHandler),
+				resultHandlerFactory : resultHandlerFactory(depResultHandler),
 				jsClient : dependencies.providers.clientInstanceProvider.getJsClient()
 			};
-			return CORA.searchHandler(dep, spec);
+			return searchHandler(dep, spec);
 		}
 
 		const getDependencies = function() {
@@ -68,4 +71,3 @@ cora.searchHandlerFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

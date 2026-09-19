@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
+import { message } from "./gui/message.js";
+import { messageHolder as messageHolderImported } from "./gui/messageHolder.js";
 
-cora.recordHandler = function(dependencies, spec) {
+export const recordHandler = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let createNewRecord = spec.createNewRecord;
 		let fetchLatestDataFromServer = spec.fetchLatestDataFromServer;
@@ -44,7 +45,7 @@ cora.recordHandler = function(dependencies, spec) {
 		const start = function() {
 			managedGuiItem = createManagedGuiItem();
 
-			messageHolder = CORA.messageHolder();
+			messageHolder = messageHolderImported();
 			managedGuiItem.addWorkPresentation(messageHolder.getView());
 
 			recordHandlerView = createRecordHandlerView();
@@ -120,7 +121,7 @@ cora.recordHandler = function(dependencies, spec) {
 			metadataForRecordType = spec.jsClient.getMetadataForRecordTypeId(recordTypeId);
 
 			if (copiedDataExists(copiedData)) {
-				let cCopiedData = CORA.coraData(copiedData);
+				let cCopiedData = coraData(copiedData);
 				validationTypeId = getValidationTypeIdFromData(cCopiedData);
 				tryToCreateGuiForNewWithKnownValidationType(copiedData);
 			} else if (onlyOneValiationType()) {
@@ -310,7 +311,7 @@ cora.recordHandler = function(dependencies, spec) {
 			resetViewsAndProcessFetchedRecord2(answer);
 			let messageSpec = {
 				message: "Tjohoo, det där gick ju bra, data sparat på servern!",
-				type: CORA.message.POSITIVE
+				type: message.POSITIVE
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -394,7 +395,7 @@ cora.recordHandler = function(dependencies, spec) {
 		};
 
 		const tryToProcessFetchedRecordData = function(data, permissions) {
-			let cData = CORA.coraData(data);
+			let cData = coraData(data);
 			let recordData = {};
 			recordData.dataDivider = getDataDividerFromData(cData);
 			recordData.recordType = getRecordTypeFromData(cData);
@@ -442,21 +443,21 @@ cora.recordHandler = function(dependencies, spec) {
 		};
 
 		const getDataDividerFromData = function(cData) {
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("dataDivider");
 		};
 
 		const getRecordTypeFromData = function(cData) {
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("type");
 		};
 		const getRecordIdFromData = function(cData) {
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const getValidationTypeIdFromData = function(cData) {
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getLinkedRecordIdFromFirstChildLinkWithNameInData("validationType");
 		};
 
@@ -510,8 +511,8 @@ cora.recordHandler = function(dependencies, spec) {
 		};
 
 		const getIdForMetadata = function() {
-			let cData = CORA.coraData(fetchedRecord.data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cData = coraData(fetchedRecord.data);
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
@@ -541,7 +542,7 @@ cora.recordHandler = function(dependencies, spec) {
 		const showData = function() {
 			let messageSpec = {
 				message: JSON.stringify(recordGui.dataHolder.getData()),
-				type: CORA.message.INFO,
+				type: message.INFO,
 				renderHtml: false,
 				timeout: 0
 			};
@@ -639,7 +640,7 @@ cora.recordHandler = function(dependencies, spec) {
 			busy.hideWithEffect();
 			let messageSpec = {
 				message: "Posten är indexerad",
-				type: CORA.message.POSITIVE
+				type: message.POSITIVE
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -648,7 +649,7 @@ cora.recordHandler = function(dependencies, spec) {
 			busy.hideWithEffect();
 			let messageSpec = {
 				message: "TIMEOUT",
-				type: CORA.message.ERROR
+				type: message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -657,7 +658,7 @@ cora.recordHandler = function(dependencies, spec) {
 			busy.hideWithEffect();
 			let messageSpec = {
 				message: answer.status + " " + answer.response,
-				type: CORA.message.ERROR
+				type: message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -747,4 +748,3 @@ cora.recordHandler = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

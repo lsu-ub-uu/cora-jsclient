@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "./basicGui.js";
 
-cora.button = function(spec) {
+export const button = function(spec) {
 		const action = spec.action;
 		let view;
 		let actionMethod;
@@ -34,7 +33,7 @@ cora.button = function(spec) {
 		};
 
 		const createView = function() {
-			return CORA.createSpanWithClassName(getClassNameOrEmptyFromSpec());
+			return createSpanWithClassName(getClassNameOrEmptyFromSpec());
 		};
 
 		const getClassNameOrEmptyFromSpec = function() {
@@ -114,4 +113,3 @@ cora.button = function(spec) {
 		return out.getView();
 	};
 
-export default CORA;

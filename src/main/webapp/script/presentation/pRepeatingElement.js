@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button } from "../gui/button.js";
+import { createRemoveButton as createRemoveButtonImported } from "../gui/basicGui.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pRepeatingElement = function(dependencies, spec) {
+export const pRepeatingElement = function(dependencies, spec) {
 		const jsBookkeeper = dependencies.jsBookkeeper;
 		const pubSub = dependencies.pubSub;
 
@@ -79,7 +80,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		};
 
 		const createBaseView = function() {
-			let repeatingElement = CORA.createSpanWithClassName("repeatingElement");
+			let repeatingElement = createSpanWithClassName("repeatingElement");
 			if (userCanMove) {
 				repeatingElement.ondragenter = ondragenterHandler;
 			}
@@ -91,7 +92,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		};
 
 		const createButtonView = function() {
-			let newButtonView = CORA.createSpanWithClassName("buttonView");
+			let newButtonView = createSpanWithClassName("buttonView");
 			view.appendChild(newButtonView);
 			if (userCanRemove) {
 				removeButton = createRemoveButton();
@@ -117,7 +118,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 				};
 				jsBookkeeper.remove(data);
 			};
-			let newRemoveButton = CORA.createRemoveButton(removeFunction);
+			let newRemoveButton = createRemoveButtonImported(removeFunction);
 			newRemoveButton.addEventListener("mouseenter", function() {
 				view.classList.add("hoverRemove");
 			});
@@ -128,7 +129,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		};
 
 		const createDragButton = function() {
-			let createdDragButton = CORA.createSpanWithClassName("iconButton dragButton");
+			let createdDragButton = createSpanWithClassName("iconButton dragButton");
 			createdDragButton.onmousedown = function() {
 				view.draggable = "true";
 			};
@@ -151,7 +152,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 					method: addBeforeFunction
 				}
 			};
-			return CORA.button(buttonSpec);
+			return button(buttonSpec);
 		};
 
 		const possiblyAddClickableHeadline = function() {
@@ -355,7 +356,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		};
 
 		const createAndAddAlternativeButton = function(buttonClasses) {
-			alternativeButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.alternative);
+			alternativeButton = createSpanWithClassName("iconButton " + buttonClasses.alternative);
 			alternativeButton.onclick = showAlternativePresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(alternativeButton, dragButton);
@@ -365,7 +366,7 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		};
 
 		const createAndAddDefaultButton = function(buttonClasses) {
-			defaultButton = CORA.createSpanWithClassName("iconButton " + buttonClasses.default);
+			defaultButton = createSpanWithClassName("iconButton " + buttonClasses.default);
 			defaultButton.onclick = showDefaultPresentation;
 			if (userCanMove) {
 				buttonView.insertBefore(defaultButton, dragButton);
@@ -494,4 +495,3 @@ cora.pRepeatingElement = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

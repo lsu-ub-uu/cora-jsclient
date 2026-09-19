@@ -16,35 +16,39 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
+import coraNamespace from "./aCoraNameSpace.js";
 
-const cora = CORA;
+const resolveTypeToFactor = function(typeToFactor) {
+	if (typeof typeToFactor === "function") {
+		return typeToFactor;
+	}
+	return coraNamespace[typeToFactor];
+};
 
-cora.genericParentFactory = function(typeToFactor, dependencies) {
-		let out;
+export const genericParentFactory = function(typeToFactor, dependencies) {
+	let out;
+	const resolvedTypeToFactor = resolveTypeToFactor(typeToFactor);
 
-		const factor = function(spec, child) {
-			if(undefined == dependencies){
-				return CORA[typeToFactor](spec, child);
-			}
-			return CORA[typeToFactor](dependencies, spec, child);
-		};
-
-		const getTypeToFactor = function() {
-			return typeToFactor;
-		};
-
-		const getDependencies = function() {
-			return dependencies;
-		};
-
-		out = Object.freeze({
-			type : "genericParentFactory",
-			getTypeToFactor : getTypeToFactor,
-			getDependencies : getDependencies,
-			factor : factor
-		});
-		return out;
+	const factor = function(spec, child) {
+		if(undefined == dependencies){
+			return resolvedTypeToFactor(spec, child);
+		}
+		return resolvedTypeToFactor(dependencies, spec, child);
 	};
 
-export default CORA;
+	const getTypeToFactor = function() {
+		return resolvedTypeToFactor.name || typeToFactor;
+	};
+
+	const getDependencies = function() {
+		return dependencies;
+	};
+
+	out = Object.freeze({
+		type : "genericParentFactory",
+		getTypeToFactor : getTypeToFactor,
+		getDependencies : getDependencies,
+		factor : factor
+	});
+	return out;
+};

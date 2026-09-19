@@ -18,11 +18,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
-
-const cora = CORA;
-
-cora.coraData = function(dataIn) {
+export const coraData = function(dataIn) {
 		const NOT_FOUND_IN_CHILDREN = ") not found in children to coraData";
 		let data = dataIn;
 		let children = data?.children;
@@ -339,4 +335,3 @@ cora.coraData = function(dataIn) {
 			});
 	};
 
-export default CORA;

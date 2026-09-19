@@ -16,11 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button as buttonImported } from "./button.js";
+import { createSpanWithClassName } from "./basicGui.js";
 
-cora.info = function(spec) {
+export const info = function(spec) {
 		let infoLevel = cora.info.NONE;
 		let button;
 		let view;
@@ -36,7 +36,7 @@ cora.info = function(spec) {
 					method : showInfo
 				}
 			};
-			return CORA.button(infoButtonSpec);
+			return buttonImported(infoButtonSpec);
 		};
 
 		const getButton = function() {
@@ -75,7 +75,7 @@ cora.info = function(spec) {
 		};
 
 		const createBaseView = function() {
-			view = CORA.createSpanWithClassName("infoView");
+			view = createSpanWithClassName("infoView");
 		};
 
 		const addBaseViewAccordingToSpec = function() {
@@ -97,7 +97,7 @@ cora.info = function(spec) {
 		};
 
 		const createViewPart = function(info) {
-			let viewPart = CORA.createSpanWithClassName(info.className);
+			let viewPart = createSpanWithClassName(info.className);
 			viewPart.innerHTML = info.text;
 			addOnClickIfSpecifiedInSpec(info.onclickMethod, viewPart);
 			view.appendChild(viewPart);
@@ -140,4 +140,3 @@ cora.info = function(spec) {
 	cora.info.TEXT = 1;
 	cora.info.ALL = 2;
 
-export default CORA;

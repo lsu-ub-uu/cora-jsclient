@@ -17,11 +17,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { calculatePathForNewElement } from "../metadata/calculatePathForNewElement.js";
+import { coraData } from "../metadata/coraData.js";
+import { message } from "../gui/message.js";
+import { metadataHelper as metadataHelperImported } from "../metadata/metadataHelper.js";
 
-cora.pChildRefHandler = function(dependencies, spec) {
+export const pChildRefHandler = function(dependencies, spec) {
         const { recordData, recordTypeProvider, metadataProvider, textProvider, pubSub,
             jsBookkeeper, uploadManager, ajaxCallFactory, presentationFactory,
             pChildRefHandlerViewFactory, pRepeatingElementFactory } = dependencies;
@@ -66,7 +68,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
         let possiblyFake;
 
         const start = function() {
-            metadataHelper = CORA.metadataHelper({
+            metadataHelper = metadataHelperImported({
                 metadataProvider: metadataProvider
             });
             presentationId = findPresentationId(spec.cPresentation);
@@ -83,12 +85,12 @@ cora.pChildRefHandler = function(dependencies, spec) {
 
         const findPresentationId = function(cPresentationToSearch) {
             let recordInfo = cPresentationToSearch.getFirstChildByNameInData("recordInfo");
-            return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+            return coraData(recordInfo).getFirstAtomicValueByNameInData("id");
         };
 
         const getMetadataIdFromPresentation = function() {
             let presentationGroup = spec.cPresentation.getFirstChildByNameInData("presentationOf");
-            let cPresentationGroup = CORA.coraData(presentationGroup);
+            let cPresentationGroup = coraData(presentationGroup);
             return cPresentationGroup.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
@@ -108,7 +110,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
         };
 
         const continueWithNormalStartup = function() {
-            cRef = CORA.coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
+            cRef = coraData(cParentMetadataChildRefPart.getFirstChildByNameInData("ref"));
             metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
             cMetadataElement = getMetadataById(metadataId);
 
@@ -181,12 +183,12 @@ cora.pChildRefHandler = function(dependencies, spec) {
         };
 
         const getTextId = function(cMetadataElementIn) {
-            let cTextGroup = CORA.coraData(cMetadataElementIn.getFirstChildByNameInData("textId"));
+            let cTextGroup = coraData(cMetadataElementIn.getFirstChildByNameInData("textId"));
             return cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
         const getMetadataById = function(id) {
-            return CORA.coraData(metadataProvider.getMetadataById(id));
+            return coraData(metadataProvider.getMetadataById(id));
         };
 
         const getTextForAddButton = function(cMetadataElement) {
@@ -266,7 +268,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
         };
 
         const calculateIfBinary = function() {
-            let cRecordTypeGroup = CORA.coraData(cMetadataElement
+            let cRecordTypeGroup = coraData(cMetadataElement
                 .getFirstChildByNameInData("linkedRecordType"));
             let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
             return "binary" == recordTypeId;
@@ -364,7 +366,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
                 repeatId: repeatId,
                 parentPath: parentPath
             };
-            return CORA.calculatePathForNewElement(pathSpec);
+            return calculatePathForNewElement(pathSpec);
         };
         const initComplete = function() {
             if (isInputMode && presentationSize === "singleInitiallyHidden") {
@@ -670,7 +672,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
         };
 
         const getImplementingLinkedRecordType = function() {
-            let cRecordTypeGroup = CORA.coraData(cMetadataElement
+            let cRecordTypeGroup = coraData(cMetadataElement
                 .getFirstChildByNameInData("linkedRecordType"));
             let recordTypeId = cRecordTypeGroup.getFirstAtomicValueByNameInData("linkedRecordId");
             return recordTypeProvider.getRecordTypeById(recordTypeId);
@@ -734,8 +736,8 @@ cora.pChildRefHandler = function(dependencies, spec) {
         };
 
         const getIdFromRecordData = function(recordData) {
-            let cRecord = CORA.coraData(recordData);
-            let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+            let cRecord = coraData(recordData);
+            let cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
             return cRecordInfo.getFirstAtomicValueByNameInData("id");
         };
 
@@ -753,7 +755,7 @@ cora.pChildRefHandler = function(dependencies, spec) {
         const callError = function(answer) {
             let messageSpec = {
                 message: answer.status,
-                type: CORA.message.ERROR
+                type: message.ERROR
             };
             let errorChild = document.createElement("span");
             errorChild.innerHTML = messageSpec.message;
@@ -817,4 +819,3 @@ cora.pChildRefHandler = function(dependencies, spec) {
         return out;
     };
 
-export default CORA;

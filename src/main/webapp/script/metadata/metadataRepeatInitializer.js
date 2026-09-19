@@ -18,11 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+import { metadataHelper as metadataHelperImported } from "./metadataHelper.js";
 
-const cora = CORA;
-
-cora.metadataRepeatInitializer = function(dependencies, spec) {
+export const metadataRepeatInitializer = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const pubSub = dependencies.pubSub;
 		const metadataId = spec.metadataId;
@@ -38,7 +38,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const initalizeRepeat = function() {
@@ -64,7 +64,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 		};
 
 		const collectAttributesForMetadataId = function(metadataIdIn) {
-			const metadataHelper = CORA.metadataHelper({
+			const metadataHelper = metadataHelperImported({
 				metadataProvider: dependencies.metadataProvider
 			});
 			return metadataHelper.collectAttributesAsObjectForMetadataId(metadataIdIn);
@@ -82,7 +82,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 		};
 
 		const addAttribute = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
+			let cAttributeReference = coraData(attributeReference);
 			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cCollectionVariable = getMetadataById(refLinkedId);
 
@@ -101,7 +101,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 				parentPath: createNextLevelPath(),
 				type: "attribute"
 			};
-			let attributePath = CORA.calculatePathForNewElement(pathSpec);
+			let attributePath = calculatePathForNewElement(pathSpec);
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
 				setValueForForAttributeWithFinalValue(attributePath, cCollectionVariable);
 			} else {
@@ -174,7 +174,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 				repeatId: spec.repeatId,
 				parentPath: path
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const isGroup = function() {
@@ -202,8 +202,8 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 		};
 
 		const getCRef = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cChildReference = coraData(childReference);
+			return coraData(cChildReference.getFirstChildByNameInData("ref"));
 		};
 
 		const createSpecAndInitalizeMetadataChildInitializer = function(childReference, nextLevelPath, data) {
@@ -243,7 +243,7 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 
 		const initializeLinkedRecordType = function(nextLevelPath) {
 			let recordTypeStaticChildReference = createRefWithRef("linkedRecordTypeTextVar");
-			let cRecordTypeGroup = CORA.coraData(cMetadataElement
+			let cRecordTypeGroup = coraData(cMetadataElement
 				.getFirstChildByNameInData("linkedRecordType"));
 			let linkedRecordTypeValue = cRecordTypeGroup
 				.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -369,4 +369,3 @@ cora.metadataRepeatInitializer = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

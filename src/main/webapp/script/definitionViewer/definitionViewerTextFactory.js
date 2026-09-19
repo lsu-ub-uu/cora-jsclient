@@ -16,16 +16,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { definitionViewerText } from "./definitionViewerText.js";
 
-cora.definitionViewerTextFactory = function(dependencies) {
+export const definitionViewerTextFactory = function(dependencies) {
 
 		const factor = function (spec) {
 			let dep = {};
 
-			let definitionViewer = CORA.definitionViewerText(dep, spec);
+			let definitionViewer = definitionViewerText(dep, spec);
 			return definitionViewer;
 		}
 		
@@ -40,4 +39,3 @@ cora.definitionViewerTextFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

@@ -16,14 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { holder } from "./holder.js";
 
-cora.holderFactory = function() {
+export const holderFactory = function() {
 
 		function factor(spec) {
-			return CORA.holder(spec);
+			return holder(spec);
 		}
 
 		return Object.freeze({
@@ -32,4 +31,3 @@ cora.holderFactory = function() {
 		});
 	};
 
-export default CORA;

@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.reloadableSearchProvider = function(dependencies, spec) {
+export const reloadableSearchProvider = function(dependencies, spec) {
 
 		var currentSearchProvider;
 		var loadingSearchProvider;
@@ -78,4 +75,3 @@ cora.reloadableSearchProvider = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

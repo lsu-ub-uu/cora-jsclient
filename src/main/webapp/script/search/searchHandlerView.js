@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { inputButton } from "../gui/inputButton.js";
 
-cora.searchHandlerView = function(dependencies, spec) {
+export const searchHandlerView = function(dependencies, spec) {
 		let view;
 		let searchFormHolder;
 		let buttonView;
@@ -46,12 +46,12 @@ cora.searchHandlerView = function(dependencies, spec) {
 		}
 
 		const createSearchFormHolderAndAddTo = function(addTo) {
-			searchFormHolder = CORA.createSpanWithClassName("searchFormHolder");
+			searchFormHolder = createSpanWithClassName("searchFormHolder");
 			addTo.addViewToView(searchFormHolder);
 		}
 
 		const createButtonViewAndAddTo = function(addTo) {
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			addTo.appendChild(buttonView);
 		}
 
@@ -69,11 +69,11 @@ cora.searchHandlerView = function(dependencies, spec) {
 					method: spec.searchMethod
 				}
 			};
-			return CORA.inputButton(buttonSpec);
+			return inputButton(buttonSpec);
 		}
 
 		const createResultHolderAndAddTo = function(addTo) {
-			resultHolder = CORA.createSpanWithClassName("searchResultHolder");
+			resultHolder = createSpanWithClassName("searchResultHolder");
 			addTo.addViewToView(resultHolder);
 		}
 
@@ -123,4 +123,3 @@ cora.searchHandlerView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

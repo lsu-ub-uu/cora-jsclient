@@ -16,11 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
+import { createSpanWithClassName } from "./gui/basicGui.js";
 
-cora.indexListHandler = function(dependencies, spec) {
+export const indexListHandler = function(dependencies, spec) {
 		var uploadQue = [];
 		var numberOfIndexRecords = 0;
 		var indexOrderView;
@@ -54,7 +54,7 @@ cora.indexListHandler = function(dependencies, spec) {
 		}
 
 		function createIndexOrderView() {
-			indexOrderView = CORA.createSpanWithClassName("indexOrder");
+			indexOrderView = createSpanWithClassName("indexOrder");
 			indexOrderView.textContent = dependencies.textProvider
 				.getTranslation("theClient_indexedText");
 		}
@@ -85,7 +85,7 @@ cora.indexListHandler = function(dependencies, spec) {
 
 		function indexingFinished() {
 			numberOfIndexRecords++;
-			var child = CORA.createSpanWithClassName("indexItem");
+			var child = createSpanWithClassName("indexItem");
 			child.textContent = numberOfIndexRecords + ". " + getChildInfo();
 
 			indexOrderView.appendChild(child);
@@ -103,13 +103,13 @@ cora.indexListHandler = function(dependencies, spec) {
 		}
 
 		function extractRecordInfoFromCurrentRecord() {
-			var cRecord = CORA.coraData(currentRecord.data);
-			return CORA.coraData(cRecord
+			var cRecord = coraData(currentRecord.data);
+			return coraData(cRecord
 				.getFirstChildByNameInData("recordInfo"));
 		}
 
 		function extractAtomicTypeFromRecordInfo(cRecordInfo) {
-			var cType = CORA.coraData(cRecordInfo
+			var cType = coraData(cRecordInfo
 				.getFirstChildByNameInData("type"));
 			return cType.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
@@ -132,7 +132,7 @@ cora.indexListHandler = function(dependencies, spec) {
 		}
 
 		function timeoutMethod() {
-			var child = CORA.createSpanWithClassName("indexItem");
+			var child = createSpanWithClassName("indexItem");
 			child.textContent = "TIMEOUT";
 			indexOrderView.appendChild(child);
 
@@ -193,4 +193,3 @@ cora.indexListHandler = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

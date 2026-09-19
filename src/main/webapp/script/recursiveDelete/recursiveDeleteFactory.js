@@ -17,25 +17,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { genericFactory } from "../genericFactory.js";
+import { question } from "../gui/question.js";
+import { recursiveDelete as recursiveDeleteImported } from "./recursiveDelete.js";
+import { recursiveDeleteDeleter } from "./recursiveDeleteDeleter.js";
+import { recursiveDeleteView } from "./recursiveDeleteView.js";
 
-cora.recursiveDeleteFactory = function(providers, dependencies) {
+export const recursiveDeleteFactory = function(providers, dependencies) {
 
 		const factor = function(spec) {
 			let deleteViewDep = {
 				textProvider: providers.textProvider,
-				questionFactory: CORA.genericFactory("question", undefined),
+				questionFactory: genericFactory(question, undefined),
 			};
 			
-			let deleteView = CORA.recursiveDeleteView(deleteViewDep);
+			let deleteView = recursiveDeleteView(deleteViewDep);
 
 			let deleteDeleterDep = {
 				ajaxCallFactory: dependencies.globalFactories.ajaxCallFactory,
 				view: deleteView
 			};
-			let deleteDeleter = CORA.recursiveDeleteDeleter(deleteDeleterDep);
+			let deleteDeleter = recursiveDeleteDeleter(deleteDeleterDep);
 
 
 			let dep = {
@@ -44,7 +47,7 @@ cora.recursiveDeleteFactory = function(providers, dependencies) {
 				recursiveDeleteDeleter: deleteDeleter
 			};
 
-			let recursiveDelete = CORA.recursiveDelete(providers, dep, spec);
+			let recursiveDelete = recursiveDeleteImported(providers, dep, spec);
 			return recursiveDelete;
 		}
 
@@ -64,4 +67,3 @@ cora.recursiveDeleteFactory = function(providers, dependencies) {
 		});
 	};
 
-export default CORA;

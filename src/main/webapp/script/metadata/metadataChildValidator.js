@@ -18,11 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+import { metadataRepeatValidator } from "./metadataRepeatValidator.js";
 
-const cora = CORA;
-
-cora.metadataChildValidator = function(dependencies, spec) {
+export const metadataChildValidator = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
 		let path = spec.path;
@@ -37,8 +37,8 @@ cora.metadataChildValidator = function(dependencies, spec) {
 		let childInstancesCanNotBeRemoved = [];
 		let childInstancesCanBeRemoved = [];
 		let numberOfChildrenOk = 0;
-		let childReference = CORA.coraData(spec.childReference);
-		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
+		let childReference = coraData(spec.childReference);
+		let cRef = coraData(childReference.getFirstChildByNameInData("ref"));
 		let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 
 		const validate = function() {
@@ -88,7 +88,7 @@ cora.metadataChildValidator = function(dependencies, spec) {
 
 		const validateForMetadataWithIdAndDataAndRepeatId = function(dataChild, repeatId) {
 			let nextPath = createNextLevelPath(repeatId);
-			return CORA.metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
+			return metadataRepeatValidator(ref, nextPath, dataHolder, dataChild, repeatId, metadataProvider,
 				pubSub);
 		};
 
@@ -98,7 +98,7 @@ cora.metadataChildValidator = function(dependencies, spec) {
 				repeatId: repeatId,
 				parentPath: path
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		// if any child of the group has valuable data then the validation result has valuable data
@@ -216,4 +216,3 @@ cora.metadataChildValidator = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

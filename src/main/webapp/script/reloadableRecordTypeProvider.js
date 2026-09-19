@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.reloadableRecordTypeProvider = function(dependencies, spec) {
+export const reloadableRecordTypeProvider = function(dependencies, spec) {
 
 		var currentRecordTypeProvider;
 		var loadingRecordTypeProvider;
@@ -86,4 +83,3 @@ cora.reloadableRecordTypeProvider = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

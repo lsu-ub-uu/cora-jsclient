@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.recordTypeMenu = function(providers, dependencies, spec) {
+export const recordTypeMenu = function(providers, dependencies, spec) {
 
 		let recordTypeProvider = providers.recordTypeProvider;
 		let textProvider = providers.textProvider;
@@ -42,11 +42,11 @@ cora.recordTypeMenu = function(providers, dependencies, spec) {
 
 		const createAndAddGroupOfRecordTypesToList = function() {
 			recordTypeGroups = [];
-			let cGroupOfRecordTypesCollection = CORA.coraData(metadataProvider
+			let cGroupOfRecordTypesCollection = coraData(metadataProvider
 				.getMetadataById("groupOfRecordTypeCollection"));
 			if (cGroupOfRecordTypesCollection
 				.containsChildWithNameInData("collectionItemReferences")) {
-				let cItemReferences = CORA.coraData(cGroupOfRecordTypesCollection
+				let cItemReferences = coraData(cGroupOfRecordTypesCollection
 					.getFirstChildByNameInData("collectionItemReferences"));
 				let refs = cItemReferences.getChildrenByNameInData("ref");
 				createAndAddGroupOfRecordTypesToListForAllGroups(refs);
@@ -57,15 +57,15 @@ cora.recordTypeMenu = function(providers, dependencies, spec) {
 			let counter = 0;
 			refs.forEach(function(ref) {
 				counter++;
-				let cRef = CORA.coraData(ref);
+				let cRef = coraData(ref);
 				let itemId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 				possiblyCreateAndAddGroupOfRecordTypesToListForOneGroup(itemId);
 			});
 		};
 
 		const possiblyCreateAndAddGroupOfRecordTypesToListForOneGroup = function(itemId) {
-			let group = CORA.createSpanWithClassName("recordTypeGroup");
-			let cItem = CORA.coraData(metadataProvider.getMetadataById(itemId));
+			let group = createSpanWithClassName("recordTypeGroup");
+			let cItem = coraData(metadataProvider.getMetadataById(itemId));
 
 			let groupId = cItem.getFirstAtomicValueByNameInData("nameInData");
 			let recordTypeForGroupList = recordTypeProvider.getRecordTypesByGroupId(groupId);
@@ -101,8 +101,8 @@ cora.recordTypeMenu = function(providers, dependencies, spec) {
 		};
 
 		const createTranslatedGroupHeadline = function(cItem) {
-			let groupHeadline = CORA.createSpanWithClassName("recordTypeGroupHeadline");
-			let cTextIdGroup = CORA.coraData(cItem.getFirstChildByNameInData("textId"));
+			let groupHeadline = createSpanWithClassName("recordTypeGroupHeadline");
+			let cTextIdGroup = coraData(cItem.getFirstChildByNameInData("textId"));
 			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			groupHeadline.innerHTML = textProvider.getTranslation(textId);
 			return groupHeadline;
@@ -151,4 +151,3 @@ cora.recordTypeMenu = function(providers, dependencies, spec) {
 
 	};
 
-export default CORA;

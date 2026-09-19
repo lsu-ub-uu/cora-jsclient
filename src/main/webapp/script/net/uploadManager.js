@@ -16,18 +16,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { uploadManagerView } from "./uploadManagerView.js";
 
-cora.uploadManager = function(dependencies, spec) {
+export const uploadManager = function(dependencies, spec) {
 		var uploading = false;
 		var uploadQue = [];
 		var viewSpec = {
 			"showWorkViewMethod" : showView,
 			"textProvider" : dependencies.textProvider
 		};
-		var view = CORA.uploadManagerView(viewSpec);
+		var view = uploadManagerView(viewSpec);
 
 		var managedGuiItem = createManagedGuiItem();
 
@@ -120,4 +119,3 @@ cora.uploadManager = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

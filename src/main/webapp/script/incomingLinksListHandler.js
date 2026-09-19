@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
 
-cora.incomingLinksListHandler = function(dependencies, spec) {
+export const incomingLinksListHandler = function(dependencies, spec) {
 		var view;
 		function start() {
 			var viewSpec = {
@@ -57,9 +56,9 @@ cora.incomingLinksListHandler = function(dependencies, spec) {
 		}
 
 		function addIncomingLinkToView(incomingLink) {
-			var cData = CORA.coraData(incomingLink);
+			var cData = coraData(incomingLink);
 			var from = cData.getFirstChildByNameInData("from");
-			var cFrom = CORA.coraData(from);
+			var cFrom = coraData(from);
 			var incomingLinkToAdd = {
 				"linkedRecordType" : cFrom.getFirstAtomicValueByNameInData("linkedRecordType"),
 				"linkedRecordId" : cFrom.getFirstAtomicValueByNameInData("linkedRecordId"),
@@ -100,4 +99,3 @@ cora.incomingLinksListHandler = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

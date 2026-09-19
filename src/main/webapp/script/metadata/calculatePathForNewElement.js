@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.calculatePathForNewElement = function(spec) {
+export const calculatePathForNewElement = function(spec) {
 		var metadataId = spec.metadataIdToAdd;
 		var repeatId = spec.repeatId;
 
@@ -75,4 +72,3 @@ cora.calculatePathForNewElement = function(spec) {
 		return newPath;
 	};
 
-export default CORA;

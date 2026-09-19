@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button as buttonImported } from "../gui/button.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { genericFactory } from "../genericFactory.js";
 
-cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
+export const pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		let view;
 		let headline;
 		let buttonView;
@@ -34,7 +35,7 @@ cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		//TODO: change to be sent in through dependencies
-		let buttonFactory = CORA.genericFactory("button");
+		let buttonFactory = genericFactory(buttonImported);
 
 		const clickableHeadlineText = spec.clickableHeadlineText;
 		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
@@ -60,7 +61,7 @@ cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			return CORA.createSpanWithClassName(newClassName);
+			return createSpanWithClassName(newClassName);
 		};
 
 		const setContainsDataStyle = function() {
@@ -130,7 +131,7 @@ cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		const createButtonView = function(presentationSize) {
 			if (!toggleButtonsAreCreated) {
 				toggleButtonsAreCreated = true;
-				let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+				let buttonViewNew = createSpanWithClassName("buttonView");
 				buttonView = buttonViewNew;
 				view.appendChild(buttonViewNew);
 				createDefaultAndAlternativeButtons(presentationSize);
@@ -289,4 +290,3 @@ cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

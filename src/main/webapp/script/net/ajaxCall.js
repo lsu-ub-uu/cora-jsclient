@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.ajaxCall = function(spec) {
+export const ajaxCall = function(spec) {
 		const defaultTimeoutMS = 90000;
 		const timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
 		let intervalId;
@@ -199,4 +196,3 @@ cora.ajaxCall = function(spec) {
 		});
 	};
 
-export default CORA;

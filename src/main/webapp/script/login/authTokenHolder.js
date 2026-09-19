@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.authTokenHolder = function() {
+export const authTokenHolder = function() {
 		let out;
 		let authToken = "";
 
@@ -45,4 +42,3 @@ cora.authTokenHolder = function() {
 		return out;
 	};
 
-export default CORA;

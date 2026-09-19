@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { appTokenLogin } from "./appTokenLogin.js";
 
-cora.appTokenLoginFactory = function(dependencies) {
+export const appTokenLoginFactory = function(dependencies) {
 
 		const getDependencies = function() {
 			return dependencies;
@@ -30,7 +29,7 @@ cora.appTokenLoginFactory = function(dependencies) {
 			let appTokenLoginDependencies = {
 				ajaxCallFactory : dependencies.ajaxCallFactory
 			};
-			return CORA.appTokenLogin(appTokenLoginDependencies, spec);
+			return appTokenLogin(appTokenLoginDependencies, spec);
 		};
 
 		return Object.freeze({
@@ -40,4 +39,3 @@ cora.appTokenLoginFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

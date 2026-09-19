@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.resultHandlerView = function(dependencies, spec) {
+export const resultHandlerView = function(dependencies, spec) {
 		let view;
 		let resultsHolder;
 
@@ -32,16 +31,16 @@ cora.resultHandlerView = function(dependencies, spec) {
 		};
 
 		const createView = function() {
-			return CORA.createSpanWithClassName("resultHolder");
+			return createSpanWithClassName("resultHolder");
 		};
 
 		const createResultsHolder = function() {
-			resultsHolder = CORA.createSpanWithClassName("resultsHolderPage");
+			resultsHolder = createSpanWithClassName("resultsHolderPage");
 			view.appendChild(resultsHolder);
 		};
 
 		const createInfo = function() {
-			let infoHolder = CORA.createSpanWithClassName("infoHolder");
+			let infoHolder = createSpanWithClassName("infoHolder");
 			view.appendChild(infoHolder);
 			infoHolder.textContent = spec.fromNo + " - " + spec.toNo + " " + spec.ofText + " "
 				+ spec.totalNo;
@@ -54,7 +53,7 @@ cora.resultHandlerView = function(dependencies, spec) {
 		};
 
 		const createRecordView = function(record) {
-			let newView = CORA.createSpanWithClassName("listItem");
+			let newView = createSpanWithClassName("listItem");
 			newView.onclick = function(event) {
 				let loadInBackground = "false";
 				if (event.ctrlKey) {
@@ -107,4 +106,3 @@ cora.resultHandlerView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

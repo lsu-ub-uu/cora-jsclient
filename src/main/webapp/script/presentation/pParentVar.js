@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
+import { pathUtils as pathUtilsImported } from "../metadata/pathUtils.js";
 
-cora.pParentVar = function(dependencies, spec, child) {
+export const pParentVar = function(dependencies, spec, child) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
@@ -59,7 +59,7 @@ cora.pParentVar = function(dependencies, spec, child) {
 		const setPresentationIdFromCPresentation = function() {
 			if (cPresentation.containsChildWithNameInData("recordInfo")) {
 				let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-				presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+				presentationId = coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			}
 		};
 
@@ -126,7 +126,7 @@ cora.pParentVar = function(dependencies, spec, child) {
 
 		const addPresentationInfoWhenNotFakePresentationFromAttributes = function(pVarViewSpec) {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			presentationId = coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 			pVarViewSpec.presentationId = presentationId;
 			pVarViewSpec.info.technicalInfo.push({
 				text: `presentationId: ${presentationId}`,
@@ -166,7 +166,7 @@ cora.pParentVar = function(dependencies, spec, child) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getTextId = function(cMetadataElementIn, textNameInData) {
@@ -197,7 +197,7 @@ cora.pParentVar = function(dependencies, spec, child) {
 		};
 
 		const ensureNoRepeatIdInLowestLevelOfPath = function() {
-			let pathUtils = CORA.pathUtils();
+			let pathUtils = pathUtilsImported();
 			return pathUtils.ensureNoRepeatIdInLowestLevelOfPath(path);
 		};
 
@@ -369,4 +369,3 @@ cora.pParentVar = function(dependencies, spec, child) {
 
 	};
 
-export default CORA;

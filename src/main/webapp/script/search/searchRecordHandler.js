@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
 
-cora.searchRecordHandler = function(dependencies, spec) {
+export const searchRecordHandler = function(dependencies, spec) {
 		let searchId;
 		let viewSpec;
 		let view;
@@ -38,7 +37,7 @@ cora.searchRecordHandler = function(dependencies, spec) {
 		};
 
 		const getHeadlineText = function(searchRecord) {
-			let cData = CORA.coraData(searchRecord.data);
+			let cData = coraData(searchRecord.data);
 			if (textIdIsMissingInData(cData)) {
 				return searchId;
 			}
@@ -50,15 +49,15 @@ cora.searchRecordHandler = function(dependencies, spec) {
 		};
 
 		const getTranslatedText = function(cData) {
-			let cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
+			let cTextIdGroup = coraData(cData.getFirstChildByNameInData("textId"));
 			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return dependencies.textProvider.getTranslation(textId);
 		};
 
 
 		const getIdFromRecord = function(record) {
-			let cData = CORA.coraData(record.data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cData = coraData(record.data);
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
@@ -67,7 +66,7 @@ cora.searchRecordHandler = function(dependencies, spec) {
 		};
 
 		const openSearch = function() {
-			let cSearchRecordData = CORA.coraData(spec.searchRecord.data);
+			let cSearchRecordData = coraData(spec.searchRecord.data);
 			let searchHandlerSpec = {
 				headerText: viewSpec.headerText,
 				metadataId: getLinkValueFromSearchRecord(cSearchRecordData, "metadataId"),
@@ -82,7 +81,7 @@ cora.searchRecordHandler = function(dependencies, spec) {
 			if (!cSearchRecordData.containsChildWithNameInData(id)) {
 				return undefined;
 			}
-			let cRecordLink = CORA.coraData(cSearchRecordData.getFirstChildByNameInData(id));
+			let cRecordLink = coraData(cSearchRecordData.getFirstChildByNameInData(id));
 			return cRecordLink.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -113,4 +112,3 @@ cora.searchRecordHandler = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

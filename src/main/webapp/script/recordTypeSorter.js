@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
 
-cora.recordTypeSorter = function() {
+export const recordTypeSorter = function() {
 		var sortedList = {};
 
 		function sortListUsingChildWithNameInData(listToSort, nameInData) {
@@ -32,7 +31,7 @@ cora.recordTypeSorter = function() {
 		}
 
 		function addSearchRecordToList(searchRecord, nameInData) {
-			var cSearchRecord = CORA.coraData(searchRecord.data);
+			var cSearchRecord = coraData(searchRecord.data);
 			var sortByValues = cSearchRecord.getChildrenByNameInData(nameInData);
 			sortByValues.forEach(function(sortByValueChild) {
 				var sortByValue = sortByValueChild.value;
@@ -50,4 +49,3 @@ cora.recordTypeSorter = function() {
 		});
 	};
 
-export default CORA;

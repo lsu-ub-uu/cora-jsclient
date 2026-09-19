@@ -18,11 +18,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
 
-const cora = CORA;
-
-cora.metadataController = function(dependencies, spec) {
+export const metadataController = function(dependencies, spec) {
 		const pubSub = dependencies.pubSub;
 		const metadataProvider = dependencies.metadataProvider;
 		const metadataChildAndRepeatInitializerFactory = dependencies.metadataChildAndRepeatInitializerFactory;
@@ -61,7 +60,7 @@ cora.metadataController = function(dependencies, spec) {
 		};
 
 		const addAttribute = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
+			let cAttributeReference = coraData(attributeReference);
 			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cCollectionVariable = getMetadataById(refLinkedId);
 
@@ -81,7 +80,7 @@ cora.metadataController = function(dependencies, spec) {
 				parentPath: [],
 				type: "attribute"
 			};
-			let attributePath = CORA.calculatePathForNewElement(pathSpec);
+			let attributePath = calculatePathForNewElement(pathSpec);
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
 				setValueForForAttributeWithFinalValue(attributePath, cCollectionVariable);
 			} else {
@@ -125,7 +124,7 @@ cora.metadataController = function(dependencies, spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const possiblyInitializeChild = function(childReference) {
@@ -141,8 +140,8 @@ cora.metadataController = function(dependencies, spec) {
 		};
 
 		const getCRef = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cChildReference = coraData(childReference);
+			return coraData(cChildReference.getFirstChildByNameInData("ref"));
 		};
 
 		const intitalizeChild = function(childReference) {
@@ -180,4 +179,3 @@ cora.metadataController = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

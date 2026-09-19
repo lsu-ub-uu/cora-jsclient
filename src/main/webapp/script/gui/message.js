@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createDivWithClassName } from "./basicGui.js";
+import { createRemoveButton as createRemoveButtonImported } from "./basicGui.js";
+import { createSpanWithClassName } from "./basicGui.js";
 
-cora.message = function(spec) {
+export const message = function(spec) {
 		let renderHtml;
 		let timeout;
 		let view;
@@ -47,11 +48,11 @@ cora.message = function(spec) {
 		}
 
 		const createView = function() {
-			return CORA.createDivWithClassName("message " + spec.type.className);
+			return createDivWithClassName("message " + spec.type.className);
 		}
 
 		const createMessageText = function() {
-			var textNew = CORA.createSpanWithClassName("messageText");
+			var textNew = createSpanWithClassName("messageText");
 			if (renderHtml) {
 				textNew.innerHTML = spec.message;
 			} else {
@@ -64,7 +65,7 @@ cora.message = function(spec) {
 			var removeFunction = function() {
 				view.modelObject.hideWithEffect();
 			};
-			return CORA.createRemoveButton(removeFunction);
+			return createRemoveButtonImported(removeFunction);
 		}
 
 		const possiblySetHideTimeout = function() {
@@ -139,4 +140,3 @@ cora.message = function(spec) {
 		"defaultTimeout": 3000
 	};
 
-export default CORA;

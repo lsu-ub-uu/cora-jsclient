@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pParentVarView = function(dependencies, spec, child) {
+export const pParentVarView = function(dependencies, spec, child) {
 		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
@@ -32,7 +31,7 @@ cora.pParentVarView = function(dependencies, spec, child) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.createSpanWithClassName(baseClassName);
+			view = createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
@@ -62,7 +61,7 @@ cora.pParentVarView = function(dependencies, spec, child) {
 		};
 
 		const addLabelForOutput = function() {
-			let label = CORA.createSpanWithClassName("label");
+			let label = createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
@@ -118,7 +117,7 @@ cora.pParentVarView = function(dependencies, spec, child) {
 		};
 
 		const createOutputText = function() {
-			let outputNew = CORA.createSpanWithClassName("value");
+			let outputNew = createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};
@@ -239,4 +238,3 @@ cora.pParentVarView = function(dependencies, spec, child) {
 		return out;
 	};
 
-export default CORA;

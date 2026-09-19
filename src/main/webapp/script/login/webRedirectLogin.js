@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.webRedirectLogin = function(dependencies, spec) {
+export const webRedirectLogin = function(dependencies, spec) {
 		let openedWindow;
 		const start = function() {
 			openedWindow = dependencies.window.open(spec.url, "CoraHelperWindow");
@@ -48,4 +45,3 @@ cora.webRedirectLogin = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

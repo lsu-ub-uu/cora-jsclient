@@ -17,41 +17,60 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { ajaxCallFactory as ajaxCallFactoryImported } from "../net/ajaxCallFactory.js";
+import { appTokenLoginFactory as appTokenLoginFactoryImported } from "../login/appTokenLoginFactory.js";
+import { definitionViewerFactory } from "../definitionViewer/definitionViewerFactory.js";
+import { genericFactory } from "../genericFactory.js";
+import { jsClient as jsClientImported } from "./jsClient.js";
+import { jsClientViewFactory } from "./jsClientViewFactory.js";
+import { loginManagerFactory as loginManagerFactoryImported } from "../login/loginManagerFactory.js";
+import { managedGuiItemFactory as managedGuiItemFactoryImported } from "../managedGuiItemFactory.js";
+import { passwordLoginFactory } from "../login/passwordLoginFactory.js";
+import { recordGuiFactory as recordGuiFactoryImported } from "../recordGui/recordGuiFactory.js";
+import { recordHandlerFactory as recordHandlerFactoryImported } from "../recordHandlerFactory.js";
+import { recordListHandlerFactory as recordListHandlerFactoryImported } from "../recordListHandlerFactory.js";
+import { recordTypeHandlerFactory as recordTypeHandlerFactoryImported } from "../recordTypeHandlerFactory.js";
+import { recordTypeHandlerViewFactory as recordTypeHandlerViewFactoryImported } from "../recordTypeHandlerViewFactory.js";
+import { recordTypeMenu as recordTypeMenuImported } from "./recordTypeMenu.js";
+import { resultHandlerFactory as resultHandlerFactoryImported } from "../search/resultHandlerFactory.js";
+import { searchHandlerFactory } from "../search/searchHandlerFactory.js";
+import { searchRecordHandlerViewFactory as searchRecordHandlerViewFactoryImported } from "../search/searchRecordHandlerViewFactory.js";
+import { uploadManagerFactory as uploadManagerFactoryImported } from "../net/uploadManagerFactory.js";
+import { webRedirectLoginFactory as webRedirectLoginFactoryImported } from "../login/webRedirectLoginFactory.js";
+import { xmlHttpRequestFactory as xmlHttpRequestFactoryImported } from "../net/xmlHttpRequestFactory.js";
 
-cora.jsClientFactory = function(providers, dependencies) {
+export const jsClientFactory = function(providers, dependencies) {
 		let jsClient;
 		function factor(jsClientSpec) {
 
 			let globalFactories = {};
 
 			let authTokenHolder = dependencies.authTokenHolder;
-			let xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
+			let xmlHttpRequestFactory = xmlHttpRequestFactoryImported();
 			let ajaxCallFactoryDependencies = {
 				xmlHttpRequestFactory : xmlHttpRequestFactory,
 				authTokenHolder : authTokenHolder
 			};
-			let ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
+			let ajaxCallFactory = ajaxCallFactoryImported(ajaxCallFactoryDependencies);
 
 			let appTokenLoginFactoryDependencies = {
 				ajaxCallFactory : ajaxCallFactory
 			};
-			let appTokenLoginFactory = CORA.appTokenLoginFactory(appTokenLoginFactoryDependencies);
-			let webRedirectLoginFactory = CORA.webRedirectLoginFactory();
+			let appTokenLoginFactory = appTokenLoginFactoryImported(appTokenLoginFactoryDependencies);
+			let webRedirectLoginFactory = webRedirectLoginFactoryImported();
 
 			let dependenciesPassword = {
 				providers : providers,
 				globalFactories : globalFactories
 			};
-			globalFactories.passwordLoginFactory = CORA.passwordLoginFactory(dependenciesPassword);
+			globalFactories.passwordLoginFactory = passwordLoginFactory(dependenciesPassword);
 
 			let passwordLoginJsClientIntegratorDep = {
 				passwordLoginFactory : globalFactories.passwordLoginFactory,
-				managedGuiItemFactory : CORA.managedGuiItemFactory()
+				managedGuiItemFactory : managedGuiItemFactoryImported()
 			};
-			let passwordLoginJsClientIntegratorFactory = CORA.genericFactory(
+			let passwordLoginJsClientIntegratorFactory = genericFactory(
 					"passwordLoginJsClientIntegrator", passwordLoginJsClientIntegratorDep);
 
 			let loginManagerFactoryDependencies = {
@@ -62,7 +81,7 @@ cora.jsClientFactory = function(providers, dependencies) {
 				ajaxCallFactory : ajaxCallFactory,
 				passwordLoginJsClientIntegratorFactory : passwordLoginJsClientIntegratorFactory
 			};
-			let loginManagerFactory = CORA.loginManagerFactory(loginManagerFactoryDependencies);
+			let loginManagerFactory = loginManagerFactoryImported(loginManagerFactoryDependencies);
 
 			let openGuiItemHandlerFactoryDep = {
 				textProvider : providers.textProvider
@@ -70,14 +89,14 @@ cora.jsClientFactory = function(providers, dependencies) {
 			let openGuiItemHandlerFactory = CORA
 					.openGuiItemHandlerFactory(openGuiItemHandlerFactoryDep);
 
-			let managedGuiItemFactory = CORA.managedGuiItemFactory();
+			let managedGuiItemFactory = managedGuiItemFactoryImported();
 			let uploadManagerDep = {
 				clientInstanceProvider : providers.clientInstanceProvider,
 				textProvider : providers.textProvider,
 				ajaxCallFactory : ajaxCallFactory,
 				managedGuiItemFactory : managedGuiItemFactory
 			};
-			let uploadManagerFactory = CORA.uploadManagerFactory(uploadManagerDep);
+			let uploadManagerFactory = uploadManagerFactoryImported(uploadManagerDep);
 
 			let uploadManagerSpec = {};
 			let uploadManager = uploadManagerFactory.factor(uploadManagerSpec);
@@ -91,10 +110,10 @@ cora.jsClientFactory = function(providers, dependencies) {
 				ajaxCallFactory : ajaxCallFactory,
 				authTokenHolder : authTokenHolder,
 				uploadManager : uploadManager,
-				recordPartPermissionCalculatorFactory : CORA.genericFactory(
+				recordPartPermissionCalculatorFactory : genericFactory(
 						"recordPartPermissionCalculator", calculatorFactoryDep)
 			};
-			let recordGuiFactory = CORA.recordGuiFactory(recordGuiFactoryDep);
+			let recordGuiFactory = recordGuiFactoryImported(recordGuiFactoryDep);
 
 			let depRecordHandler = {
 				globalFactories : globalFactories,
@@ -105,7 +124,7 @@ cora.jsClientFactory = function(providers, dependencies) {
 				metadataProvider : providers.metadataProvider,
 				textProvider : providers.textProvider
 			};
-			let recordHandlerFactory = CORA.recordHandlerFactory(depRecordHandler);
+			let recordHandlerFactory = recordHandlerFactoryImported(depRecordHandler);
 
 			let depResultHandler = {
 				textProvider : providers.textProvider,
@@ -113,9 +132,9 @@ cora.jsClientFactory = function(providers, dependencies) {
 				ajaxCallFactory : ajaxCallFactory,
 				recordGuiFactory : recordGuiFactory
 			};
-			let resultHandlerFactory = CORA.resultHandlerFactory(depResultHandler);
+			let resultHandlerFactory = resultHandlerFactoryImported(depResultHandler);
 
-			let searchRecordHandlerViewFactory = CORA.searchRecordHandlerViewFactory({});
+			let searchRecordHandlerViewFactory = searchRecordHandlerViewFactoryImported({});
 			let searchRecordHandlerFactoryDep = {
 				globalFactories : globalFactories,
 				searchRecordHandlerViewFactory : searchRecordHandlerViewFactory,
@@ -129,22 +148,22 @@ cora.jsClientFactory = function(providers, dependencies) {
 			let depRecordListHandler = {
 				factories : globalFactories
 			};
-			let recordListHandlerFactory = CORA.recordListHandlerFactory(depRecordListHandler);
+			let recordListHandlerFactory = recordListHandlerFactoryImported(depRecordListHandler);
 
-			let recordTypeHandlerViewFactory = CORA.recordTypeHandlerViewFactory();
+			let recordTypeHandlerViewFactory = recordTypeHandlerViewFactoryImported();
 
 			let dependenciesRTH = {
 				clientInstanceProvider : providers.clientInstanceProvider,
 				textProvider : providers.textProvider,
 				factories : globalFactories
 			};
-			let recordTypeHandlerFactory = CORA.recordTypeHandlerFactory(dependenciesRTH);
+			let recordTypeHandlerFactory = recordTypeHandlerFactoryImported(dependenciesRTH);
 
 			let dependenciesSH = {
 				providers : providers,
 				globalFactories : globalFactories
 			};
-			globalFactories.searchHandlerFactory = CORA.searchHandlerFactory(dependenciesSH);
+			globalFactories.searchHandlerFactory = searchHandlerFactory(dependenciesSH);
 
 			globalFactories.loginManagerFactory = loginManagerFactory;
 			globalFactories.ajaxCallFactory = ajaxCallFactory;
@@ -168,9 +187,9 @@ cora.jsClientFactory = function(providers, dependencies) {
 				},
 				globalFactories : globalFactories
 			};
-			globalFactories.incomingLinksListHandlerFactory = CORA.genericFactory(
+			globalFactories.incomingLinksListHandlerFactory = genericFactory(
 					"incomingLinksListHandler", genericDependencies);
-			globalFactories.incomingLinksListHandlerViewFactory = CORA.genericFactory(
+			globalFactories.incomingLinksListHandlerViewFactory = genericFactory(
 					"incomingLinksListHandlerView", genericDependencies);
 
 			let menuDependencies = {
@@ -179,7 +198,7 @@ cora.jsClientFactory = function(providers, dependencies) {
 			let menuSpec = {
 				baseUrl : jsClientSpec.baseUrl
 			};
-			let recordTypeMenu = CORA.recordTypeMenu(providers, menuDependencies, menuSpec);
+			let recordTypeMenu = recordTypeMenuImported(providers, menuDependencies, menuSpec);
 
 			let dependenciesRD = {
 				globalFactories : globalFactories
@@ -196,18 +215,18 @@ cora.jsClientFactory = function(providers, dependencies) {
 				globalFactories : globalFactories,
 
 				authTokenHolder : authTokenHolder,
-				jsClientViewFactory : CORA.jsClientViewFactory(providers),
+				jsClientViewFactory : jsClientViewFactory(providers),
 				appTokenLoginFactory : appTokenLoginFactory,
 				openGuiItemHandlerFactory : openGuiItemHandlerFactory,
 				uploadManager : uploadManager,
 				searchRecordHandlerFactory : searchRecordHandlerFactory,
 				recordTypeHandlerFactory : recordTypeHandlerFactory,
-				definitionViewerFactory : CORA.definitionViewerFactory(providers),
+				definitionViewerFactory : definitionViewerFactory(providers),
 				recursiveDeleteFactory : recursiveDeleteFactory,
 				recordTypeMenu : recordTypeMenu
 			};
 
-			jsClient = CORA.jsClient(dep, jsClientSpec);
+			jsClient = jsClientImported(dep, jsClientSpec);
 			return jsClient;
 		}
 
@@ -217,4 +236,3 @@ cora.jsClientFactory = function(providers, dependencies) {
 		});
 	};
 
-export default CORA;

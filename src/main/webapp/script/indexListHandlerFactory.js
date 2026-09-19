@@ -15,11 +15,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { genericFactory } from "./genericFactory.js";
+import { indexHandler } from "./indexHandler.js";
+import { indexListHandler } from "./indexListHandler.js";
 
-cora.indexListHandlerFactory = function(dependencies) {
+export const indexListHandlerFactory = function(dependencies) {
 
 		function factor(indexListHandlerSpec) {
 			var indexHandlerDep = {
@@ -28,12 +29,12 @@ cora.indexListHandlerFactory = function(dependencies) {
 			};
 
 			var dep = {
-				"indexHandlerFactory" : CORA.genericFactory("indexHandler",
+				"indexHandlerFactory" : genericFactory(indexHandler,
 						indexHandlerDep),
 				"uploadManager" : dependencies.uploadManager,
 				"textProvider" : dependencies.textProvider
 			};
-			return CORA.indexListHandler(dep, indexListHandlerSpec);
+			return indexListHandler(dep, indexListHandlerSpec);
 		}
 
 		function getDependencies() {
@@ -47,4 +48,3 @@ cora.indexListHandlerFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

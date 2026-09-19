@@ -18,11 +18,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+import { metadataChildValidator as metadataChildValidatorImported } from "./metadataChildValidator.js";
+import { numberVariableValidator } from "./numberVariableValidator.js";
 
-const cora = CORA;
-
-cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
+export const metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
         pubSub) {
         const result = {
             onlyFinalValues: true,
@@ -39,7 +40,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         }
 
         const getMetadataById = function(id) {
-            return CORA.coraData(metadataProvider.getMetadataById(id));
+            return coraData(metadataProvider.getMetadataById(id));
         };
 
         const validateRepeat = function() {
@@ -72,7 +73,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         };
 
         const getRefValueFromAttributeRef = function(attributeReference) {
-            let cAttributeReference = CORA.coraData(attributeReference);
+            let cAttributeReference = coraData(attributeReference);
             return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
@@ -80,7 +81,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
             let attributePath = createNextLevelPathAttribute(attributeRef);
             let attributeData = dataHolder.findContainer(attributePath);
             let attributeValidationResult =
-                CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder,
+                metadataRepeatValidator(attributeRef, attributePath, dataHolder,
                     attributeData, undefined, metadataProvider, pubSub);
             attributeValidationResults.push(attributeValidationResult);
         };
@@ -91,7 +92,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
                 parentPath: path,
                 type: "attribute"
             };
-            return CORA.calculatePathForNewElement(pathSpec);
+            return calculatePathForNewElement(pathSpec);
         };
 
         const validateForMetadata = function() {
@@ -155,7 +156,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
                 childReference: childReference,
                 dataHolder: dataHolder
             };
-            let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
+            let metadataChildValidator = metadataChildValidatorImported(dependencies, spec);
             let childResult = metadataChildValidator.validate();
             if (!childResult.everythingOkBelow) {
                 result.everythingOkBelow = false;
@@ -266,7 +267,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         };
 
         const validateNumberVariable = function() {
-            let validator = CORA.numberVariableValidator({
+            let validator = numberVariableValidator({
                 "metadataProvider": metadataProvider,
             });
             return validator.validateData(data.value, cMetadataElement);
@@ -282,7 +283,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         };
 
         const getCollectionItemReferences = function() {
-            let cRefCollection = CORA.coraData(cMetadataElement
+            let cRefCollection = coraData(cMetadataElement
                 .getFirstChildByNameInData("refCollection"));
 
             let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -291,7 +292,7 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         };
 
         const isItemDataValue = function(collectionItemReference) {
-            let cItemRef = CORA.coraData(collectionItemReference);
+            let cItemRef = coraData(collectionItemReference);
             let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
             let cCollectionItem = getMetadataById(itemRefId);
             let nameInData = cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
@@ -321,4 +322,3 @@ cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repe
         return start();
     }
 
-export default CORA;

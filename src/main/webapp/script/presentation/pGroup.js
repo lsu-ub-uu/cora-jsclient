@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.pGroup = function(dependencies, spec) {
+export const pGroup = function(dependencies, spec) {
 		let parent;
 
 		const start = function() {
@@ -57,4 +54,3 @@ cora.pGroup = function(dependencies, spec) {
 
 	};
 
-export default CORA;

@@ -17,18 +17,18 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { holderFactory } from "./holderFactory.js";
+import { workItemView } from "./workItemView.js";
 
-cora.workItemViewFactory = function() {
+export const workItemViewFactory = function() {
 
 		var dependencies = {
-			"holderFactory" : CORA.holderFactory()
+			"holderFactory" : holderFactory()
 		};
 
 		function factor(spec) {
-			return CORA.workItemView(dependencies, spec);
+			return workItemView(dependencies, spec);
 		}
 
 		return Object.freeze({
@@ -37,4 +37,3 @@ cora.workItemViewFactory = function() {
 		});
 	};
 
-export default CORA;

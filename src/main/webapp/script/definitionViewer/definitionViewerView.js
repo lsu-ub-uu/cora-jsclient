@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.definitionViewerView = function(dependencies, spec) {
+export const definitionViewerView = function(dependencies, spec) {
 		let out;
 		let view;
 		let copyToClipboardMethod;
@@ -224,4 +221,3 @@ cora.definitionViewerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

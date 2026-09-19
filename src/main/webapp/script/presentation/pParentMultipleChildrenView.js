@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createDivWithClassName } from "../gui/basicGui.js";
 
-cora.pParentMultipleChildrenView = function(dependencies, spec, child) {
+export const pParentMultipleChildrenView = function(dependencies, spec, child) {
 		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
@@ -32,7 +31,7 @@ cora.pParentMultipleChildrenView = function(dependencies, spec, child) {
 		
 		const start = function() {
 			baseClassName = spec.className;
-			view = CORA.createDivWithClassName(baseClassName);
+			view = createDivWithClassName(baseClassName);
 			possiblyAddHeadlineTextToView();
 			info = createInfo();
 			view.appendChild(info.getButton());
@@ -189,4 +188,3 @@ cora.pParentMultipleChildrenView = function(dependencies, spec, child) {
 		return out;
 	};
 
-export default CORA;

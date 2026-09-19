@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
 
-cora.dataHolder = function(spec) {
+export const dataHolder = function(spec) {
 		let metadataId = spec.metadataId;
 		let metadataProvider = spec.metadataProvider;
 		let pubSub = spec.pubSub;
@@ -50,7 +50,7 @@ cora.dataHolder = function(spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
@@ -107,7 +107,7 @@ cora.dataHolder = function(spec) {
 				parentPath: path,
 				type: "attribute"
 			};
-			let pathString = JSON.stringify(CORA.calculatePathForNewElement(pathSpec));
+			let pathString = JSON.stringify(calculatePathForNewElement(pathSpec));
 			containerPath[pathString] = attributeContainer;
 		};
 
@@ -318,7 +318,7 @@ cora.dataHolder = function(spec) {
 				"repeatId": repeatId,
 				"parentPath": parentPath
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const remove = function(path) {
@@ -439,4 +439,3 @@ cora.dataHolder = function(spec) {
 		});
 	};
 
-export default CORA;

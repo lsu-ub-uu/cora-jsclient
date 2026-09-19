@@ -17,18 +17,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "./basicGui.js";
 
-cora.workItemView = function(dependencies, spec) {
+export const workItemView = function(dependencies, spec) {
 		let out;
 		let view;
 		let topBar;
 		let toolHolder;
 
 		const start = function() {
-			view = CORA.createSpanWithClassName("workItem " + spec.extraClassName);
+			view = createSpanWithClassName("workItem " + spec.extraClassName);
 		};
 
 		const addToolViewToToolHolder = function(toolView) {
@@ -52,7 +51,7 @@ cora.workItemView = function(dependencies, spec) {
 		};
 
 		const createTopBarInView = function() {
-			let topBarNew = CORA.createSpanWithClassName("topBar");
+			let topBarNew = createSpanWithClassName("topBar");
 			view.prepend(topBarNew);
 
 			return topBarNew;
@@ -104,4 +103,3 @@ cora.workItemView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

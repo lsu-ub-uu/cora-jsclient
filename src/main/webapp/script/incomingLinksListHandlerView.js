@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "./gui/basicGui.js";
 
-cora.incomingLinksListHandlerView = function(dependencies, spec) {
+export const incomingLinksListHandlerView = function(dependencies, spec) {
 		var view;
 		var incomingLinks;
 		var numberOfIncomingLinksView;
@@ -32,16 +31,16 @@ cora.incomingLinksListHandlerView = function(dependencies, spec) {
 		}
 
 		function createView() {
-			return CORA.createSpanWithClassName("incomingLinksList");
+			return createSpanWithClassName("incomingLinksList");
 		}
 
 		function createNumberOfLinks() {
-			numberOfIncomingLinksView = CORA.createSpanWithClassName("numberOfLinks");
+			numberOfIncomingLinksView = createSpanWithClassName("numberOfLinks");
 			view.appendChild(numberOfIncomingLinksView);
 		}
 
 		function createincomingLinks() {
-			incomingLinks = CORA.createSpanWithClassName("incomingLinks");
+			incomingLinks = createSpanWithClassName("incomingLinks");
 			view.appendChild(incomingLinks);
 		}
 
@@ -51,16 +50,16 @@ cora.incomingLinksListHandlerView = function(dependencies, spec) {
 		}
 
 		function createViewForIncomingLink(incomingLink) {
-			var incomingLinkView = CORA.createSpanWithClassName("incomingLink");
+			var incomingLinkView = createSpanWithClassName("incomingLink");
 			incomingLinkView.onclick = function(event) {
 				openRecordUsingLink(incomingLink, event);
 			};
 
-			var recordTypeView = CORA.createSpanWithClassName("recordType");
+			var recordTypeView = createSpanWithClassName("recordType");
 			recordTypeView.textContent = incomingLink.linkedRecordType;
 			incomingLinkView.appendChild(recordTypeView);
 
-			var recordIdView = CORA.createSpanWithClassName("recordId");
+			var recordIdView = createSpanWithClassName("recordId");
 			recordIdView.textContent = incomingLink.linkedRecordId;
 			incomingLinkView.appendChild(recordIdView);
 			return incomingLinkView;
@@ -106,4 +105,3 @@ cora.incomingLinksListHandlerView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

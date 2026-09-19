@@ -17,16 +17,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { resultHandlerView } from "./resultHandlerView.js";
 
-cora.resultHandlerViewFactory = function(dependencies) {
+export const resultHandlerViewFactory = function(dependencies) {
 
 		var dep = {};
 
 		function factor(spec) {
-			return CORA.resultHandlerView(dep, spec);
+			return resultHandlerView(dep, spec);
 		}
 
 		function getDependencies() {
@@ -40,4 +39,3 @@ cora.resultHandlerViewFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

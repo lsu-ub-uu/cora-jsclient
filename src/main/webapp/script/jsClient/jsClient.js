@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.jsClient = function(dependencies, spec) {
+export const jsClient = function(dependencies, spec) {
 		const metadataProvider = dependencies.providers.metadataProvider;
 		const textProvider = dependencies.providers.textProvider;
 		const recordTypeProvider = dependencies.providers.recordTypeProvider;
@@ -305,7 +304,7 @@ cora.jsClient = function(dependencies, spec) {
 			let definitionManagedGuiItem = createManagedGuiItem(definitionViewer.reloadForMetadataChanges);
 			definitionManagedGuiItem.addWorkPresentation(definitionView);
 			
-			let definitionMenuView = CORA.createSpanWithClassName("definitionViewer");
+			let definitionMenuView = createSpanWithClassName("definitionViewer");
 			definitionMenuView.innerHTML = "Definition viewer: " + id;
 			definitionManagedGuiItem.addMenuPresentation(definitionMenuView);
 			
@@ -320,7 +319,7 @@ cora.jsClient = function(dependencies, spec) {
 			let recursiveDeleteManagedGuiItem = createManagedGuiItem();
 			recursiveDeleteManagedGuiItem.addWorkPresentation(recursiveDeleteView);
 			
-			let recursiveDeleteMenuView = CORA.createSpanWithClassName("recursiveDelete");
+			let recursiveDeleteMenuView = createSpanWithClassName("recursiveDelete");
 			recursiveDeleteMenuView.innerHTML = "Recursive delete: " + id;
 			recursiveDeleteManagedGuiItem.addMenuPresentation(recursiveDeleteMenuView);
 			
@@ -415,4 +414,3 @@ cora.jsClient = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.pSurroundingContainer = function(dependencies, specIn) {
+export const pSurroundingContainer = function(dependencies, specIn) {
 		let spec = specIn;
 		let cPresentation = spec.cPresentation;
 		let cParentPresentation = spec.cParentPresentation;
@@ -70,4 +67,3 @@ cora.pSurroundingContainer = function(dependencies, specIn) {
 		return out;
 	};
 
-export default CORA;

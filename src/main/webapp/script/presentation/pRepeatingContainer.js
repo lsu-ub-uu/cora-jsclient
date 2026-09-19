@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pRepeatingContainer = function(dependencies, spec) {
+export const pRepeatingContainer = function(dependencies, spec) {
 		const pubSub = dependencies.pubSub;
 		let path = spec.path;
 		const presentationCounter = spec.presentationCounter;
@@ -30,7 +30,7 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 		let textProvider = dependencies.textProvider;
 		let presentationFactory = dependencies.presentationFactory;
 		let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-		let presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+		let presentationId = coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		let view;
 
 		let presentationVisibilities = {};
@@ -46,7 +46,7 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 		};
 
 		const createBaseView = function() {
-			let viewNew = CORA.createSpanWithClassName("pRepeatingContainer " + presentationId);
+			let viewNew = createSpanWithClassName("pRepeatingContainer " + presentationId);
 
 			let presentationChildren = cPresentation.getFirstChildByNameInData("childReferences").children;
 
@@ -60,7 +60,7 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 			let refId = getRefId(presentationChildRef);
 			let cPresentationChild = getMetadataById(refId);
 			if (cPresentationChild.getData().name === "text") {
-				let text = CORA.createSpanWithClassName("text");
+				let text = createSpanWithClassName("text");
 				text.appendChild(document.createTextNode(textProvider.getTranslation(refId)));
 				return text;
 			}
@@ -79,10 +79,10 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 		};
 
 		const getRefId = function(presentationChildRef) {
-			let cPresentationChildRef = CORA.coraData(presentationChildRef);
-			let cRefGroup = CORA.coraData(cPresentationChildRef
+			let cPresentationChildRef = coraData(presentationChildRef);
+			let cRefGroup = coraData(cPresentationChildRef
 				.getFirstChildByNameInData("refGroup"));
-			let cRef = CORA.coraData(cRefGroup.getFirstChildByNameInData("ref"));
+			let cRef = coraData(cRefGroup.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -161,7 +161,7 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getView = function() {
@@ -195,4 +195,3 @@ cora.pRepeatingContainer = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

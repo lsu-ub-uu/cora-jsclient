@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
+import { createDivWithClassName } from "../gui/basicGui.js";
 
-cora.presentationHolder = function(dependencies, spec) {
+export const presentationHolder = function(dependencies, spec) {
 		let presentationId = spec.presentationId;
 		let metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
@@ -39,11 +39,11 @@ cora.presentationHolder = function(dependencies, spec) {
 		};
 
 		const createBaseViewHolder = function() {
-			return CORA.createDivWithClassName("presentation " + presentationId);
+			return createDivWithClassName("presentation " + presentationId);
 		};
 
 		const createViewForTopPGroup = function() {
-			let cPresentation = CORA.coraData(metadataProvider.getMetadataById(presentationId));
+			let cPresentation = coraData(metadataProvider.getMetadataById(presentationId));
 			let metadataIdUsedInData = spec.metadataIdUsedInData;
 			let presentationSpec = {
 				path : [],
@@ -87,4 +87,3 @@ cora.presentationHolder = function(dependencies, spec) {
 
 	};
 
-export default CORA;

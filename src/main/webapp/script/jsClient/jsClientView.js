@@ -17,11 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createDivWithClassName } from "../gui/basicGui.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { message } from "../gui/message.js";
 
-cora.jsClientView = function(providers, dependencies, spec) {
+export const jsClientView = function(providers, dependencies, spec) {
 		let out;
 		let mainView;
 		let header;
@@ -43,26 +44,26 @@ cora.jsClientView = function(providers, dependencies, spec) {
 		}
 
 		function createMainView() {
-			let view = CORA.createSpanWithClassName("jsClient mainView");
-			let serverAddress = CORA.createSpanWithClassName("serverAddress");
+			let view = createSpanWithClassName("jsClient mainView");
+			let serverAddress = createSpanWithClassName("serverAddress");
 			serverAddress.textContent = spec.serverAddress;
 
-			header = CORA.createSpanWithClassName("header");
+			header = createSpanWithClassName("header");
 			header.textContent = spec.name;
 			view.appendChild(header);
 
-			sideBar = CORA.createSpanWithClassName("sideBar");
+			sideBar = createSpanWithClassName("sideBar");
 			view.appendChild(sideBar);
 
-			searchesView = CORA.createSpanWithClassName("searchesView");
+			searchesView = createSpanWithClassName("searchesView");
 			sideBar.appendChild(searchesView);
 			clearSearchesView();
 
-			recordTypesView = CORA.createSpanWithClassName("recordTypesView");
+			recordTypesView = createSpanWithClassName("recordTypesView");
 			sideBar.appendChild(recordTypesView);
 			sideBar.appendChild(serverAddress);
 
-			workArea = CORA.createSpanWithClassName("workArea");
+			workArea = createSpanWithClassName("workArea");
 			view.appendChild(workArea);
 
 			messageHolder = dependencies.messageHolderFactory.factor();
@@ -71,15 +72,15 @@ cora.jsClientView = function(providers, dependencies, spec) {
 			return view;
 		}
 		function addReloadProvidersButton() {
-			reloadProvidersButton = CORA.createSpanWithClassName("menuView");
+			reloadProvidersButton = createSpanWithClassName("menuView");
 			reloadProvidersButton.onclick = spec.reloadProvidersMethod;
 			reloadProvidersButton.textContent = "Ladda om";
 			header.appendChild(reloadProvidersButton);
 		}
 		function addLogoHeader() {
-			logo = CORA.createDivWithClassName("logoHeader");
+			logo = createDivWithClassName("logoHeader");
 			header.appendChild(logo);
-			logoImage = CORA.createDivWithClassName("logoHeaderLogo");
+			logoImage = createDivWithClassName("logoHeaderLogo");
 			header.appendChild(logoImage);
 		}
 
@@ -106,7 +107,7 @@ cora.jsClientView = function(providers, dependencies, spec) {
 		}
 
 		function createSearchesHeadline() {
-			let searchesHeadline = CORA.createDivWithClassName("searchesViewHeadline");
+			let searchesHeadline = createDivWithClassName("searchesViewHeadline");
 			let searchesText = providers.textProvider.getTranslation("theClient_searchesHeadlineText");
 			searchesHeadline.textContent = searchesText;
 			return searchesHeadline;
@@ -159,7 +160,7 @@ cora.jsClientView = function(providers, dependencies, spec) {
 		const addInfoMessage = function(infoText, timeout) {
 			let messageSpec = {
 				message: infoText,
-				type: CORA.message.INFO,
+				type: message.INFO,
 				timeout:timeout
 			};
 			messageHolder.createMessage(messageSpec);
@@ -167,7 +168,7 @@ cora.jsClientView = function(providers, dependencies, spec) {
 		function addErrorMessage(errorText) {
 			let messageSpec = {
 				"message": errorText,
-				"type": CORA.message.ERROR
+				"type": message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		}
@@ -235,4 +236,3 @@ cora.jsClientView = function(providers, dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

@@ -16,11 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { inputButton } from "../gui/inputButton.js";
 
-cora.passwordLoginView = function(dependencies, spec) {
+export const passwordLoginView = function(dependencies, spec) {
 		let view;
 		let loginFormHolder;
 		let buttonView;
@@ -29,7 +29,7 @@ cora.passwordLoginView = function(dependencies, spec) {
 			let workItemView = createWorkItemView();
 			view = workItemView.getView();
 			createLoginFormHolderAndAddTo(workItemView);
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 			addLoginButton();
 		};
@@ -42,7 +42,7 @@ cora.passwordLoginView = function(dependencies, spec) {
 		};
 
 		const createLoginFormHolderAndAddTo = function(addTo) {
-			loginFormHolder = CORA.createSpanWithClassName("loginFormHolder");
+			loginFormHolder = createSpanWithClassName("loginFormHolder");
 			addTo.addViewToView(loginFormHolder);
 		};
 		
@@ -61,7 +61,7 @@ cora.passwordLoginView = function(dependencies, spec) {
 					method: spec.loginMethod
 				}
 			};
-			return CORA.inputButton(buttonSpec);
+			return inputButton(buttonSpec);
 		};
 
 		const getView = function() {
@@ -90,4 +90,3 @@ cora.passwordLoginView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

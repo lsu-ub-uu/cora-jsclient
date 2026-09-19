@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "../metadata/coraData.js";
 
-cora.definitionViewer = function(providers, dependencies, spec) {
+export const definitionViewer = function(providers, dependencies, spec) {
 		let out;
 		let metadataProvider = providers.metadataProvider;
 		let textProvider = providers.textProvider;
@@ -94,7 +93,7 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 			let attributes = [];
 			let attributeReferences = cDataRecordGroup.getFirstChildByNameInData("attributeReferences");
 			for (let attributeReference of attributeReferences.children) {
-				let cAttributeReference = CORA.coraData(attributeReference);
+				let cAttributeReference = coraData(attributeReference);
 				let attributeId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cAttribute = getCMetadataById(attributeId);
 				let attribute = getBasicModelFromCDataRecordGroup(cAttribute);
@@ -106,13 +105,13 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 
 		const collectCollectionItems = function(cAttribute) {
 			let collectionLink = cAttribute.getFirstChildByNameInData("refCollection");
-			let cCollectionLink = CORA.coraData(collectionLink);
+			let cCollectionLink = coraData(collectionLink);
 			let collectionId = cCollectionLink.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cCollection = getCMetadataById(collectionId);
 			let collectionItemReferences = cCollection.getFirstChildByNameInData("collectionItemReferences");
 			let collectionItems = [];
 			for (let itemLink of collectionItemReferences.children) {
-				let cItemLink = CORA.coraData(itemLink);
+				let cItemLink = coraData(itemLink);
 				let collectionItemId = cItemLink.getFirstAtomicValueByNameInData("linkedRecordId");
 				let cCollectionItem = getCMetadataById(collectionItemId);
 				let collectionItem = getBasicModelFromCDataRecordGroup(cCollectionItem);
@@ -125,7 +124,7 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData("childReferences");
 			for (let childReference of childReferences.children) {
-				let cChildReference = CORA.coraData(childReference);
+				let cChildReference = coraData(childReference);
 				let repeatMin = cChildReference.getFirstAtomicValueByNameInData("repeatMin");
 				let repeatMax = cChildReference.getFirstAtomicValueByNameInData("repeatMax");
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
@@ -143,7 +142,7 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 					let indexs = cChildReference.getChildrenByNameInDataAndAttributes("childRefCollectTerm", indexAttributes);
 					let indexTerms = [];
 					for (let index of indexs) {
-						let cIndex = CORA.coraData(index);
+						let cIndex = coraData(index);
 						let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
 						indexTerms.push(collectTermId);
 					}
@@ -152,14 +151,14 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 				let storageAttributes = createAttributesWithNameAndValueAndRepeatId("type", "storage");
 				if (cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm", storageAttributes)) {
 					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm", storageAttributes);
-					let cIndex = CORA.coraData(index);
+					let cIndex = coraData(index);
 					let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
 					childRef.collectStorageTerm = collectTermId;
 				}
 				let permissionAttributes = createAttributesWithNameAndValueAndRepeatId("type", "permission");
 				if (cChildReference.containsChildWithNameInDataAndAttributes("childRefCollectTerm", permissionAttributes)) {
 					let index = cChildReference.getFirstChildByNameInDataAndAttributes("childRefCollectTerm", permissionAttributes);
-					let cIndex = CORA.coraData(index);
+					let cIndex = coraData(index);
 					let collectTermId = cIndex.getFirstAtomicValueByNameInData("linkedRecordId");
 					childRef.collectPermissionTerm = collectTermId;
 				}
@@ -191,12 +190,12 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-			return CORA.coraData(metadata);
+			return coraData(metadata);
 		};
 
 		const getIdFromCDataGroup = function(cDataRecordGroup) {
 			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-			let cRecordInfo = CORA.coraData(recordInfo);
+			let cRecordInfo = coraData(recordInfo);
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
@@ -262,4 +261,3 @@ cora.definitionViewer = function(providers, dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

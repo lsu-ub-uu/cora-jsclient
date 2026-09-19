@@ -16,11 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button } from "../gui/button.js";
+import { holder as holderImported } from "../gui/holder.js";
+import { loginManager } from "./loginManager.js";
 
-cora.loginManagerView = function(dependencies, spec) {
+export const loginManagerView = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let view;
@@ -35,7 +36,7 @@ cora.loginManagerView = function(dependencies, spec) {
 				buttonText : textProvider.getTranslation("theClient_loginMenuText"),
 				appendTo : document.body
 			};
-			holder = CORA.holder(holderSpec);
+			holder = holderImported(holderSpec);
 			view = holder.getButton();
 			menu = holder.getView();
 		};
@@ -72,7 +73,7 @@ cora.loginManagerView = function(dependencies, spec) {
 					}
 				}
 			};
-			let optionButton = CORA.button(buttonSpec);
+			let optionButton = button(buttonSpec);
 			menu.appendChild(optionButton);
 		};
 
@@ -87,7 +88,7 @@ cora.loginManagerView = function(dependencies, spec) {
 
 		const setState = function(stateIn) {
 			holder.closeHolder();
-			if (CORA.loginManager.LOGGEDIN === stateIn) {
+			if (loginManager.LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
 				let logoutOptions = [ {
 					text : textProvider.getTranslation("theClient_logoutMenuText"),
@@ -109,7 +110,7 @@ cora.loginManagerView = function(dependencies, spec) {
 					method : logoutOption.call
 				}
 			};
-			let optionButton = CORA.button(buttonSpec);
+			let optionButton = button(buttonSpec);
 			menu.appendChild(optionButton);
 		}
 
@@ -128,4 +129,3 @@ cora.loginManagerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

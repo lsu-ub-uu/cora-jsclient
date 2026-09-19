@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { calculatePathForNewElement } from "../metadata/calculatePathForNewElement.js";
+import { coraData } from "../metadata/coraData.js";
 
-cora.pMap = function(dependencies, spec) {
+export const pMap = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const pubSub = dependencies.pubSub;
@@ -63,11 +63,11 @@ cora.pMap = function(dependencies, spec) {
 		}
 
 		const getTextInfoFromMetadata = function() {
-			let cTextGroup = CORA.coraData(cMetadataElement.getFirstChildByNameInData("textId"));
+			let cTextGroup = coraData(cMetadataElement.getFirstChildByNameInData("textId"));
 			textId = cTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			text = textProvider.getTranslation(textId);
 
-			let cDefTextGroup = CORA.coraData(cMetadataElement
+			let cDefTextGroup = coraData(cMetadataElement
 				.getFirstChildByNameInData("defTextId"));
 			defTextId = cDefTextGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			defText = textProvider.getTranslation(defTextId);
@@ -86,7 +86,7 @@ cora.pMap = function(dependencies, spec) {
 		}
 
 		const subscribeToSetValueForCoordinatesValues = function() {
-			let cChildReferences = CORA.coraData(cMetadataElement
+			let cChildReferences = coraData(cMetadataElement
 				.getFirstChildByNameInData("childReferences"));
 			let childReferences = cChildReferences.getChildrenByNameInData("childReference");
 			childReferences.forEach(subscribeToSetValueIfLatitudeOrLongitude);
@@ -101,8 +101,8 @@ cora.pMap = function(dependencies, spec) {
 		}
 
 		const getIdFromChildReference = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cChildReference = coraData(childReference);
+			let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
 
@@ -140,7 +140,7 @@ cora.pMap = function(dependencies, spec) {
 				metadataIdToAdd: metadataIdToAdd,
 				parentPath: parentPath
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		}
 
 		const newElementsAdded = function() {
@@ -257,12 +257,12 @@ cora.pMap = function(dependencies, spec) {
 		}
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		}
 
 		const getPresentationId = function() {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			return coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		}
 
 		const getView = function() {
@@ -298,4 +298,3 @@ cora.pMap = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

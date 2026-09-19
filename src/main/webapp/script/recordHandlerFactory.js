@@ -17,11 +17,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { busy } from "./gui/busy.js";
+import { genericFactory } from "./genericFactory.js";
+import { indexHandler } from "./indexHandler.js";
+import { question } from "./gui/question.js";
+import { recordHandler } from "./recordHandler.js";
+import { recordHandlerViewFactory } from "./recordHandlerViewFactory.js";
 
-cora.recordHandlerFactory = function(dependencies) {
+export const recordHandlerFactory = function(dependencies) {
 		let out;
 		let indexHandlerDep = {
 			ajaxCallFactory: dependencies.ajaxCallFactory
@@ -29,18 +33,18 @@ cora.recordHandlerFactory = function(dependencies) {
 		
 		let dep = {
 			globalFactories: dependencies.globalFactories,
-			recordHandlerViewFactory: CORA.recordHandlerViewFactory(),
+			recordHandlerViewFactory: recordHandlerViewFactory(),
 			ajaxCallFactory: dependencies.ajaxCallFactory,
 			recordGuiFactory: dependencies.recordGuiFactory,
 			managedGuiItemFactory: dependencies.managedGuiItemFactory,
-			indexHandlerFactory: CORA.genericFactory("indexHandler", indexHandlerDep),
-			questionFactory: CORA.genericFactory("question", undefined),
-			busyFactory: CORA.genericFactory("busy", undefined),
+			indexHandlerFactory: genericFactory(indexHandler, indexHandlerDep),
+			questionFactory: genericFactory(question, undefined),
+			busyFactory: genericFactory(busy, undefined),
 			textProvider : dependencies.textProvider
 		};
 		const factor = function(recordHandlerSpec) {
 			dep.recordHandlerFactory = out;
-			return CORA.recordHandler(dep, recordHandlerSpec);
+			return recordHandler(dep, recordHandlerSpec);
 		};
 
 		const getDependencies = function() {
@@ -55,4 +59,3 @@ cora.recordHandlerFactory = function(dependencies) {
 		return out;
 	};
 
-export default CORA;

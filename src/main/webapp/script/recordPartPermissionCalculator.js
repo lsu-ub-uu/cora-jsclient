@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
 
-cora.recordPartPermissionCalculator = function(dependencies, spec) {
+export const recordPartPermissionCalculator = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let fulfilledWriteRecordParts = [];
 		let fulfilledReadRecordParts = [];
@@ -37,7 +36,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 
 		const getChildReferences = function(childId) {
 			let metadataGroup = metadataProvider.getMetadataById(childId);
-			let cMetadataGroup = CORA.coraData(metadataGroup);
+			let cMetadataGroup = coraData(metadataGroup);
 			return cMetadataGroup.getFirstChildByNameInData('childReferences');
 		};
 
@@ -48,7 +47,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		};
 
 		const handleRecordPartPermissionsForChildReference = function(childReference, unfulfilledWritePermissionInParentHierarchy) {
-			let cChildReference = CORA.coraData(childReference);
+			let cChildReference = coraData(childReference);
 			let childId = getLinkedRecordId(cChildReference);
 			let nameInData = extractNameInData(childId);
 
@@ -59,7 +58,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		};
 
 		const getLinkedRecordId = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -95,7 +94,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		};
 
 		const referencePointsToGroup = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") === "metadataGroup";
 		};
 
@@ -147,7 +146,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		};
 
 		const createCombinedChildId = function(cChildReference) {
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordType") + "_"
 				+ cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
@@ -171,7 +170,7 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getDependencies = function() {
@@ -223,4 +222,3 @@ cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

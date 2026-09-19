@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { openGuiItemHandlerView } from "./openGuiItemHandlerView.js";
 
-cora.openGuiItemHandlerViewFactory = function(dependencies) {
+export const openGuiItemHandlerViewFactory = function(dependencies) {
 
 		function getDependencies() {
 			return dependencies;
@@ -28,7 +27,7 @@ cora.openGuiItemHandlerViewFactory = function(dependencies) {
 
 		function factor(spec) {
 			var openGuiItemHandlerViewDependencies = {};
-			return CORA.openGuiItemHandlerView(openGuiItemHandlerViewDependencies, spec);
+			return openGuiItemHandlerView(openGuiItemHandlerViewDependencies, spec);
 		}
 
 		return Object.freeze({
@@ -38,4 +37,3 @@ cora.openGuiItemHandlerViewFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

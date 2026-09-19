@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.openGuiItemHandler = function(dependencies, spec) {
+export const openGuiItemHandler = function(dependencies, spec) {
 		let view;
 		let viewSpec = {
 			headerText : dependencies.textProvider.getTranslation("theClient_openedText")
@@ -177,4 +174,3 @@ cora.openGuiItemHandler = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

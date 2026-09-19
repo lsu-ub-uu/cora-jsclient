@@ -17,11 +17,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { managedGuiItemFactory } from "../managedGuiItemFactory.js";
+import { messageHolderFactory } from "../gui/messageHolderFactory.js";
+import { searchRecordHandler } from "./searchRecordHandler.js";
+import { searchRecordHandlerViewFactory } from "./searchRecordHandlerViewFactory.js";
 
-cora.searchRecordHandlerFactory = function(dependencies) {
+export const searchRecordHandlerFactory = function(dependencies) {
 
 		function getDependencies() {
 			return dependencies;
@@ -31,19 +33,19 @@ cora.searchRecordHandlerFactory = function(dependencies) {
 			var searchHandlerJsClientIntegratorDep = {
 				"searchHandlerFactory" : dependencies.globalFactories.searchHandlerFactory,
 				"jsClient" : spec.jsClient,
-				"managedGuiItemFactory" : CORA.managedGuiItemFactory()
+				"managedGuiItemFactory" : managedGuiItemFactory()
 			};
 
 			var searchRecordHandlerDependencies = {
-				"messageHolderFactory" : CORA.messageHolderFactory(),
-				"searchRecordHandlerViewFactory" : CORA.searchRecordHandlerViewFactory(),
-				"managedGuiItemFactory" : CORA.managedGuiItemFactory(),
+				"messageHolderFactory" : messageHolderFactory(),
+				"searchRecordHandlerViewFactory" : searchRecordHandlerViewFactory(),
+				"managedGuiItemFactory" : managedGuiItemFactory(),
 				"jsClient" : spec.jsClient,
 				"textProvider" : dependencies.textProvider,
 				"searchHandlerJSClientIntegratorFactory" : CORA
 						.searchHandlerJsClientIntegratorFactory(searchHandlerJsClientIntegratorDep)
 			};
-			return CORA.searchRecordHandler(searchRecordHandlerDependencies, spec);
+			return searchRecordHandler(searchRecordHandlerDependencies, spec);
 		}
 
 		return Object.freeze({
@@ -53,4 +55,3 @@ cora.searchRecordHandlerFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

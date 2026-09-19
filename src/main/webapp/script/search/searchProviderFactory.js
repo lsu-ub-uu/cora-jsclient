@@ -16,17 +16,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { searchProvider } from "./searchProvider.js";
 
-cora.searchProviderFactory = function(dependencies) {
+export const searchProviderFactory = function(dependencies) {
 
 		function factor(spec) {
 			var dep = {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory
 			};
-			return CORA.searchProvider(dep, spec);
+			return searchProvider(dep, spec);
 		}
 
 		function getDependencies() {
@@ -40,4 +39,3 @@ cora.searchProviderFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

@@ -16,29 +16,29 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { button } from "./gui/button.js";
+import { createSpanWithClassName } from "./gui/basicGui.js";
 
-cora.recordTypeHandlerView = function(dependencies, spec) {
+export const recordTypeHandlerView = function(dependencies, spec) {
 		var out;
 		var view;
 		var header;
 		var buttonView;
 
 		function start() {
-			view = CORA.createSpanWithClassName("recordType");
+			view = createSpanWithClassName("recordType");
 
 			header = createHeader();
 			view.appendChild(header);
 
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			view.appendChild(buttonView);
 			possiblyCreateCreateButton();
 		}
 
 		function createHeader() {
-			var headerNew = CORA.createSpanWithClassName("header");
+			var headerNew = createSpanWithClassName("header");
 			if (specHasFetchListMethod()) {
 				headerNew.className = headerNew.className + " clickable";
 				headerNew.onclick = spec.fetchListMethod;
@@ -66,7 +66,7 @@ cora.recordTypeHandlerView = function(dependencies, spec) {
 					}
 				}
 			};
-			return CORA.button(buttonSpec);
+			return button(buttonSpec);
 		}
 
 		function getView() {
@@ -91,4 +91,3 @@ cora.recordTypeHandlerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

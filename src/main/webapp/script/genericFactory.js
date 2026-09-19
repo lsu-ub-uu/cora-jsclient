@@ -16,56 +16,60 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
+import coraNamespace from "./aCoraNameSpace.js";
 
-const cora = CORA;
+const resolveTypeToFactor = function(typeToFactor) {
+	if (typeof typeToFactor === "function") {
+		return typeToFactor;
+	}
+	return coraNamespace[typeToFactor];
+};
 
-cora.genericFactory = function(typeToFactor, first, second) {
-		let out;
-		let providers = first;
-		let dependencies = second;
+export const genericFactory = function(typeToFactor, first, second) {
+	let out;
+	let providers = first;
+	let dependencies = second;
+	const resolvedTypeToFactor = resolveTypeToFactor(typeToFactor);
 
-		const start = function() {
-			ifOnlyTwoArgumentsUseFistAsDependencies();
-		};
-
-		const ifOnlyTwoArgumentsUseFistAsDependencies = function() {
-			if (second === undefined) {
-				providers = undefined;
-				dependencies = first;
-			}
-		};
-
-		const factor = function(spec) {
-			if (undefined == dependencies) {
-				return CORA[typeToFactor](spec);
-			}
-			if (undefined == providers) {
-				return CORA[typeToFactor](dependencies, spec);
-			}
-			return CORA[typeToFactor](providers, dependencies, spec);
-		};
-
-		const getTypeToFactor = function() {
-			return typeToFactor;
-		};
-
-		const getProviders = function() {
-			return providers;
-		};
-
-		const getDependencies = function() {
-			return dependencies;
-		};
-		start();
-		out = Object.freeze({
-			type: "genericFactory",
-			getTypeToFactor: getTypeToFactor,
-			getProviders: getProviders,
-			getDependencies: getDependencies,
-			factor: factor
-		});
-		return out;
+	const start = function() {
+		ifOnlyTwoArgumentsUseFistAsDependencies();
 	};
 
-export default CORA;
+	const ifOnlyTwoArgumentsUseFistAsDependencies = function() {
+		if (second === undefined) {
+			providers = undefined;
+			dependencies = first;
+		}
+	};
+
+	const factor = function(spec) {
+		if (undefined == dependencies) {
+			return resolvedTypeToFactor(spec);
+		}
+		if (undefined == providers) {
+			return resolvedTypeToFactor(dependencies, spec);
+		}
+		return resolvedTypeToFactor(providers, dependencies, spec);
+	};
+
+	const getTypeToFactor = function() {
+		return resolvedTypeToFactor.name || typeToFactor;
+	};
+
+	const getProviders = function() {
+		return providers;
+	};
+
+	const getDependencies = function() {
+		return dependencies;
+	};
+	start();
+	out = Object.freeze({
+		type: "genericFactory",
+		getTypeToFactor: getTypeToFactor,
+		getProviders: getProviders,
+		getDependencies: getDependencies,
+		factor: factor
+	});
+	return out;
+};

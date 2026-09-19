@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createDivWithClassName } from "./basicGui.js";
 
-cora.question = function(spec) {
+export const question = function(spec) {
 		let view;
 		let box;
 		let questionBox;
@@ -38,11 +37,11 @@ cora.question = function(spec) {
 		};
 
 		const createView = function() {
-			return CORA.createDivWithClassName("question");
+			return createDivWithClassName("question");
 		};
 
 		const createTextView = function() {
-			let viewNew = CORA.createDivWithClassName("questionBox");
+			let viewNew = createDivWithClassName("questionBox");
 			let textElement = document.createElement("text");
 			viewNew.appendChild(textElement);
 			textElement.innerHTML = spec.text;
@@ -95,4 +94,3 @@ cora.question = function(spec) {
 		return out;
 	};
 
-export default CORA;

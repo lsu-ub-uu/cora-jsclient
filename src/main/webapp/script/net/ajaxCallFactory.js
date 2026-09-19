@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { ajaxCall } from "./ajaxCall.js";
 
-cora.ajaxCallFactory = function(dependencies) {
+export const ajaxCallFactory = function(dependencies) {
 		const factor = function(ajaxCallSpecIn) {
 			let ajaxCallSpec = ajaxCallSpecIn;
 			ajaxCallSpec.requestHeaders = {};
@@ -52,7 +51,7 @@ cora.ajaxCallFactory = function(dependencies) {
 		};
 		
 		const createNewAjaxCallUsingSpec = function(ajaxCallSpec) {
-			return CORA.ajaxCall(ajaxCallSpec);
+			return ajaxCall(ajaxCallSpec);
 		};
 
 		const getDependencies = function() {
@@ -66,4 +65,3 @@ cora.ajaxCallFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

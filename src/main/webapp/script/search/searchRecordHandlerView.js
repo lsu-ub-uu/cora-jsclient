@@ -17,28 +17,27 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.searchRecordHandlerView = function(dependencies, spec) {
+export const searchRecordHandlerView = function(dependencies, spec) {
 		var out;
 		var view;
 		var header;
 		var childrenView;
 
 		function start() {
-			view = CORA.createSpanWithClassName("searchRecord");
+			view = createSpanWithClassName("searchRecord");
 
 			header = createHeader();
 			view.appendChild(header);
 
-			childrenView = CORA.createSpanWithClassName("childrenView");
+			childrenView = createSpanWithClassName("childrenView");
 			view.appendChild(childrenView);
 		}
 
 		function createHeader() {
-			var headerNew = CORA.createSpanWithClassName("header clickable");
+			var headerNew = createSpanWithClassName("header clickable");
 			headerNew.onclick = spec.openSearchMethod;
 			headerNew.textContent = spec.headerText;
 			return headerNew;
@@ -76,4 +75,3 @@ cora.searchRecordHandlerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

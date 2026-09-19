@@ -18,16 +18,15 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
 
-const cora = CORA;
+export const metadataChildInitializer = function(dependencies, spec) {
 
-cora.metadataChildInitializer = function(dependencies, spec) {
+		let childReference = coraData(spec.childReference);
+		let data = coraData(spec.data);
 
-		let childReference = CORA.coraData(spec.childReference);
-		let data = CORA.coraData(spec.data);
-
-		let cRef = CORA.coraData(childReference.getFirstChildByNameInData("ref"));
+		let cRef = coraData(childReference.getFirstChildByNameInData("ref"));
 		let metadataId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		let dataChildrenForMetadata;
 		let attributes;
@@ -89,12 +88,12 @@ cora.metadataChildInitializer = function(dependencies, spec) {
 			} else {
 				let possibleAttributeValues = [];
 				let refCollection = attributeMetadata.getFirstChildByNameInData("refCollection");
-				let collectionId = CORA.coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
+				let collectionId = coraData(refCollection).getFirstAtomicValueByNameInData("linkedRecordId");
 				let cCollection = getMetadataById(collectionId);
 				let colItemRefs = cCollection.getFirstChildByNameInData("collectionItemReferences");
-				let allRefs = CORA.coraData(colItemRefs).getChildrenByNameInData("ref");
+				let allRefs = coraData(colItemRefs).getChildrenByNameInData("ref");
 				allRefs.forEach(function(colItemRef) {
-					let linkedId = CORA.coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
+					let linkedId = coraData(colItemRef).getFirstAtomicValueByNameInData("linkedRecordId");
 					let cItem = getMetadataById(linkedId);
 					let value = cItem.getFirstAtomicValueByNameInData("nameInData");
 					possibleAttributeValues.push(value);
@@ -108,7 +107,7 @@ cora.metadataChildInitializer = function(dependencies, spec) {
 		};
 
 		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
+			let cAttributeReference = coraData(attributeReference);
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -242,7 +241,7 @@ cora.metadataChildInitializer = function(dependencies, spec) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(dependencies.metadataProvider.getMetadataById(id));
+			return coraData(dependencies.metadataProvider.getMetadataById(id));
 		};
 
 		const hasData = function() {
@@ -276,7 +275,7 @@ cora.metadataChildInitializer = function(dependencies, spec) {
 				repeatId: spec.repeatId,
 				parentPath: spec.path
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const publishDisableMessage = function(pathForTopLevelChild) {
@@ -303,4 +302,3 @@ cora.metadataChildInitializer = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

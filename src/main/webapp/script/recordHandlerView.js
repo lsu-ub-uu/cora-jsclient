@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "./gui/basicGui.js";
 
-cora.recordHandlerView = function(dependencies, spec) {
+export const recordHandlerView = function(dependencies, spec) {
 		const texts = spec.texts;
 		let showIncomingLinksButton;
 		let incomingLinksView;
@@ -45,11 +44,11 @@ cora.recordHandlerView = function(dependencies, spec) {
 			workItemView = dependencies.workItemViewFactory.factor(workItemViewSpec);
 			view = workItemView.getView();
 
-			editView = CORA.createSpanWithClassName("editView");
+			editView = createSpanWithClassName("editView");
 			workItemView.addViewToView(editView);
-			showView = CORA.createSpanWithClassName("showView");
+			showView = createSpanWithClassName("showView");
 			workItemView.addViewToView(showView);
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			workItemView.addViewToView(buttonView);
 
 			setShowDataFunction(spec.showDataMethod);
@@ -244,4 +243,3 @@ cora.recordHandlerView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

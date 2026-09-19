@@ -16,14 +16,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { managedGuiItemView } from "./managedGuiItemView.js";
 
-cora.managedGuiItemViewFactory = function() {
+export const managedGuiItemViewFactory = function() {
 
 		function factor(managedGuiItemViewSpec) {
-			return CORA.managedGuiItemView( managedGuiItemViewSpec);
+			return managedGuiItemView( managedGuiItemViewSpec);
 		}
 
 		return Object.freeze({
@@ -32,4 +31,3 @@ cora.managedGuiItemViewFactory = function() {
 		});
 	};
 
-export default CORA;

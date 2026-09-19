@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { searchRecordHandlerView } from "./searchRecordHandlerView.js";
 
-cora.searchRecordHandlerViewFactory = function(dependencies) {
+export const searchRecordHandlerViewFactory = function(dependencies) {
 
 		function getDependencies() {
 			return dependencies;
@@ -28,7 +27,7 @@ cora.searchRecordHandlerViewFactory = function(dependencies) {
 
 		function factor(spec) {
 			var searchRecordHandlerViewDependencies = {};
-			return CORA.searchRecordHandlerView(searchRecordHandlerViewDependencies, spec);
+			return searchRecordHandlerView(searchRecordHandlerViewDependencies, spec);
 		}
 
 		return Object.freeze({
@@ -38,4 +37,3 @@ cora.searchRecordHandlerViewFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

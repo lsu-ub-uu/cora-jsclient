@@ -16,18 +16,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createDivWithClassName } from "./basicGui.js";
 
-cora.busy = function() {
+export const busy = function() {
 		let view = createView();
 		let beforeShowFunction;
 
 		let box = cora.box(view);
 
 		function createView() {
-			return CORA.createDivWithClassName("busy hidden");
+			return createDivWithClassName("busy hidden");
 		}
 
 
@@ -59,4 +58,3 @@ cora.busy = function() {
 		return out;
 	};
 
-export default CORA;

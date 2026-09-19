@@ -16,11 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.recordGui = function(dependencies, spec) {
+export const recordGui = function(dependencies, spec) {
 		const pubSub = dependencies.pubSub;
 		const dataHolder = dependencies.dataHolder;
 		const jsBookkeeper = dependencies.jsBookkeeper;
@@ -86,4 +83,3 @@ cora.recordGui = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

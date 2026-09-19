@@ -17,36 +17,34 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button } from "./button.js";
 
-cora.createRemoveButton = function(onclick) {
+export const createRemoveButton = function(onclick) {
 		let spec = {
 			className : "iconButton removeButton",
 			action : {
 				method : onclick
 			}
 		};
-		return CORA.button(spec);
+		return button(spec);
 	};
 
-	cora.createSpanWithClassName = function(className) {
+	export const createSpanWithClassName = function(className) {
 		let spanNew = document.createElement("span");
 		spanNew.className = className;
 		return spanNew;
 	};
 
-	cora.createDivWithClassName = function(className) {
+	export const createDivWithClassName = function(className) {
 		let divNew = document.createElement("div");
 		divNew.className = className;
 		return divNew;
 	};
 
-	cora.createLabelWithClassName = function(className) {
+	export const createLabelWithClassName = function(className) {
 		let titleNew = document.createElement("label");
 		titleNew.className = className;
 		return titleNew;
 	};
 
-export default CORA;

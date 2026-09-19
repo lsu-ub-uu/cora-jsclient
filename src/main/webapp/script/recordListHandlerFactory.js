@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { recordListHandler } from "./recordListHandler.js";
 
-cora.recordListHandlerFactory = function(dependencies) {
+export const recordListHandlerFactory = function(dependencies) {
 
 		function factor(recordListHandlerSpec) {
 
@@ -31,7 +30,7 @@ cora.recordListHandlerFactory = function(dependencies) {
 				"managedGuiItemFactory" : dependencies.factories.managedGuiItemFactory,
 				"resultHandlerFactory" : dependencies.factories.resultHandlerFactory
 			};
-			return CORA.recordListHandler(dep, recordListHandlerSpec);
+			return recordListHandler(dep, recordListHandlerSpec);
 		}
 
 		function getDependencies() {
@@ -45,4 +44,3 @@ cora.recordListHandlerFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

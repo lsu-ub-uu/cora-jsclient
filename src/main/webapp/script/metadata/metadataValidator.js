@@ -18,11 +18,9 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CORA from "../aCoraNameSpace.js";
+import { coraData } from "./coraData.js";
 
-const cora = CORA;
-
-cora.metadataValidator = function(dependencies, spec) {
+export const metadataValidator = function(dependencies, spec) {
         let metadataProvider = dependencies.metadataProvider;
         let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
         let pubSub = dependencies.pubSub;
@@ -54,8 +52,8 @@ cora.metadataValidator = function(dependencies, spec) {
         };
 
         const removeDataOnValidateIfNoWritePermission = function(childReference) {
-            let cchildReference = CORA.coraData(childReference);
-            let cRef = CORA.coraData(cchildReference.getFirstChildByNameInData("ref"));
+            let cchildReference = coraData(childReference);
+            let cRef = coraData(cchildReference.getFirstChildByNameInData("ref"));
             let id = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
             try {
                 let removeMessage = {
@@ -70,7 +68,7 @@ cora.metadataValidator = function(dependencies, spec) {
 
         const shouldChildBeValidatedDependingOnRecordPartConstraintsAndUsersPermissions = function(
             childReference) {
-            let cChildReference = CORA.coraData(childReference);
+            let cChildReference = coraData(childReference);
             if (childHasRecordPartConstraints(cChildReference)) {
                 return userHasRecordPartPermission(cChildReference);
             }
@@ -82,7 +80,7 @@ cora.metadataValidator = function(dependencies, spec) {
         };
 
         const userHasRecordPartPermission = function(cChildReference) {
-            let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+            let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
             return spec.recordPartPermissionCalculator.hasFulfilledWritePermissionsForRecordPart(cRef);
         };
 
@@ -101,7 +99,7 @@ cora.metadataValidator = function(dependencies, spec) {
         };
 
         const getMetadataById = function(id) {
-            return CORA.coraData(metadataProvider.getMetadataById(id));
+            return coraData(metadataProvider.getMetadataById(id));
         };
 
         const getDependencies = function() {
@@ -120,4 +118,3 @@ cora.metadataValidator = function(dependencies, spec) {
         });
     };
 
-export default CORA;

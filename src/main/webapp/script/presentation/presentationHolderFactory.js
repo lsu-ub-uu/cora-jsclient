@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { presentationHolder } from "./presentationHolder.js";
 
-cora.presentationHolderFactory = function(dependencies) {
+export const presentationHolderFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let presentationHolderDependencies = {
@@ -31,7 +30,7 @@ cora.presentationHolderFactory = function(dependencies) {
 					textProvider : dependencies.textProvider,
 					jsBookkeeper : dependencies.jsBookkeeper
 			};
-			return CORA.presentationHolder(presentationHolderDependencies, spec);
+			return presentationHolder(presentationHolderDependencies, spec);
 		};
 
 		const getDependencies = function() {
@@ -45,4 +44,3 @@ cora.presentationHolderFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

@@ -16,11 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { button } from "../gui/button.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pRecordLinkView = function(dependencies, spec) {
+export const pRecordLinkView = function(dependencies, spec) {
 		let out;
 		let view;
 		let childrenView;
@@ -37,9 +37,9 @@ cora.pRecordLinkView = function(dependencies, spec) {
 		let label;
 			
 		const start = function() {
-			view = CORA.createSpanWithClassName(baseClassName);
+			view = createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
-			buttonView = CORA.createSpanWithClassName("buttonView");
+			buttonView = createSpanWithClassName("buttonView");
 			openLinkedRecordButton = createOpenLinkedRecordButton();
 			showSearchButton = createShowSearchButton();
 			createChildrenView();
@@ -55,7 +55,7 @@ cora.pRecordLinkView = function(dependencies, spec) {
 		};
 		
 		const addLabel = function(){
-			label = CORA.createSpanWithClassName("label");
+			label = createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
@@ -72,7 +72,7 @@ cora.pRecordLinkView = function(dependencies, spec) {
 					method: onclickMethod
 				}
 			};
-			return CORA.button(buttonSpec);
+			return button(buttonSpec);
 		};
 
 		const createShowSearchButton = function() {
@@ -91,7 +91,7 @@ cora.pRecordLinkView = function(dependencies, spec) {
 		};
 
 		const createChildrenView = function() {
-			childrenView = CORA.createSpanWithClassName("childrenView");
+			childrenView = createSpanWithClassName("childrenView");
 			view.appendChild(childrenView);
 		};
 
@@ -309,4 +309,3 @@ cora.pRecordLinkView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

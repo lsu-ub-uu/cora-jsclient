@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { metadataController } from "./metadataController.js";
 
-cora.metadataControllerFactory = function(dependencies) {
+export const metadataControllerFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let metadataChildAndRepeatInitializerDep = {
@@ -38,7 +37,7 @@ cora.metadataControllerFactory = function(dependencies) {
 				pubSub : dependencies.pubSub,
 				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
 			};
-			return CORA.metadataController(controllerDependencies, spec);
+			return metadataController(controllerDependencies, spec);
 		};
 
 		const getDependencies = function() {
@@ -52,4 +51,3 @@ cora.metadataControllerFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

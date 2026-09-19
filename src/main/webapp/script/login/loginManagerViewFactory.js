@@ -16,11 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { loginManagerView } from "./loginManagerView.js";
 
-cora.loginManagerViewFactory = function(dependencies) {
+export const loginManagerViewFactory = function(dependencies) {
 
 		const getDependencies = function() {
 			return dependencies;
@@ -30,7 +29,7 @@ cora.loginManagerViewFactory = function(dependencies) {
 			let loginManagerViewDependencies = {
 				textProvider : dependencies.textProvider
 			};
-			return CORA.loginManagerView(loginManagerViewDependencies, spec);
+			return loginManagerView(loginManagerViewDependencies, spec);
 		};
 
 		return Object.freeze({
@@ -40,4 +39,3 @@ cora.loginManagerViewFactory = function(dependencies) {
 		});
 	};
 
-export default CORA;

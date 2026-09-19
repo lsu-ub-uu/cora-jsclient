@@ -1,5 +1,17 @@
-import CORA from "./main.js";
 import { startUsingServer } from "../useServer.js";
+import { ajaxCallFactory as ajaxCallFactoryImported } from "./net/ajaxCallFactory.js";
+import { authTokenHolder as authTokenHolderImported } from "./login/authTokenHolder.js";
+import { clientInstanceProvider } from "./jsClient/clientInstanceProvider.js";
+import { jsClientFactory as jsClientFactoryImported } from "./jsClient/jsClientFactory.js";
+import { metadataProviderFactory } from "./metadata/metadataProviderFactory.js";
+import { recordTypeProviderFactory } from "./recordTypeProviderFactory.js";
+import { reloadableMetadataProvider } from "./metadata/reloadableMetadataProvider.js";
+import { reloadableRecordTypeProvider } from "./reloadableRecordTypeProvider.js";
+import { reloadableSearchProvider } from "./search/reloadableSearchProvider.js";
+import { reloadableTextProvider } from "./metadata/reloadableTextProvider.js";
+import { searchProviderFactory } from "./search/searchProviderFactory.js";
+import { textProviderFactory } from "./metadata/textProviderFactory.js";
+import { xmlHttpRequestFactory as xmlHttpRequestFactoryImported } from "./net/xmlHttpRequestFactory.js";
 
 const state = {
 	name : "A Client",
@@ -19,13 +31,13 @@ const state = {
 	recordTypeProviderStarted : false
 };
 
-const authTokenHolder = CORA.authTokenHolder();
-const xmlHttpRequestFactory = CORA.xmlHttpRequestFactory();
+const authTokenHolder = authTokenHolderImported();
+const xmlHttpRequestFactory = xmlHttpRequestFactoryImported();
 const ajaxCallFactoryDependencies = {
 	"xmlHttpRequestFactory" : xmlHttpRequestFactory,
 	"authTokenHolder" : authTokenHolder
 };
-const ajaxCallFactory = CORA.ajaxCallFactory(ajaxCallFactoryDependencies);
+const ajaxCallFactory = ajaxCallFactoryImported(ajaxCallFactoryDependencies);
 
 const metadataProviderReady = function() {
 	state.metadataProviderStarted = true;
@@ -72,9 +84,9 @@ const startDependencies = function() {
 		"ajaxCallFactory" : ajaxCallFactory
 	};
 	let dependenciesTextProvider = {
-		"textProviderFactory" : CORA.textProviderFactory(dependenciesTextProviderFactory)
+		"textProviderFactory" : textProviderFactory(dependenciesTextProviderFactory)
 	};
-	state.textProvider = CORA.reloadableTextProvider(dependenciesTextProvider, textProviderSpec);
+	state.textProvider = reloadableTextProvider(dependenciesTextProvider, textProviderSpec);
 
 	let metadataProviderSpec = {
 		"metadataListLink" : metadataListLink,
@@ -89,30 +101,30 @@ const startDependencies = function() {
 		"ajaxCallFactory" : ajaxCallFactory
 	};
 	let dependenciesMetadataProvider = {
-		"metadataProviderFactory" : CORA.metadataProviderFactory(dependenciesMetadataProviderFactory)
+		"metadataProviderFactory" : metadataProviderFactory(dependenciesMetadataProviderFactory)
 	};
-	state.metadataProvider = CORA.reloadableMetadataProvider(dependenciesMetadataProvider,
+	state.metadataProvider = reloadableMetadataProvider(dependenciesMetadataProvider,
 			metadataProviderSpec);
 
 	let dependenciesSearchProviderFactory = {
 		"ajaxCallFactory" : ajaxCallFactory
 	};
 	let dependenciesSearchProvider = {
-		"searchProviderFactory" : CORA.searchProviderFactory(dependenciesSearchProviderFactory)
+		"searchProviderFactory" : searchProviderFactory(dependenciesSearchProviderFactory)
 	};
 	let searchRecordListLink = createListActionLink("search");
 	let specSearchProvider = {
 		"searchRecordListLink" : searchRecordListLink,
 		"callWhenReady" : searchProviderReady
 	};
-	state.searchProvider = CORA.reloadableSearchProvider(dependenciesSearchProvider,
+	state.searchProvider = reloadableSearchProvider(dependenciesSearchProvider,
 			specSearchProvider);
 
 	let dependenciesRecordTypeProviderFactory = {
 		"ajaxCallFactory" : ajaxCallFactory
 	};
 	let dependenciesReloadableRecordTypeProvider = {
-		"recordTypeProviderFactory" : CORA.recordTypeProviderFactory(
+		"recordTypeProviderFactory" : recordTypeProviderFactory(
 				dependenciesRecordTypeProviderFactory)
 	};
 	let recordTypeListLink = createListActionLink("recordType");
@@ -121,7 +133,7 @@ const startDependencies = function() {
 		"validationTypeListLink" : validationTypeListLink,
 		"callWhenReady" : recordTypeProviderReady
 	};
-	state.recordTypeProvider = CORA.reloadableRecordTypeProvider(
+	state.recordTypeProvider = reloadableRecordTypeProvider(
 			dependenciesReloadableRecordTypeProvider, recordTypeProviderSpec);
 };
 
@@ -148,7 +160,7 @@ const startJsClient = function() {
 		"textProvider" : state.textProvider,
 		"searchProvider" : state.searchProvider,
 		"recordTypeProvider" : state.recordTypeProvider,
-		"clientInstanceProvider" : CORA.clientInstanceProvider()
+		"clientInstanceProvider" : clientInstanceProvider()
 	};
 	state.jsClientSpec = {
 		"name" : state.name,
@@ -159,7 +171,7 @@ const startJsClient = function() {
 	let dependencies = {
 		"authTokenHolder" : authTokenHolder
 	};
-	let jsClientFactory = CORA.jsClientFactory(providers, dependencies);
+	let jsClientFactory = jsClientFactoryImported(providers, dependencies);
 	state.jsClient = jsClientFactory.factor(state.jsClientSpec);
 	state.jsClientView = state.jsClient.getView();
 	document.body.appendChild(state.jsClient.getView());

@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.managedGuiItem = function(dependencies, spec) {
+export const managedGuiItem = function(dependencies, spec) {
 		const maxNumberIndicators = 16;
 
 		let out;
@@ -213,4 +210,3 @@ cora.managedGuiItem = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

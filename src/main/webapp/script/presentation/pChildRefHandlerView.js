@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pChildRefHandlerView = function(dependencies, spec) {
+export const pChildRefHandlerView = function(dependencies, spec) {
 		let view;
 		let childrenView;
 		let buttonView;
@@ -52,7 +51,7 @@ cora.pChildRefHandlerView = function(dependencies, spec) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			return CORA.createSpanWithClassName(newClassName);
+			return createSpanWithClassName(newClassName);
 		};
 
 		const getView = function() {
@@ -60,7 +59,7 @@ cora.pChildRefHandlerView = function(dependencies, spec) {
 		};
 
 		const createButtonView = function() {
-			let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+			let buttonViewNew = createSpanWithClassName("buttonView");
 			if (spec.upload !== "true") {
 				buttonViewNew.appendChild(createAddButton());
 			} else {
@@ -104,7 +103,7 @@ cora.pChildRefHandlerView = function(dependencies, spec) {
 		};
 
 		const createChildrenView = function() {
-			let childrenViewNew = CORA.createSpanWithClassName("childrenView");
+			let childrenViewNew = createSpanWithClassName("childrenView");
 			if (spec.isRepeating) {
 				addDragEventHandlers(childrenViewNew);
 			}
@@ -354,4 +353,3 @@ cora.pChildRefHandlerView = function(dependencies, spec) {
 		return out;
 	};
 
-export default CORA;

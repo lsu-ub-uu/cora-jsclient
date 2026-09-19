@@ -17,11 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
-
-cora.pSurroundingContainerView = function(dependencies, spec) {
+export const pSurroundingContainerView = function(dependencies, spec) {
 		const pParentMultipleChildrenViewFactory = dependencies.pParentMultipleChildrenViewFactory;
 		let pParentVarView;
 
@@ -100,4 +97,3 @@ cora.pSurroundingContainerView = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

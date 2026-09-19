@@ -16,11 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { genericFactory } from "../genericFactory.js";
+import { metadataChildInitializer } from "./metadataChildInitializer.js";
+import { metadataRepeatInitializer } from "./metadataRepeatInitializer.js";
 
-cora.metadataChildAndRepeatInitializerFactory = function(dependencies) {
+export const metadataChildAndRepeatInitializerFactory = function(dependencies) {
 		let self;
 
 		let metadataChildInititalizerDep = {
@@ -35,9 +36,9 @@ cora.metadataChildAndRepeatInitializerFactory = function(dependencies) {
 			pubSub : dependencies.pubSub
 		};
 
-		let metadataChildInitializerFactory = CORA.genericFactory("metadataChildInitializer",
+		let metadataChildInitializerFactory = genericFactory(metadataChildInitializer,
 				metadataChildInititalizerDep);
-		let metadataRepeatInitializerFactory = CORA.genericFactory("metadataRepeatInitializer",
+		let metadataRepeatInitializerFactory = genericFactory(metadataRepeatInitializer,
 				metadataRepeatInititalizerDep);
 
 		const factorChildInitializer = function(spec) {
@@ -74,4 +75,3 @@ cora.metadataChildAndRepeatInitializerFactory = function(dependencies) {
 		return out;
 	};
 
-export default CORA;

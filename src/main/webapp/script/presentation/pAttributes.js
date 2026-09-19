@@ -17,11 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { calculatePathForNewElement } from "../metadata/calculatePathForNewElement.js";
+import { coraData } from "../metadata/coraData.js";
 
-cora.pAttributes = function(dependencies, spec) {
+export const pAttributes = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
 		let view = dependencies.pAttributesViewFactory.factor();
@@ -77,7 +77,7 @@ cora.pAttributes = function(dependencies, spec) {
 		}
 		
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 		
 		const createAttributePresentation = function(attributeMetadataId) {
@@ -116,7 +116,7 @@ cora.pAttributes = function(dependencies, spec) {
 					type: "pCollVar"
 				}
 			};
-			return CORA.coraData(presentationChildForAttribute);
+			return coraData(presentationChildForAttribute);
 		};
 
 		const createAttributePath = function(metadataId) {
@@ -125,7 +125,7 @@ cora.pAttributes = function(dependencies, spec) {
 				parentPath: path,
 				type: "attribute"
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const getSpec = function() {
@@ -155,4 +155,3 @@ cora.pAttributes = function(dependencies, spec) {
 
 	};
 
-export default CORA;

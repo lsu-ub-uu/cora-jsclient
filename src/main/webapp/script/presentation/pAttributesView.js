@@ -16,16 +16,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "../aCoraNameSpace.js";
 
-const cora = CORA;
+import { createSpanWithClassName } from "../gui/basicGui.js";
 
-cora.pAttributesView = function() {
+export const pAttributesView = function() {
 		let out;
 		let view;
 
 		const start = function() {
-			view = CORA.createSpanWithClassName("attributes");
+			view = createSpanWithClassName("attributes");
 		};
 
 		const getView = function() {
@@ -45,4 +44,3 @@ cora.pAttributesView = function() {
 		return out;
 	};
 
-export default CORA;

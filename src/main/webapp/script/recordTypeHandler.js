@@ -17,11 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-import CORA from "./aCoraNameSpace.js";
 
-const cora = CORA;
+import { coraData } from "./metadata/coraData.js";
 
-cora.recordTypeHandler = function(dependencies, spec) {
+export const recordTypeHandler = function(dependencies, spec) {
 
 		let recordId;
 		let view;
@@ -49,7 +48,7 @@ cora.recordTypeHandler = function(dependencies, spec) {
 		}
 
 		const getHeadlineText = function(recordTypeRecord) {
-			let cData = CORA.coraData(recordTypeRecord.data);
+			let cData = coraData(recordTypeRecord.data);
 			if (textIdIsMissingInData(cData)) {
 				return recordId;
 			}
@@ -61,14 +60,14 @@ cora.recordTypeHandler = function(dependencies, spec) {
 		}
 
 		const getTranslatedText = function(cData) {
-			let cTextIdGroup = CORA.coraData(cData.getFirstChildByNameInData("textId"));
+			let cTextIdGroup = coraData(cData.getFirstChildByNameInData("textId"));
 			let textId = cTextIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 			return dependencies.textProvider.getTranslation(textId);
 		}
 
 		const getIdFromRecord = function(record) {
-			let cData = CORA.coraData(record.data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cData = coraData(record.data);
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		}
 
@@ -136,4 +135,3 @@ cora.recordTypeHandler = function(dependencies, spec) {
 		});
 	};
 
-export default CORA;

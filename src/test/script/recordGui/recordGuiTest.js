@@ -16,6 +16,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "../aCoratestNameSpace.js";
 "use strict";
 QUnit.module("recordGui/recordGuiTest.js", {
 	beforeEach: function() {
@@ -128,3 +131,5 @@ QUnit.test("testValidateDataHasCorrectSpec", function(assert) {
 	assert.strictEqual(factoredValidatorSpec.pubSub, this.dependencies.pubSub);
 	assert.strictEqual(factoredValidatorSpec.recordPartPermissionCalculator, this.spec.recordPartPermissionCalculator);
 });
+
+export {};

@@ -17,9 +17,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.testSpanWithClassNameOnlyContainsText = function(span, className, text, assert) {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.testSpanWithClassNameOnlyContainsText = function(span, className, text, assert) {
 		assert.strictEqual(span.childNodes.length, 1);
 		assert.equal(span.nodeName, "SPAN");
 		assert.equal(span.className, className);
@@ -54,5 +56,4 @@ var CORATEST = (function(coraTest) {
 		}			
 	};
 
-	return coraTest;
-}(CORATEST || {}));
+export default CORATEST;

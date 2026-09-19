@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.uploadManagerView = function(spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.uploadManagerView = function(spec) {
 		var out;
 
 		var workView = CORA.createSpanWithClassName("workView");
@@ -92,5 +94,4 @@ var CORA = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORA));
+export default CORA;

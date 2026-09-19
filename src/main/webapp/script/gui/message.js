@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.message = function(spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.message = function(spec) {
 		let renderHtml;
 		let timeout;
 		let view;
@@ -136,5 +138,5 @@ var CORA = (function(cora) {
 		"className": "positive",
 		"defaultTimeout": 3000
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

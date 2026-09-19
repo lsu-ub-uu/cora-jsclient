@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("gui/infoFactoryTest.js", {
@@ -44,3 +46,5 @@ QUnit.test("factor", function(assert) {
 	var infoSpec = info.getSpec();
 	assert.strictEqual(infoSpec.extraClassName, spec.extraClassName);
 });
+
+export {};

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordViewer = function(spec) {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.recordViewer = function(spec) {
 
 		let view = CORA.createSpanWithClassName("recordViewer");
 
@@ -140,5 +142,5 @@ var CORA = (function(cora) {
 			processFetchedRecord : processFetchedRecord
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

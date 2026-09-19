@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandlerView = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.searchHandlerView = function(dependencies, spec) {
 		let view;
 		let searchFormHolder;
 		let buttonView;
@@ -120,5 +122,5 @@ var CORA = (function(cora) {
 			setSearchRunning: setSearchRunning
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

@@ -123,7 +123,8 @@ QUnit.test("testUpload", function(assert) {
 	this.assertAjaxCallSpecIsCorrect(assert, ajaxCallSpy0);
 });
 
-var CORATEST = (function(coraTest) {
+{
+const coraTest = CORATEST;
 	coraTest.createUploadLink = function() {
 		return {
 			"requestMethod" : "POST",
@@ -141,9 +142,7 @@ var CORATEST = (function(coraTest) {
 		// });
 		return "";
 	};
-
-	return coraTest;
-}(CORATEST || {}));
+}
 
 QUnit.test("testUploadQue", function(assert) {
 	var uploadManager = this.uploadManager;

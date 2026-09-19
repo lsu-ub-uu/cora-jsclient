@@ -15,9 +15,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.indexListHandlerFactory = function(dependencies) {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.indexListHandlerFactory = function(dependencies) {
 
 		function factor(indexListHandlerSpec) {
 			var indexHandlerDep = {
@@ -44,5 +46,5 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

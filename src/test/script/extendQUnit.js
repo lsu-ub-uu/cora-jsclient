@@ -50,3 +50,5 @@ QUnit.assert.elementHasClass = function(domElement, className, message) {
 QUnit.assert.elementHasNotClass = function(domElement, className, message) {
 	QUnit.assert.false(domElement.classList.contains(className), message);
 };
+
+export {};

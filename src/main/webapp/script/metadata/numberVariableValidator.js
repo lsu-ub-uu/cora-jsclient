@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.numberVariableValidator = function() {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.numberVariableValidator = function() {
 		let value;
 		let cMetadataElement;
 
@@ -79,5 +81,5 @@ var CORA = (function(cora) {
 			validateData : validateData
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

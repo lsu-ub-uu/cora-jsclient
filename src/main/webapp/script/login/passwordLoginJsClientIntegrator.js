@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.passwordLoginJsClientIntegrator = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.passwordLoginJsClientIntegrator = function(dependencies, spec) {
 		const jsClient = spec.jsClient;
 		let managedGuiItem;
 		let passwordLogin;
@@ -68,5 +70,5 @@ var CORA = (function(cora) {
 			getSpec : getSpec
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(cora) {
-	"use strict";
-	cora.windowSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const cora = CORATEST;
+
+cora.windowSpy = function(dependencies, spec) {
 		let url = "";
 		let name = "";
 		let postedMessages = [];
@@ -73,5 +75,4 @@ var CORATEST = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORATEST || {}));
+export default CORATEST;

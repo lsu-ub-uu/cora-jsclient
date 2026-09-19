@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataChildInitializer = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.metadataChildInitializer = function(dependencies, spec) {
 
 		let childReference = CORA.coraData(spec.childReference);
 		let data = CORA.coraData(spec.data);
@@ -300,5 +302,5 @@ var CORA = (function(cora) {
 			initializeTopLevel: initializeTopLevel
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

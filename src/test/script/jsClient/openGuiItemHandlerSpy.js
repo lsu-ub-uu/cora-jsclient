@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.openGuiItemHandlerSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.openGuiItemHandlerSpy = function(dependencies, spec) {
 		let addedManagedGuiItem = [];
 		let getViewCalled = 0;
 		let view = CORA.createSpanWithClassName("openGuiItemHandlerSpy");
@@ -142,5 +145,5 @@ var CORATEST = (function(coraTest) {
 			
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

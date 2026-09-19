@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.questionSpy = function(spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.questionSpy = function(spec) {
 		let spyView = document.createElement("span");
 		spyView.className = "questionSpySpan";
 
@@ -43,5 +45,5 @@ var CORATEST = (function(coraTest) {
 			hideWithEffect: hideWithEffect
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

@@ -17,6 +17,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = {
+const CORA = window.CORA || {
 	gui: {}
 };
+window.CORA = CORA;
+
+export default CORA;

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.metadataValidatorSpy = function(spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.metadataValidatorSpy = function(spec) {
 		function validate() {
 			return true;
 		}
@@ -27,5 +29,5 @@ var CORATEST = (function(coraTest) {
 			validate : validate
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

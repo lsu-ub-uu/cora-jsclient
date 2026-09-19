@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.passwordLoginView = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.passwordLoginView = function(dependencies, spec) {
 		let view;
 		let loginFormHolder;
 		let buttonView;
@@ -87,5 +89,5 @@ var CORA = (function(cora) {
 			addPresentationToLoginFormHolder : addPresentationToLoginFormHolder
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

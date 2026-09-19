@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataHelper = function(spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.metadataHelper = function(spec) {
 
 		const getMetadataById = function(id) {
 			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
@@ -185,5 +187,5 @@ var CORA = (function(cora) {
 			firstAttributesExistsInSecond: firstAttributesExistsInSecond
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

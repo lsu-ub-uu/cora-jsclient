@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pChildRefHandlerView = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.pChildRefHandlerView = function(dependencies, spec) {
 		let view;
 		let childrenView;
 		let buttonView;
@@ -351,5 +353,5 @@ var CORA = (function(cora) {
 		view.viewObject = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

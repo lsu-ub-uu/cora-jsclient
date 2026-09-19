@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordTypeHandlerView = function(dependencies, spec) {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.recordTypeHandlerView = function(dependencies, spec) {
 		var out;
 		var view;
 		var header;
@@ -88,5 +90,5 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

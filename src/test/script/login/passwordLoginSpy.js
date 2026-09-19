@@ -17,9 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.passwordLoginSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.passwordLoginSpy = function(dependencies, spec) {
 
 		let view = CORA.createSpanWithClassName("passwordLoginSpy");
 		const getView = function() {
@@ -31,5 +34,5 @@ var CORATEST = (function(coraTest) {
 			getView : getView
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

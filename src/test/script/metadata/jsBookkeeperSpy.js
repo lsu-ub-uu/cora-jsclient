@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.jsBookkeeperSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.jsBookkeeperSpy = function() {
 		var dataArray = [];
 		var addDataArray = [];
 		var removeDataArray = [];
@@ -76,5 +78,5 @@ var CORATEST = (function(coraTest) {
 			getAddBeforeDataArray:getAddBeforeDataArray
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

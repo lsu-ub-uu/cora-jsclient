@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.uploadManager = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.uploadManager = function(dependencies, spec) {
 		var uploading = false;
 		var uploadQue = [];
 		var viewSpec = {
@@ -118,5 +120,4 @@ var CORA = (function(cora) {
 		});
 	};
 
-	return cora;
-}(CORA));
+export default CORA;

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.definitionViewerText = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.definitionViewerText = function(dependencies, spec) {
 		const SPACE = " ";
 		const COMMA_SPACE = ", ";
 		let out;
@@ -118,5 +120,5 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

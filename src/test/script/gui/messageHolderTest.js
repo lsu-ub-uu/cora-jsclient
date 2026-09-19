@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("gui/messageHolderTest.js", {
@@ -52,3 +54,5 @@ QUnit.test("testNewMessage", function(assert) {
 	var messageText = messageView.childNodes[1];
 	assert.strictEqual(messageText.textContent, "some text");
 });
+
+export {};

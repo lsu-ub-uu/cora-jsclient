@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordPartPermissionCalculator = function(dependencies, spec) {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.recordPartPermissionCalculator = function(dependencies, spec) {
 		let metadataProvider = dependencies.metadataProvider;
 		let fulfilledWriteRecordParts = [];
 		let fulfilledReadRecordParts = [];
@@ -220,5 +222,5 @@ var CORA = (function(cora) {
 			getFulfilledReadRecordParts: getFulfilledReadRecordParts
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

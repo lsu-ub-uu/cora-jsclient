@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.textProvider = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.textProvider = function(dependencies, spec) {
 		let texts = {};
 		let currentLang = "sv";
 		let metadata = {};
@@ -147,5 +149,5 @@ var CORA = (function(cora) {
 			getAllTranslations : getAllTranslations
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

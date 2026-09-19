@@ -17,9 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.resultHandlerSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.resultHandlerSpy = function(dependencies, spec) {
 		var openedRecords = [];
 		var view = CORA.createSpanWithClassName("resultHandlerSpy");
 
@@ -42,5 +45,5 @@ var CORATEST = (function(coraTest) {
 			getOpenedRecord:getOpenedRecord
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

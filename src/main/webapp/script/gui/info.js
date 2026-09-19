@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.info = function(spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.info = function(spec) {
 		let infoLevel = cora.info.NONE;
 		let button;
 		let view;
@@ -137,5 +139,5 @@ var CORA = (function(cora) {
 	cora.info.NONE = 0;
 	cora.info.TEXT = 1;
 	cora.info.ALL = 2;
-	return cora;
-}(CORA));
+
+export default CORA;

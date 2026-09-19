@@ -16,6 +16,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "./aCoratestNameSpace.js";
 "use strict";
 
 QUnit.module(
@@ -172,3 +175,5 @@ QUnit.test("testOpenRecord", function(assert) {
 	assert.stringifyEqual(jsClient.getOpenInfo(0).readLink, expectedOpenInfo.readLink);
 	assert.strictEqual(jsClient.getOpenInfo(0).loadInBackground, openInfo.loadInBackground);
 });
+
+export {};

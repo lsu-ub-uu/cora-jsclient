@@ -18,9 +18,43 @@
  */
 let addStandardAppTokensToLoginMenu = false;
 let appTokenOptions = [];
-var CORA = (function(cora) {
-	"use strict";
-	cora.loginManager = function(dependencies, spec) {
+
+Object.defineProperty(window, "addStandardAppTokensToLoginMenu", {
+	configurable : true,
+	get : function() {
+		return addStandardAppTokensToLoginMenu;
+	},
+	set : function(value) {
+		addStandardAppTokensToLoginMenu = value;
+	}
+});
+
+Object.defineProperty(window, "appTokenOptions", {
+	configurable : true,
+	get : function() {
+		return appTokenOptions;
+	},
+	set : function(value) {
+		appTokenOptions = value;
+	}
+});
+
+export const enableStandardAppTokenLoginOptions = function() {
+	addStandardAppTokensToLoginMenu = true;
+};
+
+export const addStandardAppTokenOption = function(option) {
+	appTokenOptions.push(option);
+};
+
+export const clearStandardAppTokenOptions = function() {
+	appTokenOptions = [];
+};
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.loginManager = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let loginManagerView;
@@ -503,5 +537,5 @@ var CORA = (function(cora) {
 	};
 	cora.loginManager.LOGGEDOUT = 0;
 	cora.loginManager.LOGGEDIN = 1;
-	return cora;
-}(CORA));
+
+export default CORA;

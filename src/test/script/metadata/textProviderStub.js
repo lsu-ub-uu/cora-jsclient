@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.textProviderStub = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.textProviderStub = function() {
 
 		function getTranslation(textId) {
 			switch (textId) {
@@ -225,5 +227,5 @@ var CORATEST = (function(coraTest) {
 			getTranslation : getTranslation
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

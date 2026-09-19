@@ -16,13 +16,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.metadataControllerSpy = function(spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.metadataControllerSpy = function(spec) {
 
 		return Object.freeze({
 			"type" : "metadataControllerSpy"
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

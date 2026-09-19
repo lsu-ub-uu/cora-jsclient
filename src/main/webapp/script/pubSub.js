@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.pubSub = function() {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.pubSub = function() {
 		let arbiter = Arbiter.create();
 
 		function subscribe(type, path, context, functionToCall) {
@@ -69,5 +71,5 @@ var CORA = (function(cora) {
 			convertPathToMsg: convertPathToMsg
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

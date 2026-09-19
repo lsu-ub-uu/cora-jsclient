@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pParentMultipleChildren = function(dependencies, spec, child) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.pParentMultipleChildren = function(dependencies, spec, child) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const cPresentation = spec.cPresentation;
@@ -527,5 +529,5 @@ var CORA = (function(cora) {
 			getPresentationCounter: getPresentationCounter
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

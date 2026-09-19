@@ -17,6 +17,8 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
+
 "use strict";
 
 QUnit.module("pubSubTest.js", hooks => {
@@ -217,3 +219,5 @@ QUnit.module("pubSubTest.js", hooks => {
 	});
 
 });
+
+export {};

@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("definitionViewer/definitionViewerFactoryTest.js", {
@@ -57,3 +59,5 @@ QUnit.test("factorTestSpec", function(assert) {
 	
 	assert.deepEqual(definitionViewerView.onlyForTestGetSpec(), this.spec);
 });
+
+export {};

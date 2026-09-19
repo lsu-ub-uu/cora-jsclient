@@ -1,3 +1,6 @@
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "../aCoratestNameSpace.js";
+
 
 /*
  * Copyright 2024 Uppsala University Library
@@ -576,3 +579,5 @@ QUnit.module("recursiveDelete/recursiveDeleteTest.js", hooks => {
 		assert.strictEqual(deleteMethod, recursiveDeleteDeleter.deleteElement);
 	});
 });
+
+export {};

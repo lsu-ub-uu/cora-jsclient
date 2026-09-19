@@ -16,55 +16,54 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-addStandardAppTokensToLoginMenu = true;
-const start = function() {
-	let callSpec = 	{
+import {
+	addStandardAppTokenOption,
+	clearStandardAppTokenOptions,
+	enableStandardAppTokenLoginOptions
+} from "./script/login/loginManager.js";
+
+export const startUsingServer = function(context) {
+	enableStandardAppTokenLoginOptions();
+	clearStandardAppTokenOptions();
+	let callSpec = {
 		requestMethod : "GET",
-		url : serverRestUrl,
+		url : context.serverRestUrl,
 		accept : "application/vnd.cora.deploymentInfo+json",
-		loadMethod: deploymentInfoFetched,
-		errorMethod: callError,
+		loadMethod : function(answer) {
+			deploymentInfoFetched(context, answer);
+		},
+		errorMethod : context.callError,
 	};
-	ajaxCallFactory.factor(callSpec);
+	context.ajaxCallFactory.factor(callSpec);
 };
-const deploymentInfoFetched = function(answer){
+
+const deploymentInfoFetched = function(context, answer) {
 	let deploymentInfo = JSON.parse(answer.responseText);
-	name = deploymentInfo.deploymentName;
-	baseUrl = deploymentInfo.urls.REST;
-
-	appTokenLogin= deploymentInfo.urls.appTokenLogin;
-	passwordLogin= deploymentInfo.urls.passwordLogin;
-	for(const exampleUser of deploymentInfo.exampleUsers){
+	context.name = deploymentInfo.deploymentName;
+	context.baseUrl = deploymentInfo.urls.REST;
+	context.appTokenLogin = deploymentInfo.urls.appTokenLogin;
+	context.passwordLogin = deploymentInfo.urls.passwordLogin;
+	for (const exampleUser of deploymentInfo.exampleUsers) {
 		let user = {
-				text: exampleUser.name,
-				type: exampleUser.type,
-				loginId: exampleUser.loginId,
-				appToken: exampleUser.appToken
-			};
-		appTokenOptions.push(user);
+			text : exampleUser.name,
+			type : exampleUser.type,
+			loginId : exampleUser.loginId,
+			appToken : exampleUser.appToken
+		};
+		addStandardAppTokenOption(user);
 	}
-	switch(deploymentInfo.applicationName){
-	  case "alvin":
-		enableCSS("alvinCSS");
-		enableIcon("alvin");
-	    break;
-	  case "diva":
-		enableCSS("divaLilaCSS");
-		enableIcon("diva");
-	    break;
-	  default:
-		enableCSS("aClientCSS");
-		enableIcon("cora");
+	switch (deploymentInfo.applicationName) {
+	case "alvin":
+		context.enableCSS("alvinCSS");
+		context.enableIcon("alvin");
+		break;
+	case "diva":
+		context.enableCSS("divaLilaCSS");
+		context.enableIcon("diva");
+		break;
+	default:
+		context.enableCSS("aClientCSS");
+		context.enableIcon("cora");
 	}
-	startDependencies();
+	context.startDependencies();
 };
-
-const enableIcon = function(systemName) {
-	document.getElementById("tabIcon").href = `images/${systemName}Icon.svg`;
-};
-
-const enableCSS = function(cssName) {
-	document.getElementById(cssName).disabled = true;
-	document.getElementById(cssName).disabled = false;
-};
-

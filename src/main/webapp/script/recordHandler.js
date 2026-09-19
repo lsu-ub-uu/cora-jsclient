@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordHandler = function(dependencies, spec) {
+import CORA from "./aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.recordHandler = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let createNewRecord = spec.createNewRecord;
 		let fetchLatestDataFromServer = spec.fetchLatestDataFromServer;
@@ -744,5 +746,5 @@ var CORA = (function(cora) {
 			showRecursiveDelete: showRecursiveDelete
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

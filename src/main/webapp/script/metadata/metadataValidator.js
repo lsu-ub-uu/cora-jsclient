@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-    "use strict";
-    cora.metadataValidator = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.metadataValidator = function(dependencies, spec) {
         let metadataProvider = dependencies.metadataProvider;
         let metadataChildValidatorFactory = dependencies.metadataChildValidatorFactory;
         let pubSub = dependencies.pubSub;
@@ -117,5 +119,5 @@ var CORA = (function(cora) {
             validate: validateFirstLevel
         });
     };
-    return cora;
-}(CORA));
+
+export default CORA;

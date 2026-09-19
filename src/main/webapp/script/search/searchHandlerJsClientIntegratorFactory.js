@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandlerJsClientIntegratorFactory = function(dependencies) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.searchHandlerJsClientIntegratorFactory = function(dependencies) {
 
 		function factor(spec) {
 			return CORA.searchHandlerJsClientIntegrator(dependencies, spec);
@@ -35,5 +37,5 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

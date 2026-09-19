@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordGuiFactory = function(dependencies) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.recordGuiFactory = function(dependencies) {
 		const metadataProvider = dependencies.providers.metadataProvider;
 		const textProvider = dependencies.providers.textProvider;
 		const recordTypeProvider = dependencies.providers.recordTypeProvider;
@@ -146,5 +148,5 @@ var CORA = (function(cora) {
 		self = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

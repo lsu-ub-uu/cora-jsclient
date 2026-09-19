@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataProvider = function(dependencies, spec) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.metadataProvider = function(dependencies, spec) {
 		let textProvider = dependencies.textProvider;
 		let processedAjaxCalls = 0;
 		let metadata = {};
@@ -129,5 +131,5 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

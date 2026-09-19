@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-    "use strict";
-    coraTest.MetadataProviderStub = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.MetadataProviderStub = function() {
         function createRecordInfoJson(id) {
             return {
                 name: "recordInfo",
@@ -12789,5 +12791,5 @@ var CORATEST = (function(coraTest) {
             getRequestedMetadataIds: getRequestedMetadataIds
         });
     };
-    return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

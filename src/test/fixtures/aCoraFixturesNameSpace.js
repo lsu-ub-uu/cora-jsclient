@@ -1,0 +1,4 @@
+const CORAFIXTURES = window.CORAFIXTURES || {};
+window.CORAFIXTURES = CORAFIXTURES;
+
+export default CORAFIXTURES;

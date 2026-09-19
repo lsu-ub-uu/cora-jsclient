@@ -275,3 +275,7 @@ case "pgGroupIdOneTextChildMinimized":
 	}
 
 }
+
+window.MetadataProviderStubGuiElement = MetadataProviderStubGuiElement;
+
+export default MetadataProviderStubGuiElement;

@@ -18,9 +18,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-    "use strict";
-    cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
         pubSub) {
         const result = {
             onlyFinalValues: true,
@@ -318,5 +320,5 @@ var CORA = (function(cora) {
         };
         return start();
     }
-    return cora;
-}(CORA));
+
+export default CORA;

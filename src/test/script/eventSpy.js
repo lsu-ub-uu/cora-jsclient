@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.eventSpy = function() {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.eventSpy = function() {
 		let stopPropagationIsCalled = false;
 		let preventDefaultIsCalled = false;
 		let target;
@@ -76,5 +78,5 @@ var CORATEST = (function(coraTest) {
 			altKey : altKey
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.jsClientViewFactory = function(providers) {
+import CORA from "../aCoraNameSpace.js";
+
+const cora = CORA;
+
+cora.jsClientViewFactory = function(providers) {
 
 		function factor(spec) {
 			let dependencies = {
@@ -33,5 +35,5 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+
+export default CORA;

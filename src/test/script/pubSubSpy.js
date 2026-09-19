@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pubSubSpy = function() {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pubSubSpy = function() {
 
 		var messages = [];
 		var subscriptions = [];
@@ -93,5 +95,5 @@ var CORATEST = (function(coraTest) {
 			setThrowError:setThrowError
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

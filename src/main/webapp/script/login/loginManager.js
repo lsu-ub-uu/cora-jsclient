@@ -19,25 +19,27 @@
 let addStandardAppTokensToLoginMenu = false;
 let appTokenOptions = [];
 
-Object.defineProperty(window, "addStandardAppTokensToLoginMenu", {
-	configurable : true,
-	get : function() {
-		return addStandardAppTokensToLoginMenu;
-	},
-	set : function(value) {
-		addStandardAppTokensToLoginMenu = value;
-	}
-});
+if (typeof window !== "undefined") {
+	Object.defineProperty(window, "addStandardAppTokensToLoginMenu", {
+		configurable : true,
+		get : function() {
+			return addStandardAppTokensToLoginMenu;
+		},
+		set : function(value) {
+			addStandardAppTokensToLoginMenu = value;
+		}
+	});
 
-Object.defineProperty(window, "appTokenOptions", {
-	configurable : true,
-	get : function() {
-		return appTokenOptions;
-	},
-	set : function(value) {
-		appTokenOptions = value;
-	}
-});
+	Object.defineProperty(window, "appTokenOptions", {
+		configurable : true,
+		get : function() {
+			return appTokenOptions;
+		},
+		set : function(value) {
+			appTokenOptions = value;
+		}
+	});
+}
 
 export const enableStandardAppTokenLoginOptions = function() {
 	addStandardAppTokensToLoginMenu = true;

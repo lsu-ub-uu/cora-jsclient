@@ -32,12 +32,6 @@ export const coraData = function(dataIn) {
         return children.some(filter);
     };
 
-    const createNameInDataFilter = function(nameInDataIn) {
-        return function(child) {
-            return child.name === nameInDataIn;
-        };
-    };
-
     const getFirstChildByNameInData = function(nameInData) {
         return getFirstChildFromDataByNameInData(data, nameInData);
     };
@@ -117,15 +111,6 @@ export const coraData = function(dataIn) {
         return containerAndPathDoesNotHaveAttributes(container, attributes);
     };
 
-    const containerAndPathHasAttributes = function(container, attributes) {
-        return attributesContainsAttributes(attributes) && containerHasAttributes(container);
-    };
-
-    const containerAndPathDoesNotHaveAttributes = function(container, attributes) {
-        return attributesConatainsNoAttributes(attributes)
-            && containerDoesNotHaveAttributes(container);
-    };
-
     const containerHasSameAttributesAsPath = function(container, attributes) {
         let containerAttributes = container.attributes;
         let pathAttributes = attributes.children;
@@ -185,51 +170,9 @@ export const coraData = function(dataIn) {
         });
     };
 
-    const evaluateAttributeValues = function(pathAttributeValue, value) {
-        if (!Array.isArray(pathAttributeValue)) {
-            return pathAttributeValue === value;
-        } else {
-            return pathAttributeValue.includes(value);
-        }
-    };
-
-    const attributesConatainsNoAttributes = function(attributes) {
-        return !attributesContainsAttributes(attributes);
-    };
-
-    const attributesContainsAttributes = function(attributes) {
-        let length = attributes?.children?.length;
-        if (length === undefined) {
-            return false;
-        }
-        return length !== 0;
-    };
-
-    const containerHasAttributes = function(container) {
-        return container.attributes !== undefined;
-    };
-
-    const containerDoesNotHaveAttributes = function(container) {
-        return !containerHasAttributes(container);
-    };
-
     const containsChildWithNameInDataAndIndex = function(nameInData, index) {
         let filter = createNameInDataAndIndexFilter(nameInData, index);
         return children.some(filter);
-    };
-
-    const createNameInDataAndIndexFilter = function(nameInDataIn, index) {
-        let found = 0;
-        let filter = createNameInDataFilter(nameInDataIn);
-        return function(child) {
-            if (filter(child)) {
-                if (found === index) {
-                    return true;
-                }
-                found++;
-            }
-            return false;
-        };
     };
 
     const getChildByNameInDataAndIndex = function(nameInData, index) {
@@ -249,20 +192,6 @@ export const coraData = function(dataIn) {
     const containsChildWithNameInDataAndRepeatId = function(nameInData, repeatId) {
         let filter = createNameInDataAndRepeatIdFilter(nameInData, repeatId);
         return children.some(filter);
-    };
-
-    const createNameInDataAndRepeatIdFilter = function(nameInDataIn, repeatId) {
-        let filter = createNameInDataFilter(nameInDataIn);
-        let repeatIdFilter = createRepeatIdFilter(repeatId);
-        return function(child) {
-            return filter(child) && repeatIdFilter(child);
-        };
-    };
-
-    const createRepeatIdFilter = function(repeatId) {
-        return function(child) {
-            return child.repeatId === repeatId;
-        };
     };
 
     const getFirstChildByNameInDataAndRepeatId = function(nameInData, repeatId) {
@@ -330,3 +259,73 @@ export const coraData = function(dataIn) {
     });
 };
 
+const createNameInDataFilter = function(nameInDataIn) {
+    return function(child) {
+        return child.name === nameInDataIn;
+    };
+};
+
+const containerAndPathHasAttributes = function(container, attributes) {
+    return attributesContainsAttributes(attributes) && containerHasAttributes(container);
+};
+
+const containerAndPathDoesNotHaveAttributes = function(container, attributes) {
+    return attributesConatainsNoAttributes(attributes)
+        && containerDoesNotHaveAttributes(container);
+};
+
+const evaluateAttributeValues = function(pathAttributeValue, value) {
+    if (!Array.isArray(pathAttributeValue)) {
+        return pathAttributeValue === value;
+    } else {
+        return pathAttributeValue.includes(value);
+    }
+};
+
+const attributesConatainsNoAttributes = function(attributes) {
+    return !attributesContainsAttributes(attributes);
+};
+
+const containerDoesNotHaveAttributes = function(container) {
+    return !containerHasAttributes(container);
+};
+
+const createNameInDataAndIndexFilter = function(nameInDataIn, index) {
+    let found = 0;
+    let filter = createNameInDataFilter(nameInDataIn);
+    return function(child) {
+        if (filter(child)) {
+            if (found === index) {
+                return true;
+            }
+            found++;
+        }
+        return false;
+    };
+};
+
+const attributesContainsAttributes = function(attributes) {
+    let length = attributes?.children?.length;
+    if (length === undefined) {
+        return false;
+    }
+    return length !== 0;
+};
+
+const containerHasAttributes = function(container) {
+    return container.attributes !== undefined;
+};
+
+const createNameInDataAndRepeatIdFilter = function(nameInDataIn, repeatId) {
+    let filter = createNameInDataFilter(nameInDataIn);
+    let repeatIdFilter = createRepeatIdFilter(repeatId);
+    return function(child) {
+        return filter(child) && repeatIdFilter(child);
+    };
+};
+
+const createRepeatIdFilter = function(repeatId) {
+    return function(child) {
+        return child.repeatId === repeatId;
+    };
+};

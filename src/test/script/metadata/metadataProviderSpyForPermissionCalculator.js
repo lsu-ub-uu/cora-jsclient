@@ -17,9 +17,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.metadataProviderSpyForPermissionCalculator = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.metadataProviderSpyForPermissionCalculator = function() {
 
 		var fetchedMetadataIds = [];
 		var fetchedMetadata = [];
@@ -77,5 +79,5 @@ var CORATEST = (function(coraTest) {
 			getNumberOfCallsToGetMetadataById: getNumberOfCallsToGetMetadataById
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

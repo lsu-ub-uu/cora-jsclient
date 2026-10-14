@@ -24,3 +24,5 @@ function ShouldIBuyMilk() {
 		return ret;
 	};
 }
+
+export { ShouldIBuyMilk };

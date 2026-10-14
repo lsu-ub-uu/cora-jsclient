@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandler = function(dependencies, spec) {
+
+export const searchHandler = function(dependencies, spec) {
 		let view;
 		let recordGui;
 		let searchTimeoutTime = 800;
@@ -180,5 +179,4 @@ var CORA = (function(cora) {
 			getSearchTimeoutTime: getSearchTimeoutTime
 		});
 	};
-	return cora;
-}(CORA));
+

@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.clientInstanceProviderSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.clientInstanceProviderSpy = function(dependencies, spec) {
 		var jsClient = CORATEST.jsClientSpy();
 
 		function setJsClient(jsClientToSet) {
@@ -35,5 +37,5 @@ var CORATEST = (function(coraTest) {
 			getJsClient : getJsClient
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

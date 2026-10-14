@@ -27,8 +27,29 @@ module.exports = function(config) {
 		frameworks : [ 'qunit' ],
 
 		// list of files / patterns to load in the browser
-		files : [ 'src/main/webapp/script/**/*.js', 'src/main/webapp/css/**/*.css',
-				'src/test/script/**/*.js', {
+		files : [ 'src/main/webapp/css/**/*.css',
+				'src/main/webapp/script/lib/arbiter.js',
+				'src/main/webapp/script/lib/leaflet.js',
+				'src/main/webapp/script/lib/minimap.js',
+				{
+					pattern : 'src/main/webapp/script/**/*.js',
+					watched : true,
+					included : false,
+					served : true
+				}, {
+					pattern : 'src/test/script/**/*.js',
+					watched : true,
+					included : false,
+					served : true
+				}, {
+					pattern : 'src/test/fixtures/**/*.js',
+					watched : true,
+					included : false,
+					served : true
+				}, {
+					pattern : 'src/test/tests.js',
+					type : 'module'
+				}, {
 					pattern : 'src/main/webapp/**/*.svg',
 					watched : false,
 					included : false,

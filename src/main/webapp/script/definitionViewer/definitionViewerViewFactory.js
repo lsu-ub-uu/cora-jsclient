@@ -16,15 +16,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.definitionViewerViewFactory = function(dependencies) {
+
+import { definitionViewerView } from "./definitionViewerView.js";
+
+export const definitionViewerViewFactory = function(dependencies) {
 
 		const factor = function (spec) {
 			let dep = {
 			};
 
-			let definitionViewer = CORA.definitionViewerView(dep, spec);
+			let definitionViewer = definitionViewerView(dep, spec);
 			return definitionViewer;
 		}
 		
@@ -38,5 +39,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

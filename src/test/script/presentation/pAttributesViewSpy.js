@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pAttributesViewSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pAttributesViewSpy = function() {
 		let view = document.createElement("span");
 		let presentationAttributeView = [];
 		
@@ -40,5 +42,5 @@ var CORATEST = (function(coraTest) {
 			getAddedAttributePresentation : getAddedAttributePresentation
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

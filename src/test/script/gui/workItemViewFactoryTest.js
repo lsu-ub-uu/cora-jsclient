@@ -17,6 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("gui/workItemViewFactoryTest.js", {
@@ -46,3 +48,5 @@ QUnit.test("testFactoredDependencies", function(assert) {
 
 	assert.strictEqual(workItemView.getDependencies().holderFactory.type, "holderFactory");
 });
+
+export {};

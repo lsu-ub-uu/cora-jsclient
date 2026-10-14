@@ -17,16 +17,17 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataProviderFactory = function(dependencies) {
+
+import { metadataProvider } from "./metadataProvider.js";
+
+export const metadataProviderFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let dep = {
 				"ajaxCallFactory" : dependencies.ajaxCallFactory,
 				"textProvider" : dependencies.textProvider
 			};
-			return CORA.metadataProvider(dep, spec);
+			return metadataProvider(dep, spec);
 		}
 
 		const getDependencies = function() {
@@ -39,5 +40,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

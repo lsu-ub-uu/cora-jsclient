@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.resultHandlerFactory = function(dependencies) {
+
+import { indexListHandlerFactory } from "../indexListHandlerFactory.js";
+import { resultHandler } from "./resultHandler.js";
+import { resultHandlerViewFactory } from "./resultHandlerViewFactory.js";
+
+export const resultHandlerFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let viewDep = {};
@@ -29,14 +32,14 @@ var CORA = (function(cora) {
 				textProvider: dependencies.textProvider
 			};
 			let dep = {
-				resultHandlerViewFactory: CORA.resultHandlerViewFactory(viewDep),
-				indexListHandlerFactory: CORA.indexListHandlerFactory(indexHandlerDep),
+				resultHandlerViewFactory: resultHandlerViewFactory(viewDep),
+				indexListHandlerFactory: indexListHandlerFactory(indexHandlerDep),
 				textProvider: dependencies.textProvider,
 				recordGuiFactory: dependencies.recordGuiFactory,
 				jsClient: spec.jsClient,
 				recordHandlerFactory: dependencies.recordHandlerFactory
 			};
-			return CORA.resultHandler(dep, spec);
+			return resultHandler(dep, spec);
 		};
 
 		const getDependencies = function() {
@@ -49,5 +52,4 @@ var CORA = (function(cora) {
 			factor: factor
 		});
 	};
-	return cora;
-}(CORA));
+

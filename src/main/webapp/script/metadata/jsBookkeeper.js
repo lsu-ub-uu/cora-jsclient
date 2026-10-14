@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.jsBookkeeper = function(dependencies, spec) {
+
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+
+export const jsBookkeeper = function(dependencies, spec) {
 		let pubSub = spec.pubSub;
 
 		const setValue = function(data) {
@@ -34,8 +36,8 @@ var CORA = (function(cora) {
 			if (path.length > 0) {
 				currentData = spec.dataHolder.findContainer(path);
 			}
-			let cChildReference = CORA.coraData(childReference);
-			let cRef = CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cChildReference = coraData(childReference);
+			let cRef = coraData(cChildReference.getFirstChildByNameInData("ref"));
 			let ref = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			let repeatMax = cChildReference.getFirstAtomicValueByNameInData('repeatMax');
 
@@ -120,7 +122,7 @@ var CORA = (function(cora) {
 				repeatId: repeatId,
 				parentPath: parentPath
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const getSpec = function() {
@@ -142,5 +144,4 @@ var CORA = (function(cora) {
 			addBefore: addBefore
 		});
 	};
-	return cora;
-}(CORA));
+

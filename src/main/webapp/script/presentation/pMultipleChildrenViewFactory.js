@@ -16,24 +16,29 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pMultipleChildrenViewFactory = function() {
+
+import { genericParentFactory } from "../genericParentFactory.js";
+import { infoFactory } from "../gui/infoFactory.js";
+import { pGroupView } from "./pGroupView.js";
+import { pParentMultipleChildrenView } from "./pParentMultipleChildrenView.js";
+import { pSurroundingContainerView } from "./pSurroundingContainerView.js";
+
+export const pMultipleChildrenViewFactory = function() {
 		const childDependencies = {
-			infoFactory: CORA.infoFactory(),
+			infoFactory: infoFactory(),
 		};
 		
 		const dependencies = {
-			pParentMultipleChildrenViewFactory: CORA.genericParentFactory("pParentMultipleChildrenView",
+			pParentMultipleChildrenViewFactory: genericParentFactory(pParentMultipleChildrenView,
 				childDependencies)
 		};
 		
 		function factor(spec) {
 			if(spec.type === "container"){
-				return CORA.pSurroundingContainerView(dependencies, spec);
+				return pSurroundingContainerView(dependencies, spec);
 			}
 			
-			return CORA.pGroupView(dependencies, spec);
+			return pGroupView(dependencies, spec);
 		}
 
 		const self = Object.freeze({
@@ -42,5 +47,4 @@ var CORA = (function(cora) {
 		});
 		return self;
 	};
-	return cora;
-}(CORA));
+

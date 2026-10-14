@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("login/webRedirectLoginFactoryTest.js", {
@@ -55,3 +57,5 @@ QUnit.test("factor", function(assert) {
 	let webRedirectLoginDependencies = webRedirectLogin.getDependencies();
 	assert.strictEqual(webRedirectLoginDependencies.window, window);
 });
+
+export {};

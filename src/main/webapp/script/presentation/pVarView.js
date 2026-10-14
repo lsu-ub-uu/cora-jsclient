@@ -17,84 +17,81 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pVarView = function(dependencies, spec) {
-		const pParentVarViewFactory = dependencies.pParentVarViewFactory;
-		let pParentVarView;
 
-		const start = function() {
-			pParentVarView = pParentVarViewFactory.factor(spec, self);
-		};
-		
-		const createInputElementWithSetValueFunction = function() {
-			let inputNew = document.createElement(spec.inputType);
-			if (spec.inputFormat === "password") {
-				inputNew.setAttribute("type", "password");
-			}
+export const pVarView = function(dependencies, spec) {
+    const pParentVarViewFactory = dependencies.pParentVarViewFactory;
+    let pParentVarView;
 
-			inputNew.setValue = function(value) {
-				inputNew.value = value;
-			};
-			return inputNew;
-		};
+    const start = function() {
+        pParentVarView = pParentVarViewFactory.factor(spec, self);
+    };
 
-		const useTextOnlyOutput = function() {
-			return !(spec.outputFormat === "image" || spec.outputFormat === "link");
-		};
-		
-		const createOutputWithSetValueFunction = function() {
-			if (spec.outputFormat === "image") {
-				return createOutputImage();
-			} 
-			return createOutputLink();
-		};
-		
-		const createOutputImage = function() {
-			let outputNew = document.createElement("img");
-			outputNew.setValue = function(value) {
-				outputNew.src = value;
-			};
-			return outputNew;
-		};
+    const createInputElementWithSetValueFunction = function() {
+        let inputNew = document.createElement(spec.inputType);
+        if (spec.inputFormat === "password") {
+            inputNew.setAttribute("type", "password");
+        }
 
-		const createOutputLink = function() {
-			let outputNew = document.createElement("a");
-			outputNew.setValue = function(value) {
-				outputNew.href = value;
-				outputNew.text = value;
-			};
-			return outputNew;
-		};
+        inputNew.setValue = function(value) {
+            inputNew.value = value;
+        };
+        return inputNew;
+    };
 
-		const getDependencies = function() {
-			return dependencies;
-		};
+    const useTextOnlyOutput = function() {
+        return !(spec.outputFormat === "image" || spec.outputFormat === "link");
+    };
 
-		const getSpec = function() {
-			return spec;
-		};
-		
-		const self = {
-			createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
-			useTextOnlyOutput: useTextOnlyOutput,
-			createOutputWithSetValueFunction: createOutputWithSetValueFunction
-		};
-		
-		start();
-		return Object.freeze({
-			type: "pVarView",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			getView: pParentVarView.getView,
-			setValue: pParentVarView.setValue,
-			updateClassName: pParentVarView.updateClassName,
-			setState: pParentVarView.setState,
-			disable: pParentVarView.disable,
-			addAttributesView: pParentVarView.addAttributesView,
-			hide: pParentVarView.hide,
-			show: pParentVarView.show
-		});
-	};
-	return cora;
-}(CORA));
+    const createOutputWithSetValueFunction = function() {
+        if (spec.outputFormat === "image") {
+            return createOutputImage();
+        }
+        return createOutputLink();
+    };
+
+    const getDependencies = function() {
+        return dependencies;
+    };
+
+    const getSpec = function() {
+        return spec;
+    };
+
+    const self = {
+        createInputElementWithSetValueFunction: createInputElementWithSetValueFunction,
+        useTextOnlyOutput: useTextOnlyOutput,
+        createOutputWithSetValueFunction: createOutputWithSetValueFunction
+    };
+
+    start();
+    return Object.freeze({
+        type: "pVarView",
+        getDependencies: getDependencies,
+        getSpec: getSpec,
+        getView: pParentVarView.getView,
+        setValue: pParentVarView.setValue,
+        updateClassName: pParentVarView.updateClassName,
+        setState: pParentVarView.setState,
+        disable: pParentVarView.disable,
+        addAttributesView: pParentVarView.addAttributesView,
+        hide: pParentVarView.hide,
+        show: pParentVarView.show
+    });
+};
+
+const createOutputImage = function() {
+    let outputNew = document.createElement("img");
+    outputNew.setValue = function(value) {
+        outputNew.src = value;
+    };
+    return outputNew;
+};
+
+const createOutputLink = function() {
+    let outputNew = document.createElement("a");
+    outputNew.setValue = function(value) {
+        outputNew.href = value;
+        outputNew.text = value;
+    };
+    return outputNew;
+};

@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.openGuiItemHandlerFactory = function(dependencies) {
+
+import { openGuiItemHandler } from "./openGuiItemHandler.js";
+import { openGuiItemHandlerViewFactory } from "./openGuiItemHandlerViewFactory.js";
+
+export const openGuiItemHandlerFactory = function(dependencies) {
 
 		function getDependencies() {
 			return dependencies;
@@ -28,9 +30,9 @@ var CORA = (function(cora) {
 		function factor(spec) {
 			var openGuiItemHandlerDependencies = {
 				"textProvider" : dependencies.textProvider,
-				"openGuiItemHandlerViewFactory" : CORA.openGuiItemHandlerViewFactory()
+				"openGuiItemHandlerViewFactory" : openGuiItemHandlerViewFactory()
 			};
-			return CORA.openGuiItemHandler(openGuiItemHandlerDependencies, spec);
+			return openGuiItemHandler(openGuiItemHandlerDependencies, spec);
 		}
 
 		return Object.freeze({
@@ -39,5 +41,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

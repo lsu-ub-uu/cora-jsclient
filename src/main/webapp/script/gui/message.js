@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.message = function(spec) {
+
+import { createDivWithClassName } from "./basicGui.js";
+import { createRemoveButton as createRemoveButtonImported } from "./basicGui.js";
+import { createSpanWithClassName } from "./basicGui.js";
+
+export const message = function(spec) {
 		let renderHtml;
 		let timeout;
 		let view;
@@ -45,11 +48,11 @@ var CORA = (function(cora) {
 		}
 
 		const createView = function() {
-			return CORA.createDivWithClassName("message " + spec.type.className);
+			return createDivWithClassName("message " + spec.type.className);
 		}
 
 		const createMessageText = function() {
-			var textNew = CORA.createSpanWithClassName("messageText");
+			var textNew = createSpanWithClassName("messageText");
 			if (renderHtml) {
 				textNew.innerHTML = spec.message;
 			} else {
@@ -62,7 +65,7 @@ var CORA = (function(cora) {
 			var removeFunction = function() {
 				view.modelObject.hideWithEffect();
 			};
-			return CORA.createRemoveButton(removeFunction);
+			return createRemoveButtonImported(removeFunction);
 		}
 
 		const possiblySetHideTimeout = function() {
@@ -120,21 +123,19 @@ var CORA = (function(cora) {
 		return out;
 	};
 
-	cora.message.ERROR = {
+	message.ERROR = {
 		"className": "error",
 		"defaultTimeout": 0
 	};
-	cora.message.WARNING = {
+	message.WARNING = {
 		"className": "warning",
 		"defaultTimeout": 10000
 	};
-	cora.message.INFO = {
+	message.INFO = {
 		"className": "info",
 		"defaultTimeout": 5000
 	};
-	cora.message.POSITIVE = {
+	message.POSITIVE = {
 		"className": "positive",
 		"defaultTimeout": 3000
 	};
-	return cora;
-}(CORA));

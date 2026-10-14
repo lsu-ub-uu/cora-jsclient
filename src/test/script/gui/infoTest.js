@@ -16,6 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "../aCoratestNameSpace.js";
+import CORATESTHELPER from "../aCoratestHelperNameSpace.js";
 "use strict";
 QUnit.module("gui/infoTest.js", {
 	beforeEach : function() {
@@ -307,3 +311,5 @@ QUnit.test("testOnclickIsNotPropagatedToParent", function(assert) {
 	assert.strictEqual(clicked, true);
 	assert.strictEqual(clickedParent, false);
 });
+
+export {};

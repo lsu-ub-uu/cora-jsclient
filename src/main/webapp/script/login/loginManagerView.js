@@ -16,9 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.loginManagerView = function(dependencies, spec) {
+
+import { button } from "../gui/button.js";
+import { holder as holderImported } from "../gui/holder.js";
+import { LOGGEDIN } from "./loginManager.js";
+
+export const loginManagerView = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let view;
@@ -33,7 +36,7 @@ var CORA = (function(cora) {
 				buttonText : textProvider.getTranslation("theClient_loginMenuText"),
 				appendTo : document.body
 			};
-			holder = CORA.holder(holderSpec);
+			holder = holderImported(holderSpec);
 			view = holder.getButton();
 			menu = holder.getView();
 		};
@@ -70,7 +73,7 @@ var CORA = (function(cora) {
 					}
 				}
 			};
-			let optionButton = CORA.button(buttonSpec);
+			let optionButton = button(buttonSpec);
 			menu.appendChild(optionButton);
 		};
 
@@ -85,7 +88,7 @@ var CORA = (function(cora) {
 
 		const setState = function(stateIn) {
 			holder.closeHolder();
-			if (CORA.loginManager.LOGGEDIN === stateIn) {
+			if (LOGGEDIN === stateIn) {
 				menu.innerHTML = "";
 				let logoutOptions = [ {
 					text : textProvider.getTranslation("theClient_logoutMenuText"),
@@ -107,7 +110,7 @@ var CORA = (function(cora) {
 					method : logoutOption.call
 				}
 			};
-			let optionButton = CORA.button(buttonSpec);
+			let optionButton = button(buttonSpec);
 			menu.appendChild(optionButton);
 		}
 
@@ -125,5 +128,3 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));

@@ -777,3 +777,7 @@ function MetadataCoordinatesProviderStub() {
 		};
 	};
 }
+
+window.MetadataCoordinatesProviderStub = MetadataCoordinatesProviderStub;
+
+export default MetadataCoordinatesProviderStub;

@@ -16,17 +16,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.passwordLoginViewFactory = function(dependencies) {
+
+import { passwordLoginView } from "./passwordLoginView.js";
+import { workItemViewFactory } from "../gui/workItemViewFactory.js";
+
+export const passwordLoginViewFactory = function(dependencies) {
 
 		let dep = {
 			textProvider : dependencies.textProvider,
-			workItemViewFactory : CORA.workItemViewFactory(),
+			workItemViewFactory : workItemViewFactory(),
 		};
 
 		const factor = function(spec) {
-			return CORA.passwordLoginView(dep, spec);
+			return passwordLoginView(dep, spec);
 		};
 
 		const getDependencies = function() {
@@ -39,5 +41,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

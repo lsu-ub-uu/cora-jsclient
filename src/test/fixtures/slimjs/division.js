@@ -22,3 +22,7 @@ var eg = {
         }
     }
 };
+
+const Division = eg.Division;
+
+export { Division };

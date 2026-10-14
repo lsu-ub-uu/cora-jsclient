@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.managedGuiItem = function(dependencies, spec) {
+
+export const managedGuiItem = function(dependencies, spec) {
 		const maxNumberIndicators = 16;
 
 		let out;
@@ -211,5 +210,3 @@ var CORA = (function(cora) {
 		return out;
 	};
 
-	return cora;
-}(CORA));

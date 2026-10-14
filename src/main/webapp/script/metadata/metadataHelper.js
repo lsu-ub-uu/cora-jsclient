@@ -17,12 +17,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataHelper = function(spec) {
+
+import { coraData } from "./coraData.js";
+
+export const metadataHelper = function(spec) {
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(spec.metadataProvider.getMetadataById(id));
+			return coraData(spec.metadataProvider.getMetadataById(id));
 		};
 
 		const collectAttributesAsObjectForMetadataId = function(metadataId) {
@@ -58,7 +59,7 @@ var CORA = (function(cora) {
 		};
 
 		const getRefValueFromAttributeRef = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
+			let cAttributeReference = coraData(attributeReference);
 			return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -87,14 +88,14 @@ var CORA = (function(cora) {
 		};
 
 		const getCollectionItemValue = function(collectionItemRef) {
-			let cItemRef = CORA.coraData(collectionItemRef);
+			let cItemRef = coraData(collectionItemRef);
 			let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
 			let cCollectionItem = getMetadataById(itemRefId);
 			return cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
 		};
 
 		const getCollectionItemReferencesFor = function(cCollectionVariable) {
-			let cAttributeRefCollection = CORA.coraData(cCollectionVariable
+			let cAttributeRefCollection = coraData(cCollectionVariable
 				.getFirstChildByNameInData("refCollection"));
 
 			let attributeRefCollectionId = cAttributeRefCollection
@@ -117,12 +118,12 @@ var CORA = (function(cora) {
 
 			let children = cMetadata.getFirstChildByNameInData("childReferences").children;
 			let parentMetadataChildRef = children.find(findFunction);
-			return CORA.coraData(parentMetadataChildRef);
+			return coraData(parentMetadataChildRef);
 		};
 
 		const getMetadataIdFromRef = function(metadataChildRef) {
-			let cMetadataChildRef = CORA.coraData(metadataChildRef);
-			let cRef = CORA.coraData(cMetadataChildRef.getFirstChildByNameInData("ref"));
+			let cMetadataChildRef = coraData(metadataChildRef);
+			let cRef = coraData(cMetadataChildRef.getFirstChildByNameInData("ref"));
 			return cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -185,5 +186,4 @@ var CORA = (function(cora) {
 			firstAttributesExistsInSecond: firstAttributesExistsInSecond
 		});
 	};
-	return cora;
-}(CORA));
+

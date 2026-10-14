@@ -18,15 +18,15 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.assertCorrectFactoredSpec = function(assert, factoredSpec, context) {
-		assert.strictEqual(factoredSpec.jsClient, context.dependencies.jsClient);
-		assert.strictEqual(factoredSpec.recordTypeRecordIdForNew, "collectTerm");
-	};
+import CORATEST from "./aCoratestNameSpace.js";
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
 
-	return coraTest;
-}(CORATEST || {}));
+const coraTest = CORATEST;
+
+coraTest.assertCorrectFactoredSpec = function(assert, factoredSpec, context) {
+	assert.strictEqual(factoredSpec.jsClient, context.dependencies.jsClient);
+	assert.strictEqual(factoredSpec.recordTypeRecordIdForNew, "collectTerm");
+};
 
 QUnit.module("recordTypeHandlerTest.js", {
 	beforeEach : function() {

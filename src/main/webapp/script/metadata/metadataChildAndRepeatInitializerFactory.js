@@ -16,9 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataChildAndRepeatInitializerFactory = function(dependencies) {
+
+import { genericFactory } from "../genericFactory.js";
+import { metadataChildInitializer } from "./metadataChildInitializer.js";
+import { metadataRepeatInitializer } from "./metadataRepeatInitializer.js";
+
+export const metadataChildAndRepeatInitializerFactory = function(dependencies) {
 		let self;
 
 		let metadataChildInititalizerDep = {
@@ -33,9 +36,9 @@ var CORA = (function(cora) {
 			pubSub : dependencies.pubSub
 		};
 
-		let metadataChildInitializerFactory = CORA.genericFactory("metadataChildInitializer",
+		let metadataChildInitializerFactory = genericFactory(metadataChildInitializer,
 				metadataChildInititalizerDep);
-		let metadataRepeatInitializerFactory = CORA.genericFactory("metadataRepeatInitializer",
+		let metadataRepeatInitializerFactory = genericFactory(metadataRepeatInitializer,
 				metadataRepeatInititalizerDep);
 
 		const factorChildInitializer = function(spec) {
@@ -71,5 +74,4 @@ var CORA = (function(cora) {
 		self = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+

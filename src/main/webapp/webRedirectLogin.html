@@ -33,51 +33,8 @@
 <link href="css/alvin.css" rel="alternate stylesheet" type="text/css" title="Alvin">
 <link href="css/other.css" rel="alternate stylesheet" type="text/css" title="Other">
 
-<script type="text/javascript" src="script/aCoraNameSpace.js"></script>
-
-
-
-<script type="text/javascript">
-	window.onload = start;
-
-	function start() {
-		// 		window.opener.jsClientView.getView.appendChild(document.createText("from loign"));
-		// window.opener.CallParent();
-		//console.log(window.opener.jsClient.getDependencies());
-
-		// window.opener.callParent2();
-		var authInfo = {
-			"userId" : "Webredirect user",
-			"token" : "fake authToken from here",
-			"validForNoSeconds" : "131",
-			"actionLinks" : {
-				"delete" : {
-					"requestMethod" : "DELETE",
-					"rel" : "delete",
-					"url" : "http://localhost:8080/login/rest/apptoken/141414"
-				}
-			}
-		};
-		var authInfo2 = {
-			"userId" : "Webredirect fake login",
-			"token" : "fd6d7fab-6c90-4cc1-a699-46134cb25937",
-			"validForNoSeconds" : "600",
-			"actionLinks" : {
-				"delete" : {
-					"requestMethod" : "DELETE",
-					"rel" : "delete",
-					"url" : "http://localhost:8080/login/rest/apptoken/141414"
-				}
-			}
-		};
-		window.opener.jsClient.getDependencies().globalInstances.loginManager
-				.authInfoCallback(authInfo2);
-		window.opener.focus();
-		window.close();
-	}
-</script>
+<script type="module" src="script/webRedirectLoginPage.js"></script>
 </head>
 <body>hej
 </body>
 </html>
-

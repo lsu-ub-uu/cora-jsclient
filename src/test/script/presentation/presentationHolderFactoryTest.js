@@ -16,6 +16,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATEST from "../aCoratestNameSpace.js";
 "use strict";
 QUnit.module("presentation/presentationHolderFactoryTest.js", {
 	beforeEach : function() {
@@ -74,3 +77,5 @@ QUnit.test("testFactorSpec", function(assert) {
 	let presentationHolder = this.presentationHolderFactory.factor(this.spec);
 	assert.strictEqual(presentationHolder.getSpec(), this.spec);
 });
+
+export {};

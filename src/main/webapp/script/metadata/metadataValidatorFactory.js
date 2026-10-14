@@ -16,9 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-    "use strict";
-    cora.metadataValidatorFactory = function(dependencies) {
+
+import { genericFactory } from "../genericFactory.js";
+import { metadataChildValidator } from "./metadataChildValidator.js";
+import { metadataValidator } from "./metadataValidator.js";
+
+export const metadataValidatorFactory = function(dependencies) {
 
         const factor = function(spec) {
             let childValidatorDependencies = {
@@ -28,10 +31,10 @@ var CORA = (function(cora) {
             let validatorDependencies = {
                 metadataProvider: dependencies.metadataProvider,
                 pubSub: dependencies.pubSub,
-                metadataChildValidatorFactory: CORA.genericFactory("metadataChildValidator",
+                metadataChildValidatorFactory: genericFactory(metadataChildValidator,
                     childValidatorDependencies)
             };
-            return CORA.metadataValidator(validatorDependencies, spec);
+            return metadataValidator(validatorDependencies, spec);
         };
 
         const getDependencies = function() {
@@ -44,5 +47,4 @@ var CORA = (function(cora) {
             factor: factor
         });
     };
-    return cora;
-}(CORA));
+

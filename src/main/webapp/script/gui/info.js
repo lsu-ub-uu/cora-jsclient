@@ -16,10 +16,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.info = function(spec) {
-		let infoLevel = cora.info.NONE;
+
+import { button as buttonImported } from "./button.js";
+import { createSpanWithClassName } from "./basicGui.js";
+
+export const info = function(spec) {
+		let infoLevel = info.NONE;
 		let button;
 		let view;
 
@@ -34,7 +36,7 @@ var CORA = (function(cora) {
 					method : showInfo
 				}
 			};
-			return CORA.button(infoButtonSpec);
+			return buttonImported(infoButtonSpec);
 		};
 
 		const getButton = function() {
@@ -50,14 +52,14 @@ var CORA = (function(cora) {
 		};
 
 		const showInfo = function(event) {
-			if (infoLevel === cora.info.NONE) {
+			if (infoLevel === info.NONE) {
 				createAndAddBaseView();
 				createLevelView(spec.level1);
 			}
-			if (infoLevel === cora.info.TEXT) {
+			if (infoLevel === info.TEXT) {
 				createLevelView(spec.level2);
 			}
-			if (infoLevel === cora.info.ALL) {
+			if (infoLevel === info.ALL) {
 				resetInfo();
 			} else {
 				infoLevel++;
@@ -73,7 +75,7 @@ var CORA = (function(cora) {
 		};
 
 		const createBaseView = function() {
-			view = CORA.createSpanWithClassName("infoView");
+			view = createSpanWithClassName("infoView");
 		};
 
 		const addBaseViewAccordingToSpec = function() {
@@ -95,7 +97,7 @@ var CORA = (function(cora) {
 		};
 
 		const createViewPart = function(info) {
-			let viewPart = CORA.createSpanWithClassName(info.className);
+			let viewPart = createSpanWithClassName(info.className);
 			viewPart.innerHTML = info.text;
 			addOnClickIfSpecifiedInSpec(info.onclickMethod, viewPart);
 			view.appendChild(viewPart);
@@ -134,8 +136,6 @@ var CORA = (function(cora) {
 		});
 	};
 
-	cora.info.NONE = 0;
-	cora.info.TEXT = 1;
-	cora.info.ALL = 2;
-	return cora;
-}(CORA));
+	info.NONE = 0;
+	info.TEXT = 1;
+	info.ALL = 2;

@@ -17,14 +17,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.resultHandlerViewFactory = function(dependencies) {
+
+import { resultHandlerView } from "./resultHandlerView.js";
+
+export const resultHandlerViewFactory = function(dependencies) {
 
 		var dep = {};
 
 		function factor(spec) {
-			return CORA.resultHandlerView(dep, spec);
+			return resultHandlerView(dep, spec);
 		}
 
 		function getDependencies() {
@@ -37,5 +38,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

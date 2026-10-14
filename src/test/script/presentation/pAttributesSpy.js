@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pAttributesSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pAttributesSpy = function() {
 		let disableExistingAttributesNoCalls = 0;
 
 		const disableExistingAttributes = function() {
@@ -35,5 +37,5 @@ var CORATEST = (function(coraTest) {
 			getNoOfCallsToDisable: getNoOfCallsToDisable
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

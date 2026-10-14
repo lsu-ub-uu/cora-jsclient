@@ -18,9 +18,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-    "use strict";
-    cora.metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+import { metadataChildValidator as metadataChildValidatorImported } from "./metadataChildValidator.js";
+import { numberVariableValidator } from "./numberVariableValidator.js";
+
+export const metadataRepeatValidator = function(metadataId, path, dataHolder, data, repeatId, metadataProvider,
         pubSub) {
         const result = {
             onlyFinalValues: true,
@@ -37,7 +40,7 @@ var CORA = (function(cora) {
         }
 
         const getMetadataById = function(id) {
-            return CORA.coraData(metadataProvider.getMetadataById(id));
+            return coraData(metadataProvider.getMetadataById(id));
         };
 
         const validateRepeat = function() {
@@ -70,7 +73,7 @@ var CORA = (function(cora) {
         };
 
         const getRefValueFromAttributeRef = function(attributeReference) {
-            let cAttributeReference = CORA.coraData(attributeReference);
+            let cAttributeReference = coraData(attributeReference);
             return cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
         };
 
@@ -78,7 +81,7 @@ var CORA = (function(cora) {
             let attributePath = createNextLevelPathAttribute(attributeRef);
             let attributeData = dataHolder.findContainer(attributePath);
             let attributeValidationResult =
-                CORA.metadataRepeatValidator(attributeRef, attributePath, dataHolder,
+                metadataRepeatValidator(attributeRef, attributePath, dataHolder,
                     attributeData, undefined, metadataProvider, pubSub);
             attributeValidationResults.push(attributeValidationResult);
         };
@@ -89,7 +92,7 @@ var CORA = (function(cora) {
                 parentPath: path,
                 type: "attribute"
             };
-            return CORA.calculatePathForNewElement(pathSpec);
+            return calculatePathForNewElement(pathSpec);
         };
 
         const validateForMetadata = function() {
@@ -153,7 +156,7 @@ var CORA = (function(cora) {
                 childReference: childReference,
                 dataHolder: dataHolder
             };
-            let metadataChildValidator = CORA.metadataChildValidator(dependencies, spec);
+            let metadataChildValidator = metadataChildValidatorImported(dependencies, spec);
             let childResult = metadataChildValidator.validate();
             if (!childResult.everythingOkBelow) {
                 result.everythingOkBelow = false;
@@ -264,7 +267,7 @@ var CORA = (function(cora) {
         };
 
         const validateNumberVariable = function() {
-            let validator = CORA.numberVariableValidator({
+            let validator = numberVariableValidator({
                 "metadataProvider": metadataProvider,
             });
             return validator.validateData(data.value, cMetadataElement);
@@ -280,7 +283,7 @@ var CORA = (function(cora) {
         };
 
         const getCollectionItemReferences = function() {
-            let cRefCollection = CORA.coraData(cMetadataElement
+            let cRefCollection = coraData(cMetadataElement
                 .getFirstChildByNameInData("refCollection"));
 
             let refCollectionId = cRefCollection.getFirstAtomicValueByNameInData("linkedRecordId");
@@ -289,7 +292,7 @@ var CORA = (function(cora) {
         };
 
         const isItemDataValue = function(collectionItemReference) {
-            let cItemRef = CORA.coraData(collectionItemReference);
+            let cItemRef = coraData(collectionItemReference);
             let itemRefId = cItemRef.getFirstChildByNameInData("linkedRecordId").value;
             let cCollectionItem = getMetadataById(itemRefId);
             let nameInData = cCollectionItem.getFirstAtomicValueByNameInData("nameInData");
@@ -318,5 +321,4 @@ var CORA = (function(cora) {
         };
         return start();
     }
-    return cora;
-}(CORA));
+

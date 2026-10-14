@@ -18,9 +18,10 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataController = function(dependencies, spec) {
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+
+export const metadataController = function(dependencies, spec) {
 		const pubSub = dependencies.pubSub;
 		const metadataProvider = dependencies.metadataProvider;
 		const metadataChildAndRepeatInitializerFactory = dependencies.metadataChildAndRepeatInitializerFactory;
@@ -59,7 +60,7 @@ var CORA = (function(cora) {
 		};
 
 		const addAttribute = function(attributeReference) {
-			let cAttributeReference = CORA.coraData(attributeReference);
+			let cAttributeReference = coraData(attributeReference);
 			let refLinkedId = cAttributeReference.getFirstAtomicValueByNameInData("linkedRecordId");
 			let cCollectionVariable = getMetadataById(refLinkedId);
 
@@ -79,7 +80,7 @@ var CORA = (function(cora) {
 				parentPath: [],
 				type: "attribute"
 			};
-			let attributePath = CORA.calculatePathForNewElement(pathSpec);
+			let attributePath = calculatePathForNewElement(pathSpec);
 			if (cCollectionVariable.containsChildWithNameInData("finalValue")) {
 				setValueForForAttributeWithFinalValue(attributePath, cCollectionVariable);
 			} else {
@@ -123,7 +124,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const possiblyInitializeChild = function(childReference) {
@@ -139,8 +140,8 @@ var CORA = (function(cora) {
 		};
 
 		const getCRef = function(childReference) {
-			let cChildReference = CORA.coraData(childReference);
-			return CORA.coraData(cChildReference.getFirstChildByNameInData("ref"));
+			let cChildReference = coraData(childReference);
+			return coraData(cChildReference.getFirstChildByNameInData("ref"));
 		};
 
 		const intitalizeChild = function(childReference) {
@@ -177,5 +178,4 @@ var CORA = (function(cora) {
 			getDependencies: getDependencies
 		});
 	};
-	return cora;
-}(CORA));
+

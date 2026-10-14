@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.indexListHandler = function(dependencies, spec) {
+
+import { coraData } from "./metadata/coraData.js";
+import { createSpanWithClassName } from "./gui/basicGui.js";
+
+export const indexListHandler = function(dependencies, spec) {
 		var uploadQue = [];
 		var numberOfIndexRecords = 0;
 		var indexOrderView;
@@ -52,7 +54,7 @@ var CORA = (function(cora) {
 		}
 
 		function createIndexOrderView() {
-			indexOrderView = CORA.createSpanWithClassName("indexOrder");
+			indexOrderView = createSpanWithClassName("indexOrder");
 			indexOrderView.textContent = dependencies.textProvider
 				.getTranslation("theClient_indexedText");
 		}
@@ -83,7 +85,7 @@ var CORA = (function(cora) {
 
 		function indexingFinished() {
 			numberOfIndexRecords++;
-			var child = CORA.createSpanWithClassName("indexItem");
+			var child = createSpanWithClassName("indexItem");
 			child.textContent = numberOfIndexRecords + ". " + getChildInfo();
 
 			indexOrderView.appendChild(child);
@@ -101,13 +103,13 @@ var CORA = (function(cora) {
 		}
 
 		function extractRecordInfoFromCurrentRecord() {
-			var cRecord = CORA.coraData(currentRecord.data);
-			return CORA.coraData(cRecord
+			var cRecord = coraData(currentRecord.data);
+			return coraData(cRecord
 				.getFirstChildByNameInData("recordInfo"));
 		}
 
 		function extractAtomicTypeFromRecordInfo(cRecordInfo) {
-			var cType = CORA.coraData(cRecordInfo
+			var cType = coraData(cRecordInfo
 				.getFirstChildByNameInData("type"));
 			return cType.getFirstAtomicValueByNameInData("linkedRecordId");
 		}
@@ -130,7 +132,7 @@ var CORA = (function(cora) {
 		}
 
 		function timeoutMethod() {
-			var child = CORA.createSpanWithClassName("indexItem");
+			var child = createSpanWithClassName("indexItem");
 			child.textContent = "TIMEOUT";
 			indexOrderView.appendChild(child);
 
@@ -190,5 +192,4 @@ var CORA = (function(cora) {
 
 		});
 	};
-	return cora;
-}(CORA));
+

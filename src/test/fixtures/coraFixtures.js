@@ -1,6 +1,9 @@
-var CORAFIXTURES = (function(coraFixtures) {
-	"use strict";
-	coraFixtures.coraData = function() {
+import CORA from "../../main/webapp/script/aCoraNameSpace.js";
+import CORAFIXTURES from "./aCoraFixturesNameSpace.js";
+
+const coraFixtures = CORAFIXTURES;
+
+coraFixtures.coraData = function() {
 		var firstChild = {
 			"name" : "textVariableId",
 			"value" : "A Value",
@@ -34,5 +37,4 @@ var CORAFIXTURES = (function(coraFixtures) {
 		});
 	};
 
-	return coraFixtures;
-}({}));
+export default CORAFIXTURES;

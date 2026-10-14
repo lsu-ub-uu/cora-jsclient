@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pParentVarSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pParentVarSpy = function() {
 		let presentationCounter = "1-123";
 		const getDependencies = function() {
 			return "fakeDependencies from pParentVarSpy";
@@ -55,5 +57,5 @@ var CORATEST = (function(coraTest) {
 			getPresentationCounter: getPresentationCounter
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

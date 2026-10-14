@@ -16,10 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
+import CORATEST from "../aCoratestNameSpace.js";
 
-	coraTest.createJsonForChildReference = function(arrayWithChildParameters) {
+const coraTest = CORATEST;
+
+coraTest.createJsonForChildReference = function(arrayWithChildParameters) {
 
 		let json = {
 			"name": "childReferences",
@@ -137,6 +138,4 @@ var CORATEST = (function(coraTest) {
 		};
 	}
 
-
-	return coraTest;
-}(CORATEST || {}));
+export default CORATEST;

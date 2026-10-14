@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataProvider = function(dependencies, spec) {
+
+import { coraData } from "./coraData.js";
+
+export const metadataProvider = function(dependencies, spec) {
 		let textProvider = dependencies.textProvider;
 		let processedAjaxCalls = 0;
 		let metadata = {};
@@ -75,8 +76,8 @@ var CORA = (function(cora) {
 		};
 
 		const getIdFromRecordData = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+			let cRecord = coraData(recordData);
+			let cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
@@ -129,5 +130,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

@@ -24,3 +24,5 @@ function child_process()
         }
     }
 }
+
+export { child_process };

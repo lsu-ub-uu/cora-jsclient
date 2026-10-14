@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recursiveDelete = function(providers, dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+
+export const recursiveDelete = function(providers, dependencies, spec) {
 		const metadataProvider = providers.metadataProvider;
 		const jsClient = providers.clientInstanceProvider.getJsClient();
 		const ajaxCallFactory = dependencies.ajaxCallFactory;
@@ -70,7 +71,7 @@ var CORA = (function(cora) {
 
 		const getCMetadataById = function(metadataId) {
 			let metadata = metadataProvider.getMetadataById(metadataId);
-			return CORA.coraData(metadata);
+			return coraData(metadata);
 		};
 
 		const getBasicModelForMetadata = function(cDataRecordGroup) {
@@ -101,13 +102,13 @@ var CORA = (function(cora) {
 
 		const getCRecordInfo = function(cDataRecordGroup) {
 			let recordInfo = cDataRecordGroup.getFirstChildByNameInData("recordInfo");
-			return CORA.coraData(recordInfo);
+			return coraData(recordInfo);
 		}
 
 		const getRecordType = function(cDataRecordGroup) {
 			let cRecordInfo = getCRecordInfo(cDataRecordGroup);
 			let type = cRecordInfo.getFirstChildByNameInData("type");
-			let cTtype = CORA.coraData(type);
+			let cTtype = coraData(type);
 			return cTtype.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -139,7 +140,7 @@ var CORA = (function(cora) {
 		};
 
 		const readLinkAndCreateMetadataInformation = function(data) {
-			let cData = CORA.coraData(data);
+			let cData = coraData(data);
 			let linkId = cData.getFirstAtomicValueByNameInData("linkedRecordId");
 			return getViewModelForMetadataUsingId(linkId);
 		};
@@ -166,7 +167,7 @@ var CORA = (function(cora) {
 			let children = [];
 			let childReferences = cDataRecordGroup.getFirstChildByNameInData(groupName);
 			for (let childReference of childReferences.children) {
-				let cChildReference = CORA.coraData(childReference);
+				let cChildReference = coraData(childReference);
 				let refId = cChildReference.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 				let childrenMetadataInfo = getViewModelForMetadataUsingId(refId);
 				children.push(childrenMetadataInfo);
@@ -236,9 +237,9 @@ var CORA = (function(cora) {
 		};
 
 		const getRecordTypeFromIncomingLink = function(incomingLinkAsJson) {
-			let cData = CORA.coraData(incomingLinkAsJson);
+			let cData = coraData(incomingLinkAsJson);
 			let from = cData.getFirstChildByNameInData("from");
-			let cFrom = CORA.coraData(from);
+			let cFrom = coraData(from);
 			let incomingLink = {
 				type: cFrom.getFirstAtomicValueByNameInData("linkedRecordType"),
 				id: cFrom.getFirstAtomicValueByNameInData("linkedRecordId")
@@ -316,7 +317,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleChildReference = function(childrenArrays, childReference) {
-			let cChildReference = CORA.coraData(childReference);
+			let cChildReference = coraData(childReference);
 			let refGroup = cChildReference.getFirstChildByNameInData("refGroup");
 			for (let ref of refGroup.children) {
 				handleRefGroupChild(childrenArrays, ref);
@@ -324,7 +325,7 @@ var CORA = (function(cora) {
 		};
 
 		const handleRefGroupChild = function(childrenArrays, ref) {
-			let cRef = CORA.coraData(ref);
+			let cRef = coraData(ref);
 			let refId = cRef.getFirstAtomicValueByNameInData("linkedRecordId");
 			let childrenMetadataInfo = getViewModelForPresentationUsingId(refId);
 			if (getType(cRef) === "presentation") {
@@ -390,5 +391,4 @@ var CORA = (function(cora) {
 
 		return out;
 	};
-	return cora;
-}(CORA));
+

@@ -16,17 +16,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.messageHolder = function() {
+
+import { createDivWithClassName } from "./basicGui.js";
+import { message as messageImported } from "./message.js";
+
+export const messageHolder = function() {
 		var view = createView();
 
 		function createView() {
-			return CORA.createDivWithClassName("messageHolder");
+			return createDivWithClassName("messageHolder");
 		}
 
 		function createMessage(messageSpec) {
-			var message = CORA.message(messageSpec);
+			var message = messageImported(messageSpec);
 			view.appendChild(message.getView());
 		}
 
@@ -42,5 +44,4 @@ var CORA = (function(cora) {
 		view.modelObject = out;
 		return out;
 	};
-	return cora;
-}(CORA));
+

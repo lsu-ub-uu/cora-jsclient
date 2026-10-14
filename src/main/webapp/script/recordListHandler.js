@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordListHandler = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "./gui/basicGui.js";
+import { message } from "./gui/message.js";
+import { messageHolder as messageHolderImported } from "./gui/messageHolder.js";
+
+export const recordListHandler = function(dependencies, spec) {
 		let managedGuiItem;
 
 		const start = function() {
@@ -48,7 +51,7 @@ var CORA = (function(cora) {
 		};
 
 		const addTextToMenuView = function() {
-			let menuPresentation = CORA.createSpanWithClassName("listMenu");
+			let menuPresentation = createSpanWithClassName("listMenu");
 			menuPresentation.textContent = "List (" + spec.headerText + ")";
 			managedGuiItem.addMenuPresentation(menuPresentation);
 		};
@@ -76,11 +79,11 @@ var CORA = (function(cora) {
 		};
 
 		const callError = function(answer) {
-			let messageHolder = CORA.messageHolder();
+			let messageHolder = messageHolderImported();
 			managedGuiItem.addWorkPresentation(messageHolder.getView());
 			let messageSpec = {
 				message : answer.status,
-				type : CORA.message.ERROR
+				type : message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		};
@@ -105,5 +108,4 @@ var CORA = (function(cora) {
 
 		return out;
 	};
-	return cora;
-}(CORA));
+

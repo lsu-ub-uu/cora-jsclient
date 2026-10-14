@@ -16,16 +16,21 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordViewer = function(spec) {
 
-		let view = CORA.createSpanWithClassName("recordViewer");
+import { busy as busyImported } from "./gui/busy.js";
+import { coraData } from "./metadata/coraData.js";
+import { createSpanWithClassName } from "./gui/basicGui.js";
+import { message } from "./gui/message.js";
+import { messageHolder as messageHolderImported } from "./gui/messageHolder.js";
 
-		let messageHolder = CORA.messageHolder();
+export const recordViewer = function(spec) {
+
+		let view = createSpanWithClassName("recordViewer");
+
+		let messageHolder = messageHolderImported();
 		view.appendChild(messageHolder.getView());
 
-		let busy = CORA.busy();
+		let busy = busyImported();
 		view.appendChild(busy.getView());
 
 		fetchDataFromServer(processFetchedRecord);
@@ -46,7 +51,7 @@ var CORA = (function(cora) {
 			busy.hideWithEffect();
 			let messageSpec = {
 				"message" : answer.status,
-				"type" : CORA.message.ERROR
+				"type" : message.ERROR
 			};
 			messageHolder.createMessage(messageSpec);
 		}
@@ -118,9 +123,9 @@ var CORA = (function(cora) {
 		}
 
 		const getDataDividerFromData = function(data) {
-			let cData = CORA.coraData(data);
-			let cRecordInfo = CORA.coraData(cData.getFirstChildByNameInData("recordInfo"));
-			let cDataDivider = CORA.coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
+			let cData = coraData(data);
+			let cRecordInfo = coraData(cData.getFirstChildByNameInData("recordInfo"));
+			let cDataDivider = coraData(cRecordInfo.getFirstChildByNameInData("dataDivider"));
 			return cDataDivider.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -140,5 +145,4 @@ var CORA = (function(cora) {
 			processFetchedRecord : processFetchedRecord
 		});
 	};
-	return cora;
-}(CORA));
+

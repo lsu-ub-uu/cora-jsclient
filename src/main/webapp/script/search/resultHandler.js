@@ -17,9 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.resultHandler = function(dependencies, spec) {
+
+export const resultHandler = function(dependencies, spec) {
 		let out;
 		let view;
 		let showIndexButton = false;
@@ -118,5 +117,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

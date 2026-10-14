@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.metadataRepeatInitializerSpy = function(dependencies, spec, spySpec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.metadataRepeatInitializerSpy = function(dependencies, spec, spySpec) {
 		let initializeCalled = false;
 		
 		const initialize = function() {
@@ -35,5 +37,5 @@ var CORATEST = (function(coraTest) {
 			getInitializeCalled: getInitializeCalled
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

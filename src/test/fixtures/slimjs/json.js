@@ -14,3 +14,5 @@ function Json()
         return this.obj.x + this.obj.y;
     }
 }
+
+export { Json };

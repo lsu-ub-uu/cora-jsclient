@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.recordListHandlerFactory = function(dependencies) {
+
+import { recordListHandler } from "./recordListHandler.js";
+
+export const recordListHandlerFactory = function(dependencies) {
 
 		function factor(recordListHandlerSpec) {
 
@@ -29,7 +30,7 @@ var CORA = (function(cora) {
 				"managedGuiItemFactory" : dependencies.factories.managedGuiItemFactory,
 				"resultHandlerFactory" : dependencies.factories.resultHandlerFactory
 			};
-			return CORA.recordListHandler(dep, recordListHandlerSpec);
+			return recordListHandler(dep, recordListHandlerSpec);
 		}
 
 		function getDependencies() {
@@ -42,5 +43,4 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));
+

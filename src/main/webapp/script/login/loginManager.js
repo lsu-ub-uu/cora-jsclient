@@ -16,11 +16,69 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import { coraData } from "../metadata/coraData.js";
+import coraNamespace from "../aCoraNameSpace.js";
+
 let addStandardAppTokensToLoginMenu = false;
 let appTokenOptions = [];
-var CORA = (function(cora) {
-	"use strict";
-	cora.loginManager = function(dependencies, spec) {
+
+if (typeof window !== "undefined") {
+	Object.defineProperty(window, "addStandardAppTokensToLoginMenu", {
+		configurable : true,
+		get : function() {
+			return addStandardAppTokensToLoginMenu;
+		},
+		set : function(value) {
+			addStandardAppTokensToLoginMenu = value;
+		}
+	});
+
+	Object.defineProperty(window, "appTokenOptions", {
+		configurable : true,
+		get : function() {
+			return appTokenOptions;
+		},
+		set : function(value) {
+			appTokenOptions = value;
+		}
+	});
+}
+
+Object.defineProperty(coraNamespace, "addStandardAppTokensToLoginMenu", {
+	configurable : true,
+	get : function() {
+		return addStandardAppTokensToLoginMenu;
+	},
+	set : function(value) {
+		addStandardAppTokensToLoginMenu = value;
+	}
+});
+
+Object.defineProperty(coraNamespace, "appTokenOptions", {
+	configurable : true,
+	get : function() {
+		return appTokenOptions;
+	},
+	set : function(value) {
+		appTokenOptions = value;
+	}
+});
+
+export const enableStandardAppTokenLoginOptions = function() {
+	addStandardAppTokensToLoginMenu = true;
+};
+
+export const addStandardAppTokenOption = function(option) {
+	appTokenOptions.push(option);
+};
+
+export const clearStandardAppTokenOptions = function() {
+	appTokenOptions = [];
+};
+export const LOGGEDOUT = 0;
+export const LOGGEDIN = 1;
+export const loginManager = function(dependencies, spec) {
 		const textProvider = dependencies.textProvider;
 		let out;
 		let loginManagerView;
@@ -118,13 +176,13 @@ var CORA = (function(cora) {
 		};
 
 		const getIdFromRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+			let cRecord = coraData(recordData);
+			let cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
 		const getUrlFromLoginRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
+			let cRecord = coraData(recordData);
 			return cRecord.getFirstAtomicValueByNameInData("url");
 		};
 
@@ -133,14 +191,14 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataIdFromLoginRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cMetadataIdGroup = CORA.coraData(cRecord.getFirstChildByNameInData("viewDefinition"));
+			let cRecord = coraData(recordData);
+			let cMetadataIdGroup = coraData(cRecord.getFirstChildByNameInData("viewDefinition"));
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getPresentationIdFromLoginRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cMetadataIdGroup = CORA.coraData(cRecord
+			let cRecord = coraData(recordData);
+			let cMetadataIdGroup = coraData(cRecord
 				.getFirstChildByNameInData("viewPresentation"));
 			return cMetadataIdGroup.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
@@ -176,16 +234,16 @@ var CORA = (function(cora) {
 		};
 
 		const getTextIdFromRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
-			let cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("loginDescription"));
+			let cRecord = coraData(recordData);
+			let cLoginInfo = coraData(cRecord.getFirstChildByNameInData("loginInfo"));
+			let cLogin = coraData(cLoginInfo.getFirstChildByNameInData("loginDescription"));
 			return cLogin.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
 		const getLoginIdFromRecord = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cLoginInfo = CORA.coraData(cRecord.getFirstChildByNameInData("loginInfo"));
-			let cLogin = CORA.coraData(cLoginInfo.getFirstChildByNameInData("login"));
+			let cRecord = coraData(recordData);
+			let cLoginInfo = coraData(cRecord.getFirstChildByNameInData("loginInfo"));
+			let cLogin = coraData(cLoginInfo.getFirstChildByNameInData("login"));
 			return cLogin.getFirstAtomicValueByNameInData("linkedRecordId");
 		};
 
@@ -322,7 +380,7 @@ var CORA = (function(cora) {
 		const convertCoraAuthenticationToAuthentication = function(json) {
 			let authentication = json.authentication;
 			let data = authentication.data;
-			let cData = CORA.coraData(data);
+			let cData = coraData(data);
 			let token = cData.getFirstAtomicValueByNameInData("token");
 			let userId = cData.getFirstAtomicValueByNameInData("userId");
 			let loginId = cData.getFirstAtomicValueByNameInData("loginId");
@@ -346,7 +404,7 @@ var CORA = (function(cora) {
 			authentication = authenticationIn;
 			dependencies.authTokenHolder.setCurrentAuthToken(authentication.token);
 			loginManagerView.setLoginId(authentication.loginId);
-			loginManagerView.setState(CORA.loginManager.LOGGEDIN);
+			loginManagerView.setState(loginManager.LOGGEDIN);
 			spec.afterLoginMethod();
 			removeStartedPasswordLogins();
 			startRenewAuthTokenProcess(authentication);
@@ -443,7 +501,7 @@ var CORA = (function(cora) {
 		};
 
 		const logoutCallback = function() {
-			loginManagerView.setState(CORA.loginManager.LOGGEDOUT);
+			loginManagerView.setState(loginManager.LOGGEDOUT);
 			dependencies.authTokenHolder.setCurrentAuthToken("");
 			spec.afterLogoutMethod();
 			window.clearTimeout(renewCallTimeout);
@@ -501,7 +559,5 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	cora.loginManager.LOGGEDOUT = 0;
-	cora.loginManager.LOGGEDIN = 1;
-	return cora;
-}(CORA));
+	loginManager.LOGGEDOUT = LOGGEDOUT;
+	loginManager.LOGGEDIN = LOGGEDIN;

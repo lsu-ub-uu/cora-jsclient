@@ -17,9 +17,11 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.dataHolderStub = function(dataIn, foundContainer) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.dataHolderStub = function(dataIn, foundContainer) {
 		let usedPath = undefined;
 		function getData() {
 			if (dataIn !== undefined) {
@@ -61,5 +63,5 @@ var CORATEST = (function(coraTest) {
 			getUsedPath : getUsedPath
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

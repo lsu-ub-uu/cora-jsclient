@@ -17,6 +17,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+import CORATESTHELPER from "../aCoratestHelperNameSpace.js";
 "use strict";
 
 QUnit.module("gui/messageTest.js", {
@@ -246,3 +249,5 @@ QUnit.test("testHideWithEffectTransitionendNotCalled", function(assert) {
 		done();
 	}, 1050);
 });
+
+export {};

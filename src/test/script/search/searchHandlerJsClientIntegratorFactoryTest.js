@@ -17,6 +17,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORATEST from "../aCoratestNameSpace.js";
 "use strict";
 
 QUnit
@@ -69,3 +71,4 @@ QUnit.test("testFactor", function(assert) {
 	assert.strictEqual(searchHandler.type, "searchHandlerJsClientIntegrator");
 });
 
+export {};

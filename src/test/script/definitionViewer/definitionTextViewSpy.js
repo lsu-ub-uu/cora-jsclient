@@ -17,9 +17,12 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.definitionTextViewSpy = function() {
+import CORATEST from "../aCoratestNameSpace.js";
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.definitionTextViewSpy = function() {
 
 		let viewModels = [];
 		let createdViews = [];
@@ -67,5 +70,5 @@ var CORATEST = (function(coraTest) {
 			createViewAsText: createViewAsText
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

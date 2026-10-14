@@ -16,101 +16,101 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.button = function(spec) {
-		const action = spec.action;
-		let view;
-		let actionMethod;
 
-		const start = function() {
-			view = createView();
-			possiblyHandleAction();
-			possiblyAddOnclickMethod();
-			possiblyAddOnkeydownMethod();
-			possiblyAddText();
-		};
+import { createSpanWithClassName } from "./basicGui.js";
 
-		const createView = function() {
-			return CORA.createSpanWithClassName(getClassNameOrEmptyFromSpec());
-		};
+export const button = function(spec) {
+    const action = spec.action;
+    let view;
+    let actionMethod;
 
-		const getClassNameOrEmptyFromSpec = function() {
-			if (spec.className !== undefined) {
-				return spec.className;
-			}
-			return "";
-		};
+    const start = function() {
+        view = createView();
+        possiblyHandleAction();
+        possiblyAddOnclickMethod();
+        possiblyAddOnkeydownMethod();
+        possiblyAddText();
+    };
 
-		const possiblyHandleAction = function() {
-			if (action !== undefined) {
-				handleAction();
-			}
-		};
+    const createView = function() {
+        return createSpanWithClassName(getClassNameOrEmptyFromSpec());
+    };
 
-		const handleAction = function() {
-			actionMethod = action.method;
-		};
+    const getClassNameOrEmptyFromSpec = function() {
+        if (spec.className !== undefined) {
+            return spec.className;
+        }
+        return "";
+    };
 
-		const possiblyAddOnclickMethod = function() {
-			if (specDemandsClick()) {
-				addOnclickForMethodFromAction();
-			}
-		};
+    const possiblyHandleAction = function() {
+        if (action !== undefined) {
+            handleAction();
+        }
+    };
 
-		const specDemandsClick = function(){
-			return action !== undefined
-			&& (action.clickable === true || action.clickable === undefined);
-		};
+    const handleAction = function() {
+        actionMethod = action.method;
+    };
 
-		const addOnclickForMethodFromAction = function(){
-			view.addEventListener('click', (event) => {
-				event.stopPropagation();
-				actionMethod(event);
-			});
-		};
+    const possiblyAddOnclickMethod = function() {
+        if (specDemandsClick()) {
+            addOnclickForMethodFromAction();
+        }
+    };
 
-		const possiblyAddOnkeydownMethod = function() {
-			if(specDemandsKeydown()){
-				addTabstop();
-				addOnkeydownMethod();
-			}
-		};
+    const specDemandsClick = function() {
+        return action !== undefined
+            && (action.clickable === true || action.clickable === undefined);
+    };
 
-		const specDemandsKeydown = function(){
-			return action !== undefined && action.onkeydown !== undefined;
-		};
+    const addOnclickForMethodFromAction = function() {
+        view.addEventListener('click', (event) => {
+            event.stopPropagation();
+            actionMethod(event);
+        });
+    };
 
-		const addTabstop = function() {
-			view.tabIndex = 0;
-		};
+    const possiblyAddOnkeydownMethod = function() {
+        if (specDemandsKeydown()) {
+            addTabstop();
+            addOnkeydownMethod();
+        }
+    };
 
-		const addOnkeydownMethod = function() {
-			let onkeydownFunction = function(event) {
-				if (action.onkeydown.keys.indexOf(event.key) !== -1) {
-					event.stopPropagation();
-					actionMethod(event);
-				}
-			};
-			view.addEventListener("keydown", onkeydownFunction);
-		};
+    const specDemandsKeydown = function() {
+        return action !== undefined && action.onkeydown !== undefined;
+    };
 
-		const possiblyAddText = function() {
-			if (spec.text !== undefined) {
-				view.textContent = spec.text;
-			}
-		};
+    const addTabstop = function() {
+        view.tabIndex = 0;
+    };
 
-		const getView = function() {
-			return view;
-		};
+    const addOnkeydownMethod = function() {
+        view.addEventListener("keydown", onkeydownFunction);
+    };
 
-		let out = Object.freeze({
-			getView : getView
-		});
-		start();
-		return out.getView();
-	};
+    const onkeydownFunction = function(event) {
+        if (action.onkeydown.keys.includes(event.key)) {
+            event.stopPropagation();
+            actionMethod(event);
+        }
+    };
 
-	return cora;
-}(CORA));
+    const possiblyAddText = function() {
+        if (spec.text !== undefined) {
+            view.textContent = spec.text;
+        }
+    };
+
+    const getView = function() {
+        return view;
+    };
+
+    let out = Object.freeze({
+        getView: getView
+    });
+    start();
+    return out.getView();
+};
+

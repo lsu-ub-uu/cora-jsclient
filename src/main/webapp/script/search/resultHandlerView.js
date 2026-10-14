@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.resultHandlerView = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const resultHandlerView = function(dependencies, spec) {
 		let view;
 		let resultsHolder;
 
@@ -30,16 +31,16 @@ var CORA = (function(cora) {
 		};
 
 		const createView = function() {
-			return CORA.createSpanWithClassName("resultHolder");
+			return createSpanWithClassName("resultHolder");
 		};
 
 		const createResultsHolder = function() {
-			resultsHolder = CORA.createSpanWithClassName("resultsHolderPage");
+			resultsHolder = createSpanWithClassName("resultsHolderPage");
 			view.appendChild(resultsHolder);
 		};
 
 		const createInfo = function() {
-			let infoHolder = CORA.createSpanWithClassName("infoHolder");
+			let infoHolder = createSpanWithClassName("infoHolder");
 			view.appendChild(infoHolder);
 			infoHolder.textContent = spec.fromNo + " - " + spec.toNo + " " + spec.ofText + " "
 				+ spec.totalNo;
@@ -52,7 +53,7 @@ var CORA = (function(cora) {
 		};
 
 		const createRecordView = function(record) {
-			let newView = CORA.createSpanWithClassName("listItem");
+			let newView = createSpanWithClassName("listItem");
 			newView.onclick = function(event) {
 				let loadInBackground = "false";
 				if (event.ctrlKey) {
@@ -104,5 +105,4 @@ var CORA = (function(cora) {
 			addButton: addButton
 		});
 	};
-	return cora;
-}(CORA));
+

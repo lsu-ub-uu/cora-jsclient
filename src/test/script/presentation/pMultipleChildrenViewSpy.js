@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.pMultipleChildrenViewSpy = function(dependencies, spec) {
+import CORATEST from "../aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.pMultipleChildrenViewSpy = function(dependencies, spec) {
 		let addedViews = [];
 		let addedToolViews = [];
 		let showData = null;
@@ -131,5 +133,5 @@ var CORATEST = (function(coraTest) {
 			
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

@@ -65,3 +65,5 @@ QUnit.test("testUnsubscribePathAndBelow", function(assert) {
 
 	assert.strictEqual(publishCounter, 1);
 });
+
+export {};

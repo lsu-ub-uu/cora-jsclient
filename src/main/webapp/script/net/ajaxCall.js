@@ -16,9 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.ajaxCall = function(spec) {
+
+export const ajaxCall = function(spec) {
 		const defaultTimeoutMS = 90000;
 		const timeoutTime = spec.timeoutInMS ? spec.timeoutInMS : defaultTimeoutMS;
 		let intervalId;
@@ -196,5 +195,4 @@ var CORA = (function(cora) {
 			getCurrentTimeout: getCurrentTimeout
 		});
 	};
-	return cora;
-}(CORA));
+

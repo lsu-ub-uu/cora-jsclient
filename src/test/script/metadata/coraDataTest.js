@@ -18,6 +18,8 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
+
 "use strict";
 QUnit.module("metadata/coraDataTest.js", hooks => {
 	const test = QUnit.test;
@@ -563,3 +565,5 @@ QUnit.module("metadata/coraDataTest.js", hooks => {
 		assert.strictEqual(linkedRecordId, "someLinkedId");
 	});
 });
+
+export {};

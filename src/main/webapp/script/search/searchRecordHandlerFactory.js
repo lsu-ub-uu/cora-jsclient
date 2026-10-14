@@ -17,9 +17,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchRecordHandlerFactory = function(dependencies) {
+
+import { managedGuiItemFactory } from "../managedGuiItemFactory.js";
+import { messageHolderFactory } from "../gui/messageHolderFactory.js";
+import { searchHandlerJsClientIntegratorFactory } from "./searchHandlerJsClientIntegratorFactory.js";
+import { searchRecordHandler } from "./searchRecordHandler.js";
+import { searchRecordHandlerViewFactory } from "./searchRecordHandlerViewFactory.js";
+
+export const searchRecordHandlerFactory = function(dependencies) {
 
 		function getDependencies() {
 			return dependencies;
@@ -29,19 +34,19 @@ var CORA = (function(cora) {
 			var searchHandlerJsClientIntegratorDep = {
 				"searchHandlerFactory" : dependencies.globalFactories.searchHandlerFactory,
 				"jsClient" : spec.jsClient,
-				"managedGuiItemFactory" : CORA.managedGuiItemFactory()
+				"managedGuiItemFactory" : managedGuiItemFactory()
 			};
 
 			var searchRecordHandlerDependencies = {
-				"messageHolderFactory" : CORA.messageHolderFactory(),
-				"searchRecordHandlerViewFactory" : CORA.searchRecordHandlerViewFactory(),
-				"managedGuiItemFactory" : CORA.managedGuiItemFactory(),
+				"messageHolderFactory" : messageHolderFactory(),
+				"searchRecordHandlerViewFactory" : searchRecordHandlerViewFactory(),
+				"managedGuiItemFactory" : managedGuiItemFactory(),
 				"jsClient" : spec.jsClient,
 				"textProvider" : dependencies.textProvider,
-				"searchHandlerJSClientIntegratorFactory" : CORA
-						.searchHandlerJsClientIntegratorFactory(searchHandlerJsClientIntegratorDep)
+				"searchHandlerJSClientIntegratorFactory" : searchHandlerJsClientIntegratorFactory(
+						searchHandlerJsClientIntegratorDep)
 			};
-			return CORA.searchRecordHandler(searchRecordHandlerDependencies, spec);
+			return searchRecordHandler(searchRecordHandlerDependencies, spec);
 		}
 
 		return Object.freeze({
@@ -50,5 +55,3 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));

@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pParentMultipleChildren = function(dependencies, spec, child) {
+
+import { coraData } from "../metadata/coraData.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const pParentMultipleChildren = function(dependencies, spec, child) {
 		const metadataProvider = dependencies.metadataProvider;
 		const textProvider = dependencies.textProvider;
 		const cPresentation = spec.cPresentation;
@@ -40,7 +42,7 @@ var CORA = (function(cora) {
 		const start = function() {
 			cMetadataElement = getMetadataById(child.metadataId);
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			presentationId = CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			presentationId = coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 
 			let viewSpec = intializeViewSpec();
 			child.addTypeSpecificInfoToViewSpec(mode, viewSpec);
@@ -153,7 +155,7 @@ var CORA = (function(cora) {
 		};
 
 		const createAndAppendChildForPresentationChildRef = function(presentationChildRef) {
-			let cPresentationChildRef = CORA.coraData(presentationChildRef);
+			let cPresentationChildRef = coraData(presentationChildRef);
 			let refId = extractRefId(presentationChildRef);
 
 			let cPresentationChild = getMetadataById(refId);
@@ -168,8 +170,8 @@ var CORA = (function(cora) {
 		};
 
 		const extractRefId = function(presentationChildRef) {
-			let cPresentationChildRef = CORA.coraData(presentationChildRef);
-			let cRefGroup = CORA.coraData(cPresentationChildRef
+			let cPresentationChildRef = coraData(presentationChildRef);
+			let cRefGroup = coraData(cPresentationChildRef
 				.getFirstChildByNameInData("refGroup"));
 			return cRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 		};
@@ -214,7 +216,7 @@ var CORA = (function(cora) {
 			let presentationsOf = cPresentationChild.getFirstChildByNameInData("presentationsOf");
 
 			for (const childReference of presentationsOf.children) {
-				let cContainerChildReference = CORA.coraData(childReference);
+				let cContainerChildReference = coraData(childReference);
 				if (checkHasReadPermission(cContainerChildReference)) {
 					return true;
 				}
@@ -224,7 +226,7 @@ var CORA = (function(cora) {
 
 		const possiblyAppendChildView = function(ref, cPresentationChildRef,
 			cPresentationChild, refId) {
-			let cRef = CORA.coraData(ref);
+			let cRef = coraData(ref);
 			let hasReadPermission = checkHasReadPermission(cRef);
 
 			if (hasReadPermission) {
@@ -288,7 +290,7 @@ var CORA = (function(cora) {
 				textClassName += " "
 					+ cPresentationChildRef.getFirstAtomicValueByNameInData("childStyle");
 			}
-			let textSpan = CORA.createSpanWithClassName(textClassName);
+			let textSpan = createSpanWithClassName(textClassName);
 			textSpan.appendChild(document.createTextNode(textProvider.getTranslation(presRef)));
 			return textSpan;
 		};
@@ -440,7 +442,7 @@ var CORA = (function(cora) {
 		};
 
 		const getAlternativePresentation = function(cPresentationChildRef) {
-			let cAlternativePresRefGroup = CORA.coraData(cPresentationChildRef
+			let cAlternativePresRefGroup = coraData(cPresentationChildRef
 				.getChildByNameInDataAndIndex("refGroup", 1));
 			let alternativePresRefId = cAlternativePresRefGroup.getLinkedRecordIdFromFirstChildLinkWithNameInData("ref");
 			return getMetadataById(alternativePresRefId);
@@ -467,12 +469,12 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const getPresentationId = function() {
 			let recordInfo = cPresentation.getFirstChildByNameInData("recordInfo");
-			return CORA.coraData(recordInfo).getFirstAtomicValueByNameInData("id");
+			return coraData(recordInfo).getFirstAtomicValueByNameInData("id");
 		};
 
 
@@ -527,5 +529,4 @@ var CORA = (function(cora) {
 			getPresentationCounter: getPresentationCounter
 		});
 	};
-	return cora;
-}(CORA));
+

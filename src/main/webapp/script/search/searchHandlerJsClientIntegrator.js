@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.searchHandlerJsClientIntegrator = function(dependencies, spec) {
+
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const searchHandlerJsClientIntegrator = function(dependencies, spec) {
 		let menuView;
 		let managedGuiItem;
 		let searchHandler;
@@ -37,7 +38,7 @@ var CORA = (function(cora) {
 		}
 
 		function createMenuView() {
-			let createdView = CORA.createSpanWithClassName("searchMenu");
+			let createdView = createSpanWithClassName("searchMenu");
 			createdView.textContent = spec.headerText;
 			return createdView;
 		}
@@ -79,5 +80,4 @@ var CORA = (function(cora) {
 			getSpec: getSpec
 		});
 	};
-	return cora;
-}(CORA));
+

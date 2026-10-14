@@ -16,6 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import CORA from "../../../main/webapp/script/aCoraNameSpace.js";
 "use strict";
 
 QUnit.module("jsClient/jsClientViewFactoryTest.js", {
@@ -47,3 +49,5 @@ QUnit.test("factor", function(assert) {
 	let dependencies = jsClientView.getDependencies();
 	assert.strictEqual(dependencies.messageHolderFactory.type, "messageHolderFactory");
 });
+
+export {};

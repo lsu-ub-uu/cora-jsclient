@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pAttributes = function(dependencies, spec) {
+
+import { calculatePathForNewElement } from "../metadata/calculatePathForNewElement.js";
+import { coraData } from "../metadata/coraData.js";
+
+export const pAttributes = function(dependencies, spec) {
 		const metadataProvider = dependencies.metadataProvider;
 		let pubSub = dependencies.pubSub;
 		let view = dependencies.pAttributesViewFactory.factor();
@@ -75,7 +77,7 @@ var CORA = (function(cora) {
 		}
 		
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 		
 		const createAttributePresentation = function(attributeMetadataId) {
@@ -114,7 +116,7 @@ var CORA = (function(cora) {
 					type: "pCollVar"
 				}
 			};
-			return CORA.coraData(presentationChildForAttribute);
+			return coraData(presentationChildForAttribute);
 		};
 
 		const createAttributePath = function(metadataId) {
@@ -123,7 +125,7 @@ var CORA = (function(cora) {
 				parentPath: path,
 				type: "attribute"
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const getSpec = function() {
@@ -152,5 +154,4 @@ var CORA = (function(cora) {
 		});
 
 	};
-	return cora;
-}(CORA));
+

@@ -16,9 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.passwordLogin = function(dependencies, spec) {
+
+import { coraData } from "../metadata/coraData.js";
+
+export const passwordLogin = function(dependencies, spec) {
 		const recordGuiFactory = dependencies.recordGuiFactory;
 		const passwordLoginViewFactory = dependencies.passwordLoginViewFactory;
 		const ajaxCallFactory = dependencies.ajaxCallFactory;
@@ -59,7 +60,7 @@ var CORA = (function(cora) {
 		};
 
 		const login = function() {
-			let loginData = CORA.coraData(recordGui.dataHolder.getData());
+			let loginData = coraData(recordGui.dataHolder.getData());
 			loginId = loginData.getFirstAtomicValueByNameInData("loginId");
 			let password = loginData.getFirstAtomicValueByNameInData("password");
 			let callSpec = createCallSpec(loginId, password);
@@ -102,5 +103,3 @@ var CORA = (function(cora) {
 		});
 	};
 
-	return cora;
-}(CORA));

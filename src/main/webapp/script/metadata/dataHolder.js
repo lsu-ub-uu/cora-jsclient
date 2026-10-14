@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.dataHolder = function(spec) {
+
+import { calculatePathForNewElement } from "./calculatePathForNewElement.js";
+import { coraData } from "./coraData.js";
+
+export const dataHolder = function(spec) {
 		let metadataId = spec.metadataId;
 		let metadataProvider = spec.metadataProvider;
 		let pubSub = spec.pubSub;
@@ -48,7 +50,7 @@ var CORA = (function(cora) {
 		};
 
 		const getMetadataById = function(id) {
-			return CORA.coraData(metadataProvider.getMetadataById(id));
+			return coraData(metadataProvider.getMetadataById(id));
 		};
 
 		const addContainerContentFromElement = function(dataContainerPart, cMetadataElement) {
@@ -105,7 +107,7 @@ var CORA = (function(cora) {
 				parentPath: path,
 				type: "attribute"
 			};
-			let pathString = JSON.stringify(CORA.calculatePathForNewElement(pathSpec));
+			let pathString = JSON.stringify(calculatePathForNewElement(pathSpec));
 			containerPath[pathString] = attributeContainer;
 		};
 
@@ -316,7 +318,7 @@ var CORA = (function(cora) {
 				"repeatId": repeatId,
 				"parentPath": parentPath
 			};
-			return CORA.calculatePathForNewElement(pathSpec);
+			return calculatePathForNewElement(pathSpec);
 		};
 
 		const remove = function(path) {
@@ -436,5 +438,4 @@ var CORA = (function(cora) {
 			onlyForTestGetContainerPathNoRepeatId: onlyForTestGetContainerPathNoRepeatId
 		});
 	};
-	return cora;
-}(CORA));
+

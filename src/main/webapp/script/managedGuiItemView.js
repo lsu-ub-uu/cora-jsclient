@@ -17,9 +17,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.managedGuiItemView = function(spec) {
+
+import { createRemoveButton as createRemoveButtonImported } from "./gui/basicGui.js";
+import { createSpanWithClassName } from "./gui/basicGui.js";
+
+export const managedGuiItemView = function(spec) {
 
 		let originalMenuViewClassName = "menuView";
 		let menuView;
@@ -29,17 +31,17 @@ var CORA = (function(cora) {
 		const start = function() {
 			menuView = createMenuView();
 			workView = createWorkView();
-			listView = CORA.createSpanWithClassName("listView");
+			listView = createSpanWithClassName("listView");
 		};
 		
 		const createWorkView = function() {
-			let newWorkView = CORA.createSpanWithClassName("workView");
+			let newWorkView = createSpanWithClassName("workView");
 			newWorkView.addEventListener("focusin", spec.focusinMethod);
 			return newWorkView;
 		};
 
 		const createMenuView = function() {
-			let newMenuView = CORA.createSpanWithClassName(originalMenuViewClassName);
+			let newMenuView = createSpanWithClassName(originalMenuViewClassName);
 			newMenuView.onclick = spec.activateMethod;
 			possiblyCreateRemoveButton(newMenuView);
 			return newMenuView;
@@ -52,7 +54,7 @@ var CORA = (function(cora) {
 		};
 		
 		const createRemoveButton = function(addToView) {
-			let newButton = CORA.createRemoveButton(spec.removeMethod);
+			let newButton = createRemoveButtonImported(spec.removeMethod);
 			addToView.appendChild(newButton);
 		};
 
@@ -165,5 +167,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

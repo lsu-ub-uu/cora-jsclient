@@ -17,9 +17,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
+
+import { button as buttonImported } from "../gui/button.js";
+import { createSpanWithClassName } from "../gui/basicGui.js";
+import { genericFactory } from "../genericFactory.js";
+
+export const pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
 		let view;
 		let headline;
 		let buttonView;
@@ -32,7 +35,7 @@ var CORA = (function(cora) {
 		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
 		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
 		//TODO: change to be sent in through dependencies
-		let buttonFactory = CORA.genericFactory("button");
+		let buttonFactory = genericFactory(buttonImported);
 
 		const clickableHeadlineText = spec.clickableHeadlineText;
 		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
@@ -58,7 +61,7 @@ var CORA = (function(cora) {
 				newClassName += " " + spec.childStyle;
 			}
 			newClassName += " " + spec.presentationId;
-			return CORA.createSpanWithClassName(newClassName);
+			return createSpanWithClassName(newClassName);
 		};
 
 		const setContainsDataStyle = function() {
@@ -128,7 +131,7 @@ var CORA = (function(cora) {
 		const createButtonView = function(presentationSize) {
 			if (!toggleButtonsAreCreated) {
 				toggleButtonsAreCreated = true;
-				let buttonViewNew = CORA.createSpanWithClassName("buttonView");
+				let buttonViewNew = createSpanWithClassName("buttonView");
 				buttonView = buttonViewNew;
 				view.appendChild(buttonViewNew);
 				createDefaultAndAlternativeButtons(presentationSize);
@@ -286,5 +289,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

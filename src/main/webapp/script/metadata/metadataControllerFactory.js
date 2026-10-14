@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.metadataControllerFactory = function(dependencies) {
+
+import { metadataController } from "./metadataController.js";
+import { metadataChildAndRepeatInitializerFactory } from "./metadataChildAndRepeatInitializerFactory.js";
+
+export const metadataControllerFactory = function(dependencies) {
 
 		const factor = function(spec) {
 			let metadataChildAndRepeatInitializerDep = {
@@ -27,16 +29,16 @@ var CORA = (function(cora) {
 				pubSub : dependencies.pubSub
 			};
 
-			let metadataChildAndRepeatInitializerFactory = CORA
-					.metadataChildAndRepeatInitializerFactory(metadataChildAndRepeatInitializerDep);
+			let metadataChildAndRepeatInitializerFactoryNew = metadataChildAndRepeatInitializerFactory(
+					metadataChildAndRepeatInitializerDep);
 
 			let controllerDependencies = {
 				recordTypeProvider : dependencies.recordTypeProvider,
 				metadataProvider : dependencies.metadataProvider,
 				pubSub : dependencies.pubSub,
-				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactory
+				metadataChildAndRepeatInitializerFactory : metadataChildAndRepeatInitializerFactoryNew
 			};
-			return CORA.metadataController(controllerDependencies, spec);
+			return metadataController(controllerDependencies, spec);
 		};
 
 		const getDependencies = function() {
@@ -49,5 +51,3 @@ var CORA = (function(cora) {
 			factor : factor
 		});
 	};
-	return cora;
-}(CORA));

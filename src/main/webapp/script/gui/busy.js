@@ -16,16 +16,18 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.busy = function() {
+
+import { createDivWithClassName } from "./basicGui.js";
+import { box } from "./box.js";
+
+export const busy = function() {
 		let view = createView();
 		let beforeShowFunction;
 
-		let box = cora.box(view);
+		let busyBox = box(view);
 
 		function createView() {
-			return CORA.createDivWithClassName("busy hidden");
+			return createDivWithClassName("busy hidden");
 		}
 
 
@@ -47,15 +49,12 @@ var CORA = (function(cora) {
 		}
 
 		let out = Object.freeze({
-			getView: box.getView,
+			getView: busyBox.getView,
 			show: show,
-			hide: box.hide,
-			hideWithEffect: box.hideWithEffect,
+			hide: busyBox.hide,
+			hideWithEffect: busyBox.hideWithEffect,
 			addBeforeShowFunction: addBeforeShowFunction
 		});
 		view.modelObject = out;
 		return out;
 	};
-
-	return cora;
-}(CORA));

@@ -17,9 +17,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORA = (function(cora) {
-	"use strict";
-	cora.pParentVarView = function(dependencies, spec, child) {
+
+import { createSpanWithClassName } from "../gui/basicGui.js";
+
+export const pParentVarView = function(dependencies, spec, child) {
 		const infoFactory = dependencies.infoFactory;
 		let out;
 		let view;
@@ -30,7 +31,7 @@ var CORA = (function(cora) {
 		let state = "ok";
 
 		const start = function() {
-			view = CORA.createSpanWithClassName(baseClassName);
+			view = createSpanWithClassName(baseClassName);
 			possiblyAddLableTextToView();
 			valueView = createValueView();
 			view.appendChild(valueView);
@@ -60,7 +61,7 @@ var CORA = (function(cora) {
 		};
 
 		const addLabelForOutput = function() {
-			let label = CORA.createSpanWithClassName("label");
+			let label = createSpanWithClassName("label");
 			view.appendChild(label);
 			label.appendChild(document.createTextNode(spec.label));
 		};
@@ -116,7 +117,7 @@ var CORA = (function(cora) {
 		};
 
 		const createOutputText = function() {
-			let outputNew = CORA.createSpanWithClassName("value");
+			let outputNew = createSpanWithClassName("value");
 			outputNew.setValue = function(value) {
 				outputNew.textContent = value;
 			};
@@ -236,5 +237,4 @@ var CORA = (function(cora) {
 		start();
 		return out;
 	};
-	return cora;
-}(CORA));
+

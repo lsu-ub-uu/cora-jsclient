@@ -18,9 +18,9 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var CORA = (function(cora) {
-	"use strict";
-	cora.textProvider = function(dependencies, spec) {
+import { coraData } from "./coraData.js";
+
+export const textProvider = function(dependencies, spec) {
 		let texts = {};
 		let currentLang = "sv";
 		let metadata = {};
@@ -64,7 +64,7 @@ var CORA = (function(cora) {
 
 			metadata[recordId] = recordData;
 
-			let cRecordData = CORA.coraData(recordData);
+			let cRecordData = coraData(recordData);
 			let textParts = cRecordData.getChildrenByNameInData("textPart");
 			textParts.forEach(function(textPart) {
 				createTextObjectFromTextPart(recordId, textPart);
@@ -72,8 +72,8 @@ var CORA = (function(cora) {
 		};
 
 		const getIdFromRecordData = function(recordData) {
-			let cRecord = CORA.coraData(recordData);
-			let cRecordInfo = CORA.coraData(cRecord.getFirstChildByNameInData("recordInfo"));
+			let cRecord = coraData(recordData);
+			let cRecordInfo = coraData(cRecord.getFirstChildByNameInData("recordInfo"));
 			return cRecordInfo.getFirstAtomicValueByNameInData("id");
 		};
 
@@ -147,5 +147,4 @@ var CORA = (function(cora) {
 			getAllTranslations : getAllTranslations
 		});
 	};
-	return cora;
-}(CORA));
+

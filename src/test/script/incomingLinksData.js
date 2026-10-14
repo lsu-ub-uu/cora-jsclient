@@ -1,3 +1,5 @@
+import CORATEST from "./aCoratestNameSpace.js";
+
 CORATEST.incomingLinksAnswer={
   "dataList": {
     "fromNo": "1",
@@ -208,3 +210,5 @@ CORATEST.incomingLinksWithoutPresentationsAnswer={
     "toNo": "1"
   }
 }
+
+export {};

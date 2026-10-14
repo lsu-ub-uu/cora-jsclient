@@ -16,9 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-var CORATEST = (function(coraTest) {
-	"use strict";
-	coraTest.recordHandlerSpy = function(dependencies, spec) {
+import CORATEST from "./aCoratestNameSpace.js";
+
+const coraTest = CORATEST;
+
+coraTest.recordHandlerSpy = function(dependencies, spec) {
 		var managedGuiItem = CORATEST.managedGuiItemSpy();
 
 		function getManagedGuiItem() {
@@ -29,5 +31,5 @@ var CORATEST = (function(coraTest) {
 			getManagedGuiItem : getManagedGuiItem
 		});
 	};
-	return coraTest;
-}(CORATEST || {}));
+
+export default CORATEST;

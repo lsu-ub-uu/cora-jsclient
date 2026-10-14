@@ -18,31 +18,30 @@
  */
 
 export const pathUtils = function() {
+    const ensureNoRepeatIdInLowestLevelOfPath = function(pathIn) {
+        let path = structuredClone(pathIn);
+        if (pathHasChildren(path)) {
+            removeRepeatIdFromLowestLevelOfPath(path);
+        }
+        return path;
+    };
 
-		const ensureNoRepeatIdInLowestLevelOfPath = function(pathIn) {
-			let path = JSON.parse(JSON.stringify(pathIn));
-			if (pathHasChildren(path)) {
-				removeRepeatIdFromLowestLevelOfPath(path);
-			}
-			return path;
-		};
+    const removeRepeatIdFromLowestLevelOfPath = function(path) {
+        let lowestPath = path.pop();
+        if (lowestPath.indexOf(".") > 0) {
+            lowestPath = lowestPath.substring(0, lowestPath.indexOf("."));
+        }
+        path.push(lowestPath);
+    };
 
-		const removeRepeatIdFromLowestLevelOfPath = function(path) {
-			let lowestPath = path.pop();
-			if (lowestPath.indexOf(".")>0) {
-				lowestPath = lowestPath.substring(0, lowestPath.indexOf("."));
-			}
-			path.push(lowestPath);
-		};
+    const pathHasChildren = function(path) {
+        return path.length > 0;
+    };
 
-		const pathHasChildren = function(path) {
-			return path.length > 0;
-		};
+    return Object.freeze({
+        type: "pathUtils",
+        ensureNoRepeatIdInLowestLevelOfPath: ensureNoRepeatIdInLowestLevelOfPath
+    });
 
-		return Object.freeze({
-			type: "pathUtils",
-			ensureNoRepeatIdInLowestLevelOfPath: ensureNoRepeatIdInLowestLevelOfPath
-		});
-
-	};
+};
 

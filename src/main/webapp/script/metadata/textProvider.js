@@ -35,13 +35,9 @@ export const textProvider = function(dependencies, spec) {
 		};
 
 		const callThroughAjax = function(linkSpec, callAfterAnswer) {
-			let ajaxCallSpec = createIndependentCopy(linkSpec);
+			let ajaxCallSpec = structuredClone(linkSpec);
 			ajaxCallSpec.loadMethod = callAfterAnswer;
 			dependencies.ajaxCallFactory.factor(ajaxCallSpec);
-		};
-
-		const createIndependentCopy = function(someObject) {
-			return JSON.parse(JSON.stringify(someObject));
 		};
 
 		const processFetchedTextdata = function(answer) {

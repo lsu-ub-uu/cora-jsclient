@@ -680,7 +680,7 @@ coraTest.searchProviderSpy = function() {
 			}
 		};
 
-		let textSearchWithResultPresentation = JSON.parse(JSON.stringify(searchArray.textSearch));
+		let textSearchWithResultPresentation = structuredClone(searchArray.textSearch);
 		textSearchWithResultPresentation.data.children.push({
 							name: "searchResultPresentation",
 							children: [{

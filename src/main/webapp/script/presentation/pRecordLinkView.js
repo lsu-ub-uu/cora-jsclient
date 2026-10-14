@@ -268,12 +268,12 @@ export const pRecordLinkView = function(dependencies, spec) {
 			view.insertBefore(attributesView, info.nextSibling);
 		};
 		
-		const hide = function(element) {
+		const hide = function() {
 			view.styleOriginal = view.style.display;
 			view.style.display = "none";
 		};
 
-		const show = function(element) {
+		const show = function() {
 			if (view.styleOriginal !== undefined) {
 				view.style.display = view.styleOriginal;
 			} else {

@@ -206,6 +206,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
                         name: "linkedRecordId",
                         value: "someRecordIdFromDep"
                     }]
+                },
+                {
+                    name: "status",
+                    value: "created"
                 }
                 ]
             }, {
@@ -255,6 +259,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
                         name: "linkedRecordId",
                         value: "someRecordIdFromDep"
                     }]
+                },
+                {
+                    name: "status",
+                    value: "created"
                 }
                 ]
             },
@@ -304,6 +312,10 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
                         name: "linkedRecordId",
                         value: "someRecordIdFromDep"
                     }]
+                },
+                {
+                    name: "status",
+                    value: "created"
                 }
                 ]
             }, {
@@ -753,7 +765,7 @@ QUnit.module("presentation/pChildRefHandlerTest.js", hooks => {
 
         assert.strictEqual(ajaxCallSpy0.getSpec().loadMethod, pChildRefHandler.processNewBinary);
 
-        dataBinaryRecord = JSON.parse(JSON.stringify(dataBinaryRecord));
+        dataBinaryRecord = structuredClone(dataBinaryRecord);
         dataBinaryRecord.attributes.type = "generic";
         assert.strictEqual(ajaxCallSpy0.getSpec().data, JSON.stringify(dataBinaryRecord));
     });

@@ -19,479 +19,479 @@
  */
 
 import { button } from "../gui/button.js";
-import { createRemoveButton as createRemoveButtonImported } from "../gui/basicGui.js";
-import { createSpanWithClassName } from "../gui/basicGui.js";
+import { createRemoveButton as createRemoveButtonImported, createSpanWithClassName } from "../gui/basicGui.js";
 
 export const pRepeatingElement = function(dependencies, spec) {
-		const jsBookkeeper = dependencies.jsBookkeeper;
-		const pubSub = dependencies.pubSub;
+    const jsBookkeeper = dependencies.jsBookkeeper;
+    const pubSub = dependencies.pubSub;
 
-		const pChildRefHandler = spec.pChildRefHandler;
-		const pChildRefHandlerView = spec.pChildRefHandlerView;
-		const path = spec.path;
+    const pChildRefHandler = spec.pChildRefHandler;
+    const pChildRefHandlerView = spec.pChildRefHandlerView;
+    const path = spec.path;
 
-		const userCanRemove = spec.userCanRemove;
-		const userCanMove = spec.userCanMove;
-		const userCanAddBefore = spec.userCanAddBefore;
-		const clickableHeadlineText = spec.clickableHeadlineText;
-		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
-		const mode = spec.mode;
-		const parentPresentationCounter = spec.parentPresentationCounter;
+    const userCanRemove = spec.userCanRemove;
+    const userCanMove = spec.userCanMove;
+    const userCanAddBefore = spec.userCanAddBefore;
+    const clickableHeadlineText = spec.clickableHeadlineText;
+    const clickableHeadlineLevel = spec.clickableHeadlineLevel;
+    const mode = spec.mode;
+    const parentPresentationCounter = spec.parentPresentationCounter;
 
-		let presentationSize = spec.presentationSize;
+    let presentationSize = spec.presentationSize;
 
-		let view;
-		let removeButton;
-		let dragButton;
-		let addBeforeButton;
-		let alternativePresentation;
-		let defaultPresentation;
-		let alternativeButton;
-		let defaultButton;
+    let view;
+    let removeButton;
+    let dragButton;
+    let addBeforeButton;
+    let alternativePresentation;
+    let defaultPresentation;
+    let alternativeButton;
+    let defaultButton;
 
-		let buttonView;
-		let showDefaultPresentationNext = false;
-		let toggleButtonsAreCreated = false;
-		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
-		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
-		let presentationVisibilities = {};
-		let pRepeatingElementIsVisible;
-		let presentationContainsDatas = {};
-		let pRepeatingElementContainsData;
-		let presentationContainsErrors = {};
-		let pRepeatingElementContainsError;
-		let presentationCounterToUseWhenPublishingCombinedStatus;
-
-
-		const start = function() {
-			view = createBaseView();
-			buttonView = createButtonView();
-			possiblyAddClickableHeadline();
-			updateViewForNoInitialData();
-		};
+    let buttonView;
+    let showDefaultPresentationNext = false;
+    let toggleButtonsAreCreated = false;
+    let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
+    let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+    let presentationVisibilities = {};
+    let pRepeatingElementIsVisible;
+    let presentationContainsDatas = {};
+    let pRepeatingElementContainsData;
+    let presentationContainsErrors = {};
+    let pRepeatingElementContainsError;
+    let presentationCounterToUseWhenPublishingCombinedStatus;
 
 
-		const updateViewForNoInitialData = function() {
-			view.classList.remove("containsData");
-			view.classList.add("containsNoData");
-			if (mode === "output") {
-				hide(view);
-			}
-		};
+    const start = function() {
+        view = createBaseView();
+        buttonView = createButtonView();
+        possiblyAddClickableHeadline();
+        updateViewForNoInitialData();
+    };
 
-		const createBaseView = function() {
-			let repeatingElement = createSpanWithClassName("repeatingElement");
-			if (userCanMove) {
-				repeatingElement.ondragenter = ondragenterHandler;
-			}
-			return repeatingElement;
-		};
 
-		const ondragenterHandler = function() {
-			pChildRefHandlerView.setRepeatingElementDragOver(view.modelObject);
-		};
+    const updateViewForNoInitialData = function() {
+        view.classList.remove("containsData");
+        view.classList.add("containsNoData");
+        if (mode === "output") {
+            hide(view);
+        }
+    };
 
-		const createButtonView = function() {
-			let newButtonView = createSpanWithClassName("buttonView");
-			view.appendChild(newButtonView);
-			if (userCanRemove) {
-				removeButton = createRemoveButton();
-				newButtonView.appendChild(removeButton);
-			}
-			if (userCanMove) {
-				dragButton = createDragButton();
-				newButtonView.appendChild(dragButton);
-			}
-			if (userCanAddBefore) {
-				addBeforeButton = createAddBeforeButton();
-				newButtonView.appendChild(addBeforeButton);
-			}
+    const createBaseView = function() {
+        let repeatingElement = createSpanWithClassName("repeatingElement");
+        if (userCanMove) {
+            repeatingElement.ondragenter = ondragenterHandler;
+        }
+        return repeatingElement;
+    };
 
-			return newButtonView;
-		};
+    const ondragenterHandler = function() {
+        pChildRefHandlerView.setRepeatingElementDragOver(view.modelObject);
+    };
 
-		const createRemoveButton = function() {
-			let removeFunction = function() {
-				let data = {
-					type: "remove",
-					path: path
-				};
-				jsBookkeeper.remove(data);
-			};
-			let newRemoveButton = createRemoveButtonImported(removeFunction);
-			newRemoveButton.addEventListener("mouseenter", function() {
-				view.classList.add("hoverRemove");
-			});
-			newRemoveButton.addEventListener("mouseleave", function() {
-				view.classList.remove("hoverRemove");
-			});
-			return newRemoveButton;
-		};
+    const createButtonView = function() {
+        let newButtonView = createSpanWithClassName("buttonView");
+        view.appendChild(newButtonView);
+        if (userCanRemove) {
+            removeButton = createRemoveButton();
+            newButtonView.appendChild(removeButton);
+        }
+        if (userCanMove) {
+            dragButton = createDragButton();
+            newButtonView.appendChild(dragButton);
+        }
+        if (userCanAddBefore) {
+            addBeforeButton = createAddBeforeButton();
+            newButtonView.appendChild(addBeforeButton);
+        }
 
-		const createDragButton = function() {
-			let createdDragButton = createSpanWithClassName("iconButton dragButton");
-			createdDragButton.onmousedown = function() {
-				view.draggable = "true";
-			};
-			createdDragButton.onmouseup = function() {
-				view.draggable = undefined;
-			};
-			return createdDragButton;
-		};
+        return newButtonView;
+    };
 
-		const createAddBeforeButton = function() {
-			let addBeforeFunction = function() {
-				let data = {
-					path: path
-				};
-				pChildRefHandler.sendAddBefore(data);
-			};
-			let buttonSpec = {
-				className: "iconButton addBeforeButton",
-				action: {
-					method: addBeforeFunction
-				}
-			};
-			return button(buttonSpec);
-		};
+    const createRemoveButton = function() {
+        let newRemoveButton = createRemoveButtonImported(removeFunction);
+        newRemoveButton.addEventListener("mouseenter", function() {
+            view.classList.add("hoverRemove");
+        });
+        newRemoveButton.addEventListener("mouseleave", function() {
+            view.classList.remove("hoverRemove");
+        });
+        return newRemoveButton;
+    };
 
-		const possiblyAddClickableHeadline = function() {
-			if (clickableHeadlineText) {
-				const level = clickableHeadlineLevel || "h2";
-				addClickableHeadline(clickableHeadlineText, level);
-				presentationSize = presentationSize || "singleInitiallyHidden";
-				createDefaultAndAlternativeButtons(presentationSize);
-			}
-		};
+    const removeFunction = function() {
+        let data = {
+            type: "remove",
+            path: path
+        };
+        jsBookkeeper.remove(data);
+    };
 
-		const addClickableHeadline = function(text, level) {
-			let headline = document.createElement(level);
-			headline.classList.add("clickableHeadline");
-			headline.addEventListener('click', () => {
-				toggleDefaultShown();
-			});
-			view.insertBefore(headline, buttonView);
-			headline.appendChild(document.createTextNode(text));
-		};
+    const createDragButton = function() {
+        let createdDragButton = createSpanWithClassName("iconButton dragButton");
+        createdDragButton.onmousedown = function() {
+            view.draggable = "true";
+        };
+        createdDragButton.onmouseup = function() {
+            view.draggable = undefined;
+        };
+        return createdDragButton;
+    };
 
-		const getView = function() {
-			return view;
-		};
+    const createAddBeforeButton = function() {
+        let buttonSpec = {
+            className: "iconButton addBeforeButton",
+            action: {
+                method: addBeforeFunction
+            }
+        };
+        return button(buttonSpec);
+    };
 
-		const addPresentation = function(defaultPresentationIn) {
-			presentationCounterToUseWhenPublishingCombinedStatus = defaultPresentationIn.getPresentationCounter();
-			pubSub.subscribe("visibilityChange", [defaultPresentationIn.getPresentationCounter()],
-				undefined, handleMsgToDeterminVisibilityChange);
-			defaultPresentation = defaultPresentationIn.getView();
-			defaultPresentation.classList.add("default");
-			view.insertBefore(defaultPresentation, buttonView);
-			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
-		};
+    const addBeforeFunction = function() {
+        let data = {
+            path: path
+        };
+        pChildRefHandler.sendAddBefore(data);
+    };
 
-		const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
-			presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
-			presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
-			presentationContainsErrors[dataFromMsg.presentationCounter] = dataFromMsg.containsError;
-			let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
-			let visibilityHasChanged = visibilityChanges(currentlyVisible);
-			let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
-			let containsDataHasChanged = containsDataChanges(currentlyContainsData);
-			let currentlyContainsError = atLeastOneTrackedPresentationContainsError();
-			let containsErrorHasChanged = containsErrorChanges(currentlyContainsError);
+    const possiblyAddClickableHeadline = function() {
+        if (clickableHeadlineText) {
+            const level = clickableHeadlineLevel || "h2";
+            addClickableHeadline(clickableHeadlineText, level);
+            presentationSize = presentationSize || "singleInitiallyHidden";
+            createDefaultAndAlternativeButtons(presentationSize);
+        }
+    };
 
-			if (visibilityHasChanged && mode === "output") {
-				showOrHideViewBaseOnVisibility(currentlyVisible);
-			}
-			if (visibilityHasChanged || containsDataHasChanged || containsErrorHasChanged) {
-				publishVisibilityChange(getVisibilityStatus(), currentlyContainsData,
-					currentlyContainsError);
-			}
-			if (currentlyContainsData) {
-				updateViewForContainsData();
-			} else {
-				updateViewForContainsNoData();
-			}
+    const addClickableHeadline = function(text, level) {
+        let headline = document.createElement(level);
+        headline.classList.add("clickableHeadline");
+        headline.addEventListener('click', () => {
+            toggleDefaultShown();
+        });
+        view.insertBefore(headline, buttonView);
+        headline.appendChild(document.createTextNode(text));
+    };
 
-			if (currentlyContainsError) {
-				updateViewForContainsError();
-			} else {
-				updateViewForContainsNoError();
-			}
-		};
+    const getView = function() {
+        return view;
+    };
 
-		const atLeastOneTrackedPresentationIsVisible = function() {
-			return Object.values(presentationVisibilities).some(v => v === 'visible');
-		};
+    const addPresentation = function(defaultPresentationIn) {
+        presentationCounterToUseWhenPublishingCombinedStatus = defaultPresentationIn.getPresentationCounter();
+        pubSub.subscribe("visibilityChange", [defaultPresentationIn.getPresentationCounter()],
+            undefined, handleMsgToDeterminVisibilityChange);
+        defaultPresentation = defaultPresentationIn.getView();
+        defaultPresentation.classList.add("default");
+        view.insertBefore(defaultPresentation, buttonView);
+        possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
+    };
 
-		const atLeastOneTrackedPresentationContainsData = function() {
-			return Object.values(presentationContainsDatas).some(v => v === true);
-		};
+    const handleMsgToDeterminVisibilityChange = function(dataFromMsg, msg) {
+        presentationVisibilities[dataFromMsg.presentationCounter] = dataFromMsg.visibility;
+        presentationContainsDatas[dataFromMsg.presentationCounter] = dataFromMsg.containsData;
+        presentationContainsErrors[dataFromMsg.presentationCounter] = dataFromMsg.containsError;
+        let currentlyVisible = atLeastOneTrackedPresentationIsVisible();
+        let visibilityHasChanged = visibilityChanges(currentlyVisible);
+        let currentlyContainsData = atLeastOneTrackedPresentationContainsData();
+        let containsDataHasChanged = containsDataChanges(currentlyContainsData);
+        let currentlyContainsError = atLeastOneTrackedPresentationContainsError();
+        let containsErrorHasChanged = containsErrorChanges(currentlyContainsError);
 
-		const atLeastOneTrackedPresentationContainsError = function() {
-			return Object.values(presentationContainsErrors).some(v => v === true);
-		};
+        if (visibilityHasChanged && mode === "output") {
+            showOrHideViewBaseOnVisibility(currentlyVisible);
+        }
+        if (visibilityHasChanged || containsDataHasChanged || containsErrorHasChanged) {
+            publishVisibilityChange(getVisibilityStatus(), currentlyContainsData,
+                currentlyContainsError);
+        }
+        if (currentlyContainsData) {
+            updateViewForContainsData();
+        } else {
+            updateViewForContainsNoData();
+        }
 
-		const getVisibilityStatus = function() {
-			if (Object.values(presentationVisibilities).some(v => v === 'visible')) {
-				return "visible";
-			}
-			return "hidden";
-		};
+        if (currentlyContainsError) {
+            updateViewForContainsError();
+        } else {
+            updateViewForContainsNoError();
+        }
+    };
 
-		const visibilityChanges = function(currentlyVisible) {
-			if (pRepeatingElementIsVisible !== currentlyVisible) {
-				pRepeatingElementIsVisible = currentlyVisible;
-				return true;
-			}
-			return false;
-		};
+    const atLeastOneTrackedPresentationIsVisible = function() {
+        return Object.values(presentationVisibilities).includes('visible');
+    };
 
-		const containsDataChanges = function(currentlyContainsData) {
-			if (pRepeatingElementContainsData !== currentlyContainsData) {
-				pRepeatingElementContainsData = currentlyContainsData;
-				return true;
-			}
-			return false;
-		};
+    const atLeastOneTrackedPresentationContainsData = function() {
+        return Object.values(presentationContainsDatas).includes(true);
+    };
 
-		const containsErrorChanges = function(currentlyContainsError) {
-			if (pRepeatingElementContainsError !== currentlyContainsError) {
-				pRepeatingElementContainsError = currentlyContainsError;
-				return true;
-			}
-			return false;
-		};
+    const atLeastOneTrackedPresentationContainsError = function() {
+        return Object.values(presentationContainsErrors).includes(true);
+    };
 
-		const showOrHideViewBaseOnVisibility = function(currentlyVisible) {
-			if (currentlyVisible) {
-				show(view);
-			} else {
-				hide(view);
-			}
-		};
+    const getVisibilityStatus = function() {
+        if (Object.values(presentationVisibilities).includes('visible')) {
+            return "visible";
+        }
+        return "hidden";
+    };
 
-		const updateViewForContainsData = function() {
-			view.classList.add("containsData");
-			view.classList.remove("containsNoData");
-		};
+    const visibilityChanges = function(currentlyVisible) {
+        if (pRepeatingElementIsVisible !== currentlyVisible) {
+            pRepeatingElementIsVisible = currentlyVisible;
+            return true;
+        }
+        return false;
+    };
 
-		const updateViewForContainsNoData = function() {
-			view.classList.remove("containsData");
-			view.classList.add("containsNoData");
-		};
+    const containsDataChanges = function(currentlyContainsData) {
+        if (pRepeatingElementContainsData !== currentlyContainsData) {
+            pRepeatingElementContainsData = currentlyContainsData;
+            return true;
+        }
+        return false;
+    };
 
-		const updateViewForContainsError = function() {
-			view.classList.add("containsError");
-		};
+    const containsErrorChanges = function(currentlyContainsError) {
+        if (pRepeatingElementContainsError !== currentlyContainsError) {
+            pRepeatingElementContainsError = currentlyContainsError;
+            return true;
+        }
+        return false;
+    };
 
-		const updateViewForContainsNoError = function() {
-			view.classList.remove("containsError");
-		};
+    const showOrHideViewBaseOnVisibility = function(currentlyVisible) {
+        if (currentlyVisible) {
+            show(view);
+        } else {
+            hide(view);
+        }
+    };
 
-		const publishVisibilityChange = function(currentlyVisible, currentlyContainsData,
-			currentlyContainsError) {
-			let visibilityData = {
-				path: [parentPresentationCounter],
-				presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
-				visibility: currentlyVisible,
-				containsData: currentlyContainsData,
-				containsError: currentlyContainsError
-			};
-			pubSub.publish("visibilityChange", visibilityData);
-		};
+    const updateViewForContainsData = function() {
+        view.classList.add("containsData");
+        view.classList.remove("containsNoData");
+    };
 
-		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
-			if (presentationSize === "singleInitiallyHidden") {
-				showDefaultPresentationNext = false;
-				toggleDefaultShown();
-			}
-			if (presentationSize === "singleInitiallyVisible") {
-				showDefaultPresentationNext = true;
-				toggleDefaultShown();
-			}
-		};
+    const updateViewForContainsNoData = function() {
+        view.classList.remove("containsData");
+        view.classList.add("containsNoData");
+    };
 
-		const addAlternativePresentation = function(presentation) {
-			pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
-				undefined, handleMsgToDeterminVisibilityChange);
-			alternativePresentation = presentation.getView();
-			alternativePresentation.classList.add("alternative");
-			view.insertBefore(alternativePresentation, buttonView);
-			createDefaultAndAlternativeButtons(presentationSize);
-			showDefaultPresentationNext = true;
-			toggleDefaultShown();
-		};
+    const updateViewForContainsError = function() {
+        view.classList.add("containsError");
+    };
 
-		const createDefaultAndAlternativeButtons = function(presentationSize) {
-			if (!toggleButtonsAreCreated) {
-				toggleButtonsAreCreated = true;
-				let buttonClasses = getButtonClassName(presentationSize);
-				createAndAddAlternativeButton(buttonClasses);
-				createAndAddDefaultButton(buttonClasses);
-			}
-		};
+    const updateViewForContainsNoError = function() {
+        view.classList.remove("containsError");
+    };
 
-		const getButtonClassName = function(presentationSize) {
-			if (presentationSizeIsExpanding(presentationSize)) {
-				return {
-					default: "maximizeButton",
-					alternative: "minimizeButton"
-				};
-			}
-			if (presentationSize === "firstSmaller") {
-				return {
-					default: "minimizeButton",
-					alternative: "maximizeButton"
-				};
-			}
-			return {
-				default: "defaultButton",
-				alternative: "alternativeButton"
-			};
-		};
+    const publishVisibilityChange = function(currentlyVisible, currentlyContainsData,
+        currentlyContainsError) {
+        let visibilityData = {
+            path: [parentPresentationCounter],
+            presentationCounter: presentationCounterToUseWhenPublishingCombinedStatus,
+            visibility: currentlyVisible,
+            containsData: currentlyContainsData,
+            containsError: currentlyContainsError
+        };
+        pubSub.publish("visibilityChange", visibilityData);
+    };
 
-		const presentationSizeIsExpanding = function(presentationSize) {
-			return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
-				.includes(presentationSize);
-		};
+    const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
+        if (presentationSize === "singleInitiallyHidden") {
+            showDefaultPresentationNext = false;
+            toggleDefaultShown();
+        }
+        if (presentationSize === "singleInitiallyVisible") {
+            showDefaultPresentationNext = true;
+            toggleDefaultShown();
+        }
+    };
 
-		const createAndAddAlternativeButton = function(buttonClasses) {
-			alternativeButton = createSpanWithClassName("iconButton " + buttonClasses.alternative);
-			alternativeButton.onclick = showAlternativePresentation;
-			if (userCanMove) {
-				buttonView.insertBefore(alternativeButton, dragButton);
-			} else {
-				buttonView.appendChild(alternativeButton);
-			}
-		};
+    const addAlternativePresentation = function(presentation) {
+        pubSub.subscribe("visibilityChange", [presentation.getPresentationCounter()],
+            undefined, handleMsgToDeterminVisibilityChange);
+        alternativePresentation = presentation.getView();
+        alternativePresentation.classList.add("alternative");
+        view.insertBefore(alternativePresentation, buttonView);
+        createDefaultAndAlternativeButtons(presentationSize);
+        showDefaultPresentationNext = true;
+        toggleDefaultShown();
+    };
 
-		const createAndAddDefaultButton = function(buttonClasses) {
-			defaultButton = createSpanWithClassName("iconButton " + buttonClasses.default);
-			defaultButton.onclick = showDefaultPresentation;
-			if (userCanMove) {
-				buttonView.insertBefore(defaultButton, dragButton);
-			} else {
-				buttonView.appendChild(defaultButton);
-			}
-		};
+    const createDefaultAndAlternativeButtons = function(presentationSize) {
+        if (!toggleButtonsAreCreated) {
+            toggleButtonsAreCreated = true;
+            let buttonClasses = getButtonClassName(presentationSize);
+            createAndAddAlternativeButton(buttonClasses);
+            createAndAddDefaultButton(buttonClasses);
+        }
+    };
 
-		const showAlternativePresentation = function() {
-			showDefaultPresentationNext = false;
-			toggleDefaultShown();
-		};
+    const getButtonClassName = function(presentationSize) {
+        if (presentationSizeIsExpanding(presentationSize)) {
+            return {
+                default: "maximizeButton",
+                alternative: "minimizeButton"
+            };
+        }
+        if (presentationSize === "firstSmaller") {
+            return {
+                default: "minimizeButton",
+                alternative: "maximizeButton"
+            };
+        }
+        return {
+            default: "defaultButton",
+            alternative: "alternativeButton"
+        };
+    };
 
-		const showDefaultPresentation = function() {
-			showDefaultPresentationNext = true;
-			toggleDefaultShown();
-		};
+    const presentationSizeIsExpanding = function(presentationSize) {
+        return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
+            .includes(presentationSize);
+    };
 
-		const toggleDefaultShown = function() {
-			if (showDefaultPresentationNext === true) {
-				hide(alternativePresentation);
-				show(defaultPresentation);
-				show(alternativeButton);
-				hide(defaultButton);
-				callOnFirstShowOfDefaultPresentation();
-			} else {
-				show(alternativePresentation);
-				hide(defaultPresentation);
-				hide(alternativeButton);
-				show(defaultButton);
-				callOnFirstShowOfAlternativePresentation();
-			}
-			showDefaultPresentationNext = !showDefaultPresentationNext;
-		};
+    const createAndAddAlternativeButton = function(buttonClasses) {
+        alternativeButton = createSpanWithClassName("iconButton " + buttonClasses.alternative);
+        alternativeButton.onclick = showAlternativePresentation;
+        if (userCanMove) {
+            buttonView.insertBefore(alternativeButton, dragButton);
+        } else {
+            buttonView.appendChild(alternativeButton);
+        }
+    };
 
-		const callOnFirstShowOfDefaultPresentation = function() {
-			if (callOnFirstShowOfDefaultPresentationShouldBeCalled
-				&& spec.callOnFirstShowOfPresentation !== undefined) {
-				callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfPresentation();
-			}
-		};
-		const callOnFirstShowOfAlternativePresentation = function() {
-			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
-				&& spec.callOnFirstShowOfPresentation !== undefined) {
-				callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfPresentation();
-			}
-		};
+    const createAndAddDefaultButton = function(buttonClasses) {
+        defaultButton = createSpanWithClassName("iconButton " + buttonClasses.default);
+        defaultButton.onclick = showDefaultPresentation;
+        if (userCanMove) {
+            buttonView.insertBefore(defaultButton, dragButton);
+        } else {
+            buttonView.appendChild(defaultButton);
+        }
+    };
 
-		const hideRemoveButton = function() {
-			hide(removeButton);
-		};
+    const showAlternativePresentation = function() {
+        showDefaultPresentationNext = false;
+        toggleDefaultShown();
+    };
 
-		const showRemoveButton = function() {
-			show(removeButton);
-		};
+    const showDefaultPresentation = function() {
+        showDefaultPresentationNext = true;
+        toggleDefaultShown();
+    };
 
-		const hideDragButton = function() {
-			if (dragButton !== undefined) {
-				hide(dragButton);
-			}
-		};
+    const toggleDefaultShown = function() {
+        if (showDefaultPresentationNext === true) {
+            hide(alternativePresentation);
+            show(defaultPresentation);
+            show(alternativeButton);
+            hide(defaultButton);
+            callOnFirstShowOfDefaultPresentation();
+        } else {
+            show(alternativePresentation);
+            hide(defaultPresentation);
+            hide(alternativeButton);
+            show(defaultButton);
+            callOnFirstShowOfAlternativePresentation();
+        }
+        showDefaultPresentationNext = !showDefaultPresentationNext;
+    };
 
-		const showDragButton = function() {
-			if (dragButton !== undefined) {
-				show(dragButton);
-			}
-		};
+    const callOnFirstShowOfDefaultPresentation = function() {
+        if (callOnFirstShowOfDefaultPresentationShouldBeCalled
+            && spec.callOnFirstShowOfPresentation !== undefined) {
+            callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
+            spec.callOnFirstShowOfPresentation();
+        }
+    };
+    const callOnFirstShowOfAlternativePresentation = function() {
+        if (callOnFirstShowOfAlternativePresentationShouldBeCalled
+            && spec.callOnFirstShowOfPresentation !== undefined) {
+            callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
+            spec.callOnFirstShowOfPresentation();
+        }
+    };
 
-		const hide = function(element) {
-			if (element !== undefined && element.style.display !== "none") {
-				element.styleOriginal = element.style.display;
-				element.style.display = "none";
-			}
-		};
+    const hideRemoveButton = function() {
+        hide(removeButton);
+    };
 
-		const show = function(element) {
-			if (element !== undefined) {
-				if (element.styleOriginal !== undefined) {
-					element.style.display = element.styleOriginal;
-				} else {
-					element.style.display = "";
-				}
-			}
-		};
+    const showRemoveButton = function() {
+        show(removeButton);
+    };
 
-		const hideAddBeforeButton = function() {
-			hide(addBeforeButton);
-		};
+    const hideDragButton = function() {
+        if (dragButton !== undefined) {
+            hide(dragButton);
+        }
+    };
 
-		const showAddBeforeButton = function() {
-			show(addBeforeButton);
-		};
+    const showDragButton = function() {
+        if (dragButton !== undefined) {
+            show(dragButton);
+        }
+    };
 
-		const getPath = function() {
-			return path;
-		};
+    const hideAddBeforeButton = function() {
+        hide(addBeforeButton);
+    };
 
-		const getDependencies = function() {
-			return dependencies;
-		};
+    const showAddBeforeButton = function() {
+        show(addBeforeButton);
+    };
 
-		const getSpec = function() {
-			return spec;
-		};
+    const getPath = function() {
+        return path;
+    };
 
-		let out = Object.freeze({
-			type: "pRepeatingElement",
-			getDependencies: getDependencies,
-			getSpec: getSpec,
-			getView: getView,
-			addPresentation: addPresentation,
-			addAlternativePresentation: addAlternativePresentation,
-			hideRemoveButton: hideRemoveButton,
-			showRemoveButton: showRemoveButton,
-			hideDragButton: hideDragButton,
-			showDragButton: showDragButton,
-			hideAddBeforeButton: hideAddBeforeButton,
-			showAddBeforeButton: showAddBeforeButton,
-			getPath: getPath,
-			handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
-		});
-		start();
-		view.modelObject = out;
-		return out;
-	};
+    const getDependencies = function() {
+        return dependencies;
+    };
 
+    const getSpec = function() {
+        return spec;
+    };
+
+    let out = Object.freeze({
+        type: "pRepeatingElement",
+        getDependencies: getDependencies,
+        getSpec: getSpec,
+        getView: getView,
+        addPresentation: addPresentation,
+        addAlternativePresentation: addAlternativePresentation,
+        hideRemoveButton: hideRemoveButton,
+        showRemoveButton: showRemoveButton,
+        hideDragButton: hideDragButton,
+        showDragButton: showDragButton,
+        hideAddBeforeButton: hideAddBeforeButton,
+        showAddBeforeButton: showAddBeforeButton,
+        getPath: getPath,
+        handleMsgToDeterminVisibilityChange: handleMsgToDeterminVisibilityChange
+    });
+    start();
+    view.modelObject = out;
+    return out;
+};
+
+const hide = function(element) {
+    if (element !== undefined && element.style.display !== "none") {
+        element.styleOriginal = element.style.display;
+        element.style.display = "none";
+    }
+};
+
+const show = function(element) {
+    if (element !== undefined) {
+        if (element.styleOriginal !== undefined) {
+            element.style.display = element.styleOriginal;
+        } else {
+            element.style.display = "";
+        }
+    }
+};

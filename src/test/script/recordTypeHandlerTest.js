@@ -32,13 +32,13 @@ QUnit.module("recordTypeHandlerTest.js", {
 	beforeEach : function() {
 		this.record = CORATEST.recordTypeList.dataList.data[0].record;
 		
-		this.recordWithoutListLink = JSON.parse(JSON.stringify(this.record));
+		this.recordWithoutListLink = structuredClone(this.record);
 		this.recordWithoutListLink.actionLinks.list = undefined;
 		
-		this.recordWithoutCreateLink = JSON.parse(JSON.stringify(this.record));
+		this.recordWithoutCreateLink = structuredClone(this.record);
 		this.recordWithoutCreateLink.actionLinks.create = undefined;
 		
-		this.recordWithoutListAndCreateLink = JSON.parse(JSON.stringify(this.record));
+		this.recordWithoutListAndCreateLink = structuredClone(this.record);
 		this.recordWithoutListAndCreateLink.actionLinks.list = undefined;
 		this.recordWithoutListAndCreateLink.actionLinks.create = undefined;
 

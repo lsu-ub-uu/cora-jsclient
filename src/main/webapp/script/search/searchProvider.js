@@ -33,13 +33,9 @@ export const searchProvider = function(dependencies, spec) {
 		}
 
 		function callThroughAjax(linkSpec, callAfterAnswer) {
-			var ajaxCallSpec = createIndependentCopy(linkSpec);
+			var ajaxCallSpec = structuredClone(linkSpec);
 			ajaxCallSpec.loadMethod = callAfterAnswer;
 			dependencies.ajaxCallFactory.factor(ajaxCallSpec);
-		}
-
-		function createIndependentCopy(someObject) {
-			return JSON.parse(JSON.stringify(someObject));
 		}
 
 		function processFetchedData(answer) {

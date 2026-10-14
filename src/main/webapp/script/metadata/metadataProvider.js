@@ -36,14 +36,10 @@ export const metadataProvider = function(dependencies, spec) {
 		};
 
 		const callThroughAjax = function(linkSpec, callAfterAnswer) {
-			let ajaxCallSpec = createIndependentCopy(linkSpec);
+			let ajaxCallSpec = structuredClone(linkSpec);
 			ajaxCallSpec.loadMethod = callAfterAnswer;
 			ajaxCallSpec.errorMethod = processErrorAnswer;
 			dependencies.ajaxCallFactory.factor(ajaxCallSpec);
-		};
-
-		const createIndependentCopy = function(someObject) {
-			return JSON.parse(JSON.stringify(someObject));
 		};
 
 		const processFetchedMetadata = function(answer) {

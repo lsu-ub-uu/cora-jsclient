@@ -23,270 +23,269 @@ import { createSpanWithClassName } from "../gui/basicGui.js";
 import { genericFactory } from "../genericFactory.js";
 
 export const pNonRepeatingChildRefHandlerView = function(dependencies, spec) {
-		let view;
-		let headline;
-		let buttonView;
-		let alternativePresentation;
-		let defaultPresentation;
-		let alternativeButton;
-		let defaultButton;
-		let containsData = false;
-		let containsError = false;
-		let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
-		let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
-		//TODO: change to be sent in through dependencies
-		let buttonFactory = genericFactory(buttonImported);
+    let view;
+    let headline;
+    let buttonView;
+    let alternativePresentation;
+    let defaultPresentation;
+    let alternativeButton;
+    let defaultButton;
+    let containsData = false;
+    let containsError = false;
+    let callOnFirstShowOfDefaultPresentationShouldBeCalled = true;
+    let callOnFirstShowOfAlternativePresentationShouldBeCalled = true;
+    //TODO: change to be sent in through dependencies
+    let buttonFactory = genericFactory(buttonImported);
 
-		const clickableHeadlineText = spec.clickableHeadlineText;
-		const clickableHeadlineLevel = spec.clickableHeadlineLevel;
+    const clickableHeadlineText = spec.clickableHeadlineText;
+    const clickableHeadlineLevel = spec.clickableHeadlineLevel;
 
-		let presentationSize = spec.presentationSize;
-		let showDefaultPresentationNext = false;
-		let toggleButtonsAreCreated = false;
-
-
-		const start = function() {
-			view = createBaseView();
-			setContainsDataStyle();
-			setContainsErrorStyle();
-			possiblyAddClickableHeadline();
-		};
-
-		const createBaseView = function() {
-			let newClassName = "pNonRepeatingChildRefHandler";
-			if (spec.textStyle !== undefined) {
-				newClassName += " " + spec.textStyle;
-			}
-			if (spec.childStyle !== undefined) {
-				newClassName += " " + spec.childStyle;
-			}
-			newClassName += " " + spec.presentationId;
-			return createSpanWithClassName(newClassName);
-		};
-
-		const setContainsDataStyle = function() {
-			let currentContainsStateClass = containsData ? "containsData" : "containsNoData";
-			let notCurrentContainsStateClass = !containsData ? "containsData" : "containsNoData";
-			view.classList.remove(notCurrentContainsStateClass);
-			view.classList.add(currentContainsStateClass);
-		};
-		const setContainsErrorStyle = function() {
-			if (containsError) {
-				view.classList.add("containsError");
-			} else {
-				view.classList.remove("containsError");
-			}
-		};
-
-		const possiblyAddClickableHeadline = function() {
-			if (clickableHeadlineText) {
-				const level = clickableHeadlineLevel || "h2";
-				addClickableHeadline(clickableHeadlineText, level);
-				createButtonView(presentationSize);
-			}
-		};
-
-		const addClickableHeadline = function(text, level) {
-			headline = document.createElement(level);
-			headline.classList.add("clickableHeadline");
-			headline.addEventListener('click', () => {
-				toggleDefaultShown();
-			});
-			view.insertBefore(headline, buttonView);
-			headline.appendChild(document.createTextNode(text));
-		};
+    let presentationSize = spec.presentationSize;
+    let showDefaultPresentationNext = false;
+    let toggleButtonsAreCreated = false;
 
 
-		const getView = function() {
-			return view;
-		};
+    const start = function() {
+        view = createBaseView();
+        setContainsDataStyle();
+        setContainsErrorStyle();
+        possiblyAddClickableHeadline();
+    };
 
-		const addChild = function(child) {
-			child.classList.add("default");
-			defaultPresentation = child;
-			view.insertBefore(child, buttonView);
-			possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
-		};
+    const createBaseView = function() {
+        let newClassName = "pNonRepeatingChildRefHandler";
+        if (spec.textStyle !== undefined) {
+            newClassName += " " + spec.textStyle;
+        }
+        if (spec.childStyle !== undefined) {
+            newClassName += " " + spec.childStyle;
+        }
+        newClassName += " " + spec.presentationId;
+        return createSpanWithClassName(newClassName);
+    };
 
-		const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
-			if (presentationSize === "singleInitiallyHidden") {
-				showDefaultPresentationNext = false;
-				toggleDefaultShown();
-			}
-			if (presentationSize === "singleInitiallyVisible") {
-				showDefaultPresentationNext = true;
-				toggleDefaultShown();
-			}
-		};
+    const setContainsDataStyle = function() {
+        let currentContainsStateClass = containsData ? "containsData" : "containsNoData";
+        let notCurrentContainsStateClass = !containsData ? "containsData" : "containsNoData";
+        view.classList.remove(notCurrentContainsStateClass);
+        view.classList.add(currentContainsStateClass);
+    };
+    const setContainsErrorStyle = function() {
+        if (containsError) {
+            view.classList.add("containsError");
+        } else {
+            view.classList.remove("containsError");
+        }
+    };
 
-		const addAlternativePresentation = function(child) {
-			child.classList.add("alternative");
-			alternativePresentation = child;
-			createButtonView(presentationSize);
-			view.insertBefore(child, buttonView);
-			showDefaultPresentationNext = true;
-			toggleDefaultShown();
-		};
+    const possiblyAddClickableHeadline = function() {
+        if (clickableHeadlineText) {
+            const level = clickableHeadlineLevel || "h2";
+            addClickableHeadline(clickableHeadlineText, level);
+            createButtonView(presentationSize);
+        }
+    };
 
-		const createButtonView = function(presentationSize) {
-			if (!toggleButtonsAreCreated) {
-				toggleButtonsAreCreated = true;
-				let buttonViewNew = createSpanWithClassName("buttonView");
-				buttonView = buttonViewNew;
-				view.appendChild(buttonViewNew);
-				createDefaultAndAlternativeButtons(presentationSize);
-			}
-		};
+    const addClickableHeadline = function(text, level) {
+        headline = document.createElement(level);
+        headline.classList.add("clickableHeadline");
+        headline.addEventListener('click', () => {
+            toggleDefaultShown();
+        });
+        view.insertBefore(headline, buttonView);
+        headline.appendChild(document.createTextNode(text));
+    };
 
-		const createDefaultAndAlternativeButtons = function(presentationSize) {
-			let buttonClasses = getButtonClassName(presentationSize);
-			createAndAddAlternativeButton(buttonClasses);
-			createAndAddDefaultButton(buttonClasses);
-		};
 
-		const createAndAddAlternativeButton = function(buttonClasses) {
-			alternativeButton = createAndAddSwapButton(buttonClasses.alternative, showAlternativePresentation);
-		};
+    const getView = function() {
+        return view;
+    };
 
-		const createAndAddDefaultButton = function(buttonClasses) {
-			defaultButton = createAndAddSwapButton(buttonClasses.default, showDefaultPresentation);
-		};
+    const addChild = function(child) {
+        child.classList.add("default");
+        defaultPresentation = child;
+        view.insertBefore(child, buttonView);
+        possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden();
+    };
 
-		const showAlternativePresentation = function() {
-			showDefaultPresentationNext = false;
-			toggleDefaultShown();
-		};
+    const possiblyHideDefaultPresentationIfClickableHeadlineIsInitiallyHidden = function() {
+        if (presentationSize === "singleInitiallyHidden") {
+            showDefaultPresentationNext = false;
+            toggleDefaultShown();
+        }
+        if (presentationSize === "singleInitiallyVisible") {
+            showDefaultPresentationNext = true;
+            toggleDefaultShown();
+        }
+    };
 
-		const showDefaultPresentation = function() {
-			showDefaultPresentationNext = true;
-			toggleDefaultShown();
-		};
+    const addAlternativePresentation = function(child) {
+        child.classList.add("alternative");
+        alternativePresentation = child;
+        createButtonView(presentationSize);
+        view.insertBefore(child, buttonView);
+        showDefaultPresentationNext = true;
+        toggleDefaultShown();
+    };
 
-		const createAndAddSwapButton = function(buttonClass, actionMethod) {
-			let buttonSpec = {
-				className: "iconButton " + buttonClass,
-				action: {
-					method: actionMethod,
-					onkeydown: {
-						keys: [" ", "Enter"]
-					}
-				}
-			};
-			let button = buttonFactory.factor(buttonSpec);
-			buttonView.appendChild(button);
-			return button;
-		};
+    const createButtonView = function(presentationSize) {
+        if (!toggleButtonsAreCreated) {
+            toggleButtonsAreCreated = true;
+            let buttonViewNew = createSpanWithClassName("buttonView");
+            buttonView = buttonViewNew;
+            view.appendChild(buttonViewNew);
+            createDefaultAndAlternativeButtons(presentationSize);
+        }
+    };
 
-		const getButtonClassName = function(presentationSize) {
-			//			nameInData: presentationSize
-			//			presentationId: presentationSizePCollVar
-			//			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
-			//			(firstLarger) Första presentationen är större - Första presentationen är större
-			//			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
-			//			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
-			//			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
-			if (presentationSizeIsExpanding(presentationSize)) {
-				return {
-					default: "maximizeButton",
-					alternative: "minimizeButton"
-				};
-			}
-			if (presentationSize === "firstSmaller") {
-				return {
-					default: "minimizeButton",
-					alternative: "maximizeButton"
-				};
-			}
-			return {
-				default: "defaultButton",
-				alternative: "alternativeButton"
-			};
-		};
+    const createDefaultAndAlternativeButtons = function(presentationSize) {
+        let buttonClasses = getButtonClassName(presentationSize);
+        createAndAddAlternativeButton(buttonClasses);
+        createAndAddDefaultButton(buttonClasses);
+    };
 
-		const presentationSizeIsExpanding = function(presentationSize) {
-			return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
-				.includes(presentationSize);
-		};
+    const createAndAddAlternativeButton = function(buttonClasses) {
+        alternativeButton = createAndAddSwapButton(buttonClasses.alternative, showAlternativePresentation);
+    };
 
-		const toggleDefaultShown = function() {
-			if (showDefaultPresentationNext === true) {
-				hide(alternativePresentation);
-				show(defaultPresentation);
-				show(alternativeButton);
-				hide(defaultButton);
-				callOnFirstShowOfDefaultPresentation();
-			} else {
-				show(alternativePresentation);
-				hide(defaultPresentation);
-				hide(alternativeButton);
-				show(defaultButton);
-				callOnFirstShowOfAlternativePresentation();
-			}
-			showDefaultPresentationNext = !showDefaultPresentationNext;
-		};
+    const createAndAddDefaultButton = function(buttonClasses) {
+        defaultButton = createAndAddSwapButton(buttonClasses.default, showDefaultPresentation);
+    };
 
-		const hide = function(element) {
-			if (element !== undefined && element.style.display !== "none") {
-				element.styleOriginal = element.style.display;
-				element.style.display = "none";
-			}
-		};
+    const showAlternativePresentation = function() {
+        showDefaultPresentationNext = false;
+        toggleDefaultShown();
+    };
 
-		const show = function(element) {
-			if (element !== undefined) {
-				if (element.styleOriginal !== undefined) {
-					element.style.display = element.styleOriginal;
-				} else {
-					element.style.display = "";
-				}
-			}
-		};
+    const showDefaultPresentation = function() {
+        showDefaultPresentationNext = true;
+        toggleDefaultShown();
+    };
 
-		const hideView = function() {
-			hide(view);
-		};
+    const createAndAddSwapButton = function(buttonClass, actionMethod) {
+        let buttonSpec = {
+            className: "iconButton " + buttonClass,
+            action: {
+                method: actionMethod,
+                onkeydown: {
+                    keys: [" ", "Enter"]
+                }
+            }
+        };
+        let button = buttonFactory.factor(buttonSpec);
+        buttonView.appendChild(button);
+        return button;
+    };
 
-		const showView = function() {
-			show(view);
-		};
+    const getButtonClassName = function(presentationSize) {
+        //			nameInData: presentationSize
+        //			presentationId: presentationSizePCollVar
+        //			itemCollection: presentationSizeCollection(firstSmaller) Första presentationen är mindre - Den första presentationen är mindre
+        //			(firstLarger) Första presentationen är större - Första presentationen är större
+        //			(bothEqual) Båda är likvärdiga - Båda alternativen är likvärdiga i storlek, d.v.s. det går inte att säga att den ena är större än den andra.
+        //			(singleInitiallyHidden) Enstaka är dold initialt - Om det endast finns en presentation ska den vara dold initialt
+        //			(singleInitiallyVisible) Enstaka visas initialt - Om det endast finns en presentation ska den vara synlig initialt
+        if (presentationSizeIsExpanding(presentationSize)) {
+            return {
+                default: "maximizeButton",
+                alternative: "minimizeButton"
+            };
+        }
+        if (presentationSize === "firstSmaller") {
+            return {
+                default: "minimizeButton",
+                alternative: "maximizeButton"
+            };
+        }
+        return {
+            default: "defaultButton",
+            alternative: "alternativeButton"
+        };
+    };
 
-		const callOnFirstShowOfDefaultPresentation = function() {
-			if (callOnFirstShowOfDefaultPresentationShouldBeCalled
-				&& spec.callOnFirstShowOfPresentation !== undefined) {
-				callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfPresentation();
-			}
-		};
+    const presentationSizeIsExpanding = function(presentationSize) {
+        return ["firstLarger", "singleInitiallyHidden", "singleInitiallyVisible"]
+            .includes(presentationSize);
+    };
 
-		const callOnFirstShowOfAlternativePresentation = function() {
-			if (callOnFirstShowOfAlternativePresentationShouldBeCalled
-				&& spec.callOnFirstShowOfPresentation !== undefined) {
-				callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
-				spec.callOnFirstShowOfPresentation();
-			}
-		};
+    const toggleDefaultShown = function() {
+        if (showDefaultPresentationNext === true) {
+            hide(alternativePresentation);
+            show(defaultPresentation);
+            show(alternativeButton);
+            hide(defaultButton);
+            callOnFirstShowOfDefaultPresentation();
+        } else {
+            show(alternativePresentation);
+            hide(defaultPresentation);
+            hide(alternativeButton);
+            show(defaultButton);
+            callOnFirstShowOfAlternativePresentation();
+        }
+        showDefaultPresentationNext = !showDefaultPresentationNext;
+    };
 
-		const setHasDataStyle = function(containsDataIn) {
-			containsData = containsDataIn;
-			setContainsDataStyle();
-		};
+    const hideView = function() {
+        hide(view);
+    };
 
-		const setHasErrorStyle = function(containsErrorIn) {
-			containsError = containsErrorIn;
-			setContainsErrorStyle();
-		};
+    const showView = function() {
+        show(view);
+    };
 
-		let out = Object.freeze({
-			type: "pNonRepeatingChildRefHandlerView",
-			getView: getView,
-			addChild: addChild,
-			addAlternativePresentation: addAlternativePresentation,
-			hideContent: hideView,
-			showContent: showView,
-			setHasDataStyle: setHasDataStyle,
-			setHasErrorStyle: setHasErrorStyle
-		});
-		start();
-		return out;
-	};
+    const callOnFirstShowOfDefaultPresentation = function() {
+        if (callOnFirstShowOfDefaultPresentationShouldBeCalled
+            && spec.callOnFirstShowOfPresentation !== undefined) {
+            callOnFirstShowOfDefaultPresentationShouldBeCalled = false;
+            spec.callOnFirstShowOfPresentation();
+        }
+    };
 
+    const callOnFirstShowOfAlternativePresentation = function() {
+        if (callOnFirstShowOfAlternativePresentationShouldBeCalled
+            && spec.callOnFirstShowOfPresentation !== undefined) {
+            callOnFirstShowOfAlternativePresentationShouldBeCalled = false;
+            spec.callOnFirstShowOfPresentation();
+        }
+    };
+
+    const setHasDataStyle = function(containsDataIn) {
+        containsData = containsDataIn;
+        setContainsDataStyle();
+    };
+
+    const setHasErrorStyle = function(containsErrorIn) {
+        containsError = containsErrorIn;
+        setContainsErrorStyle();
+    };
+
+    let out = Object.freeze({
+        type: "pNonRepeatingChildRefHandlerView",
+        getView: getView,
+        addChild: addChild,
+        addAlternativePresentation: addAlternativePresentation,
+        hideContent: hideView,
+        showContent: showView,
+        setHasDataStyle: setHasDataStyle,
+        setHasErrorStyle: setHasErrorStyle
+    });
+    start();
+    return out;
+};
+
+const hide = function(element) {
+    if (element !== undefined && element.style.display !== "none") {
+        element.styleOriginal = element.style.display;
+        element.style.display = "none";
+    }
+};
+
+const show = function(element) {
+    if (element !== undefined) {
+        if (element.styleOriginal !== undefined) {
+            element.style.display = element.styleOriginal;
+        } else {
+            element.style.display = "";
+        }
+    }
+};

@@ -155,12 +155,12 @@ export const pParentMultipleChildrenView = function(dependencies, spec, child) {
 			}
 		};
 		
-		const hide = function(element) {
+		const hide = function() {
 			view.styleOriginal = view.style.display;
 			view.style.display = "none";
 		};
 
-		const show = function(element) {
+		const show = function() {
 			if (view.styleOriginal !== undefined) {
 				view.style.display = view.styleOriginal;
 			} else {
